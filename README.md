@@ -61,7 +61,7 @@ Then, include the following header in your script:
 ```
 
 ### A Simple Example
-A simple example of using NetwrokEditorGUI to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building NetwrokEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to directory where NetwrokEditorGUI is installed (`<root directory>/install`).
+A simple example of using NetwrokEditorGUI to create a GUI is in the <a href="https://github.com/adelhpour/NetworkEditorGUI/tree/main/example/">example folder</a> of the project. The steps to build it are all the same as the ones for [building NetwrokEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to the directory where NetwrokEditorGUI is installed (`<root directory>/install`).
 
 ## License
 NetwrokEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/main/LICENSE">The MIT License</a>.
