@@ -47,13 +47,13 @@ The steps to build NetwrokEditorGUI from its source code are as follows:
     + On Linux and macOS, simply go to `<root directory>/build` and  run `make` and then `make install` on terminal.
 
 ## How to Use
-To use NetwrokEditorGUI, you first need to:
+To use NetworkEditorGUI, you first need to:
 
-* [Build](#how-to-build) NetwrokEditorGUI.
+* [Build](#how-to-build) NetworkEditorGUI.
 
-* Add NetwrokEditorGUI include directory (`<root directory>/install/include/src`) to the "include directory" of your project.
+* Add NetworkEditorGUI include directory (`<root directory>/install/include/src`) to the "include directory" of your project.
 
-* Add NetwrokEditorGUI library (in `<root directory>/install/lib` ) to the "dependencies" of your project.
+* Add NetworkEditorGUI library (in `<root directory>/install/lib` ) to the "dependencies" of your project.
 
 Then, include the following header in your script:
 ```
@@ -61,7 +61,7 @@ Then, include the following header in your script:
 ```
 
 ### A Simple Example
-A simple example of using NetwrokEditorGUI to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building NetwrokEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to directory where NetwrokEditorGUI is installed (`<root directory>/install`).
+A simple example of using NetworkEditorGUI to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building NetworkEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to directory where NetworkEditorGUI is installed (`<root directory>/install`).
 
 Here is a preview that shows how the example GUI can be used to create a network:
 
@@ -69,4 +69,4 @@ Here is a preview that shows how the example GUI can be used to create a network
  
 
 ## License
-NetwrokEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/main/LICENSE">The MIT License</a>.
+NetworkEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/main/LICENSE">The MIT License</a>.
