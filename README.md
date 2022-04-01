@@ -65,7 +65,7 @@ A simple example of using NetwrokEditorGUI to create a GUI is in /example direct
 
 Here is a preview that shows how the example GUI can be used to create a network:
 
-<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="321" height="220">
+<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="481.5" height="330">
  
 
 ## License
