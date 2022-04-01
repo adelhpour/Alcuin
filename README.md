@@ -65,7 +65,8 @@ A simple example of using NetwrokEditorGUI to create a GUI is in /example direct
 
 Here is a preview of the example GUI:
 
-<img src="https://github.com/adelhpout/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="350" height="450">
+<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="350" height="450">
+ 
 
 ## License
 NetwrokEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/main/LICENSE">The MIT License</a>.
