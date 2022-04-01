@@ -63,7 +63,7 @@ Then, include the following header in your script:
 ### A Simple Example
 A simple example of using NetwrokEditorGUI to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building NetwrokEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to directory where NetwrokEditorGUI is installed (`<root directory>/install`).
 
-Here is a preview of the example GUI:
+Here is a preview that shows how the example GUI can be used to create a network:
 
 <img src="https://github.com/adelhpour/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="321" height="220">
  
