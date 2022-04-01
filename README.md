@@ -1,6 +1,6 @@
 # NetworkEditorGUI
 
-NetwrokEditorGUI is a portable GUI library, based on Qt/C++, that provides developers with the basic features required for a reaction network editor software tool. These features are:
+NetworkEditorGUI is a portable GUI library, based on Qt/C++, that provides developers with the basic features required for a reaction network editor software tool. These features are:
 
 * Add/Remove Nodes to the scene,
 * Add/Remove Edges between two nodes on the scene,
@@ -11,8 +11,8 @@ NetwrokEditorGUI is a portable GUI library, based on Qt/C++, that provides devel
 
 ## How to Use
 
-The steps to build NetwrokEditorGUI from its source code are as follows:
-* Create a directory for your entire NetwrokEditorGUI project. This directory has to be placed in somewhere not admin-blocked and is recommended to have the following file structure:
+The steps to build NetworkEditorGUI from its source code are as follows:
+* Create a directory for your entire NetworkEditorGUI project. This directory has to be placed in somewhere not admin-blocked and is recommended to have the following file structure:
 
 ```
 <root directory>
@@ -20,7 +20,7 @@ The steps to build NetwrokEditorGUI from its source code are as follows:
 ├── install
 ```
 
-* Clone or download <a href="https://github.com/adelhpour/NetworkEditorGUI/">NetwrokEditorGUI source</a> to the `<root directory>`.
+* Clone or download <a href="https://github.com/adelhpour/NetworkEditorGUI/">NetworkEditorGUI source</a> to the `<root directory>`.
 
 * <a href="https://cmake.org/download/">Download</a> and Install CMake and then open CMake-gui.
 
