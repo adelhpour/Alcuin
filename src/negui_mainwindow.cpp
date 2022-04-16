@@ -1,9 +1,9 @@
 #include "negui_mainwindow.h"
 #include <iostream>
 
-MyMainWindow::MyMainWindow(QWidget *parent) :  QMainWindow(parent)
-{
+MyMainWindow::MyMainWindow(QWidget *parent) :  QMainWindow(parent) {
     _isSetView = false;
+    setObjectName("main_window");
     
     //ui->setupUi(this);
     
@@ -21,6 +21,7 @@ MyMainWindow::MyMainWindow(QWidget *parent) :  QMainWindow(parent)
     _undoStack = new MyUndoStack(this);
     if (view()->scene())
         connect(view()->scene(), SIGNAL(commandCreated(QUndoCommand*)), _undoStack, SLOT(addCommand(QUndoCommand*)));
+    loadPlugins();
     createMenus();
 
     QGridLayout* layout = new QGridLayout;
@@ -34,9 +35,36 @@ MyMainWindow::MyMainWindow(QWidget *parent) :  QMainWindow(parent)
     setCentralWidget(widget);
 }
 
-MyMainWindow::~MyMainWindow()
-{
+MyMainWindow::~MyMainWindow() {
     
+}
+
+bool MyMainWindow::loadPlugins() {
+    QDir pluginsDir(QCoreApplication::applicationDirPath());
+#if defined(Q_OS_WIN)
+    if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
+        pluginsDir.cdUp();
+#elif defined(Q_OS_MAC)
+    if (pluginsDir.dirName() == "MacOS")
+        pluginsDir.cdUp();
+#endif
+    pluginsDir.cd("plugins");
+    const QStringList entries = pluginsDir.entryList(QDir::Files);
+    for (const QString &fileName : entries) {
+        QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
+        QObject* plugin = pluginLoader.instance();
+        if (plugin) {
+            _nodeInterface = qobject_cast<NodeInterface *>(plugin);
+            if (_nodeInterface) {
+                _nodeInterface->loadScript(pluginsDir.path());
+                return true;
+            }
+            
+            pluginLoader.unload();
+        }
+    }
+
+    return false;
 }
 
 void MyMainWindow::createMenus() {
@@ -211,8 +239,7 @@ void MyGraphicsView::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
-    if (_pan)
-    {
+    if (_pan) {
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - _panStartX));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - _panStartY));
         _panStartX = event->x();
@@ -225,8 +252,7 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
 
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
-    if (event->button() == Qt::LeftButton)
-    {
+    if (event->button() == Qt::LeftButton) {
         _pan = false;
         setCursor(Qt::ArrowCursor);
         event->accept();
@@ -308,16 +334,6 @@ void MyGraphicsScene::addNode(const QPointF& position) {
         QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
         emit commandCreated(addNodeCommand);
     }
-    
-    
-    /*
-    if (mode() == ADD_NODE_MODE) {
-        MyNode* _node = new MyNode(position.x(), position.y());
-        _node->setZValue(1);
-        _nodes.push_back(_node);
-        addItem(_node);
-    }
-     */
 }
 
 void MyGraphicsScene::addNode(MyNode* n) {
@@ -353,25 +369,6 @@ void MyGraphicsScene::addEdge(const QPointF& position) {
         else
             enableNormalMode();
     }
-    
-    /*
-    if (mode() == ADD_EDGE_MODE) {
-        QList<QGraphicsItem *> itemsList = items(position);
-        if (itemsList.size() == 1) {
-            if (!isSetSelectedEdgeStartNode())
-                setSelectedEdgeStartNode((MyNode*)itemsList.at(0));
-            else if (selectedEdgeStartNode() != (MyNode*)itemsList.at(0) && !edgeExists(selectedEdgeStartNode(), (MyNode*)itemsList.at(0))) {
-                MyEdge* _edge = new MyEdge(selectedEdgeStartNode(), (MyNode*)itemsList.at(0));
-                _edge->setZValue(0);
-                _edges.push_back(_edge);
-                addItem(_edge);
-                unSetSelectedEdgeStartNode();
-            }
-        }
-        else
-            enableNormalMode();
-    }
-    */
 }
 
 void MyGraphicsScene::addEdge(MyEdge* e) {
@@ -405,33 +402,6 @@ void MyGraphicsScene::removeItems(const QPointF& position) {
         else
             enableNormalMode();
     }
-    
-    /*
-    if (mode() == REMOVE_MODE) {
-        QList<QGraphicsItem *> itemsList = items(position);
-        if (!itemsList.isEmpty()) {
-            for (QGraphicsItem *item : qAsConst(itemsList)) {
-                if(item->type() == 4) {
-                    QList<MyEdge *> edges = ((MyNode*)item)->edges();
-                    for (MyEdge *edge : qAsConst(edges)) {
-                        removeItem(edge);
-                        _edges.removeOne(edge);
-                        delete edge;
-                    }
-                    _nodes.removeOne((MyNode*)item);
-                }
-                else if (item->type() == 6)
-                    _edges.removeOne((MyEdge*)item);
-                
-                removeItem(item);
-                delete item;
-            }
-        }
-        else
-            enableNormalMode();
-    }
-     
-     */
 }
 
 void MyGraphicsScene::setSelectedEdgeStartNode(MyNode* n) {

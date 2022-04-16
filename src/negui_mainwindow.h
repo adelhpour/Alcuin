@@ -7,7 +7,9 @@
     #define NEGUI_LIB_EXPORT Q_DECL_IMPORT
 #endif
 
+#include <QApplication>
 #include <QMainWindow>
+#include <QPluginLoader>
 #include <QWidget>
 #include <QGraphicsView>
 #include <QGraphicsScene>
@@ -24,6 +26,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QtMath>
 #include <QUndoStack>
+#include "negui_interfaces.h"
+
 
 class MyGraphicsView;
 class MyGraphicsScene;
@@ -66,11 +70,14 @@ private slots:
     void exit();
     
 private:
+    bool loadPlugins();
+    
     void createMenus();
     
     MyGraphicsView* _view;
     MyUndoStack* _undoStack;
     bool _isSetView;
+    NodeInterface* _nodeInterface;
 };
 
 class NEGUI_LIB_EXPORT MyGraphicsView : public QGraphicsView {
