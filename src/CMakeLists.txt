@@ -1,13 +1,83 @@
-### find python packages
-find_package(Python COMPONENTS Development)
-set (PYTHON_DEVS Python::Python)
-
 set(CMAKE_AUTOMOC ON)
 
 ### build the library
 ## set the required sources and headers
-set(gui_sources negui_mainwindow.cpp negui_pyhelper.hpp)
-set(gui_headers negui_mainwindow.h negui_interfaces.h)
+set(gui_sources
+	negui_base.cpp
+	negui_mainwidget.cpp
+	negui_toolbar.cpp
+	negui_graphics_view.cpp
+	negui_graphics_scene.cpp
+	negui_interactor.cpp
+	negui_element_base.cpp
+	negui_parameters.cpp
+	negui_node.cpp
+	negui_edge.cpp
+	negui_arrow_head.cpp
+	negui_element_style_base.cpp
+	negui_node_style.cpp
+	negui_edge_style.cpp
+	negui_arrow_head_style.cpp
+	negui_element_graphics_item_base.cpp
+	negui_node_graphics_item.cpp
+	negui_edge_graphics_item.cpp
+	negui_arrow_head_graphics_item.cpp
+	negui_shape_style_base.cpp
+	negui_ellipse_style.cpp
+	negui_rect_style.cpp
+	negui_polygon_style.cpp
+	negui_line_style.cpp
+	negui_text_style.cpp
+	negui_shape_graphics_item_base.cpp
+	negui_ellipse_graphics_item.cpp
+	negui_rect_graphics_item.cpp
+	negui_polygon_graphics_item.cpp
+	negui_line_graphics_item.cpp
+	negui_text_graphics_item.cpp
+	negui_feature_menu.cpp
+	negui_import_tools.cpp
+	negui_export_tools.cpp
+	negui_autolayout_engines.cpp
+	negui_c_api.cpp)
+
+set(gui_headers
+	negui_mainwidget.h
+	negui_toolbar.h
+	negui_graphics_view.h
+	negui_graphics_scene.h
+	negui_interactor.h
+	negui_element_base.h
+	negui_base.h
+	negui_parameters.h
+	negui_node.h
+	negui_edge.h
+	negui_arrow_head.h
+	negui_element_style_base.h
+	negui_node_style.h
+	negui_edge_style.h
+	negui_arrow_head_style.h
+	negui_element_graphics_item_base.h
+	negui_node_graphics_item.h
+	negui_edge_graphics_item.h
+	negui_arrow_head_graphics_item.h
+	negui_shape_style_base.h
+	negui_ellipse_style.h
+	negui_rect_style.h
+	negui_polygon_style.h
+	negui_line_style.h
+	negui_text_style.h
+	negui_shape_graphics_item_base.h
+	negui_ellipse_graphics_item.h
+	negui_rect_graphics_item.h
+	negui_polygon_graphics_item.h
+	negui_line_graphics_item.h
+	negui_text_graphics_item.h
+	negui_feature_menu.h
+	negui_import_tools.h
+	negui_export_tools.h
+	negui_autolayout_engines.h
+	negui_interfaces.h
+	negui_c_api.h)
 
 ## build
 add_library(NetworkEditorGUI SHARED 
@@ -19,12 +89,13 @@ target_link_libraries(NetworkEditorGUI
 	Qt5::Core
 	Qt5::Gui 
 	Qt5::Widgets
-	Qt5::PrintSupport
-	${PYTHON_DEVS})
+	Qt5::PrintSupport)
 
 ## set library dist
 install(TARGETS NetworkEditorGUI RUNTIME DESTINATION bin COMPONENT networkeditorgui_lib LIBRARY DESTINATION lib COMPONENT networkeditorgui_lib ARCHIVE DESTINATION lib COMPONENT networkeditorgui_lib)
 
 ## install headers
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src DESTINATION include COMPONENT networkeditorgui_lib
-        FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp")
+file(GLOB headers ${CMAKE_SOURCE_DIR}/src/*.h)
+install(FILES ${headers} DESTINATION include COMPONENT networkeditorgui_lib)
+
+add_subdirectory(plugins)

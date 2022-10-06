@@ -42,9 +42,10 @@ elseif(UNIX)
 	## set use of RPATH for Mac
 	if (APPLE)
 		set(CMAKE_MACOSX_RPATH true)
+		
 		## set C/C++ compiler flags
-    		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -Wno-inline")
-    		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fPIC -std=gnu++11")
+    	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -Wno-inline")
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fPIC -std=gnu++11")
 	else ()
 		## set C/C++ compiler flags
     		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -Wno-inline")
@@ -57,8 +58,8 @@ elseif(UNIX)
 	set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif ()
 
-# find Qt5 and required components
-find_package(Qt5 COMPONENTS Core Gui Widgets PrintSupport REQUIRED)
+## find Qt5 and required components
+find_package(Qt5 COMPONENTS Core Gui Widgets DBus PrintSupport REQUIRED)
 
 ## Set build type default.
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING
@@ -68,3 +69,11 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
 endif()
 
 add_subdirectory(src)
+
+## build test-app
+set(BUILD_TEST_APP OFF CACHE BOOL "Build the test app that uses the network editor gui lib")
+
+if(BUILD_TEST_APP)
+	include(ExternalProject)
+    #ExternalProject_Add(networkeditorguitestapp SOURCE_DIR ${CMAKE_SOURCE_DIR}/test-app BINARY_DIR ${CMAKE_BINARY_DIR}/test-app INSTALL_DIR ${CMAKE_INSTALL_DIR})
+endif()
