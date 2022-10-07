@@ -65,8 +65,8 @@ A simple example of using NetworkEditorGUI to create a GUI is in /example direct
 
 Here is a preview that shows how the example GUI can be used to create a network:
 
-<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/main/docs/Figures/GUIpreview.gif" width="642" height="440">
+<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/develop-widget/docs/Figures/GUIpreview.gif" width="642" height="440">
  
 
 ## License
-NetworkEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/main/LICENSE">The MIT License</a>.
+NetworkEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/develop-widget/LICENSE">The MIT License</a>.
