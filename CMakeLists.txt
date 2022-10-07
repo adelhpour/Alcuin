@@ -77,3 +77,10 @@ if(BUILD_TEST_APP)
 	include(ExternalProject)
     #ExternalProject_Add(networkeditorguitestapp SOURCE_DIR ${CMAKE_SOURCE_DIR}/test-app BINARY_DIR ${CMAKE_BINARY_DIR}/test-app INSTALL_DIR ${CMAKE_INSTALL_DIR})
 endif()
+
+## build the documentation
+option(BUILD_DOCS "Build the documentation" OFF)
+
+if(BUILD_DOCS)
+	add_subdirectory(docs)
+endif()
