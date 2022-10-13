@@ -46,6 +46,7 @@ public:
     QList<MyPluginItemBase*>& dataExportTools();
     void readDataExportInfo(const QJsonObject &json);
     void clearDataExportInfo();
+    void disconnectPressedEnterKeyFromDataExportTools();
     
     // print export interface
     bool setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path);

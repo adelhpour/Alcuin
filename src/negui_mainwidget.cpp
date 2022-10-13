@@ -67,7 +67,9 @@ void MyNetworkEditorWidget::setInteractions() {
     
     // change mode
     connect(view()->scene(), &MyGraphicsScene::mouseRightButtonIsPressed, interactor(), &MyInteractor::enableNormalMode);
+    connect(view()->scene(), &MyGraphicsScene::mouseRightButtonIsPressed, interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
     connect(view()->scene(), &MyGraphicsScene::escapeKeyIsPressed, interactor(), &MyInteractor::enableNormalMode);
+    connect(view()->scene(), &MyGraphicsScene::escapeKeyIsPressed, interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
 }
 
 MyInteractor* MyNetworkEditorWidget::interactor() {

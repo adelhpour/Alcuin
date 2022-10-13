@@ -128,6 +128,11 @@ void MyInteractor::clearDataExportInfo() {
         delete (MyDataExportTool*)_dataExportTools.takeLast();
 }
 
+void MyInteractor::disconnectPressedEnterKeyFromDataExportTools() {
+    for (MyPluginItemBase *exportTool : qAsConst(dataExportTools()))
+        disconnect(this, SIGNAL(enterKeyIsPressed()), (MyDataExportTool*)exportTool, SLOT(annotateSelectedElements()));
+}
+
 bool MyInteractor::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path) {
     if (printExportInterface) {
         _printExportInterface = printExportInterface;
@@ -669,8 +674,6 @@ void MyInteractor::addNewNode(const QPointF& position) {
         QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
         undoStack()->addCommand(addNodeCommand);
     }
-    else
-        enableNormalMode();
 }
 
 void MyInteractor::selectNode(MyElementBase* element) {
@@ -820,7 +823,7 @@ void MyInteractor::annotateExportData(MyPluginItemBase* exportTool) {
 }
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    disconnect(this, SIGNAL(enterKeyIsPressed()), (MyDataExportTool*)exportTool, SLOT(annotateSelectedElements()));
+    disconnectPressedEnterKeyFromDataExportTools();
     QJsonObject graphInfoObject = ((MyDataExportTool*)exportTool)->getGraphInfoObject();
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName();
     if (!fileName.isEmpty()) {
