@@ -1,22 +1,13 @@
 #ifndef __NEGUI_EDGE_H
 #define __NEGUI_EDGE_H
 
-#include "negui_base.h"
 #include "negui_element_base.h"
-#include "negui_node.h"
-#include "negui_arrow_head.h"
-#include "negui_edge_graphics_item.h"
-#include "negui_edge_style.h"
-
-class MyNode;
-class MyArrowHead;
-
 
 class MyEdge : public MyElementBase {
     
 public:
     
-    MyEdge(const QString& name, MyNode* startNode, MyNode* endNode);
+    MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
     
     ~MyEdge();
     
@@ -24,22 +15,19 @@ public:
     
     const QString typeAsString() const override;
     
-    MyNode* startNode();
-    MyNode* endNode();
+    MyElementBase* startNode();
+    MyElementBase* endNode();
     
     void updateGraphicsItem() override;
     
     void setSelected(const bool& selected) override;
     
-    MyArrowHead* arrowHead();
+    MyElementBase* arrowHead();
     void setArrowHead();
     const bool isSetArrowHead() const { return _isSetArrowHead; }
     
     // determine whether the edge is visible on the scene
-    bool setActive(const bool& active);
-    
-    // return true if the edge is visible on the scene
-    const bool isActive() const { return _isActive; }
+    bool setActive(const bool& active) override;
     
     // determine whether the edge is connected to its start and end nodes
     bool connectToNodes(const bool& connect);
@@ -85,11 +73,10 @@ private slots:
     QWidget* getFeatureMenu() override;
 
 protected:
-    MyNode* _startNode;
-    MyNode* _endNode;
-    MyArrowHead* _arrowHead;
+    MyElementBase* _startNode;
+    MyElementBase* _endNode;
+    MyElementBase* _arrowHead;
     bool _isSetArrowHead;
-    bool _isActive;
     bool _isConnectedToNodes;
 };
 

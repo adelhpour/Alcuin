@@ -2,7 +2,6 @@
 #define __NEGUI_EDGE_GRAPHICS_ITEM_H
 
 #include "negui_element_graphics_item_base.h"
-#include "negui_line_graphics_item.h"
 
 class MyEdgeGraphicsItemBase: public MyElementGraphicsItemBase {
     Q_OBJECT
@@ -11,17 +10,7 @@ public:
     
     MyEdgeGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
-    MyShapeGraphicsItemBase* defaultEllipseItem() override;
-    
-    MyShapeGraphicsItemBase* defaultRectItem() override;
-    
-    MyShapeGraphicsItemBase* defaultPolygonItem() override;
-    
-    MyShapeGraphicsItemBase* defaultLineItem() override;
-    
-    MyShapeGraphicsItemBase* defaultBezierItem() override;
-    
-    MyShapeGraphicsItemBase* defaultTextItem() override;
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
     void setLine(const QLineF &line);
     

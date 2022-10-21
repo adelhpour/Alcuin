@@ -1,17 +1,12 @@
 #ifndef __NEGUI_ARROW_HEAD_H
 #define __NEGUI_ARROW_HEAD_H
 
-#include "negui_base.h"
 #include "negui_element_base.h"
-#include "negui_edge.h"
-#include "negui_arrow_head_graphics_item.h"
-
-class MyEdge;
 
 class MyArrowHead : public MyElementBase {
 public:
     
-    MyArrowHead(const QString& name, MyEdge* edge);
+    MyArrowHead(const QString& name, MyElementBase* edge);
     
     ~MyArrowHead();
     
@@ -20,7 +15,7 @@ public:
     const QString typeAsString() const override;
     
     // get the edge this arrow head belongs to
-    MyEdge* edge();
+    MyElementBase* edge();
     
     void setSelected(const bool& selected) override;
     
@@ -55,7 +50,7 @@ private slots:
     QWidget* getFeatureMenu() override;
     
 protected:
-    MyEdge* _edge;
+    MyElementBase* _edge;
 };
 
 #endif

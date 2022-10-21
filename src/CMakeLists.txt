@@ -3,37 +3,47 @@ set(CMAKE_AUTOMOC ON)
 ### build the library
 ## set the required sources and headers
 set(gui_sources
-	negui_base.cpp
 	negui_mainwidget.cpp
 	negui_toolbar.cpp
 	negui_graphics_view.cpp
 	negui_graphics_scene.cpp
 	negui_interactor.cpp
+	negui_base.cpp
+	negui_plugin_item_base.cpp
 	negui_element_base.cpp
-	negui_parameters.cpp
 	negui_node.cpp
 	negui_edge.cpp
 	negui_arrow_head.cpp
+	negui_element_builder.cpp
 	negui_element_style_base.cpp
 	negui_node_style.cpp
 	negui_edge_style.cpp
 	negui_arrow_head_style.cpp
+	negui_element_style_builder.cpp
 	negui_element_graphics_item_base.cpp
 	negui_node_graphics_item.cpp
 	negui_edge_graphics_item.cpp
 	negui_arrow_head_graphics_item.cpp
+	negui_element_graphics_item_builder.cpp
 	negui_shape_style_base.cpp
 	negui_ellipse_style.cpp
 	negui_rect_style.cpp
 	negui_polygon_style.cpp
 	negui_line_style.cpp
+	negui_bezier_style.cpp
 	negui_text_style.cpp
+	negui_shape_style_builder.cpp
 	negui_shape_graphics_item_base.cpp
+	negui_1d_shape_graphics_item_base.cpp
+	negui_2d_shape_graphics_item_base.cpp
 	negui_ellipse_graphics_item.cpp
 	negui_rect_graphics_item.cpp
 	negui_polygon_graphics_item.cpp
 	negui_line_graphics_item.cpp
+	negui_bezier_graphics_item.cpp
 	negui_text_graphics_item.cpp
+	negui_shape_graphics_item_builder.cpp
+	negui_parameters.cpp
 	negui_feature_menu.cpp
 	negui_import_tools.cpp
 	negui_export_tools.cpp
@@ -46,37 +56,47 @@ set(gui_headers
 	negui_graphics_view.h
 	negui_graphics_scene.h
 	negui_interactor.h
-	negui_element_base.h
 	negui_base.h
-	negui_parameters.h
+	negui_plugin_item_base.h
+	negui_element_base.h
 	negui_node.h
 	negui_edge.h
 	negui_arrow_head.h
+	negui_element_builder.h
 	negui_element_style_base.h
 	negui_node_style.h
 	negui_edge_style.h
 	negui_arrow_head_style.h
+	negui_element_style_builder.h
 	negui_element_graphics_item_base.h
 	negui_node_graphics_item.h
 	negui_edge_graphics_item.h
 	negui_arrow_head_graphics_item.h
+	negui_element_graphics_item_builder.h
 	negui_shape_style_base.h
 	negui_ellipse_style.h
 	negui_rect_style.h
 	negui_polygon_style.h
 	negui_line_style.h
+	negui_bezier_style.h
 	negui_text_style.h
+	negui_shape_style_builder.h
 	negui_shape_graphics_item_base.h
+	negui_1d_shape_graphics_item_base.h
+	negui_2d_shape_graphics_item_base.h
 	negui_ellipse_graphics_item.h
 	negui_rect_graphics_item.h
 	negui_polygon_graphics_item.h
 	negui_line_graphics_item.h
+	negui_bezier_graphics_item.h
 	negui_text_graphics_item.h
+	negui_shape_graphics_item_builder.h
+	negui_parameters.h
 	negui_feature_menu.h
+	negui_interfaces.h
 	negui_import_tools.h
 	negui_export_tools.h
 	negui_autolayout_engines.h
-	negui_interfaces.h
 	negui_c_api.h)
 
 ## build

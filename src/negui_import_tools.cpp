@@ -1,4 +1,7 @@
 #include "negui_import_tools.h"
+#include <QFileDialog>
+#include <QIcon>
+#include <QJsonObject>
 
 // MyImportTool
 

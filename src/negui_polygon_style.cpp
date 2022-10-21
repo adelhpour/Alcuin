@@ -1,4 +1,7 @@
 #include "negui_polygon_style.h"
+#include <QtMath>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // MyPolygonStyleBase
 

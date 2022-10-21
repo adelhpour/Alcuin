@@ -1,4 +1,5 @@
 #include "negui_data_export_plugin.h"
+#include <QJsonDocument>
 
 int DataExportPlugin::initialize(const QString &path) {
     _path = path;

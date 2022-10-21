@@ -1,19 +1,14 @@
 #ifndef __NEGUI_INTERACTOR_H
 #define __NEGUI_INTERACTOR_H
 
-#include "negui_base.h"
 #include "negui_element_base.h"
-#include "negui_node.h"
-#include "negui_edge.h"
-#include "negui_element_style_base.h"
-#include "negui_node_style.h"
-#include "negui_edge_style.h"
 #include "negui_interfaces.h"
-#include "negui_import_tools.h"
-#include "negui_autolayout_engines.h"
-#include "negui_export_tools.h"
 
+#include <QObject>
 #include <QPluginLoader>
+#include <QUndoStack>
+#include <QWidgetAction>
+#include <QPrinter>
 
 class MyInteractor : public QObject {
     Q_OBJECT
@@ -81,7 +76,7 @@ public:
     void clearAutoLayoutInfo();
     
     // undo stack
-    MyUndoStack* undoStack();
+    QUndoStack* undoStack();
     
     // modes
     void setMode(SceneMode mode);
@@ -219,7 +214,7 @@ protected:
     QList<MyPluginItemBase*> _autoLayoutEngines;
     
     // undo stack
-    MyUndoStack* _undoStack;
+    QUndoStack* _undoStack;
     
     // modes
     SceneMode _mode;
@@ -232,6 +227,54 @@ protected:
     
     // network
     QRectF _networkExtents;
+};
+
+class MyUndoStack : public QUndoStack {
+    
+public:
+    
+    MyUndoStack(QObject *parent = nullptr);
+    
+    void addCommand(QUndoCommand* command);
+    
+    void clear();
+};
+
+class MyToolButton : public QToolButton {
+    
+public:
+    
+    MyToolButton(QWidget* parent = nullptr);
+};
+
+class MyToolButtonMenu : public QMenu {
+    
+public:
+    
+    MyToolButtonMenu(QWidget* parent = nullptr);
+};
+
+class MyWidgetAction : public QWidgetAction {
+    Q_OBJECT
+    
+public:
+    
+    MyWidgetAction(QObject* parent = nullptr);
+    
+    void setItems(QList<MyPluginItemBase*> items);
+    
+signals:
+    void itemIsChosen(MyPluginItemBase*);
+    
+protected:
+    QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
+};
+
+class MyItemPreviewButton : public QPushButton {
+    
+public:
+    
+    MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
 };
 
 class MyAddNodeCommand : public QUndoCommand {

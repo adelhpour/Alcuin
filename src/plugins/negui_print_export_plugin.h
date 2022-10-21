@@ -1,7 +1,5 @@
 #include "negui_pyhelper.hpp"
-#include <QtPlugin>
-#include <QString>
-#include "negui_mainwidget.h"
+#include "negui_interfaces.h"
 
 class PrintExportPlugin : public QObject, PrintExportInterface {
     Q_OBJECT

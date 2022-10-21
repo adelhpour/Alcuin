@@ -1,4 +1,5 @@
 #include "negui_ellipse_style.h"
+#include <QJsonObject>
 
 // MyEllipseStyleBase
 

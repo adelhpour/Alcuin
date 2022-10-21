@@ -27,6 +27,10 @@ void MyElementBase::setStyle(MyElementStyleBase* style) {
     updateGraphicsItem();
 }
 
+bool MyElementBase::setActive(const bool& active) {
+    return _isActive = active;
+}
+
 const bool MyElementBase::isSelected() {
     return graphicsItem()->isSelected();
 }

@@ -1,9 +1,10 @@
 #include "negui_rect_graphics_item.h"
+#include "negui_rect_style.h"
 
 // MyRectGraphicsItem
 
-MyRectGraphicsItem::MyRectGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : QGraphicsPathItem(parent) {
-    _originalPosition = QPointF(x, y);
+MyRectGraphicsItem::MyRectGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsPathItem(parent) {
+    
 }
 
 void MyRectGraphicsItem::updateStyle() {
@@ -68,3 +69,7 @@ void MyRectGraphicsItem::updateExtents(const QRectF& extents) {
 QRectF MyRectGraphicsItem::getExtents() const {
     return boundingRect();
 }
+
+void MyRectGraphicsItem::setZValue(qreal z) {
+    QGraphicsItem::setZValue(z);
+};

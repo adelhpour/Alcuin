@@ -1,4 +1,5 @@
 #include "negui_print_export_plugin.h"
+#include <QJsonDocument>
 
 int PrintExportPlugin::initialize(const QString &path) {
     _path = path;

@@ -1,4 +1,6 @@
 #include "negui_arrow_head_style.h"
+#include "negui_shape_style_builder.h"
+#include "negui_element_graphics_item_builder.h"
 
 // MyArrowHeadStyle
 
@@ -12,11 +14,11 @@ void MyArrowHeadStyle::addDefaultShapeStyle() {
 
 MyShapeStyleBase* MyArrowHeadStyle::createShapeStyle(const QString& shape) {
     if (shape == "ellipse")
-        return new MyArrowHeadEllipseStyle(shape);
+        return createArrowHeadEllipseStyle(shape);
     else if (shape == "rect")
-        return new MyArrowHeadRectStyle(shape);
+        return createArrowHeadRectStyle(shape);
     else if (shape == "polygon")
-        return new MyArrowHeadPolygonStyle(shape);
+        return createArrowHeadPolygonStyle(shape);
     
     return NULL;
 }
@@ -25,7 +27,7 @@ QList<MyElementGraphicsItemBase*> MyArrowHeadStyle::getElementIconGraphicsItems(
     QList<MyElementGraphicsItemBase*> items;
     
     // arrow head style
-    MyElementGraphicsItemBase* arrowHeadIconItem = new MyArrowHeadIconGraphicsItem();
+    MyElementGraphicsItemBase* arrowHeadIconItem = createArrowHeadIconGraphicsItem();
     arrowHeadIconItem->addShapeItems(shapeStyles());
     items.push_back(arrowHeadIconItem);
     

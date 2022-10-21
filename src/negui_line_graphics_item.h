@@ -1,47 +1,25 @@
 #ifndef __NEGUI_LINE_GRAPHICS_ITEM_H
 #define __NEGUI_LINE_GRAPHICS_ITEM_H
 
-#include "negui_shape_graphics_item_base.h"
-#include "negui_line_style.h"
+#include "negui_1d_shape_graphics_item_base.h"
+#include <QGraphicsItem>
 
-class MyLinearGraphicsItemBase: public MyShapeGraphicsItemBase, public QGraphicsPathItem {
-public:
-    
-    MyLinearGraphicsItemBase(QGraphicsItem *parent);
-    
-    void setSelectedWithStroke(const bool& selected) override;
-    
-    void setSelectedWithFill(const bool& selected) override;
-    
-    const qreal getEndSlope() const override;
-    
-    QRectF getExtents() const override;
-    
-protected:
-    QLineF _line;
-    qreal _endSlope;
-};
-
-class MyLineGraphicsItem: public MyLinearGraphicsItemBase {
+class MyLineGraphicsItem: public My1DShapeGraphicsItemBase, public QGraphicsPathItem {
 public:
     
     MyLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
     
     void updateStyle() override;
     
-    void setLine(const QLineF& line) override;
-};
-
-class MyBezierGraphicsItem: public MyLinearGraphicsItemBase {
-public:
+    void setSelectedWithStroke(const bool& selected) override;
     
-    MyBezierGraphicsItem(const QLineF& line, QGraphicsItem *parent);
+    void setSelectedWithFill(const bool& selected) override;
     
-    void updateStyle() override;
+    QRectF getExtents() const override;
+    
+    void setZValue(qreal z) override;
     
     void setLine(const QLineF& line) override;
-    
-    const qreal calcualteBezierEndSlope(const QPointF& p0, const QPointF& p1, const QPointF& p2, const QPointF& p3) const;
 };
 
 #endif

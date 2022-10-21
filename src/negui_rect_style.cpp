@@ -1,4 +1,5 @@
 #include "negui_rect_style.h"
+#include <QJsonObject>
 
 // MyRectStyleBase
 

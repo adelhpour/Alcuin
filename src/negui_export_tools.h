@@ -1,9 +1,9 @@
 #ifndef __NEGUI_EXPORT_TOOLS_H
 #define __NEGUI_EXPORT_TOOLS_H
 
-#include "negui_base.h"
-
-#include <QMessageBox>
+#include "negui_plugin_item_base.h"
+#include <QPrinter>
+#include <QJsonObject>
 
 class MyExportToolBase : public MyPluginItemBase {
 public:

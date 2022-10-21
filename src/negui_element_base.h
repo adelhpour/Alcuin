@@ -30,6 +30,10 @@ public:
     
     void setStyle(MyElementStyleBase* style);
     
+    virtual bool setActive(const bool& active);
+    
+    const bool isActive() const { return _isActive; }
+    
     virtual void setSelected(const bool& selected) = 0;
     
     const bool isSelected();
@@ -62,6 +66,7 @@ protected:
     
     MyElementGraphicsItemBase* _graphicsItem;
     MyElementStyleBase* _style;
+    bool _isActive;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef __NEGUI_ELEMENT_STYLE_BASE_H
 #define __NEGUI_ELEMENT_STYLE_BASE_H
 
-#include "negui_base.h"
+#include "negui_plugin_item_base.h"
 #include "negui_shape_style_base.h"
 #include "negui_element_graphics_item_base.h"
 

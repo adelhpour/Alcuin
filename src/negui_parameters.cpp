@@ -1,4 +1,8 @@
 #include "negui_parameters.h"
+#include <QWidgetAction>
+#include <QtMath>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // MyParameterBase
 
@@ -416,24 +420,24 @@ MyParameterBase::PARAMETER_TYPE MyPointParameterBase::type() {
 }
 
 void MyPointParameterBase::setDefaultValueX(const qreal& x) {
-    _x->setDefaultValue(x);
+    ((MyPositionalParameter*)_x)->setDefaultValue(x);
 }
 
 const qreal& MyPointParameterBase::defaultValueX() const {
-    return _x->defaultValue();
+    return ((MyPositionalParameter*)_x)->defaultValue();
 }
 
 void MyPointParameterBase::setDefaultValueY(const qreal& y) {
-    _y->setDefaultValue(y);
+    ((MyPositionalParameter*)_y)->setDefaultValue(y);
 }
 
 const qreal& MyPointParameterBase::defaultValueY() const {
-    return _y->defaultValue();
+    return ((MyPositionalParameter*)_y)->defaultValue();
 }
 
 void MyPointParameterBase::setDefaultValue() {
-    _x->setDefaultValue();
-    _y->setDefaultValue();
+    ((MyPositionalParameter*)_x)->setDefaultValue();
+    ((MyPositionalParameter*)_y)->setDefaultValue();
 }
 
 QWidget* MyPointParameterBase::inputWidget() {
@@ -1711,10 +1715,10 @@ MyColorPickerMenu::MyColorPickerMenu() {
     addAction(frequentColors);
 }
 
-void MyColorPickerMenu::colorTileButtonPicked(MyColorTileButton* colorTileButton) {
+void MyColorPickerMenu::colorTileButtonPicked(QPushButton* colorTileButton) {
     if (colorTileButton) {
         close();
-        emit colorChosen(colorTileButton->color());
+        emit colorChosen(((MyColorTileButton*)colorTileButton)->color());
     }
 }
 
@@ -1737,6 +1741,133 @@ const QString& MyColorTileButton::color() const {
 const QString& MyColorTileButton::value() const {
     return _value;
 }
+
+// MySpacerItem
+
+MySpacerItem::MySpacerItem(int w, int h) : QSpacerItem(w, h, QSizePolicy::Fixed, QSizePolicy::Fixed) {
+    
+}
+
+// MyLabel
+
+MyLabel::MyLabel(const QString& text, QWidget* parent) : QLabel(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    QFont _font;
+    _font.setBold(true);
+    _font.setCapitalization(QFont::Capitalize);
+    _font.setPointSize(12);
+    setFont(_font);
+    
+    if (!text.isEmpty())
+        setText(text);
+    
+    setFixedSize(120, 20);
+}
+
+// MyTitleLabel
+
+MyTitleLabel::MyTitleLabel(const QString& text, QWidget* parent) : MyLabel(text, parent) {
+    QFont _font = font();
+    _font.setPointSize(18);
+    setFont(_font);
+    setFixedSize(120, 25);
+    setAlignment(Qt::AlignCenter);
+}
+
+// MyLineEdit
+
+MyLineEdit::MyLineEdit(const QString &contents, QWidget* parent) : QLineEdit(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setStyleSheet("QLineEdit {border: 1px solid LightSlateGray; border-radius: 10px; padding: 0 8px; background: GhostWhite; selection-background-color: LightGray;} QLineEdit::read-only {color: gray}");
+    setText(contents);
+    setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setFixedSize(120, 20);
+}
+
+void MyLineEdit::setText(const QString &contents) {
+    QLineEdit::setText(contents);
+    setToolTip(contents);
+    setCursorPosition(0);
+}
+
+
+
+MyReadOnlyLineEdit::MyReadOnlyLineEdit(const QString &contents, QWidget* parent) : MyLineEdit(contents, parent) {
+    setReadOnly(true);
+}
+
+// MySpinBox
+
+MySpinBox::MySpinBox(QWidget* parent) : QSpinBox(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    setStyleSheet("QSpinBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; margin-right: 15px }" "QSpinBox::up-button { background-color: transparent; }" "QSpinBox::down-button { background-color: transparent;}" "QSpinBox::up-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-bottom: 5px solid black; width: 0px; height: 0px; }" "QSpinBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; }");
+    setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setFixedSize(120, 20);
+}
+
+// MyDoubleSpinBox
+
+MyDoubleSpinBox::MyDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
+    setStyleSheet("QDoubleSpinBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; margin-right: 15px }" "QDoubleSpinBox::up-button { background-color: transparent; }" "QDoubleSpinBox::down-button { background-color: transparent;}" "QDoubleSpinBox::up-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-bottom: 5px solid black; width: 0px; height: 0px; }" "QDoubleSpinBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; }");
+    setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setFixedSize(120, 20);
+}
+
+// MyComboBox
+
+MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setStyleSheet("QComboBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; color: black; padding: 1px 18px 1px 3px; }" "QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; border-left-width: 1px; border-left-color: LightSlateGray;border-left-style: solid; border-top-right-radius: 5px; border-bottom-right-radius: 5px; }" "QComboBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; } QComboBox::disabled { color: gray;} QComboBox QAbstractItemView { border: 1px solid LightSlateGray; background-color: white; min-width: 100px; }");
+    
+    setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setFixedSize(120, 20);
+}
+
+// MyGroupBox
+
+MyGroupBox::MyGroupBox(QWidget* parent) : QGroupBox(parent) {
+    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    setStyleSheet("QGroupBox { background-color: white; border: no-border;}");
+    setContentsMargins(0, 0, 0, 0);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+}
+
+// MyMenuItemGroupBox
+
+MyMenuItemGroupBox::MyMenuItemGroupBox(QWidget* parent) : MyGroupBox(parent) {
+    setLayout(new QGridLayout());
+}
+
+const QSize MyMenuItemGroupBox::extents() const {
+    qint32 totalWidth = 0;
+    qint32 totalHeight = 0;
+    qint32 rowWidth = 0;
+    qint32 rowHeight = 0;
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QLayoutItem* item = NULL;
+    for (qint32 row = 0; row < contentLayout->rowCount(); ++row) {
+        rowWidth = 0;
+        rowHeight = 0;
+        for (qint32 column = 0; column < contentLayout->columnCount(); ++column) {
+            item = contentLayout->itemAtPosition(row, column);
+            if (item && item->widget()) {
+                rowWidth += item->widget()->size().width();
+                if (item->widget()->size().height() > rowHeight)
+                    rowHeight = item->widget()->size().height();
+            }
+        }
+        
+        if (rowWidth > totalWidth)
+            totalWidth = rowWidth;
+        totalHeight+= rowHeight;
+    }
+
+    return QSize(totalWidth + 10 * contentLayout->columnCount(), totalHeight + 10 *  contentLayout->rowCount() );
+}
+
 
 
 

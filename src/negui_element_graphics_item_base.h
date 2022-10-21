@@ -1,10 +1,9 @@
 #ifndef __NEGUI_ELEMENT_GRAPHICS_ITEM_BASE_H
 #define __NEGUI_ELEMENT_GRAPHICS_ITEM_BASE_H
 
-#include "negui_base.h"
-#include "negui_shape_style_base.h"
 #include "negui_shape_graphics_item_base.h"
-#include "negui_feature_menu.h"
+#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 class MyElementGraphicsItemBase : public QObject, public QGraphicsItemGroup {
     Q_OBJECT
@@ -17,19 +16,9 @@ public:
     
     void addShapeItem(MyShapeStyleBase* style);
     
+    virtual MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) = 0;
+    
     QList<MyShapeStyleBase*> getShapeStyles();
-    
-    virtual MyShapeGraphicsItemBase* defaultEllipseItem() = 0;
-    
-    virtual MyShapeGraphicsItemBase* defaultRectItem() = 0;
-    
-    virtual MyShapeGraphicsItemBase* defaultPolygonItem() = 0;
-    
-    virtual MyShapeGraphicsItemBase* defaultLineItem() = 0;
-    
-    virtual MyShapeGraphicsItemBase* defaultBezierItem() = 0;
-    
-    virtual MyShapeGraphicsItemBase* defaultTextItem() = 0;
     
     void setSelectedWithStroke(const bool& selected);
     

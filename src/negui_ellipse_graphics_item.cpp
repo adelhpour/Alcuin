@@ -1,9 +1,9 @@
 #include "negui_ellipse_graphics_item.h"
+#include "negui_ellipse_style.h"
 
 // MyEllipseGraphicsItem
 
-MyEllipseGraphicsItem::MyEllipseGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : QGraphicsEllipseItem(parent) {
-    _originalPosition = QPointF(x, y);
+MyEllipseGraphicsItem::MyEllipseGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsEllipseItem(parent) {
 }
 
 void MyEllipseGraphicsItem::updateStyle() {
@@ -58,3 +58,7 @@ void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
 QRectF MyEllipseGraphicsItem::getExtents() const {
     return boundingRect();
 }
+
+void MyEllipseGraphicsItem::setZValue(qreal z) {
+    QGraphicsItem::setZValue(z);
+};

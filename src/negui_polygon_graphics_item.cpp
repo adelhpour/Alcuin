@@ -1,9 +1,9 @@
 #include "negui_polygon_graphics_item.h"
+#include "negui_polygon_style.h"
 
 // MyPolygonGraphicsItem
 
-MyPolygonGraphicsItem::MyPolygonGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : QGraphicsPolygonItem(parent) {
-    _originalPosition = QPointF(x, y);
+MyPolygonGraphicsItem::MyPolygonGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x,y), QGraphicsPolygonItem(parent) {
 }
 
 void MyPolygonGraphicsItem::updateStyle() {
@@ -53,3 +53,7 @@ void MyPolygonGraphicsItem::updateExtents(const QRectF& extents) {
 QRectF MyPolygonGraphicsItem::getExtents() const {
     return boundingRect();
 }
+
+void MyPolygonGraphicsItem::setZValue(qreal z) {
+    QGraphicsItem::setZValue(z);
+};

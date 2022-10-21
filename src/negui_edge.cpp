@@ -1,23 +1,31 @@
 #include "negui_edge.h"
+#include "negui_node.h"
+#include "negui_element_builder.h"
+#include "negui_element_graphics_item_builder.h"
+#include "negui_edge_style.h"
+#include "negui_edge_graphics_item.h"
+#include "negui_arrow_head_graphics_item.h"
+#include <QtMath>
+#include <QJsonObject>
 
 // MyEdge
 
-MyEdge::MyEdge(const QString& name, MyNode* startNode, MyNode* endNode) : MyElementBase(name) {
+MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode) : MyElementBase(name) {
     _arrowHead = NULL;
     _style = NULL;
     _isSetArrowHead = false;
     _isActive = false;
     _isConnectedToNodes = false;
-    _graphicsItem = new MyEdgeSceneGraphicsItem();
+    _graphicsItem = createEdgeSceneGraphicsItem();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(askForElementFeatureMenu()), this, SLOT(getFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForSetShapeStyles(QList<MyShapeStyleBase*>)), this, SLOT(setShapeStyles(QList<MyShapeStyleBase*>)));
     enableNormalMode();
     if (startNode && endNode) {
         _startNode = startNode;
-        _startNode->addEdge(this);
+        ((MyNode*)_startNode)->addEdge(this);
         _endNode = endNode;
-        _endNode->addEdge(this);
+        ((MyNode*)_endNode)->addEdge(this);
     }
 }
 
@@ -36,11 +44,11 @@ const QString MyEdge::typeAsString() const {
     return "Edge";
 }
 
-MyNode* MyEdge::startNode() {
+MyElementBase* MyEdge::startNode() {
     return _startNode;
 }
 
-MyNode* MyEdge::endNode() {
+MyElementBase* MyEdge::endNode() {
     return _endNode;
 }
 
@@ -67,7 +75,7 @@ void MyEdge::setSelected(const bool& selected) {
     }
 }
 
-MyArrowHead* MyEdge::arrowHead() {
+MyElementBase* MyEdge::arrowHead() {
     return _arrowHead;
 }
 
@@ -78,7 +86,7 @@ void MyEdge::setArrowHead() {
     }
             
     if (((MyEdgeStyle*)style())->arrowHeadStyle() && ((MyEdgeStyle*)style())->arrowHeadStyle()->shapeStyles().size()) {
-        _arrowHead = new MyArrowHead(name() + "_ArrowHead", this);
+        _arrowHead = createArrowHead(name() + "_ArrowHead", this);
         _arrowHead->setStyle(((MyEdgeStyle*)style())->arrowHeadStyle());
         _isSetArrowHead = true;
     }
@@ -109,10 +117,10 @@ void MyEdge::updatePoints() {
 
 const QPointF MyEdge::getStartPosition() {
     if (startNode() && endNode()) {
-        QPointF startPosition = startNode()->position();
-        QPointF endPosition = endNode()->position();
-        qreal startRadius = 0.5 * qMax(startNode()->getExtents().width(), startNode()->getExtents().height());
-        qreal endRadius = 0.5 * qMax(endNode()->getExtents().width(), endNode()->getExtents().height());
+        QPointF startPosition = ((MyNode*)startNode())->position();
+        QPointF endPosition = ((MyNode*)endNode())->position();
+        qreal startRadius = 0.5 * qMax(((MyNode*)startNode())->getExtents().width(), ((MyNode*)startNode())->getExtents().height());
+        qreal endRadius = 0.5 * qMax(((MyNode*)endNode())->getExtents().width(), ((MyNode*)endNode())->getExtents().height());
         if (qSqrt(((endPosition - startPosition).x() * (endPosition - startPosition).x()) + ((endPosition - startPosition).y() * (endPosition - startPosition).y())) > (startRadius + endRadius + 10.0)) {
             startRadius += 5;
             endRadius += 5;
@@ -127,10 +135,10 @@ const QPointF MyEdge::getStartPosition() {
 
 const QPointF MyEdge::getEndPosition() {
     if (startNode() && endNode()) {
-        QPointF startPosition = startNode()->position();
-        QPointF endPosition = endNode()->position();
-        qreal startRadius = 0.5 * qMax(startNode()->getExtents().width(), startNode()->getExtents().height());
-        qreal endRadius = 0.5 * qMax(endNode()->getExtents().width(), endNode()->getExtents().height());
+        QPointF startPosition = ((MyNode*)startNode())->position();
+        QPointF endPosition = ((MyNode*)endNode())->position();
+        qreal startRadius = 0.5 * qMax(((MyNode*)startNode())->getExtents().width(), ((MyNode*)startNode())->getExtents().height());
+        qreal endRadius = 0.5 * qMax(((MyNode*)endNode())->getExtents().width(), ((MyNode*)endNode())->getExtents().height());
         if (qSqrt(((endPosition - startPosition).x() * (endPosition - startPosition).x()) + ((endPosition - startPosition).y() * (endPosition - startPosition).y())) > (startRadius + endRadius + 10.0)) {
             startRadius += 5;
             endRadius += 5;

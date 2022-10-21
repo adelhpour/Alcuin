@@ -1,10 +1,14 @@
 #include "negui_feature_menu.h"
+#include "negui_parameters.h"
+#include "negui_shape_style_builder.h"
+#include "negui_polygon_style.h"
 
 // MyFeatureMenu
 
-MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyDialog(parent) {
+MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : QDialog(parent) {
     _expandableWidgetSize = QSize(0, 0);
     setWindowTitle("Features");
+    setStyleSheet("QDialog {background-color: white;}");
     QGridLayout* contentLayout = new QGridLayout(this);
     
     // element feature menu
@@ -41,14 +45,14 @@ void MyFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
 
 void MyFeatureMenu::setShapeStyles() {
     QList<MyShapeStyleBase*> temporaryShapeStyles = getTemporaryShapeStyles();
-    _addRemoveShapeStyleButtons->setRemovingMenu(temporaryShapeStyles);
-    _shapeStylesTreeView->setBranches(temporaryShapeStyles);
+    ((MyAddRemoveShapeStylesButtons*)_addRemoveShapeStyleButtons)->setRemovingMenu(temporaryShapeStyles);
+    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(temporaryShapeStyles);
 }
 
 void MyFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
     _temporaryAddedShapeStyles.push_back(shapeStyle);
     setShapeStyles();
-    _shapeStylesTreeView->exapndLastBranch();
+    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->exapndLastBranch();
 }
 
 void MyFeatureMenu::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
@@ -133,12 +137,12 @@ MyAddRemoveShapeStylesButtons::MyAddRemoveShapeStylesButtons(QWidget* parent) : 
     
     // adding menu
     connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
-        emit askForAddShapeStyle(new MyNodeEllipseStyle("ellipse")); });
-    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(new MyNodeRectStyle("rect")); });
-    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyNodePolygonStyle* polygonShapeStyle = new MyNodePolygonStyle("polygon");
-        polygonShapeStyle->addDefaultPoints();
+        emit askForAddShapeStyle(createNodeEllipseStyle("ellipse")); });
+    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
+    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodePolygonStyle("polygon");
+        ((MyNodePolygonStyle*)polygonShapeStyle)->addDefaultPoints();
         emit askForAddShapeStyle(polygonShapeStyle); });
-    connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(new MyTextStyle("text")); });
+    connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
     
     // remove button
     _removePushButton = addButton(QString("-"), QDialogButtonBox::NoRole);
@@ -158,10 +162,85 @@ void MyAddRemoveShapeStylesButtons::setRemovingMenu(QList<MyShapeStyleBase*> sha
         _removePushButton->setEnabled(false);
 }
 
+// MyStandardItem
+
+MyStandardItem::MyStandardItem(const QString& text, const qreal& fontsize, const bool& isbold, const QColor& color) {
+    QFont font;
+    font.setPointSize(fontsize);
+    font.setCapitalization(QFont::Capitalize);
+    font.setBold(isbold);
+    
+    setEditable(false);
+    setSelectable(false);
+    setForeground(color);
+    setFont(font);
+    setText(text);
+}
+
 // MyShapeStyleTreeView
 
-MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : MyTreeView(parent) {
+MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) {
+    setHeaderHidden(true);
+    setStyleSheet("QTreeView { background-color: white; border: no-border;}" "QTreeView::item:selected { background-color: white; border: no-border;}" "QTreeView::item:hover { background-color: white; border: no-border;}");
+    setContentsMargins(0, 0, 0, 0);
+    //setAnimated(true);
     
+    treeModel = new QStandardItemModel(this);
+    setModel(treeModel);
+    
+    connect(this, QOverload<const QModelIndex&>::of(&QTreeView::expanded), this, [this] (const QModelIndex& index) {
+        std::vector<QStandardItem*> familyItems;
+        std::list<QStandardItem*> items;
+        QStandardItem* root = treeModel->invisibleRootItem();;
+        QStandardItem* item = treeModel->itemFromIndex(index);
+        int n = 0;
+        int m = 0;
+        
+        familyItems.push_back(item);
+        while (item->parent()) {
+            item = item->parent();
+            familyItems.push_back(item);
+        }
+        
+        for (int i = 0; i < root->rowCount(); ++i) {
+            items.push_back(root->child(i));
+            
+            while (!items.empty()) {
+                n = items.size();
+                
+                while (n > 0) {
+                    item = items.front();
+                    items.pop_front();
+                    
+                    m = 0;
+                    for (m = 0; m < familyItems.size(); ++m) {
+                        if (item->text() == familyItems.at(m)->text())
+                            break;
+                    }
+                    
+                    if (m == familyItems.size())
+                        this->collapse(treeModel->indexFromItem(item));
+                    
+                    //if (!item->hasChildren())
+                        //break;
+                    
+                    for (int j = 0; j < item->rowCount(); ++j)
+                        items.push_back(item->child(j));
+                    
+                    n--;
+                }
+            }
+        }
+        
+        QWidget* branchWidget = indexWidget(treeModel->itemFromIndex(index)->child(0)->index());
+        if (branchWidget)
+            emit extentsAreUpdated(((MyMenuItemGroupBox*)branchWidget)->extents() + collapsedSize());
+        this->scrollTo(index, QAbstractItemView::PositionAtTop);
+    });
+    
+    connect(this, &QTreeView::collapsed, this, [this] () {
+        emit extentsAreUpdated(collapsedSize());
+    });
 }
 
 void MyShapeStyleTreeView::setBranches(QList<MyShapeStyleBase*> shapeStyles) {
@@ -174,8 +253,68 @@ void MyShapeStyleTreeView::setBranches(QList<MyShapeStyleBase*> shapeStyles) {
     }
 }
 
+void MyShapeStyleTreeView::addBranchWidget(QWidget* branchWidget, const QString& branchTitle, const QString& rootTitle) {
+    MyStandardItem* branch = new MyStandardItem(branchTitle, 12.0, true);
+    if (treeModel->findItems(rootTitle).empty())
+        treeModel->invisibleRootItem()->appendRow(branch);
+    else
+        treeModel->findItems(rootTitle).first()->appendRow(branch);
+    
+    if (branchWidget) {
+        MyStandardItem* branchContent = new MyStandardItem();
+        branch->appendRow(branchContent);
+        setIndexWidget(branchContent->index(), branchWidget);
+        _branches.push_back(std::pair<MyStandardItem*, MyStandardItem*>(branch, branchContent));
+    }
+    else
+        _branches.push_back(std::pair<MyStandardItem*, MyStandardItem*>(branch, NULL));
+}
+
+void MyShapeStyleTreeView::clearModel() {
+    for (constBranchIt bIt = BranchesBegin(); bIt != BranchesEnd(); ++bIt) {
+        if ((*bIt).second) {
+            (*bIt).second->removeRows(0, (*bIt).second->rowCount());
+            delete (*bIt).second;
+        }
+        delete (*bIt).first;
+    }
+    _branches.clear();
+    treeModel->clear();
+}
+
+void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsigned int& staticbranches) {
+    QList<QStandardItem *> roots;
+    if (!rootTitle.isEmpty())
+        roots = treeModel->findItems(rootTitle);
+    else
+        roots.push_back(treeModel->invisibleRootItem());
+    for (int i = 0; i < roots.size(); ++i) {
+        while (roots.at(i)->rowCount() > staticbranches) {
+            for (constBranchIt bIt = BranchesBegin(); bIt != BranchesEnd(); ++bIt) {
+                if ((*bIt).first->text() == roots.at(i)->child(staticbranches)->text()) {
+                    if ((*bIt).second) {
+                        (*bIt).second->clearData();
+                        (*bIt).second->removeRows(0, (*bIt).second->rowCount());
+                        delete (*bIt).second;
+                    }
+                    (*bIt).first->clearData();
+                    (*bIt).first->removeRows(0, (*bIt).first->rowCount());
+                    delete (*bIt).first;
+                    _branches.erase(bIt);
+                    roots.at(i)->removeRow(staticbranches);
+                    break;
+                }
+            }
+        }
+    }
+}
+
 void MyShapeStyleTreeView::exapndLastBranch() {
     expand(treeModel->indexFromItem((treeModel->item(treeModel->rowCount() - 1))));
+}
+
+const QSize MyShapeStyleTreeView::collapsedSize() const {
+    return QSize(100, 100 + 20 * model()->rowCount());
 }
 
 

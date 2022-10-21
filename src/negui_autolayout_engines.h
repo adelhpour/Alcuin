@@ -1,10 +1,9 @@
 #ifndef __NEGUI_AUTOLAYOUT_ENGINES_H
 #define __NEGUI_AUTOLAYOUT_ENGINES_H
 
-#include "negui_base.h"
+#include "negui_plugin_item_base.h"
 #include "negui_parameters.h"
-
-class MyParameterBase;
+#include <QDialog>
 
 class MyAutoLayoutEngine : public MyPluginItemBase {
     
@@ -33,6 +32,14 @@ protected:
     
     QList<MyParameterBase*> _parameters;
     QString _iconDirectory;
+};
+
+class MyDialog : public QDialog {
+    Q_OBJECT
+
+public:
+    
+    MyDialog(QWidget *parent = nullptr);
 };
 
 #endif

@@ -1,4 +1,7 @@
 #include "negui_element_style_base.h"
+#include <QPainter>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // MyElementStyleBase
 

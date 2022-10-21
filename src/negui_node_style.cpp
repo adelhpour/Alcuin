@@ -1,4 +1,6 @@
 #include "negui_node_style.h"
+#include "negui_shape_style_builder.h"
+#include "negui_element_graphics_item_builder.h"
 
 // MyNodeStyle
 
@@ -10,18 +12,18 @@ MyNodeStyle::MyNodeStyle(const QString& name) : MyElementStyleBase(name) {
 }
 
 void MyNodeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(new MyNodeEllipseStyle("ellipse"));
+    _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
 }
 
 MyShapeStyleBase* MyNodeStyle::createShapeStyle(const QString& shape) {
     if (shape == "ellipse")
-        return new MyNodeEllipseStyle(shape);
+        return createNodeEllipseStyle(shape);
     else if (shape == "rect")
-        return new MyNodeRectStyle(shape);
+        return createNodeRectStyle(shape);
     else if (shape == "polygon")
-        return new MyNodePolygonStyle(shape);
+        return createNodePolygonStyle(shape);
     else if (shape == "text")
-        return new MyTextStyle(shape);
+        return createTextStyle(shape);
     
     return NULL;
 }
@@ -30,7 +32,7 @@ QList<MyElementGraphicsItemBase*>  MyNodeStyle::getElementIconGraphicsItems() {
     QList<MyElementGraphicsItemBase*> items;
     
     // node style
-    MyElementGraphicsItemBase* nodeIconItem = new MyNodeIconGraphicsItem();
+    MyElementGraphicsItemBase* nodeIconItem = createNodeIconGraphicsItem();
     nodeIconItem->addShapeItems(shapeStyles());
     items.push_back(nodeIconItem);
     

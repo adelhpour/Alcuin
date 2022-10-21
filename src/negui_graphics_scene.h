@@ -1,9 +1,10 @@
 #ifndef __NEGUI_GRAPHICS_SCENE_H
 #define __NEGUI_GRAPHICS_SCENE_H
 
-#include "negui_base.h"
-
+#include <QWidget>
 #include <QGraphicsScene>
+#include <QKeyEvent>
+#include <QGraphicsSceneMouseEvent>
 
 class MyGraphicsScene : public QGraphicsScene {
     Q_OBJECT

@@ -1,4 +1,5 @@
 #include "negui_edge_style_plugin.h"
+#include <QJsonDocument>
 
 int EdgeStylePlugin::initialize(const QString &path) {
     _path = path;

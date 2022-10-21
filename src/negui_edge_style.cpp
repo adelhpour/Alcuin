@@ -1,4 +1,8 @@
 #include "negui_edge_style.h"
+#include "negui_element_style_builder.h"
+#include "negui_shape_style_builder.h"
+#include "negui_element_graphics_item_builder.h"
+#include <QJsonObject>
 
 // MyEdgeStyle
 
@@ -6,7 +10,7 @@ MyEdgeStyle::MyEdgeStyle(const QString& name) : MyElementStyleBase(name) {
     if (name == "Default")
         addDefaultShapeStyle();
     
-    _arrowHeadStyle = new MyArrowHeadStyle(name + "_ArrowHead");
+    _arrowHeadStyle = createArrowHeadStyle(name + "_ArrowHead");
     _iconSize = QSize(75, 45);
 }
 
@@ -15,14 +19,14 @@ MyElementStyleBase* MyEdgeStyle::arrowHeadStyle() {
 }
 
 void MyEdgeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(new MyLineStyle("line"));
+    _shapeStyles.push_back(createLineStyle("line"));
 }
 
 MyShapeStyleBase* MyEdgeStyle::createShapeStyle(const QString& shape) {
     if (shape == "line")
-        return new MyLineStyle(shape);
+        return createLineStyle(shape);
     else if (shape == "bezier")
-        return new MyBezierStyle(shape);
+        return createBezierStyle(shape);
     
     return NULL;
 }
@@ -31,7 +35,7 @@ QList<MyElementGraphicsItemBase*> MyEdgeStyle::getElementIconGraphicsItems() {
     QList<MyElementGraphicsItemBase*> items;
 
     // edge style
-    MyElementGraphicsItemBase* edgeIconItem = new MyEdgeIconGraphicsItem();
+    MyElementGraphicsItemBase* edgeIconItem = createEdgeIconGraphicsItem();
     edgeIconItem->addShapeItems(shapeStyles());
     items.push_back(edgeIconItem);
     

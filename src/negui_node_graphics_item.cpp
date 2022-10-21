@@ -1,4 +1,7 @@
 #include "negui_node_graphics_item.h"
+#include "negui_shape_graphics_item_builder.h"
+#include "negui_2d_shape_graphics_item_base.h"
+#include <QtMath>
 
 // MyNodeGraphicsItemBase
 
@@ -6,35 +9,22 @@ MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyElemen
     
 }
 
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultEllipseItem() {
-    MyShapeGraphicsItemBase* item = new MyEllipseGraphicsItem(_initialPosition.x(), _initialPosition.y(), this);
-    ((MyEllipseGraphicsItem*)item)->setZValue(zValue());
-    return item;
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultRectItem() {
-    MyShapeGraphicsItemBase* item = new MyRectGraphicsItem(_initialPosition.x(), _initialPosition.y(), this);
-    ((MyRectGraphicsItem*)item)->setZValue(zValue());
-    return item;
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultPolygonItem() {
-    MyShapeGraphicsItemBase* item = new MyPolygonGraphicsItem(_initialPosition.x(), _initialPosition.y(), this);
-    ((MyPolygonGraphicsItem*)item)->setZValue(zValue());
-    return item;
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultLineItem() {
-    return NULL;
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultBezierItem() {
-    return NULL;
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::defaultTextItem() {
-    MyShapeGraphicsItemBase* item = new MyTextGraphicsItem(_initialPosition.x(), _initialPosition.y(), this);
-    ((MyTextGraphicsItem*)item)->setZValue(zValue() + 1);
+MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
+        item = createEllipseShape(_initialPosition.x(), _initialPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE)
+        item = createRectShape(_initialPosition.x(), _initialPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
+        item = createPolygonShape(_initialPosition.x(), _initialPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE) {
+        item = createTextShape(_initialPosition.x(), _initialPosition.y(), this);
+        item->setZValue(zValue() + 1);
+    }
+    
+    if (item)
+        item->setZValue(zValue());
+    
     return item;
 }
 
@@ -64,7 +54,7 @@ void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
 
 void MyNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
     for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        My2DShapeGraphicsItemBase* casted_item = dynamic_cast<My2DShapeGraphicsItemBase*>(item);
         if (casted_item)
             casted_item->updateExtents(QRectF(extents.x() - x(), extents.y() - y(), extents.width(), extents.height()));
     }

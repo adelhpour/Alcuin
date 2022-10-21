@@ -1,7 +1,7 @@
 #ifndef __NEGUI_IMPORT_TOOLS_H
 #define __NEGUI_IMPORT_TOOLS_H
 
-#include "negui_base.h"
+#include "negui_plugin_item_base.h"
 
 class MyImportTool : public MyPluginItemBase {
 public:

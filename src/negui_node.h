@@ -1,12 +1,7 @@
 #ifndef __NEGUI_NODE_H
 #define __NEGUI_NODE_H
 
-#include "negui_base.h"
 #include "negui_element_base.h"
-#include "negui_edge.h"
-#include "negui_node_graphics_item.h"
-
-class MyEdge;
 
 class MyNode : public MyElementBase {
     Q_OBJECT
@@ -22,13 +17,13 @@ public:
     const QString typeAsString() const override;
     
     // add to edges
-    void addEdge(MyEdge* e);
+    void addEdge(MyElementBase* e);
     
     // remove from edges
-    void removeEdge(MyEdge* e);
+    void removeEdge(MyElementBase* e);
     
     // get edges
-    QList<MyEdge*>& edges();
+    QList<MyElementBase*>& edges();
     
     void setSelected(const bool& selected) override;
     
@@ -42,10 +37,10 @@ public:
     void setParentNodeId(const QString& parentNodeId);
     
     // get the parent node of the node
-    MyNode* parentNode();
+    MyElementBase* parentNode();
     
     // set the parent node of the node
-    void setParentNode(MyNode* parentNode);
+    void setParentNode(MyElementBase* parentNode);
     
     // return true if the parent node of the node is set
     const bool isSetParentNode() const { return _isSetParentNode; }
@@ -57,13 +52,13 @@ public:
     const bool isParentNodeLocked() const { return _isParentNodeLocked; }
     
     // add to child nodes
-    void addChildNode(MyNode* n);
+    void addChildNode(MyElementBase* n);
     
     // remove the node from child nodes
-    void removeChildNode(MyNode* n);
+    void removeChildNode(MyElementBase* n);
     
     // get the child nodes
-    QList<MyNode*>& childNodes();
+    QList<MyElementBase*>& childNodes();
     
     // lock the position of the child nodes
     void lockChildNodes(const bool& locked);
@@ -73,12 +68,6 @@ public:
     
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
-    
-    // determine whether the node is visible on the scene
-    bool setActive(const bool& active);
-    
-    // return true if the node is visible on the scene
-    const bool isActive() const { return _isActive; }
     
     // enable the normal mode of the node
     void enableNormalMode() override;
@@ -134,12 +123,11 @@ private slots:
 
 protected:
     QString _parentNodeId;
-    MyNode* _parentNode;
-    QList<MyEdge*> _edges;
-    QList<MyNode*> _childNodes;
+    MyElementBase* _parentNode;
+    QList<MyElementBase*> _edges;
+    QList<MyElementBase*> _childNodes;
     QPointF _position;
     bool _isSetParentNode;
-    bool _isActive;
     bool _isParentNodeLocked;
     bool _areChildNodesLocked;
 };

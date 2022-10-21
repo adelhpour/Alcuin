@@ -1,9 +1,4 @@
 #include "negui_pyhelper.hpp"
-#include <QtPlugin>
-#include <QString>
-#include <QFile>
-#include <QJsonDocument>
-#include <QJsonArray>
 #include "negui_interfaces.h"
 
 class EdgeStylePlugin : public QObject, EdgeStyleInterface {

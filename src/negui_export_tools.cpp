@@ -1,4 +1,9 @@
 #include "negui_export_tools.h"
+#include <QFileDialog>
+#include <QIcon>
+#include <QMessageBox>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // MyExportToolBase
 

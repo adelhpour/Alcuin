@@ -1,4 +1,8 @@
 #include "negui_mainwidget.h"
+#include "negui_interactor.h"
+#include "negui_toolbar.h"
+#include "negui_graphics_view.h"
+#include "negui_graphics_scene.h"
 
 // MyNetworkEditorWidget
 
@@ -25,61 +29,61 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 }
 
 void MyNetworkEditorWidget::setWidgets() {
-    _view = new MyGraphicsView(this);
     _toolBar = new MyToolBar(this);
+    _view = new MyGraphicsView(this);
     _interactor = new MyInteractor(this);
     
-    toolBar()->addButtons(interactor()->getMenuButtons());
+    ((MyToolBar*)toolBar())->addButtons(((MyInteractor*)interactor())->getMenuButtons());
 }
 
 void MyNetworkEditorWidget::setInteractions() {
     /// graphics view
     // export screen scene
-    connect(interactor(), SIGNAL(askForExportFigure(const QString&, QPrinter::OutputFormat)), view(), SLOT(exportFigure(const QString&, QPrinter::OutputFormat)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, QPrinter::OutputFormat)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, QPrinter::OutputFormat)));
     
     // set tool tip
-    connect(interactor(), SIGNAL(askForSetToolTip(const QString&)), view(), SLOT(setToolTip(const QString&)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForSetToolTip(const QString&)), (MyGraphicsView*)view(), SLOT(setToolTip(const QString&)));
     
     // reset scale
-    connect(interactor(), SIGNAL(askForClearScene()), view(), SLOT(resetScale()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), (MyGraphicsView*)view(), SLOT(resetScale()));
     
     // enter key pressed
-    connect(view(), SIGNAL(enterKeyIsPressed()), interactor(), SIGNAL(enterKeyIsPressed()));
+    connect((MyGraphicsView*)view(), SIGNAL(enterKeyIsPressed()), (MyInteractor*)interactor(), SIGNAL(enterKeyIsPressed()));
     
     /// graphcis scene
     // set scene rect
-    connect(interactor(), SIGNAL(askForSetSceneRect(qreal, qreal, qreal, qreal)), view()->scene(), SLOT(setSceneRect(qreal, qreal, qreal, qreal)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForSetSceneRect(qreal, qreal, qreal, qreal)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setSceneRect(qreal, qreal, qreal, qreal)));
     
     // add graphics item
-    connect(interactor(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), view()->scene(), SLOT(addGraphicsItem(QGraphicsItem*)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(addGraphicsItem(QGraphicsItem*)));
     
     // remove graphics item
-    connect(interactor(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), view()->scene(), SLOT(removeGraphicsItem(QGraphicsItem*)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(removeGraphicsItem(QGraphicsItem*)));
     
     // reset scene
-    connect(interactor(), SIGNAL(askForClearScene()), view()->scene(), SLOT(clearScene()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(clearScene()));
     
     // items at position
-    connect(interactor(), SIGNAL(askForItemsAtPosition(const QPointF&)), view()->scene(), SLOT(itemsAtPosition(const QPointF&)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForItemsAtPosition(const QPointF&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(itemsAtPosition(const QPointF&)));
     
     // add node
-    connect(view()->scene(), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), interactor(), SLOT(addNewNode(const QPointF&)));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), (MyInteractor*)interactor(), SLOT(addNewNode(const QPointF&)));
     
     // change mode
-    connect(view()->scene(), &MyGraphicsScene::mouseRightButtonIsPressed, interactor(), &MyInteractor::enableNormalMode);
-    connect(view()->scene(), &MyGraphicsScene::mouseRightButtonIsPressed, interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
-    connect(view()->scene(), &MyGraphicsScene::escapeKeyIsPressed, interactor(), &MyInteractor::enableNormalMode);
-    connect(view()->scene(), &MyGraphicsScene::escapeKeyIsPressed, interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseRightButtonIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseRightButtonIsPressed, (MyInteractor*)interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::disconnectPressedEnterKeyFromDataExportTools);
 }
 
-MyInteractor* MyNetworkEditorWidget::interactor() {
+QObject* MyNetworkEditorWidget::interactor() {
     return _interactor;
 }
 
-MyToolBar* MyNetworkEditorWidget::toolBar() {
+QWidget* MyNetworkEditorWidget::toolBar() {
     return _toolBar;
 }
 
-MyGraphicsView* MyNetworkEditorWidget::view() {
+QWidget* MyNetworkEditorWidget::view() {
     return _view;
 }

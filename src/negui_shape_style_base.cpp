@@ -1,4 +1,5 @@
 #include "negui_shape_style_base.h"
+#include <QJsonObject>
 
 // MyShapeStyleBase
 

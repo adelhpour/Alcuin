@@ -1,10 +1,10 @@
 #ifndef __NEGUI_RECT_GRAPHICS_ITEM_H
 #define __NEGUI_RECT_GRAPHICS_ITEM_H
 
-#include "negui_shape_graphics_item_base.h"
-#include "negui_rect_style.h"
+#include "negui_2d_shape_graphics_item_base.h"
+#include <QGraphicsItem>
 
-class MyRectGraphicsItem: public MyShapeGraphicsItemBase, public QGraphicsPathItem {
+class MyRectGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsPathItem {
 public:
     
     MyRectGraphicsItem(qreal x, qreal y, QGraphicsItem *parent);
@@ -18,6 +18,8 @@ public:
     void updateExtents(const QRectF& extents) override;
     
     QRectF getExtents() const override;
+    
+    void setZValue(qreal z) override;
 };
 
 #endif

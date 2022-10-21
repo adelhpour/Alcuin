@@ -1,9 +1,9 @@
 #include "negui_text_graphics_item.h"
+#include "negui_text_style.h"
 
 // MyTextGraphicsItem
 
-MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : QGraphicsTextItem(parent) {
-    _originalPosition = QPointF(x, y);
+MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
 }
 
 void MyTextGraphicsItem::updateStyle() {
@@ -70,3 +70,6 @@ QRectF MyTextGraphicsItem::getExtents() const {
     return QRectF(x(), y(), boundingRect().width(), boundingRect().height());
 }
 
+void MyTextGraphicsItem::setZValue(qreal z) {
+    QGraphicsItem::setZValue(z);
+};

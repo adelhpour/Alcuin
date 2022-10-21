@@ -1,4 +1,5 @@
 #include "negui_import_plugin.h"
+#include <QJsonDocument>
 
 int ImportPlugin::initialize(const QString &path) {
     _path = path;

@@ -1,7 +1,8 @@
 #ifndef __NEGUI_INTERFACES_H
 #define __NEGUI_INTERFACES_H
 
-#include "negui_base.h"
+#include <QJsonObject>
+#include <QtPlugin>
 
 // interface base
 class InterfaceBase {

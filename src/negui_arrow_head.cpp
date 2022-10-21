@@ -1,11 +1,14 @@
 #include "negui_arrow_head.h"
+#include "negui_edge.h"
+#include "negui_element_graphics_item_builder.h"
+#include <QJsonObject>
 
 // MyArrowHead
 
-MyArrowHead::MyArrowHead(const QString& name, MyEdge* edge) : MyElementBase(name) {
+MyArrowHead::MyArrowHead(const QString& name, MyElementBase* edge) : MyElementBase(name) {
     _style = NULL;
     _edge = edge;
-    _graphicsItem = new MyArrowHeadSceneGraphicsItem();
+    _graphicsItem = createArrowHeadSceneGraphicsItem();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(askForElementFeatureMenu()), this, SLOT(getFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForSetShapeStyles(QList<MyShapeStyleBase*>)), this, SLOT(setShapeStyles(QList<MyShapeStyleBase*>)));
@@ -24,7 +27,7 @@ const QString MyArrowHead::typeAsString() const {
     return "ArrowHead";
 }
 
-MyEdge* MyArrowHead::edge() {
+MyElementBase* MyArrowHead::edge() {
     return _edge;
 }
 
@@ -37,7 +40,7 @@ void MyArrowHead::setSelected(const bool& selected) {
 
 void MyArrowHead::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
     MyElementBase::setShapeStyles(shapeStyles);
-    edge()->updatePoints();
+    ((MyEdge*)edge())->updatePoints();
 }
 
 void MyArrowHead::enableNormalMode() {

@@ -1,15 +1,10 @@
 #ifndef __NEGUI_GRAPHICS_VIEW_H
 #define __NEGUI_GRAPHICS_VIEW_H
 
-#include "negui_base.h"
-#include "negui_graphics_scene.h"
-
 #include <QGraphicsView>
-#include <QScrollbar>
 #include <QWheelEvent>
-#include <QTimeLine>
-
-class MyGraphicsScene;
+#include <QPrinter>
+#include <QProxyStyle>
 
 class MyGraphicsView : public QGraphicsView {
     Q_OBJECT
@@ -18,7 +13,6 @@ public:
     
     MyGraphicsView(QWidget* parent = nullptr);
     
-    MyGraphicsScene* scene();
     const qreal currentScale() const;
     void setMinScale(const qreal& minScale);
     void setMaxScale(const qreal& maxScale);
@@ -50,6 +44,15 @@ protected:
     int _panStartX;
     int _panStartY;
     bool _panMode;
+};
+
+class MyProxyStyle : public QProxyStyle {
+    
+public:
+    
+    MyProxyStyle(QStyle *style = nullptr);
+    
+    int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const override;
 };
 
 #endif

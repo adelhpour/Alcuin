@@ -1,4 +1,5 @@
 #include "negui_node_style_plugin.h"
+#include <QJsonDocument>
 
 int NodeStylePlugin::initialize(const QString &path) {
     _path = path;

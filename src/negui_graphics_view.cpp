@@ -1,4 +1,7 @@
 #include "negui_graphics_view.h"
+#include "negui_graphics_scene.h"
+#include <QScrollbar>
+#include <QTimeLine>
 
 // MyGraphicsView
 
@@ -17,10 +20,6 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setScene(new MyGraphicsScene(this));
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 };
-
-MyGraphicsScene* MyGraphicsView::scene() {
-    return ((MyGraphicsScene*)(QGraphicsView::scene()));
-}
 
 const qreal MyGraphicsView::currentScale() const {
     return transform().m11();
@@ -132,4 +131,16 @@ void MyGraphicsView::keyPressEvent(QKeyEvent *event) {
             event->accept();
         }
     }
+}
+
+// MyProxyStyle
+
+MyProxyStyle::MyProxyStyle(QStyle *style) : QProxyStyle(style) {
+    
+}
+
+int MyProxyStyle::styleHint(StyleHint hint, const QStyleOption* option, const QWidget* widget, QStyleHintReturn* returnData) const {
+    if (hint == QStyle::SH_ToolTip_WakeUpDelay)
+        return 250;
+    return QProxyStyle::styleHint(hint, option, widget, returnData);
 }

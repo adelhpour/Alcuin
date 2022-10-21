@@ -1,4 +1,6 @@
 #include "negui_autolayout_plugin.h"
+#include <QJsonArray>
+#include <QJsonDocument>
 
 int AutoLayoutPlugin::initialize(const QString &path) {
     _path = path;

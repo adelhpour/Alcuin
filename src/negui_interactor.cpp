@@ -1,4 +1,15 @@
 #include "negui_interactor.h"
+#include "negui_node.h"
+#include "negui_edge.h"
+#include "negui_element_builder.h"
+#include "negui_element_style_builder.h"
+#include "negui_import_tools.h"
+#include "negui_autolayout_engines.h"
+#include "negui_export_tools.h"
+#include <QCoreApplication>
+#include <QFileDialog>
+#include <QJsonArray>
+
 
 // MyInteractor
 
@@ -19,13 +30,13 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     _nodeStyleInterface = NULL;
     _isSetNodeStyleInterface = false;
     _nodeStyle = NULL;
-    _nodeStyles.push_back(new MyNodeStyle("Default"));
+    _nodeStyles.push_back(createNodeStyle("Default"));
     
     // edge style interface
     _edgeStyleInterface = NULL;
     _isSetEdgeStyleInterface = false;
     _edgeStyle = NULL;
-    _edgeStyles.push_back(new MyEdgeStyle("Default"));
+    _edgeStyles.push_back(createEdgeStyle("Default"));
     
     // autolayout interface
     _autoLayoutInterface = NULL;
@@ -204,7 +215,7 @@ void MyInteractor::readNodeStylesInfo(const QJsonObject &json) {
         for (int styleIndex = 0; styleIndex < stylesArray.size(); ++styleIndex) {
             QJsonObject styleObject = stylesArray[styleIndex].toObject();
             if (styleObject.contains("name") && styleObject["name"].isString()) {
-                style = new MyNodeStyle(styleObject["name"].toString());
+                style = createNodeStyle(styleObject["name"].toString());
                 style->read(styleObject);
                 _nodeStyles.push_back(style);
             }
@@ -246,7 +257,7 @@ void MyInteractor::readEdgeStylesInfo(const QJsonObject &json) {
         for (int styleIndex = 0; styleIndex < stylesArray.size(); ++styleIndex) {
             QJsonObject styleObject = stylesArray[styleIndex].toObject();
             if (styleObject.contains("name") && styleObject["name"].isString()) {
-                style = new MyEdgeStyle(styleObject["name"].toString());
+                style = createEdgeStyle(styleObject["name"].toString());
                 style->read(styleObject);
                 _edgeStyles.push_back(style);
             }
@@ -301,7 +312,7 @@ void MyInteractor::clearAutoLayoutInfo() {
         delete (MyAutoLayoutEngine*)_autoLayoutEngines.takeLast();
 }
 
-MyUndoStack* MyInteractor::undoStack() {
+QUndoStack* MyInteractor::undoStack() {
     return _undoStack;
 }
 
@@ -379,26 +390,26 @@ MyElementBase* MyInteractor::findNode(const QString& name) {
 
 void MyInteractor::addNode(const QJsonObject &json) {
     if (json.contains("id") && json["id"].isString() && json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble()) {
-        MyElementBase* _node = new MyNode(json["id"].toString(), json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
+        MyElementBase* _node = createNode(json["id"].toString(), json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
         if (json.contains("parent") && json["parent"].isString())
            ((MyNode*)_node)->setParentNodeId(json["parent"].toString());
         MyElementStyleBase* _style = NULL;
         if (json.contains("style") && json["style"].isObject() && json["style"].toObject().contains("name") && json["style"]["name"].isString()) {
-            _style = new MyNodeStyle(json["style"]["name"].toString());
+            _style = createNodeStyle(json["style"]["name"].toString());
             _style->read(json["style"].toObject());
         }
         if (!_style)
             _style = getCopyNodeStyle(_node->name() + "_style");
         _node->setStyle(_style);
         QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
-        undoStack()->addCommand(addNodeCommand);
+        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
     }
 }
 
 void MyInteractor::addNode(MyElementBase* n) {
-    if (n && !((MyNode*)n)->isActive()) {
+    if (n && !n->isActive()) {
         _nodes.push_back(n);
-        ((MyNode*)n)->setActive(true);
+        n->setActive(true);
         connect(n, SIGNAL(askForParentNodeAtPosition(MyElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyElementBase*, const QPointF&)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectNode(MyElementBase*)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(addNewEdge(MyElementBase*)));
@@ -408,9 +419,9 @@ void MyInteractor::addNode(MyElementBase* n) {
 }
 
 void MyInteractor::removeNode(MyElementBase* n) {
-    if (n && ((MyNode*)n)->isActive()) {
+    if (n && n->isActive()) {
         _nodes.removeOne(n);
-        ((MyNode*)n)->setActive(false);
+        n->setActive(false);
         emit askForRemoveGraphicsItem(n->graphicsItem());
     }
 }
@@ -467,7 +478,7 @@ MyElementStyleBase* MyInteractor::nodeStyle() {
 MyElementStyleBase* MyInteractor::getCopyNodeStyle(const QString& name) {
     QJsonObject styleObject;
     nodeStyle()->write(styleObject);
-    MyElementStyleBase* style = new MyNodeStyle(name);
+    MyElementStyleBase* style = createNodeStyle(name);
     style->read(styleObject);
     return style;
 }
@@ -506,22 +517,22 @@ MyElementBase* MyInteractor::findEdge(const QString& name) {
 
 void MyInteractor::addEdge(const QJsonObject &json) {
     if (json.contains("id") && json["id"].isString() && json.contains("start") && json["start"].isObject() && json["start"].toObject().contains("node") && json["start"]["node"].isString() && findNode(json["start"]["node"].toString()) && json.contains("end") && json["end"].isObject() && json["end"].toObject().contains("node") && json["end"]["node"].isString() && findNode(json["end"]["node"].toString())) {
-        MyElementBase* _edge = new MyEdge(json["id"].toString(), (MyNode*)findNode(json["start"]["node"].toString()), (MyNode*)findNode(json["end"]["node"].toString()));
+        MyElementBase* _edge = createEdge(json["id"].toString(), findNode(json["start"]["node"].toString()), findNode(json["end"]["node"].toString()));
         MyElementStyleBase* _style = NULL;
         if (json.contains("style") && json["style"].isObject() && json["style"].toObject().contains("name") && json["style"]["name"].isString()) {
-            _style = new MyEdgeStyle(json["style"]["name"].toString());
+            _style = createEdgeStyle(json["style"]["name"].toString());
             _style->read(json["style"].toObject());
         }
         if (!_style)
             _style = getCopyEdgeStyle(_edge->name() + "_style");
         _edge->setStyle(_style);
         QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
-        undoStack()->addCommand(addEdgeCommand);
+        ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
     }
 }
 
 void MyInteractor::addEdge(MyElementBase* e) {
-    if (e && !edgeExists(((MyEdge*)e)->startNode(), ((MyEdge*)e)->endNode()) && ((MyEdge*)e)->setActive(true)) {
+    if (e && !edgeExists(((MyEdge*)e)->startNode(), ((MyEdge*)e)->endNode()) && e->setActive(true)) {
         _edges.push_back(e);
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
@@ -532,8 +543,8 @@ void MyInteractor::addEdge(MyElementBase* e) {
 }
 
 void MyInteractor::removeEdge(MyElementBase* e) {
-    if (e && ((MyEdge*)e)->isActive()) {
-        ((MyEdge*)e)->setActive(false);
+    if (e && e->isActive()) {
+        e->setActive(false);
         _edges.removeOne(e);
         emit askForRemoveGraphicsItem(e->graphicsItem());
         if (((MyEdge*)e)->isSetArrowHead())
@@ -558,7 +569,7 @@ MyElementStyleBase* MyInteractor::edgeStyle() {
 MyElementStyleBase* MyInteractor::getCopyEdgeStyle(const QString& name) {
     QJsonObject styleObject;
     edgeStyle()->write(styleObject);
-    MyElementStyleBase* style = new MyEdgeStyle(name);
+    MyElementStyleBase* style = createEdgeStyle(name);
     style->read(styleObject);
     return style;
 }
@@ -567,13 +578,13 @@ void MyInteractor::setSelectedEdgeStartNode(MyElementBase* n) {
     if (n) {
         _selectedEdgeStartNode = n;
         _isSetSelectedEdgeStartNode = true;
-        ((MyNode*)selectedEdgeStartNode())->setSelected(true);
+        selectedEdgeStartNode()->setSelected(true);
     }
 }
 
 void MyInteractor::unSetSelectedEdgeStartNode() {
     if (selectedEdgeStartNode())
-        ((MyNode*)selectedEdgeStartNode())->setSelected(false);
+        selectedEdgeStartNode()->setSelected(false);
     _selectedEdgeStartNode = NULL;
     _isSetSelectedEdgeStartNode = false;
 }
@@ -669,10 +680,10 @@ void MyInteractor::exportNetworkInfo(QJsonObject &json) {
 
 void MyInteractor::addNewNode(const QPointF& position) {
     if (mode() == ADD_NODE_MODE) {
-        MyElementBase* _node = new MyNode(getNodeUniqueId(), position.x(), position.y());
+        MyElementBase* _node = createNode(getNodeUniqueId(), position.x(), position.y());
         _node->setStyle(getCopyNodeStyle(_node->name() + "_style"));
         QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
-        undoStack()->addCommand(addNodeCommand);
+        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
     }
 }
 
@@ -691,10 +702,10 @@ void MyInteractor::addNewEdge(MyElementBase* element) {
             setSelectedEdgeStartNode(element);
         }
         else if (selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element)) {
-            MyElementBase* _edge = new MyEdge(getEdgeUniqueId(), (MyNode*)selectedEdgeStartNode(), (MyNode*)element);
+            MyElementBase* _edge = createEdge(getEdgeUniqueId(), selectedEdgeStartNode(), element);
             _edge->setStyle(getCopyEdgeStyle(_edge->name() + "_style"));
             QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
-            undoStack()->addCommand(addEdgeCommand);
+            ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
             unSetSelectedEdgeStartNode();
         }
     }
@@ -718,7 +729,7 @@ void MyInteractor::removeItem(MyElementBase* element) {
             removeCommand = new MyRemoveEdgeCommand(this, element);
         
         if (removeCommand)
-            undoStack()->addCommand(removeCommand);
+            ((MyUndoStack*)undoStack())->addCommand(removeCommand);
     }
 }
 
@@ -1006,6 +1017,76 @@ QToolButton* MyInteractor::populateResetSceneMenu() {
     return button;
 }
 
+// MyUndoStack
+
+MyUndoStack::MyUndoStack(QObject *parent) : QUndoStack(parent) {
+    
+}
+
+void MyUndoStack::addCommand(QUndoCommand* command) {
+    push(command);
+}
+
+void MyUndoStack::clear() {
+    QUndoStack::clear();
+}
+
+// MyToolButton
+
+MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
+    setPopupMode(QToolButton::InstantPopup);
+    setStyleSheet("QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+// MyToolButtonMenu
+
+MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
+    setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
+}
+
+// MyWidgetAction
+
+MyWidgetAction::MyWidgetAction(QObject* parent) : QWidgetAction(parent) {
+    
+}
+
+void MyWidgetAction::setItems(QList<MyPluginItemBase*> items) {
+    setDefaultWidget(createItemPreviewWidget(items));
+}
+
+QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items) {
+    QWidget* itemWidget = new QWidget();
+    QVBoxLayout* itemWidgetLayoutContent = new QVBoxLayout();
+    QPushButton* itemPreviewButton = NULL;
+    for (MyPluginItemBase* item : items) {
+        itemPreviewButton = new MyItemPreviewButton(item);
+        connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); ((MyToolButtonMenu*)(this->parent()))->close(); });
+        itemWidgetLayoutContent->addWidget(itemPreviewButton, itemWidgetLayoutContent->count());
+    }
+    itemWidget->setLayout(itemWidgetLayoutContent);
+    itemWidget->setStyleSheet("QWidget { background-color: white; border-radius: 10px;}");
+    
+    return itemWidget;
+}
+
+// MyItemPreviewButton
+
+MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent) : QPushButton(parent) {
+    setCheckable(true);
+    setToolTip(item->name());
+    
+    if (item->icon().isNull()) {
+        setStyleSheet("QPushButton { border : no-border; text-align : left} QPushButton:hover { color: darkgray}");
+        setText(item->name());
+    }
+    else {
+        setStyleSheet("QPushButton { border : no-border;} QPushButton:hover { background-color: darkgray}");
+        setIcon(item->icon());
+        setIconSize(item->iconSize());
+    }
+}
+
+
 // MyAddNodeCommand
 
 MyAddNodeCommand::MyAddNodeCommand(MyInteractor* interactor, MyElementBase* node, QUndoCommand* parent) : QUndoCommand(parent) {
@@ -1040,7 +1121,7 @@ void MyRemoveNodeCommand::undo() {
 
 void MyRemoveNodeCommand::redo() {
     _interactor->removeNode(_node);
-    for (MyEdge *edge : qAsConst(((MyNode*)_node)->edges()))
+    for (MyElementBase *edge : qAsConst(((MyNode*)_node)->edges()))
         _interactor->removeEdge(edge);
 }
 

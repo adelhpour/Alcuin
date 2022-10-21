@@ -1,4 +1,8 @@
 #include "negui_node.h"
+#include "negui_edge.h"
+#include "negui_element_graphics_item_builder.h"
+#include "negui_node_graphics_item.h"
+#include <QJsonObject>
 
 // MyNode
 
@@ -11,7 +15,7 @@ MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementB
     _isParentNodeLocked = false;
     _areChildNodesLocked = false;
     _position = QPointF(x, y);
-    _graphicsItem = new MyNodeSceneGraphicsItem(position());
+    _graphicsItem = createNodeSceneGraphicsItem(position());
     enableNormalMode();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
@@ -34,17 +38,17 @@ const QString MyNode::typeAsString() const {
     return "Node";
 }
 
-void MyNode::addEdge(MyEdge* e) {
+void MyNode::addEdge(MyElementBase* e) {
     if (e)
         _edges.push_back(e);
 }
 
-void MyNode::removeEdge(MyEdge* e) {
+void MyNode::removeEdge(MyElementBase* e) {
     if (e)
         _edges.removeOne(e);
 }
 
-QList<MyEdge*>& MyNode::edges() {
+QList<MyElementBase*>& MyNode::edges() {
     return _edges;
 }
 
@@ -65,21 +69,21 @@ void MyNode::setParentNodeId(const QString& parentNodeId) {
     _parentNodeId = parentNodeId;
 }
 
-MyNode* MyNode::parentNode() {
+MyElementBase* MyNode::parentNode() {
     return _parentNode;
 }
 
-void MyNode::setParentNode(MyNode* parentNode) {
+void MyNode::setParentNode(MyElementBase* parentNode) {
     if (parentNode) {
         _parentNode = parentNode;
         _isSetParentNode = true;
         _parentNodeId = parentNode->name();
-        _parentNode->addChildNode(this);
+        ((MyNode*)_parentNode)->addChildNode(this);
     }
     else {
         if (_parentNode) {
-            _parentNode->removeChildNode(this);
-            _parentNode->adjustExtentsTochildren();
+            ((MyNode*)_parentNode)->removeChildNode(this);
+            ((MyNode*)_parentNode)->adjustExtentsTochildren();
         }
         _parentNode = NULL;
         _isSetParentNode = false;
@@ -91,21 +95,21 @@ void MyNode::lockParentNode(const bool& locked) {
     _isParentNodeLocked = locked;
 }
 
-void MyNode::addChildNode(MyNode* n) {
+void MyNode::addChildNode(MyElementBase* n) {
     if (n) {
         _childNodes.push_back(n);
         updateChildNodesMobility();
     }
 }
 
-void MyNode::removeChildNode(MyNode* n) {
+void MyNode::removeChildNode(MyElementBase* n) {
     if (n) {
         _childNodes.removeOne(n);
         updateChildNodesMobility();
     }
 }
 
-QList<MyNode*>& MyNode::childNodes() {
+QList<MyElementBase*>& MyNode::childNodes() {
     return _childNodes;
 }
 
@@ -115,7 +119,7 @@ void MyNode::lockChildNodes(const bool& locked) {
 
 void MyNode::updateChildNodesMobility() {
     if (childNodes().size() > 1) {
-        for (MyNode* node : qAsConst(childNodes()))
+        for (MyElementBase* node : qAsConst(childNodes()))
             node->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
     }
     else if (childNodes().size() == 1)
@@ -144,8 +148,8 @@ void MyNode::reparent() {
 void MyNode::setPosition(const QPointF& position) {
     // move child nodes
     if (!areChildNodesLocked()) {
-        for (MyNode* node : qAsConst(childNodes())) {
-            node->lockParentNode(true);
+        for (MyElementBase* node : qAsConst(childNodes())) {
+            ((MyNode*)node)->lockParentNode(true);
             ((MyNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
         }
     }
@@ -158,14 +162,14 @@ void MyNode::setPosition(const QPointF& position) {
     // adjust parent extents
     if (!isParentNodeLocked()) {
         if (parentNode())
-            parentNode()->adjustExtentsTochildren();
+            ((MyNode*)parentNode())->adjustExtentsTochildren();
     }
     else
         lockParentNode(false);
     
     // edges
-    for (MyEdge *edge : qAsConst(edges()))
-        edge->updatePoints();
+    for (MyElementBase *edge : qAsConst(edges()))
+        ((MyEdge*)edge)->updatePoints();
 }
 
 void MyNode::resetPosition() {
@@ -182,8 +186,8 @@ const QRectF MyNode::getExtents() {
     extents.setY(INT_MAX);
     if (childNodes().size()) {
         QRectF childExtents;
-        for (MyNode* childNode : qAsConst(childNodes())) {
-            childExtents = childNode->getExtents();
+        for (MyElementBase* childNode : qAsConst(childNodes())) {
+            childExtents = ((MyNode*)childNode)->getExtents();
             if (childExtents.x() < extents.x())
                 extents.setX(childExtents.x());
             if (childExtents.y() < extents.y())
@@ -205,10 +209,6 @@ void MyNode::adjustExtentsTochildren() {
     lockChildNodes(true);
     ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width()), extents.y() - (position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height()));
     ((MyNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
-}
-
-bool MyNode::setActive(const bool& active) {
-    return _isActive = active;
 }
 
 void MyNode::enableNormalMode() {
@@ -255,10 +255,10 @@ QWidget* MyNode::getFeatureMenu() {
 
 const qint32 MyNode::calculateZValue() {
     qint32 incrementZValue = 2;
-    MyNode* parent = this;
-    while (parent && parent->parentNodeId() != "N/A") {
+    MyElementBase* parent = this;
+    while (parent && ((MyNode*)parent)->parentNodeId() != "N/A") {
         incrementZValue += 4;
-        parent = parent->parentNode();
+        parent = ((MyNode*)parent)->parentNode();
     }
     
     return incrementZValue;

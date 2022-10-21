@@ -1,4 +1,7 @@
 #include "negui_element_graphics_item_base.h"
+#include "negui_feature_menu.h"
+
+#include <QGraphicsSceneMouseEvent>
 
 // MyElementGraphicsItemBase
 
@@ -15,20 +18,7 @@ void MyElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> shapeStyl
 }
 
 void MyElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
-        item = defaultEllipseItem();
-    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE)
-        item = defaultRectItem();
-    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
-        item = defaultPolygonItem();
-    else if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE)
-        item = defaultLineItem();
-    else if (style->type() == MyShapeStyleBase::BEZIER_SHAPE_STYLE)
-        item = defaultBezierItem();
-    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE)
-        item = defaultTextItem();
-    
+    MyShapeGraphicsItemBase* item = createShapeGraphicsItem(style);
     if (item) {
         item->setStyle(style);
         item->updateStyle();

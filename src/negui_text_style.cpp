@@ -1,4 +1,5 @@
 #include "negui_text_style.h"
+#include <QJsonObject>
 
 // MyTextStyle
 

@@ -1,4 +1,6 @@
 #include "negui_arrow_head_graphics_item.h"
+#include "negui_shape_graphics_item_builder.h"
+#include <QtMath>
 
 // MyArrowHeadGraphicsItemBase
 
@@ -6,34 +8,19 @@ MyArrowHeadGraphicsItemBase::MyArrowHeadGraphicsItemBase(QGraphicsItem *parent) 
     
 }
 
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultEllipseItem() {
-    MyShapeGraphicsItemBase* item = new MyEllipseGraphicsItem(_initialPosition.x() - _padding, _initialPosition.y(), this);
-    ((MyEllipseGraphicsItem*)item)->setZValue(zValue());
+MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
+        item = createEllipseShape(_initialPosition.x() - _padding, _initialPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE)
+        item = createRectShape(_initialPosition.x() - _padding * qCos(qDegreesToRadians(45.0)), _initialPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
+        item = createPolygonShape(_initialPosition.x() + _padding, _initialPosition.y(), this);
+    
+    if (item)
+        item->setZValue(zValue());
+    
     return item;
-}
-
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultRectItem() {
-    MyShapeGraphicsItemBase* item = new MyRectGraphicsItem(_initialPosition.x() - _padding * qCos(qDegreesToRadians(45.0)), _initialPosition.y(), this);
-    ((MyRectGraphicsItem*)item)->setZValue(zValue());
-    return item;
-}
-
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultPolygonItem() {
-    MyShapeGraphicsItemBase* item = new MyPolygonGraphicsItem(_initialPosition.x() + _padding, _initialPosition.y(), this);
-    ((MyPolygonGraphicsItem*)item)->setZValue(zValue());
-    return item;
-}
-
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultLineItem() {
-    return NULL;
-}
-
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultBezierItem() {
-    return NULL;
-}
-
-MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::defaultTextItem() {
-    return NULL;
 }
 
 // MyArrowHeadSceneGraphicsItem

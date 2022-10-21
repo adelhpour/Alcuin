@@ -1,4 +1,7 @@
 #include "negui_autolayout_engines.h"
+#include <QDialogButtonBox>
+#include <QJsonObject>
+#include <QJsonArray>
 
 // MyAutoLayoutEngine
 
@@ -114,4 +117,10 @@ void MyAutoLayoutEngine::write(QJsonObject &json) {
     
     // icon directory
     json["icon-file"] = iconDirectory();
+}
+
+// MyDialog
+
+MyDialog::MyDialog(QWidget *parent) : QDialog(parent) {
+    setStyleSheet("QDialog {background-color: white;}");
 }
