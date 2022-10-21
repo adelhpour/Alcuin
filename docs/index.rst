@@ -7,7 +7,18 @@ NetworkEditorGUI documentation!
    :caption: Contents:
    
    overview.rst
-
+   features.rst
+   software.rst
+   gallery.rst
+   tutorials.rst
+   download.rst
+   plugins.rst
+   goals.rst
+   contact.rst
+   feedback.rst
+   citation.rst
+   license.rst
+   
 Indices and tables
 ##################
 

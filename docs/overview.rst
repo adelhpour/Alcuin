@@ -5,20 +5,10 @@ Overview
 Description
 ###########
 
-NetworkEditorGUI is a portable GUI library, based on Qt/C++, that provides developers with the basic features required for a reaction network editor software tool. These features are:
+NetworkEditorGUI is an open-source portable GUI library that provides developers with an embeddable Qt widget with the fundamental features required for network viewer and editor software tools. Using NetworkEditorGUI, a developer can straightforwardly add network viewer and editor features into their tool and customize it at their will through its plugin interface. This plugin interface allows the developer to write code in Python and customize their app features to meet their specific requirements.
 
-* Add/Remove Nodes to the scene,
-* Add/Remove Edges between two nodes on the scene,
-* Drag and Move a node and its connected edges on the scene,
-* Undo/Redo actions,
-* Zoom and Pan on the scene,
-* Export a .pdf figure of the scene.
+NetworkEditorGUI is being developed and maintained by Adel Heydarabadipour and Herbert Sauro at `Sys-Bio Lab <https://www.sys-bio.org>`_
 
- 
-Operating Systems
-#################
-NetworkEditorGUI runs on:
+Long-term goals
+###############
 
-* Microsoft Windows,
-* macOS,
-* Linux.
