@@ -105,7 +105,7 @@ def writeJSON(graphInfo, filename):
 
 
 def writeSBML(graphInfo, filename):
-    sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromNetworkEditorJson()
+    sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromNetworkEditor()
     sbml_graph_info.extract_info(graphInfo)
     sbml_export = sbmlplot.SBMLGraphInfoExportToSBMLModel()
     sbml_export.extract_graph_info(sbml_graph_info)
