@@ -2,10 +2,13 @@
 Download and Install
 ********************
 
-Build from source
+Build from Source
 #################
 
-NetworkEditorGUI can be built from its source code using the followng steps:
+Portable Library
+================
+
+NetworkEditorGUI can be built from its source code using the following steps:
 
 * Create a directory for your entire NetworkEditorGUI project. This directory should be placed in somewhere not admin-blocked and is recommended to have the following file structure:
 
@@ -43,8 +46,14 @@ NetworkEditorGUI can be built from its source code using the followng steps:
     *  On Windows, you can either click on "Open Project" button on CMake-gui or open the generated ``.sln`` file in ``<root directory>/build`` in Visual Studio. Once Visual Studio is launched, change the configuration to "Release", and build ``ALL-BUILD`` and ``INSTALL``.
     
     *  On macOS and Linux, simply go to ``<root directory>/build`` and run ``make`` and then ``make install`` on terminal.
+    
+Application
+===========
 
-Download binary installers
+An application consisting of a window of NetworkEditorGUI widget can be built from its source code. To build it, a developer should follow similar steps described above for building the portable library except that ``<root directory>/source/networkeditorgui/test-app`` must be selected as the source directory in CMake-gui.
+
+
+Download Binary Installers
 ##########################
 
 NetworkEditorGUI runs on:

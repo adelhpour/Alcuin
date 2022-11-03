@@ -10,16 +10,17 @@ How to use
 To the Developers
 =================
 
-To use NetworkEditorGUI, a developer should follow the following steps:
+To use NetworkEditorGUI portable library, a developer should follow the following steps:
 
-    * Link their code against NetworkEditorGUI library, located in the ``lib`` or ``bin`` folder (depending on the operating system) under install directory
-    * include NetworkEditorGUI header files, located in the ``include`` folder under install directory, in their project
-    * create an object of ``MyNetworkEditorWidget`` in their code
+    * Either :ref:`build <download:Build from source>` NetworkEditorGUI portable library from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers,
+    * Link their code against NetworkEditorGUI library, located in the ``lib`` or ``bin`` folder (depending on the operating system) under install directory,
+    * include NetworkEditorGUI header files, located in the ``include`` folder under install directory, in their project,
+    * create an object of ``MyNetworkEditorWidget`` in their code.
     
 To the Users
 ============
 
-To use NetworkEditorGUI, a user should build a test-app from source or install it using the binary installers
+To use NetworkEditorGUI application, a user/ developer should :ref:`build <download:Build from source>` the application from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers.
 
 Architecture
 ############
@@ -33,7 +34,7 @@ On the front-end, NetworkEditorGUI consists of the following items:
     
     * An object of MyToolbar, a customized QToolbar class, contating the action buttons,
     * An object of MyGraphicsView, a customized QGraphicsView class, holding the scene,
-    * An object of MyGraphicsScene, a customized QGraphicsScene class, displaying the network,
+    * An object of MyGraphicsScene, a customized QGraphicsScene class, displaying the network.
     
 Back-end
 ========
