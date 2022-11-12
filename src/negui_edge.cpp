@@ -153,49 +153,36 @@ const QPointF MyEdge::getEndPosition() {
 
 void MyEdge::enableNormalMode() {
     MyElementBase::enableNormalMode();
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    
-    // arrow head
     if (isSetArrowHead())
         arrowHead()->enableNormalMode();
 }
 
 void MyEdge::enableAddNodeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    
-    // arrow head
+    MyElementBase::enableAddNodeMode();
     if (isSetArrowHead())
         arrowHead()->enableAddNodeMode();
 }
 
 void MyEdge::enableSelectNodeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    
-    // arrow head
+    MyElementBase::enableSelectNodeMode();
     if (isSetArrowHead())
         arrowHead()->enableSelectNodeMode();
 }
 
 void MyEdge::enableAddEdgeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    
-    // arrow head
+    MyElementBase::enableAddEdgeMode();
     if (isSetArrowHead())
         arrowHead()->enableAddEdgeMode();
 }
 
 void MyEdge::enableSelectEdgeMode() {
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    
-    // arrow head
+    MyElementBase::enableSelectEdgeMode();
     if (isSetArrowHead())
         arrowHead()->enableSelectEdgeMode();
 }
 
 void MyEdge::enableRemoveMode() {
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    
-    // arrow head
+    MyElementBase::enableRemoveMode();
     if (isSetArrowHead())
         arrowHead()->enableRemoveMode();
 }

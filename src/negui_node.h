@@ -69,22 +69,6 @@ public:
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
     
-    // enable the normal mode of the node
-    void enableNormalMode() override;
-    
-    // enable the add node mode of the node
-    void enableAddNodeMode() override;
-    
-    void enableSelectNodeMode() override;
-    
-    // enable the add edge mode of the node
-    void enableAddEdgeMode() override;
-    
-    void enableSelectEdgeMode() override;
-    
-    // enable the remove mode of the node
-    void enableRemoveMode() override;
-    
     // get node extents based on its children extents
     const QRectF getExtents();
     

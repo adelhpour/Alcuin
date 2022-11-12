@@ -9,14 +9,24 @@ class MyPluginItemBase : public MyBase {
 public:
     
     MyPluginItemBase(const QString& name);
-    
-    // icon
+    virtual const QString type() const = 0;
+    const QString& category() const;
+    const QString& subCategory() const;
     virtual const QIcon icon() = 0;
     const QSize& iconSize() const;
+    virtual void read(const QJsonObject &json) override;
+    virtual void write(QJsonObject &json) override;
     
 protected:
-    
+    QString _category;
+    QString _subCategory;
     QSize _iconSize;
 };
+
+QList<MyPluginItemBase*> getPluginsOfType(QList<MyPluginItemBase*> plugins, const QString& type);
+QList<MyPluginItemBase*> getPluginsOfCategory(QList<MyPluginItemBase*> plugins, const QString& category);
+QList<MyPluginItemBase*> getPluginsOfSubCategory(QList<MyPluginItemBase*> plugins, const QString& subCategory);
+const QList<QString> getPluginsCategories(QList<MyPluginItemBase*> plugins);
+const QList<QString> getPluginsSubCategories(QList<MyPluginItemBase*> plugins);
 
 #endif

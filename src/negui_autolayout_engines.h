@@ -12,6 +12,7 @@ public:
     MyAutoLayoutEngine(const QString& name);
     
     ~MyAutoLayoutEngine();
+    const QString type() const override;
     
     // parameters
     void addParameter(MyParameterBase* p);

@@ -43,6 +43,30 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
     return endSlope;
 }
 
+void MyEdgeGraphicsItemBase::enableNormalMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeGraphicsItemBase::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeGraphicsItemBase::enableSelectNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeGraphicsItemBase::enableAddEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeGraphicsItemBase::enableSelectEdgeMode() {
+    setCursor(Qt::PointingHandCursor);
+}
+
+void MyEdgeGraphicsItemBase::enableRemoveMode() {
+    setCursor(Qt::PointingHandCursor);
+}
+
 // MyEdgeSceneGraphicsItem
 
 MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {

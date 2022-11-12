@@ -3,13 +3,13 @@ import json
     
 def autoLayoutInfo():
     # circular
-    circular = {'name' : "Circular"}
+    circular = {'name' : "Circular", 'type': "autolayoutengine"}
     # planar
-    planar = {'name' : "Planar"}
+    planar = {'name' : "Planar", 'type': "autolayoutengine"}
     # kamad_kawai
-    kamad_kawai = {'name' : "Kamda-Kawai"}
+    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine"}
     # spiral
-    spiral = {'name' : "Spiral", 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
+    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
     
     return json.dumps({'items': [circular, planar, kamad_kawai, spiral]})
         

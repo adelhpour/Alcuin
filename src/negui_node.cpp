@@ -138,7 +138,8 @@ void MyNode::deparent() {
 void MyNode::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     setParentNode(NULL);
-    if (parentNode) {
+    if (parentNode && parentNode->isStyleCategoryConvertibleToParentCategory()) {
+        parentNode->convertStyleCategoryToParentCategory();
         setParentNode((MyNode*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
         ((MyNode*)parentNode)->adjustExtentsTochildren();
@@ -209,37 +210,6 @@ void MyNode::adjustExtentsTochildren() {
     lockChildNodes(true);
     ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width()), extents.y() - (position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height()));
     ((MyNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
-}
-
-void MyNode::enableNormalMode() {
-    MyElementBase::enableNormalMode();
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-}
-
-void MyNode::enableAddNodeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNode::enableSelectNodeMode() {
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNode::enableAddEdgeMode() {
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNode::enableSelectEdgeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNode::enableRemoveMode() {
-    graphicsItem()->setCursor(Qt::PointingHandCursor);
-    graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 QWidget* MyNode::getFeatureMenu() {

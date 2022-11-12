@@ -12,6 +12,12 @@ public:
     
     MyElementStyleBase(const QString& name);
     
+    const QString& parentCategory() const;
+    
+    bool isCategoryConvertibleToParentCategory();
+    
+    void convertCategoryToParentCategory();
+    
     QList<MyShapeStyleBase*>& shapeStyles();
     
     virtual void addDefaultShapeStyle() = 0;
@@ -38,6 +44,7 @@ public slots:
     
 protected:
     QList<MyShapeStyleBase*> _shapeStyles;
+    QString _parentCategory;
 };
 
 #endif

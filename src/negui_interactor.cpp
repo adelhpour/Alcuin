@@ -3,6 +3,7 @@
 #include "negui_edge.h"
 #include "negui_element_builder.h"
 #include "negui_element_style_builder.h"
+#include "negui_plugin_item_builder.h"
 #include "negui_import_tools.h"
 #include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
@@ -26,21 +27,17 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     _printExportInterface = NULL;
     _isSetPrintExportInterface = false;
     
-    // node style interface
-    _nodeStyleInterface = NULL;
-    _isSetNodeStyleInterface = false;
-    _nodeStyle = NULL;
-    _nodeStyles.push_back(createNodeStyle("Default"));
-    
-    // edge style interface
-    _edgeStyleInterface = NULL;
-    _isSetEdgeStyleInterface = false;
-    _edgeStyle = NULL;
-    _edgeStyles.push_back(createEdgeStyle("Default"));
+    // element style interface
+    _elementStyleInterface = NULL;
+    _isSetElementStyleInterface = false;
     
     // autolayout interface
     _autoLayoutInterface = NULL;
     _isSetAutoLayoutInterface = false;
+    
+    // element styles
+    _nodeStyle = NULL;
+    _edgeStyle = NULL;
     
     // undo stack
     _undoStack = new MyUndoStack(this);
@@ -65,12 +62,7 @@ ImportInterface* MyInteractor::importInterface() {
     return _importInterface;
 }
 
-QList<MyPluginItemBase*>& MyInteractor::importTools() {
-    return _importTools;
-}
-
 void MyInteractor::readImportInfo(const QJsonObject &json) {
-    clearImportInfo();
     // tools
     if (json.contains("items") && json["items"].isArray()) {
         QJsonArray toolsArray = json["items"].toArray();
@@ -80,15 +72,10 @@ void MyInteractor::readImportInfo(const QJsonObject &json) {
             if (toolObject.contains("name") && toolObject["name"].isString()) {
                 tool = new MyImportTool(toolObject["name"].toString());
                 tool->read(toolObject);
-                _importTools.push_back(tool);
+                _plugins.push_back(tool);
             }
         }
     }
-}
-
-void MyInteractor::clearImportInfo() {
-    while(_importTools.size())
-        delete (MyImportTool*)_importTools.takeLast();
 }
 
 bool MyInteractor::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path) {
@@ -107,12 +94,7 @@ DataExportInterface* MyInteractor::dataExportInterface() {
     return _dataExportInterface;
 }
 
-QList<MyPluginItemBase*>& MyInteractor::dataExportTools() {
-    return _dataExportTools;
-}
-
 void MyInteractor::readDataExportInfo(const QJsonObject &json) {
-    clearDataExportInfo();
     // tools
     if (json.contains("items") && json["items"].isArray()) {
         QJsonArray toolsArray = json["items"].toArray();
@@ -121,27 +103,11 @@ void MyInteractor::readDataExportInfo(const QJsonObject &json) {
             QJsonObject toolObject = toolsArray[toolIndex].toObject();
             if (toolObject.contains("name") && toolObject["name"].isString()) {
                 tool = new MyDataExportTool(toolObject["name"].toString());
-                connect((MyDataExportTool*)tool, SIGNAL(elementSelectionStarted()), this, SLOT(enableNormalMode()));
-                connect((MyDataExportTool*)tool, SIGNAL(askForNodeSelection(const QString&)), this, SLOT(enableSelectNodeMode(const QString&)));
-                connect((MyDataExportTool*)tool, SIGNAL(askForSelectedNodes()), this, SLOT(selectedNodes()));
-                connect((MyDataExportTool*)tool, SIGNAL(askForEdgeSelection(const QString&)), this, SLOT(enableSelectEdgeMode(const QString&)));
-                connect((MyDataExportTool*)tool, SIGNAL(askForSelectedEdges()), this, SLOT(selectedEdges()));
-                connect((MyDataExportTool*)tool, SIGNAL(elementSelectionFinished(MyPluginItemBase*)), this, SLOT(writeDataToFile(MyPluginItemBase*)));
                 tool->read(toolObject);
-                _dataExportTools.push_back(tool);
+                _plugins.push_back(tool);
             }
         }
     }
-}
-
-void MyInteractor::clearDataExportInfo() {
-    while(_dataExportTools.size())
-        delete (MyDataExportTool*)_dataExportTools.takeLast();
-}
-
-void MyInteractor::disconnectPressedEnterKeyFromDataExportTools() {
-    for (MyPluginItemBase *exportTool : qAsConst(dataExportTools()))
-        disconnect(this, SIGNAL(enterKeyIsPressed()), (MyDataExportTool*)exportTool, SLOT(annotateSelectedElements()));
 }
 
 bool MyInteractor::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path) {
@@ -160,12 +126,7 @@ PrintExportInterface* MyInteractor::printExportInterface() {
     return _printExportInterface;
 }
 
-QList<MyPluginItemBase*>& MyInteractor::printExportTools() {
-    return _printExportTools;
-}
-
 void MyInteractor::readPrintExportInfo(const QJsonObject &json) {
-    clearPrintExportInfo();
     // tools
     if (json.contains("items") && json["items"].isArray()) {
         QJsonArray toolsArray = json["items"].toArray();
@@ -175,99 +136,48 @@ void MyInteractor::readPrintExportInfo(const QJsonObject &json) {
             if (toolObject.contains("name") && toolObject["name"].isString()) {
                 tool = new MyPrintExportTool(toolObject["name"].toString());
                 tool->read(toolObject);
-                _printExportTools.push_back(tool);
+                _plugins.push_back(tool);
             }
         }
     }
 }
 
-void MyInteractor::clearPrintExportInfo() {
-    while(_printExportTools.size())
-        delete (MyPrintExportTool*)_printExportTools.takeLast();
+QList<MyPluginItemBase*>& MyInteractor::plugins() {
+    return _plugins;
 }
 
-bool MyInteractor::setNodeStyleInterface(NodeStyleInterface* nodeStyleInterface, const QString &path) {
-    if (nodeStyleInterface) {
-        _nodeStyleInterface = nodeStyleInterface;
-        if (!_nodeStyleInterface->initialize(path)) {
-            readNodeStylesInfo(_nodeStyleInterface->loadItemsInfo());
-            _isSetNodeStyleInterface = true;
+bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &path) {
+    if (elementStyleInterface) {
+        _elementStyleInterface = elementStyleInterface;
+        if (!_elementStyleInterface->initialize(path)) {
+            readElementStylesInfo(_elementStyleInterface->loadItemsInfo());
+            _isSetElementStyleInterface = true;
         }
     }
     
-    return _isSetNodeStyleInterface;
+    return _isSetElementStyleInterface;
 }
 
-NodeStyleInterface* MyInteractor::nodeStyleInterface() {
-    return _nodeStyleInterface;
+ElementStyleInterface* MyInteractor::elementStyleInterface() {
+    return _elementStyleInterface;
 }
 
-QList<MyPluginItemBase*>& MyInteractor::nodeStyles() {
-    return _nodeStyles;
-}
-
-void MyInteractor::readNodeStylesInfo(const QJsonObject &json) {
-    clearNodeStylesInfo();
-    // node styles
+void MyInteractor::readElementStylesInfo(const QJsonObject &json) {
+    // element styles
     if (json.contains("items") && json["items"].isArray()) {
         QJsonArray stylesArray = json["items"].toArray();
         MyPluginItemBase* style = NULL;
         for (int styleIndex = 0; styleIndex < stylesArray.size(); ++styleIndex) {
             QJsonObject styleObject = stylesArray[styleIndex].toObject();
-            if (styleObject.contains("name") && styleObject["name"].isString()) {
-                style = createNodeStyle(styleObject["name"].toString());
-                style->read(styleObject);
-                _nodeStyles.push_back(style);
+            if (styleObject.contains("name") && styleObject["name"].isString() && styleObject.contains("type") && styleObject["type"].isString()) {
+                MyPluginItemBase* style = createPluginItem(styleObject["name"].toString(), styleObject["type"].toString());
+                if (style) {
+                    style->read(styleObject);
+                    _plugins.push_back(style);
+                }
             }
         }
     }
-}
-
-void MyInteractor::clearNodeStylesInfo() {
-    while(_nodeStyles.size() > 1)
-        delete (MyElementStyleBase*)_nodeStyles.takeLast();
-}
-
-bool MyInteractor::setEdgeStyleInterface(EdgeStyleInterface* edgeStyleInterface, const QString &path) {
-    if (edgeStyleInterface) {
-        _edgeStyleInterface = edgeStyleInterface;
-        if (!_edgeStyleInterface->initialize(path)) {
-            readEdgeStylesInfo(_edgeStyleInterface->loadItemsInfo());
-            _isSetEdgeStyleInterface = true;
-        }
-    }
-    
-    return _isSetEdgeStyleInterface;
-}
-
-EdgeStyleInterface* MyInteractor::edgeStyleInterface() {
-    return _edgeStyleInterface;
-}
-
-QList<MyPluginItemBase*>& MyInteractor::edgeStyles() {
-    return _edgeStyles;
-}
-
-void MyInteractor::readEdgeStylesInfo(const QJsonObject &json) {
-    clearEdgeStylesInfo();
-    // edge styles
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray stylesArray = json["items"].toArray();
-        MyPluginItemBase* style = NULL;
-        for (int styleIndex = 0; styleIndex < stylesArray.size(); ++styleIndex) {
-            QJsonObject styleObject = stylesArray[styleIndex].toObject();
-            if (styleObject.contains("name") && styleObject["name"].isString()) {
-                style = createEdgeStyle(styleObject["name"].toString());
-                style->read(styleObject);
-                _edgeStyles.push_back(style);
-            }
-        }
-    }
-}
-
-void MyInteractor::clearEdgeStylesInfo() {
-    while(_edgeStyles.size() > 1)
-        delete (MyElementStyleBase*)_edgeStyles.takeLast();
 }
 
 bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path) {
@@ -286,12 +196,7 @@ AutoLayoutInterface* MyInteractor::autoLayoutInterface() {
     return _autoLayoutInterface;
 }
 
-QList<MyPluginItemBase*>& MyInteractor::autoLayoutEngines() {
-    return _autoLayoutEngines;
-}
-
 void MyInteractor::readAutoLayoutInfo(const QJsonObject &json) {
-    clearAutoLayoutInfo();
     // engines
     if (json.contains("items") && json["items"].isArray()) {
         QJsonArray enginesArray = json["items"].toArray();
@@ -301,15 +206,10 @@ void MyInteractor::readAutoLayoutInfo(const QJsonObject &json) {
             if (engineObject.contains("name") && engineObject["name"].isString()) {
                 engine = new MyAutoLayoutEngine(engineObject["name"].toString());
                 engine->read(engineObject);
-                _autoLayoutEngines.push_back(engine);
+                _plugins.push_back(engine);
             }
         }
     }
-}
-
-void MyInteractor::clearAutoLayoutInfo() {
-    while(_autoLayoutEngines.size())
-        delete (MyAutoLayoutEngine*)_autoLayoutEngines.takeLast();
 }
 
 QUndoStack* MyInteractor::undoStack() {
@@ -365,7 +265,7 @@ QString MyInteractor::getNodeUniqueId() {
     qreal k = 0;
     bool isSimilarIdFound = true;
     while(isSimilarIdFound) {
-        name = "Node_" + QString::number(k);
+        name = nodeStyle()->category() + "_" + QString::number(k);
         isSimilarIdFound = false;
         for (MyElementBase *node : qAsConst(nodes())) {
             if (node->name() == name) {
@@ -492,7 +392,7 @@ QString MyInteractor::getEdgeUniqueId() {
     qreal k = 0;
     bool isSimilarIdFound = true;
     while(isSimilarIdFound) {
-        name = "Edge_" + QString::number(k);
+        name = edgeStyle()->category() + "_" + QString::number(k);
         isSimilarIdFound = false;
         for (MyElementBase *edge : qAsConst(edges())) {
             if (edge->name() == name) {
@@ -606,15 +506,13 @@ bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
 
 QList<QToolButton*> MyInteractor::getMenuButtons() {
     QList<QToolButton*> buttons;
-    
-    if (!importTools().isEmpty())
+    if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(populateImportMenu());
-    if (dataExportTools().size() || printExportTools().size())
+    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
         buttons.push_back(populateExportMenu());
-    buttons.push_back(populateAddNodeMenu());
-    buttons.push_back(populateAddEdgeMenu());
+    buttons.append(populateAddElementMenu());
     buttons.push_back(populateRemoveItemMenu());
-    if (!autoLayoutEngines().isEmpty())
+    if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(populateAutoLayoutMenu());
     buttons.push_back(populateUndoActionMenu());
     buttons.push_back(populateRedoActionMenu());
@@ -772,10 +670,10 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     for (MyElementBase *edge : qAsConst(edges()))
         edge->enableAddNodeMode();
     
-    emit askForSetToolTip("Add Node");
+    emit askForSetToolTip("Add " + style->category());
 }
 
-void MyInteractor::enableSelectNodeMode(const QString& nodeType) {
+void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
     enableNormalMode();
     setMode(SELECT_NODE_MODE);
     for (MyElementBase *node : qAsConst(nodes()))
@@ -783,7 +681,7 @@ void MyInteractor::enableSelectNodeMode(const QString& nodeType) {
     for (MyElementBase *edge : qAsConst(edges()))
         edge->enableSelectNodeMode();
     
-    emit askForSetToolTip("Select " + nodeType + " nodes");
+    emit askForSetToolTip("Select " + nodeCategory + " nodes");
 }
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
@@ -798,7 +696,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     emit askForSetToolTip("Select Node");
 }
 
-void MyInteractor::enableSelectEdgeMode(const QString& edgeType) {
+void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     enableNormalMode();
     setMode(SELECT_EDGE_MODE);
     for (MyElementBase *node : qAsConst(nodes()))
@@ -806,7 +704,7 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeType) {
     for (MyElementBase *edge : qAsConst(edges()))
         edge->enableSelectEdgeMode();
     
-    emit askForSetToolTip("Select " + edgeType + " edges");
+    emit askForSetToolTip("Select " + edgeCategory + " edges");
 }
 
 void MyInteractor::enableRemoveMode() {
@@ -826,16 +724,9 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
 }
 
-void MyInteractor::annotateExportData(MyPluginItemBase* exportTool) {
-    connect(this, SIGNAL(enterKeyIsPressed()), (MyDataExportTool*)exportTool, SLOT(annotateSelectedElements()));
+void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
     QJsonObject graphInfoObject;
     exportNetworkInfo(graphInfoObject);
-    ((MyDataExportTool*)exportTool)->annotateElementsWithTypes(graphInfoObject);
-}
-
-void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    disconnectPressedEnterKeyFromDataExportTools();
-    QJsonObject graphInfoObject = ((MyDataExportTool*)exportTool)->getGraphInfoObject();
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName();
     if (!fileName.isEmpty()) {
         ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibiliy(graphInfoObject, exportTool->name()));
@@ -889,12 +780,9 @@ void MyInteractor::loadPlugins() {
             // print export interface
             else if (qobject_cast<PrintExportInterface *>(plugin))
                 setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), pluginsDir.path());
-            // node style interface
-            else if (qobject_cast<NodeStyleInterface *>(plugin))
-                setNodeStyleInterface(qobject_cast<NodeStyleInterface *>(plugin), pluginsDir.path());
-            // edge style interface
-            else if (qobject_cast<EdgeStyleInterface *>(plugin))
-                setEdgeStyleInterface(qobject_cast<EdgeStyleInterface *>(plugin), pluginsDir.path());
+            // element style interface
+            else if (qobject_cast<ElementStyleInterface *>(plugin))
+                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), pluginsDir.path());
             // auto layout interface
             else if (qobject_cast<AutoLayoutInterface *>(plugin))
                 setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), pluginsDir.path());
@@ -906,7 +794,7 @@ QToolButton* MyInteractor::populateImportMenu() {
     MyToolButton* button = new MyToolButton();
     MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* importWidgetAction = new MyWidgetAction(subMenu);
-    importWidgetAction->setItems(importTools());
+    importWidgetAction->setItems(getPluginsOfType(plugins(), "importtool"));
     connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(readFromFile(MyPluginItemBase*)));
     subMenu->addAction(importWidgetAction);
     button->setText("Import");
@@ -916,24 +804,27 @@ QToolButton* MyInteractor::populateImportMenu() {
 }
 
 QToolButton* MyInteractor::populateExportMenu() {
+    QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
+    QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
+    
     MyToolButton* button = new MyToolButton();
     MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
     
     // data export
-    if (dataExportTools().size()) {
+    if (dataExportPlugins.size()) {
         MyWidgetAction* dataExportWidgetAction = new MyWidgetAction(subMenu);
-        dataExportWidgetAction->setItems(dataExportTools());
-        connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(annotateExportData(MyPluginItemBase*)));
+        dataExportWidgetAction->setItems((getPluginsOfType(plugins(), "dataexporttool")));
+        connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeDataToFile(MyPluginItemBase*)));
         subMenu->addAction(dataExportWidgetAction);
     }
     
-    if (dataExportTools().size() && printExportTools().size())
+    if (dataExportPlugins.size() && dataExportPlugins.size())
         subMenu->addSeparator();
     
     // print export
-    if (printExportTools().size()) {
+    if (dataExportPlugins.size()) {
         MyWidgetAction* printExportWidgetAction = new MyWidgetAction(subMenu);
-        printExportWidgetAction->setItems(printExportTools());
+        printExportWidgetAction->setItems((getPluginsOfType(plugins(), "printexporttool")));
         connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeFigureToFile(MyPluginItemBase*)));
         subMenu->addAction(printExportWidgetAction);
     }
@@ -944,30 +835,52 @@ QToolButton* MyInteractor::populateExportMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateAddNodeMenu() {
-    MyToolButton* button = new MyToolButton();
-    MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* addNodeWidgetAction = new MyWidgetAction(subMenu);
-    addNodeWidgetAction->setItems(nodeStyles());
-    connect(addNodeWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddNodeMode(MyPluginItemBase*)));
-    subMenu->addAction(addNodeWidgetAction);
-    button->setText("Node");
-    button->setToolTip(tr("Add a node to the network"));
+QList<QToolButton*> MyInteractor::populateAddElementMenu() {
+    QList<QToolButton*> buttons;
+    if (!getPluginsOfType(plugins(), "nodestyle").size())
+        _plugins.push_back(createNodeStyle("Default"));
+    if (!getPluginsOfType(plugins(), "edgestyle").size())
+        _plugins.push_back(createEdgeStyle("Default"));
+    QList<QString> pluginsCategories = getPluginsCategories(plugins());
+    for (QString category : pluginsCategories) {
+        QList<MyPluginItemBase*> nodeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category);
+        QList<MyPluginItemBase*> edgeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "edgestyle"), category);
+        MyToolButtonMenu* subMenu = new MyToolButtonMenu();
+        // node
+        if (nodeStylesOfCategory.size())
+            subMenu->addAction(createNodeStyleWidgetAction(nodeStylesOfCategory, subMenu));
+        if (nodeStylesOfCategory.size() && edgeStylesOfCategory.size())
+            subMenu->addSeparator();
+        // edge
+        if (edgeStylesOfCategory.size())
+            subMenu->addAction(createEdgeStyleWidgetAction(edgeStylesOfCategory, subMenu));
+        buttons.push_back(createPluginItemToolButton(subMenu, category));
+    }
+    
+    return buttons;
+}
+
+QToolButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QString& text) {
+    QToolButton* button = new MyToolButton();
+    button->setText(text);
+    button->setToolTip("Add " + text + " to the network");
     button->setMenu(subMenu);
     return button;
 }
 
-QToolButton* MyInteractor::populateAddEdgeMenu() {
-    MyToolButton* button = new MyToolButton();
-    MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* addEdgeWidgetAction = new MyWidgetAction(subMenu);
-    addEdgeWidgetAction->setItems(edgeStyles());
-    connect(addEdgeWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
-    subMenu->addAction(addEdgeWidgetAction);
-    button->setText("Edge");
-    button->setToolTip(tr("Add an edge to the network"));
-    button->setMenu(subMenu);
-    return button;
+
+QWidgetAction* MyInteractor::createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent) {
+    MyWidgetAction* widgetAction = new MyWidgetAction(parent);
+    widgetAction->setItems(nodeStyles);
+    connect(widgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddNodeMode(MyPluginItemBase*)));
+    return widgetAction;
+}
+
+QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*> edgeStyles, QWidget* parent) {
+    MyWidgetAction* widgetAction = new MyWidgetAction(parent);
+    widgetAction->setItems(edgeStyles);
+    connect(widgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
+    return widgetAction;
 }
 
 QToolButton* MyInteractor::populateRemoveItemMenu() {
@@ -982,7 +895,7 @@ QToolButton* MyInteractor::populateAutoLayoutMenu() {
     MyToolButton* button = new MyToolButton();
     MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* autoLayoutWidgetAction = new MyWidgetAction(subMenu);
-    autoLayoutWidgetAction->setItems(autoLayoutEngines());
+    autoLayoutWidgetAction->setItems((getPluginsOfType(plugins(), "autolayoutengine")));
     connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(autoLayout(MyPluginItemBase*)));
     subMenu->addAction(autoLayoutWidgetAction);
     button->setText("AutoLayout");
@@ -1058,15 +971,33 @@ QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items)
     QWidget* itemWidget = new QWidget();
     QVBoxLayout* itemWidgetLayoutContent = new QVBoxLayout();
     QPushButton* itemPreviewButton = NULL;
-    for (MyPluginItemBase* item : items) {
-        itemPreviewButton = new MyItemPreviewButton(item);
-        connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); ((MyToolButtonMenu*)(this->parent()))->close(); });
-        itemWidgetLayoutContent->addWidget(itemPreviewButton, itemWidgetLayoutContent->count());
+    
+    QList<QString> itemsSubCategories = getPluginsSubCategories(items);
+    if (itemsSubCategories.size()) {
+        for (QString subCategory : itemsSubCategories) {
+            itemWidgetLayoutContent->addWidget(new MyLabel(subCategory), itemWidgetLayoutContent->count());
+            QList<MyPluginItemBase*> itemsOfSubCategory = getPluginsOfSubCategory(items, subCategory);
+            for (MyPluginItemBase* itemOfSubCategory : itemsOfSubCategory)
+                itemWidgetLayoutContent->addWidget(createItemPreviewButton(itemOfSubCategory), itemWidgetLayoutContent->count());
+        }
     }
+    else {
+        for (MyPluginItemBase* item : items)
+            itemWidgetLayoutContent->addWidget(createItemPreviewButton(item), itemWidgetLayoutContent->count());
+        
+    }
+    
     itemWidget->setLayout(itemWidgetLayoutContent);
     itemWidget->setStyleSheet("QWidget { background-color: white; border-radius: 10px;}");
     
     return itemWidget;
+}
+
+QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
+    QPushButton* itemPreviewButton = new MyItemPreviewButton(item);
+    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); ((MyToolButtonMenu*)(this->parent()))->close(); });
+    
+    return itemPreviewButton;
 }
 
 // MyItemPreviewButton

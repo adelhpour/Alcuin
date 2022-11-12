@@ -5,10 +5,15 @@
 // MyNodeStyle
 
 MyNodeStyle::MyNodeStyle(const QString& name) : MyElementStyleBase(name) {
+    _category = "Node";
     if (name == "Default")
         addDefaultShapeStyle();
     
     _iconSize = QSize(40, 40);
+}
+
+const QString MyNodeStyle::type() const {
+    return "nodestyle";
 }
 
 void MyNodeStyle::addDefaultShapeStyle() {

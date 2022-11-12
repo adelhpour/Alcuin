@@ -23,6 +23,30 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
     return item;
 }
 
+void MyArrowHeadGraphicsItemBase::enableNormalMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadGraphicsItemBase::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadGraphicsItemBase::enableSelectNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadGraphicsItemBase::enableAddEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadGraphicsItemBase::enableSelectEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadGraphicsItemBase::enableRemoveMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {

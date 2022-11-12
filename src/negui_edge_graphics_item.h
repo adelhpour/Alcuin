@@ -15,6 +15,18 @@ public:
     void setLine(const QLineF &line);
     
     const qreal getEndSlope() const;
+    
+    void enableNormalMode() override;
+
+    void enableAddNodeMode() override;
+    
+    void enableSelectNodeMode() override;
+
+    void enableAddEdgeMode() override;
+
+    void enableSelectEdgeMode() override;
+
+    void enableRemoveMode() override;
 
 protected:
     QLineF _initialLine;

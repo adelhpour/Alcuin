@@ -10,6 +10,7 @@ set(gui_sources
 	negui_interactor.cpp
 	negui_base.cpp
 	negui_plugin_item_base.cpp
+	negui_plugin_item_builder.cpp
 	negui_element_base.cpp
 	negui_node.cpp
 	negui_edge.cpp
@@ -58,6 +59,7 @@ set(gui_headers
 	negui_interactor.h
 	negui_base.h
 	negui_plugin_item_base.h
+	negui_plugin_item_builder.h
 	negui_element_base.h
 	negui_node.h
 	negui_edge.h

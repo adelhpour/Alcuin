@@ -43,6 +43,8 @@ public:
     
     MyDataExportTool(const QString& name);
     
+    const QString type() const override;
+    
     QJsonObject getGraphInfoObject();
     
     const QList<QString>& nodeTypes() const;
@@ -58,38 +60,8 @@ public:
     const QString messagesAsString() const;
     
     void showMessages();
-    
-    void annotateElementsWithTypes(QJsonObject &json);
-    
-    void selectElements();
-    
-    void annotateSelectedNodesWithNodeType(QList<QString> selectedNodes, const QString& nodeType);
-    
-    void annotateSelectedEdgesWithEdgeType(QList<QString> selectedEdges, const QString& edgeType);
-    
-    // read the export info from the json object
-    void read(const QJsonObject &json) override;
-    
-    // write the export info to the json object
-    void write(QJsonObject &json) override;
-    
-signals:
-    void elementSelectionStarted();
-    void askForNodeSelection(const QString& nodeType);
-    const QList<QString> askForSelectedNodes();
-    void askForEdgeSelection(const QString& edgeType);
-    const QList<QString> askForSelectedEdges();
-    void elementSelectionFinished(MyPluginItemBase*);
-    
-public slots:
-    void annotateSelectedElements();
 
 protected:
-    QJsonObject _graphInfo;
-    QList<QString> _nodeTypes;
-    qint32 _nodeTypeIndex;
-    QList<QString> _edgeTypes;
-    qint32 _edgeTypeIndex;
     bool _isInfoCompatible;
     QList<QString> _messages;
 };
@@ -98,6 +70,8 @@ class MyPrintExportTool : public MyExportToolBase {
 public:
     
     MyPrintExportTool(const QString& name);
+    
+    const QString type() const override;
     
     QPrinter::OutputFormat outputFormat();
     

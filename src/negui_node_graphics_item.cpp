@@ -28,6 +28,36 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
     return item;
 }
 
+void MyNodeGraphicsItemBase::enableNormalMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+}
+
+void MyNodeGraphicsItemBase::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeGraphicsItemBase::enableSelectNodeMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeGraphicsItemBase::enableAddEdgeMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeGraphicsItemBase::enableSelectEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeGraphicsItemBase::enableRemoveMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
 // MyNodeSceneGraphicsItem
 
 MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {

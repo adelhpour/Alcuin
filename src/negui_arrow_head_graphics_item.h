@@ -12,6 +12,18 @@ public:
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
+    void enableNormalMode() override;
+
+    void enableAddNodeMode() override;
+
+    void enableSelectNodeMode() override;
+
+    void enableAddEdgeMode() override;
+
+    void enableSelectEdgeMode() override;
+
+    void enableRemoveMode() override;
+    
 protected:
     QPointF _initialPosition;
     qreal _padding;

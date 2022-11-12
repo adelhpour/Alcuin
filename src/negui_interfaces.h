@@ -42,23 +42,14 @@ class PrintExportInterface : public InterfaceBase {
 
 Q_DECLARE_INTERFACE(PrintExportInterface, PrintExportInterface_iid)
 
-// node style interface
-class NodeStyleInterface : public InterfaceBase {
+// element style interface
+class ElementStyleInterface : public InterfaceBase {
     
 };
 
-#define NodeStyleInterface_iid "org.sys-bio.networkeditorgui.nodestyleinterface/1.0"
+#define ElementStyleInterface_iid "org.sys-bio.networkeditorgui.elementstyleinterface/1.0"
 
-Q_DECLARE_INTERFACE(NodeStyleInterface, NodeStyleInterface_iid)
-
-// edge style interface
-class EdgeStyleInterface : public InterfaceBase {
-    
-};
-
-#define EdgeStyleInterface_iid "org.sys-bio.networkeditorgui.edgestyleinterface/1.0"
-
-Q_DECLARE_INTERFACE(EdgeStyleInterface, EdgeStyleInterface_iid)
+Q_DECLARE_INTERFACE(ElementStyleInterface, ElementStyleInterface_iid)
 
 // auto layout interface
 class AutoLayoutInterface : public InterfaceBase {

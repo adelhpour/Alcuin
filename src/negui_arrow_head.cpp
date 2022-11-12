@@ -43,31 +43,6 @@ void MyArrowHead::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
     ((MyEdge*)edge())->updatePoints();
 }
 
-void MyArrowHead::enableNormalMode() {
-    MyElementBase::enableNormalMode();
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHead::enableAddNodeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHead::enableSelectNodeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHead::enableAddEdgeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHead::enableSelectEdgeMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHead::enableRemoveMode() {
-    graphicsItem()->setCursor(Qt::ArrowCursor);
-}
-
 QWidget* MyArrowHead::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();

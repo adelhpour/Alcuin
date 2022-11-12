@@ -9,6 +9,21 @@ MyElementStyleBase::MyElementStyleBase(const QString& name) : MyPluginItemBase(n
     
 }
 
+const QString& MyElementStyleBase::parentCategory() const {
+    return _parentCategory;
+}
+
+bool MyElementStyleBase::isCategoryConvertibleToParentCategory() {
+    if (!_parentCategory.isEmpty())
+        return true;
+    
+    return false;
+}
+
+void MyElementStyleBase::convertCategoryToParentCategory() {
+    _category = parentCategory();
+}
+
 void MyElementStyleBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
     // delete the previous styles which are removed now
     QList<MyShapeStyleBase*> removedShapeStyles;
@@ -79,6 +94,11 @@ const QIcon MyElementStyleBase::icon() {
 }
 
 void MyElementStyleBase::read(const QJsonObject &json) {
+    MyPluginItemBase::read(json);
+    _parentCategory.clear();
+    if (json.contains("parent-category") && json["parent-category"].isString())
+        _parentCategory = json["parent-category"].toString();
+    
     // shapes
     clearShapeStyles();
     if (json.contains("shapes") && json["shapes"].isArray()) {
@@ -100,7 +120,10 @@ void MyElementStyleBase::read(const QJsonObject &json) {
 }
 
 void MyElementStyleBase::write(QJsonObject &json) {
+    MyPluginItemBase::write(json);
+    
     json["name"] = name();
+    json["parent-category"] = parentCategory();
     
     // shapes
     QJsonArray shapeStylesArray;

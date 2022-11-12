@@ -7,11 +7,16 @@
 // MyEdgeStyle
 
 MyEdgeStyle::MyEdgeStyle(const QString& name) : MyElementStyleBase(name) {
+    _category = "Edge";
     if (name == "Default")
         addDefaultShapeStyle();
     
     _arrowHeadStyle = createArrowHeadStyle(name + "_ArrowHead");
     _iconSize = QSize(75, 45);
+}
+
+const QString MyEdgeStyle::type() const {
+    return "edgestyle";
 }
 
 MyElementStyleBase* MyEdgeStyle::arrowHeadStyle() {

@@ -13,6 +13,10 @@ MyAutoLayoutEngine::~MyAutoLayoutEngine() {
     clearParameters();
 }
 
+const QString MyAutoLayoutEngine::type() const {
+    return "autolayoutengine";
+}
+
 void MyAutoLayoutEngine::addParameter(MyParameterBase* p) {
     if (p)
         _parameters.push_back(p);

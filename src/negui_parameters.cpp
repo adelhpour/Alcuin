@@ -1770,7 +1770,7 @@ MyTitleLabel::MyTitleLabel(const QString& text, QWidget* parent) : MyLabel(text,
     QFont _font = font();
     _font.setPointSize(18);
     setFont(_font);
-    setFixedSize(120, 25);
+    setFixedSize(160, 25);
     setAlignment(Qt::AlignCenter);
 }
 

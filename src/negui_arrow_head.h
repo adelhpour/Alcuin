@@ -19,22 +19,6 @@ public:
     
     void setSelected(const bool& selected) override;
     
-    // enable the normal mode of the arrow head
-    void enableNormalMode() override;
-    
-    // enable the add node mode of the arrow head
-    void enableAddNodeMode() override;
-    
-    void enableSelectNodeMode() override;
-    
-    // enable the add edge mode of the arrow head
-    void enableAddEdgeMode() override;
-    
-    void enableSelectEdgeMode() override;
-    
-    // enable the remove mode of the arrow head
-    void enableRemoveMode() override;
-    
     const qint32 calculateZValue() override;
     
     // read the arrow head info from the json object

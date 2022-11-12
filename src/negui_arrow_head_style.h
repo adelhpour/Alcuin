@@ -8,6 +8,8 @@ public:
     
     MyArrowHeadStyle(const QString& name);
     
+    const QString type() const override;
+    
     void addDefaultShapeStyle() override;
     
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;

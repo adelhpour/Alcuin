@@ -24,11 +24,21 @@ public:
     
     void setSelectedWithFill(const bool& selected);
     
-    const bool& isSelected() {return _isSelected; };
-    
     void setCursor(const QCursor &cursor);
     
     void clear();
+    
+    virtual void enableNormalMode() = 0;
+    
+    virtual void enableAddNodeMode() = 0;
+    
+    virtual void enableSelectNodeMode() = 0;
+    
+    virtual void enableAddEdgeMode() = 0;
+    
+    virtual void enableSelectEdgeMode() = 0;
+    
+    virtual void enableRemoveMode() = 0;
     
 signals:
     
@@ -46,7 +56,6 @@ protected:
     
     QList<MyShapeStyleBase*> _shapeStyles;
     bool _isChosen;
-    bool _isSelected;
 };
 
 #endif

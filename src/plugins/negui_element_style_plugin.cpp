@@ -1,21 +1,21 @@
-#include "negui_edge_style_plugin.h"
+#include "negui_element_style_plugin.h"
 #include <QJsonDocument>
 
-int EdgeStylePlugin::initialize(const QString &path) {
+int ElementStylePlugin::initialize(const QString &path) {
     _path = path;
     _pyInstance = new CPyInstance();
     _pyInstance->appendPath(_path.toStdString().c_str());
-    _script.setObject(_pyInstance->importModule("negui_edge_style_plugin"));
+    _script.setObject(_pyInstance->importModule("negui_element_style_plugin"));
     if (_script)
         return 0;
     
     return -1;
 }
 
-const QJsonObject EdgeStylePlugin::loadItemsInfo() {
+const QJsonObject ElementStylePlugin::loadItemsInfo() {
     QJsonObject object;
     if (_pyInstance && _script) {
-        CPyObject stylesInfoFunc = PyObject_GetAttrString(_script.getObject(), (char*)"edgeStylesInfo");
+        CPyObject stylesInfoFunc = PyObject_GetAttrString(_script.getObject(), (char*)"elementStylesInfo");
         if (stylesInfoFunc) {
             CPyObject stylesInfo = PyObject_CallObject(stylesInfoFunc.getObject(), PyTuple_Pack(0));
             if (stylesInfo) {

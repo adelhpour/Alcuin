@@ -1,10 +1,10 @@
 #include "negui_pyhelper.hpp"
 #include "negui_interfaces.h"
 
-class EdgeStylePlugin : public QObject, EdgeStyleInterface {
+class ElementStylePlugin : public QObject, ElementStyleInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.edgestyleinterface/1.0")
-    Q_INTERFACES(EdgeStyleInterface)
+    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.elementstyleinterface/1.0")
+    Q_INTERFACES(ElementStyleInterface)
 
 public:
     int initialize(const QString &path) override;

@@ -7,7 +7,6 @@
 
 MyElementGraphicsItemBase::MyElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
     _isChosen = false;
-    _isSelected = false;
 }
 
 void MyElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
@@ -39,7 +38,6 @@ void MyElementGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
             casted_item->setSelectedWithStroke(selected);
     }
     QGraphicsItem::setSelected(selected);
-    _isSelected = selected;
 }
 
 void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
@@ -49,7 +47,6 @@ void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
             casted_item->setSelectedWithFill(selected);
     }
     QGraphicsItem::setSelected(selected);
-    _isSelected = selected;
 }
 
 void MyElementGraphicsItemBase::setCursor(const QCursor &cursor) {

@@ -8,6 +8,8 @@ public:
     
     MyEdgeStyle(const QString& name);
     
+    const QString type() const override;
+    
     MyElementStyleBase* arrowHeadStyle();
     
     void addDefaultShapeStyle() override;

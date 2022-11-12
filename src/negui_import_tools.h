@@ -8,6 +8,8 @@ public:
     
     MyImportTool(const QString& name);
     
+    const QString type() const override;
+    
     // get the open file name from the user by poping up a file dialog
     const QString getOpenFileName() const;
     

@@ -5,7 +5,11 @@
 // MyArrowHeadStyle
 
 MyArrowHeadStyle::MyArrowHeadStyle(const QString& name) : MyElementStyleBase(name) {
-    
+    _category = "ArrowHead";
+}
+
+const QString MyArrowHeadStyle::type() const {
+    return "arrowheadstyle";
 }
 
 void MyArrowHeadStyle::addDefaultShapeStyle() {

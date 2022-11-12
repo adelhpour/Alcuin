@@ -27,6 +27,21 @@ void MyElementBase::setStyle(MyElementStyleBase* style) {
     updateGraphicsItem();
 }
 
+const QString MyElementBase::styleCategory() {
+    if (!style()->category().isEmpty())
+        return style()->category();
+    
+    return "N/A";
+}
+
+bool MyElementBase::isStyleCategoryConvertibleToParentCategory() {
+    return style()->isCategoryConvertibleToParentCategory();
+}
+
+void MyElementBase::convertStyleCategoryToParentCategory() {
+    style()->convertCategoryToParentCategory();
+}
+
 bool MyElementBase::setActive(const bool& active) {
     return _isActive = active;
 }
@@ -37,6 +52,27 @@ const bool MyElementBase::isSelected() {
 
 void MyElementBase::enableNormalMode() {
     setSelected(false);
+    graphicsItem()->enableNormalMode();
+}
+
+void MyElementBase::enableAddNodeMode() {
+    graphicsItem()->enableAddNodeMode();
+}
+
+void MyElementBase::enableSelectNodeMode() {
+    graphicsItem()->enableSelectNodeMode();
+}
+
+void MyElementBase::enableAddEdgeMode() {
+    graphicsItem()->enableAddEdgeMode();
+}
+
+void MyElementBase::enableSelectEdgeMode() {
+    graphicsItem()->enableSelectEdgeMode();
+}
+
+void MyElementBase::enableRemoveMode() {
+    graphicsItem()->enableRemoveMode();
 }
 
 void MyElementBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -49,7 +85,7 @@ QWidget* MyElementBase::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
     // title
-    contentLayout->addWidget(new MyTitleLabel(typeAsString()), contentLayout->rowCount(), 0, 1, 2, Qt::AlignCenter);
+    contentLayout->addWidget(new MyTitleLabel(styleCategory()), contentLayout->rowCount(), 0, 1, 2, Qt::AlignCenter);
     
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);

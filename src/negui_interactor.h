@@ -30,50 +30,33 @@ public:
     bool setImportInterface(ImportInterface* importInterface, const QString &path);
     ImportInterface* importInterface();
     const bool isSetImportInterface() const { return _isSetImportInterface; }
-    QList<MyPluginItemBase*>& importTools();
     void readImportInfo(const QJsonObject &json);
-    void clearImportInfo();
     
     // data export interface
     bool setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path);
     DataExportInterface* dataExportInterface();
     const bool isSetDataExportInterface() const { return _isSetDataExportInterface; }
-    QList<MyPluginItemBase*>& dataExportTools();
     void readDataExportInfo(const QJsonObject &json);
-    void clearDataExportInfo();
-    void disconnectPressedEnterKeyFromDataExportTools();
     
     // print export interface
     bool setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path);
     PrintExportInterface* printExportInterface();
     const bool isSetPrintExportInterface() const { return _isSetPrintExportInterface; }
-    QList<MyPluginItemBase*>& printExportTools();
     void readPrintExportInfo(const QJsonObject &json);
-    void clearPrintExportInfo();
     
-    // node style interface
-    bool setNodeStyleInterface(NodeStyleInterface* nodeStyleInterface, const QString &path);
-    NodeStyleInterface* nodeStyleInterface();
-    const bool isSetNodeStyleInterface() const { return _isSetNodeStyleInterface; }
-    QList<MyPluginItemBase*>& nodeStyles();
-    void readNodeStylesInfo(const QJsonObject &json);
-    void clearNodeStylesInfo();
-    
-    // edge style interface
-    bool setEdgeStyleInterface(EdgeStyleInterface* edgeStyleInterface, const QString &path);
-    EdgeStyleInterface* edgeStyleInterface();
-    const bool isSetEdgeStyleInterface() const { return _isSetEdgeStyleInterface; }
-    QList<MyPluginItemBase*>& edgeStyles();
-    void clearEdgeStylesInfo();
-    void readEdgeStylesInfo(const QJsonObject &json);
+    // element style interface
+    bool setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &path);
+    ElementStyleInterface* elementStyleInterface();
+    const bool isSetElementStyleInterface() const { return _isSetElementStyleInterface; }
+    void readElementStylesInfo(const QJsonObject &json);
     
     // autolayout interface
     bool setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path);
     AutoLayoutInterface* autoLayoutInterface();
     const bool isSetAutoLayoutInterface() const { return _isSetAutoLayoutInterface; }
-    QList<MyPluginItemBase*>& autoLayoutEngines();
     void readAutoLayoutInfo(const QJsonObject &json);
-    void clearAutoLayoutInfo();
+    
+    QList<MyPluginItemBase*>& plugins();
     
     // undo stack
     QUndoStack* undoStack();
@@ -151,15 +134,14 @@ public slots:
     // modes
     void enableNormalMode();
     void enableAddNodeMode(MyPluginItemBase* style);
-    void enableSelectNodeMode(const QString& nodeType = "");
+    void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableAddEdgeMode(MyPluginItemBase* style);
-    void enableSelectEdgeMode(const QString& edgeType = "");
+    void enableSelectEdgeMode(const QString& edgeCategory = "");
     void enableRemoveMode();
     
 private slots:
         
     void readFromFile(MyPluginItemBase* importTool);
-    void annotateExportData(MyPluginItemBase* exportTool);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
@@ -173,8 +155,11 @@ protected:
     // menus
     QToolButton* populateImportMenu();
     QToolButton* populateExportMenu();
-    QToolButton* populateAddNodeMenu();
-    QToolButton* populateAddEdgeMenu();
+    QList<QToolButton*> populateAddElementMenu();
+    QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
+    QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
+    QWidgetAction* createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent);
+    QWidgetAction* createEdgeStyleWidgetAction(QList<MyPluginItemBase*> edgeStyles, QWidget* parent);
     QToolButton* populateRemoveItemMenu();
     QToolButton* populateAutoLayoutMenu();
     QToolButton* populateUndoActionMenu();
@@ -196,22 +181,20 @@ protected:
     bool _isSetPrintExportInterface;
     QList<MyPluginItemBase*> _printExportTools;
     
-    // node style interface
-    NodeStyleInterface* _nodeStyleInterface;
-    bool _isSetNodeStyleInterface;
-    QList<MyPluginItemBase*> _nodeStyles;
-    MyElementStyleBase* _nodeStyle;
-    
-    // edge style interface
-    EdgeStyleInterface* _edgeStyleInterface;
-    bool _isSetEdgeStyleInterface;
-    QList<MyPluginItemBase*> _edgeStyles;
-    MyElementStyleBase* _edgeStyle;
+    // element style interface
+    ElementStyleInterface* _elementStyleInterface;
+    bool _isSetElementStyleInterface;
     
     // autolayout interface
     AutoLayoutInterface* _autoLayoutInterface;
     bool _isSetAutoLayoutInterface;
     QList<MyPluginItemBase*> _autoLayoutEngines;
+    
+    // element styles
+    MyElementStyleBase* _nodeStyle;
+    MyElementStyleBase* _edgeStyle;
+    
+    QList<MyPluginItemBase*> _plugins;
     
     // undo stack
     QUndoStack* _undoStack;
@@ -268,6 +251,7 @@ signals:
     
 protected:
     QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
+    QPushButton* createItemPreviewButton(MyPluginItemBase* item);
 };
 
 class MyItemPreviewButton : public QPushButton {
