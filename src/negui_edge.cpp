@@ -1,10 +1,10 @@
 #include "negui_edge.h"
 #include "negui_node.h"
+#include "negui_arrow_head.h"
 #include "negui_element_builder.h"
 #include "negui_element_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_edge_graphics_item.h"
-#include "negui_arrow_head_graphics_item.h"
 #include <QtMath>
 #include <QJsonObject>
 
@@ -12,15 +12,11 @@
 
 MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode) : MyElementBase(name) {
     _arrowHead = NULL;
-    _style = NULL;
     _isSetArrowHead = false;
-    _isActive = false;
     _isConnectedToNodes = false;
     _graphicsItem = createEdgeSceneGraphicsItem();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(askForElementFeatureMenu()), this, SLOT(getFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForSetShapeStyles(QList<MyShapeStyleBase*>)), this, SLOT(setShapeStyles(QList<MyShapeStyleBase*>)));
-    enableNormalMode();
+    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     if (startNode && endNode) {
         _startNode = startNode;
         ((MyNode*)_startNode)->addEdge(this);
@@ -40,10 +36,6 @@ MyEdge::ELEMENT_TYPE MyEdge::type() {
     return EDGE_ELEMENT;
 };
 
-const QString MyEdge::typeAsString() const {
-    return "Edge";
-}
-
 MyElementBase* MyEdge::startNode() {
     return _startNode;
 }
@@ -52,13 +44,15 @@ MyElementBase* MyEdge::endNode() {
     return _endNode;
 }
 
-void MyEdge::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
-    MyElementBase::setShapeStyles(shapeStyles);
+void MyEdge::updateGraphicsItem() {
+    MyElementBase::updateGraphicsItem();
+    if (isSetArrowHead())
+        arrowHead()->updateGraphicsItem();
     updatePoints();
 }
 
-void MyEdge::updateGraphicsItem() {
-    MyElementBase::updateGraphicsItem();
+void MyEdge::setStyle(MyElementStyleBase* style) {
+    MyElementBase::setStyle(style);
     setArrowHead();
 }
 
@@ -84,7 +78,7 @@ void MyEdge::setArrowHead() {
         delete _arrowHead;
         _isSetArrowHead = false;
     }
-            
+    
     if (((MyEdgeStyle*)style())->arrowHeadStyle() && ((MyEdgeStyle*)style())->arrowHeadStyle()->shapeStyles().size()) {
         _arrowHead = createArrowHead(name() + "_ArrowHead", this);
         _arrowHead->setStyle(((MyEdgeStyle*)style())->arrowHeadStyle());
@@ -112,7 +106,7 @@ void MyEdge::updatePoints() {
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
     
     if (isSetArrowHead())
-        ((MyArrowHeadSceneGraphicsItem*)arrowHead()->graphicsItem())->update(endPosition, ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
+        ((MyArrowHead*)arrowHead())->updatePlacement(endPosition, ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
 }
 
 const QPointF MyEdge::getStartPosition() {

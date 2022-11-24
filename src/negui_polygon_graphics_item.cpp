@@ -1,5 +1,6 @@
 #include "negui_polygon_graphics_item.h"
 #include "negui_polygon_style.h"
+#include "negui_resize_handlebared_graphics_item.h"
 
 // MyPolygonGraphicsItem
 
@@ -42,16 +43,22 @@ void MyPolygonGraphicsItem::setSelectedWithFill(const bool& selected) {
 }
 
 void MyPolygonGraphicsItem::updateExtents(const QRectF& extents) {
-    _originalPosition = QPointF(extents.x() + 0.5 * extents.width(), extents.y() + 0.5 * extents.height());
-    
     if (isSetStyle())
-        ((MyPolygonStyleBase*)style())->scaleToExtents(extents);
+        ((MyPolygonStyleBase*)style())->scaleToExtents(QRectF(extents.x() - (movedDistance().x() + boundingRect().x()), extents.y() - (movedDistance().y() + boundingRect().y()), extents.width(), extents.height()));
     
     updateStyle();
 }
 
-QRectF MyPolygonGraphicsItem::getExtents() const {
+QRectF MyPolygonGraphicsItem::getExtents() {
     return boundingRect();
+}
+
+QGraphicsItem* MyPolygonGraphicsItem::getResizeHandlebaredGraphicsItem() {
+    QRectF resizeRect = QRectF(boundingRect().x() + movedDistance().x(), boundingRect().y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
+    connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    
+    return resizeHandlebaredGraphicsItem;
 }
 
 void MyPolygonGraphicsItem::setZValue(qreal z) {

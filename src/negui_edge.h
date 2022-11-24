@@ -13,12 +13,12 @@ public:
     
     ELEMENT_TYPE type() override;
     
-    const QString typeAsString() const override;
-    
     MyElementBase* startNode();
     MyElementBase* endNode();
     
     void updateGraphicsItem() override;
+    
+    void setStyle(MyElementStyleBase* style) override;
     
     void setSelected(const bool& selected) override;
     
@@ -58,6 +58,8 @@ public:
     // enable the remove mode of the edge
     void enableRemoveMode() override;
     
+    QWidget* getFeatureMenu() override;
+    
     const qint32 calculateZValue() override;
     
     // read the edge info from the json object
@@ -65,12 +67,6 @@ public:
     
     // write the edge info to the json object
     void write(QJsonObject &json) override;
-    
-private slots:
-    
-    void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) override;
-    
-    QWidget* getFeatureMenu() override;
 
 protected:
     MyElementBase* _startNode;

@@ -1,36 +1,57 @@
 #include "negui_node_graphics_item.h"
 #include "negui_shape_graphics_item_builder.h"
-#include "negui_2d_shape_graphics_item_base.h"
 #include <QtMath>
 
 // MyNodeGraphicsItemBase
 
 MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
-    
+    enableNormalMode();
 }
 
 MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
-        item = createEllipseShape(_initialPosition.x(), _initialPosition.y(), this);
-    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE)
-        item = createRectShape(_initialPosition.x(), _initialPosition.y(), this);
-    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
-        item = createPolygonShape(_initialPosition.x(), _initialPosition.y(), this);
+    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE) {
+        item = createEllipseShape(_originalPosition.x() - x(), _originalPosition.y() - y(), this);
+        item->setZValue(zValue());
+    }
+    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE) {
+        item = createRectShape(_originalPosition.x() - x(), _originalPosition.y() - y(), this);
+        item->setZValue(zValue());
+    }
+    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE) {
+        item = createPolygonShape(_originalPosition.x() - x(), _originalPosition.y() - y(), this);
+        item->setZValue(zValue());
+    }
     else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE) {
-        item = createTextShape(_initialPosition.x(), _initialPosition.y(), this);
+        item = createTextShape(_originalPosition.x() - x(), _originalPosition.y() - y(), this);
         item->setZValue(zValue() + 1);
     }
     
     if (item)
-        item->setZValue(zValue());
+        item->setMovedDistance(QPointF(x(), y()));
     
     return item;
+}
+
+QList<QGraphicsItem*> MyNodeGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
+    QList<QGraphicsItem*> resizeHandlebaredGraphicsItems;
+    QGraphicsItem* resizeHandlebaredGraphicsItem = NULL;
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item) {
+            resizeHandlebaredGraphicsItem = casted_item->getResizeHandlebaredGraphicsItem();
+            if (resizeHandlebaredGraphicsItem)
+                resizeHandlebaredGraphicsItems.push_back((resizeHandlebaredGraphicsItem));
+        }
+    }
+    
+    return resizeHandlebaredGraphicsItems;
 }
 
 void MyNodeGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);
+    clearResizeHandleBaredGraphicsItems();
 }
 
 void MyNodeGraphicsItemBase::enableAddNodeMode() {
@@ -61,7 +82,7 @@ void MyNodeGraphicsItemBase::enableRemoveMode() {
 // MyNodeSceneGraphicsItem
 
 MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
-    _initialPosition = position;
+    _originalPosition = position;
     
     // make it movable
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -84,9 +105,9 @@ void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
 
 void MyNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
     for (QGraphicsItem* item : childItems()) {
-        My2DShapeGraphicsItemBase* casted_item = dynamic_cast<My2DShapeGraphicsItemBase*>(item);
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->updateExtents(QRectF(extents.x() - x(), extents.y() - y(), extents.width(), extents.height()));
+            casted_item->updateExtents(QRectF(extents.x(), extents.y(), extents.width(), extents.height()));
     }
     extentsModified();
 }
@@ -116,7 +137,13 @@ QVariant MyNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QV
     if (change == ItemPositionChange) {
         if (_reparent)
             emit askForDeparent();
-        emit positionChanged(value.toPointF() + _initialPosition);
+        for (QGraphicsItem* item : childItems()) {
+            MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+            if (casted_item)
+                casted_item->setMovedDistance(value.toPointF());
+        }
+        _originalPosition += QPointF(value.toPointF().x() - x(), value.toPointF().y() - y());
+        emit positionChanged(_originalPosition);
     }
     
     return QGraphicsItem::itemChange(change, value);
@@ -144,8 +171,30 @@ void MyNodeSceneGraphicsItem::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
+void MyNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    MyElementGraphicsItemBase::mousePressEvent(event);
+    if (event->button() == Qt::LeftButton)
+        _mousePressedPosition = event->scenePos();
+}
+
+void MyNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+    if (event->button() == Qt::LeftButton) {
+        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
+            setFocused(true);
+            setFlag(QGraphicsItem::ItemIsMovable, false);
+        }
+    }
+}
+
+void MyNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
+    setFocused(false);
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    QGraphicsItem::focusOutEvent(event);
+}
+
 // MyNodeIconGraphicsItem
 
 MyNodeIconGraphicsItem::MyNodeIconGraphicsItem(QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
-    _initialPosition = QPointF(0.0, 0.0);
+    _originalPosition = QPointF(0.0, 0.0);
 }

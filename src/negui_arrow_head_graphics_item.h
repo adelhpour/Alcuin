@@ -12,6 +12,8 @@ public:
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
+    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() override;
+    
     void enableNormalMode() override;
 
     void enableAddNodeMode() override;
@@ -25,7 +27,7 @@ public:
     void enableRemoveMode() override;
     
 protected:
-    QPointF _initialPosition;
+    QPointF _originalPosition;
     qreal _padding;
 };
 

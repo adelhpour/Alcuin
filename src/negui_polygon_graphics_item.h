@@ -2,7 +2,6 @@
 #define __NEGUI_POLYGON_GRAPHICS_ITEM_H
 
 #include "negui_2d_shape_graphics_item_base.h"
-#include <QGraphicsItem>
 
 class MyPolygonGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsPolygonItem {
 public:
@@ -15,11 +14,14 @@ public:
     
     void setSelectedWithFill(const bool& selected) override;
     
-    void updateExtents(const QRectF& extents) override;
+    QRectF getExtents() override;
     
-    QRectF getExtents() const override;
+    QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
     
     void setZValue(qreal z) override;
+    
+public slots:
+    void updateExtents(const QRectF& extents) override;
 };
 
 #endif

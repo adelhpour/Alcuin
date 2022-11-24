@@ -441,33 +441,33 @@ void MyPointParameterBase::setDefaultValue() {
 }
 
 QWidget* MyPointParameterBase::inputWidget() {
-    if (!_inputWidget) {
-        qint32 fixedWidth = 0;
-        _inputWidget = new QWidget();
-        QHBoxLayout* contentLayout = new QHBoxLayout(_inputWidget);
-        MyLabel* xLabel = new MyLabel(_x->name());
-        xLabel->setFixedWidth(60);
-        xLabel->setAlignment(Qt::AlignRight);
-        contentLayout->addWidget(xLabel);
-        fixedWidth += xLabel->size().width();
-        contentLayout->addItem(new MySpacerItem(7, 0));
-        fixedWidth += 7;
-        contentLayout->addWidget(_x->inputWidget());
-        fixedWidth += _x->inputWidget()->size().width();
-        contentLayout->addItem(new MySpacerItem(25, 0));
-        fixedWidth += 25;
-        MyLabel* yLabel = new MyLabel(_y->name());
-        yLabel->setFixedWidth(60);
-        yLabel->setAlignment(Qt::AlignRight);
-        contentLayout->addWidget(yLabel);
-        fixedWidth += yLabel->size().width();
-        contentLayout->addItem(new MySpacerItem(7, 0));
-        fixedWidth += 7;
-        contentLayout->addWidget(_y->inputWidget());
-        fixedWidth += _y->inputWidget()->size().width();
-        _inputWidget->setLayout(contentLayout);
-        _inputWidget->setFixedSize(fixedWidth, 35);
-    }
+    if (_inputWidget)
+        _inputWidget->deleteLater();
+    qint32 fixedWidth = 0;
+    _inputWidget = new QWidget();
+    QHBoxLayout* contentLayout = new QHBoxLayout(_inputWidget);
+    MyLabel* xLabel = new MyLabel(_x->name());
+    xLabel->setFixedWidth(60);
+    xLabel->setAlignment(Qt::AlignRight);
+    contentLayout->addWidget(xLabel);
+    fixedWidth += xLabel->size().width();
+    contentLayout->addItem(new MySpacerItem(7, 0));
+    fixedWidth += 7;
+    contentLayout->addWidget(_x->inputWidget());
+    fixedWidth += _x->inputWidget()->size().width();
+    contentLayout->addItem(new MySpacerItem(25, 0));
+    fixedWidth += 25;
+    MyLabel* yLabel = new MyLabel(_y->name());
+    yLabel->setFixedWidth(60);
+    yLabel->setAlignment(Qt::AlignRight);
+    contentLayout->addWidget(yLabel);
+    fixedWidth += yLabel->size().width();
+    contentLayout->addItem(new MySpacerItem(7, 0));
+    fixedWidth += 7;
+    contentLayout->addWidget(_y->inputWidget());
+    fixedWidth += _y->inputWidget()->size().width();
+    _inputWidget->setLayout(contentLayout);
+    _inputWidget->setFixedSize(fixedWidth, 35);
     
     return _inputWidget;
 }
@@ -681,7 +681,7 @@ MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name) : My
 void MyCornerCurvatureParameter::reset() {
     setDefaultValue(0.0000);
     setMin(0.0);
-    setMax(50.0);
+    setMax(1000.0);
     setStep(1.0);
 }
 
@@ -692,7 +692,7 @@ MyStrokeParameter::MyStrokeParameter() : MyColorParameter("stroke") {
 }
 
 void MyStrokeParameter::reset() {
-    setDefaultValue("lightgray");
+    setDefaultValue("black");
 }
 
 // MyFillParameter
@@ -702,7 +702,7 @@ MyFillParameter::MyFillParameter() : MyColorParameter("fill") {
 }
 
 void MyFillParameter::reset() {
-    setDefaultValue("darkcyan");
+    setDefaultValue("white");
 }
 
 // MyFontFamilyParameter

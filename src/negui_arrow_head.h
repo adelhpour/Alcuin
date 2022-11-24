@@ -12,12 +12,16 @@ public:
     
     ELEMENT_TYPE type() override;
     
-    const QString typeAsString() const override;
-    
     // get the edge this arrow head belongs to
     MyElementBase* edge();
     
+    void updateGraphicsItem() override;
+    
+    void updatePlacement(const QPointF& position, const qreal& slope);
+    
     void setSelected(const bool& selected) override;
+    
+    QWidget* getFeatureMenu() override;
     
     const qint32 calculateZValue() override;
     
@@ -27,14 +31,10 @@ public:
     // write the arrow head info to the json object
     void write(QJsonObject &json) override;
     
-private slots:
-    
-    void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) override;
-    
-    QWidget* getFeatureMenu() override;
-    
 protected:
     MyElementBase* _edge;
+    QPointF _position;
+    qreal _slope;
 };
 
 #endif

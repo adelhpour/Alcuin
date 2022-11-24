@@ -14,8 +14,6 @@ public:
     
     ELEMENT_TYPE type() override;
     
-    const QString typeAsString() const override;
-    
     // add to edges
     void addEdge(MyElementBase* e);
     
@@ -24,6 +22,8 @@ public:
     
     // get edges
     QList<MyElementBase*>& edges();
+    
+    void updateGraphicsItem() override;
     
     void setSelected(const bool& selected) override;
     
@@ -75,6 +75,8 @@ public:
     // adjust node extents to fit all its children
     void adjustExtentsTochildren();
     
+    QWidget* getFeatureMenu() override;
+    
     const qint32 calculateZValue() override;
     
     // read the node info from the json object
@@ -100,10 +102,6 @@ private slots:
     
     // set the position of the node using its current position
     void resetPosition();
-    
-    QWidget* getFeatureMenu() override;
-    
-    void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) override;
 
 protected:
     QString _parentNodeId;

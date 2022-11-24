@@ -34,8 +34,14 @@ public:
     // get the value of height
     const qreal height() const;
     
+    // set the x value of corner radius
+    void setRx(const qreal& rx) const;
+    
     // get the x value of corner radius
     const qreal rx() const;
+    
+    // set the y value of corner radius
+    void setRy(const qreal& ry) const;
     
     // get the y value of corner radius
     const qreal ry() const;

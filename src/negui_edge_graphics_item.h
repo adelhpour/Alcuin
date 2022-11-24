@@ -17,6 +17,8 @@ public:
     const qreal getEndSlope() const;
     
     void enableNormalMode() override;
+    
+    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() override;
 
     void enableAddNodeMode() override;
     

@@ -1,5 +1,6 @@
 #include "negui_ellipse_graphics_item.h"
 #include "negui_ellipse_style.h"
+#include "negui_resize_handlebared_graphics_item.h"
 
 // MyEllipseGraphicsItem
 
@@ -36,14 +37,12 @@ void MyEllipseGraphicsItem::setSelectedWithFill(const bool& selected) {
 }
 
 void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
-    _originalPosition = QPointF(extents.x() + 0.5 * extents.width(), extents.y() + 0.5 * extents.height());
-    
     if (isSetStyle()) {
         // cx
-        ((MyEllipseStyleBase*)style())->setCx(0.5 * extents.width());
+        ((MyEllipseStyleBase*)style())->setCx(extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
         
         // cy
-        ((MyEllipseStyleBase*)style())->setCy(0.5 * extents.height());
+        ((MyEllipseStyleBase*)style())->setCy(extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
         
         // rx
         ((MyEllipseStyleBase*)style())->setRx(0.5 * extents.width());
@@ -55,8 +54,16 @@ void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
     updateStyle();
 }
 
-QRectF MyEllipseGraphicsItem::getExtents() const {
+QRectF MyEllipseGraphicsItem::getExtents() {
     return boundingRect();
+}
+
+QGraphicsItem* MyEllipseGraphicsItem::getResizeHandlebaredGraphicsItem() {
+    QRectF resizeRect = QRectF(boundingRect().x() + movedDistance().x(), boundingRect().y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
+    connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    
+    return resizeHandlebaredGraphicsItem;
 }
 
 void MyEllipseGraphicsItem::setZValue(qreal z) {

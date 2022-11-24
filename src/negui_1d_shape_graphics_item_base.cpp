@@ -9,3 +9,11 @@ My1DShapeGraphicsItemBase::My1DShapeGraphicsItemBase() {
 const qreal My1DShapeGraphicsItemBase::getEndSlope() const {
     return _endSlope;
 }
+
+QGraphicsItem* My1DShapeGraphicsItemBase::getResizeHandlebaredGraphicsItem() {
+    return NULL;
+}
+
+void My1DShapeGraphicsItemBase::updateExtents(const QRectF& extents) {
+    
+}

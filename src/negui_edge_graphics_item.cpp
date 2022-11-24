@@ -5,7 +5,7 @@
 // MyEdgeGraphicsItemBase
 
 MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
-    
+    enableNormalMode();
 }
 
 MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
@@ -41,6 +41,10 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
         return (endSlope / childItems().size());
     
     return endSlope;
+}
+
+QList<QGraphicsItem*> MyEdgeGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
+    return QList<QGraphicsItem*>();
 }
 
 void MyEdgeGraphicsItemBase::enableNormalMode() {

@@ -35,7 +35,7 @@ private slots:
     
 protected:
     
-    void updateExtents();
+    void updateDialogBoxExtents();
     
     QWidget* _elementFeatureMenu;
     QDialogButtonBox* _addRemoveShapeStyleButtons;

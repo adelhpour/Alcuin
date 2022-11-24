@@ -20,15 +20,15 @@ public:
     
     virtual ELEMENT_TYPE type() = 0;
     
-    virtual const QString typeAsString() const = 0;
-    
     MyElementGraphicsItemBase* graphicsItem();
     
     virtual void updateGraphicsItem();
     
     MyElementStyleBase* style();
     
-    void setStyle(MyElementStyleBase* style);
+    virtual void setStyle(MyElementStyleBase* style);
+    
+    void updateStyle(QList<MyShapeStyleBase*> shapeStyles);
     
     const QString styleCategory();
     
@@ -56,6 +56,8 @@ public:
     
     virtual void enableRemoveMode();
     
+    virtual QWidget* getFeatureMenu();
+    
     virtual const qint32 calculateZValue() = 0;
     
 signals:
@@ -64,9 +66,7 @@ signals:
     
 protected slots:
     
-    virtual void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles);
-    
-    virtual QWidget* getFeatureMenu();
+    void displayFeatureMenu();
     
 protected:
     

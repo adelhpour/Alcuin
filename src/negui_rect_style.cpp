@@ -80,12 +80,24 @@ const qreal MyRectStyleBase::height() const {
     return 0.000;
 }
 
+void MyRectStyleBase::setRx(const qreal& rx) const {
+    MyParameterBase* parameter = findParameter("rx");
+    if (parameter)
+        return ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(rx);
+}
+
 const qreal MyRectStyleBase::rx() const {
     MyParameterBase* parameter = findParameter("rx");
     if (parameter)
         return ((MyCornerCurvatureParameter*)parameter)->defaultValue();
     
     return 0.000;
+}
+
+void MyRectStyleBase::setRy(const qreal& ry) const {
+    MyParameterBase* parameter = findParameter("ry");
+    if (parameter)
+        return ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(ry);
 }
 
 const qreal MyRectStyleBase::ry() const {

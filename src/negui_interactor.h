@@ -67,13 +67,13 @@ public:
     
     // network
     void resetNetwork();
+    void setNetworkExtents(const QJsonObject& json);
     void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
     const QRectF& networkExtents();
     
     // nodes
     QList<MyElementBase*>& nodes();
-    QString getNodeUniqueId();
-    MyElementBase* findNode(const QString& name);
+    void addNodes(const QJsonObject &json);
     void addNode(const QJsonObject& json);
     void addNode(MyElementBase* node);
     void removeNode(MyElementBase* node);
@@ -85,8 +85,7 @@ public:
     
     // edges
     QList<MyElementBase*>& edges();
-    QString getEdgeUniqueId();
-    MyElementBase* findEdge(const QString& name);
+    void addEdges(const QJsonObject &json);
     void addEdge(const QJsonObject& json);
     void addEdge(MyElementBase* edge);
     void removeEdge(MyElementBase* edge);
@@ -321,5 +320,9 @@ protected:
     MyInteractor* _interactor;
 };
 
+MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
+MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
+MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);
+QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaultIdSection);
 
 #endif

@@ -27,7 +27,7 @@ void MyLineGraphicsItem::setSelectedWithFill(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-QRectF MyLineGraphicsItem::getExtents() const {
+QRectF MyLineGraphicsItem::getExtents() {
     return boundingRect();
 }
 

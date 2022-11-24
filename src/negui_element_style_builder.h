@@ -5,7 +5,11 @@
 
 MyElementStyleBase* createNodeStyle(const QString& name);
 
+MyElementStyleBase* createNodeStyle(const QJsonObject &json);
+
 MyElementStyleBase* createEdgeStyle(const QString& name);
+
+MyElementStyleBase* createEdgeStyle(const QJsonObject &json);
 
 MyElementStyleBase* createArrowHeadStyle(const QString& name);
 

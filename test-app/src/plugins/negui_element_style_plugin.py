@@ -2,7 +2,7 @@
 import json
  
 def elementStylesInfo():
-    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2}]}
+    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'width' : 40.0, 'height' : 40.0, 'rx' : 8.0, 'ry' : 8.0}]}
     
     species_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Species", 'parent-category' : "Compartment", 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2}]}
     

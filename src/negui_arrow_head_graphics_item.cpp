@@ -5,22 +5,26 @@
 // MyArrowHeadGraphicsItemBase
 
 MyArrowHeadGraphicsItemBase::MyArrowHeadGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
-    
+    enableNormalMode();
 }
 
 MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = NULL;
     if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
-        item = createEllipseShape(_initialPosition.x() - _padding, _initialPosition.y(), this);
+        item = createEllipseShape(_originalPosition.x() - _padding, _originalPosition.y(), this);
     else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE)
-        item = createRectShape(_initialPosition.x() - _padding * qCos(qDegreesToRadians(45.0)), _initialPosition.y(), this);
+        item = createRectShape(_originalPosition.x() - _padding * qCos(qDegreesToRadians(45.0)), _originalPosition.y(), this);
     else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
-        item = createPolygonShape(_initialPosition.x() + _padding, _initialPosition.y(), this);
+        item = createPolygonShape(_originalPosition.x() + _padding, _originalPosition.y(), this);
     
     if (item)
         item->setZValue(zValue());
     
     return item;
+}
+
+QList<QGraphicsItem*> MyArrowHeadGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
+    return QList<QGraphicsItem*>();
 }
 
 void MyArrowHeadGraphicsItemBase::enableNormalMode() {
@@ -50,7 +54,7 @@ void MyArrowHeadGraphicsItemBase::enableRemoveMode() {
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
-    _initialPosition = QPointF(0.0, 0.0);
+    _originalPosition = QPointF(0.0, 0.0);
     _padding = 2.5;
 }
 
@@ -64,6 +68,6 @@ void MyArrowHeadSceneGraphicsItem::update(const QPointF& position, const qreal& 
 // MyArrowHeadIconGraphicsItem
 
 MyArrowHeadIconGraphicsItem::MyArrowHeadIconGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
-    _initialPosition = QPointF(60.0, 0.0);
+    _originalPosition = QPointF(60.0, 0.0);
     _padding = 0.0;
 }

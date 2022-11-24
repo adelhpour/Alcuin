@@ -13,6 +13,8 @@ public:
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
+    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() override;
+    
     void enableNormalMode() override;
 
     void enableAddNodeMode() override;
@@ -26,7 +28,7 @@ public:
     void enableRemoveMode() override;
     
 protected:
-    QPointF _initialPosition;
+    QPointF _originalPosition;
 };
 
 class MyNodeSceneGraphicsItem : public MyNodeGraphicsItemBase {
@@ -38,9 +40,10 @@ public:
     
     void moveBy(qreal dx, qreal dy);
     
-    void updateExtents(const QRectF& extents);
-    
     QRectF getExtents() const;
+    
+public slots:
+    void updateExtents(const QRectF& extents);
     
 signals:
     void positionChanged(const QPointF& position);
@@ -55,11 +58,18 @@ protected:
     
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
     
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    
     void keyPressEvent(QKeyEvent *event) override;
     
     void keyReleaseEvent(QKeyEvent *event) override;
     
+    void focusOutEvent(QFocusEvent *event) override;
+    
     bool _reparent;
+    QPointF _mousePressedPosition;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {

@@ -1,5 +1,4 @@
 #include "negui_element_graphics_item_base.h"
-#include "negui_feature_menu.h"
 
 #include <QGraphicsSceneMouseEvent>
 
@@ -14,6 +13,7 @@ void MyElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> shapeStyl
     setZValue(zValue);
     for (MyShapeStyleBase* style : qAsConst(shapeStyles))
         addShapeItem(style);
+    clearResizeHandleBaredGraphicsItems();
 }
 
 void MyElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
@@ -49,6 +49,29 @@ void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
+void MyElementGraphicsItemBase::setFocused(const bool& isFocused) {
+    if (isFocused)
+        addResizeHandleBaredGraphicsItems();
+    else
+        clearResizeHandleBaredGraphicsItems();
+}
+
+void MyElementGraphicsItemBase::addResizeHandleBaredGraphicsItems() {
+    clearResizeHandleBaredGraphicsItems();
+    _resizeHandlebaredGraphicsItems = createResizeHandleBaredGraphicsItems();
+    for (QGraphicsItem* item : _resizeHandlebaredGraphicsItems)
+        emit askForAddGraphicsItem(item);
+}
+
+void MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems() {
+    for (QGraphicsItem* item : _resizeHandlebaredGraphicsItems) {
+        emit askForRemoveGraphicsItem(item);
+        delete item;
+    }
+    _resizeHandlebaredGraphicsItems.clear();
+}
+
+
 void MyElementGraphicsItemBase::setCursor(const QCursor &cursor) {
     for (QGraphicsItem* item : childItems())
         item->setCursor(cursor);
@@ -82,17 +105,9 @@ void MyElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *even
 void MyElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseDoubleClickEvent(event);
     if (event->button() == Qt::LeftButton) {
-        QWidget* elementFeatureMenu = emit askForElementFeatureMenu();
-        if (elementFeatureMenu) {
-            MyFeatureMenu* featureMenu =  new MyFeatureMenu(elementFeatureMenu);
-            featureMenu->setShapeStyles(getShapeStyles());
-            
-            if (featureMenu->exec() == QDialog::Accepted) {
-                emit askForSetShapeStyles(featureMenu->getShapeStyles());
-                event->accept();
-                return;
-            }
-        }
+        event->accept();
+        emit mouseLeftButtonIsDoubleClicked();
+        return;
     }
     event->ignore();
 }

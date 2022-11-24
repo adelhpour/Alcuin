@@ -15,7 +15,7 @@ public:
     
     void setSelectedWithFill(const bool& selected) override;
     
-    QRectF getExtents() const override;
+    QRectF getExtents() override;
     
     void setZValue(qreal z) override;
     

@@ -1,5 +1,6 @@
 #include "negui_rect_graphics_item.h"
 #include "negui_rect_style.h"
+#include "negui_resize_handlebared_graphics_item.h"
 
 // MyRectGraphicsItem
 
@@ -47,14 +48,18 @@ void MyRectGraphicsItem::setSelectedWithFill(const bool& selected) {
 }
 
 void MyRectGraphicsItem::updateExtents(const QRectF& extents) {
-    _originalPosition = QPointF(extents.x() + 0.5 * extents.width(), extents.y() + 0.5 * extents.height());
-    
     if (isSetStyle()) {
         // x
-        ((MyRectStyleBase*)style())->setX(0.0);
+        ((MyRectStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x() - 0.5 * ((MyRectStyleBase*)style())->width()));
         
         // y
-        ((MyRectStyleBase*)style())->setY(0.0);
+        ((MyRectStyleBase*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y() - 0.5 * ((MyRectStyleBase*)style())->height()));
+        
+        // rx
+        ((MyRectStyleBase*)style())->setRx((extents.width()/ ((MyRectStyleBase*)style())->width()) * ((MyRectStyleBase*)style())->rx());
+        
+        // ry
+        ((MyRectStyleBase*)style())->setRy((extents.height()/ ((MyRectStyleBase*)style())->height()) * ((MyRectStyleBase*)style())->ry());
         
         // width
         ((MyRectStyleBase*)style())->setWidth(extents.width());
@@ -66,8 +71,29 @@ void MyRectGraphicsItem::updateExtents(const QRectF& extents) {
     updateStyle();
 }
 
-QRectF MyRectGraphicsItem::getExtents() const {
+QRectF MyRectGraphicsItem::getExtents() {
     return boundingRect();
+}
+
+void MyRectGraphicsItem::updateCurvatureRadii(const qreal& radiusX, const qreal& radiusY) {
+    if (isSetStyle()) {
+        // rx
+        ((MyRectStyleBase*)style())->setRx(radiusX);
+        
+        // ry
+        ((MyRectStyleBase*)style())->setRy(radiusY);
+    }
+    
+    updateStyle();
+}
+
+QGraphicsItem* MyRectGraphicsItem::getResizeHandlebaredGraphicsItem() {
+    QRectF resizeRect = QRectF(boundingRect().x() + movedDistance().x(), boundingRect().y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyRoundedRectangleResizeHandlebaredGraphicsItem(resizeRect, ((MyRectStyleBase*)style())->rx(), ((MyRectStyleBase*)style())->ry(), zValue());
+    connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    connect(resizeHandlebaredGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
+    
+    return resizeHandlebaredGraphicsItem;
 }
 
 void MyRectGraphicsItem::setZValue(qreal z) {

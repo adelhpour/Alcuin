@@ -1,15 +1,16 @@
 #include "negui_element_base.h"
+#include "negui_feature_menu.h"
 
 // MyElementBase
 
 MyElementBase::MyElementBase(const QString& name) : MyBase(name) {
-    
+    _style = NULL;
+    _isActive = false;
 }
 
 MyElementGraphicsItemBase* MyElementBase::graphicsItem() {
     return _graphicsItem;
 }
-
 
 void MyElementBase::updateGraphicsItem() {
     graphicsItem()->clear();
@@ -21,10 +22,11 @@ MyElementStyleBase* MyElementBase::style() {
 }
 
 void MyElementBase::setStyle(MyElementStyleBase* style) {
-    if (style)
-        _style = style;
-    
-    updateGraphicsItem();
+    _style = style;
+}
+
+void MyElementBase::updateStyle(QList<MyShapeStyleBase*> shapeStyles) {
+    style()->setShapeStyles(shapeStyles);
 }
 
 const QString MyElementBase::styleCategory() {
@@ -75,11 +77,6 @@ void MyElementBase::enableRemoveMode() {
     graphicsItem()->enableRemoveMode();
 }
 
-void MyElementBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
-    style()->setShapeStyles(shapeStyles);
-    updateGraphicsItem();
-}
-
 QWidget* MyElementBase::getFeatureMenu() {
     MyMenuItemGroupBox* featureMenu = new MyMenuItemGroupBox();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
@@ -96,4 +93,13 @@ QWidget* MyElementBase::getFeatureMenu() {
     contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1);
     
     return featureMenu;
+}
+
+void MyElementBase::displayFeatureMenu() {
+    MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu());
+    featureMenu->setShapeStyles(style()->shapeStyles());
+    if (featureMenu->exec() == QDialog::Accepted) {
+        updateStyle(featureMenu->getShapeStyles());
+        updateGraphicsItem();
+    }
 }

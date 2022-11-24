@@ -30,7 +30,7 @@ void MyBezierGraphicsItem::setSelectedWithFill(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-QRectF MyBezierGraphicsItem::getExtents() const {
+QRectF MyBezierGraphicsItem::getExtents() {
     return boundingRect();
 }
 

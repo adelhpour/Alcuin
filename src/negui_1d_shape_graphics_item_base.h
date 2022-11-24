@@ -12,6 +12,11 @@ public:
     
     virtual void setLine(const QLineF& line) = 0;
     
+    QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
+    
+public slots:
+    virtual void updateExtents(const QRectF& extents) override;
+    
 protected:
     QLineF _line;
     qreal _endSlope;

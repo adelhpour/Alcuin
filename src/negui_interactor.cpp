@@ -11,7 +11,6 @@
 #include <QFileDialog>
 #include <QJsonArray>
 
-
 // MyInteractor
 
 MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
@@ -225,6 +224,13 @@ MyInteractor::SceneMode MyInteractor::mode() {
     return _mode;
 }
 
+void MyInteractor::createNetwork(const QJsonObject &json) {
+    resetNetwork();
+    setNetworkExtents(json);
+    addNodes(json);
+    addEdges(json);
+}
+
 void MyInteractor::resetNetwork() {
     _selectedEdgeStartNode = NULL;
     _isSetSelectedEdgeStartNode = false;
@@ -233,6 +239,11 @@ void MyInteractor::resetNetwork() {
     clearEdgesInfo();
     askForClearScene();
     setNetworkExtents(30.0, 20.0, 840.0, 560.0);
+}
+
+void MyInteractor::setNetworkExtents(const QJsonObject& json) {
+    if (json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble() && json.contains("dimensions") && json["dimensions"].isObject() && json["dimensions"].toObject().contains("width") && json["dimensions"]["width"].isDouble() && json["dimensions"].toObject().contains("height") && json["dimensions"]["height"].isDouble())
+        setNetworkExtents(json["position"]["x"].toDouble(), json["position"]["y"].toDouble(), json["dimensions"]["width"].toDouble(), json["dimensions"]["height"].toDouble());
 }
 
 void MyInteractor::setNetworkExtents(qreal x, qreal y, qreal width, qreal height) {
@@ -260,48 +271,23 @@ QList<MyElementBase*>& MyInteractor::nodes() {
     return _nodes;
 }
 
-QString MyInteractor::getNodeUniqueId() {
-    QString name;
-    qreal k = 0;
-    bool isSimilarIdFound = true;
-    while(isSimilarIdFound) {
-        name = nodeStyle()->category() + "_" + QString::number(k);
-        isSimilarIdFound = false;
-        for (MyElementBase *node : qAsConst(nodes())) {
-            if (node->name() == name) {
-                isSimilarIdFound = true;
-                break;
-            }
-        }
-        ++k;
+void MyInteractor::addNodes(const QJsonObject &json) {
+    if (json.contains("nodes") && json["nodes"].isArray()) {
+        QJsonArray nodesArray = json["nodes"].toArray();
+        for (int nodeIndex = 0; nodeIndex < nodesArray.size(); ++nodeIndex)
+            addNode(nodesArray[nodeIndex].toObject());
+        updateNodeParetns();
     }
-    
-    return name;
-}
-
-MyElementBase* MyInteractor::findNode(const QString& name) {
-    for (MyElementBase *node : qAsConst(nodes())) {
-        if (node->name() == name)
-            return node;
-    }
-    
-    return NULL;
 }
 
 void MyInteractor::addNode(const QJsonObject &json) {
-    if (json.contains("id") && json["id"].isString() && json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble()) {
-        MyElementBase* _node = createNode(json["id"].toString(), json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
-        if (json.contains("parent") && json["parent"].isString())
-           ((MyNode*)_node)->setParentNodeId(json["parent"].toString());
-        MyElementStyleBase* _style = NULL;
-        if (json.contains("style") && json["style"].isObject() && json["style"].toObject().contains("name") && json["style"]["name"].isString()) {
-            _style = createNodeStyle(json["style"]["name"].toString());
-            _style->read(json["style"].toObject());
-        }
-        if (!_style)
-            _style = getCopyNodeStyle(_node->name() + "_style");
-        _node->setStyle(_style);
-        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
+    MyElementBase* node = createNode(json);
+    if (node) {
+        MyElementStyleBase* style = createNodeStyle(json);
+        if (!style)
+            style = getCopyNodeStyle(node->name() + "_style");
+        node->setStyle(style);
+        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, node);
         ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
     }
 }
@@ -310,11 +296,23 @@ void MyInteractor::addNode(MyElementBase* n) {
     if (n && !n->isActive()) {
         _nodes.push_back(n);
         n->setActive(true);
+        n->updateGraphicsItem();
         connect(n, SIGNAL(askForParentNodeAtPosition(MyElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyElementBase*, const QPointF&)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectNode(MyElementBase*)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(addNewEdge(MyElementBase*)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
+        connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         emit askForAddGraphicsItem(n->graphicsItem());
+    }
+}
+
+void MyInteractor::addNewNode(const QPointF& position) {
+    if (mode() == ADD_NODE_MODE) {
+        MyElementBase* _node = createNode(getElementUniqueId(nodes(), nodeStyle()->category()), position.x(), position.y());
+        _node->setStyle(getCopyNodeStyle(_node->name() + "_style"));
+        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
+        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
     }
 }
 
@@ -329,7 +327,7 @@ void MyInteractor::removeNode(MyElementBase* n) {
 void MyInteractor::updateNodeParetns() {
     MyElementBase* parentNode = NULL;
     for (MyElementBase *node : qAsConst(nodes())) {
-        parentNode = findNode(((MyNode*)node)->parentNodeId());
+        parentNode = findElement(nodes(), ((MyNode*)node)->parentNodeId());
         if (parentNode)
             ((MyNode*)node)->setParentNode((MyNode*)parentNode);
     }
@@ -387,46 +385,22 @@ QList<MyElementBase*>& MyInteractor::edges() {
     return _edges;
 }
 
-QString MyInteractor::getEdgeUniqueId() {
-    QString name;
-    qreal k = 0;
-    bool isSimilarIdFound = true;
-    while(isSimilarIdFound) {
-        name = edgeStyle()->category() + "_" + QString::number(k);
-        isSimilarIdFound = false;
-        for (MyElementBase *edge : qAsConst(edges())) {
-            if (edge->name() == name) {
-                isSimilarIdFound = true;
-                break;
-            }
-        }
-        ++k;
+void MyInteractor::addEdges(const QJsonObject &json) {
+    if (json.contains("edges") && json["edges"].isArray()) {
+        QJsonArray edgesArray = json["edges"].toArray();
+        for (int edgeIndex = 0; edgeIndex < edgesArray.size(); ++edgeIndex)
+            addEdge(edgesArray[edgeIndex].toObject());
     }
-    
-    return name;
-}
-
-MyElementBase* MyInteractor::findEdge(const QString& name) {
-    for (MyElementBase *edge : qAsConst(edges())) {
-        if (edge->name() == name)
-            return edge;
-    }
-    
-    return NULL;
 }
 
 void MyInteractor::addEdge(const QJsonObject &json) {
-    if (json.contains("id") && json["id"].isString() && json.contains("start") && json["start"].isObject() && json["start"].toObject().contains("node") && json["start"]["node"].isString() && findNode(json["start"]["node"].toString()) && json.contains("end") && json["end"].isObject() && json["end"].toObject().contains("node") && json["end"]["node"].isString() && findNode(json["end"]["node"].toString())) {
-        MyElementBase* _edge = createEdge(json["id"].toString(), findNode(json["start"]["node"].toString()), findNode(json["end"]["node"].toString()));
-        MyElementStyleBase* _style = NULL;
-        if (json.contains("style") && json["style"].isObject() && json["style"].toObject().contains("name") && json["style"]["name"].isString()) {
-            _style = createEdgeStyle(json["style"]["name"].toString());
-            _style->read(json["style"].toObject());
-        }
-        if (!_style)
-            _style = getCopyEdgeStyle(_edge->name() + "_style");
-        _edge->setStyle(_style);
-        QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
+    MyElementBase* edge = createEdge(json, findStartNode(nodes(), json), findEndNode(nodes(), json));
+    if (edge) {
+        MyElementStyleBase* style = createEdgeStyle(json);
+        if (!style)
+            style = getCopyEdgeStyle(edge->name() + "_style");
+        edge->setStyle(style);
+        QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, edge);
         ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
     }
 }
@@ -434,11 +408,27 @@ void MyInteractor::addEdge(const QJsonObject &json) {
 void MyInteractor::addEdge(MyElementBase* e) {
     if (e && !edgeExists(((MyEdge*)e)->startNode(), ((MyEdge*)e)->endNode()) && e->setActive(true)) {
         _edges.push_back(e);
+        e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdge*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdge*)e)->arrowHead()->graphicsItem());
+    }
+}
+
+void MyInteractor::addNewEdge(MyElementBase* element) {
+    if (mode() == ADD_EDGE_MODE) {
+        if (!isSetSelectedEdgeStartNode()) {
+            setSelectedEdgeStartNode(element);
+        }
+        else if (selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element)) {
+            MyElementBase* _edge = createEdge(getElementUniqueId(edges(), edgeStyle()->category()), selectedEdgeStartNode(), element);
+            _edge->setStyle(getCopyEdgeStyle(_edge->name() + "_style"));
+            QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
+            ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
+            unSetSelectedEdgeStartNode();
+        }
     }
 }
 
@@ -504,46 +494,6 @@ bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
     return false;
 }
 
-QList<QToolButton*> MyInteractor::getMenuButtons() {
-    QList<QToolButton*> buttons;
-    if (getPluginsOfType(plugins(), "importtool").size())
-        buttons.push_back(populateImportMenu());
-    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
-        buttons.push_back(populateExportMenu());
-    buttons.append(populateAddElementMenu());
-    buttons.push_back(populateRemoveItemMenu());
-    if (getPluginsOfType(plugins(), "autolayoutengine").size())
-        buttons.push_back(populateAutoLayoutMenu());
-    buttons.push_back(populateUndoActionMenu());
-    buttons.push_back(populateRedoActionMenu());
-    buttons.push_back(populateResetSceneMenu());
-    
-    return buttons;
-}
-
-void MyInteractor::createNetwork(const QJsonObject &json) {
-    resetNetwork();
-    
-    // position and dimensions
-    if (json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble() && json.contains("dimensions") && json["dimensions"].isObject() && json["dimensions"].toObject().contains("width") && json["dimensions"]["width"].isDouble() && json["dimensions"].toObject().contains("height") && json["dimensions"]["height"].isDouble())
-        setNetworkExtents(json["position"]["x"].toDouble(), json["position"]["y"].toDouble(), json["dimensions"]["width"].toDouble(), json["dimensions"]["height"].toDouble());
-    
-    // nodes
-    if (json.contains("nodes") && json["nodes"].isArray()) {
-        QJsonArray nodesArray = json["nodes"].toArray();
-        for (int nodeIndex = 0; nodeIndex < nodesArray.size(); ++nodeIndex)
-            addNode(nodesArray[nodeIndex].toObject());
-        updateNodeParetns();
-    }
-    
-    // edges
-    if (json.contains("edges") && json["edges"].isArray()) {
-        QJsonArray edgesArray = json["edges"].toArray();
-        for (int edgeIndex = 0; edgeIndex < edgesArray.size(); ++edgeIndex)
-            addEdge(edgesArray[edgeIndex].toObject());
-    }
-}
-
 void MyInteractor::exportNetworkInfo(QJsonObject &json) {
     // position
     QJsonObject positionObject;
@@ -576,36 +526,12 @@ void MyInteractor::exportNetworkInfo(QJsonObject &json) {
     json["edges"] = edgesArray;
 }
 
-void MyInteractor::addNewNode(const QPointF& position) {
-    if (mode() == ADD_NODE_MODE) {
-        MyElementBase* _node = createNode(getNodeUniqueId(), position.x(), position.y());
-        _node->setStyle(getCopyNodeStyle(_node->name() + "_style"));
-        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
-        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
-    }
-}
-
 void MyInteractor::selectNode(MyElementBase* element) {
     if (mode() == SELECT_NODE_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
             element->setSelected(false);
-    }
-}
-
-void MyInteractor::addNewEdge(MyElementBase* element) {
-    if (mode() == ADD_EDGE_MODE) {
-        if (!isSetSelectedEdgeStartNode()) {
-            setSelectedEdgeStartNode(element);
-        }
-        else if (selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element)) {
-            MyElementBase* _edge = createEdge(getEdgeUniqueId(), selectedEdgeStartNode(), element);
-            _edge->setStyle(getCopyEdgeStyle(_edge->name() + "_style"));
-            QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
-            ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
-            unSetSelectedEdgeStartNode();
-        }
     }
 }
 
@@ -788,6 +714,23 @@ void MyInteractor::loadPlugins() {
                 setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), pluginsDir.path());
         }
     }
+}
+
+QList<QToolButton*> MyInteractor::getMenuButtons() {
+    QList<QToolButton*> buttons;
+    if (getPluginsOfType(plugins(), "importtool").size())
+        buttons.push_back(populateImportMenu());
+    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
+        buttons.push_back(populateExportMenu());
+    buttons.append(populateAddElementMenu());
+    buttons.push_back(populateRemoveItemMenu());
+    if (getPluginsOfType(plugins(), "autolayoutengine").size())
+        buttons.push_back(populateAutoLayoutMenu());
+    buttons.push_back(populateUndoActionMenu());
+    buttons.push_back(populateRedoActionMenu());
+    buttons.push_back(populateResetSceneMenu());
+    
+    return buttons;
 }
 
 QToolButton* MyInteractor::populateImportMenu() {
@@ -1090,4 +1033,46 @@ void MyRemoveEdgeCommand::undo() {
 void MyRemoveEdgeCommand::redo() {
     ((MyEdge*)_edge)->connectToNodes(false);
     _interactor->removeEdge(_edge);
+}
+
+MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name) {
+    for (MyElementBase *element : qAsConst(elements)) {
+        if (element->name() == name)
+            return element;
+    }
+    
+    return NULL;
+}
+
+MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("start") && json["start"].isObject() && json["start"].toObject().contains("node") && json["start"]["node"].isString())
+        return findElement(nodes, json["start"]["node"].toString());
+    
+    return NULL;
+}
+
+MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("end") && json["end"].isObject() && json["end"].toObject().contains("node") && json["end"]["node"].isString())
+        return findElement(nodes, json["end"]["node"].toString());
+    
+    return NULL;
+}
+
+QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaultIdSection) {
+    QString name;
+    qreal k = 0;
+    bool isSimilarIdFound = true;
+    while(isSimilarIdFound) {
+        name = defaultIdSection + "_" + QString::number(k);
+        isSimilarIdFound = false;
+        for (MyElementBase *element : qAsConst(elements)) {
+            if (element->name() == name) {
+                isSimilarIdFound = true;
+                break;
+            }
+        }
+        ++k;
+    }
+    
+    return name;
 }

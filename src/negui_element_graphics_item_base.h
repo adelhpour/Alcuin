@@ -20,9 +20,17 @@ public:
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
+    virtual QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() = 0;
+    
     void setSelectedWithStroke(const bool& selected);
     
     void setSelectedWithFill(const bool& selected);
+    
+    void setFocused(const bool& isFocused);
+    
+    void addResizeHandleBaredGraphicsItems();
+    
+    void clearResizeHandleBaredGraphicsItems();
     
     void setCursor(const QCursor &cursor);
     
@@ -43,8 +51,9 @@ public:
 signals:
     
     void mouseLeftButtonIsPressed();
-    QWidget* askForElementFeatureMenu();
-    void askForSetShapeStyles(QList<MyShapeStyleBase*> shapeStyles);
+    void mouseLeftButtonIsDoubleClicked();
+    void askForAddGraphicsItem(QGraphicsItem*);
+    void askForRemoveGraphicsItem(QGraphicsItem*);
     
 protected:
     
@@ -55,6 +64,7 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     
     QList<MyShapeStyleBase*> _shapeStyles;
+    QList<QGraphicsItem*> _resizeHandlebaredGraphicsItems;
     bool _isChosen;
 };
 

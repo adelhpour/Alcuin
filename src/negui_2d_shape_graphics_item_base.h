@@ -7,8 +7,6 @@ class My2DShapeGraphicsItemBase: public MyShapeGraphicsItemBase {
 public:
     
     My2DShapeGraphicsItemBase(qreal x, qreal y);
-    
-    virtual void updateExtents(const QRectF& extents) = 0;
 };
 
 #endif

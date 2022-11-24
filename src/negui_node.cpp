@@ -10,20 +10,16 @@ MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementB
     _parentNodeId = "N/A";
     _parentNode = NULL;
     _isSetParentNode = false;
-    _style = NULL;
-    _isActive = false;
     _isParentNodeLocked = false;
     _areChildNodesLocked = false;
     _position = QPointF(x, y);
     _graphicsItem = createNodeSceneGraphicsItem(position());
-    enableNormalMode();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(positionChanged(QPointF)), this, SLOT(setPosition(QPointF)));
     connect(_graphicsItem, SIGNAL(extentsModified()), this, SLOT(resetPosition()));
-    connect(_graphicsItem, SIGNAL(askForElementFeatureMenu()), this, SLOT(getFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForSetShapeStyles(QList<MyShapeStyleBase*>)), this, SLOT(setShapeStyles(QList<MyShapeStyleBase*>)));
 }
 
 MyNode::~MyNode() {
@@ -32,10 +28,6 @@ MyNode::~MyNode() {
 
 MyNode::ELEMENT_TYPE MyNode::type() {
     return NODE_ELEMENT;
-}
-
-const QString MyNode::typeAsString() const {
-    return "Node";
 }
 
 void MyNode::addEdge(MyElementBase* e) {
@@ -50,6 +42,11 @@ void MyNode::removeEdge(MyElementBase* e) {
 
 QList<MyElementBase*>& MyNode::edges() {
     return _edges;
+}
+
+void MyNode::updateGraphicsItem() {
+    MyElementBase::updateGraphicsItem();
+    resetPosition();
 }
 
 void MyNode::setSelected(const bool& selected) {
@@ -126,11 +123,6 @@ void MyNode::updateChildNodesMobility() {
         childNodes().first()->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNode::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
-    MyElementBase::setShapeStyles(shapeStyles);
-    resetPosition();
-}
-
 void MyNode::deparent() {
     setParentNode(NULL);
 }
@@ -143,6 +135,7 @@ void MyNode::reparent() {
         setParentNode((MyNode*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
         ((MyNode*)parentNode)->adjustExtentsTochildren();
+        resetPosition();
     }
 }
 
@@ -198,11 +191,11 @@ const QRectF MyNode::getExtents() {
             if (extents.y() + extents.height() < childExtents.y() + childExtents.height())
                 extents.setHeight(extents.height() + (childExtents.y() + childExtents.height() - extents.y() - extents.height()));
         }
+        return QRectF(extents.x() - 10.0, extents.y() - 10.0, extents.width() + 20.0, extents.height() + 20.0);
     }
     else
         return QRectF(position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width(), position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height(), ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width(), ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height());
     
-    return QRectF(extents.x() - 10.0, extents.y() - 10.0, extents.width() + 20.0, extents.height() + 20.0);
 }
 
 void MyNode::adjustExtentsTochildren() {
@@ -247,10 +240,8 @@ void MyNode::read(const QJsonObject &json) {
         setParentNodeId(json["parent"].toString());
     
     // style
-    if (json.contains("style") && json["style"].isObject()) {
+    if (json.contains("style") && json["style"].isObject())
         style()->read(json["style"].toObject());
-        updateGraphicsItem();
-    }
 }
 
 void MyNode::write(QJsonObject &json) {

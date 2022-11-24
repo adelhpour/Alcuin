@@ -60,15 +60,15 @@ const QRectF MyPolygonStyleBase::boundingRect() const {
     return rect;
 }
 
-void MyPolygonStyleBase::scaleToExtents(const QRectF& extetns) {
+void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
     QRectF polygonBoundingRect = boundingRect();
-    qreal xScaleFactor = extetns.width() / polygonBoundingRect.width();
-    qreal yScaleFactor = extetns.height() / polygonBoundingRect.height();
+    qreal xScaleFactor = extents.width() / polygonBoundingRect.width();
+    qreal yScaleFactor = extents.height() / polygonBoundingRect.height();
     
     QList<MyAbsolutePointParameter*> parameters = pointParameters();
     for (MyAbsolutePointParameter* parameter : qAsConst(parameters)) {
-        parameter->setDefaultValueX(xScaleFactor * (parameter->defaultValueX() - polygonBoundingRect.center().x()) + polygonBoundingRect.center().x());
-        parameter->setDefaultValueY(yScaleFactor * (parameter->defaultValueY() - polygonBoundingRect.center().y()) + polygonBoundingRect.center().y());
+        parameter->setDefaultValueX(extents.x() + xScaleFactor * (parameter->defaultValueX() - polygonBoundingRect.center().x()) + polygonBoundingRect.center().x());
+        parameter->setDefaultValueY(extents.y() + yScaleFactor * (parameter->defaultValueY() - polygonBoundingRect.center().y()) + polygonBoundingRect.center().y());
     }
 }
 

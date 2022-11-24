@@ -35,7 +35,7 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : QDi
     contentLayout->addWidget(dialogBoxButtons, contentLayout->rowCount(), 0, 1, 2);
     
     setLayout(contentLayout);
-    updateExtents();
+    updateDialogBoxExtents();
 }
 
 void MyFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -101,10 +101,10 @@ QList<MyShapeStyleBase*> MyFeatureMenu::getTemporaryShapeStyles() {
 
 void MyFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
     _expandableWidgetSize = expandableWidgetSize;
-    updateExtents();
+    updateDialogBoxExtents();
 }
 
-void MyFeatureMenu::updateExtents() {
+void MyFeatureMenu::updateDialogBoxExtents() {
     qint32 menuWidth = 0;
     qint32 menuHeight = 0;
     
