@@ -50,7 +50,8 @@ void MyPolygonGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyPolygonGraphicsItem::getExtents() {
-    return boundingRect();
+    QRectF polygonBoundingRect = ((MyPolygonStyleBase*)style())->boundingRect();
+    return QRectF((movedDistance().x() + boundingRect().x()), (movedDistance().y() + boundingRect().y()), polygonBoundingRect.width(), polygonBoundingRect.height());
 }
 
 QGraphicsItem* MyPolygonGraphicsItem::getResizeHandlebaredGraphicsItem() {

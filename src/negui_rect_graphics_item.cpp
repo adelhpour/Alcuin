@@ -72,7 +72,7 @@ void MyRectGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyRectGraphicsItem::getExtents() {
-    return boundingRect();
+    return QRectF(((MyRectStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x() - 0.5 * ((MyRectStyleBase*)style())->width()), ((MyRectStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y() - 0.5 * ((MyRectStyleBase*)style())->height()), ((MyRectStyleBase*)style())->width(), ((MyRectStyleBase*)style())->height());
 }
 
 void MyRectGraphicsItem::updateCurvatureRadii(const qreal& radiusX, const qreal& radiusY) {

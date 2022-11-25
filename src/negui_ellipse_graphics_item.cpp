@@ -55,7 +55,7 @@ void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyEllipseGraphicsItem::getExtents() {
-    return boundingRect();
+    return QRectF(((MyEllipseStyleBase*)style())->cx() - 2 * ((MyEllipseStyleBase*)style())->rx() + (movedDistance().x() + _originalPosition.x()), ((MyEllipseStyleBase*)style())->cy() - 2 * ((MyEllipseStyleBase*)style())->ry() + (movedDistance().y() + _originalPosition.y()), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
 }
 
 QGraphicsItem* MyEllipseGraphicsItem::getResizeHandlebaredGraphicsItem() {

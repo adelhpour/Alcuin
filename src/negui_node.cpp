@@ -71,21 +71,10 @@ MyElementBase* MyNode::parentNode() {
 }
 
 void MyNode::setParentNode(MyElementBase* parentNode) {
-    if (parentNode) {
-        _parentNode = parentNode;
-        _isSetParentNode = true;
-        _parentNodeId = parentNode->name();
-        ((MyNode*)_parentNode)->addChildNode(this);
-    }
-    else {
-        if (_parentNode) {
-            ((MyNode*)_parentNode)->removeChildNode(this);
-            ((MyNode*)_parentNode)->adjustExtentsTochildren();
-        }
-        _parentNode = NULL;
-        _isSetParentNode = false;
-        _parentNodeId = "N/A";
-    }
+    _parentNode = parentNode;
+    _isSetParentNode = true;
+    _parentNodeId = parentNode->name();
+    ((MyNode*)_parentNode)->addChildNode(this);
 }
 
 void MyNode::lockParentNode(const bool& locked) {
@@ -124,12 +113,18 @@ void MyNode::updateChildNodesMobility() {
 }
 
 void MyNode::deparent() {
-    setParentNode(NULL);
+    if (_parentNode) {
+        ((MyNode*)_parentNode)->removeChildNode(this);
+        ((MyNode*)_parentNode)->adjustExtentsTochildren();
+    }
+    _parentNode = NULL;
+    _isSetParentNode = false;
+    _parentNodeId = "N/A";
 }
 
 void MyNode::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
-    setParentNode(NULL);
+    deparent();
     if (parentNode && parentNode->isStyleCategoryConvertibleToParentCategory()) {
         parentNode->convertStyleCategoryToParentCategory();
         setParentNode((MyNode*)parentNode);
@@ -175,27 +170,31 @@ const QPointF MyNode::position() const {
 }
 
 const QRectF MyNode::getExtents() {
-    QRectF extents;
-    extents.setX(INT_MAX);
-    extents.setY(INT_MAX);
     if (childNodes().size()) {
-        QRectF childExtents;
+        QRectF childExtents = ((MyNode*)childNodes().at(0))->getExtents();
+        qreal extentsX = childExtents.x();
+        qreal extentsY = childExtents.y();
+        qreal extentsWidth = childExtents.width();
+        qreal extentsHeight = childExtents.height();
         for (MyElementBase* childNode : qAsConst(childNodes())) {
             childExtents = ((MyNode*)childNode)->getExtents();
-            if (childExtents.x() < extents.x())
-                extents.setX(childExtents.x());
-            if (childExtents.y() < extents.y())
-                extents.setY(childExtents.y());
-            if (extents.x() + extents.width() < childExtents.x() + childExtents.width())
-                extents.setWidth(extents.width() + (childExtents.x() + childExtents.width() - extents.x() - extents.width()));
-            if (extents.y() + extents.height() < childExtents.y() + childExtents.height())
-                extents.setHeight(extents.height() + (childExtents.y() + childExtents.height() - extents.y() - extents.height()));
+            if (childExtents.x() < extentsX) {
+                extentsWidth += extentsX - childExtents.x();
+                extentsX = childExtents.x();
+            }
+            if (childExtents.y() < extentsY) {
+                extentsHeight += extentsY - childExtents.y();
+                extentsY = childExtents.y();
+            }
+            if (extentsX + extentsWidth < childExtents.x() + childExtents.width())
+                extentsWidth += childExtents.x() + childExtents.width() - extentsX - extentsWidth;
+            if (extentsY + extentsHeight < childExtents.y() + childExtents.height())
+                extentsHeight +=  childExtents.y() + childExtents.height() - extentsY - extentsHeight;
         }
-        return QRectF(extents.x() - 10.0, extents.y() - 10.0, extents.width() + 20.0, extents.height() + 20.0);
+        return QRectF(extentsX - 10.0, extentsY - 10.0, extentsWidth + 20.0, extentsHeight + 20.0);
     }
-    else
-        return QRectF(position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width(), position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height(), ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width(), ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height());
     
+    return ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents();
 }
 
 void MyNode::adjustExtentsTochildren() {

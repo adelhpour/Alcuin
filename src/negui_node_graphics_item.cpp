@@ -103,46 +103,61 @@ void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
         emit extentsModified();
 }
 
+void MyNodeSceneGraphicsItem::deparent() {
+    if (_reparent)
+        emit askForDeparent();
+}
+
+void MyNodeSceneGraphicsItem::moveChildItems(const QPointF& movedDistance) {
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->setMovedDistance(movedDistance);
+    }
+}
+
+void MyNodeSceneGraphicsItem::movePosition(const QPointF& movedDistance) {
+    _originalPosition += QPointF(movedDistance);
+}
+
 void MyNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
             casted_item->updateExtents(QRectF(extents.x(), extents.y(), extents.width(), extents.height()));
     }
-    extentsModified();
 }
 
 QRectF MyNodeSceneGraphicsItem::getExtents() const {
-    QRectF extents = boundingRect();
     if (childItems().size()) {
-        QRectF childExtents;
+        QRectF childExtents = dynamic_cast<MyShapeGraphicsItemBase*>(childItems().at(0))->getExtents();
+        qreal extentsX = childExtents.x();
+        qreal extentsY = childExtents.y();
+        qreal extentsWidth = childExtents.width();
+        qreal extentsHeight = childExtents.height();
         for (QGraphicsItem* childItem : childItems()) {
             MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(childItem);
             childExtents = casted_item->getExtents();
-            if (childExtents.x() < extents.x())
-                extents.setX(childExtents.x());
-            if (childExtents.y() < extents.y())
-                extents.setY(childExtents.y());
-            if (extents.x() + extents.width() < childExtents.x() + childExtents.width())
-                extents.setWidth(extents.width() + (childExtents.x() + childExtents.width() - extents.x() - extents.width()));
-            if (extents.y() + extents.height() < childExtents.y() + childExtents.height())
-                extents.setHeight(extents.height() + (childExtents.y() + childExtents.height() - extents.y() - extents.height()));
+            if (childExtents.x() < extentsX)
+                extentsX = childExtents.x();
+            if (childExtents.y() < extentsY)
+                extentsY = childExtents.y();
+            if (extentsX + extentsWidth < childExtents.x() + childExtents.width())
+                extentsWidth += childExtents.x() + childExtents.width() - extentsX - extentsWidth;
+            if (extentsY + extentsHeight < childExtents.y() + childExtents.height())
+                extentsHeight += childExtents.y() + childExtents.height() - extentsY - extentsHeight;
         }
+        return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
     }
     
-    return extents;
+    return QRectF(_originalPosition.x(), _originalPosition.y(), 0.0, 0.0);
 }
 
 QVariant MyNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &value) {
     if (change == ItemPositionChange) {
-        if (_reparent)
-            emit askForDeparent();
-        for (QGraphicsItem* item : childItems()) {
-            MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-            if (casted_item)
-                casted_item->setMovedDistance(value.toPointF());
-        }
-        _originalPosition += QPointF(value.toPointF().x() - x(), value.toPointF().y() - y());
+        deparent();
+        moveChildItems(value.toPointF());
+        movePosition(QPointF(value.toPointF().x() - x(), value.toPointF().y() - y()));
         emit positionChanged(_originalPosition);
     }
     

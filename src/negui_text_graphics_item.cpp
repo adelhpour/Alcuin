@@ -66,7 +66,7 @@ void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyTextGraphicsItem::getExtents() {
-    return QRectF(x(), y(), boundingRect().width(), boundingRect().height());
+    return QRectF(((MyTextStyle*)style())->x() + (movedDistance().x() + _originalPosition.x() - 0.5 * ((MyTextStyle*)style())->width()), ((MyTextStyle*)style())->y() + (movedDistance().y() + _originalPosition.y() - 0.5 * ((MyTextStyle*)style())->height()), ((MyTextStyle*)style())->width(), ((MyTextStyle*)style())->height());
 }
 
 QGraphicsItem* MyTextGraphicsItem::getResizeHandlebaredGraphicsItem() {

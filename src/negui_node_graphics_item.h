@@ -40,6 +40,12 @@ public:
     
     void moveBy(qreal dx, qreal dy);
     
+    void deparent();
+    
+    void moveChildItems(const QPointF& movedDistance);
+    
+    void movePosition(const QPointF& movedDistance);
+    
     QRectF getExtents() const;
     
 public slots:
