@@ -73,7 +73,7 @@ public:
     const QRectF getExtents();
     
     // adjust node extents to fit all its children
-    void adjustExtentsTochildren();
+    void adjustExtents();
     
     QWidget* getFeatureMenu() override;
     

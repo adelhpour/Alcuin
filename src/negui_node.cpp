@@ -115,7 +115,7 @@ void MyNode::updateChildNodesMobility() {
 void MyNode::deparent() {
     if (_parentNode) {
         ((MyNode*)_parentNode)->removeChildNode(this);
-        ((MyNode*)_parentNode)->adjustExtentsTochildren();
+        ((MyNode*)_parentNode)->adjustExtents();
     }
     _parentNode = NULL;
     _isSetParentNode = false;
@@ -129,7 +129,7 @@ void MyNode::reparent() {
         parentNode->convertStyleCategoryToParentCategory();
         setParentNode((MyNode*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
-        ((MyNode*)parentNode)->adjustExtentsTochildren();
+        ((MyNode*)parentNode)->adjustExtents();
         resetPosition();
     }
 }
@@ -151,7 +151,7 @@ void MyNode::setPosition(const QPointF& position) {
     // adjust parent extents
     if (!isParentNodeLocked()) {
         if (parentNode())
-            ((MyNode*)parentNode())->adjustExtentsTochildren();
+            ((MyNode*)parentNode())->adjustExtents();
     }
     else
         lockParentNode(false);
@@ -197,7 +197,7 @@ const QRectF MyNode::getExtents() {
     return ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents();
 }
 
-void MyNode::adjustExtentsTochildren() {
+void MyNode::adjustExtents() {
     QRectF extents = getExtents();
     lockChildNodes(true);
     ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width()), extents.y() - (position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height()));

@@ -334,7 +334,7 @@ void MyInteractor::updateNodeParetns() {
     
     for (MyElementBase *node : qAsConst(nodes())) {
         if (((MyNode*)node)->childNodes().size()) {
-            ((MyNode*)node)->adjustExtentsTochildren();
+            ((MyNode*)node)->adjustExtents();
         }
     }
 }
