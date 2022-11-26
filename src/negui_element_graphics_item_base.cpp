@@ -85,6 +85,12 @@ void MyElementGraphicsItemBase::clear() {
     }
 }
 
+void MyElementGraphicsItemBase::setZValue(qreal z) {
+    for (QGraphicsItem* item : childItems())
+        item->setZValue(item->zValue() + (z - zValue()));
+    QGraphicsItemGroup::setZValue(z);
+}
+
 void MyElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {

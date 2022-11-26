@@ -36,6 +36,8 @@ public:
     
     void clear();
     
+    void setZValue(qreal z);
+    
     virtual void enableNormalMode() = 0;
     
     virtual void enableAddNodeMode() = 0;
