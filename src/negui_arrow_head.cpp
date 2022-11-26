@@ -30,13 +30,13 @@ MyElementBase* MyArrowHead::edge() {
 void MyArrowHead::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     updatePlacement(_position, _slope);
-    graphicsItem()->setZValue(calculateZValue());
 }
 
 void MyArrowHead::updatePlacement(const QPointF& position, const qreal& slope) {
     _position = position;
     _slope = slope;
     ((MyArrowHeadSceneGraphicsItem*)graphicsItem())->update(_position, _slope);
+    graphicsItem()->setZValue(calculateZValue());
 }
 
 void MyArrowHead::setSelected(const bool& selected) {
