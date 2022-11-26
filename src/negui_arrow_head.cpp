@@ -30,6 +30,7 @@ MyElementBase* MyArrowHead::edge() {
 void MyArrowHead::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     updatePlacement(_position, _slope);
+    graphicsItem()->setZValue(calculateZValue());
 }
 
 void MyArrowHead::updatePlacement(const QPointF& position, const qreal& slope) {

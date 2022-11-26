@@ -102,8 +102,8 @@ bool MyEdge::connectToNodes(const bool& connect) {
 void MyEdge::updatePoints() {
     QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
     QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
-
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
+    graphicsItem()->setZValue(calculateZValue());
     
     if (isSetArrowHead())
         ((MyArrowHead*)arrowHead())->updatePlacement(endPosition, ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
