@@ -38,10 +38,6 @@ public:
     // update the ending points of the edge using the start and end node positions
     void updatePoints();
     
-    const QPointF getStartPosition();
-    
-    const QPointF getEndPosition();
-    
     // enable the normal mode of the edge
     void enableNormalMode() override;
     
@@ -75,5 +71,9 @@ protected:
     bool _isSetArrowHead;
     bool _isConnectedToNodes;
 };
+
+const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* connectedNode);
+
+qreal getRadius(const QRectF& rect, const QPointF& point);
 
 #endif

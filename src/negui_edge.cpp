@@ -100,49 +100,13 @@ bool MyEdge::connectToNodes(const bool& connect) {
 }
 
 void MyEdge::updatePoints() {
-    QPointF startPosition = getStartPosition();
-    QPointF endPosition = getEndPosition();
+    QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
+    QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
 
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
     
     if (isSetArrowHead())
         ((MyArrowHead*)arrowHead())->updatePlacement(endPosition, ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
-}
-
-const QPointF MyEdge::getStartPosition() {
-    if (startNode() && endNode()) {
-        QPointF startPosition = ((MyNode*)startNode())->position();
-        QPointF endPosition = ((MyNode*)endNode())->position();
-        qreal startRadius = 0.5 * qMax(((MyNode*)startNode())->getExtents().width(), ((MyNode*)startNode())->getExtents().height());
-        qreal endRadius = 0.5 * qMax(((MyNode*)endNode())->getExtents().width(), ((MyNode*)endNode())->getExtents().height());
-        if (qSqrt(((endPosition - startPosition).x() * (endPosition - startPosition).x()) + ((endPosition - startPosition).y() * (endPosition - startPosition).y())) > (startRadius + endRadius + 10.0)) {
-            startRadius += 5;
-            endRadius += 5;
-        }
-        qreal slope = qAtan2(endPosition.y() - startPosition.y(), endPosition.x() - startPosition.x());
-        
-        return QPointF(startPosition.x() + startRadius * qCos(slope), startPosition.y() + startRadius * qSin(slope));
-    }
-    
-    return QPointF();
-}
-
-const QPointF MyEdge::getEndPosition() {
-    if (startNode() && endNode()) {
-        QPointF startPosition = ((MyNode*)startNode())->position();
-        QPointF endPosition = ((MyNode*)endNode())->position();
-        qreal startRadius = 0.5 * qMax(((MyNode*)startNode())->getExtents().width(), ((MyNode*)startNode())->getExtents().height());
-        qreal endRadius = 0.5 * qMax(((MyNode*)endNode())->getExtents().width(), ((MyNode*)endNode())->getExtents().height());
-        if (qSqrt(((endPosition - startPosition).x() * (endPosition - startPosition).x()) + ((endPosition - startPosition).y() * (endPosition - startPosition).y())) > (startRadius + endRadius + 10.0)) {
-            startRadius += 5;
-            endRadius += 5;
-        }
-        qreal slope = qAtan2(endPosition.y() - startPosition.y(), endPosition.x() - startPosition.x());
-        
-        return QPointF(endPosition.x() - endRadius * qCos(slope), endPosition.y() - endRadius * qSin(slope));
-    }
-    
-    return QPointF();
 }
 
 void MyEdge::enableNormalMode() {
@@ -214,9 +178,10 @@ void MyEdge::write(QJsonObject &json) {
     if (startNode()) {
         startObject["node"] = startNode()->name();
         
+        QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
         QJsonObject positionObject;
-        positionObject["x"] = getStartPosition().x();
-        positionObject["y"] = getStartPosition().y();
+        positionObject["x"] = startPosition.x();
+        positionObject["y"] = startPosition.y();
         startObject["position"] = positionObject;
         
         json["start"] = startObject;
@@ -227,9 +192,10 @@ void MyEdge::write(QJsonObject &json) {
     if (endNode()) {
         endObject["node"] = endNode()->name();
         
+        QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
         QJsonObject positionObject;
-        positionObject["x"] = getEndPosition().x();
-        positionObject["y"] = getEndPosition().y();
+        positionObject["x"] = endPosition.x();
+        positionObject["y"] = endPosition.y();
         endObject["position"] = positionObject;
         
         json["end"] = endObject;
@@ -239,4 +205,38 @@ void MyEdge::write(QJsonObject &json) {
     QJsonObject styleObject;
     style()->write(styleObject);
     json["style"] = styleObject;
+}
+
+const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* connectedNode) {
+    QRectF mainNodeExtents = ((MyNode*)mainNode)->getExtents();
+    QRectF connectedNodeExtents = ((MyNode*)connectedNode)->getExtents();
+    QPointF mainNodePosition = mainNodeExtents.center();
+    QPointF connectedNodePosition = connectedNodeExtents.center();
+    qreal mainNodeRadius = getRadius(mainNodeExtents, connectedNodePosition);
+    qreal connectedNodeRadius = getRadius(connectedNodeExtents, mainNodePosition);
+    if (qSqrt(((connectedNodePosition - mainNodePosition).x() * (connectedNodePosition - mainNodePosition).x()) + ((connectedNodePosition - mainNodePosition).y() * (connectedNodePosition - mainNodePosition).y())) > (mainNodeRadius + connectedNodeRadius + 10.0)) {
+        mainNodeRadius += 5;
+        connectedNodeRadius += 5;
+    }
+    qreal slope = qAtan2(connectedNodePosition.y() - mainNodePosition.y(), connectedNodePosition.x() - mainNodePosition.x());
+    return QPointF(mainNodePosition.x() + mainNodeRadius * qCos(slope), mainNodePosition.y() + mainNodeRadius * qSin(slope));
+}
+
+qreal getRadius(const QRectF& rect, const QPointF& point) {
+    qreal q1CuttingAngle = qRadiansToDegrees(qAtan2(rect.height(), rect.width()));
+    qreal q2CuttingAngle = qRadiansToDegrees(qAtan2(rect.height(), -rect.width()));
+    qreal q3CuttingAngle = qRadiansToDegrees(qAtan2(-rect.height(), -rect.width()));
+    qreal q4CuttingAngle = qRadiansToDegrees(qAtan2(-rect.height(), rect.width()));
+    qreal pointAngle = qRadiansToDegrees(qAtan2((point - rect.center()).y(), (point - rect.center()).x()));
+    if (pointAngle > q4CuttingAngle && pointAngle <= q1CuttingAngle)
+        return 0.5 * rect.width() / qFabs(qCos(qDegreesToRadians(pointAngle)));
+    else if (pointAngle > q1CuttingAngle && pointAngle <= q2CuttingAngle)
+        return 0.5 * rect.height() / qFabs(qSin(qDegreesToRadians(pointAngle)));
+    else if ((pointAngle > q2CuttingAngle && pointAngle <= 180.0) || (pointAngle <= q3CuttingAngle && pointAngle >= -180.0))
+        return 0.5 * rect.width() / qFabs(qCos(qDegreesToRadians(pointAngle)));
+    else if (pointAngle > q3CuttingAngle && pointAngle <= q4CuttingAngle) {
+        return 0.5 * rect.height() / qFabs(qSin(qDegreesToRadians(pointAngle)));
+    }
+        
+    return qMax(rect.width(), rect.height());
 }
