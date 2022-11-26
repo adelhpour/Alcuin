@@ -96,6 +96,11 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     _reparent = false;
 }
 
+void MyNodeSceneGraphicsItem::enableNormalMode() {
+    MyNodeGraphicsItemBase::enableNormalMode();
+    emit extentsModified();
+}
+
 void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
     if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
         QGraphicsItem::moveBy(dx, dy);
@@ -203,8 +208,8 @@ void MyNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 }
 
 void MyNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
-    setFocused(false);
     setFlag(QGraphicsItem::ItemIsMovable, true);
+    setFocused(false);
     QGraphicsItem::focusOutEvent(event);
 }
 

@@ -229,6 +229,7 @@ void MyInteractor::createNetwork(const QJsonObject &json) {
     setNetworkExtents(json);
     addNodes(json);
     addEdges(json);
+    enableNormalMode();
 }
 
 void MyInteractor::resetNetwork() {

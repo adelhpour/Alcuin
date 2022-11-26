@@ -38,6 +38,8 @@ public:
     
     MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
     
+    void enableNormalMode() override;
+    
     void moveBy(qreal dx, qreal dy);
     
     void deparent();
