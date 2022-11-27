@@ -44,6 +44,10 @@ QList<MyElementBase*>& MyNode::edges() {
     return _edges;
 }
 
+bool MyNode::isConnectableTo(MyElementBase* n) {
+    return style()->isConnectableTo(n->style()->category());
+}
+
 void MyNode::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     resetPosition();
@@ -125,8 +129,8 @@ void MyNode::deparent() {
 void MyNode::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     deparent();
-    if (parentNode && parentNode->isStyleCategoryConvertibleToParentCategory()) {
-        parentNode->convertStyleCategoryToParentCategory();
+    if (parentNode && parentNode->style()->isConvertibleToParentCategory(style()->parentCategories())) {
+        parentNode->style()->convertToParentCategory();
         setParentNode((MyNode*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
         ((MyNode*)parentNode)->adjustExtents();

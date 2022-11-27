@@ -32,10 +32,6 @@ public:
     
     const QString styleCategory();
     
-    bool isStyleCategoryConvertibleToParentCategory();
-    
-    void convertStyleCategoryToParentCategory();
-    
     virtual bool setActive(const bool& active);
     
     const bool isActive() const { return _isActive; }

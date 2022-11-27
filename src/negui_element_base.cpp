@@ -36,14 +36,6 @@ const QString MyElementBase::styleCategory() {
     return "N/A";
 }
 
-bool MyElementBase::isStyleCategoryConvertibleToParentCategory() {
-    return style()->isCategoryConvertibleToParentCategory();
-}
-
-void MyElementBase::convertStyleCategoryToParentCategory() {
-    style()->convertCategoryToParentCategory();
-}
-
 bool MyElementBase::setActive(const bool& active) {
     return _isActive = active;
 }

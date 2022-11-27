@@ -6,6 +6,9 @@
 
 MyNodeStyle::MyNodeStyle(const QString& name) : MyElementStyleBase(name) {
     _category = "Node";
+    _convertibleParentCategory = "Node";
+    _parentCategories.push_back("Node");
+    _connectableCategories.push_back("Node");
     if (name == "Default")
         addDefaultShapeStyle();
     

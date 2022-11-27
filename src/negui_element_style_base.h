@@ -12,11 +12,17 @@ public:
     
     MyElementStyleBase(const QString& name);
     
-    const QString& parentCategory() const;
+    const QString& convertibleParentCategory() const;
     
-    bool isCategoryConvertibleToParentCategory();
+    bool isConvertibleToParentCategory(QList<QString> parentCategories);
     
-    void convertCategoryToParentCategory();
+    void convertToParentCategory();
+    
+    QList<QString> parentCategories();
+    
+    QList<QString> connectableCategories();
+    
+    bool isConnectableTo(const QString& connectedCategory);
     
     QList<MyShapeStyleBase*>& shapeStyles();
     
@@ -44,7 +50,9 @@ public slots:
     
 protected:
     QList<MyShapeStyleBase*> _shapeStyles;
-    QString _parentCategory;
+    QString _convertibleParentCategory;
+    QList<QString> _parentCategories;
+    QList<QString> _connectableCategories;
 };
 
 #endif

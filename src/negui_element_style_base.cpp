@@ -9,19 +9,38 @@ MyElementStyleBase::MyElementStyleBase(const QString& name) : MyPluginItemBase(n
     
 }
 
-const QString& MyElementStyleBase::parentCategory() const {
-    return _parentCategory;
+const QString& MyElementStyleBase::convertibleParentCategory() const {
+    return _convertibleParentCategory;
 }
 
-bool MyElementStyleBase::isCategoryConvertibleToParentCategory() {
-    if (!_parentCategory.isEmpty())
-        return true;
+bool MyElementStyleBase::isConvertibleToParentCategory(QList<QString> parentCategories) {
+    for (QString parentCategory : parentCategories) {
+        if (parentCategory == _convertibleParentCategory)
+            return true;
+    }
     
     return false;
 }
 
-void MyElementStyleBase::convertCategoryToParentCategory() {
-    _category = parentCategory();
+void MyElementStyleBase::convertToParentCategory() {
+    _category = convertibleParentCategory();
+}
+
+QList<QString> MyElementStyleBase::parentCategories() {
+    return _parentCategories;
+}
+
+bool MyElementStyleBase::isConnectableTo(const QString& connectedCategory) {
+    for (QString connectableCategory : _connectableCategories) {
+        if (connectedCategory == connectableCategory)
+            return true;
+    }
+    
+    return false;
+}
+
+QList<QString> MyElementStyleBase::connectableCategories() {
+    return _connectableCategories;
 }
 
 void MyElementStyleBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -95,9 +114,28 @@ const QIcon MyElementStyleBase::icon() {
 
 void MyElementStyleBase::read(const QJsonObject &json) {
     MyPluginItemBase::read(json);
-    _parentCategory.clear();
-    if (json.contains("parent-category") && json["parent-category"].isString())
-        _parentCategory = json["parent-category"].toString();
+    _convertibleParentCategory.clear();
+    if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
+        _convertibleParentCategory = json["convertible-parent-category"].toString();
+
+    _parentCategories.clear();
+    if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
+        QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
+        for (int parentCategoryIndex = 0; parentCategoryIndex < parentCategoriesArray.size(); ++parentCategoryIndex) {
+            if (parentCategoriesArray[parentCategoryIndex].isString())
+                _parentCategories.push_back(parentCategoriesArray[parentCategoryIndex].toString());
+        }
+    }
+    
+    _connectableCategories.clear();
+    if (json.contains("connectable-categories") && json["connectable-categories"].isArray()) {
+        QJsonArray connectableCategoriesArray = json["connectable-categories"].toArray();
+        for (int connectableCategoryIndex = 0; connectableCategoryIndex < connectableCategoriesArray.size(); ++connectableCategoryIndex) {
+            if (connectableCategoriesArray[connectableCategoryIndex].isString())
+                _connectableCategories.push_back(connectableCategoriesArray[connectableCategoryIndex].toString());
+        }
+    }
+    
     
     // shapes
     clearShapeStyles();
@@ -123,7 +161,17 @@ void MyElementStyleBase::write(QJsonObject &json) {
     MyPluginItemBase::write(json);
     
     json["name"] = name();
-    json["parent-category"] = parentCategory();
+    json["convertible-parent-category"] = convertibleParentCategory();
+    
+    QJsonArray parentCategoriesArray;
+    for (QString parentCategory : parentCategories())
+        parentCategoriesArray.append(parentCategory);
+    json["parent-categories"] = parentCategoriesArray;
+    
+    QJsonArray connectableCategoriesArray;
+    for (QString connectableCategory : connectableCategories())
+        connectableCategoriesArray.append(connectableCategory);
+    json["connectable-categories"] = connectableCategoriesArray;
     
     // shapes
     QJsonArray shapeStylesArray;

@@ -423,7 +423,7 @@ void MyInteractor::addNewEdge(MyElementBase* element) {
         if (!isSetSelectedEdgeStartNode()) {
             setSelectedEdgeStartNode(element);
         }
-        else if (selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element)) {
+        else if (selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element) && nodesAreConnectable(selectedEdgeStartNode(), element)) {
             MyElementBase* _edge = createEdge(getElementUniqueId(edges(), edgeStyle()->category()), selectedEdgeStartNode(), element);
             _edge->setStyle(getCopyEdgeStyle(_edge->name() + "_style"));
             QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
@@ -1076,4 +1076,8 @@ QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaul
     }
     
     return name;
+}
+
+bool nodesAreConnectable(MyElementBase* n1, MyElementBase* n2) {
+    return ((MyNode*)n1)->isConnectableTo(n2) && ((MyNode*)n2)->isConnectableTo(n1) ? true : false;
 }

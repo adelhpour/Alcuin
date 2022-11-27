@@ -23,6 +23,8 @@ public:
     // get edges
     QList<MyElementBase*>& edges();
     
+    bool isConnectableTo(MyElementBase* e);
+    
     void updateGraphicsItem() override;
     
     void setSelected(const bool& selected) override;
