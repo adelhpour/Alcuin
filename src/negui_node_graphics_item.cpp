@@ -94,6 +94,8 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     setFlag(QGraphicsItem::ItemIsFocusable, true);
     
     _reparent = false;
+    
+    setZValue(2);
 }
 
 void MyNodeSceneGraphicsItem::enableNormalMode() {

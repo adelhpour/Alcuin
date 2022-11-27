@@ -56,6 +56,7 @@ void MyArrowHeadGraphicsItemBase::enableRemoveMode() {
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
     _originalPosition = QPointF(0.0, 0.0);
     _padding = 2.5;
+    setZValue(1);
 }
 
 void MyArrowHeadSceneGraphicsItem::update(const QPointF& position, const qreal& rotation) {

@@ -4,21 +4,15 @@
 #include "negui_arrow_head_graphics_item.h"
 
 MyElementGraphicsItemBase* createNodeSceneGraphicsItem(const QPointF &position) {
-    MyElementGraphicsItemBase* item = new MyNodeSceneGraphicsItem(position);
-    item->setZValue(2);
-    return item;
+    return new MyNodeSceneGraphicsItem(position);
 }
 
 MyElementGraphicsItemBase* createEdgeSceneGraphicsItem() {
-    MyElementGraphicsItemBase* item = new MyEdgeSceneGraphicsItem();
-    item->setZValue(0);
-    return item;
+    return new MyEdgeSceneGraphicsItem();
 }
 
 MyElementGraphicsItemBase* createArrowHeadSceneGraphicsItem() {
-    MyElementGraphicsItemBase* item = new MyArrowHeadSceneGraphicsItem();
-    item->setZValue(1);
-    return item;
+    return new MyArrowHeadSceneGraphicsItem();
 }
 
 MyElementGraphicsItemBase* createNodeIconGraphicsItem() {

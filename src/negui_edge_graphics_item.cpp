@@ -75,6 +75,7 @@ void MyEdgeGraphicsItemBase::enableRemoveMode() {
 
 MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
     _initialLine = QLineF(0.0, 0.0, 0.0, 0.0);
+    setZValue(0);
 }
 
 // MyEdgeIconGraphicsItem
