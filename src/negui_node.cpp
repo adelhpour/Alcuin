@@ -127,7 +127,7 @@ void MyNode::deparent() {
 }
 
 void MyNode::reparent() {
-    MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
+    MyElementBase* parentNode = askForParentNodeAtPosition(this, getExtents().center());
     deparent();
     if (parentNode && parentNode->style()->isConvertibleToParentCategory(style()->parentCategories())) {
         parentNode->style()->convertToParentCategory();
