@@ -18,7 +18,6 @@ MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementB
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
-    connect(_graphicsItem, SIGNAL(positionChanged(QPointF)), this, SLOT(setPosition(QPointF)));
     connect(_graphicsItem, SIGNAL(extentsModified()), this, SLOT(resetPosition()));
 }
 
@@ -127,7 +126,7 @@ void MyNode::deparent() {
 }
 
 void MyNode::reparent() {
-    MyElementBase* parentNode = askForParentNodeAtPosition(this, getExtents().center());
+    MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     deparent();
     if (parentNode && parentNode->style()->isConvertibleToParentCategory(style()->parentCategories())) {
         parentNode->style()->convertToParentCategory();
@@ -166,7 +165,7 @@ void MyNode::setPosition(const QPointF& position) {
 }
 
 void MyNode::resetPosition() {
-    setPosition(position());
+    setPosition(((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().center());
 }
 
 const QPointF MyNode::position() const {

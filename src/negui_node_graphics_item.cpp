@@ -98,8 +98,12 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItem::enableNormalMode() {
-    MyNodeGraphicsItemBase::enableNormalMode();
+void MyNodeSceneGraphicsItem::addResizeHandleBaredGraphicsItems() {
+    MyElementGraphicsItemBase::addResizeHandleBaredGraphicsItems();
+}
+
+void MyNodeSceneGraphicsItem::clearResizeHandleBaredGraphicsItems() {
+    MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems();
     emit extentsModified();
 }
 
@@ -165,7 +169,7 @@ QVariant MyNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QV
         deparent();
         moveChildItems(value.toPointF());
         movePosition(QPointF(value.toPointF().x() - x(), value.toPointF().y() - y()));
-        emit positionChanged(_originalPosition);
+        emit extentsModified();
     }
     
     return QGraphicsItem::itemChange(change, value);

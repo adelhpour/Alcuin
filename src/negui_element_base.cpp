@@ -13,8 +13,7 @@ MyElementGraphicsItemBase* MyElementBase::graphicsItem() {
 }
 
 void MyElementBase::updateGraphicsItem() {
-    graphicsItem()->clear();
-    graphicsItem()->addShapeItems(style()->shapeStyles(), calculateZValue());
+    graphicsItem()->update(style()->shapeStyles(), calculateZValue());
 }
 
 MyElementStyleBase* MyElementBase::style() {

@@ -12,6 +12,8 @@ public:
     
     MyElementGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
+    void update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue);
+    
     void addShapeItems(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue = 0);
     
     void addShapeItem(MyShapeStyleBase* style);
@@ -22,15 +24,15 @@ public:
     
     virtual QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() = 0;
     
+    virtual void addResizeHandleBaredGraphicsItems();
+    
+    virtual void clearResizeHandleBaredGraphicsItems();
+    
     void setSelectedWithStroke(const bool& selected);
     
     void setSelectedWithFill(const bool& selected);
     
     void setFocused(const bool& isFocused);
-    
-    void addResizeHandleBaredGraphicsItems();
-    
-    void clearResizeHandleBaredGraphicsItems();
     
     void setCursor(const QCursor &cursor);
     

@@ -38,7 +38,9 @@ public:
     
     MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
     
-    void enableNormalMode() override;
+    void addResizeHandleBaredGraphicsItems() override;
+    
+    void clearResizeHandleBaredGraphicsItems() override;
     
     void moveBy(qreal dx, qreal dy);
     
@@ -54,7 +56,6 @@ public slots:
     void updateExtents(const QRectF& extents);
     
 signals:
-    void positionChanged(const QPointF& position);
     
     void extentsModified();
     
