@@ -10,6 +10,8 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // set the cx value of center position
     void setCx(const qreal& cx) const;
     

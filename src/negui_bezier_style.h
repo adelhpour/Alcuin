@@ -10,6 +10,8 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // get the relative value of p1
     const QPoint relativeP1() const;
     

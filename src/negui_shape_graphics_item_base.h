@@ -33,6 +33,8 @@ public:
     
     virtual void setZValue(qreal z) = 0;
     
+    virtual void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) = 0;
+    
 public slots:
     virtual void updateExtents(const QRectF& extents) = 0;
 

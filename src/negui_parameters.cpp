@@ -591,6 +591,17 @@ void MyPositionalParameter::reset() {
     setStep(1.0);
 }
 
+// MyNodeRectPositionalParameter
+
+MyNodeRectPositionalParameter::MyNodeRectPositionalParameter(const QString& name) : MyPositionalParameter(name) {
+    reset();
+}
+
+void MyNodeRectPositionalParameter::reset() {
+    MyPositionalParameter::reset();
+    setDefaultValue(-20.0);
+}
+
 // MyNodeEllipsePositionalParameter
 
 MyNodeEllipsePositionalParameter::MyNodeEllipsePositionalParameter(const QString& name) : MyPositionalParameter(name) {
@@ -599,18 +610,62 @@ MyNodeEllipsePositionalParameter::MyNodeEllipsePositionalParameter(const QString
 
 void MyNodeEllipsePositionalParameter::reset() {
     MyPositionalParameter::reset();
-    setDefaultValue(25.0);
+    setDefaultValue(0.0);
 }
 
-// MyArrowHeadEllipsePositionalParameter
+// MyNodeTextPositionalParameter
 
-MyArrowHeadEllipsePositionalParameter::MyArrowHeadEllipsePositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyNodeTextPositionalParameter::MyNodeTextPositionalParameter(const QString& name) : MyPositionalParameter(name) {
     reset();
 }
 
-void MyArrowHeadEllipsePositionalParameter::reset() {
+void MyNodeTextPositionalParameter::reset() {
     MyPositionalParameter::reset();
-    setDefaultValue(7.5);
+    setDefaultValue(-20.0);
+}
+
+// MyArrowHeadRectXParameter
+
+MyArrowHeadRectXParameter::MyArrowHeadRectXParameter(const QString& name) : MyPositionalParameter(name) {
+    reset();
+}
+
+void MyArrowHeadRectXParameter::reset() {
+    MyPositionalParameter::reset();
+    setDefaultValue(-7.5);
+}
+
+// MyArrowHeadRectYParameter
+
+MyArrowHeadRectYParameter::MyArrowHeadRectYParameter(const QString& name) : MyPositionalParameter(name) {
+    reset();
+}
+
+void MyArrowHeadRectYParameter::reset() {
+    MyPositionalParameter::reset();
+    setDefaultValue(-3.725);
+}
+
+// MyArrowHeadEllipseCxParameter
+
+MyArrowHeadEllipseCxParameter::MyArrowHeadEllipseCxParameter(const QString& name) : MyPositionalParameter(name) {
+    reset();
+}
+
+void MyArrowHeadEllipseCxParameter::reset() {
+    MyPositionalParameter::reset();
+    setDefaultValue(-5.0);
+}
+
+// MyArrowHeadEllipseCyParameter
+
+MyArrowHeadEllipseCyParameter::MyArrowHeadEllipseCyParameter(const QString& name) : MyPositionalParameter(name) {
+    reset();
+}
+
+void MyArrowHeadEllipseCyParameter::reset() {
+    MyPositionalParameter::reset();
+    setDefaultValue(0.0);
 }
 
 // MyRelativePositionalParameter
@@ -633,7 +688,7 @@ MyDimensionalParameter::MyDimensionalParameter(const QString& name) : MyDoublePa
 }
 
 void MyDimensionalParameter::reset() {
-    setDefaultValue(25.0);
+    setDefaultValue(20.0);
     setMin(0.0);
     setMax(2000.0);
     setStep(1.0);
@@ -647,18 +702,29 @@ MyNodeRectDimensionalParameter::MyNodeRectDimensionalParameter(const QString& na
 
 void MyNodeRectDimensionalParameter::reset() {
     MyDimensionalParameter::reset();
-    setDefaultValue(50.0 * qSin(qDegreesToRadians(45.0)));
+    setDefaultValue(40.0);
 }
 
-// MyArrowHeadEllipseDimensionalParameter
+// MyNodeEllipseDimensionalParameter
 
-MyArrowHeadEllipseDimensionalParameter::MyArrowHeadEllipseDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeEllipseDimensionalParameter::MyNodeEllipseDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
     reset();
 }
 
-void MyArrowHeadEllipseDimensionalParameter::reset() {
+void MyNodeEllipseDimensionalParameter::reset() {
     MyDimensionalParameter::reset();
-    setDefaultValue(7.5);
+    setDefaultValue(20.0);
+}
+
+// MyNodeTextDimensionalParameter
+
+MyNodeTextDimensionalParameter::MyNodeTextDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+    reset();
+}
+
+void MyNodeTextDimensionalParameter::reset() {
+    MyDimensionalParameter::reset();
+    setDefaultValue(40.0);
 }
 
 // MyArrowHeadRectDimensionalParameter
@@ -669,7 +735,18 @@ MyArrowHeadRectDimensionalParameter::MyArrowHeadRectDimensionalParameter(const Q
 
 void MyArrowHeadRectDimensionalParameter::reset() {
     MyDimensionalParameter::reset();
-    setDefaultValue(15.0 * qSin(qDegreesToRadians(45.0)));
+    setDefaultValue(7.5);
+}
+
+// MyArrowHeadEllipseDimensionalParameter
+
+MyArrowHeadEllipseDimensionalParameter::MyArrowHeadEllipseDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+    reset();
+}
+
+void MyArrowHeadEllipseDimensionalParameter::reset() {
+    MyDimensionalParameter::reset();
+    setDefaultValue(5.0);
 }
 
 // MyCornerCurvatureParameter

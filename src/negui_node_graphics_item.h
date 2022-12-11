@@ -26,9 +26,6 @@ public:
     void enableSelectEdgeMode() override;
 
     void enableRemoveMode() override;
-    
-protected:
-    QPointF _originalPosition;
 };
 
 class MyNodeSceneGraphicsItem : public MyNodeGraphicsItemBase {
@@ -48,20 +45,18 @@ public:
     
     void moveChildItems(const QPointF& movedDistance);
     
-    void movePosition(const QPointF& movedDistance);
-    
-    QRectF getExtents() const;
+    void adjustOriginalPosition();
     
 public slots:
     void updateExtents(const QRectF& extents);
     
 signals:
     
-    void extentsModified();
-    
     void askForDeparent();
     
     void askForReparent();
+    
+    void askForResetPosition();
     
 protected:
     

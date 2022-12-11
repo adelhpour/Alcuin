@@ -14,6 +14,10 @@ QGraphicsItem* My1DShapeGraphicsItemBase::getResizeHandlebaredGraphicsItem() {
     return NULL;
 }
 
+void My1DShapeGraphicsItemBase::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+    
+}
+
 void My1DShapeGraphicsItemBase::updateExtents(const QRectF& extents) {
     
 }

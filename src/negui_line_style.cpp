@@ -16,6 +16,10 @@ MyShapeStyleBase::SHAPE_STYLE MyLineStyle::type() {
     return LINE_SHAPE_STYLE;
 }
 
+const QRectF MyLineStyle::getShapeExtents() {
+    return QRectF(0.0, 0.0, 0.0, 0.0);
+}
+
 void MyLineStyle::read(const QJsonObject &json) {
     MyShapeStyleBase::read(json);
 }

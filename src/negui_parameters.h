@@ -412,6 +412,15 @@ public:
     void reset() override;
 };
 
+class MyNodeRectPositionalParameter : public MyPositionalParameter {
+public:
+    
+    MyNodeRectPositionalParameter(const QString& name);
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
 class MyNodeEllipsePositionalParameter : public MyPositionalParameter {
 public:
     
@@ -421,10 +430,46 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadEllipsePositionalParameter : public MyPositionalParameter {
+class MyNodeTextPositionalParameter : public MyPositionalParameter {
 public:
     
-    MyArrowHeadEllipsePositionalParameter(const QString& name);
+    MyNodeTextPositionalParameter(const QString& name);
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyArrowHeadRectXParameter : public MyPositionalParameter {
+public:
+    
+    MyArrowHeadRectXParameter(const QString& name = "x");
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyArrowHeadRectYParameter : public MyPositionalParameter {
+public:
+    
+    MyArrowHeadRectYParameter(const QString& name = "y");
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyArrowHeadEllipseCxParameter : public MyPositionalParameter {
+public:
+    
+    MyArrowHeadEllipseCxParameter(const QString& name = "cx");
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyArrowHeadEllipseCyParameter : public MyPositionalParameter {
+public:
+    
+    MyArrowHeadEllipseCyParameter(const QString& name = "cy");
     
     // reset the values of the parameter
     void reset() override;
@@ -457,10 +502,19 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadEllipseDimensionalParameter : public MyDimensionalParameter {
+class MyNodeEllipseDimensionalParameter : public MyDimensionalParameter {
 public:
     
-    MyArrowHeadEllipseDimensionalParameter(const QString& name);
+    MyNodeEllipseDimensionalParameter(const QString& name);
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyNodeTextDimensionalParameter : public MyDimensionalParameter {
+public:
+    
+    MyNodeTextDimensionalParameter(const QString& name);
     
     // reset the values of the parameter
     void reset() override;
@@ -470,6 +524,15 @@ class MyArrowHeadRectDimensionalParameter : public MyDimensionalParameter {
 public:
     
     MyArrowHeadRectDimensionalParameter(const QString& name);
+    
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyArrowHeadEllipseDimensionalParameter : public MyDimensionalParameter {
+public:
+    
+    MyArrowHeadEllipseDimensionalParameter(const QString& name);
     
     // reset the values of the parameter
     void reset() override;

@@ -145,6 +145,10 @@ void MyEdge::enableRemoveMode() {
         arrowHead()->enableRemoveMode();
 }
 
+const QRectF MyEdge::getExtents() {
+    return QRectF(0.0, 0.0, 0.0, 0.0);
+}
+
 QWidget* MyEdge::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();

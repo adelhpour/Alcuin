@@ -24,6 +24,22 @@ MyShapeStyleBase::SHAPE_STYLE MyRectStyleBase::type() {
     return RECT_SHAPE_STYLE;
 }
 
+const QRectF MyRectStyleBase::getShapeExtents() {
+    QRectF extents;
+    extents.setX(INT_MAX);
+    extents.setY(INT_MAX);
+    if (x() < extents.x())
+        extents.setX(x());
+    if (y() < extents.y())
+        extents.setY(y());
+    if (width() > extents.width())
+        extents.setWidth(width());
+    if (height() > extents.height())
+        extents.setHeight(height());
+    
+    return extents;
+}
+
 void MyRectStyleBase::setX(const qreal& x) const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)
@@ -194,10 +210,10 @@ void MyRectStyleBase::write(QJsonObject &json) {
 
 MyNodeRectStyle::MyNodeRectStyle(const QString& name) : MyRectStyleBase(name) {
     // x
-    _parameters.push_back(new MyPositionalParameter("x"));
+    _parameters.push_back(new MyNodeRectPositionalParameter("x"));
     
     // y
-    _parameters.push_back(new MyPositionalParameter("y"));
+    _parameters.push_back(new MyNodeRectPositionalParameter("y"));
     
     // width
     _parameters.push_back(new MyNodeRectDimensionalParameter("width"));
@@ -212,10 +228,10 @@ MyNodeRectStyle::MyNodeRectStyle(const QString& name) : MyRectStyleBase(name) {
 
 MyArrowHeadRectStyle::MyArrowHeadRectStyle(const QString& name) : MyRectStyleBase(name) {
     // x
-    _parameters.push_back(new MyPositionalParameter("x"));
+    _parameters.push_back(new MyArrowHeadRectXParameter());
     
     // y
-    _parameters.push_back(new MyPositionalParameter("y"));
+    _parameters.push_back(new MyArrowHeadRectYParameter());
     
     // width
     _parameters.push_back(new MyArrowHeadRectDimensionalParameter("width"));

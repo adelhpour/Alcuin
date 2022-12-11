@@ -54,6 +54,8 @@ public:
     // enable the remove mode of the edge
     void enableRemoveMode() override;
     
+    const QRectF getExtents() override;
+    
     QWidget* getFeatureMenu() override;
     
     const qint32 calculateZValue() override;

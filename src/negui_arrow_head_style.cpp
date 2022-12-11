@@ -37,3 +37,19 @@ QList<MyElementGraphicsItemBase*> MyArrowHeadStyle::getElementIconGraphicsItems(
     
     return items;
 }
+
+void MyArrowHeadStyle::write(QJsonObject &json) {
+    MyElementStyleBase::write(json);
+    
+    QRectF extents = getShapesExtents();
+    
+    QJsonObject positionObject;
+    positionObject["x"] = extents.center().x();
+    positionObject["y"] = extents.center().y();
+    json["position"] = positionObject;
+    
+    QJsonObject dimensionsObject;
+    dimensionsObject["width"] = extents.width();
+    dimensionsObject["height"] = extents.height();
+    json["dimensions"] = dimensionsObject;
+}

@@ -10,6 +10,8 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // set the x value of position
     void setX(const qreal& x) const;
     

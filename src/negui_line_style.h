@@ -10,6 +10,8 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
     

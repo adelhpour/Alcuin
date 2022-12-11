@@ -21,6 +21,8 @@ public:
     
     void setSelected(const bool& selected) override;
     
+    const QRectF getExtents() override;
+    
     QWidget* getFeatureMenu() override;
     
     const qint32 calculateZValue() override;

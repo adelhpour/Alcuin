@@ -52,6 +52,8 @@ public:
     
     virtual void enableRemoveMode();
     
+    virtual const QRectF getExtents() = 0;
+    
     virtual QWidget* getFeatureMenu();
     
     virtual const qint32 calculateZValue() = 0;

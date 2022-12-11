@@ -28,6 +28,8 @@ public:
     
     virtual void clearResizeHandleBaredGraphicsItems();
     
+    const QRectF getExtents() const;
+    
     void setSelectedWithStroke(const bool& selected);
     
     void setSelectedWithFill(const bool& selected);
@@ -67,6 +69,7 @@ protected:
     
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     
+    QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;
     QList<QGraphicsItem*> _resizeHandlebaredGraphicsItems;
     bool _isChosen;

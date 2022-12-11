@@ -40,6 +40,8 @@ public:
     // get the brush with selected fill color
     const QBrush selectedBrush() const;
     
+    virtual const QRectF getShapeExtents() = 0;
+    
     // poupulate the menu layout with the style features
     virtual void populateFeaturesMenu(QGridLayout* featureMenuLayout);
     

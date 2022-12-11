@@ -32,6 +32,8 @@ public:
     
     void clearShapeStyles();
     
+    const QRectF getShapesExtents();
+    
     // get the icon associated with this plugin
     const QIcon icon() override;
     

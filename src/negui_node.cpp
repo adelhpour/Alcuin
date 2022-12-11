@@ -18,7 +18,7 @@ MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementB
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
-    connect(_graphicsItem, SIGNAL(extentsModified()), this, SLOT(resetPosition()));
+    connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
 }
 
 MyNode::~MyNode() {
@@ -203,8 +203,9 @@ const QRectF MyNode::getExtents() {
 void MyNode::adjustExtents() {
     QRectF extents = getExtents();
     lockChildNodes(true);
-    ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().width()), extents.y() - (position().y() - 0.5 * ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().height()));
+    ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
     ((MyNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
+    ((MyNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
 }
 
 QWidget* MyNode::getFeatureMenu() {

@@ -14,6 +14,8 @@ public:
     
     QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
     
+    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+    
 public slots:
     virtual void updateExtents(const QRectF& extents) override;
     

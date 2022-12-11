@@ -46,6 +46,10 @@ void MyArrowHead::setSelected(const bool& selected) {
         graphicsItem()->setSelectedWithStroke(selected);
 }
 
+const QRectF MyArrowHead::getExtents() {
+    return QRectF(0.0, 0.0, 0.0, 0.0);
+}
+
 QWidget* MyArrowHead::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();

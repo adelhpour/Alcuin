@@ -10,17 +10,18 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // get the list of point parameters
     const QList<MyAbsolutePointParameter*> pointParameters() const;
     
     // get the list of points
     const QList<QPointF> points() const;
     
-    // get the bounding rect of the polygon
-    const QRectF boundingRect() const;
-    
     // scale the points to fit the extents
     void scaleToExtents(const QRectF& extetns);
+    
+    void moveBy(qreal dx, qreal dy);
     
     // add the default points for a polygon style that contains no point
     virtual void addDefaultPoints() = 0;

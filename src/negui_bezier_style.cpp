@@ -23,6 +23,10 @@ MyShapeStyleBase::SHAPE_STYLE MyBezierStyle::type() {
     return BEZIER_SHAPE_STYLE;
 }
 
+const QRectF MyBezierStyle::getShapeExtents() {
+    return QRectF(0.0, 0.0, 0.0, 0.0);
+}
+
 const QPoint MyBezierStyle::relativeP1() const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint1");

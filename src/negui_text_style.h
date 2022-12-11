@@ -10,6 +10,8 @@ public:
     
     SHAPE_STYLE type() override;
     
+    const QRectF getShapeExtents() override;
+    
     // get the plain text for text
     const QString plainText() const;
     
@@ -48,6 +50,8 @@ public:
     
     // get the vertical alignment of text
     const Qt::Alignment verticalAlignment() const;
+    
+    const qreal verticalPadding() const;
     
     // read the node style info from the json object
     void read(const QJsonObject &json) override;

@@ -244,7 +244,7 @@ void MyInteractor::resetNetwork() {
 
 void MyInteractor::setNetworkExtents(const QJsonObject& json) {
     if (json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble() && json.contains("dimensions") && json["dimensions"].isObject() && json["dimensions"].toObject().contains("width") && json["dimensions"]["width"].isDouble() && json["dimensions"].toObject().contains("height") && json["dimensions"]["height"].isDouble())
-        setNetworkExtents(json["position"]["x"].toDouble(), json["position"]["y"].toDouble(), json["dimensions"]["width"].toDouble(), json["dimensions"]["height"].toDouble());
+        setNetworkExtents(json["position"]["x"].toDouble() - 0.5 * json["dimensions"]["width"].toDouble(), json["position"]["y"].toDouble() - 0.5 * json["dimensions"]["height"].toDouble(), json["dimensions"]["width"].toDouble(), json["dimensions"]["height"].toDouble());
 }
 
 void MyInteractor::setNetworkExtents(qreal x, qreal y, qreal width, qreal height) {
@@ -333,11 +333,11 @@ void MyInteractor::updateNodeParetns() {
             ((MyNode*)node)->setParentNode((MyNode*)parentNode);
     }
     
-    for (MyElementBase *node : qAsConst(nodes())) {
-        if (((MyNode*)node)->childNodes().size()) {
-            ((MyNode*)node)->adjustExtents();
-        }
-    }
+    //for (MyElementBase *node : qAsConst(nodes())) {
+        //if (((MyNode*)node)->childNodes().size()) {
+            //((MyNode*)node)->adjustExtents();
+        //}
+    //}
 }
 
 MyElementBase* MyInteractor::parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position) {
@@ -498,8 +498,8 @@ bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
 void MyInteractor::exportNetworkInfo(QJsonObject &json) {
     // position
     QJsonObject positionObject;
-    positionObject["x"] = networkExtents().x();
-    positionObject["y"] = networkExtents().y();
+    positionObject["x"] = networkExtents().x() + 0.5 * networkExtents().width();
+    positionObject["y"] = networkExtents().y() + 0.5 * networkExtents().height();
     json["position"] = positionObject;
     
     // dimensions

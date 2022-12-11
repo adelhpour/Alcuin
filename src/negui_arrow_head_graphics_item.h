@@ -25,10 +25,6 @@ public:
     void enableSelectEdgeMode() override;
 
     void enableRemoveMode() override;
-    
-protected:
-    QPointF _originalPosition;
-    qreal _padding;
 };
 
 class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {

@@ -72,10 +72,7 @@ public:
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
     
     // get node extents based on its children extents
-    const QRectF getExtents();
-    
-    // adjust node extents to fit all its children
-    void adjustExtents();
+    const QRectF getExtents() override;
     
     QWidget* getFeatureMenu() override;
     
@@ -99,11 +96,14 @@ private slots:
     // set a new parent to the node
     void reparent();
     
+    // set the position of the node using its current position
+    void resetPosition();
+    
     // set the position of the node
     void setPosition(const QPointF& position);
     
-    // set the position of the node using its current position
-    void resetPosition();
+    // adjust node extents to fit all its children
+    void adjustExtents();
 
 protected:
     QString _parentNodeId;

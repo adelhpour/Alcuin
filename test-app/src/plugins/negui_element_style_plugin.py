@@ -1,17 +1,17 @@
 import json
  
 def elementStylesInfo():
-    compartment_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Compartment", 'convertible-parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'width' : 60.0, 'height' : 60.0, 'rx' : 12.0, 'ry' : 12.0}]}
+    compartment_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Compartment", 'convertible-parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'x' : -30.0, 'y' : -30.0, 'width' : 60.0, 'height' : 60.0, 'rx' : 12.0, 'ry' : 12.0}]}
 
-    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Reaction"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'width' : 40.0, 'height' : 40.0, 'rx' : 8.0, 'ry' : 8.0}]}
+    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Reaction"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'x' : -20.0, 'y' : -20.0, 'width' : 40.0, 'height' : 40.0, 'rx' : 8.0, 'ry' : 8.0}]}
     
     species_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Reaction"], 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2}]}
     
     species_node_style3 = {'name' : "hexagon", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Reaction"], 'shapes' : [{'shape' : "polygon", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'points' : [{'x' : -10.0, 'y' : -20}, {'x' : 10.0, 'y' : -20.0}, {'x' : 20.0, 'y' : 0.0}, {'x' : 10.0, 'y' : 20.0}, {'x' : -10.0, 'y' : 20.0}, {'x' : -20.0, 'y' : 0.0}]}]}
     
-    reaction_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Reaction", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Species"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, "x": 0.0, "y": 0.0, "width": 25.0, "height": 25.0}]}
+    reaction_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Reaction", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Species"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, "x": -12.5, "y": -12.5, "width": 25.0, "height": 25.0}]}
 
-    reaction_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Reaction", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Species"], 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, "rx": 15.0, "ry": 15.0, "cx": 15.0, "cy": 15.0}]}
+    reaction_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Reaction", 'parent-categories' : ["Compartment"], 'connectable-categories' : ["Species"], 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, "cx": 0.0, "cy": 0.0, "rx": 15.0, "ry": 15.0}]}
     
     reaction_edge_style3 = {'name' : "simple_line", 'type' : "edgestyle", 'category' : "Reaction", 'shapes' : [{'shape' : "line", 'stroke' : "black", 'stroke-width' : 2}], 'arrow-head' : {'shapes' : []}}
     

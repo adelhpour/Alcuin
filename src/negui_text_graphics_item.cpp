@@ -7,21 +7,11 @@
 MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
 }
 
+#include <iostream>
 void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
-        // position
-        QPointF position = _originalPosition;
-        position += QPointF(((MyTextStyle*)style())->x(), ((MyTextStyle*)style())->y());
-    
-        if (((MyTextStyle*)style())->width() > 0.001) {
+        if (((MyTextStyle*)style())->width() > 0.001)
             setTextWidth(((MyTextStyle*)style())->width());
-            position += QPointF(-0.5 * ((MyTextStyle*)style())->width(), 0.0);
-        }
-        
-        if (((MyTextStyle*)style())->height() > 0.001)
-            position += QPointF(0.0, -0.5 * ((MyTextStyle*)style())->height());
-        
-        setPos(position);
         
         // plain-text
         setPlainText(((MyTextStyle*)style())->plainText());
@@ -36,6 +26,8 @@ void MyTextGraphicsItem::updateStyle() {
         QTextOption option = document()->defaultTextOption();
         option.setAlignment(((MyTextStyle*)style())->verticalAlignment() | ((MyTextStyle*)style())->horizontalAlignment());
         document()->setDefaultTextOption(option);
+        
+        setPos(_originalPosition +  QPointF(((MyTextStyle*)style())->x(), ((MyTextStyle*)style())->y() + ((MyTextStyle*)style())->verticalPadding()));
     }
 }
 
@@ -50,10 +42,10 @@ void MyTextGraphicsItem::setSelectedWithFill(const bool& selected) {
 void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
-        ((MyTextStyle*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x() - 0.5 * ((MyTextStyle*)style())->width()));
+        ((MyTextStyle*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
         
         // y
-        ((MyTextStyle*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y() - 0.5 * ((MyTextStyle*)style())->height()));
+        ((MyTextStyle*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
         
         // width
         ((MyTextStyle*)style())->setWidth(extents.width());
@@ -66,11 +58,17 @@ void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyTextGraphicsItem::getExtents() {
-    return QRectF(((MyTextStyle*)style())->x() + (movedDistance().x() + _originalPosition.x() - 0.5 * ((MyTextStyle*)style())->width()), ((MyTextStyle*)style())->y() + (movedDistance().y() + _originalPosition.y() - 0.5 * ((MyTextStyle*)style())->height()), ((MyTextStyle*)style())->width(), ((MyTextStyle*)style())->height());
+    return QRectF(((MyTextStyle*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyle*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyle*)style())->width(), ((MyTextStyle*)style())->height());
+}
+
+void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+    ((MyTextStyle*)style())->setX(((MyTextStyle*)style())->x() - originalPositionMovedDistance.x());
+    ((MyTextStyle*)style())->setY(((MyTextStyle*)style())->y() - originalPositionMovedDistance.y());
+    _originalPosition += originalPositionMovedDistance;
 }
 
 QGraphicsItem* MyTextGraphicsItem::getResizeHandlebaredGraphicsItem() {
-    QRectF resizeRect = QRectF(x() + movedDistance().x(), y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    QRectF resizeRect = getExtents();
     MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
     MyShapeGraphicsItemBase::connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
     

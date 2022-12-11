@@ -3,6 +3,7 @@
 
 #include "negui_2d_shape_graphics_item_base.h"
 #include <QTextDocument>
+#include <QPainter>
 
 class MyTextGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsTextItem {
 public:
@@ -20,6 +21,8 @@ public:
     QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
     
     void setZValue(qreal z) override;
+    
+    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
     
 public slots:
     void updateExtents(const QRectF& extents) override;

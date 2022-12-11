@@ -50,12 +50,17 @@ void MyPolygonGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyPolygonGraphicsItem::getExtents() {
-    QRectF polygonBoundingRect = ((MyPolygonStyleBase*)style())->boundingRect();
+    QRectF polygonBoundingRect = ((MyPolygonStyleBase*)style())->getShapeExtents();
     return QRectF((movedDistance().x() + boundingRect().x()), (movedDistance().y() + boundingRect().y()), polygonBoundingRect.width(), polygonBoundingRect.height());
 }
 
+void MyPolygonGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+    ((MyPolygonStyleBase*)style())->moveBy(-originalPositionMovedDistance.x(), -originalPositionMovedDistance.y());
+    _originalPosition += originalPositionMovedDistance;
+}
+
 QGraphicsItem* MyPolygonGraphicsItem::getResizeHandlebaredGraphicsItem() {
-    QRectF resizeRect = QRectF(boundingRect().x() + movedDistance().x(), boundingRect().y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    QRectF resizeRect = getExtents();
     MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
     connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
     

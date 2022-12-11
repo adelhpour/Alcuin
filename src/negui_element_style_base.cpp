@@ -74,6 +74,29 @@ void MyElementStyleBase::clearShapeStyles() {
         delete _shapeStyles.takeLast();
 }
 
+const QRectF MyElementStyleBase::getShapesExtents() {
+    qreal extentsX = 0.0;
+    qreal extentsY = 0.0;
+    qreal extentsWidth = 0.0;
+    qreal extentsHeight = 0.0;
+    for (MyShapeStyleBase* shapeStyle : qAsConst(shapeStyles())) {
+        QRectF shapeStyleExtents = shapeStyle->getShapeExtents();
+        if (shapeStyleExtents.x() < extentsX) {
+            extentsWidth += extentsX - shapeStyleExtents.x();
+            extentsX = shapeStyleExtents.x();
+        }
+        if (shapeStyleExtents.y() < extentsY) {
+            extentsHeight += extentsY - shapeStyleExtents.y();
+            extentsY = shapeStyleExtents.y();
+        }
+        if (extentsX + extentsWidth < shapeStyleExtents.x() + shapeStyleExtents.width())
+            extentsWidth += shapeStyleExtents.x() + shapeStyleExtents.width() - extentsX - extentsWidth;
+        if (extentsY + extentsHeight < shapeStyleExtents.y() + shapeStyleExtents.height())
+            extentsHeight += shapeStyleExtents.y() + shapeStyleExtents.height() - extentsY - extentsHeight;
+    }
+    return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
+}
+
 const QIcon MyElementStyleBase::icon() {
     QList<MyElementGraphicsItemBase*> items = getElementIconGraphicsItems();
     

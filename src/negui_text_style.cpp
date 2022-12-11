@@ -23,16 +23,16 @@ MyTextStyle::MyTextStyle(const QString& name) : MyShapeStyleBase(name) {
     _parameters.push_back(new MyFontStyleParameter());
     
     // x
-    _parameters.push_back(new MyPositionalParameter("x"));
+    _parameters.push_back(new MyNodeTextPositionalParameter("x"));
     
     // y
-    _parameters.push_back(new MyPositionalParameter("y"));
+    _parameters.push_back(new MyNodeTextPositionalParameter("y"));
     
     // width
-    _parameters.push_back(new MyDimensionalParameter("width"));
+    _parameters.push_back(new MyNodeTextDimensionalParameter("width"));
     
     // height
-    _parameters.push_back(new MyDimensionalParameter("height"));
+    _parameters.push_back(new MyNodeTextDimensionalParameter("height"));
     
     // horizontal alignment
     _parameters.push_back(new MyTextAnchorParameter());
@@ -90,6 +90,22 @@ const QFont MyTextStyle::font() const {
         font.setItalic(((MyFontStyleParameter*)parameter)->defaultStyle());
     
     return font;
+}
+
+const QRectF MyTextStyle::getShapeExtents() {
+    QRectF extents;
+    extents.setX(INT_MAX);
+    extents.setY(INT_MAX);
+    if (x() < extents.x())
+        extents.setX(x());
+    if (y() < extents.y())
+        extents.setY(y());
+    if (width() > extents.width())
+        extents.setWidth(width());
+    if (height() > extents.height())
+        extents.setHeight(height());
+    
+    return extents;
 }
 
 void MyTextStyle::setX(const qreal& x) const {
@@ -162,6 +178,20 @@ const Qt::Alignment MyTextStyle::verticalAlignment() const {
         return ((MyVTextAnchorParameter*)parameter)->defaultAlignment();
     
     return Qt::AlignVCenter;
+}
+
+const qreal MyTextStyle::verticalPadding() const {
+    QFontMetrics fontMetrics(font());
+    if (height() > fontMetrics.height()) {
+        if (verticalAlignment() == Qt::AlignVCenter)
+            return 0.5 * height() - 0.75 * fontMetrics.height();
+        else if (verticalAlignment() == Qt::AlignBaseline)
+            return 0.5 * height() - 0.5 * fontMetrics.height();
+        else if (verticalAlignment() == Qt::AlignBottom)
+            return height() - 1.5 * fontMetrics.height();
+    }
+    
+    return 0.000;
 }
 
 void MyTextStyle::read(const QJsonObject &json) {

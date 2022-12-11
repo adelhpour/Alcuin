@@ -18,6 +18,22 @@ MyShapeStyleBase::SHAPE_STYLE MyEllipseStyleBase::type() {
     return ELLIPSE_SHAPE_STYLE;
 }
 
+const QRectF MyEllipseStyleBase::getShapeExtents() {
+    QRectF extents;
+    extents.setX(INT_MAX);
+    extents.setY(INT_MAX);
+    if (cx() - rx() < extents.x())
+        extents.setX(cx() - rx());
+    if (cy() - ry() < extents.y())
+        extents.setY(cy() - ry());
+    if (2 * rx() > extents.width())
+        extents.setWidth(2 * rx());
+    if (2 * ry() > extents.height())
+        extents.setHeight(2 * ry());
+    
+    return extents;
+}
+
 void MyEllipseStyleBase::setCx(const qreal& cx) const {
     MyParameterBase* parameter = findParameter("cx");
     if (parameter)
@@ -142,10 +158,10 @@ MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase
     _parameters.push_back(new MyNodeEllipsePositionalParameter("cy"));
     
     // rx
-    _parameters.push_back(new MyDimensionalParameter("rx"));
+    _parameters.push_back(new MyNodeEllipseDimensionalParameter("rx"));
     
     // ry
-    _parameters.push_back(new MyDimensionalParameter("ry"));
+    _parameters.push_back(new MyNodeEllipseDimensionalParameter("ry"));
     
     reset();
 }
@@ -154,10 +170,10 @@ MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase
 
 MyArrowHeadEllipseStyle::MyArrowHeadEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
     // cx
-    _parameters.push_back(new MyArrowHeadEllipsePositionalParameter("cx"));
+    _parameters.push_back(new MyArrowHeadEllipseCxParameter());
     
     // cy
-    _parameters.push_back(new MyArrowHeadEllipsePositionalParameter("cy"));
+    _parameters.push_back(new MyArrowHeadEllipseCyParameter());
     
     // rx
     _parameters.push_back(new MyArrowHeadEllipseDimensionalParameter("rx"));

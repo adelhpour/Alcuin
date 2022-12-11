@@ -15,6 +15,8 @@ public:
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
     QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
+    
+    void write(QJsonObject &json) override;
 };
 
 #endif

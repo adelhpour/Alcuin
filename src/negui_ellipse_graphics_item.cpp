@@ -16,7 +16,7 @@ void MyEllipseGraphicsItem::updateStyle() {
         setBrush(((MyEllipseStyleBase*)style())->brush());
         
         // position and dimensions
-        setRect(_originalPosition.x() + ((MyEllipseStyleBase*)style())->cx() - 2 * ((MyEllipseStyleBase*)style())->rx(), _originalPosition.y() + ((MyEllipseStyleBase*)style())->cy() - 2 * ((MyEllipseStyleBase*)style())->ry(), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
+        setRect(_originalPosition.x() + ((MyEllipseStyleBase*)style())->cx() - ((MyEllipseStyleBase*)style())->rx(), _originalPosition.y() + ((MyEllipseStyleBase*)style())->cy() - ((MyEllipseStyleBase*)style())->ry(), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
     }
 }
 
@@ -39,10 +39,10 @@ void MyEllipseGraphicsItem::setSelectedWithFill(const bool& selected) {
 void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // cx
-        ((MyEllipseStyleBase*)style())->setCx(extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
+        ((MyEllipseStyleBase*)style())->setCx(0.5 * extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
         
         // cy
-        ((MyEllipseStyleBase*)style())->setCy(extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
+        ((MyEllipseStyleBase*)style())->setCy(0.5 * extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
         
         // rx
         ((MyEllipseStyleBase*)style())->setRx(0.5 * extents.width());
@@ -55,11 +55,17 @@ void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyEllipseGraphicsItem::getExtents() {
-    return QRectF(((MyEllipseStyleBase*)style())->cx() - 2 * ((MyEllipseStyleBase*)style())->rx() + (movedDistance().x() + _originalPosition.x()), ((MyEllipseStyleBase*)style())->cy() - 2 * ((MyEllipseStyleBase*)style())->ry() + (movedDistance().y() + _originalPosition.y()), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
+    return QRectF(((MyEllipseStyleBase*)style())->cx() - ((MyEllipseStyleBase*)style())->rx() + (movedDistance().x() + _originalPosition.x()), ((MyEllipseStyleBase*)style())->cy() - ((MyEllipseStyleBase*)style())->ry() + (movedDistance().y() + _originalPosition.y()), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
+}
+
+void MyEllipseGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+    ((MyEllipseStyleBase*)style())->setCx(((MyEllipseStyleBase*)style())->cx() - originalPositionMovedDistance.x());
+    ((MyEllipseStyleBase*)style())->setCy(((MyEllipseStyleBase*)style())->cy() - originalPositionMovedDistance.y());
+    _originalPosition += originalPositionMovedDistance;
 }
 
 QGraphicsItem* MyEllipseGraphicsItem::getResizeHandlebaredGraphicsItem() {
-    QRectF resizeRect = QRectF(boundingRect().x() + movedDistance().x(), boundingRect().y() + movedDistance().y(), boundingRect().width(), boundingRect().height());
+    QRectF resizeRect = getExtents();
     MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
     connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
     
