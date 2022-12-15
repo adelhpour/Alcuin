@@ -247,16 +247,17 @@ void MyNode::write(QJsonObject &json) {
     // id
     json["id"] = name();
     
+    QRectF extents = getExtents();
     // position
     QJsonObject positionObject;
-    positionObject["x"] = position().x();
-    positionObject["y"] = position().y();
+    positionObject["x"] = extents.center().x();
+    positionObject["y"] = extents.center().y();
     json["position"] = positionObject;
     
     // dimensions
     QJsonObject dimensionsObject;
-    dimensionsObject["width"] = getExtents().width();
-    dimensionsObject["height"] = getExtents().height();
+    dimensionsObject["width"] = extents.width();
+    dimensionsObject["height"] = extents.height();
     json["dimensions"] = dimensionsObject;
     
     // parent node

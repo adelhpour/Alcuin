@@ -102,6 +102,7 @@ void MyNodeSceneGraphicsItem::addResizeHandleBaredGraphicsItems() {
 void MyNodeSceneGraphicsItem::clearResizeHandleBaredGraphicsItems() {
     MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems();
     emit askForResetPosition();
+    adjustOriginalPosition();
 }
 
 void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
