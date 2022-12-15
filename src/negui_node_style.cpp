@@ -45,3 +45,11 @@ QList<MyElementGraphicsItemBase*>  MyNodeStyle::getElementIconGraphicsItems() {
     
     return items;
 }
+
+const QString MyNodeStyle::toolTipText() {
+    return "Add " + category();
+}
+
+const QString MyNodeStyle::alternativeToolTipText() {
+    return "Add " + category();
+}

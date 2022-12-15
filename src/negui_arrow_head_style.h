@@ -16,6 +16,10 @@ public:
     
     QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
     
+    const QString toolTipText() override;
+    
+    const QString alternativeToolTipText() override;
+    
     void write(QJsonObject &json) override;
 };
 

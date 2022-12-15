@@ -37,6 +37,10 @@ public:
     // get the icon associated with this plugin
     const QIcon icon() override;
     
+    virtual const QString toolTipText() = 0;
+    
+    virtual const QString alternativeToolTipText() = 0;
+    
     // get the icon graphics items of the element
     virtual QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() = 0;
     

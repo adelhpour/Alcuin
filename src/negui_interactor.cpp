@@ -467,6 +467,7 @@ MyElementStyleBase* MyInteractor::getCopyEdgeStyle(const QString& name) {
 
 void MyInteractor::setSelectedEdgeStartNode(MyElementBase* n) {
     if (n) {
+        emit askForSetToolTip(edgeStyle()->alternativeToolTipText());
         _selectedEdgeStartNode = n;
         _isSetSelectedEdgeStartNode = true;
         selectedEdgeStartNode()->setSelected(true);
@@ -474,8 +475,10 @@ void MyInteractor::setSelectedEdgeStartNode(MyElementBase* n) {
 }
 
 void MyInteractor::unSetSelectedEdgeStartNode() {
-    if (selectedEdgeStartNode())
+    if (selectedEdgeStartNode()) {
         selectedEdgeStartNode()->setSelected(false);
+        emit askForSetToolTip(edgeStyle()->toolTipText());
+    }
     _selectedEdgeStartNode = NULL;
     _isSetSelectedEdgeStartNode = false;
 }
@@ -597,7 +600,7 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     for (MyElementBase *edge : qAsConst(edges()))
         edge->enableAddNodeMode();
     
-    emit askForSetToolTip("Add " + style->category());
+    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
 }
 
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
@@ -620,7 +623,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     for (MyElementBase *edge : qAsConst(edges()))
         edge->enableAddEdgeMode();
     
-    emit askForSetToolTip("Select Node");
+    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
 }
 
 void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {

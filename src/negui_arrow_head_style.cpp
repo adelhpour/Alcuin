@@ -38,6 +38,14 @@ QList<MyElementGraphicsItemBase*> MyArrowHeadStyle::getElementIconGraphicsItems(
     return items;
 }
 
+const QString MyArrowHeadStyle::toolTipText() {
+    return "";
+}
+
+const QString MyArrowHeadStyle::alternativeToolTipText() {
+    return "";
+}
+
 void MyArrowHeadStyle::write(QJsonObject &json) {
     MyElementStyleBase::write(json);
     

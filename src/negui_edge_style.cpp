@@ -79,6 +79,28 @@ QList<MyElementGraphicsItemBase*> MyEdgeStyle::getElementIconGraphicsItems() {
     return items;
 }
 
+const QString MyEdgeStyle::toolTipText() {
+    QString text = "Select ";
+    for (int i = 0; i < _connectableStartNodeCategories.size(); i++) {
+        text.append(_connectableStartNodeCategories.at(i));
+        if (i < _connectableStartNodeCategories.size() - 1)
+            text.append("/");
+    }
+        
+    return text;
+}
+
+const QString MyEdgeStyle::alternativeToolTipText() {
+    QString text = "Select ";
+    for (int i = 0; i < _connectableEndNodeCategories.size(); i++) {
+        text.append(_connectableEndNodeCategories.at(i));
+        if (i < _connectableEndNodeCategories.size() - 1)
+            text.append("/");
+    }
+        
+    return text;
+}
+
 void MyEdgeStyle::read(const QJsonObject &json) {
     MyElementStyleBase::read(json);
     

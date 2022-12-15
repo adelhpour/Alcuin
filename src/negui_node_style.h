@@ -15,6 +15,10 @@ public:
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
     QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
+    
+    const QString toolTipText() override;
+    
+    const QString alternativeToolTipText() override;
 };
 
 #endif
