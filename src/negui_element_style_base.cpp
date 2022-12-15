@@ -30,17 +30,12 @@ QList<QString> MyElementStyleBase::parentCategories() {
     return _parentCategories;
 }
 
-bool MyElementStyleBase::isConnectableTo(const QString& connectedCategory) {
-    for (QString connectableCategory : _connectableCategories) {
-        if (connectedCategory == connectableCategory)
-            return true;
-    }
-    
+bool MyElementStyleBase::isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory) {
     return false;
 }
 
-QList<QString> MyElementStyleBase::connectableCategories() {
-    return _connectableCategories;
+bool MyElementStyleBase::isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory) {
+    return false;
 }
 
 void MyElementStyleBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -150,16 +145,6 @@ void MyElementStyleBase::read(const QJsonObject &json) {
         }
     }
     
-    _connectableCategories.clear();
-    if (json.contains("connectable-categories") && json["connectable-categories"].isArray()) {
-        QJsonArray connectableCategoriesArray = json["connectable-categories"].toArray();
-        for (int connectableCategoryIndex = 0; connectableCategoryIndex < connectableCategoriesArray.size(); ++connectableCategoryIndex) {
-            if (connectableCategoriesArray[connectableCategoryIndex].isString())
-                _connectableCategories.push_back(connectableCategoriesArray[connectableCategoryIndex].toString());
-        }
-    }
-    
-    
     // shapes
     clearShapeStyles();
     if (json.contains("shapes") && json["shapes"].isArray()) {
@@ -190,11 +175,6 @@ void MyElementStyleBase::write(QJsonObject &json) {
     for (QString parentCategory : parentCategories())
         parentCategoriesArray.append(parentCategory);
     json["parent-categories"] = parentCategoriesArray;
-    
-    QJsonArray connectableCategoriesArray;
-    for (QString connectableCategory : connectableCategories())
-        connectableCategoriesArray.append(connectableCategory);
-    json["connectable-categories"] = connectableCategoriesArray;
     
     // shapes
     QJsonArray shapeStylesArray;

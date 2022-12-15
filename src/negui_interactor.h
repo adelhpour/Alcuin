@@ -324,6 +324,7 @@ MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
 MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
 MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);
 QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaultIdSection);
-bool nodesAreConnectable(MyElementBase* n1, MyElementBase* n2);
+bool isConnectableToStartNode(MyElementStyleBase* edgeStyle, MyElementBase* node);
+bool isConnectableToEndNode(MyElementStyleBase* edgeStyle, MyElementBase* node);
 
 #endif

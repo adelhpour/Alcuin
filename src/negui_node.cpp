@@ -43,10 +43,6 @@ QList<MyElementBase*>& MyNode::edges() {
     return _edges;
 }
 
-bool MyNode::isConnectableTo(MyElementBase* n) {
-    return style()->isConnectableTo(n->style()->category());
-}
-
 void MyNode::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     resetPosition();

@@ -20,9 +20,9 @@ public:
     
     QList<QString> parentCategories();
     
-    QList<QString> connectableCategories();
+    virtual bool isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory);
     
-    bool isConnectableTo(const QString& connectedCategory);
+    virtual bool isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory);
     
     QList<MyShapeStyleBase*>& shapeStyles();
     
@@ -54,7 +54,6 @@ protected:
     QList<MyShapeStyleBase*> _shapeStyles;
     QString _convertibleParentCategory;
     QList<QString> _parentCategories;
-    QList<QString> _connectableCategories;
 };
 
 #endif

@@ -10,6 +10,14 @@ public:
     
     const QString type() const override;
     
+    QList<QString> connectableStartNodeCategories();
+    
+    bool isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory) override;
+    
+    QList<QString> connectableEndNodeCategories();
+    
+    bool isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory) override;
+    
     MyElementStyleBase* arrowHeadStyle();
     
     void addDefaultShapeStyle() override;
@@ -24,6 +32,8 @@ public:
 
 protected:
     MyElementStyleBase* _arrowHeadStyle;
+    QList<QString> _connectableStartNodeCategories;
+    QList<QString> _connectableEndNodeCategories;
 };
 
 
