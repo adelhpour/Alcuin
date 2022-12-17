@@ -6,6 +6,8 @@
 
 MyArrowHeadStyle::MyArrowHeadStyle(const QString& name) : MyElementStyleBase(name) {
     _category = "ArrowHead";
+    _addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
+    ((MyAddRemoveArrowHeadShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
 }
 
 const QString MyArrowHeadStyle::type() const {
@@ -60,4 +62,18 @@ void MyArrowHeadStyle::write(QJsonObject &json) {
     dimensionsObject["width"] = extents.width();
     dimensionsObject["height"] = extents.height();
     json["dimensions"] = dimensionsObject;
+}
+
+// MyAddRemoveArrowHeadShapeStylesButtons
+
+MyAddRemoveArrowHeadShapeStylesButtons::MyAddRemoveArrowHeadShapeStylesButtons(QWidget* parent) : MyAddRemoveShapeStylesButtonsBase(parent) {
+    
+}
+
+void MyAddRemoveArrowHeadShapeStylesButtons::setAddingMenu() {
+    connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
+        emit askForAddShapeStyle(createArrowHeadEllipseStyle("ellipse")); });
+    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createArrowHeadRectStyle("rect")); });
+    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createArrowHeadDefaultPolygonStyle("polygon");
+        emit askForAddShapeStyle(polygonShapeStyle); });
 }

@@ -1912,39 +1912,6 @@ MyGroupBox::MyGroupBox(QWidget* parent) : QGroupBox(parent) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 }
 
-// MyMenuItemGroupBox
-
-MyMenuItemGroupBox::MyMenuItemGroupBox(QWidget* parent) : MyGroupBox(parent) {
-    setLayout(new QGridLayout());
-}
-
-const QSize MyMenuItemGroupBox::extents() const {
-    qint32 totalWidth = 0;
-    qint32 totalHeight = 0;
-    qint32 rowWidth = 0;
-    qint32 rowHeight = 0;
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    QLayoutItem* item = NULL;
-    for (qint32 row = 0; row < contentLayout->rowCount(); ++row) {
-        rowWidth = 0;
-        rowHeight = 0;
-        for (qint32 column = 0; column < contentLayout->columnCount(); ++column) {
-            item = contentLayout->itemAtPosition(row, column);
-            if (item && item->widget()) {
-                rowWidth += item->widget()->size().width();
-                if (item->widget()->size().height() > rowHeight)
-                    rowHeight = item->widget()->size().height();
-            }
-        }
-        
-        if (rowWidth > totalWidth)
-            totalWidth = rowWidth;
-        totalHeight+= rowHeight;
-    }
-
-    return QSize(totalWidth + 10 * contentLayout->columnCount(), totalHeight + 10 *  contentLayout->rowCount() );
-}
-
 
 
 

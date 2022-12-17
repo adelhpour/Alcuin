@@ -21,4 +21,14 @@ public:
     const QString alternativeToolTipText() override;
 };
 
+class MyAddRemoveNodeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {
+    Q_OBJECT
+    
+public:
+    
+    MyAddRemoveNodeShapeStylesButtons(QWidget* parent = nullptr);
+    
+    virtual void setAddingMenu() override;
+};
+
 #endif

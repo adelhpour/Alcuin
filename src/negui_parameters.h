@@ -746,14 +746,4 @@ public:
     MyGroupBox(QWidget* parent = nullptr);
 };
 
-class MyMenuItemGroupBox : public MyGroupBox {
-    Q_OBJECT
-    
-public:
-    
-    MyMenuItemGroupBox(QWidget* parent = nullptr);
-    
-    const QSize extents() const;
-};
-
 #endif

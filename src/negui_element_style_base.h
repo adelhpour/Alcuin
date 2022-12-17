@@ -5,6 +5,9 @@
 #include "negui_shape_style_base.h"
 #include "negui_element_graphics_item_base.h"
 
+#include <QDialogButtonBox>
+#include <QMenu>
+
 class MyElementStyleBase : public QObject, public MyPluginItemBase{
     Q_OBJECT
     
@@ -34,6 +37,8 @@ public:
     
     const QRectF getShapesExtents();
     
+    QDialogButtonBox* getAddRemoveShapeStylesButtons();
+    
     // get the icon associated with this plugin
     const QIcon icon() override;
     
@@ -58,6 +63,33 @@ protected:
     QList<MyShapeStyleBase*> _shapeStyles;
     QString _convertibleParentCategory;
     QList<QString> _parentCategories;
+    QDialogButtonBox* _addRemoveShapeStylesButtons;
+};
+
+class MyAddRemoveShapeStylesButtonsBase : public QDialogButtonBox {
+    Q_OBJECT
+    
+public:
+    
+    MyAddRemoveShapeStylesButtonsBase(QWidget* parent = nullptr);
+    
+    virtual void setAddingMenu() = 0;
+    
+signals:
+    
+    void askForAddShapeStyle(MyShapeStyleBase* shapeStyle);
+    
+    void askForRemoveShapeStyle(MyShapeStyleBase* shapeStyle);
+    
+public slots:
+    
+    void setRemovingMenu(QList<MyShapeStyleBase*> shapeStyles);
+    
+protected:
+    QPushButton* _addPushButton;
+    QPushButton* _removePushButton;
+    QMenu* _addingMenu;
+    QMenu* _removingMenu;
 };
 
 #endif

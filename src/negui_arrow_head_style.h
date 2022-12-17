@@ -23,4 +23,14 @@ public:
     void write(QJsonObject &json) override;
 };
 
+class MyAddRemoveArrowHeadShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {
+    Q_OBJECT
+    
+public:
+    
+    MyAddRemoveArrowHeadShapeStylesButtons(QWidget* parent = nullptr);
+    
+    virtual void setAddingMenu() override;
+};
+
 #endif

@@ -6,7 +6,7 @@
 // MyElementStyleBase
 
 MyElementStyleBase::MyElementStyleBase(const QString& name) : MyPluginItemBase(name) {
-    
+    _addRemoveShapeStylesButtons = NULL;
 }
 
 const QString& MyElementStyleBase::convertibleParentCategory() const {
@@ -92,6 +92,10 @@ const QRectF MyElementStyleBase::getShapesExtents() {
     return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
 }
 
+QDialogButtonBox* MyElementStyleBase::getAddRemoveShapeStylesButtons() {
+    return _addRemoveShapeStylesButtons;
+}
+ 
 const QIcon MyElementStyleBase::icon() {
     QList<MyElementGraphicsItemBase*> items = getElementIconGraphicsItems();
     
@@ -184,4 +188,35 @@ void MyElementStyleBase::write(QJsonObject &json) {
         shapeStylesArray.append(shapeStyleObject);
     }
     json["shapes"] = shapeStylesArray;
+}
+
+// MyAddRemoveShapeStylesButtonsBase
+
+MyAddRemoveShapeStylesButtonsBase::MyAddRemoveShapeStylesButtonsBase(QWidget* parent) : QDialogButtonBox(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setOrientation(Qt::Horizontal);
+    setFixedSize(150.0, 50.0);
+    
+    // add button
+    _addPushButton = addButton(QString("+"), QDialogButtonBox::YesRole);
+    _addingMenu = new QMenu(_addPushButton);
+    _addPushButton->setMenu(_addingMenu);
+    //setAddingMenu();
+    
+    // remove button
+    _removePushButton = addButton(QString("-"), QDialogButtonBox::NoRole);
+    _removingMenu = new QMenu(_removePushButton);
+    _removePushButton->setMenu(_removingMenu);
+}
+
+void MyAddRemoveShapeStylesButtonsBase::setRemovingMenu(QList<MyShapeStyleBase*> shapeStyles) {
+    _removingMenu->clear();
+    if (shapeStyles.size() > 1) {
+        _removePushButton->setEnabled(true);
+        for (MyShapeStyleBase* shapeStyle : qAsConst(shapeStyles)) {
+            connect(_removingMenu->addAction(shapeStyle->name()), &QAction::triggered, this, [this, shapeStyle] () { emit askForRemoveShapeStyle(shapeStyle); });
+        }
+    }
+    else
+        _removePushButton->setEnabled(false);
 }

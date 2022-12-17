@@ -1,7 +1,5 @@
 #include "negui_feature_menu.h"
 #include "negui_parameters.h"
-#include "negui_shape_style_builder.h"
-#include "negui_polygon_style.h"
 
 // MyFeatureMenu
 
@@ -13,13 +11,10 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : QDi
     
     // element feature menu
     _elementFeatureMenu = elementFeatureMenu;
+    connect(_elementFeatureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addShapeStyle(MyShapeStyleBase*)));
+    connect(_elementFeatureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
+    connect(this, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), _elementFeatureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)));
     contentLayout->addWidget(elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
-    
-    // add/remove shape style buttons
-    _addRemoveShapeStyleButtons = new MyAddRemoveShapeStylesButtons();
-    connect(_addRemoveShapeStyleButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addShapeStyle(MyShapeStyleBase*)));
-    connect(_addRemoveShapeStyleButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
-    contentLayout->addWidget(_addRemoveShapeStyleButtons, contentLayout->rowCount(), 1, Qt::AlignRight);
     
     // shape style tree view
     _shapeStylesTreeView = new MyShapeStyleTreeView(this);
@@ -45,7 +40,7 @@ void MyFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
 
 void MyFeatureMenu::setShapeStyles() {
     QList<MyShapeStyleBase*> temporaryShapeStyles = getTemporaryShapeStyles();
-    ((MyAddRemoveShapeStylesButtons*)_addRemoveShapeStyleButtons)->setRemovingMenu(temporaryShapeStyles);
+    emit askForSetRemovingMenu(temporaryShapeStyles);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(temporaryShapeStyles);
 }
 
@@ -113,9 +108,6 @@ void MyFeatureMenu::updateDialogBoxExtents() {
         menuWidth = elementFeatureMenuSize.width();
     menuHeight += elementFeatureMenuSize.height();
     
-    // add/remove buttons
-    menuHeight += 50.0;
-    
     if (_expandableWidgetSize.width() > menuWidth)
         menuWidth = _expandableWidgetSize.width();
     menuHeight += _expandableWidgetSize.height();
@@ -123,43 +115,37 @@ void MyFeatureMenu::updateDialogBoxExtents() {
     setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
 }
 
-// MyAddRemoveShapeStylesButtons
+// MyMenuItemGroupBox
 
-MyAddRemoveShapeStylesButtons::MyAddRemoveShapeStylesButtons(QWidget* parent) : QDialogButtonBox(parent) {
-    setContentsMargins(0, 0, 0, 0);
-    setOrientation(Qt::Horizontal);
-    //setFixedHeight(100);
-    
-    // add button
-    _addPushButton = addButton(QString("+"), QDialogButtonBox::YesRole);
-    _addingMenu = new QMenu(_addPushButton);
-    _addPushButton->setMenu(_addingMenu);
-    
-    // adding menu
-    connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
-        emit askForAddShapeStyle(createNodeEllipseStyle("ellipse")); });
-    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
-    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodePolygonStyle("polygon");
-        ((MyNodePolygonStyle*)polygonShapeStyle)->addDefaultPoints();
-        emit askForAddShapeStyle(polygonShapeStyle); });
-    connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
-    
-    // remove button
-    _removePushButton = addButton(QString("-"), QDialogButtonBox::NoRole);
-    _removingMenu = new QMenu(_removePushButton);
-    _removePushButton->setMenu(_removingMenu);
+MyMenuItemGroupBox::MyMenuItemGroupBox(QWidget* parent) : MyGroupBox(parent) {
+    setLayout(new QGridLayout());
 }
 
-void MyAddRemoveShapeStylesButtons::setRemovingMenu(QList<MyShapeStyleBase*> shapeStyles) {
-    _removingMenu->clear();
-    if (shapeStyles.size() > 1) {
-        _removePushButton->setEnabled(true);
-        for (MyShapeStyleBase* shapeStyle : qAsConst(shapeStyles)) {
-            connect(_removingMenu->addAction(shapeStyle->name()), &QAction::triggered, this, [this, shapeStyle] () { emit askForRemoveShapeStyle(shapeStyle); });
+const QSize MyMenuItemGroupBox::extents() const {
+    qint32 totalWidth = 0;
+    qint32 totalHeight = 0;
+    qint32 rowWidth = 0;
+    qint32 rowHeight = 0;
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QLayoutItem* item = NULL;
+    for (qint32 row = 0; row < contentLayout->rowCount(); ++row) {
+        rowWidth = 0;
+        rowHeight = 0;
+        for (qint32 column = 0; column < contentLayout->columnCount(); ++column) {
+            item = contentLayout->itemAtPosition(row, column);
+            if (item && item->widget()) {
+                rowWidth += item->widget()->size().width();
+                if (item->widget()->size().height() > rowHeight)
+                    rowHeight = item->widget()->size().height();
+            }
         }
+        
+        if (rowWidth > totalWidth)
+            totalWidth = rowWidth;
+        totalHeight+= rowHeight;
     }
-    else
-        _removePushButton->setEnabled(false);
+
+    return QSize(totalWidth + 10 * contentLayout->columnCount(), totalHeight + 10 *  contentLayout->rowCount() );
 }
 
 // MyStandardItem

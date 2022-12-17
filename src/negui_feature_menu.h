@@ -5,7 +5,6 @@
 
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QMenu>
 #include <QStandardItem>
 #include <QTreeView>
 #include <QGridLayout>
@@ -25,6 +24,10 @@ public:
     
     QList<MyShapeStyleBase*> getTemporaryShapeStyles();
     
+signals:
+    
+    void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
+    
 private slots:
     
     void setExpandableWidgetSize(const QSize& expandableWidgetSize);
@@ -38,7 +41,6 @@ protected:
     void updateDialogBoxExtents();
     
     QWidget* _elementFeatureMenu;
-    QDialogButtonBox* _addRemoveShapeStyleButtons;
     QTreeView* _shapeStylesTreeView;
     QList<MyShapeStyleBase*> _shapeStyles;
     QList<MyShapeStyleBase*> _temporaryAddedShapeStyles;
@@ -46,24 +48,21 @@ protected:
     QSize _expandableWidgetSize;
 };
 
-class MyAddRemoveShapeStylesButtons : public QDialogButtonBox {
+class MyMenuItemGroupBox : public MyGroupBox {
     Q_OBJECT
+    
+signals:
+    void askForAddShapeStyle(MyShapeStyleBase*);
+    
+    void askForRemoveShapeStyle(MyShapeStyleBase*);
+    
+    void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
     
 public:
     
-    MyAddRemoveShapeStylesButtons(QWidget* parent = nullptr);
+    MyMenuItemGroupBox(QWidget* parent = nullptr);
     
-    void setRemovingMenu(QList<MyShapeStyleBase*> shapeStyles);
-    
-signals:
-    void askForAddShapeStyle(MyShapeStyleBase* shapeStyle);
-    void askForRemoveShapeStyle(MyShapeStyleBase* shapeStyle);
-    
-protected:
-    QPushButton* _addPushButton;
-    QPushButton* _removePushButton;
-    QMenu* _addingMenu;
-    QMenu* _removingMenu;
+    const QSize extents() const;
 };
 
 class MyStandardItem : public QStandardItem {

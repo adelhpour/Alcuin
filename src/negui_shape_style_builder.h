@@ -9,11 +9,15 @@ MyShapeStyleBase* createNodeRectStyle(const QString& shape);
 
 MyShapeStyleBase* createNodePolygonStyle(const QString& shape);
 
+MyShapeStyleBase* createNodeDefaultPolygonStyle(const QString& shape);
+
 MyShapeStyleBase* createArrowHeadEllipseStyle(const QString& shape);
 
 MyShapeStyleBase* createArrowHeadRectStyle(const QString& shape);
 
 MyShapeStyleBase* createArrowHeadPolygonStyle(const QString& shape);
+
+MyShapeStyleBase* createArrowHeadDefaultPolygonStyle(const QString& shape);
 
 MyShapeStyleBase* createLineStyle(const QString& shape);
 

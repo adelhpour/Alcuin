@@ -143,3 +143,13 @@ void MyEdgeStyle::write(QJsonObject &json) {
     arrowHeadStyle()->write(arrowHeadObject);
     json["arrow-head"] = arrowHeadObject;
 }
+
+// MyAddRemoveEdgeShapeStylesButtons
+
+MyAddRemoveEdgeShapeStylesButtons::MyAddRemoveEdgeShapeStylesButtons(QWidget* parent) : MyAddRemoveShapeStylesButtonsBase(parent) {
+    
+}
+
+void MyAddRemoveEdgeShapeStylesButtons::setAddingMenu() {
+    
+}

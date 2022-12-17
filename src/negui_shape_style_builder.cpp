@@ -18,6 +18,12 @@ MyShapeStyleBase* createNodePolygonStyle(const QString& shape) {
     return new MyNodePolygonStyle(shape);
 }
 
+MyShapeStyleBase* createNodeDefaultPolygonStyle(const QString& shape) {
+    MyShapeStyleBase* shapeStyle = new MyNodePolygonStyle(shape);
+    ((MyNodePolygonStyle*)shapeStyle)->addDefaultPoints();
+    return shapeStyle;
+}
+
 MyShapeStyleBase* createArrowHeadEllipseStyle(const QString& shape) {
     return new MyArrowHeadEllipseStyle(shape);
 }
@@ -28,6 +34,12 @@ MyShapeStyleBase* createArrowHeadRectStyle(const QString& shape) {
 
 MyShapeStyleBase* createArrowHeadPolygonStyle(const QString& shape) {
     return new MyArrowHeadPolygonStyle(shape);
+}
+
+MyShapeStyleBase* createArrowHeadDefaultPolygonStyle(const QString& shape) {
+    MyShapeStyleBase* shapeStyle = new MyArrowHeadPolygonStyle(shape);
+    ((MyArrowHeadPolygonStyle*)shapeStyle)->addDefaultPoints();
+    return shapeStyle;
 }
 
 MyShapeStyleBase* createLineStyle(const QString& shape) {

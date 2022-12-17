@@ -58,6 +58,16 @@ QWidget* MyArrowHead::getFeatureMenu() {
     contentLayout->addWidget(new MyLabel("Edge"), contentLayout->rowCount(), 0);
     contentLayout->addWidget(new MyReadOnlyLineEdit(edge()->name()), contentLayout->rowCount() - 1, 1);
     
+    // spacer
+    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
+    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+    
+    // add remove buttons
+    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), style()->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(style()->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+    
     return featureMenu;
 }
 

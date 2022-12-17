@@ -40,5 +40,14 @@ protected:
     QList<QString> _connectableEndNodeCategories;
 };
 
+class MyAddRemoveEdgeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {
+    Q_OBJECT
+    
+public:
+    
+    MyAddRemoveEdgeShapeStylesButtons(QWidget* parent = nullptr);
+    
+    virtual void setAddingMenu() override;
+};
 
 #endif

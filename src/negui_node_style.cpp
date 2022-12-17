@@ -11,6 +11,8 @@ MyNodeStyle::MyNodeStyle(const QString& name) : MyElementStyleBase(name) {
     if (name == "Default")
         addDefaultShapeStyle();
     
+    _addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
     _iconSize = QSize(40, 40);
 }
 
@@ -53,3 +55,19 @@ const QString MyNodeStyle::toolTipText() {
 const QString MyNodeStyle::alternativeToolTipText() {
     return "Add " + category();
 }
+
+// MyAddRemoveNodeShapeStylesButtons
+
+MyAddRemoveNodeShapeStylesButtons::MyAddRemoveNodeShapeStylesButtons(QWidget* parent) : MyAddRemoveShapeStylesButtonsBase(parent) {
+    
+}
+
+void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
+    connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
+        emit askForAddShapeStyle(createNodeEllipseStyle("ellipse")); });
+    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
+    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
+        emit askForAddShapeStyle(polygonShapeStyle); });
+    connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
+}
+
