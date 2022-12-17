@@ -10,14 +10,11 @@ MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyElemen
 
 MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE)
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
-    else if (style->type() == MyShapeStyleBase::BEZIER_SHAPE_STYLE)
-        item = createBezierShape(_initialLine, this);
-    
-    if (item)
         item->setZValue(zValue());
-    
+    }
+        
     return item;
 }
 

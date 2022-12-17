@@ -3,7 +3,6 @@
 #include "negui_rect_style.h"
 #include "negui_polygon_style.h"
 #include "negui_line_style.h"
-#include "negui_bezier_style.h"
 #include "negui_text_style.h"
 
 MyShapeStyleBase* createNodeEllipseStyle(const QString& shape) {
@@ -44,10 +43,6 @@ MyShapeStyleBase* createArrowHeadDefaultPolygonStyle(const QString& shape) {
 
 MyShapeStyleBase* createLineStyle(const QString& shape) {
     return new MyLineStyle(shape);
-}
-
-MyShapeStyleBase* createBezierStyle(const QString& shape) {
-    return new MyBezierStyle(shape);
 }
 
 MyShapeStyleBase* createTextStyle(const QString& shape) {

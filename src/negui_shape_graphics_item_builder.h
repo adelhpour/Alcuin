@@ -12,8 +12,6 @@ MyShapeGraphicsItemBase* createPolygonShape(qreal x, qreal y, QGraphicsItem *par
 
 MyShapeGraphicsItemBase* createLineShape(const QLineF& line, QGraphicsItem *parent);
 
-MyShapeGraphicsItemBase* createBezierShape(const QLineF& line, QGraphicsItem *parent);
-
 MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent);
 
 #endif

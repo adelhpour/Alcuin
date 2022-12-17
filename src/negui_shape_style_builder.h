@@ -21,8 +21,6 @@ MyShapeStyleBase* createArrowHeadDefaultPolygonStyle(const QString& shape);
 
 MyShapeStyleBase* createLineStyle(const QString& shape);
 
-MyShapeStyleBase* createBezierStyle(const QString& shape);
-
 MyShapeStyleBase* createTextStyle(const QString& shape);
 
 #endif

@@ -3,7 +3,6 @@
 #include "negui_rect_graphics_item.h"
 #include "negui_polygon_graphics_item.h"
 #include "negui_line_graphics_item.h"
-#include "negui_bezier_graphics_item.h"
 #include "negui_text_graphics_item.h"
 
 MyShapeGraphicsItemBase* createEllipseShape(qreal x, qreal y, QGraphicsItem *parent) {
@@ -21,10 +20,6 @@ MyShapeGraphicsItemBase* createPolygonShape(qreal x, qreal y, QGraphicsItem *par
 
 MyShapeGraphicsItemBase* createLineShape(const QLineF& line, QGraphicsItem *parent) {
     return new MyLineGraphicsItem(line, parent);
-}
-
-MyShapeGraphicsItemBase* createBezierShape(const QLineF& line, QGraphicsItem *parent) {
-    return new MyBezierGraphicsItem(line, parent);
 }
 
 MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent) {

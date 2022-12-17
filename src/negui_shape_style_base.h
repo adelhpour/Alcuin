@@ -12,7 +12,6 @@ public:
         RECT_SHAPE_STYLE,
         POLYGON_SHAPE_STYLE,
         LINE_SHAPE_STYLE,
-        BEZIER_SHAPE_STYLE,
         TEXT_SHAPE_STYLE,
     } SHAPE_STYLE;
     

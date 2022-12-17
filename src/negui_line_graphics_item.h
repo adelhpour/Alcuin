@@ -20,6 +20,8 @@ public:
     void setZValue(qreal z) override;
     
     void setLine(const QLineF& line) override;
+    
+    const qreal calcualteBezierEndSlope(const QPointF& p0, const QPointF& p1, const QPointF& p2, const QPointF& p3) const;
 };
 
 #endif

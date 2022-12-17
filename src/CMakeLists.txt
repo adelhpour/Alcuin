@@ -31,7 +31,6 @@ set(gui_sources
 	negui_rect_style.cpp
 	negui_polygon_style.cpp
 	negui_line_style.cpp
-	negui_bezier_style.cpp
 	negui_text_style.cpp
 	negui_shape_style_builder.cpp
 	negui_shape_graphics_item_base.cpp
@@ -41,7 +40,6 @@ set(gui_sources
 	negui_rect_graphics_item.cpp
 	negui_polygon_graphics_item.cpp
 	negui_line_graphics_item.cpp
-	negui_bezier_graphics_item.cpp
 	negui_text_graphics_item.cpp
 	negui_shape_graphics_item_builder.cpp
 	negui_resize_handlebared_graphics_item.cpp
@@ -81,7 +79,6 @@ set(gui_headers
 	negui_rect_style.h
 	negui_polygon_style.h
 	negui_line_style.h
-	negui_bezier_style.h
 	negui_text_style.h
 	negui_shape_style_builder.h
 	negui_shape_graphics_item_base.h
@@ -91,7 +88,6 @@ set(gui_headers
 	negui_rect_graphics_item.h
 	negui_polygon_graphics_item.h
 	negui_line_graphics_item.h
-	negui_bezier_graphics_item.h
 	negui_text_graphics_item.h
 	negui_shape_graphics_item_builder.h
 	negui_resize_handlebared_graphics_item.h

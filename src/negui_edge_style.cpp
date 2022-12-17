@@ -58,9 +58,7 @@ void MyEdgeStyle::addDefaultShapeStyle() {
 
 MyShapeStyleBase* MyEdgeStyle::createShapeStyle(const QString& shape) {
     if (shape == "line")
-        return createLineStyle(shape);
-    else if (shape == "bezier")
-        return createBezierStyle(shape);
+        return createLineStyle("line");
     
     return NULL;
 }

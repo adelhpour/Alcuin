@@ -12,6 +12,12 @@ public:
     
     const QRectF getShapeExtents() override;
     
+    // get the relative value of p1
+    const QPoint relativeP1() const;
+    
+    // get the relative value of p2
+    const QPoint relativeP2() const;
+    
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
     
