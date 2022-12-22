@@ -30,21 +30,6 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
     return item;
 }
 
-QList<QGraphicsItem*> MyNodeGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
-    QList<QGraphicsItem*> resizeHandlebaredGraphicsItems;
-    QGraphicsItem* resizeHandlebaredGraphicsItem = NULL;
-    for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-        if (casted_item) {
-            resizeHandlebaredGraphicsItem = casted_item->getResizeHandlebaredGraphicsItem();
-            if (resizeHandlebaredGraphicsItem)
-                resizeHandlebaredGraphicsItems.push_back((resizeHandlebaredGraphicsItem));
-        }
-    }
-    
-    return resizeHandlebaredGraphicsItems;
-}
-
 void MyNodeGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);

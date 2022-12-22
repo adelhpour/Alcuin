@@ -40,10 +40,6 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
     return endSlope;
 }
 
-QList<QGraphicsItem*> MyEdgeGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
-    return QList<QGraphicsItem*>();
-}
-
 void MyEdgeGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::ArrowCursor);
 }

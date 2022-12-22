@@ -22,7 +22,7 @@ public:
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
-    virtual QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() = 0;
+    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems();
     
     virtual void addResizeHandleBaredGraphicsItems();
     

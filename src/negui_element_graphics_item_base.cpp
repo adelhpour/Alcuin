@@ -38,6 +38,21 @@ QList<MyShapeStyleBase*> MyElementGraphicsItemBase::getShapeStyles() {
     return _shapeStyles;
 }
 
+QList<QGraphicsItem*> MyElementGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
+    QList<QGraphicsItem*> resizeHandlebaredGraphicsItems;
+    QGraphicsItem* resizeHandlebaredGraphicsItem = NULL;
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item) {
+            resizeHandlebaredGraphicsItem = casted_item->getResizeHandlebaredGraphicsItem();
+            if (resizeHandlebaredGraphicsItem)
+                resizeHandlebaredGraphicsItems.push_back((resizeHandlebaredGraphicsItem));
+        }
+    }
+    
+    return resizeHandlebaredGraphicsItems;
+}
+
 void MyElementGraphicsItemBase::addResizeHandleBaredGraphicsItems() {
     clearResizeHandleBaredGraphicsItems();
     _resizeHandlebaredGraphicsItems = createResizeHandleBaredGraphicsItems();

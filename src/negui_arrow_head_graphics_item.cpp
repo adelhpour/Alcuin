@@ -23,10 +23,6 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
     return item;
 }
 
-QList<QGraphicsItem*> MyArrowHeadGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
-    return QList<QGraphicsItem*>();
-}
-
 void MyArrowHeadGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::ArrowCursor);
 }

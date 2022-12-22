@@ -13,8 +13,6 @@ public:
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
-    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems() override;
-    
     void enableNormalMode() override;
 
     void enableAddNodeMode() override;
