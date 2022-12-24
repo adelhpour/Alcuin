@@ -1,6 +1,6 @@
 #include "negui_text_graphics_item.h"
 #include "negui_text_style.h"
-#include "negui_resize_handlebared_graphics_item.h"
+#include "negui_resize_handled_graphics_item.h"
 
 // MyTextGraphicsItem
 
@@ -67,12 +67,12 @@ void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionM
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyTextGraphicsItem::getResizeHandlebaredGraphicsItem() {
+QGraphicsItem* MyTextGraphicsItem::getResizeHandledGraphicsItem() {
     QRectF resizeRect = getExtents();
-    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
-    MyShapeGraphicsItemBase::connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
+    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyResizeHandledGraphicsItem(resizeRect, zValue());
+    MyShapeGraphicsItemBase::connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
     
-    return resizeHandlebaredGraphicsItem;
+    return resizeHandledGraphicsItem;
 }
 
 void MyTextGraphicsItem::setZValue(qreal z) {

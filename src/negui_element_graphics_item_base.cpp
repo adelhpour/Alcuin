@@ -38,34 +38,34 @@ QList<MyShapeStyleBase*> MyElementGraphicsItemBase::getShapeStyles() {
     return _shapeStyles;
 }
 
-QList<QGraphicsItem*> MyElementGraphicsItemBase::createResizeHandleBaredGraphicsItems() {
-    QList<QGraphicsItem*> resizeHandlebaredGraphicsItems;
-    QGraphicsItem* resizeHandlebaredGraphicsItem = NULL;
+QList<QGraphicsItem*> MyElementGraphicsItemBase::createResizeHandledGraphicsItems() {
+    QList<QGraphicsItem*> resizeHandledGraphicsItems;
+    QGraphicsItem* resizeHandledGraphicsItem = NULL;
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item) {
-            resizeHandlebaredGraphicsItem = casted_item->getResizeHandlebaredGraphicsItem();
-            if (resizeHandlebaredGraphicsItem)
-                resizeHandlebaredGraphicsItems.push_back((resizeHandlebaredGraphicsItem));
+            resizeHandledGraphicsItem = casted_item->getResizeHandledGraphicsItem();
+            if (resizeHandledGraphicsItem)
+                resizeHandledGraphicsItems.push_back((resizeHandledGraphicsItem));
         }
     }
     
-    return resizeHandlebaredGraphicsItems;
+    return resizeHandledGraphicsItems;
 }
 
-void MyElementGraphicsItemBase::addResizeHandleBaredGraphicsItems() {
-    clearResizeHandleBaredGraphicsItems();
-    _resizeHandlebaredGraphicsItems = createResizeHandleBaredGraphicsItems();
-    for (QGraphicsItem* item : _resizeHandlebaredGraphicsItems)
+void MyElementGraphicsItemBase::addResizeHandledGraphicsItems() {
+    clearResizeHandledGraphicsItems();
+    _resizeHandledGraphicsItems = createResizeHandledGraphicsItems();
+    for (QGraphicsItem* item : _resizeHandledGraphicsItems)
         emit askForAddGraphicsItem(item);
 }
 
-void MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems() {
-    for (QGraphicsItem* item : _resizeHandlebaredGraphicsItems) {
+void MyElementGraphicsItemBase::clearResizeHandledGraphicsItems() {
+    for (QGraphicsItem* item : _resizeHandledGraphicsItems) {
         emit askForRemoveGraphicsItem(item);
         delete item;
     }
-    _resizeHandlebaredGraphicsItems.clear();
+    _resizeHandledGraphicsItems.clear();
 }
 
 const QRectF MyElementGraphicsItemBase::getExtents() const {
@@ -117,9 +117,9 @@ void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
 
 void MyElementGraphicsItemBase::setFocused(const bool& isFocused) {
     if (isFocused)
-        addResizeHandleBaredGraphicsItems();
+        addResizeHandledGraphicsItems();
     else
-        clearResizeHandleBaredGraphicsItems();
+        clearResizeHandledGraphicsItems();
 }
 
 void MyElementGraphicsItemBase::setCursor(const QCursor &cursor) {

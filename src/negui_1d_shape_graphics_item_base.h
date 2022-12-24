@@ -12,7 +12,7 @@ public:
     
     virtual void setLine(const QLineF& line) = 0;
     
-    QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
+    QGraphicsItem* getResizeHandledGraphicsItem() override;
     
     void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
     

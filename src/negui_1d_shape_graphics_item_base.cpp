@@ -10,7 +10,7 @@ const qreal My1DShapeGraphicsItemBase::getEndSlope() const {
     return _endSlope;
 }
 
-QGraphicsItem* My1DShapeGraphicsItemBase::getResizeHandlebaredGraphicsItem() {
+QGraphicsItem* My1DShapeGraphicsItemBase::getResizeHandledGraphicsItem() {
     return NULL;
 }
 

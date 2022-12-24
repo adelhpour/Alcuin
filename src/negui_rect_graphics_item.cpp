@@ -1,6 +1,6 @@
 #include "negui_rect_graphics_item.h"
 #include "negui_rect_style.h"
-#include "negui_resize_handlebared_graphics_item.h"
+#include "negui_resize_handled_graphics_item.h"
 
 // MyRectGraphicsItem
 
@@ -93,13 +93,13 @@ void MyRectGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionM
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyRectGraphicsItem::getResizeHandlebaredGraphicsItem() {
+QGraphicsItem* MyRectGraphicsItem::getResizeHandledGraphicsItem() {
     QRectF resizeRect = getExtents();
-    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyRoundedRectangleResizeHandlebaredGraphicsItem(resizeRect, ((MyRectStyleBase*)style())->rx(), ((MyRectStyleBase*)style())->ry(), zValue());
-    connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
-    connect(resizeHandlebaredGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
+    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyRoundedRectangleResizeHandledGraphicsItem(resizeRect, ((MyRectStyleBase*)style())->rx(), ((MyRectStyleBase*)style())->ry(), zValue());
+    connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    connect(resizeHandledGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
     
-    return resizeHandlebaredGraphicsItem;
+    return resizeHandledGraphicsItem;
 }
 
 void MyRectGraphicsItem::setZValue(qreal z) {

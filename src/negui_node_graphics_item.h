@@ -33,7 +33,7 @@ public:
     
     MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
     
-    void clearResizeHandleBaredGraphicsItems() override;
+    void clearResizeHandledGraphicsItems() override;
     
     void moveBy(qreal dx, qreal dy);
     

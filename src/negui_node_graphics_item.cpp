@@ -33,7 +33,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
 void MyNodeGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);
-    clearResizeHandleBaredGraphicsItems();
+    clearResizeHandledGraphicsItems();
 }
 
 void MyNodeGraphicsItemBase::enableAddNodeMode() {
@@ -80,8 +80,8 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItem::clearResizeHandleBaredGraphicsItems() {
-    MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems();
+void MyNodeSceneGraphicsItem::clearResizeHandledGraphicsItems() {
+    MyElementGraphicsItemBase::clearResizeHandledGraphicsItems();
     emit askForResetPosition();
     adjustOriginalPosition();
     emit askForCreateChangeStageCommand();

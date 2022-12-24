@@ -1,6 +1,6 @@
 #include "negui_ellipse_graphics_item.h"
 #include "negui_ellipse_style.h"
-#include "negui_resize_handlebared_graphics_item.h"
+#include "negui_resize_handled_graphics_item.h"
 
 // MyEllipseGraphicsItem
 
@@ -64,12 +64,12 @@ void MyEllipseGraphicsItem::adjustOriginalPosition(const QPointF& originalPositi
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyEllipseGraphicsItem::getResizeHandlebaredGraphicsItem() {
+QGraphicsItem* MyEllipseGraphicsItem::getResizeHandledGraphicsItem() {
     QRectF resizeRect = getExtents();
-    MyResizeHandlebaredGraphicsItemBase* resizeHandlebaredGraphicsItem = new MyResizeHandlebaredGraphicsItem(resizeRect, zValue());
-    connect(resizeHandlebaredGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyResizeHandledGraphicsItem(resizeRect, zValue());
+    connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
     
-    return resizeHandlebaredGraphicsItem;
+    return resizeHandledGraphicsItem;
 }
 
 void MyEllipseGraphicsItem::setZValue(qreal z) {

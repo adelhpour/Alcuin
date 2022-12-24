@@ -22,11 +22,11 @@ public:
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
-    QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems();
+    QList<QGraphicsItem*> createResizeHandledGraphicsItems();
     
-    void addResizeHandleBaredGraphicsItems();
+    void addResizeHandledGraphicsItems();
     
-    virtual void clearResizeHandleBaredGraphicsItems();
+    virtual void clearResizeHandledGraphicsItems();
     
     const QRectF getExtents() const;
     
@@ -72,7 +72,7 @@ protected:
     
     QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;
-    QList<QGraphicsItem*> _resizeHandlebaredGraphicsItems;
+    QList<QGraphicsItem*> _resizeHandledGraphicsItems;
     bool _isChosen;
 };
 

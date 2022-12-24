@@ -29,7 +29,7 @@ public:
     
     virtual QRectF getExtents() = 0;
     
-    virtual QGraphicsItem* getResizeHandlebaredGraphicsItem() = 0;
+    virtual QGraphicsItem* getResizeHandledGraphicsItem() = 0;
     
     virtual void setZValue(qreal z) = 0;
     

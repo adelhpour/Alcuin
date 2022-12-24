@@ -18,7 +18,7 @@ public:
     
     QRectF getExtents() override;
     
-    QGraphicsItem* getResizeHandlebaredGraphicsItem() override;
+    QGraphicsItem* getResizeHandledGraphicsItem() override;
     
     void setZValue(qreal z) override;
     
