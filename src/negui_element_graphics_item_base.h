@@ -24,7 +24,7 @@ public:
     
     QList<QGraphicsItem*> createResizeHandleBaredGraphicsItems();
     
-    virtual void addResizeHandleBaredGraphicsItems();
+    void addResizeHandleBaredGraphicsItems();
     
     virtual void clearResizeHandleBaredGraphicsItems();
     
@@ -60,6 +60,7 @@ signals:
     void mouseLeftButtonIsDoubleClicked();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
+    void askForCreateChangeStageCommand();
     
 protected:
     

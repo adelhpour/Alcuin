@@ -43,6 +43,8 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     
     loadPlugins();
     resetNetwork();
+    _stageInfo = exportNetworkInfo();
+    enableNormalMode();
 };
 
 bool MyInteractor::setImportInterface(ImportInterface* importInterface, const QString &path) {
@@ -215,6 +217,20 @@ QUndoStack* MyInteractor::undoStack() {
     return _undoStack;
 }
 
+void MyInteractor::createChangeStageCommand() {
+    QJsonObject currentStageInfo = exportNetworkInfo();
+    if (undoStack()->count() > undoStack()->index()) {
+        const QUndoCommand* indexCommand = undoStack()->command(undoStack()->index());
+        _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
+    }
+    if (currentStageInfo != _stageInfo) {
+        MyChangeStageCommand* changeStageCommand = new MyChangeStageCommand(_stageInfo, currentStageInfo);
+        ((MyUndoStack*)undoStack())->addCommand(changeStageCommand);
+        connect(changeStageCommand, SIGNAL(askForCreateNetwork(const QJsonObject&)), this, SLOT(createNetwork(const QJsonObject&)));
+        _stageInfo = currentStageInfo;
+    }
+}
+
 void MyInteractor::setMode(SceneMode mode) {
     _mode = mode;
     unSetSelectedEdgeStartNode();
@@ -224,21 +240,19 @@ MyInteractor::SceneMode MyInteractor::mode() {
     return _mode;
 }
 
-void MyInteractor::createNetwork(const QJsonObject &json) {
+void MyInteractor::createNetwork(const QJsonObject& json) {
     resetNetwork();
     setNetworkExtents(json);
     addNodes(json);
     addEdges(json);
-    enableNormalMode();
 }
 
 void MyInteractor::resetNetwork() {
     _selectedEdgeStartNode = NULL;
     _isSetSelectedEdgeStartNode = false;
-    enableNormalMode();
     clearNodesInfo();
     clearEdgesInfo();
-    askForClearScene();
+    emit askForClearScene();
     setNetworkExtents(30.0, 20.0, 840.0, 560.0);
 }
 
@@ -284,12 +298,12 @@ void MyInteractor::addNodes(const QJsonObject &json) {
 void MyInteractor::addNode(const QJsonObject &json) {
     MyElementBase* node = createNode(json);
     if (node) {
+        connect(node, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         MyElementStyleBase* style = createNodeStyle(json);
         if (!style)
             style = getCopyNodeStyle(node->name() + "_style");
         node->setStyle(style);
-        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, node);
-        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
+        addNode(node);
     }
 }
 
@@ -310,10 +324,11 @@ void MyInteractor::addNode(MyElementBase* n) {
 
 void MyInteractor::addNewNode(const QPointF& position) {
     if (mode() == ADD_NODE_MODE) {
-        MyElementBase* _node = createNode(getElementUniqueId(nodes(), nodeStyle()->category()), position.x(), position.y());
-        _node->setStyle(getCopyNodeStyle(_node->name() + "_style"));
-        QUndoCommand *addNodeCommand = new MyAddNodeCommand(this, _node);
-        ((MyUndoStack*)undoStack())->addCommand(addNodeCommand);
+        MyElementBase* node = createNode(getElementUniqueId(nodes(), nodeStyle()->category()), position.x(), position.y());
+        connect(node, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
+        node->setStyle(getCopyNodeStyle(node->name() + "_style"));
+        addNode(node);
+        createChangeStageCommand();
     }
 }
 
@@ -332,12 +347,6 @@ void MyInteractor::updateNodeParetns() {
         if (parentNode)
             ((MyNode*)node)->setParentNode((MyNode*)parentNode);
     }
-    
-    //for (MyElementBase *node : qAsConst(nodes())) {
-        //if (((MyNode*)node)->childNodes().size()) {
-            //((MyNode*)node)->adjustExtents();
-        //}
-    //}
 }
 
 MyElementBase* MyInteractor::parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position) {
@@ -401,8 +410,8 @@ void MyInteractor::addEdge(const QJsonObject &json) {
         if (!style)
             style = getCopyEdgeStyle(edge->name() + "_style");
         edge->setStyle(style);
-        QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, edge);
-        ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
+        ((MyEdge*)edge)->connectToNodes(true);
+        addEdge(edge);
     }
 }
 
@@ -424,11 +433,12 @@ void MyInteractor::addNewEdge(MyElementBase* element) {
             setSelectedEdgeStartNode(element);
         }
         else if (selectedEdgeStartNode() && selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element) && isConnectableToEndNode(edgeStyle(), element)) {
-            MyElementBase* _edge = createEdge(getElementUniqueId(edges(), edgeStyle()->category()), selectedEdgeStartNode(), element);
-            _edge->setStyle(getCopyEdgeStyle(_edge->name() + "_style"));
-            QUndoCommand *addEdgeCommand = new MyAddEdgeCommand(this, _edge);
-            ((MyUndoStack*)undoStack())->addCommand(addEdgeCommand);
+            MyElementBase* edge = createEdge(getElementUniqueId(edges(), edgeStyle()->category()), selectedEdgeStartNode(), element);
+            edge->setStyle(getCopyEdgeStyle(edge->name() + "_style"));
+            ((MyEdge*)edge)->connectToNodes(true);
+            addEdge(edge);
             unSetSelectedEdgeStartNode();
+            createChangeStageCommand();
         }
     }
 }
@@ -498,7 +508,9 @@ bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
     return false;
 }
 
-void MyInteractor::exportNetworkInfo(QJsonObject &json) {
+QJsonObject MyInteractor::exportNetworkInfo() {
+    QJsonObject json;
+    
     // position
     QJsonObject positionObject;
     positionObject["x"] = networkExtents().x() + 0.5 * networkExtents().width();
@@ -528,6 +540,8 @@ void MyInteractor::exportNetworkInfo(QJsonObject &json) {
         edgesArray.append(edgeObject);
     }
     json["edges"] = edgesArray;
+    
+    return json;
 }
 
 void MyInteractor::selectNode(MyElementBase* element) {
@@ -551,13 +565,16 @@ void MyInteractor::selectEdge(MyElementBase* element) {
 void MyInteractor::removeItem(MyElementBase* element) {
     if (mode() == REMOVE_MODE) {
         QUndoCommand *removeCommand = NULL;
-        if (element->type() == MyElementBase::NODE_ELEMENT)
-            removeCommand = new MyRemoveNodeCommand(this, element);
-        else if (element->type() == MyElementBase::EDGE_ELEMENT)
-            removeCommand = new MyRemoveEdgeCommand(this, element);
-        
-        if (removeCommand)
-            ((MyUndoStack*)undoStack())->addCommand(removeCommand);
+        if (element->type() == MyElementBase::NODE_ELEMENT) {
+            removeNode(element);
+            for (MyElementBase *edge : qAsConst(((MyNode*)element)->edges()))
+                removeEdge(edge);
+        }
+        else if (element->type() == MyElementBase::EDGE_ELEMENT) {
+            ((MyEdge*)element)->connectToNodes(false);
+            removeEdge(element);
+        }
+        createChangeStageCommand();
     }
 }
 
@@ -650,13 +667,16 @@ void MyInteractor::enableRemoveMode() {
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName();
-    if (!fileName.isEmpty())
+    if (!fileName.isEmpty()) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
+        emit askForResetScale();
+        createChangeStageCommand();
+        enableNormalMode();
+    }
 }
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    QJsonObject graphInfoObject;
-    exportNetworkInfo(graphInfoObject);
+    QJsonObject graphInfoObject = exportNetworkInfo();
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName();
     if (!fileName.isEmpty()) {
         ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibiliy(graphInfoObject, exportTool->name()));
@@ -679,10 +699,11 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*)autoLayoutEngine)->takeParameters()) {
         QJsonObject autoLayoutInfoObject;
         autoLayoutEngine->write(autoLayoutInfoObject);
-        QJsonObject graphInfoObject;
-        exportNetworkInfo(graphInfoObject);
+        QJsonObject graphInfoObject = exportNetworkInfo();
         autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
         createNetwork(graphInfoObject);
+        createChangeStageCommand();
+        enableNormalMode();
     }
 }
 
@@ -874,6 +895,7 @@ QToolButton* MyInteractor::populateResetSceneMenu() {
     button->setText("Reset");
     button->setToolTip(tr("Remove all network elements from the scene"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::resetNetwork);
+    connect(button, &QToolButton::clicked, this, &MyInteractor::askForResetScale);
     return button;
 }
 
@@ -964,79 +986,27 @@ MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent
     }
 }
 
+// MyChangeStageCommand
 
-// MyAddNodeCommand
-
-MyAddNodeCommand::MyAddNodeCommand(MyInteractor* interactor, MyElementBase* node, QUndoCommand* parent) : QUndoCommand(parent) {
-    _interactor = interactor;
-    _node = node;
+MyChangeStageCommand::MyChangeStageCommand(const QJsonObject& previousStageInfo, const QJsonObject& currentStageInfo, QUndoCommand* parent) : QUndoCommand(parent) {
+    _previousStageInfo = previousStageInfo;
+    _currentStageInfo = currentStageInfo;
 }
 
-void MyAddNodeCommand::undo() {
-    _interactor->removeNode(_node);
-    _interactor->enableNormalMode();
+void MyChangeStageCommand::undo() {
+    emit askForCreateNetwork(_previousStageInfo);
 }
 
-void MyAddNodeCommand::redo() {
-    _interactor->addNode(_node);
+void MyChangeStageCommand::redo() {
+    emit askForCreateNetwork(_currentStageInfo);
 }
 
-// MyRemoveNodeCommand
-
-MyRemoveNodeCommand::MyRemoveNodeCommand(MyInteractor* interactor, MyElementBase* node, QUndoCommand* parent) : QUndoCommand(parent) {
-    _interactor = interactor;
-    _node = node;
+const QJsonObject& MyChangeStageCommand::previousStageInfo() {
+    return _previousStageInfo;
 }
 
-void MyRemoveNodeCommand::undo() {
-    _interactor->addNode(_node);
-    for (MyElementBase *edge : qAsConst(((MyNode*)_node)->edges())) {
-        if (((MyEdge*)edge)->isConnectedToNodes())
-            _interactor->addEdge(edge);
-    }
-    _interactor->enableNormalMode();
-}
-
-void MyRemoveNodeCommand::redo() {
-    _interactor->removeNode(_node);
-    for (MyElementBase *edge : qAsConst(((MyNode*)_node)->edges()))
-        _interactor->removeEdge(edge);
-}
-
-// MyAddEdgeCommand
-
-MyAddEdgeCommand::MyAddEdgeCommand(MyInteractor* interactor, MyElementBase* edge, QUndoCommand* parent) : QUndoCommand(parent) {
-    _interactor = interactor;
-    _edge = edge;
-}
-
-void MyAddEdgeCommand::undo() {
-    ((MyEdge*)_edge)->connectToNodes(false);
-    _interactor->removeEdge(_edge);
-    _interactor->enableNormalMode();
-}
-
-void MyAddEdgeCommand::redo() {
-    ((MyEdge*)_edge)->connectToNodes(true);
-    _interactor->addEdge(_edge);
-}
-
-// MyRemoveEdgeCommand
-
-MyRemoveEdgeCommand::MyRemoveEdgeCommand(MyInteractor* interactor, MyElementBase* edge, QUndoCommand* parent) : QUndoCommand(parent) {
-    _interactor = interactor;
-    _edge = edge;
-}
-
-void MyRemoveEdgeCommand::undo() {
-    ((MyEdge*)_edge)->connectToNodes(true);
-    _interactor->addEdge(_edge);
-    _interactor->enableNormalMode();
-}
-
-void MyRemoveEdgeCommand::redo() {
-    ((MyEdge*)_edge)->connectToNodes(false);
-    _interactor->removeEdge(_edge);
+const QJsonObject& MyChangeStageCommand::currentStageInfo() {
+    return _currentStageInfo;
 }
 
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name) {

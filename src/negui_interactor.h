@@ -106,6 +106,7 @@ signals:
     void askForRemoveGraphicsItem(QGraphicsItem* item);
     void askForSetSceneRect(qreal x, qreal y, qreal width, qreal height);
     void askForClearScene();
+    void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void nodeIsSelected(const QString& nodeName);
@@ -119,7 +120,7 @@ public slots:
     
     // network
     void createNetwork(const QJsonObject &json);
-    void exportNetworkInfo(QJsonObject &json);
+    QJsonObject exportNetworkInfo();
     
     // network elements
     void addNewNode(const QPointF& position);
@@ -145,6 +146,7 @@ private slots:
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyElementBase* parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position);
+    void createChangeStageCommand();
     
 protected:
     
@@ -209,6 +211,7 @@ protected:
     
     // network
     QRectF _networkExtents;
+    QJsonObject _stageInfo;
 };
 
 class MyUndoStack : public QUndoStack {
@@ -260,64 +263,26 @@ public:
     MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
 };
 
-class MyAddNodeCommand : public QUndoCommand {
+class MyChangeStageCommand : public QObject, public QUndoCommand {
+    Q_OBJECT
     
 public:
     
-    MyAddNodeCommand(MyInteractor *interactor, MyElementBase* node, QUndoCommand *parent = nullptr);
+    MyChangeStageCommand(const QJsonObject& previousStageInfo, const QJsonObject& currentStageInfo, QUndoCommand* parent = nullptr);
 
     void undo() override;
     void redo() override;
+    
+    const QJsonObject& previousStageInfo();
+    const QJsonObject& currentStageInfo();
+    
+signals:
+    void askForCreateNetwork(const QJsonObject&);
 
 protected:
     
-    MyElementBase* _node;
-    MyInteractor* _interactor;
-};
-
-class MyRemoveNodeCommand : public QUndoCommand {
-    
-public:
-    
-    MyRemoveNodeCommand(MyInteractor *interactor, MyElementBase* node, QUndoCommand *parent = nullptr);
-
-    void undo() override;
-    void redo() override;
-
-protected:
-    
-    MyElementBase* _node;
-    MyInteractor* _interactor;
-};
-
-class MyAddEdgeCommand : public QUndoCommand {
-    
-public:
-    
-    MyAddEdgeCommand(MyInteractor *interactor, MyElementBase* edge, QUndoCommand *parent = nullptr);
-
-    void undo() override;
-    void redo() override;
-
-protected:
-    
-    MyElementBase* _edge;
-    MyInteractor* _interactor;
-};
-
-class MyRemoveEdgeCommand : public QUndoCommand {
-    
-public:
-    
-    MyRemoveEdgeCommand(MyInteractor *interactor, MyElementBase* edge, QUndoCommand *parent = nullptr);
-
-    void undo() override;
-    void redo() override;
-
-protected:
-    
-    MyElementBase* _edge;
-    MyInteractor* _interactor;
+    QJsonObject _previousStageInfo;
+    QJsonObject _currentStageInfo;
 };
 
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);

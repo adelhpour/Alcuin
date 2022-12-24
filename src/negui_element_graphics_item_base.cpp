@@ -155,6 +155,7 @@ void MyElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *even
     if (event->button() == Qt::LeftButton) {
         _isChosen = false;
         event->accept();
+        emit askForCreateChangeStageCommand();
     }
 }
 

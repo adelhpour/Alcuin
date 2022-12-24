@@ -17,6 +17,7 @@ MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* end
     _graphicsItem = createEdgeSceneGraphicsItem();
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     if (startNode && endNode) {
         _startNode = startNode;
         ((MyNode*)_startNode)->addEdge(this);

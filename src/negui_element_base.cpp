@@ -92,5 +92,6 @@ void MyElementBase::displayFeatureMenu() {
     if (featureMenu->exec() == QDialog::Accepted) {
         updateStyle(featureMenu->getShapeStyles());
         updateGraphicsItem();
+        emit askForCreateChangeStageCommand();
     }
 }

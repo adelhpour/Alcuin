@@ -80,14 +80,11 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItem::addResizeHandleBaredGraphicsItems() {
-    MyElementGraphicsItemBase::addResizeHandleBaredGraphicsItems();
-}
-
 void MyNodeSceneGraphicsItem::clearResizeHandleBaredGraphicsItems() {
     MyElementGraphicsItemBase::clearResizeHandleBaredGraphicsItems();
     emit askForResetPosition();
     adjustOriginalPosition();
+    emit askForCreateChangeStageCommand();
 }
 
 void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {

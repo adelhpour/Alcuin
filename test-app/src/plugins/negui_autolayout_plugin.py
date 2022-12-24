@@ -34,7 +34,7 @@ def autoLayout(graphInfoString, autoLayoutInfoString):
     if 'dimensions' in list(graphInfo.keys()) and 'width' in list(graphInfo['dimensions'].keys()) and 'height' in list(graphInfo['dimensions'].keys()):
         dim_scale = 0.5 * min(graphInfo['dimensions']['width'], graphInfo['dimensions']['height'])
         if 'position' in list(graphInfo.keys()) and 'x' in list(graphInfo['position'].keys()) and 'y' in list(graphInfo['position'].keys()):
-            pos_center = [graphInfo['position']['x'] + 0.5 * graphInfo['dimensions']['width'], graphInfo['position']['y'] + 0.5 * graphInfo['dimensions']['height']]
+            pos_center = [graphInfo['position']['x'], graphInfo['position']['y']]
     
     # apply autolayout algorithm
     node_pos = {}

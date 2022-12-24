@@ -20,8 +20,7 @@ void MyNetworkEditorWidget_setGraphInfo(MyNetworkEditorWidget* myNetworkEditorWi
 
 const char* MyNetworkEditorWidget_graphInfo(MyNetworkEditorWidget* myNetworkEditorWidget) {
     if (myNetworkEditorWidget) {
-        QJsonObject object;
-        ((MyInteractor*)myNetworkEditorWidget->interactor())->exportNetworkInfo(object);
+        QJsonObject object = ((MyInteractor*)myNetworkEditorWidget->interactor())->exportNetworkInfo();
         return strdup(QJsonDocument(object).toJson(QJsonDocument::Compact).toStdString().c_str());
     }
     

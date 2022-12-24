@@ -62,6 +62,8 @@ signals:
     
     void elementObject(MyElementBase*);
     
+    void askForCreateChangeStageCommand();
+    
 protected slots:
     
     void displayFeatureMenu();
