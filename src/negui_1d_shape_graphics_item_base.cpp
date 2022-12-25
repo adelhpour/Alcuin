@@ -3,15 +3,11 @@
 // My1DShapeGraphicsItemBase
 
 My1DShapeGraphicsItemBase::My1DShapeGraphicsItemBase() {
-    _endSlope = 0.0;
+    
 }
 
-const qreal My1DShapeGraphicsItemBase::getEndSlope() const {
-    return _endSlope;
-}
-
-QGraphicsItem* My1DShapeGraphicsItemBase::getResizeHandledGraphicsItem() {
-    return NULL;
+const qreal My1DShapeGraphicsItemBase::getEndSlope() {
+    return 0.0;
 }
 
 void My1DShapeGraphicsItemBase::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {

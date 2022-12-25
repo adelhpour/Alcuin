@@ -5,6 +5,8 @@
 #include <QGraphicsItem>
 
 class MyLineGraphicsItem: public My1DShapeGraphicsItemBase, public QGraphicsPathItem {
+    Q_OBJECT
+    
 public:
     
     MyLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
@@ -15,13 +17,31 @@ public:
     
     void setSelectedWithFill(const bool& selected) override;
     
+    const QPointF getStartPoint();
+    
+    const QPointF getControlPoint1();
+    
+    const QPointF getControlPoint2();
+    
+    const QPointF getEndPoint();
+    
+    const qreal getEndSlope() override;
+    
     QRectF getExtents() override;
+    
+    QGraphicsItem* getResizeHandledGraphicsItem() override;
     
     void setZValue(qreal z) override;
     
     void setLine(const QLineF& line) override;
     
-    const qreal calcualteBezierEndSlope(const QPointF& p0, const QPointF& p1, const QPointF& p2, const QPointF& p3) const;
+signals:
+    
+    void lineControlPointAreUpdated();
+    
+public slots:
+    
+    void setControlPoints(const QPointF& controlPoint1, const QPointF& controlPoint2);
 };
 
 #endif

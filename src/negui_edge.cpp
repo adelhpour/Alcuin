@@ -18,6 +18,7 @@ MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* end
     connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+    connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
     if (startNode && endNode) {
         _startNode = startNode;
         ((MyNode*)_startNode)->addEdge(this);
@@ -105,9 +106,12 @@ void MyEdge::updatePoints() {
     QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
-    
+    updateArrowHeadPlacement();
+}
+
+void MyEdge::updateArrowHeadPlacement() {
     if (isSetArrowHead())
-        ((MyArrowHead*)arrowHead())->updatePlacement(endPosition, ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
+        ((MyArrowHead*)arrowHead())->updatePlacement(getEndOfTheLinePosition(endNode(), startNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
 }
 
 void MyEdge::enableNormalMode() {

@@ -4,6 +4,7 @@
 #include "negui_element_base.h"
 
 class MyEdge : public MyElementBase {
+    Q_OBJECT
     
 public:
     
@@ -65,6 +66,10 @@ public:
     
     // write the edge info to the json object
     void write(QJsonObject &json) override;
+    
+public slots:
+    
+    void updateArrowHeadPlacement();
 
 protected:
     MyElementBase* _startNode;

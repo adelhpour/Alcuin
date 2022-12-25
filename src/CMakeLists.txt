@@ -43,6 +43,7 @@ set(gui_sources
 	negui_text_graphics_item.cpp
 	negui_shape_graphics_item_builder.cpp
 	negui_resize_handled_graphics_item.cpp
+	negui_bezier_adjust_handled_graphics_item.cpp
 	negui_parameters.cpp
 	negui_feature_menu.cpp
 	negui_import_tools.cpp
@@ -91,6 +92,7 @@ set(gui_headers
 	negui_text_graphics_item.h
 	negui_shape_graphics_item_builder.h
 	negui_resize_handled_graphics_item.h
+	negui_bezier_adjust_handled_graphics_item.h
 	negui_parameters.h
 	negui_feature_menu.h
 	negui_interfaces.h

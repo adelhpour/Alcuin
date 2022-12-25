@@ -12,6 +12,7 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     MyShapeGraphicsItemBase* item = NULL;
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
+        connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateArrowHeadPlacement()));
         item->setZValue(zValue());
     }
         
@@ -42,6 +43,7 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
 
 void MyEdgeGraphicsItemBase::enableNormalMode() {
     setCursor(Qt::ArrowCursor);
+    clearResizeHandledGraphicsItems();
 }
 
 void MyEdgeGraphicsItemBase::enableAddNodeMode() {
@@ -70,6 +72,27 @@ MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdge
     _initialLine = QLineF(0.0, 0.0, 0.0, 0.0);
     setZValue(0);
 }
+
+void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    MyElementGraphicsItemBase::mousePressEvent(event);
+    if (event->button() == Qt::LeftButton)
+        _mousePressedPosition = event->scenePos();
+}
+
+void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+    if (event->button() == Qt::LeftButton) {
+        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
+            setFocused(true);
+        }
+    }
+}
+
+void MyEdgeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
+    setFocused(false);
+    QGraphicsItem::focusOutEvent(event);
+}
+
 
 // MyEdgeIconGraphicsItem
 

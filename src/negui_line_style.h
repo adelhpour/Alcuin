@@ -12,8 +12,14 @@ public:
     
     const QRectF getShapeExtents() override;
     
+    // set the relative value of p1
+    void setRelativeP1(const QPointF& relativeP1) const;
+    
     // get the relative value of p1
     const QPoint relativeP1() const;
+    
+    // set the relative value of p2
+    void setRelativeP2(const QPointF& relativeP2) const;
     
     // get the relative value of p2
     const QPoint relativeP2() const;

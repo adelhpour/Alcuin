@@ -8,11 +8,9 @@ public:
     
     My1DShapeGraphicsItemBase();
     
-    const qreal getEndSlope() const;
+    virtual const qreal getEndSlope();
     
     virtual void setLine(const QLineF& line) = 0;
-    
-    QGraphicsItem* getResizeHandledGraphicsItem() override;
     
     void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
     
@@ -21,7 +19,6 @@ public slots:
     
 protected:
     QLineF _line;
-    qreal _endSlope;
 };
 
 #endif

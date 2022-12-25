@@ -27,6 +27,10 @@ public:
     void enableSelectEdgeMode() override;
 
     void enableRemoveMode() override;
+    
+signals:
+    
+    void askForUpdateArrowHeadPlacement();
 
 protected:
     QLineF _initialLine;
@@ -38,6 +42,16 @@ class MyEdgeSceneGraphicsItem: public MyEdgeGraphicsItemBase {
 public:
     
     MyEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+    
+protected:
+    
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    
+    void focusOutEvent(QFocusEvent *event) override;
+    
+    QPointF _mousePressedPosition;
 };
 
 class MyEdgeIconGraphicsItem: public MyEdgeGraphicsItemBase {

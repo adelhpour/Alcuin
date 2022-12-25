@@ -27,6 +27,15 @@ const QRectF MyLineStyle::getShapeExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }
 
+void MyLineStyle::setRelativeP1(const QPointF& relativeP1) const {
+    QPoint point;
+    MyParameterBase* parameter = findParameter("ControlPoint1");
+    if (parameter) {
+        ((MyRelativePointParameter*)parameter)->setDefaultValueX(relativeP1.x());
+        ((MyRelativePointParameter*)parameter)->setDefaultValueY(relativeP1.y());
+    }
+}
+
 const QPoint MyLineStyle::relativeP1() const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint1");
@@ -34,6 +43,15 @@ const QPoint MyLineStyle::relativeP1() const {
         point = QPoint(((MyRelativePointParameter*)parameter)->defaultValueX(), ((MyRelativePointParameter*)parameter)->defaultValueY());
     
     return point;
+}
+
+void MyLineStyle::setRelativeP2(const QPointF& relativeP2) const {
+    QPoint point;
+    MyParameterBase* parameter = findParameter("ControlPoint2");
+    if (parameter) {
+        ((MyRelativePointParameter*)parameter)->setDefaultValueX(relativeP2.x());
+        ((MyRelativePointParameter*)parameter)->setDefaultValueY(relativeP2.y());
+    }
 }
 
 const QPoint MyLineStyle::relativeP2() const {

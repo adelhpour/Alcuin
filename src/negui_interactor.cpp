@@ -421,6 +421,8 @@ void MyInteractor::addEdge(MyElementBase* e) {
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
+        connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdge*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdge*)e)->arrowHead()->graphicsItem());
