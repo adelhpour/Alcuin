@@ -42,8 +42,8 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
 }
 
 void MyEdgeGraphicsItemBase::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::ArrowCursor);
-    clearResizeHandledGraphicsItems();
 }
 
 void MyEdgeGraphicsItemBase::enableAddNodeMode() {

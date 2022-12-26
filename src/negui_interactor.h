@@ -139,6 +139,8 @@ public slots:
     void enableSelectEdgeMode(const QString& edgeCategory = "");
     void enableRemoveMode();
     
+    void clearElementsResizeHandledGraphicsItems();
+    
 private slots:
         
     void readFromFile(MyPluginItemBase* importTool);

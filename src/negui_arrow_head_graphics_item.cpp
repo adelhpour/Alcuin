@@ -24,6 +24,7 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
 }
 
 void MyArrowHeadGraphicsItemBase::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::ArrowCursor);
 }
 

@@ -318,6 +318,7 @@ void MyInteractor::addNode(MyElementBase* n) {
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
+        connect(n->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
         emit askForAddGraphicsItem(n->graphicsItem());
     }
 }
@@ -423,6 +424,7 @@ void MyInteractor::addEdge(MyElementBase* e) {
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
+        connect(e->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdge*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdge*)e)->arrowHead()->graphicsItem());
@@ -665,6 +667,13 @@ void MyInteractor::enableRemoveMode() {
         edge->enableRemoveMode();
     
     emit askForSetToolTip("Select Item");
+}
+
+void MyInteractor::clearElementsResizeHandledGraphicsItems() {
+    for (MyElementBase *node : qAsConst(nodes()))
+        node->graphicsItem()->clearResizeHandledGraphicsItems();
+    for (MyElementBase *edge : qAsConst(edges()))
+        edge->graphicsItem()->clearResizeHandledGraphicsItems();
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {

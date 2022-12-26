@@ -7,6 +7,8 @@
 MyElementGraphicsItemBase::MyElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
+    connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearResizeHandledGraphicsItems()));
+    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForClearResizeHandledGraphicsItems()));
 }
 
 void MyElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
@@ -54,7 +56,6 @@ QList<QGraphicsItem*> MyElementGraphicsItemBase::createResizeHandledGraphicsItem
 }
 
 void MyElementGraphicsItemBase::addResizeHandledGraphicsItems() {
-    clearResizeHandledGraphicsItems();
     _resizeHandledGraphicsItems = createResizeHandledGraphicsItems();
     for (QGraphicsItem* item : _resizeHandledGraphicsItems)
         emit askForAddGraphicsItem(item);
@@ -139,6 +140,10 @@ void MyElementGraphicsItemBase::setZValue(qreal z) {
     for (QGraphicsItem* item : childItems())
         item->setZValue(item->zValue() + (z - zValue()));
     QGraphicsItemGroup::setZValue(z);
+}
+
+void MyElementGraphicsItemBase::enableNormalMode() {
+    clearResizeHandledGraphicsItems();
 }
 
 void MyElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {

@@ -42,7 +42,7 @@ public:
     
     void setZValue(qreal z);
     
-    virtual void enableNormalMode() = 0;
+    virtual void enableNormalMode();
     
     virtual void enableAddNodeMode() = 0;
     
@@ -61,6 +61,7 @@ signals:
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
+    void askForClearResizeHandledGraphicsItems();
     
 protected:
     

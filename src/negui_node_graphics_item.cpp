@@ -31,9 +31,9 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
 }
 
 void MyNodeGraphicsItemBase::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);
-    clearResizeHandledGraphicsItems();
 }
 
 void MyNodeGraphicsItemBase::enableAddNodeMode() {
