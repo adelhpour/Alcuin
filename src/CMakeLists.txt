@@ -16,11 +16,14 @@ set(gui_sources
 	negui_edge.cpp
 	negui_arrow_head.cpp
 	negui_element_builder.cpp
+	negui_new_edge_builder.cpp
 	negui_element_style_base.cpp
+	negui_template_style.cpp
 	negui_node_style.cpp
 	negui_edge_style.cpp
 	negui_arrow_head_style.cpp
 	negui_element_style_builder.cpp
+	negui_element_icon_builder.cpp
 	negui_element_graphics_item_base.cpp
 	negui_node_graphics_item.cpp
 	negui_edge_graphics_item.cpp
@@ -65,11 +68,14 @@ set(gui_headers
 	negui_edge.h
 	negui_arrow_head.h
 	negui_element_builder.h
+	negui_new_edge_builder.h
 	negui_element_style_base.h
+	negui_template_style.h
 	negui_node_style.h
 	negui_edge_style.h
 	negui_arrow_head_style.h
 	negui_element_style_builder.h
+	negui_element_icon_builder.h
 	negui_element_graphics_item_base.h
 	negui_node_graphics_item.h
 	negui_edge_graphics_item.h

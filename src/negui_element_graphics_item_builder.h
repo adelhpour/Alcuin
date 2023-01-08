@@ -9,10 +9,10 @@ MyElementGraphicsItemBase* createEdgeSceneGraphicsItem();
 
 MyElementGraphicsItemBase* createArrowHeadSceneGraphicsItem();
 
-MyElementGraphicsItemBase* createNodeIconGraphicsItem();
+MyElementGraphicsItemBase* createNodeIconGraphicsItem(const QPointF& position);
 
-MyElementGraphicsItemBase* createEdgeIconGraphicsItem();
+MyElementGraphicsItemBase* createEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint);
 
-MyElementGraphicsItemBase* createArrowHeadIconGraphicsItem();
+MyElementGraphicsItemBase* createArrowHeadIconGraphicsItem(const QPointF& position, const qreal& rotation);
 
 #endif

@@ -2,6 +2,7 @@
 #include "negui_node.h"
 #include "negui_edge.h"
 #include "negui_element_builder.h"
+#include "negui_new_edge_builder.h"
 #include "negui_element_style_builder.h"
 #include "negui_plugin_item_builder.h"
 #include "negui_import_tools.h"
@@ -34,12 +35,11 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     _autoLayoutInterface = NULL;
     _isSetAutoLayoutInterface = false;
     
-    // element styles
-    _nodeStyle = NULL;
-    _edgeStyle = NULL;
-    
     // undo stack
     _undoStack = new MyUndoStack(this);
+    
+    // builder
+    _newEdgeBuilder = NULL;
     
     loadPlugins();
     resetNetwork();
@@ -233,7 +233,6 @@ void MyInteractor::createChangeStageCommand() {
 
 void MyInteractor::setMode(SceneMode mode) {
     _mode = mode;
-    unSetSelectedEdgeStartNode();
 }
 
 MyInteractor::SceneMode MyInteractor::mode() {
@@ -248,8 +247,6 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
 }
 
 void MyInteractor::resetNetwork() {
-    _selectedEdgeStartNode = NULL;
-    _isSetSelectedEdgeStartNode = false;
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
@@ -298,10 +295,9 @@ void MyInteractor::addNodes(const QJsonObject &json) {
 void MyInteractor::addNode(const QJsonObject &json) {
     MyElementBase* node = createNode(json);
     if (node) {
-        connect(node, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         MyElementStyleBase* style = createNodeStyle(json);
         if (!style)
-            style = getCopyNodeStyle(node->name() + "_style");
+            style = getCopyNodeStyle(node->name() + "_style", nodeStyle());
         node->setStyle(style);
         addNode(node);
     }
@@ -316,6 +312,7 @@ void MyInteractor::addNode(MyElementBase* n) {
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectNode(MyElementBase*)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(addNewEdge(MyElementBase*)));
         connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
@@ -325,9 +322,8 @@ void MyInteractor::addNode(MyElementBase* n) {
 
 void MyInteractor::addNewNode(const QPointF& position) {
     if (mode() == ADD_NODE_MODE) {
-        MyElementBase* node = createNode(getElementUniqueId(nodes(), nodeStyle()->category()), position.x(), position.y());
-        connect(node, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-        node->setStyle(getCopyNodeStyle(node->name() + "_style"));
+        MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), position.x(), position.y());
+        node->setStyle(getCopyNodeStyle(node->name() + "_style", nodeStyle()));
         addNode(node);
         createChangeStageCommand();
     }
@@ -378,18 +374,12 @@ void MyInteractor::clearNodesInfo() {
 void MyInteractor::setNodeStyle(MyElementStyleBase* style) {
     if (style)
         _nodeStyle = style;
+    else
+        _nodeStyle = NULL;
 }
 
 MyElementStyleBase* MyInteractor::nodeStyle() {
     return _nodeStyle;
-}
-
-MyElementStyleBase* MyInteractor::getCopyNodeStyle(const QString& name) {
-    QJsonObject styleObject;
-    nodeStyle()->write(styleObject);
-    MyElementStyleBase* style = createNodeStyle(name);
-    style->read(styleObject);
-    return style;
 }
 
 QList<MyElementBase*>& MyInteractor::edges() {
@@ -409,7 +399,7 @@ void MyInteractor::addEdge(const QJsonObject &json) {
     if (edge) {
         MyElementStyleBase* style = createEdgeStyle(json);
         if (!style)
-            style = getCopyEdgeStyle(edge->name() + "_style");
+            style = getCopyEdgeStyle(edge->name() + "_style", edgeStyle());
         edge->setStyle(style);
         ((MyEdge*)edge)->connectToNodes(true);
         addEdge(edge);
@@ -422,6 +412,7 @@ void MyInteractor::addEdge(MyElementBase* e) {
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
@@ -433,15 +424,21 @@ void MyInteractor::addEdge(MyElementBase* e) {
 
 void MyInteractor::addNewEdge(MyElementBase* element) {
     if (mode() == ADD_EDGE_MODE) {
-        if (!isSetSelectedEdgeStartNode() && isConnectableToStartNode(edgeStyle(), element)) {
-            setSelectedEdgeStartNode(element);
+        if (!_newEdgeBuilder) {
+            if (edgeStyle()->type() == "templatestyle") {
+                _newEdgeBuilder = new MyNewTemplateBuilder(edgeStyle());
+                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForAddNode, this, [this] (MyElementBase* node) { this->addNode(node); });
+                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForNodeUniqueName, this, [this] (MyElementStyleBase* nodeStyle) { return getElementUniqueName(this->nodes(), nodeStyle->category()); });
+            }
+            else
+                _newEdgeBuilder = new MyNewEdgeBuilder(edgeStyle());
+            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForAddEdge, this, [this] (MyElementBase* edge) { this->addEdge(edge); });
+            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForEdgeUniqueName, this, [this] (MyElementStyleBase* edgeStyle) { return getElementUniqueName(this->edges(), edgeStyle->category()); });
         }
-        else if (selectedEdgeStartNode() && selectedEdgeStartNode() != element && !edgeExists(selectedEdgeStartNode(), element) && isConnectableToEndNode(edgeStyle(), element)) {
-            MyElementBase* edge = createEdge(getElementUniqueId(edges(), edgeStyle()->category()), selectedEdgeStartNode(), element);
-            edge->setStyle(getCopyEdgeStyle(edge->name() + "_style"));
-            ((MyEdge*)edge)->connectToNodes(true);
-            addEdge(edge);
-            unSetSelectedEdgeStartNode();
+        ((MyNewEdgeBuilderBase*)_newEdgeBuilder)->build(element);
+        emit askForSetToolTip(((MyNewEdgeBuilderBase*)_newEdgeBuilder)->toolTipText());
+        if (((MyNewEdgeBuilderBase*)_newEdgeBuilder)->isNewEdgeBuilt()) {
+            deleteNewEdgeBuilder();
             createChangeStageCommand();
         }
     }
@@ -465,46 +462,25 @@ void MyInteractor::clearEdgesInfo() {
 void MyInteractor::setEdgeStyle(MyElementStyleBase* style) {
     if (style)
         _edgeStyle = style;
+    else
+        _edgeStyle = NULL;
 }
 
 MyElementStyleBase* MyInteractor::edgeStyle() {
     return _edgeStyle;
 }
 
-MyElementStyleBase* MyInteractor::getCopyEdgeStyle(const QString& name) {
-    QJsonObject styleObject;
-    edgeStyle()->write(styleObject);
-    MyElementStyleBase* style = createEdgeStyle(name);
-    style->read(styleObject);
-    return style;
-}
-
-void MyInteractor::setSelectedEdgeStartNode(MyElementBase* n) {
-    if (n) {
-        emit askForSetToolTip(edgeStyle()->alternativeToolTipText());
-        _selectedEdgeStartNode = n;
-        _isSetSelectedEdgeStartNode = true;
-        selectedEdgeStartNode()->setSelected(true);
-    }
-}
-
-void MyInteractor::unSetSelectedEdgeStartNode() {
-    if (selectedEdgeStartNode()) {
-        selectedEdgeStartNode()->setSelected(false);
-        emit askForSetToolTip(edgeStyle()->toolTipText());
-    }
-    _selectedEdgeStartNode = NULL;
-    _isSetSelectedEdgeStartNode = false;
-}
-
-MyElementBase* MyInteractor::selectedEdgeStartNode() {
-    return _selectedEdgeStartNode;
+void MyInteractor::deleteNewEdgeBuilder() {
+    for (MyElementBase* selectedNode : selectedNodes())
+        selectedNode->setSelected(false);
+    if (_newEdgeBuilder)
+        _newEdgeBuilder->deleteLater();
+    _newEdgeBuilder = NULL;
 }
 
 bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
     for (MyElementBase *edge : qAsConst(edges())) {
         if ((((MyEdge*)edge)->startNode() == n1 && ((MyEdge*)edge)->endNode() == n2) || (((MyEdge*)edge)->startNode() == n2 && ((MyEdge*)edge)->endNode() == n1)) {
-            unSetSelectedEdgeStartNode();
             return true;
         }
     }
@@ -568,7 +544,6 @@ void MyInteractor::selectEdge(MyElementBase* element) {
 
 void MyInteractor::removeItem(MyElementBase* element) {
     if (mode() == REMOVE_MODE) {
-        QUndoCommand *removeCommand = NULL;
         if (element->type() == MyElementBase::NODE_ELEMENT) {
             removeNode(element);
             for (MyElementBase *edge : qAsConst(((MyNode*)element)->edges()))
@@ -582,28 +557,31 @@ void MyInteractor::removeItem(MyElementBase* element) {
     }
 }
 
-const QList<QString> MyInteractor::selectedNodes() {
-    QList<QString> selectedNodesNames;
+const QList<MyElementBase*> MyInteractor::selectedNodes() {
+    QList<MyElementBase*> selectedNodesList;
     for (MyElementBase *node : qAsConst(nodes())) {
-        if (node->graphicsItem()->isSelected())
-            selectedNodesNames.push_back(node->name());
+        if (node->isSelected())
+            selectedNodesList.push_back(node);
     }
     
-    return selectedNodesNames;
+    return selectedNodesList;
 }
 
-const QList<QString> MyInteractor::selectedEdges() {
-    QList<QString> selectedEdgesNames;
+const QList<MyElementBase*> MyInteractor::selectedEdges() {
+    QList<MyElementBase*> selectedEdgesList;
     for (MyElementBase *edge : qAsConst(edges())) {
-        if (edge->graphicsItem()->isSelected())
-            selectedEdgesNames.push_back(edge->name());
+        if (edge->isSelected())
+            selectedEdgesList.push_back(edge);
     }
     
-    return selectedEdgesNames;
+    return selectedEdgesList;
 }
 
 void MyInteractor::enableNormalMode() {
     setMode(NORMAL_MODE);
+    setNodeStyle(NULL);
+    setEdgeStyle(NULL);
+    deleteNewEdgeBuilder();
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
     for (MyElementBase *edge : qAsConst(edges()))
@@ -824,15 +802,21 @@ QList<QToolButton*> MyInteractor::populateAddElementMenu() {
     for (QString category : pluginsCategories) {
         QList<MyPluginItemBase*> nodeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category);
         QList<MyPluginItemBase*> edgeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "edgestyle"), category);
+        QList<MyPluginItemBase*> templateStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "templatestyle"), category);
         MyToolButtonMenu* subMenu = new MyToolButtonMenu();
         // node
         if (nodeStylesOfCategory.size())
             subMenu->addAction(createNodeStyleWidgetAction(nodeStylesOfCategory, subMenu));
-        if (nodeStylesOfCategory.size() && edgeStylesOfCategory.size())
+        if (nodeStylesOfCategory.size() && (edgeStylesOfCategory.size() || templateStylesOfCategory.size()))
             subMenu->addSeparator();
         // edge
         if (edgeStylesOfCategory.size())
             subMenu->addAction(createEdgeStyleWidgetAction(edgeStylesOfCategory, subMenu));
+        if (edgeStylesOfCategory.size() && templateStylesOfCategory.size())
+            subMenu->addSeparator();
+        // template
+        if (templateStylesOfCategory.size())
+            subMenu->addAction(createEdgeStyleWidgetAction(templateStylesOfCategory, subMenu));
         buttons.push_back(createPluginItemToolButton(subMenu, category));
     }
     
@@ -1043,16 +1027,16 @@ MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json)
     return NULL;
 }
 
-QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaultIdSection) {
+QString getElementUniqueName(QList<MyElementBase*> elements, const QString& defaultNameSection) {
     QString name;
     qreal k = 0;
-    bool isSimilarIdFound = true;
-    while(isSimilarIdFound) {
-        name = defaultIdSection + "_" + QString::number(k);
-        isSimilarIdFound = false;
+    bool isSimilarNameFound = true;
+    while(isSimilarNameFound) {
+        name = defaultNameSection + "_" + QString::number(k);
+        isSimilarNameFound = false;
         for (MyElementBase *element : qAsConst(elements)) {
             if (element->name() == name) {
-                isSimilarIdFound = true;
+                isSimilarNameFound = true;
                 break;
             }
         }
@@ -1062,10 +1046,18 @@ QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaul
     return name;
 }
 
-bool isConnectableToStartNode(MyElementStyleBase* edgeStyle, MyElementBase* node) {
-    return edgeStyle->isConnectableToStartNodeCategory(node->style()->category()) ? true : false;
+MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* nodeStyle) {
+    QJsonObject styleObject;
+    nodeStyle->write(styleObject);
+    MyElementStyleBase* style = createNodeStyle(name);
+    style->read(styleObject);
+    return style;
 }
 
-bool isConnectableToEndNode(MyElementStyleBase* edgeStyle, MyElementBase* node) {
-    return edgeStyle->isConnectableToEndNodeCategory(node->style()->category()) ? true : false;
+MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle) {
+    QJsonObject styleObject;
+    edgeStyle->write(styleObject);
+    MyElementStyleBase* style = createEdgeStyle(name);
+    style->read(styleObject);
+    return style;
 }

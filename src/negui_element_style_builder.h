@@ -13,4 +13,6 @@ MyElementStyleBase* createEdgeStyle(const QJsonObject &json);
 
 MyElementStyleBase* createArrowHeadStyle(const QString& name);
 
+MyElementStyleBase* createTemplateStyle(const QString& name);
+
 #endif

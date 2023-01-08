@@ -1,5 +1,6 @@
 #include "negui_node.h"
 #include "negui_edge.h"
+#include "negui_node_style.h"
 #include "negui_element_graphics_item_builder.h"
 #include "negui_node_graphics_item.h"
 #include <QJsonObject>
@@ -50,6 +51,7 @@ void MyNode::updateGraphicsItem() {
 }
 
 void MyNode::setSelected(const bool& selected) {
+    MyElementBase::setSelected(selected);
     if (selected)
         graphicsItem()->setSelectedWithFill(selected);
     else {
@@ -125,8 +127,8 @@ void MyNode::deparent() {
 void MyNode::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     deparent();
-    if (parentNode && parentNode->style()->isConvertibleToParentCategory(style()->parentCategories())) {
-        parentNode->style()->convertToParentCategory();
+    if (parentNode && ((MyNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyle*)style())->parentCategories())) {
+        ((MyNodeStyle*)parentNode->style())->convertToParentCategory();
         setParentNode((MyNode*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
         ((MyNode*)parentNode)->adjustExtents();
@@ -218,10 +220,10 @@ QWidget* MyNode::getFeatureMenu() {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
     
     // add remove buttons
-    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), style()->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(style()->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+    connect(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
     
     return featureMenu;
 }

@@ -104,4 +104,4 @@ QGraphicsItem* MyRectGraphicsItem::getResizeHandledGraphicsItem() {
 
 void MyRectGraphicsItem::setZValue(qreal z) {
     QGraphicsItem::setZValue(z);
-};
+}

@@ -59,16 +59,13 @@ void MyEdge::setStyle(MyElementStyleBase* style) {
 }
 
 void MyEdge::setSelected(const bool& selected) {
+    MyElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);
     if (!selected)
         graphicsItem()->setSelectedWithFill(selected);
         
-    if (isSetArrowHead()) {
-        arrowHead()->graphicsItem()->setSelectedWithStroke(selected);
-        
-        if (!selected)
-            arrowHead()->graphicsItem()->setSelectedWithFill(selected);
-    }
+    if (isSetArrowHead())
+        arrowHead()->setSelected(selected);
 }
 
 MyElementBase* MyEdge::arrowHead() {

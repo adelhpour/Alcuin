@@ -44,15 +44,15 @@ public:
     
     virtual void enableNormalMode();
     
-    virtual void enableAddNodeMode() = 0;
+    virtual void enableAddNodeMode();
     
-    virtual void enableSelectNodeMode() = 0;
+    virtual void enableSelectNodeMode();
     
-    virtual void enableAddEdgeMode() = 0;
+    virtual void enableAddEdgeMode();
     
-    virtual void enableSelectEdgeMode() = 0;
+    virtual void enableSelectEdgeMode();
     
-    virtual void enableRemoveMode() = 0;
+    virtual void enableRemoveMode();
     
 signals:
     

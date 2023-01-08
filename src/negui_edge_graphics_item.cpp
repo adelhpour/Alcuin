@@ -12,7 +12,6 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     MyShapeGraphicsItemBase* item = NULL;
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateArrowHeadPlacement()));
         item->setZValue(zValue());
     }
         
@@ -41,36 +40,36 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
     return endSlope;
 }
 
-void MyEdgeGraphicsItemBase::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyEdgeGraphicsItemBase::enableAddNodeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyEdgeGraphicsItemBase::enableSelectNodeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyEdgeGraphicsItemBase::enableAddEdgeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyEdgeGraphicsItemBase::enableSelectEdgeMode() {
-    setCursor(Qt::PointingHandCursor);
-}
-
-void MyEdgeGraphicsItemBase::enableRemoveMode() {
-    setCursor(Qt::PointingHandCursor);
-}
-
 // MyEdgeSceneGraphicsItem
 
 MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
     _initialLine = QLineF(0.0, 0.0, 0.0, 0.0);
     setZValue(0);
+}
+
+void MyEdgeSceneGraphicsItem::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeSceneGraphicsItem::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeSceneGraphicsItem::enableSelectNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeSceneGraphicsItem::enableAddEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
+    setCursor(Qt::PointingHandCursor);
+}
+
+void MyEdgeSceneGraphicsItem::enableRemoveMode() {
+    setCursor(Qt::PointingHandCursor);
 }
 
 void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -96,6 +95,11 @@ void MyEdgeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
 
 // MyEdgeIconGraphicsItem
 
-MyEdgeIconGraphicsItem::MyEdgeIconGraphicsItem(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
-    _initialLine = QLineF(0.0, 0.0, 60.0, 0.0);
+MyEdgeIconGraphicsItem::MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
+    _initialLine = QLineF(startPoint, endPoint);
+}
+
+void MyEdgeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    for (QGraphicsItem* item : childItems())
+        item->paint(painter, option, widget);
 }

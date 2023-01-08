@@ -16,18 +16,6 @@ public:
     
     const qreal getEndSlope() const;
     
-    void enableNormalMode() override;
-
-    void enableAddNodeMode() override;
-    
-    void enableSelectNodeMode() override;
-
-    void enableAddEdgeMode() override;
-
-    void enableSelectEdgeMode() override;
-
-    void enableRemoveMode() override;
-    
 signals:
     
     void askForUpdateArrowHeadPlacement();
@@ -42,6 +30,18 @@ class MyEdgeSceneGraphicsItem: public MyEdgeGraphicsItemBase {
 public:
     
     MyEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+    
+    void enableNormalMode() override;
+
+    void enableAddNodeMode() override;
+    
+    void enableSelectNodeMode() override;
+
+    void enableAddEdgeMode() override;
+
+    void enableSelectEdgeMode() override;
+
+    void enableRemoveMode() override;
     
 protected:
     
@@ -59,7 +59,9 @@ class MyEdgeIconGraphicsItem: public MyEdgeGraphicsItemBase {
     
 public:
     
-    MyEdgeIconGraphicsItem(QGraphicsItem *parent = nullptr);
+    MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent = nullptr);
+    
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };
 
 #endif

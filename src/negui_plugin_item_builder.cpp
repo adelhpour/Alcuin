@@ -15,6 +15,8 @@ MyPluginItemBase* createPluginItem(const QString& name, const QString& type) {
         return createNodeStyle(name);
     else if (type == "edgestyle")
         return createEdgeStyle(name);
+    else if (type == "templatestyle")
+        return createTemplateStyle(name);
     else if (type == "autolayoutengine")
         return createAutoLayoutEngine(name);
     

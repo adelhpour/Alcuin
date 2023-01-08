@@ -11,6 +11,16 @@ public:
     MyArrowHeadGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+};
+
+class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {
+    Q_OBJECT
+    
+public:
+    
+    MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+    
+    void update(const QPointF& position, const qreal& rotation);
     
     void enableNormalMode() override;
 
@@ -25,22 +35,17 @@ public:
     void enableRemoveMode() override;
 };
 
-class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {
-    Q_OBJECT
-    
-public:
-    
-    MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent = nullptr);
-    
-    void update(const QPointF& position, const qreal& rotation);
-};
-
 class MyArrowHeadIconGraphicsItem : public MyArrowHeadGraphicsItemBase {
     Q_OBJECT
     
 public:
     
-    MyArrowHeadIconGraphicsItem(QGraphicsItem *parent = nullptr);
+    MyArrowHeadIconGraphicsItem(const QPointF& position, const qreal& rotation, QGraphicsItem *parent = nullptr);
+    
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    
+protected:
+    qreal _rotation;
 };
 
 #endif

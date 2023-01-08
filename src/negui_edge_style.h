@@ -10,13 +10,15 @@ public:
     
     const QString type() const override;
     
-    QList<QString> connectableStartNodeCategories();
+    bool isConnectableToNodeCategory(const QString& connectedNodeCategory, const QString& connectToNodeAs);
     
-    bool isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory) override;
+    bool isConnectableToSourceNodeCategory(const QString& connectedSourceNodeCategory);
     
-    QList<QString> connectableEndNodeCategories();
+    bool isConnectableToTargetNodeCategory(const QString& connectedRTargetNodeCategory);
     
-    bool isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory) override;
+    QList<QString> connectableSourceNodeCategories();
+    
+    QList<QString> connectableTargetNodeCategories();
     
     MyElementStyleBase* arrowHeadStyle();
     
@@ -24,11 +26,15 @@ public:
     
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
-    QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
+    QObject* createIconBuilder() override;
     
     const QString toolTipText() override;
     
-    const QString alternativeToolTipText() override;
+    const QString toolTipText(const QString& connectToNodeAs);
+    
+    const QString sourceToolTipText();
+    
+    const QString targetToolTipText();
     
     void read(const QJsonObject &json) override;
     
@@ -36,18 +42,8 @@ public:
 
 protected:
     MyElementStyleBase* _arrowHeadStyle;
-    QList<QString> _connectableStartNodeCategories;
-    QList<QString> _connectableEndNodeCategories;
-};
-
-class MyAddRemoveEdgeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {
-    Q_OBJECT
-    
-public:
-    
-    MyAddRemoveEdgeShapeStylesButtons(QWidget* parent = nullptr);
-    
-    virtual void setAddingMenu() override;
+    QList<QString> _connectableSourceNodeCategories;
+    QList<QString> _connectableTargetNodeCategories;
 };
 
 #endif

@@ -6,6 +6,7 @@
 MyElementBase::MyElementBase(const QString& name) : MyBase(name) {
     _style = NULL;
     _isActive = false;
+    _isSelected = false;
 }
 
 MyElementGraphicsItemBase* MyElementBase::graphicsItem() {
@@ -39,8 +40,12 @@ bool MyElementBase::setActive(const bool& active) {
     return _isActive = active;
 }
 
+void MyElementBase::setSelected(const bool& selected) {
+    _isSelected = selected;
+}
+
 const bool MyElementBase::isSelected() {
-    return graphicsItem()->isSelected();
+    return _isSelected;
 }
 
 void MyElementBase::enableNormalMode() {

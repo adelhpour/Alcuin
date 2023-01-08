@@ -14,11 +14,30 @@ public:
     
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
-    QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
+    QObject* createIconBuilder() override;
     
     const QString toolTipText() override;
     
-    const QString alternativeToolTipText() override;
+    const QString& convertibleParentCategory() const;
+    
+    bool isConvertibleToParentCategory(QList<QString> parentCategories);
+    
+    void convertToParentCategory();
+    
+    QList<QString> parentCategories();
+    
+    QWidget* getAddRemoveShapeStylesButtons();
+    
+    // read the element style info from the json object
+    void read(const QJsonObject &json) override;
+    
+    // write the element style info to the json object
+    void write(QJsonObject &json) override;
+    
+protected:
+    QString _convertibleParentCategory;
+    QList<QString> _parentCategories;
+    QWidget* _addRemoveShapeStylesButtons;
 };
 
 class MyAddRemoveNodeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

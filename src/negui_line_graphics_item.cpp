@@ -75,7 +75,7 @@ const qreal MyLineGraphicsItem::getEndSlope() {
 }
 
 QRectF MyLineGraphicsItem::getExtents() {
-    return boundingRect();
+    return path().boundingRect();
 }
 
 QGraphicsItem* MyLineGraphicsItem::getResizeHandledGraphicsItem() {

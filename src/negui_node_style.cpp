@@ -1,6 +1,7 @@
 #include "negui_node_style.h"
 #include "negui_shape_style_builder.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_element_icon_builder.h"
+#include <QJsonArray>
 
 // MyNodeStyle
 
@@ -37,23 +38,63 @@ MyShapeStyleBase* MyNodeStyle::createShapeStyle(const QString& shape) {
     return NULL;
 }
 
-QList<MyElementGraphicsItemBase*>  MyNodeStyle::getElementIconGraphicsItems() {
-    QList<MyElementGraphicsItemBase*> items;
-    
-    // node style
-    MyElementGraphicsItemBase* nodeIconItem = createNodeIconGraphicsItem();
-    nodeIconItem->addShapeItems(shapeStyles());
-    items.push_back(nodeIconItem);
-    
-    return items;
+QObject* MyNodeStyle::createIconBuilder() {
+    return new MyNodeIconBuilder(this);
 }
 
 const QString MyNodeStyle::toolTipText() {
     return "Add " + category();
 }
 
-const QString MyNodeStyle::alternativeToolTipText() {
-    return "Add " + category();
+const QString& MyNodeStyle::convertibleParentCategory() const {
+    return _convertibleParentCategory;
+}
+
+bool MyNodeStyle::isConvertibleToParentCategory(QList<QString> parentCategories) {
+    for (QString parentCategory : parentCategories) {
+        if (parentCategory == _convertibleParentCategory)
+            return true;
+    }
+    
+    return false;
+}
+
+void MyNodeStyle::convertToParentCategory() {
+    _category = convertibleParentCategory();
+}
+
+QList<QString> MyNodeStyle::parentCategories() {
+    return _parentCategories;
+}
+
+QWidget* MyNodeStyle::getAddRemoveShapeStylesButtons() {
+    return _addRemoveShapeStylesButtons;
+}
+
+void MyNodeStyle::read(const QJsonObject &json) {
+    MyElementStyleBase::read(json);
+    _convertibleParentCategory.clear();
+    if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
+        _convertibleParentCategory = json["convertible-parent-category"].toString();
+
+    _parentCategories.clear();
+    if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
+        QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
+        for (int parentCategoryIndex = 0; parentCategoryIndex < parentCategoriesArray.size(); ++parentCategoryIndex) {
+            if (parentCategoriesArray[parentCategoryIndex].isString())
+                _parentCategories.push_back(parentCategoriesArray[parentCategoryIndex].toString());
+        }
+    }
+}
+
+void MyNodeStyle::write(QJsonObject &json) {
+    MyElementStyleBase::write(json);
+    json["convertible-parent-category"] = convertibleParentCategory();
+    
+    QJsonArray parentCategoriesArray;
+    for (QString parentCategory : parentCategories())
+        parentCategoriesArray.append(parentCategory);
+    json["parent-categories"] = parentCategoriesArray;
 }
 
 // MyAddRemoveNodeShapeStylesButtons

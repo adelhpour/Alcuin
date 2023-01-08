@@ -1,5 +1,6 @@
 #include "negui_arrow_head.h"
 #include "negui_edge.h"
+#include "negui_arrow_head_style.h"
 #include "negui_element_graphics_item_builder.h"
 #include "negui_arrow_head_graphics_item.h"
 #include <QJsonObject>
@@ -41,10 +42,11 @@ void MyArrowHead::updatePlacement(const QPointF& position, const qreal& slope) {
 }
 
 void MyArrowHead::setSelected(const bool& selected) {
-    graphicsItem()->setSelectedWithFill(selected);
+    MyElementBase::setSelected(selected);
+    graphicsItem()->setSelectedWithStroke(selected);
     
     if (!selected)
-        graphicsItem()->setSelectedWithStroke(selected);
+        graphicsItem()->setSelectedWithFill(selected);
 }
 
 const QRectF MyArrowHead::getExtents() {
@@ -64,10 +66,10 @@ QWidget* MyArrowHead::getFeatureMenu() {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
     
     // add remove buttons
-    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(style()->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), style()->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(style()->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+    connect(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
     
     return featureMenu;
 }

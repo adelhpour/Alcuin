@@ -15,14 +15,14 @@ MyElementGraphicsItemBase* createArrowHeadSceneGraphicsItem() {
     return new MyArrowHeadSceneGraphicsItem();
 }
 
-MyElementGraphicsItemBase* createNodeIconGraphicsItem() {
-    return new MyNodeIconGraphicsItem();
+MyElementGraphicsItemBase* createNodeIconGraphicsItem(const QPointF& position) {
+    return new MyNodeIconGraphicsItem(position);
 }
 
-MyElementGraphicsItemBase* createEdgeIconGraphicsItem() {
-    return new MyEdgeIconGraphicsItem();
+MyElementGraphicsItemBase* createEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint) {
+    return new MyEdgeIconGraphicsItem(startPoint, endPoint);
 }
 
-MyElementGraphicsItemBase* createArrowHeadIconGraphicsItem() {
-    return new MyArrowHeadIconGraphicsItem();
+MyElementGraphicsItemBase* createArrowHeadIconGraphicsItem(const QPointF& position, const qreal& rotation) {
+    return new MyArrowHeadIconGraphicsItem(position, rotation);
 }

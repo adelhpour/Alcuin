@@ -146,6 +146,26 @@ void MyElementGraphicsItemBase::enableNormalMode() {
     clearResizeHandledGraphicsItems();
 }
 
+void MyElementGraphicsItemBase::enableAddNodeMode() {
+    
+}
+
+void MyElementGraphicsItemBase::enableSelectNodeMode() {
+    
+}
+
+void MyElementGraphicsItemBase::enableAddEdgeMode() {
+    
+}
+
+void MyElementGraphicsItemBase::enableSelectEdgeMode() {
+    
+}
+
+void MyElementGraphicsItemBase::enableRemoveMode() {
+    
+}
+
 void MyElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {

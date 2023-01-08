@@ -81,7 +81,6 @@ public:
     void clearNodesInfo();
     void setNodeStyle(MyElementStyleBase* style);
     MyElementStyleBase* nodeStyle();
-    MyElementStyleBase* getCopyNodeStyle(const QString& name);
     
     // edges
     QList<MyElementBase*>& edges();
@@ -92,11 +91,7 @@ public:
     void clearEdgesInfo();
     void setEdgeStyle(MyElementStyleBase* style);
     MyElementStyleBase* edgeStyle();
-    MyElementStyleBase* getCopyEdgeStyle(const QString& name);
-    void setSelectedEdgeStartNode(MyElementBase* n);
-    void unSetSelectedEdgeStartNode();
-    MyElementBase* selectedEdgeStartNode();
-    const bool isSetSelectedEdgeStartNode() const { return _isSetSelectedEdgeStartNode; }
+    void deleteNewEdgeBuilder();
     bool edgeExists(MyElementBase* n1, MyElementBase* n2);
     
 signals:
@@ -109,8 +104,7 @@ signals:
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
-    void nodeIsSelected(const QString& nodeName);
-    void edgeIsSelected(const QString& edgeName);
+    
     void enterKeyIsPressed();
     
 public slots:
@@ -128,8 +122,8 @@ public slots:
     void addNewEdge(MyElementBase* element);
     void selectEdge(MyElementBase* element);
     void removeItem(MyElementBase* element);
-    const QList<QString> selectedNodes();
-    const QList<QString> selectedEdges();
+    const QList<MyElementBase*> selectedNodes();
+    const QList<MyElementBase*> selectedEdges();
     
     // modes
     void enableNormalMode();
@@ -208,8 +202,9 @@ protected:
     // elements
     QList<MyElementBase*> _nodes;
     QList<MyElementBase*> _edges;
-    MyElementBase* _selectedEdgeStartNode;
-    bool _isSetSelectedEdgeStartNode;
+    
+    // builder
+    QObject* _newEdgeBuilder;
     
     // network
     QRectF _networkExtents;
@@ -290,8 +285,8 @@ protected:
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
 MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
 MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);
-QString getElementUniqueId(QList<MyElementBase*> elements, const QString& defaultIdSection);
-bool isConnectableToStartNode(MyElementStyleBase* edgeStyle, MyElementBase* node);
-bool isConnectableToEndNode(MyElementStyleBase* edgeStyle, MyElementBase* node);
+QString getElementUniqueName(QList<MyElementBase*> elements, const QString& defaultIdSection);
+MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* style);
+MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle);
 
 #endif

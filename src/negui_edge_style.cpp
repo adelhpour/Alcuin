@@ -1,7 +1,7 @@
 #include "negui_edge_style.h"
 #include "negui_element_style_builder.h"
 #include "negui_shape_style_builder.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_element_icon_builder.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
@@ -9,8 +9,8 @@
 
 MyEdgeStyle::MyEdgeStyle(const QString& name) : MyElementStyleBase(name) {
     _category = "Edge";
-    _connectableStartNodeCategories.push_back("Node");
-    _connectableEndNodeCategories.push_back("Node");
+    _connectableSourceNodeCategories.push_back("Node");
+    _connectableTargetNodeCategories.push_back("Node");
     if (name == "Default")
         addDefaultShapeStyle();
     
@@ -22,30 +22,43 @@ const QString MyEdgeStyle::type() const {
     return "edgestyle";
 }
 
-QList<QString> MyEdgeStyle::connectableStartNodeCategories() {
-    return _connectableStartNodeCategories;
-}
-
-bool MyEdgeStyle::isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory) {
-    for (QString connectableStartNodeCategory : _connectableStartNodeCategories) {
-        if (connectedStartNodeCategory == connectableStartNodeCategory)
+bool MyEdgeStyle::isConnectableToNodeCategory(const QString& connectedNodeCategory, const QString& connectToNodeAs) {
+    if (connectToNodeAs == "source") {
+        if (isConnectableToSourceNodeCategory(connectedNodeCategory))
+            return true;
+    }
+    else if (connectToNodeAs == "target") {
+        if (isConnectableToTargetNodeCategory(connectedNodeCategory))
             return true;
     }
     
     return false;
 }
 
-QList<QString> MyEdgeStyle::connectableEndNodeCategories() {
-    return _connectableEndNodeCategories;
-}
-
-bool MyEdgeStyle::isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory) {
-    for (QString connectableEndNodeCategory : _connectableEndNodeCategories) {
-        if (connectedEndNodeCategory == connectableEndNodeCategory)
+bool MyEdgeStyle::isConnectableToSourceNodeCategory(const QString& connectedSourceNodeCategory) {
+    for (QString connectableSourceNodeCategory : _connectableSourceNodeCategories) {
+        if (connectableSourceNodeCategory == connectedSourceNodeCategory)
             return true;
     }
     
     return false;
+}
+
+bool MyEdgeStyle::isConnectableToTargetNodeCategory(const QString& connectedTargetNodeCategory) {
+    for (QString connectableTargetNodeCategory : _connectableTargetNodeCategories) {
+        if (connectableTargetNodeCategory == connectedTargetNodeCategory)
+            return true;
+    }
+    
+    return false;
+}
+
+QList<QString> MyEdgeStyle::connectableSourceNodeCategories() {
+    return _connectableSourceNodeCategories;
+}
+
+QList<QString> MyEdgeStyle::connectableTargetNodeCategories() {
+    return _connectableTargetNodeCategories;
 }
 
 MyElementStyleBase* MyEdgeStyle::arrowHeadStyle() {
@@ -63,60 +76,61 @@ MyShapeStyleBase* MyEdgeStyle::createShapeStyle(const QString& shape) {
     return NULL;
 }
 
-QList<MyElementGraphicsItemBase*> MyEdgeStyle::getElementIconGraphicsItems() {
-    QList<MyElementGraphicsItemBase*> items;
-
-    // edge style
-    MyElementGraphicsItemBase* edgeIconItem = createEdgeIconGraphicsItem();
-    edgeIconItem->addShapeItems(shapeStyles());
-    items.push_back(edgeIconItem);
-    
-    // arrow head style
-    items += arrowHeadStyle()->getElementIconGraphicsItems();
-    
-    return items;
+QObject* MyEdgeStyle::createIconBuilder() {
+    return new MyEdgeIconBuilder(this);
 }
 
 const QString MyEdgeStyle::toolTipText() {
+    return toolTipText("source");
+}
+
+const QString MyEdgeStyle::toolTipText(const QString& connectToNodeAs) {
+    if (connectToNodeAs == "source")
+        return sourceToolTipText();
+    else if (connectToNodeAs == "target")
+        return targetToolTipText();
+    
+    return "Select Node";
+}
+
+const QString MyEdgeStyle::sourceToolTipText() {
     QString text = "Select ";
-    for (int i = 0; i < _connectableStartNodeCategories.size(); i++) {
-        text.append(_connectableStartNodeCategories.at(i));
-        if (i < _connectableStartNodeCategories.size() - 1)
+    for (int i = 0; i < _connectableSourceNodeCategories.size(); i++) {
+        text.append(_connectableSourceNodeCategories.at(i));
+        if (i < _connectableSourceNodeCategories.size() - 1)
             text.append("/");
     }
-        
     return text;
 }
 
-const QString MyEdgeStyle::alternativeToolTipText() {
+const QString MyEdgeStyle::targetToolTipText() {
     QString text = "Select ";
-    for (int i = 0; i < _connectableEndNodeCategories.size(); i++) {
-        text.append(_connectableEndNodeCategories.at(i));
-        if (i < _connectableEndNodeCategories.size() - 1)
+    for (int i = 0; i < _connectableTargetNodeCategories.size(); i++) {
+        text.append(_connectableTargetNodeCategories.at(i));
+        if (i < _connectableTargetNodeCategories.size() - 1)
             text.append("/");
     }
-        
     return text;
 }
 
 void MyEdgeStyle::read(const QJsonObject &json) {
     MyElementStyleBase::read(json);
     
-    _connectableStartNodeCategories.clear();
-    if (json.contains("connectable-start-node-categories") && json["connectable-start-node-categories"].isArray()) {
-        QJsonArray connectableStartNodeCategoriesArray = json["connectable-start-node-categories"].toArray();
-        for (int connectableStartNodeCategoryIndex = 0; connectableStartNodeCategoryIndex < connectableStartNodeCategoriesArray.size(); ++connectableStartNodeCategoryIndex) {
-            if (connectableStartNodeCategoriesArray[connectableStartNodeCategoryIndex].isString())
-                _connectableStartNodeCategories.push_back(connectableStartNodeCategoriesArray[connectableStartNodeCategoryIndex].toString());
+    _connectableSourceNodeCategories.clear();
+    if (json.contains("connectable-source-node-categories") && json["connectable-source-node-categories"].isArray()) {
+        QJsonArray connectableSourceNodeCategoriesArray = json["connectable-source-node-categories"].toArray();
+        for (int connectableSourceNodeCategoryIndex = 0; connectableSourceNodeCategoryIndex < connectableSourceNodeCategoriesArray.size(); ++connectableSourceNodeCategoryIndex) {
+            if (connectableSourceNodeCategoriesArray[connectableSourceNodeCategoryIndex].isString())
+                _connectableSourceNodeCategories.push_back(connectableSourceNodeCategoriesArray[connectableSourceNodeCategoryIndex].toString());
         }
     }
     
-    _connectableEndNodeCategories.clear();
-    if (json.contains("connectable-end-node-categories") && json["connectable-end-node-categories"].isArray()) {
-        QJsonArray connectableEndNodeCategoriesArray = json["connectable-end-node-categories"].toArray();
-        for (int connectableEndNodeCategoryIndex = 0; connectableEndNodeCategoryIndex < connectableEndNodeCategoriesArray.size(); ++connectableEndNodeCategoryIndex) {
-            if (connectableEndNodeCategoriesArray[connectableEndNodeCategoryIndex].isString())
-                _connectableEndNodeCategories.push_back(connectableEndNodeCategoriesArray[connectableEndNodeCategoryIndex].toString());
+    _connectableTargetNodeCategories.clear();
+    if (json.contains("connectable-target-node-categories") && json["connectable-target-node-categories"].isArray()) {
+        QJsonArray connectableTargetNodeCategoriesArray = json["connectable-target-node-categories"].toArray();
+        for (int connectableTargetNodeCategoryIndex = 0; connectableTargetNodeCategoryIndex < connectableTargetNodeCategoriesArray.size(); ++connectableTargetNodeCategoryIndex) {
+            if (connectableTargetNodeCategoriesArray[connectableTargetNodeCategoryIndex].isString())
+                _connectableTargetNodeCategories.push_back(connectableTargetNodeCategoriesArray[connectableTargetNodeCategoryIndex].toString());
         }
     }
     
@@ -127,27 +141,17 @@ void MyEdgeStyle::read(const QJsonObject &json) {
 void MyEdgeStyle::write(QJsonObject &json) {
     MyElementStyleBase::write(json);
     
-    QJsonArray connectableStartNodeCategoriesArray;
-    for (QString connectableStartNodeCategory : connectableStartNodeCategories())
-        connectableStartNodeCategoriesArray.append(connectableStartNodeCategory);
-    json["connectable-start-node-categories"] = connectableStartNodeCategoriesArray;
+    QJsonArray connectableSourceNodeCategoriesArray;
+    for (QString connectableSourceNodeCategory : connectableSourceNodeCategories())
+        connectableSourceNodeCategoriesArray.append(connectableSourceNodeCategory);
+    json["connectable-source-node-categories"] = connectableSourceNodeCategoriesArray;
     
-    QJsonArray connectableEndNodeCategoriesArray;
-    for (QString connectableEndNodeCategory : connectableEndNodeCategories())
-        connectableEndNodeCategoriesArray.append(connectableEndNodeCategory);
-    json["connectable-end-node-categories"] = connectableEndNodeCategoriesArray;
+    QJsonArray connectableTargetNodeCategoriesArray;
+    for (QString connectableTargetNodeCategory : connectableTargetNodeCategories())
+        connectableTargetNodeCategoriesArray.append(connectableTargetNodeCategory);
+    json["connectable-target-node-categories"] = connectableTargetNodeCategoriesArray;
     
     QJsonObject arrowHeadObject;
     arrowHeadStyle()->write(arrowHeadObject);
     json["arrow-head"] = arrowHeadObject;
-}
-
-// MyAddRemoveEdgeShapeStylesButtons
-
-MyAddRemoveEdgeShapeStylesButtons::MyAddRemoveEdgeShapeStylesButtons(QWidget* parent) : MyAddRemoveShapeStylesButtonsBase(parent) {
-    
-}
-
-void MyAddRemoveEdgeShapeStylesButtons::setAddingMenu() {
-    
 }

@@ -1,6 +1,6 @@
 #include "negui_arrow_head_style.h"
 #include "negui_shape_style_builder.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_element_icon_builder.h"
 
 // MyArrowHeadStyle
 
@@ -29,22 +29,11 @@ MyShapeStyleBase* MyArrowHeadStyle::createShapeStyle(const QString& shape) {
     return NULL;
 }
 
-QList<MyElementGraphicsItemBase*> MyArrowHeadStyle::getElementIconGraphicsItems() {
-    QList<MyElementGraphicsItemBase*> items;
-    
-    // arrow head style
-    MyElementGraphicsItemBase* arrowHeadIconItem = createArrowHeadIconGraphicsItem();
-    arrowHeadIconItem->addShapeItems(shapeStyles());
-    items.push_back(arrowHeadIconItem);
-    
-    return items;
+QObject* MyArrowHeadStyle::createIconBuilder() {
+    return new MyArrowHeadIconBuilder(this);
 }
 
 const QString MyArrowHeadStyle::toolTipText() {
-    return "";
-}
-
-const QString MyArrowHeadStyle::alternativeToolTipText() {
     return "";
 }
 
@@ -62,6 +51,10 @@ void MyArrowHeadStyle::write(QJsonObject &json) {
     dimensionsObject["width"] = extents.width();
     dimensionsObject["height"] = extents.height();
     json["dimensions"] = dimensionsObject;
+}
+
+QWidget* MyArrowHeadStyle::getAddRemoveShapeStylesButtons() {
+    return _addRemoveShapeStylesButtons;
 }
 
 // MyAddRemoveArrowHeadShapeStylesButtons

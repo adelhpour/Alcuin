@@ -7,7 +7,6 @@
 MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
 }
 
-#include <iostream>
 void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
         if (((MyTextStyle*)style())->width() > 0.001)
@@ -77,4 +76,4 @@ QGraphicsItem* MyTextGraphicsItem::getResizeHandledGraphicsItem() {
 
 void MyTextGraphicsItem::setZValue(qreal z) {
     QGraphicsItem::setZValue(z);
-};
+}

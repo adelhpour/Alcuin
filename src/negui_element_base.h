@@ -36,7 +36,7 @@ public:
     
     const bool isActive() const { return _isActive; }
     
-    virtual void setSelected(const bool& selected) = 0;
+    virtual void setSelected(const bool& selected);
     
     const bool isSelected();
     
@@ -73,6 +73,7 @@ protected:
     MyElementGraphicsItemBase* _graphicsItem;
     MyElementStyleBase* _style;
     bool _isActive;
+    bool _isSelected;
 };
 
 #endif

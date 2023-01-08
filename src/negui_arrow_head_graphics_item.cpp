@@ -1,6 +1,7 @@
 #include "negui_arrow_head_graphics_item.h"
 #include "negui_shape_graphics_item_builder.h"
 #include <QtMath>
+#include <QPainter>
 
 // MyArrowHeadGraphicsItemBase
 
@@ -23,31 +24,6 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
     return item;
 }
 
-void MyArrowHeadGraphicsItemBase::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHeadGraphicsItemBase::enableAddNodeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHeadGraphicsItemBase::enableSelectNodeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHeadGraphicsItemBase::enableAddEdgeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHeadGraphicsItemBase::enableSelectEdgeMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
-void MyArrowHeadGraphicsItemBase::enableRemoveMode() {
-    setCursor(Qt::ArrowCursor);
-}
-
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
@@ -61,8 +37,46 @@ void MyArrowHeadSceneGraphicsItem::update(const QPointF& position, const qreal& 
     }
 }
 
+void MyArrowHeadSceneGraphicsItem::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadSceneGraphicsItem::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadSceneGraphicsItem::enableSelectNodeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadSceneGraphicsItem::enableAddEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadSceneGraphicsItem::enableSelectEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
+void MyArrowHeadSceneGraphicsItem::enableRemoveMode() {
+    setCursor(Qt::ArrowCursor);
+}
+
 // MyArrowHeadIconGraphicsItem
 
-MyArrowHeadIconGraphicsItem::MyArrowHeadIconGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
-    _originalPosition = QPointF(60.0, 0.0);
+MyArrowHeadIconGraphicsItem::MyArrowHeadIconGraphicsItem(const QPointF& position, const qreal& rotation, QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
+    _originalPosition = position;
+    _rotation = rotation;
+}
+
+void MyArrowHeadIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    for (QGraphicsItem* item : childItems()) {
+        painter->translate(_originalPosition.x(), _originalPosition.y());
+        painter->rotate(_rotation);
+        painter->translate(-_originalPosition.x(), -_originalPosition.y());
+        item->paint(painter, option, widget);
+        painter->translate(_originalPosition.x(), _originalPosition.y());
+        painter->rotate(-_rotation);
+        painter->translate(-_originalPosition.x(), -_originalPosition.y());
+    }
 }

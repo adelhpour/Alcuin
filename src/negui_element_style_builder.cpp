@@ -2,6 +2,7 @@
 #include "negui_node_style.h"
 #include "negui_edge_style.h"
 #include "negui_arrow_head_style.h"
+#include "negui_template_style.h"
 
 MyElementStyleBase* createNodeStyle(const QString& name) {
     return new MyNodeStyle(name);
@@ -33,4 +34,8 @@ MyElementStyleBase* createEdgeStyle(const QJsonObject &json) {
 
 MyElementStyleBase* createArrowHeadStyle(const QString& name) {
     return new MyArrowHeadStyle(name);
+}
+
+MyElementStyleBase* createTemplateStyle(const QString& name) {
+    return new MyTemplateStyle(name);
 }

@@ -12,18 +12,6 @@ public:
     MyNodeGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
-    
-    void enableNormalMode() override;
-
-    void enableAddNodeMode() override;
-    
-    void enableSelectNodeMode() override;
-
-    void enableAddEdgeMode() override;
-
-    void enableSelectEdgeMode() override;
-
-    void enableRemoveMode() override;
 };
 
 class MyNodeSceneGraphicsItem : public MyNodeGraphicsItemBase {
@@ -42,6 +30,18 @@ public:
     void moveChildItems(const QPointF& movedDistance);
     
     void adjustOriginalPosition();
+    
+    void enableNormalMode() override;
+
+    void enableAddNodeMode() override;
+    
+    void enableSelectNodeMode() override;
+
+    void enableAddEdgeMode() override;
+
+    void enableSelectEdgeMode() override;
+
+    void enableRemoveMode() override;
     
 public slots:
     void updateExtents(const QRectF& extents);
@@ -77,7 +77,9 @@ class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {
     
 public:
     
-    MyNodeIconGraphicsItem(QGraphicsItem *parent = nullptr);
+    MyNodeIconGraphicsItem(const QPointF& position, QGraphicsItem *parent = nullptr);
+    
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };
 
 #endif

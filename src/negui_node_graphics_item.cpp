@@ -30,37 +30,6 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
     return item;
 }
 
-void MyNodeGraphicsItemBase::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
-    setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-}
-
-void MyNodeGraphicsItemBase::enableAddNodeMode() {
-    setCursor(Qt::ArrowCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNodeGraphicsItemBase::enableSelectNodeMode() {
-    setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNodeGraphicsItemBase::enableAddEdgeMode() {
-    setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNodeGraphicsItemBase::enableSelectEdgeMode() {
-    setCursor(Qt::ArrowCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
-void MyNodeGraphicsItemBase::enableRemoveMode() {
-    setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
 // MyNodeSceneGraphicsItem
 
 MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
@@ -115,6 +84,37 @@ void MyNodeSceneGraphicsItem::adjustOriginalPosition() {
             casted_item->adjustOriginalPosition(extentsCenter - (_originalPosition + pos()));
     }
     _originalPosition = extentsCenter - pos();
+}
+
+void MyNodeSceneGraphicsItem::enableNormalMode() {
+    MyElementGraphicsItemBase::enableNormalMode();
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+}
+
+void MyNodeSceneGraphicsItem::enableAddNodeMode() {
+    setCursor(Qt::ArrowCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeSceneGraphicsItem::enableSelectNodeMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeSceneGraphicsItem::enableAddEdgeMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeSceneGraphicsItem::enableSelectEdgeMode() {
+    setCursor(Qt::ArrowCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
+void MyNodeSceneGraphicsItem::enableRemoveMode() {
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
@@ -181,6 +181,11 @@ void MyNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
 
 // MyNodeIconGraphicsItem
 
-MyNodeIconGraphicsItem::MyNodeIconGraphicsItem(QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
-    
+MyNodeIconGraphicsItem::MyNodeIconGraphicsItem(const QPointF& position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
+    _originalPosition = position;
+}
+
+void MyNodeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    for (QGraphicsItem* item : childItems())
+        item->paint(painter, option, widget);
 }

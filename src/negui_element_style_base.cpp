@@ -1,41 +1,12 @@
 #include "negui_element_style_base.h"
-#include <QPainter>
+#include "negui_element_icon_builder.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
 // MyElementStyleBase
 
 MyElementStyleBase::MyElementStyleBase(const QString& name) : MyPluginItemBase(name) {
-    _addRemoveShapeStylesButtons = NULL;
-}
-
-const QString& MyElementStyleBase::convertibleParentCategory() const {
-    return _convertibleParentCategory;
-}
-
-bool MyElementStyleBase::isConvertibleToParentCategory(QList<QString> parentCategories) {
-    for (QString parentCategory : parentCategories) {
-        if (parentCategory == _convertibleParentCategory)
-            return true;
-    }
     
-    return false;
-}
-
-void MyElementStyleBase::convertToParentCategory() {
-    _category = convertibleParentCategory();
-}
-
-QList<QString> MyElementStyleBase::parentCategories() {
-    return _parentCategories;
-}
-
-bool MyElementStyleBase::isConnectableToStartNodeCategory(const QString& connectedStartNodeCategory) {
-    return false;
-}
-
-bool MyElementStyleBase::isConnectableToEndNodeCategory(const QString& connectedEndNodeCategory) {
-    return false;
 }
 
 void MyElementStyleBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -69,11 +40,11 @@ void MyElementStyleBase::clearShapeStyles() {
         delete _shapeStyles.takeLast();
 }
 
-const QRectF MyElementStyleBase::getShapesExtents() {
-    qreal extentsX = 0.0;
-    qreal extentsY = 0.0;
-    qreal extentsWidth = 0.0;
-    qreal extentsHeight = 0.0;
+const QRectF MyElementStyleBase::getShapesExtents(QRectF defaultExtents) {
+    qreal extentsX = defaultExtents.x();
+    qreal extentsY = defaultExtents.y();
+    qreal extentsWidth = defaultExtents.width();
+    qreal extentsHeight = defaultExtents.height();
     for (MyShapeStyleBase* shapeStyle : qAsConst(shapeStyles())) {
         QRectF shapeStyleExtents = shapeStyle->getShapeExtents();
         if (shapeStyleExtents.x() < extentsX) {
@@ -92,63 +63,14 @@ const QRectF MyElementStyleBase::getShapesExtents() {
     return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
 }
 
-QDialogButtonBox* MyElementStyleBase::getAddRemoveShapeStylesButtons() {
-    return _addRemoveShapeStylesButtons;
-}
- 
 const QIcon MyElementStyleBase::icon() {
-    QList<MyElementGraphicsItemBase*> items = getElementIconGraphicsItems();
-    
-    QRectF extents;
-    extents.setX(INT_MAX);
-    extents.setY(INT_MAX);
-    
-    for (QGraphicsItem* item : qAsConst(items)) {
-        if (item->boundingRect().x() < extents.x())
-            extents.setX(item->boundingRect().x());
-        if (item->boundingRect().y() < extents.y())
-            extents.setY(item->boundingRect().y());
-        if (extents.x() + extents.width() < item->boundingRect().x() + item->boundingRect().width())
-            extents.setWidth(extents.width() + (item->boundingRect().x() + item->boundingRect().width() - extents.x() - extents.width()));
-        if (extents.y() + extents.height() < item->boundingRect().y() + item->boundingRect().height())
-            extents.setHeight(extents.height() + (item->boundingRect().y() + item->boundingRect().height() - extents.y() - extents.height()));
-    }
-    
-    QPixmap pixMap(extents.width(), extents.height());
-    pixMap.fill(Qt::transparent);
-    QPainter painter(&pixMap);
-    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-    painter.translate(-1 * extents.x(),-1 * extents.y());
-    QStyleOptionGraphicsItem opt;
-    
-    for (QGraphicsItem* item : qAsConst(items)) {
-        if (QGraphicsItemGroup* group = qgraphicsitem_cast<QGraphicsItemGroup *>(item)) {
-            QList<QGraphicsItem*> children = group->childItems();
-            for (QGraphicsItem *child : qAsConst(children))
-                child->paint(&painter, &opt);
-        }
-        else
-            item->paint(&painter, &opt);
-    }
-    
-    return QIcon(pixMap);
+    QObject* iconBuilder = createIconBuilder();
+    ((MyElementIconBuilderBase*)iconBuilder)->build();
+    return ((MyElementIconBuilderBase*)iconBuilder)->icon();
 }
 
 void MyElementStyleBase::read(const QJsonObject &json) {
     MyPluginItemBase::read(json);
-    _convertibleParentCategory.clear();
-    if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
-        _convertibleParentCategory = json["convertible-parent-category"].toString();
-
-    _parentCategories.clear();
-    if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
-        QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
-        for (int parentCategoryIndex = 0; parentCategoryIndex < parentCategoriesArray.size(); ++parentCategoryIndex) {
-            if (parentCategoriesArray[parentCategoryIndex].isString())
-                _parentCategories.push_back(parentCategoriesArray[parentCategoryIndex].toString());
-        }
-    }
-    
     // shapes
     clearShapeStyles();
     if (json.contains("shapes") && json["shapes"].isArray()) {
@@ -157,7 +79,7 @@ void MyElementStyleBase::read(const QJsonObject &json) {
         for (int shapeStyleIndex = 0; shapeStyleIndex < shapeStylesArray.size(); ++shapeStyleIndex) {
             QJsonObject shapeStyleObject = shapeStylesArray[shapeStyleIndex].toObject();
             if (shapeStyleObject.contains("shape") && shapeStyleObject["shape"].isString()) {
-                MyShapeStyleBase* shapeStyle = createShapeStyle(shapeStyleObject["shape"].toString());
+                shapeStyle = createShapeStyle(shapeStyleObject["shape"].toString());
                 if (shapeStyle) {
                     shapeStyle->read(shapeStyleObject);
                     _shapeStyles.push_back(shapeStyle);
@@ -171,14 +93,7 @@ void MyElementStyleBase::read(const QJsonObject &json) {
 
 void MyElementStyleBase::write(QJsonObject &json) {
     MyPluginItemBase::write(json);
-    
     json["name"] = name();
-    json["convertible-parent-category"] = convertibleParentCategory();
-    
-    QJsonArray parentCategoriesArray;
-    for (QString parentCategory : parentCategories())
-        parentCategoriesArray.append(parentCategory);
-    json["parent-categories"] = parentCategoriesArray;
     
     // shapes
     QJsonArray shapeStylesArray;

@@ -14,13 +14,16 @@ public:
     
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
-    QList<MyElementGraphicsItemBase*> getElementIconGraphicsItems() override;
+    QObject* createIconBuilder() override;
     
     const QString toolTipText() override;
     
-    const QString alternativeToolTipText() override;
+    QWidget* getAddRemoveShapeStylesButtons();
     
     void write(QJsonObject &json) override;
+    
+protected:
+    QWidget* _addRemoveShapeStylesButtons;
 };
 
 class MyAddRemoveArrowHeadShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {
