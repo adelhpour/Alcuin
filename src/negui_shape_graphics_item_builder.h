@@ -14,4 +14,6 @@ MyShapeGraphicsItemBase* createLineShape(const QLineF& line, QGraphicsItem *pare
 
 MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent);
 
+MyShapeGraphicsItemBase* createCentroidShape(qreal x, qreal y, QGraphicsItem *parent);
+
 #endif
