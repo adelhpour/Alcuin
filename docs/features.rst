@@ -13,7 +13,7 @@ NetworkEditorGUI basic features are:
 * Adding or removing Edges between nodes on its scene,
 * Nesting a node into another one,
 * Modifying node, edge, and arrowhead features through a pop-up menu,
-* Draging and moving a node and its connected edges on its scene,
+* Dragging and moving a node and its connected edges on its scene,
 * Zooming and panning on its scene,
 * Undoing and redoing actions.
 
@@ -27,4 +27,4 @@ NetworkEditorGUI features that are currently supported by its plugin interface a
 * Exporting a figure of the network to an image file,
 * Loading customized node styles,
 * Loading customized edge and arrowhead styles,
-* Poisitioning network entities automatically.
+* Positioning  network entities automatically.
