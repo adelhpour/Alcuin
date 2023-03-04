@@ -77,7 +77,7 @@ public:
     void addNode(const QJsonObject& json);
     void addNode(MyElementBase* node);
     void removeNode(MyElementBase* node);
-    void updateNodeParetns();
+    void updateNodeParents();
     void clearNodesInfo();
     void setNodeStyle(MyElementStyleBase* style);
     MyElementStyleBase* nodeStyle();

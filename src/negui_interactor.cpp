@@ -288,7 +288,7 @@ void MyInteractor::addNodes(const QJsonObject &json) {
         QJsonArray nodesArray = json["nodes"].toArray();
         for (int nodeIndex = 0; nodeIndex < nodesArray.size(); ++nodeIndex)
             addNode(nodesArray[nodeIndex].toObject());
-        updateNodeParetns();
+        updateNodeParents();
     }
 }
 
@@ -337,7 +337,7 @@ void MyInteractor::removeNode(MyElementBase* n) {
     }
 }
 
-void MyInteractor::updateNodeParetns() {
+void MyInteractor::updateNodeParents() {
     MyElementBase* parentNode = NULL;
     for (MyElementBase *node : qAsConst(nodes())) {
         parentNode = findElement(nodes(), ((MyNode*)node)->parentNodeId());
