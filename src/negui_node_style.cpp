@@ -32,6 +32,8 @@ MyShapeStyleBase* MyNodeStyle::createShapeStyle(const QString& shape) {
         return createNodeRectStyle(shape);
     else if (shape == "polygon")
         return createNodePolygonStyle(shape);
+    else if (shape == "centroid")
+        return createNodeCentroidStyle(shape);
     else if (shape == "text")
         return createTextStyle(shape);
     
