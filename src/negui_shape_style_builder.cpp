@@ -2,6 +2,7 @@
 #include "negui_ellipse_style.h"
 #include "negui_rect_style.h"
 #include "negui_polygon_style.h"
+#include "negui_centroid_style.h"
 #include "negui_line_style.h"
 #include "negui_text_style.h"
 
@@ -21,6 +22,10 @@ MyShapeStyleBase* createNodeDefaultPolygonStyle(const QString& shape) {
     MyShapeStyleBase* shapeStyle = new MyNodePolygonStyle(shape);
     ((MyNodePolygonStyle*)shapeStyle)->addDefaultPoints();
     return shapeStyle;
+}
+
+MyShapeStyleBase* createNodeCentroidStyle(const QString& shape) {
+    return new MyNodeCentroidStyle(shape);
 }
 
 MyShapeStyleBase* createArrowHeadEllipseStyle(const QString& shape) {
