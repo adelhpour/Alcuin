@@ -26,6 +26,11 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
         item = createTextShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue() + 1);
     }
+    else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE) {
+        item = createCentroidShape(_originalPosition.x(), _originalPosition.y(), this);
+        item->setZValue(zValue());
+    }
+
     
     return item;
 }
