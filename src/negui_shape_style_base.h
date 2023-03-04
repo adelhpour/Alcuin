@@ -13,6 +13,7 @@ public:
         POLYGON_SHAPE_STYLE,
         LINE_SHAPE_STYLE,
         TEXT_SHAPE_STYLE,
+        CENTROID_SHAPE_STYLE,
     } SHAPE_STYLE;
     
     MyShapeStyleBase(const QString& name);
