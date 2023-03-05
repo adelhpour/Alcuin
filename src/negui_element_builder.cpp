@@ -5,7 +5,7 @@
 #include "negui_arrow_head.h"
 
 MyElementBase* createNode(const QString& name, MyElementStyleBase* nodeStyle, const qreal& x, const qreal& y) {
-    MyElementBase* node = new MyNode(name, x, y);
+    MyElementBase* node = new MyNodeBase(name, x, y);
     node->setStyle(nodeStyle);
     return node;
 }
@@ -17,7 +17,7 @@ MyElementBase* createNode(const QJsonObject &json) {
         if (nodeStyle) {
             node = createNode(json["id"].toString(), nodeStyle, json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
             if (json.contains("parent") && json["parent"].isString())
-                ((MyNode*)node)->setParentNodeId(json["parent"].toString());
+                ((MyNodeBase*)node)->setParentNodeId(json["parent"].toString());
         }
     }
     

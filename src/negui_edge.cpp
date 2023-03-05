@@ -21,9 +21,9 @@ MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* end
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
     if (startNode && endNode) {
         _startNode = startNode;
-        ((MyNode*)_startNode)->addEdge(this);
+        ((MyNodeBase*)_startNode)->addEdge(this);
         _endNode = endNode;
-        ((MyNode*)_endNode)->addEdge(this);
+        ((MyNodeBase*)_endNode)->addEdge(this);
     }
 }
 
@@ -213,8 +213,8 @@ void MyEdge::write(QJsonObject &json) {
 }
 
 const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* connectedNode) {
-    QRectF mainNodeExtents = ((MyNode*)mainNode)->getExtents();
-    QRectF connectedNodeExtents = ((MyNode*)connectedNode)->getExtents();
+    QRectF mainNodeExtents = ((MyNodeBase*)mainNode)->getExtents();
+    QRectF connectedNodeExtents = ((MyNodeBase*)connectedNode)->getExtents();
     QPointF mainNodePosition = mainNodeExtents.center();
     QPointF connectedNodePosition = connectedNodeExtents.center();
     qreal mainNodeRadius = getRadius(mainNodeExtents, connectedNodePosition);

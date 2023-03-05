@@ -3,14 +3,14 @@
 
 #include "negui_element_base.h"
 
-class MyNode : public MyElementBase {
+class MyNodeBase : public MyElementBase {
     Q_OBJECT
     
 public:
     
-    MyNode(const QString& name, const qreal& x, const qreal& y);
+    MyNodeBase(const QString& name, const qreal& x, const qreal& y);
     
-    ~MyNode();
+    ~MyNodeBase();
     
     ELEMENT_TYPE type() override;
     

@@ -5,9 +5,9 @@
 #include "negui_node_graphics_item.h"
 #include <QJsonObject>
 
-// MyNode
+// MyNodeBase
 
-MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementBase(name) {
+MyNodeBase::MyNodeBase(const QString& name, const qreal& x, const qreal& y) : MyElementBase(name) {
     _parentNodeId = "N/A";
     _parentNode = NULL;
     _isSetParentNode = false;
@@ -23,34 +23,34 @@ MyNode::MyNode(const QString& name, const qreal& x, const qreal& y) : MyElementB
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
-MyNode::~MyNode() {
+MyNodeBase::~MyNodeBase() {
     delete _graphicsItem;
 }
 
-MyNode::ELEMENT_TYPE MyNode::type() {
+MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
     return NODE_ELEMENT;
 }
 
-void MyNode::addEdge(MyElementBase* e) {
+void MyNodeBase::addEdge(MyElementBase* e) {
     if (e)
         _edges.push_back(e);
 }
 
-void MyNode::removeEdge(MyElementBase* e) {
+void MyNodeBase::removeEdge(MyElementBase* e) {
     if (e)
         _edges.removeOne(e);
 }
 
-QList<MyElementBase*>& MyNode::edges() {
+QList<MyElementBase*>& MyNodeBase::edges() {
     return _edges;
 }
 
-void MyNode::updateGraphicsItem() {
+void MyNodeBase::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     resetPosition();
 }
 
-void MyNode::setSelected(const bool& selected) {
+void MyNodeBase::setSelected(const bool& selected) {
     MyElementBase::setSelected(selected);
     if (selected)
         graphicsItem()->setSelectedWithFill(selected);
@@ -60,52 +60,52 @@ void MyNode::setSelected(const bool& selected) {
     }
 }
 
-const QString& MyNode::parentNodeId() const {
+const QString& MyNodeBase::parentNodeId() const {
     return _parentNodeId;
 }
 
-void MyNode::setParentNodeId(const QString& parentNodeId) {
+void MyNodeBase::setParentNodeId(const QString& parentNodeId) {
     _parentNodeId = parentNodeId;
 }
 
-MyElementBase* MyNode::parentNode() {
+MyElementBase* MyNodeBase::parentNode() {
     return _parentNode;
 }
 
-void MyNode::setParentNode(MyElementBase* parentNode) {
+void MyNodeBase::setParentNode(MyElementBase* parentNode) {
     _parentNode = parentNode;
     _isSetParentNode = true;
     _parentNodeId = parentNode->name();
-    ((MyNode*)_parentNode)->addChildNode(this);
+    ((MyNodeBase*)_parentNode)->addChildNode(this);
 }
 
-void MyNode::lockParentNode(const bool& locked) {
+void MyNodeBase::lockParentNode(const bool& locked) {
     _isParentNodeLocked = locked;
 }
 
-void MyNode::addChildNode(MyElementBase* n) {
+void MyNodeBase::addChildNode(MyElementBase* n) {
     if (n) {
         _childNodes.push_back(n);
         updateChildNodesMobility();
     }
 }
 
-void MyNode::removeChildNode(MyElementBase* n) {
+void MyNodeBase::removeChildNode(MyElementBase* n) {
     if (n) {
         _childNodes.removeOne(n);
         updateChildNodesMobility();
     }
 }
 
-QList<MyElementBase*>& MyNode::childNodes() {
+QList<MyElementBase*>& MyNodeBase::childNodes() {
     return _childNodes;
 }
 
-void MyNode::lockChildNodes(const bool& locked) {
+void MyNodeBase::lockChildNodes(const bool& locked) {
     _areChildNodesLocked = locked;
 }
 
-void MyNode::updateChildNodesMobility() {
+void MyNodeBase::updateChildNodesMobility() {
     if (childNodes().size() > 1) {
         for (MyElementBase* node : qAsConst(childNodes()))
             node->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -114,33 +114,33 @@ void MyNode::updateChildNodesMobility() {
         childNodes().first()->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNode::deparent() {
+void MyNodeBase::deparent() {
     if (_parentNode) {
-        ((MyNode*)_parentNode)->removeChildNode(this);
-        ((MyNode*)_parentNode)->adjustExtents();
+        ((MyNodeBase*)_parentNode)->removeChildNode(this);
+        ((MyNodeBase*)_parentNode)->adjustExtents();
     }
     _parentNode = NULL;
     _isSetParentNode = false;
     _parentNodeId = "N/A";
 }
 
-void MyNode::reparent() {
+void MyNodeBase::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     deparent();
     if (parentNode && ((MyNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyle*)style())->parentCategories())) {
         ((MyNodeStyle*)parentNode->style())->convertToParentCategory();
-        setParentNode((MyNode*)parentNode);
+        setParentNode((MyNodeBase*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
-        ((MyNode*)parentNode)->adjustExtents();
+        ((MyNodeBase*)parentNode)->adjustExtents();
         resetPosition();
     }
 }
 
-void MyNode::setPosition(const QPointF& position) {
+void MyNodeBase::setPosition(const QPointF& position) {
     // move child nodes
     if (!areChildNodesLocked()) {
         for (MyElementBase* node : qAsConst(childNodes())) {
-            ((MyNode*)node)->lockParentNode(true);
+            ((MyNodeBase*)node)->lockParentNode(true);
             ((MyNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
         }
     }
@@ -153,7 +153,7 @@ void MyNode::setPosition(const QPointF& position) {
     // adjust parent extents
     if (!isParentNodeLocked()) {
         if (parentNode())
-            ((MyNode*)parentNode())->adjustExtents();
+            ((MyNodeBase*)parentNode())->adjustExtents();
     }
     else
         lockParentNode(false);
@@ -163,23 +163,23 @@ void MyNode::setPosition(const QPointF& position) {
         ((MyEdge*)edge)->updatePoints();
 }
 
-void MyNode::resetPosition() {
+void MyNodeBase::resetPosition() {
     setPosition(((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().center());
 }
 
-const QPointF MyNode::position() const {
+const QPointF MyNodeBase::position() const {
     return _position;
 }
 
-const QRectF MyNode::getExtents() {
+const QRectF MyNodeBase::getExtents() {
     if (childNodes().size()) {
-        QRectF childExtents = ((MyNode*)childNodes().at(0))->getExtents();
+        QRectF childExtents = ((MyNodeBase*)childNodes().at(0))->getExtents();
         qreal extentsX = childExtents.x();
         qreal extentsY = childExtents.y();
         qreal extentsWidth = childExtents.width();
         qreal extentsHeight = childExtents.height();
         for (MyElementBase* childNode : qAsConst(childNodes())) {
-            childExtents = ((MyNode*)childNode)->getExtents();
+            childExtents = ((MyNodeBase*)childNode)->getExtents();
             if (childExtents.x() < extentsX) {
                 extentsWidth += extentsX - childExtents.x();
                 extentsX = childExtents.x();
@@ -199,7 +199,7 @@ const QRectF MyNode::getExtents() {
     return ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents();
 }
 
-void MyNode::adjustExtents() {
+void MyNodeBase::adjustExtents() {
     QRectF extents = getExtents();
     lockChildNodes(true);
     ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
@@ -207,7 +207,7 @@ void MyNode::adjustExtents() {
     ((MyNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
 }
 
-QWidget* MyNode::getFeatureMenu() {
+QWidget* MyNodeBase::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
@@ -228,18 +228,18 @@ QWidget* MyNode::getFeatureMenu() {
     return featureMenu;
 }
 
-const qint32 MyNode::calculateZValue() {
+const qint32 MyNodeBase::calculateZValue() {
     qint32 incrementZValue = 2;
     MyElementBase* parent = this;
-    while (parent && ((MyNode*)parent)->parentNodeId() != "N/A") {
+    while (parent && ((MyNodeBase*)parent)->parentNodeId() != "N/A") {
         incrementZValue += 4;
-        parent = ((MyNode*)parent)->parentNode();
+        parent = ((MyNodeBase*)parent)->parentNode();
     }
     
     return incrementZValue;
 }
 
-void MyNode::read(const QJsonObject &json) {
+void MyNodeBase::read(const QJsonObject &json) {
     // position
     if (json.contains("position") && json["position"].isObject()) {
         if (json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble()) {
@@ -256,7 +256,7 @@ void MyNode::read(const QJsonObject &json) {
         style()->read(json["style"].toObject());
 }
 
-void MyNode::write(QJsonObject &json) {
+void MyNodeBase::write(QJsonObject &json) {
     // id
     json["id"] = name();
     

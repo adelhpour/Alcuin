@@ -335,9 +335,9 @@ void MyInteractor::removeNode(MyElementBase* n) {
 void MyInteractor::updateNodeParents() {
     MyElementBase* parentNode = NULL;
     for (MyElementBase *node : qAsConst(nodes())) {
-        parentNode = findElement(nodes(), ((MyNode*)node)->parentNodeId());
+        parentNode = findElement(nodes(), ((MyNodeBase*)node)->parentNodeId());
         if (parentNode)
-            ((MyNode*)node)->setParentNode((MyNode*)parentNode);
+            ((MyNodeBase*)node)->setParentNode((MyNodeBase*)parentNode);
     }
 }
 
@@ -535,7 +535,7 @@ void MyInteractor::removeItem(MyElementBase* element) {
     if (mode() == REMOVE_MODE) {
         if (element->type() == MyElementBase::NODE_ELEMENT) {
             removeNode(element);
-            for (MyElementBase *edge : qAsConst(((MyNode*)element)->edges()))
+            for (MyElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
                 removeEdge(edge);
         }
         else if (element->type() == MyElementBase::EDGE_ELEMENT) {
