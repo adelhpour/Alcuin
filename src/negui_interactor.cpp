@@ -396,7 +396,7 @@ void MyInteractor::addEdge(const QJsonObject &json) {
 }
 
 void MyInteractor::addEdge(MyElementBase* e) {
-    if (e && !edgeExists(((MyEdge*)e)->startNode(), ((MyEdge*)e)->endNode()) && e->setActive(true)) {
+    if (e && !edgeExists(((MyEdgeBase*)e)->startNode(), ((MyEdgeBase*)e)->endNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
@@ -406,8 +406,8 @@ void MyInteractor::addEdge(MyElementBase* e) {
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
         emit askForAddGraphicsItem(e->graphicsItem());
-        if (((MyEdge*)e)->isSetArrowHead())
-            emit askForAddGraphicsItem(((MyEdge*)e)->arrowHead()->graphicsItem());
+        if (((MyEdgeBase*)e)->isSetArrowHead())
+            emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
     }
 }
 
@@ -438,8 +438,8 @@ void MyInteractor::removeEdge(MyElementBase* e) {
         e->setActive(false);
         _edges.removeOne(e);
         emit askForRemoveGraphicsItem(e->graphicsItem());
-        if (((MyEdge*)e)->isSetArrowHead())
-            emit askForRemoveGraphicsItem(((MyEdge*)e)->arrowHead()->graphicsItem());
+        if (((MyEdgeBase*)e)->isSetArrowHead())
+            emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
     }
 }
 
@@ -469,7 +469,7 @@ void MyInteractor::deleteNewEdgeBuilder() {
 
 bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
     for (MyElementBase *edge : qAsConst(edges())) {
-        if ((((MyEdge*)edge)->startNode() == n1 && ((MyEdge*)edge)->endNode() == n2) || (((MyEdge*)edge)->startNode() == n2 && ((MyEdge*)edge)->endNode() == n1)) {
+        if ((((MyEdgeBase*)edge)->startNode() == n1 && ((MyEdgeBase*)edge)->endNode() == n2) || (((MyEdgeBase*)edge)->startNode() == n2 && ((MyEdgeBase*)edge)->endNode() == n1)) {
             return true;
         }
     }
@@ -539,7 +539,7 @@ void MyInteractor::removeItem(MyElementBase* element) {
                 removeEdge(edge);
         }
         else if (element->type() == MyElementBase::EDGE_ELEMENT) {
-            ((MyEdge*)element)->connectToNodes(false);
+            ((MyEdgeBase*)element)->connectToNodes(false);
             removeEdge(element);
         }
         createChangeStageCommand();

@@ -3,14 +3,14 @@
 
 #include "negui_element_base.h"
 
-class MyEdge : public MyElementBase {
+class MyEdgeBase : public MyElementBase {
     Q_OBJECT
     
 public:
     
-    MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
+    MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
     
-    ~MyEdge();
+    ~MyEdgeBase();
     
     ELEMENT_TYPE type() override;
     

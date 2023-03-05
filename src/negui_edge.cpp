@@ -8,9 +8,9 @@
 #include <QtMath>
 #include <QJsonObject>
 
-// MyEdge
+// MyEdgeBase
 
-MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode) : MyElementBase(name) {
+MyEdgeBase::MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementBase* endNode) : MyElementBase(name) {
     _arrowHead = NULL;
     _isSetArrowHead = false;
     _isConnectedToNodes = false;
@@ -27,38 +27,38 @@ MyEdge::MyEdge(const QString& name, MyElementBase* startNode, MyElementBase* end
     }
 }
 
-MyEdge::~MyEdge() {
+MyEdgeBase::~MyEdgeBase() {
     delete _graphicsItem;
     
     if (isSetArrowHead())
         delete _arrowHead;
 }
 
-MyEdge::ELEMENT_TYPE MyEdge::type() {
+MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
     return EDGE_ELEMENT;
 };
 
-MyElementBase* MyEdge::startNode() {
+MyElementBase* MyEdgeBase::startNode() {
     return _startNode;
 }
 
-MyElementBase* MyEdge::endNode() {
+MyElementBase* MyEdgeBase::endNode() {
     return _endNode;
 }
 
-void MyEdge::updateGraphicsItem() {
+void MyEdgeBase::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     if (isSetArrowHead())
         arrowHead()->updateGraphicsItem();
     updatePoints();
 }
 
-void MyEdge::setStyle(MyElementStyleBase* style) {
+void MyEdgeBase::setStyle(MyElementStyleBase* style) {
     MyElementBase::setStyle(style);
     setArrowHead();
 }
 
-void MyEdge::setSelected(const bool& selected) {
+void MyEdgeBase::setSelected(const bool& selected) {
     MyElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);
     if (!selected)
@@ -68,11 +68,11 @@ void MyEdge::setSelected(const bool& selected) {
         arrowHead()->setSelected(selected);
 }
 
-MyElementBase* MyEdge::arrowHead() {
+MyElementBase* MyEdgeBase::arrowHead() {
     return _arrowHead;
 }
 
-void MyEdge::setArrowHead() {
+void MyEdgeBase::setArrowHead() {
     if (isSetArrowHead()) {
         delete _arrowHead;
         _isSetArrowHead = false;
@@ -84,7 +84,7 @@ void MyEdge::setArrowHead() {
     }
 }
 
-bool MyEdge::setActive(const bool& active) {
+bool MyEdgeBase::setActive(const bool& active) {
     if (active && startNode() && startNode()->isActive() && endNode() && endNode()->isActive()) {
         updatePoints();
         return _isActive = true;
@@ -93,11 +93,11 @@ bool MyEdge::setActive(const bool& active) {
     return _isActive = false;
 }
 
-bool MyEdge::connectToNodes(const bool& connect) {
+bool MyEdgeBase::connectToNodes(const bool& connect) {
     return _isConnectedToNodes = connect;
 }
 
-void MyEdge::updatePoints() {
+void MyEdgeBase::updatePoints() {
     QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
     QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
@@ -105,52 +105,52 @@ void MyEdge::updatePoints() {
     updateArrowHeadPlacement();
 }
 
-void MyEdge::updateArrowHeadPlacement() {
+void MyEdgeBase::updateArrowHeadPlacement() {
     if (isSetArrowHead())
         ((MyArrowHead*)arrowHead())->updatePlacement(getEndOfTheLinePosition(endNode(), startNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
 }
 
-void MyEdge::enableNormalMode() {
+void MyEdgeBase::enableNormalMode() {
     MyElementBase::enableNormalMode();
     if (isSetArrowHead())
         arrowHead()->enableNormalMode();
 }
 
-void MyEdge::enableAddNodeMode() {
+void MyEdgeBase::enableAddNodeMode() {
     MyElementBase::enableAddNodeMode();
     if (isSetArrowHead())
         arrowHead()->enableAddNodeMode();
 }
 
-void MyEdge::enableSelectNodeMode() {
+void MyEdgeBase::enableSelectNodeMode() {
     MyElementBase::enableSelectNodeMode();
     if (isSetArrowHead())
         arrowHead()->enableSelectNodeMode();
 }
 
-void MyEdge::enableAddEdgeMode() {
+void MyEdgeBase::enableAddEdgeMode() {
     MyElementBase::enableAddEdgeMode();
     if (isSetArrowHead())
         arrowHead()->enableAddEdgeMode();
 }
 
-void MyEdge::enableSelectEdgeMode() {
+void MyEdgeBase::enableSelectEdgeMode() {
     MyElementBase::enableSelectEdgeMode();
     if (isSetArrowHead())
         arrowHead()->enableSelectEdgeMode();
 }
 
-void MyEdge::enableRemoveMode() {
+void MyEdgeBase::enableRemoveMode() {
     MyElementBase::enableRemoveMode();
     if (isSetArrowHead())
         arrowHead()->enableRemoveMode();
 }
 
-const QRectF MyEdge::getExtents() {
+const QRectF MyEdgeBase::getExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }
 
-QWidget* MyEdge::getFeatureMenu() {
+QWidget* MyEdgeBase::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
@@ -165,15 +165,15 @@ QWidget* MyEdge::getFeatureMenu() {
     return featureMenu;
 }
 
-const qint32 MyEdge::calculateZValue() {
+const qint32 MyEdgeBase::calculateZValue() {
     return qMax(startNode()->calculateZValue(), endNode()->calculateZValue()) - 2;
 }
 
-void MyEdge::read(const QJsonObject &json) {
+void MyEdgeBase::read(const QJsonObject &json) {
     
 }
 
-void MyEdge::write(QJsonObject &json) {
+void MyEdgeBase::write(QJsonObject &json) {
     // id
     json["id"] = name();
     

@@ -160,7 +160,7 @@ void MyNodeBase::setPosition(const QPointF& position) {
     
     // edges
     for (MyElementBase *edge : qAsConst(edges()))
-        ((MyEdge*)edge)->updatePoints();
+        ((MyEdgeBase*)edge)->updatePoints();
 }
 
 void MyNodeBase::resetPosition() {

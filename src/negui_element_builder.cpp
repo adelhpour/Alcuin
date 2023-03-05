@@ -25,9 +25,9 @@ MyElementBase* createNode(const QJsonObject &json) {
 }
 
 MyElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, MyElementBase* startNode, MyElementBase* endNode) {
-    MyElementBase* edge = new MyEdge(name, startNode, endNode);
+    MyElementBase* edge = new MyEdgeBase(name, startNode, endNode);
     edge->setStyle(edgeStyle);
-    ((MyEdge*)edge)->connectToNodes(true);
+    ((MyEdgeBase*)edge)->connectToNodes(true);
     return edge;
 }
 
