@@ -3,12 +3,12 @@
 
 #include "negui_element_base.h"
 
-class MyArrowHead : public MyElementBase {
+class MyArrowHeadBase : public MyElementBase {
 public:
+
+    MyArrowHeadBase(const QString& name, MyElementBase* edge);
     
-    MyArrowHead(const QString& name, MyElementBase* edge);
-    
-    ~MyArrowHead();
+    ~MyArrowHeadBase();
     
     ELEMENT_TYPE type() override;
     

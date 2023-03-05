@@ -5,9 +5,9 @@
 #include "negui_arrow_head_graphics_item.h"
 #include <QJsonObject>
 
-// MyArrowHead
+// MyArrowHeadBase
 
-MyArrowHead::MyArrowHead(const QString& name, MyElementBase* edge) : MyElementBase(name) {
+MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyElementBase* edge) : MyElementBase(name) {
     _edge = edge;
     _position = QPointF(0.0, 0.0);
     _slope = 0.0;
@@ -17,31 +17,31 @@ MyArrowHead::MyArrowHead(const QString& name, MyElementBase* edge) : MyElementBa
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
-MyArrowHead::~MyArrowHead() {
+MyArrowHeadBase::~MyArrowHeadBase() {
     delete _graphicsItem;
 }
 
-MyArrowHead::ELEMENT_TYPE MyArrowHead::type() {
+MyArrowHeadBase::ELEMENT_TYPE MyArrowHeadBase::type() {
     return ARROW_HEAD_ELEMENT;
 };
 
-MyElementBase* MyArrowHead::edge() {
+MyElementBase* MyArrowHeadBase::edge() {
     return _edge;
 }
 
-void MyArrowHead::updateGraphicsItem() {
+void MyArrowHeadBase::updateGraphicsItem() {
     MyElementBase::updateGraphicsItem();
     updatePlacement(_position, _slope);
 }
 
-void MyArrowHead::updatePlacement(const QPointF& position, const qreal& slope) {
+void MyArrowHeadBase::updatePlacement(const QPointF& position, const qreal& slope) {
     _position = position;
     _slope = slope;
     ((MyArrowHeadSceneGraphicsItem*)graphicsItem())->update(_position, _slope);
     graphicsItem()->setZValue(calculateZValue());
 }
 
-void MyArrowHead::setSelected(const bool& selected) {
+void MyArrowHeadBase::setSelected(const bool& selected) {
     MyElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);
     
@@ -49,11 +49,11 @@ void MyArrowHead::setSelected(const bool& selected) {
         graphicsItem()->setSelectedWithFill(selected);
 }
 
-const QRectF MyArrowHead::getExtents() {
+const QRectF MyArrowHeadBase::getExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }
 
-QWidget* MyArrowHead::getFeatureMenu() {
+QWidget* MyArrowHeadBase::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
@@ -74,14 +74,14 @@ QWidget* MyArrowHead::getFeatureMenu() {
     return featureMenu;
 }
 
-const qint32 MyArrowHead::calculateZValue() {
+const qint32 MyArrowHeadBase::calculateZValue() {
     return edge()->calculateZValue() + 1;
 }
 
-void MyArrowHead::read(const QJsonObject &json) {
+void MyArrowHeadBase::read(const QJsonObject &json) {
     
 }
 
-void MyArrowHead::write(QJsonObject &json) {
+void MyArrowHeadBase::write(QJsonObject &json) {
     
 }

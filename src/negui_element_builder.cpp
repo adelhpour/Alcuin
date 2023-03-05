@@ -44,7 +44,7 @@ MyElementBase* createEdge(const QJsonObject &json, MyElementBase* startNode, MyE
 }
 
 MyElementBase* createArrowHead(const QString& name, MyElementStyleBase* arrowHeadStyle, MyElementBase* edge) {
-    MyElementBase* arrowHead = new MyArrowHead(name, edge);
+    MyElementBase* arrowHead = new MyArrowHeadBase(name, edge);
     arrowHead->setStyle(arrowHeadStyle);
     return arrowHead;
 }

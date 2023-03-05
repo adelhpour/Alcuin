@@ -107,7 +107,7 @@ void MyEdgeBase::updatePoints() {
 
 void MyEdgeBase::updateArrowHeadPlacement() {
     if (isSetArrowHead())
-        ((MyArrowHead*)arrowHead())->updatePlacement(getEndOfTheLinePosition(endNode(), startNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
+        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(endNode(), startNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
 }
 
 void MyEdgeBase::enableNormalMode() {
