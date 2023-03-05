@@ -114,4 +114,12 @@ protected:
     bool _areChildNodesLocked;
 };
 
+class MyClassicNode : public MyNodeBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicNode(const QString& name, const qreal& x, const qreal& y);
+};
+
 #endif

@@ -282,3 +282,9 @@ void MyNodeBase::write(QJsonObject &json) {
     style()->write(styleObject);
     json["style"] = styleObject;
 }
+
+// MyClassicNode
+
+MyClassicNode::MyClassicNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
+
+}
