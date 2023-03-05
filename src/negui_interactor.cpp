@@ -294,13 +294,8 @@ void MyInteractor::addNodes(const QJsonObject &json) {
 
 void MyInteractor::addNode(const QJsonObject &json) {
     MyElementBase* node = createNode(json);
-    if (node) {
-        MyElementStyleBase* style = createNodeStyle(json);
-        if (!style)
-            style = getCopyNodeStyle(node->name() + "_style", nodeStyle());
-        node->setStyle(style);
+    if (node)
         addNode(node);
-    }
 }
 
 void MyInteractor::addNode(MyElementBase* n) {
@@ -320,10 +315,10 @@ void MyInteractor::addNode(MyElementBase* n) {
     }
 }
 
+#include <iostream>
 void MyInteractor::addNewNode(const QPointF& position) {
     if (mode() == ADD_NODE_MODE) {
-        MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), position.x(), position.y());
-        node->setStyle(getCopyNodeStyle(node->name() + "_style", nodeStyle()));
+        MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
         addNode(node);
         createChangeStageCommand();
     }
@@ -396,14 +391,8 @@ void MyInteractor::addEdges(const QJsonObject &json) {
 
 void MyInteractor::addEdge(const QJsonObject &json) {
     MyElementBase* edge = createEdge(json, findStartNode(nodes(), json), findEndNode(nodes(), json));
-    if (edge) {
-        MyElementStyleBase* style = createEdgeStyle(json);
-        if (!style)
-            style = getCopyEdgeStyle(edge->name() + "_style", edgeStyle());
-        edge->setStyle(style);
-        ((MyEdge*)edge)->connectToNodes(true);
+    if (edge)
         addEdge(edge);
-    }
 }
 
 void MyInteractor::addEdge(MyElementBase* e) {

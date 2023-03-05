@@ -47,9 +47,7 @@ const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelcetedNodes() {
 }
 
 void MyNewEdgeBuilderBase::buildNewEdge(MyElementBase* sourceNode, MyElementBase* targetNode, MyElementStyleBase* newEdgeStyle) {
-    MyElementBase* newEdge = createEdge(askForEdgeUniqueName(newEdgeStyle), sourceNode, targetNode);
-    newEdge->setStyle(getCopyEdgeStyle(style()->name() + "_" + newEdgeStyle->name(), newEdgeStyle));
-    ((MyEdge*)newEdge)->connectToNodes(true);
+    MyElementBase* newEdge = createEdge(askForEdgeUniqueName(newEdgeStyle), getCopyEdgeStyle(style()->name() + "_" + newEdgeStyle->name(), newEdgeStyle), sourceNode, targetNode);
     emit askForAddEdge(newEdge);
 }
 
@@ -123,8 +121,7 @@ void MyNewTemplateBuilder::buildNewEdge() {
 void MyNewTemplateBuilder::buildIntermediaryNode() {
     if (((MyTemplateStyle*)style())->intermediaryNodeStyle()) {
         QPointF position = intermediaryNodePosition();
-        _intermediaryNode = createNode(askForNodeUniqueName(((MyTemplateStyle*)style())->intermediaryNodeStyle()), position.x(), position.y());
-        _intermediaryNode->setStyle(getCopyNodeStyle(style()->name() + "_" + ((MyTemplateStyle*)style())->intermediaryNodeStyle()->name(), ((MyTemplateStyle*)style())->intermediaryNodeStyle()));
+        _intermediaryNode = createNode(askForNodeUniqueName(((MyTemplateStyle*)style())->intermediaryNodeStyle()), getCopyNodeStyle(style()->name() + "_" + ((MyTemplateStyle*)style())->intermediaryNodeStyle()->name(), ((MyTemplateStyle*)style())->intermediaryNodeStyle()), position.x(), position.y());
         askForAddNode(_intermediaryNode);
     }
 }

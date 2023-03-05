@@ -79,8 +79,7 @@ void MyEdge::setArrowHead() {
     }
     
     if (((MyEdgeStyle*)style())->arrowHeadStyle() && ((MyEdgeStyle*)style())->arrowHeadStyle()->shapeStyles().size()) {
-        _arrowHead = createArrowHead(name() + "_ArrowHead", this);
-        _arrowHead->setStyle(((MyEdgeStyle*)style())->arrowHeadStyle());
+        _arrowHead = createArrowHead(name() + "_ArrowHead", ((MyEdgeStyle*)style())->arrowHeadStyle(), this);
         _isSetArrowHead = true;
     }
 }
