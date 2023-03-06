@@ -25,7 +25,7 @@ MyElementBase* createNode(const QJsonObject &json) {
 }
 
 MyElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, MyElementBase* startNode, MyElementBase* endNode) {
-    MyElementBase* edge = new MyEdgeBase(name, startNode, endNode);
+    MyElementBase* edge = new MyClassicEdge(name, startNode, endNode);
     edge->setStyle(edgeStyle);
     ((MyEdgeBase*)edge)->connectToNodes(true);
     return edge;
@@ -44,7 +44,7 @@ MyElementBase* createEdge(const QJsonObject &json, MyElementBase* startNode, MyE
 }
 
 MyElementBase* createArrowHead(const QString& name, MyElementStyleBase* arrowHeadStyle, MyElementBase* edge) {
-    MyElementBase* arrowHead = new MyArrowHeadBase(name, edge);
+    MyElementBase* arrowHead = new MyClassicArrowHead(name, edge);
     arrowHead->setStyle(arrowHeadStyle);
     return arrowHead;
 }

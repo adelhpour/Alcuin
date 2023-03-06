@@ -4,13 +4,20 @@
 #include "negui_element_base.h"
 
 class MyArrowHeadBase : public MyElementBase {
+
 public:
+
+    typedef enum {
+        CLASSIC_ARROW_HEAD,
+    } ARROW_HEAD_TYPE;
 
     MyArrowHeadBase(const QString& name, MyElementBase* edge);
     
     ~MyArrowHeadBase();
     
     ELEMENT_TYPE type() override;
+
+    virtual ARROW_HEAD_TYPE arrowHeadType() = 0;
     
     // get the edge this arrow head belongs to
     MyElementBase* edge();
@@ -37,6 +44,16 @@ protected:
     MyElementBase* _edge;
     QPointF _position;
     qreal _slope;
+};
+
+class MyClassicArrowHead : public MyArrowHeadBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicArrowHead(const QString& name, MyElementBase* edge);
+
+    ARROW_HEAD_TYPE arrowHeadType() override;
 };
 
 #endif

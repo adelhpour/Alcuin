@@ -245,3 +245,13 @@ qreal getRadius(const QRectF& rect, const QPointF& point) {
         
     return qMax(rect.width(), rect.height());
 }
+
+// MyClassicEdge
+
+MyClassicEdge::MyClassicEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode) : MyEdgeBase(name, startNode, endNode) {
+
+}
+
+MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {
+    return CLASSIC_EDGE;
+}

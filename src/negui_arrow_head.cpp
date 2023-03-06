@@ -85,3 +85,13 @@ void MyArrowHeadBase::read(const QJsonObject &json) {
 void MyArrowHeadBase::write(QJsonObject &json) {
     
 }
+
+// MyClassicArrowHead
+
+MyClassicArrowHead::MyClassicArrowHead(const QString& name, MyElementBase* edge) : MyArrowHeadBase(name, edge) {
+
+}
+
+MyArrowHeadBase::ARROW_HEAD_TYPE MyClassicArrowHead::arrowHeadType() {
+    return CLASSIC_ARROW_HEAD;
+}

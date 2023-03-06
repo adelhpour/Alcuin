@@ -7,12 +7,18 @@ class MyEdgeBase : public MyElementBase {
     Q_OBJECT
     
 public:
+
+    typedef enum {
+        CLASSIC_EDGE,
+    } EDGE_TYPE;
     
     MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
     
     ~MyEdgeBase();
     
     ELEMENT_TYPE type() override;
+
+    virtual EDGE_TYPE edgeType() = 0;
     
     MyElementBase* startNode();
     MyElementBase* endNode();
@@ -77,6 +83,16 @@ protected:
     MyElementBase* _arrowHead;
     bool _isSetArrowHead;
     bool _isConnectedToNodes;
+};
+
+class MyClassicEdge : public MyEdgeBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
+
+    EDGE_TYPE edgeType() override;
 };
 
 const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* connectedNode);
