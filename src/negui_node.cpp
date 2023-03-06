@@ -215,6 +215,10 @@ MyClassicNode::MyClassicNode(const QString& name, const qreal& x, const qreal& y
     _areChildNodesLocked = false;
 }
 
+MyNodeBase::NODE_TYPE MyClassicNode::nodeType() {
+    return CLASSIC_NODE;
+}
+
 void MyClassicNode::addChildNode(MyElementBase* n) {
     if (n) {
         _childNodes.push_back(n);
@@ -294,4 +298,14 @@ void MyClassicNode::adjustExtents() {
     ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
     ((MyNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
     ((MyNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+}
+
+// MyCentroidNode
+
+MyCentroidNode::MyCentroidNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
+
+}
+
+MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
+    return CENTROID_NODE;
 }

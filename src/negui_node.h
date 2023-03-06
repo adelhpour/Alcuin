@@ -7,12 +7,19 @@ class MyNodeBase : public MyElementBase {
     Q_OBJECT
     
 public:
+
+    typedef enum {
+        CLASSIC_NODE,
+        CENTROID_NODE,
+    } NODE_TYPE;
     
     MyNodeBase(const QString& name, const qreal& x, const qreal& y);
     
     ~MyNodeBase();
     
     ELEMENT_TYPE type() override;
+
+    virtual NODE_TYPE nodeType() = 0;
     
     // add to edges
     void addEdge(MyElementBase* e);
@@ -97,6 +104,8 @@ public:
 
     MyClassicNode(const QString& name, const qreal& x, const qreal& y);
 
+    NODE_TYPE nodeType() override;
+
     // add to child nodes
     void addChildNode(MyElementBase* n);
 
@@ -125,6 +134,20 @@ public slots:
 
     // set the position of the node
     void setPosition(const QPointF& position) override;
+
+protected:
+    QList<MyElementBase*> _childNodes;
+    bool _areChildNodesLocked;
+};
+
+class MyCentroidNode : public MyNodeBase {
+    Q_OBJECT
+
+public:
+
+    MyCentroidNode(const QString& name, const qreal& x, const qreal& y);
+
+    NODE_TYPE nodeType() override;
 
 protected:
     QList<MyElementBase*> _childNodes;
