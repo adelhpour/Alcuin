@@ -3,8 +3,12 @@
 #include "negui_edge_graphics_item.h"
 #include "negui_arrow_head_graphics_item.h"
 
-MyElementGraphicsItemBase* createNodeSceneGraphicsItem(const QPointF &position) {
-    return new MyNodeSceneGraphicsItem(position);
+MyElementGraphicsItemBase* createClassicNodeSceneGraphicsItem(const QPointF &position) {
+    return new MyClassicNodeSceneGraphicsItem(position);
+}
+
+MyElementGraphicsItemBase* createCentroidNodeSceneGraphicsItem(const QPointF &position) {
+    return new MyCentroidNodeSceneGraphicsItem(position);
 }
 
 MyElementGraphicsItemBase* createEdgeSceneGraphicsItem() {

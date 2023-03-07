@@ -3,7 +3,9 @@
 
 #include "negui_element_graphics_item_base.h"
 
-MyElementGraphicsItemBase* createNodeSceneGraphicsItem(const QPointF &position);
+MyElementGraphicsItemBase* createClassicNodeSceneGraphicsItem(const QPointF &position);
+
+MyElementGraphicsItemBase* createCentroidNodeSceneGraphicsItem(const QPointF &position);
 
 MyElementGraphicsItemBase* createEdgeSceneGraphicsItem();
 
