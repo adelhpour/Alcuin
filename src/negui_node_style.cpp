@@ -3,82 +3,32 @@
 #include "negui_element_icon_builder.h"
 #include <QJsonArray>
 
-// MyNodeStyle
+// MyNodeStyleBase
 
-MyNodeStyle::MyNodeStyle(const QString& name) : MyElementStyleBase(name) {
+MyNodeStyleBase::MyNodeStyleBase(const QString& name) : MyElementStyleBase(name) {
     _category = "Node";
-    _convertibleParentCategory = "Node";
     _parentCategories.push_back("Node");
-    if (name == "Default")
-        addDefaultShapeStyle();
-    
-    _addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
-    ((MyAddRemoveNodeShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
     _iconSize = QSize(40, 40);
 }
 
-const QString MyNodeStyle::type() const {
+const QString MyNodeStyleBase::type() const {
     return "nodestyle";
 }
 
-void MyNodeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
-}
-
-MyShapeStyleBase* MyNodeStyle::createShapeStyle(const QString& shape) {
-    if (shape == "ellipse")
-        return createNodeEllipseStyle(shape);
-    else if (shape == "rect")
-        return createNodeRectStyle(shape);
-    else if (shape == "polygon")
-        return createNodePolygonStyle(shape);
-    else if (shape == "centroid")
-        return createNodeCentroidStyle(shape);
-    else if (shape == "text")
-        return createTextStyle(shape);
-    
-    return NULL;
-}
-
-QObject* MyNodeStyle::createIconBuilder() {
+QObject* MyNodeStyleBase::createIconBuilder() {
     return new MyNodeIconBuilder(this);
 }
 
-const QString MyNodeStyle::toolTipText() {
+const QString MyNodeStyleBase::toolTipText() {
     return "Add " + category();
 }
 
-const QString& MyNodeStyle::convertibleParentCategory() const {
-    return _convertibleParentCategory;
-}
-
-bool MyNodeStyle::isConvertibleToParentCategory(QList<QString> parentCategories) {
-    for (QString parentCategory : parentCategories) {
-        if (parentCategory == _convertibleParentCategory)
-            return true;
-    }
-    
-    return false;
-}
-
-void MyNodeStyle::convertToParentCategory() {
-    _category = convertibleParentCategory();
-}
-
-QList<QString> MyNodeStyle::parentCategories() {
+QList<QString> MyNodeStyleBase::parentCategories() {
     return _parentCategories;
 }
 
-QWidget* MyNodeStyle::getAddRemoveShapeStylesButtons() {
-    return _addRemoveShapeStylesButtons;
-}
-
-void MyNodeStyle::read(const QJsonObject &json) {
+void MyNodeStyleBase::read(const QJsonObject &json) {
     MyElementStyleBase::read(json);
-    _convertibleParentCategory.clear();
-    if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
-        _convertibleParentCategory = json["convertible-parent-category"].toString();
-
     _parentCategories.clear();
     if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
         QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
@@ -89,20 +39,97 @@ void MyNodeStyle::read(const QJsonObject &json) {
     }
 }
 
-void MyNodeStyle::write(QJsonObject &json) {
+void MyNodeStyleBase::write(QJsonObject &json) {
     MyElementStyleBase::write(json);
-    json["convertible-parent-category"] = convertibleParentCategory();
-    
     QJsonArray parentCategoriesArray;
     for (QString parentCategory : parentCategories())
         parentCategoriesArray.append(parentCategory);
     json["parent-categories"] = parentCategoriesArray;
 }
 
+// MyClassicNodeStyle
+
+MyClassicNodeStyle::MyClassicNodeStyle(const QString& name) : MyNodeStyleBase(name) {
+    _convertibleParentCategory = "Node";
+    if (name == "Default")
+        addDefaultShapeStyle();
+
+    _addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
+}
+
+void MyClassicNodeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
+}
+
+MyShapeStyleBase* MyClassicNodeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "ellipse")
+        return createNodeEllipseStyle(shape);
+    else if (shape == "rect")
+        return createNodeRectStyle(shape);
+    else if (shape == "polygon")
+        return createNodePolygonStyle(shape);
+    else if (shape == "text")
+        return createTextStyle(shape);
+
+    return NULL;
+}
+
+
+const QString& MyClassicNodeStyle::convertibleParentCategory() const {
+    return _convertibleParentCategory;
+}
+
+bool MyClassicNodeStyle::isConvertibleToParentCategory(QList<QString> parentCategories) {
+    for (QString parentCategory : parentCategories) {
+        if (parentCategory == _convertibleParentCategory)
+            return true;
+    }
+
+    return false;
+}
+
+void MyClassicNodeStyle::convertToParentCategory() {
+    _category = convertibleParentCategory();
+}
+
+QWidget* MyClassicNodeStyle::getAddRemoveShapeStylesButtons() {
+    return _addRemoveShapeStylesButtons;
+}
+
+void MyClassicNodeStyle::read(const QJsonObject &json) {
+    MyNodeStyleBase::read(json);
+    _convertibleParentCategory.clear();
+    if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
+        _convertibleParentCategory = json["convertible-parent-category"].toString();
+}
+
+void MyClassicNodeStyle::write(QJsonObject &json) {
+    MyNodeStyleBase::write(json);
+    json["convertible-parent-category"] = convertibleParentCategory();
+}
+
+// MyCentroidNodeStyle
+
+MyCentroidNodeStyle::MyCentroidNodeStyle(const QString& name) : MyNodeStyleBase(name) {
+    _parentCategories.push_back("Node");
+}
+
+void MyCentroidNodeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createNodeCentroidStyle("centroid"));
+}
+
+MyShapeStyleBase* MyCentroidNodeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "centroid")
+        return createNodeCentroidStyle(shape);
+
+    return NULL;
+}
+
 // MyAddRemoveNodeShapeStylesButtons
 
 MyAddRemoveNodeShapeStylesButtons::MyAddRemoveNodeShapeStylesButtons(QWidget* parent) : MyAddRemoveShapeStylesButtonsBase(parent) {
-    
+
 }
 
 void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
@@ -113,4 +140,3 @@ void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
         emit askForAddShapeStyle(polygonShapeStyle); });
     connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
 }
-

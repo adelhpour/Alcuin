@@ -3,30 +3,18 @@
 
 #include "negui_element_style_base.h"
 
-class MyNodeStyle : public MyElementStyleBase {
+class MyNodeStyleBase : public MyElementStyleBase {
 public:
-    
-    MyNodeStyle(const QString& name);
+
+    MyNodeStyleBase(const QString& name);
     
     const QString type() const override;
-    
-    void addDefaultShapeStyle() override;
-    
-    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
-    
+
     QObject* createIconBuilder() override;
-    
+
     const QString toolTipText() override;
     
-    const QString& convertibleParentCategory() const;
-    
-    bool isConvertibleToParentCategory(QList<QString> parentCategories);
-    
-    void convertToParentCategory();
-    
     QList<QString> parentCategories();
-    
-    QWidget* getAddRemoveShapeStylesButtons();
     
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
@@ -35,9 +23,45 @@ public:
     void write(QJsonObject &json) override;
     
 protected:
-    QString _convertibleParentCategory;
     QList<QString> _parentCategories;
+};
+
+class MyClassicNodeStyle : public MyNodeStyleBase {
+public:
+
+    MyClassicNodeStyle(const QString& name);
+
+    void addDefaultShapeStyle() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+
+    const QString& convertibleParentCategory() const;
+
+    bool isConvertibleToParentCategory(QList<QString> parentCategories);
+
+    void convertToParentCategory();
+
+    QWidget* getAddRemoveShapeStylesButtons();
+
+    // read the element style info from the json object
+    void read(const QJsonObject &json) override;
+
+    // write the element style info to the json object
+    void write(QJsonObject &json) override;
+
+protected:
+    QString _convertibleParentCategory;
     QWidget* _addRemoveShapeStylesButtons;
+};
+
+class MyCentroidNodeStyle : public MyNodeStyleBase {
+public:
+
+    MyCentroidNodeStyle(const QString& name);
+
+    void addDefaultShapeStyle() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 };
 
 class MyAddRemoveNodeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

@@ -74,8 +74,8 @@ void MyNodeBase::deparent() {
 void MyNodeBase::reparent() {
     MyElementBase* parentNode = askForParentNodeAtPosition(this, position());
     deparent();
-    if (parentNode && ((MyNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyle*)style())->parentCategories())) {
-        ((MyNodeStyle*)parentNode->style())->convertToParentCategory();
+    if (parentNode && ((MyClassicNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyleBase*)style())->parentCategories())) {
+        ((MyClassicNodeStyle*)parentNode->style())->convertToParentCategory();
         setParentNode((MyNodeBase*)parentNode);
         graphicsItem()->setZValue(calculateZValue());
         ((MyClassicNode*)parentNode)->adjustExtents();
@@ -146,12 +146,6 @@ QWidget* MyNodeBase::getFeatureMenu() {
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
-    
-    // add remove buttons
-    connect(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(((MyNodeStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
     
     return featureMenu;
 }
@@ -306,6 +300,19 @@ void MyClassicNode::adjustExtents() {
     ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
     ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
     ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+}
+
+QWidget* MyClassicNode::getFeatureMenu() {
+    QWidget* featureMenu = MyNodeBase::getFeatureMenu();
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    
+    // add remove buttons
+    connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+    
+    return featureMenu;
 }
 
 // MyCentroidNode

@@ -5,7 +5,7 @@
 #include "negui_template_style.h"
 
 MyElementStyleBase* createNodeStyle(const QString& name) {
-    return new MyNodeStyle(name);
+    return new MyClassicNodeStyle(name);
 }
 
 MyElementStyleBase* createNodeStyle(const QJsonObject &json) {

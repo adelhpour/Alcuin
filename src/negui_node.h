@@ -38,7 +38,7 @@ public:
     
     void setSelected(const bool& selected) override;
 
-    // get the positoin of the node
+    // get the position of the node
     const QPointF position() const;
 
     // get the id of parent node of the node
@@ -135,6 +135,8 @@ public:
 
     // adjust node extents to fit all its children
     void adjustExtents();
+
+    QWidget* getFeatureMenu() override;
 
 public slots:
 
