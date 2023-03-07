@@ -3,25 +3,31 @@
 
 #include "negui_element_style_base.h"
 
-class MyArrowHeadStyle : public MyElementStyleBase {
+class MyArrowHeadStyleBase : public MyElementStyleBase {
 public:
-    
-    MyArrowHeadStyle(const QString& name);
+
+    MyArrowHeadStyleBase(const QString& name);
     
     const QString type() const override;
-    
-    void addDefaultShapeStyle() override;
-    
-    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
     QObject* createIconBuilder() override;
     
     const QString toolTipText() override;
     
-    QWidget* getAddRemoveShapeStylesButtons();
-    
     void write(QJsonObject &json) override;
-    
+};
+
+class MyClassicArrowHeadStyle : public MyArrowHeadStyleBase {
+public:
+
+    MyClassicArrowHeadStyle(const QString& name);
+
+    void addDefaultShapeStyle() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+
+    QWidget* getAddRemoveShapeStylesButtons();
+
 protected:
     QWidget* _addRemoveShapeStylesButtons;
 };

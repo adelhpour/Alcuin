@@ -33,7 +33,7 @@ MyElementStyleBase* createEdgeStyle(const QJsonObject &json) {
 }
 
 MyElementStyleBase* createArrowHeadStyle(const QString& name) {
-    return new MyArrowHeadStyle(name);
+    return new MyClassicArrowHeadStyle(name);
 }
 
 MyElementStyleBase* createTemplateStyle(const QString& name) {

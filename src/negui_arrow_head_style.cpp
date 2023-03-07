@@ -2,42 +2,25 @@
 #include "negui_shape_style_builder.h"
 #include "negui_element_icon_builder.h"
 
-// MyArrowHeadStyle
+// MyArrowHeadStyleBase
 
-MyArrowHeadStyle::MyArrowHeadStyle(const QString& name) : MyElementStyleBase(name) {
+MyArrowHeadStyleBase::MyArrowHeadStyleBase(const QString& name) : MyElementStyleBase(name) {
     _category = "ArrowHead";
-    _addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
-    ((MyAddRemoveArrowHeadShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
 }
 
-const QString MyArrowHeadStyle::type() const {
+const QString MyArrowHeadStyleBase::type() const {
     return "arrowheadstyle";
 }
 
-void MyArrowHeadStyle::addDefaultShapeStyle() {
-    
-}
-
-MyShapeStyleBase* MyArrowHeadStyle::createShapeStyle(const QString& shape) {
-    if (shape == "ellipse")
-        return createArrowHeadEllipseStyle(shape);
-    else if (shape == "rect")
-        return createArrowHeadRectStyle(shape);
-    else if (shape == "polygon")
-        return createArrowHeadPolygonStyle(shape);
-    
-    return NULL;
-}
-
-QObject* MyArrowHeadStyle::createIconBuilder() {
+QObject* MyArrowHeadStyleBase::createIconBuilder() {
     return new MyArrowHeadIconBuilder(this);
 }
 
-const QString MyArrowHeadStyle::toolTipText() {
+const QString MyArrowHeadStyleBase::toolTipText() {
     return "";
 }
 
-void MyArrowHeadStyle::write(QJsonObject &json) {
+void MyArrowHeadStyleBase::write(QJsonObject &json) {
     MyElementStyleBase::write(json);
     
     QRectF extents = getShapesExtents();
@@ -53,7 +36,29 @@ void MyArrowHeadStyle::write(QJsonObject &json) {
     json["dimensions"] = dimensionsObject;
 }
 
-QWidget* MyArrowHeadStyle::getAddRemoveShapeStylesButtons() {
+// MyClassicArrowHeadStyle
+
+MyClassicArrowHeadStyle::MyClassicArrowHeadStyle(const QString& name) : MyArrowHeadStyleBase(name) {
+    _addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
+    ((MyAddRemoveArrowHeadShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
+}
+
+void MyClassicArrowHeadStyle::addDefaultShapeStyle() {
+
+}
+
+MyShapeStyleBase* MyClassicArrowHeadStyle::createShapeStyle(const QString& shape) {
+    if (shape == "ellipse")
+        return createArrowHeadEllipseStyle(shape);
+    else if (shape == "rect")
+        return createArrowHeadRectStyle(shape);
+    else if (shape == "polygon")
+        return createArrowHeadPolygonStyle(shape);
+
+    return NULL;
+}
+
+QWidget* MyClassicArrowHeadStyle::getAddRemoveShapeStylesButtons() {
     return _addRemoveShapeStylesButtons;
 }
 

@@ -64,13 +64,7 @@ QWidget* MyArrowHeadBase::getFeatureMenu() {
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
-    
-    // add remove buttons
-    connect(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(((MyArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
-    
+
     return featureMenu;
 }
 
@@ -94,4 +88,17 @@ MyClassicArrowHead::MyClassicArrowHead(const QString& name, MyElementBase* edge)
 
 MyArrowHeadBase::ARROW_HEAD_TYPE MyClassicArrowHead::arrowHeadType() {
     return CLASSIC_ARROW_HEAD;
+}
+
+QWidget* MyClassicArrowHead::getFeatureMenu() {
+    QWidget* featureMenu = MyArrowHeadBase::getFeatureMenu();
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+
+    // add remove buttons
+    connect(((MyClassicArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(((MyClassicArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyClassicArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(((MyClassicArrowHeadStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+
+    return featureMenu;
 }

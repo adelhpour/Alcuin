@@ -29,7 +29,7 @@ public:
     void setSelected(const bool& selected) override;
     
     const QRectF getExtents() override;
-    
+
     QWidget* getFeatureMenu() override;
     
     const qint32 calculateZValue() override;
@@ -54,6 +54,8 @@ public:
     MyClassicArrowHead(const QString& name, MyElementBase* edge);
 
     ARROW_HEAD_TYPE arrowHeadType() override;
+
+    QWidget* getFeatureMenu() override;
 };
 
 #endif
