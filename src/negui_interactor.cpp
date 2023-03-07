@@ -315,7 +315,6 @@ void MyInteractor::addNode(MyElementBase* n) {
     }
 }
 
-#include <iostream>
 void MyInteractor::addNewNode(const QPointF& position) {
     if (mode() == ADD_NODE_MODE) {
         MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
