@@ -19,7 +19,7 @@ MyElementStyleBase* createNodeStyle(const QJsonObject &json) {
 }
 
 MyElementStyleBase* createEdgeStyle(const QString& name) {
-    return new MyEdgeStyle(name);
+    return new MyClassicEdgeStyle(name);
 }
 
 MyElementStyleBase* createEdgeStyle(const QJsonObject &json) {

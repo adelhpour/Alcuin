@@ -75,7 +75,7 @@ QList<QGraphicsItem*> MyEdgeIconBuilder::getIconGraphicsItems() {
     qreal paddingRotation = qRadiansToDegrees(qAtan2(verticalPadding, (0.5 * iconWidth)));
     QList<QGraphicsItem*> items = getEdgeIconGraphicsItems(style(), QPointF(0.0, -verticalPadding), QPointF(iconWidth, verticalPadding));
     
-    items += getArrowHeadIconGraphicsItems(((MyEdgeStyle*)style())->arrowHeadStyle(), QPointF(iconWidth, verticalPadding), paddingRotation);
+    items += getArrowHeadIconGraphicsItems(((MyEdgeStyleBase*)style())->arrowHeadStyle(), QPointF(iconWidth, verticalPadding), paddingRotation);
     
     return items;
 }
@@ -116,7 +116,7 @@ QList<QGraphicsItem*> MyTemplateIconBuilder::getSourceEdgeIconGraphicsItems() {
         verticalPadding = getVerticalPadding(sourceEdgeStyle, ((MyTemplateStyle*)style())->sourceEdgeStyles());
         paddingRotation = qRadiansToDegrees(qAtan2(verticalPadding, (0.5 * getIconWidth())));
         items += getEdgeIconGraphicsItems(sourceEdgeStyle, QPointF(0.0, verticalPadding), QPointF(0.5 * (getIconWidth() - getIntermediaryShapeWidth()), 0.0));
-        items += getArrowHeadIconGraphicsItems(((MyEdgeStyle*)sourceEdgeStyle)->arrowHeadStyle(), QPointF(0.5 * (getIconWidth() - getIntermediaryShapeWidth()), 0.0), -paddingRotation);
+        items += getArrowHeadIconGraphicsItems(((MyEdgeStyleBase*)sourceEdgeStyle)->arrowHeadStyle(), QPointF(0.5 * (getIconWidth() - getIntermediaryShapeWidth()), 0.0), -paddingRotation);
     }
     
     return items;
@@ -130,7 +130,7 @@ QList<QGraphicsItem*> MyTemplateIconBuilder::getTargetEdgeIconGraphicsItems() {
         verticalPadding = getVerticalPadding(targetEdgeStyle, ((MyTemplateStyle*)style())->targetEdgeStyles());
         paddingRotation = qRadiansToDegrees(qAtan2(verticalPadding, (0.5 * getIconWidth())));
         items += getEdgeIconGraphicsItems(targetEdgeStyle, QPointF(0.5 * (getIconWidth() + getIntermediaryShapeWidth()), 0.0), QPointF(getIconWidth(), verticalPadding));
-        items += getArrowHeadIconGraphicsItems(((MyEdgeStyle*)targetEdgeStyle)->arrowHeadStyle(), QPointF(getIconWidth(), verticalPadding), paddingRotation);
+        items += getArrowHeadIconGraphicsItems(((MyEdgeStyleBase*)targetEdgeStyle)->arrowHeadStyle(), QPointF(getIconWidth(), verticalPadding), paddingRotation);
     }
     
     return items;

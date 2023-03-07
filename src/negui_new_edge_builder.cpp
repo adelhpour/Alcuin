@@ -36,7 +36,7 @@ const bool MyNewEdgeBuilderBase::canSelectNodeAsConnectedNode(MyElementBase* nod
 }
 
 bool MyNewEdgeBuilderBase::isConnectableToNode(MyElementBase* node) {
-    return ((MyEdgeStyle*)edgeStyle())->isConnectableToNodeCategory(node->style()->category(), connectToNodeAs()) ? true : false;
+    return ((MyEdgeStyleBase*)edgeStyle())->isConnectableToNodeCategory(node->style()->category(), connectToNodeAs()) ? true : false;
 }
 
 const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelcetedNodes() {
@@ -68,7 +68,7 @@ QList<MyElementBase*> MyNewEdgeBuilderBase::selectedEdgeTargetNodes() {
 }
 
 const QString MyNewEdgeBuilderBase::toolTipText() {
-    return ((MyEdgeStyle*)edgeStyle())->toolTipText(connectToNodeAs());
+    return ((MyEdgeStyleBase*)edgeStyle())->toolTipText(connectToNodeAs());
 }
 
 const QString MyNewEdgeBuilderBase::connectToNodeAs() {

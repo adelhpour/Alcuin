@@ -3,10 +3,10 @@
 
 #include "negui_element_style_base.h"
 
-class MyEdgeStyle : public MyElementStyleBase {
+class MyEdgeStyleBase : public MyElementStyleBase {
 public:
-    
-    MyEdgeStyle(const QString& name);
+
+    MyEdgeStyleBase(const QString& name);
     
     const QString type() const override;
     
@@ -21,10 +21,6 @@ public:
     QList<QString> connectableTargetNodeCategories();
     
     MyElementStyleBase* arrowHeadStyle();
-    
-    void addDefaultShapeStyle() override;
-    
-    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
     
     QObject* createIconBuilder() override;
     
@@ -44,6 +40,16 @@ protected:
     MyElementStyleBase* _arrowHeadStyle;
     QList<QString> _connectableSourceNodeCategories;
     QList<QString> _connectableTargetNodeCategories;
+};
+
+class MyClassicEdgeStyle : public MyEdgeStyleBase {
+public:
+
+    MyClassicEdgeStyle(const QString& name);
+
+    void addDefaultShapeStyle() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 };
 
 #endif

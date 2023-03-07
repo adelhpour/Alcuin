@@ -5,24 +5,21 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-// MyEdgeStyle
+// MyEdgeStyleBase
 
-MyEdgeStyle::MyEdgeStyle(const QString& name) : MyElementStyleBase(name) {
+MyEdgeStyleBase::MyEdgeStyleBase(const QString& name) : MyElementStyleBase(name) {
     _category = "Edge";
     _connectableSourceNodeCategories.push_back("Node");
     _connectableTargetNodeCategories.push_back("Node");
-    if (name == "Default")
-        addDefaultShapeStyle();
-    
     _arrowHeadStyle = createArrowHeadStyle(name + "_ArrowHead");
     _iconSize = QSize(75, 45);
 }
 
-const QString MyEdgeStyle::type() const {
+const QString MyEdgeStyleBase::type() const {
     return "edgestyle";
 }
 
-bool MyEdgeStyle::isConnectableToNodeCategory(const QString& connectedNodeCategory, const QString& connectToNodeAs) {
+bool MyEdgeStyleBase::isConnectableToNodeCategory(const QString& connectedNodeCategory, const QString& connectToNodeAs) {
     if (connectToNodeAs == "source") {
         if (isConnectableToSourceNodeCategory(connectedNodeCategory))
             return true;
@@ -35,7 +32,7 @@ bool MyEdgeStyle::isConnectableToNodeCategory(const QString& connectedNodeCatego
     return false;
 }
 
-bool MyEdgeStyle::isConnectableToSourceNodeCategory(const QString& connectedSourceNodeCategory) {
+bool MyEdgeStyleBase::isConnectableToSourceNodeCategory(const QString& connectedSourceNodeCategory) {
     for (QString connectableSourceNodeCategory : _connectableSourceNodeCategories) {
         if (connectableSourceNodeCategory == connectedSourceNodeCategory)
             return true;
@@ -44,7 +41,7 @@ bool MyEdgeStyle::isConnectableToSourceNodeCategory(const QString& connectedSour
     return false;
 }
 
-bool MyEdgeStyle::isConnectableToTargetNodeCategory(const QString& connectedTargetNodeCategory) {
+bool MyEdgeStyleBase::isConnectableToTargetNodeCategory(const QString& connectedTargetNodeCategory) {
     for (QString connectableTargetNodeCategory : _connectableTargetNodeCategories) {
         if (connectableTargetNodeCategory == connectedTargetNodeCategory)
             return true;
@@ -53,38 +50,27 @@ bool MyEdgeStyle::isConnectableToTargetNodeCategory(const QString& connectedTarg
     return false;
 }
 
-QList<QString> MyEdgeStyle::connectableSourceNodeCategories() {
+QList<QString> MyEdgeStyleBase::connectableSourceNodeCategories() {
     return _connectableSourceNodeCategories;
 }
 
-QList<QString> MyEdgeStyle::connectableTargetNodeCategories() {
+QList<QString> MyEdgeStyleBase::connectableTargetNodeCategories() {
     return _connectableTargetNodeCategories;
 }
 
-MyElementStyleBase* MyEdgeStyle::arrowHeadStyle() {
+MyElementStyleBase* MyEdgeStyleBase::arrowHeadStyle() {
     return _arrowHeadStyle;
 }
 
-void MyEdgeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(createLineStyle("line"));
-}
-
-MyShapeStyleBase* MyEdgeStyle::createShapeStyle(const QString& shape) {
-    if (shape == "line")
-        return createLineStyle("line");
-    
-    return NULL;
-}
-
-QObject* MyEdgeStyle::createIconBuilder() {
+QObject* MyEdgeStyleBase::createIconBuilder() {
     return new MyEdgeIconBuilder(this);
 }
 
-const QString MyEdgeStyle::toolTipText() {
+const QString MyEdgeStyleBase::toolTipText() {
     return toolTipText("source");
 }
 
-const QString MyEdgeStyle::toolTipText(const QString& connectToNodeAs) {
+const QString MyEdgeStyleBase::toolTipText(const QString& connectToNodeAs) {
     if (connectToNodeAs == "source")
         return sourceToolTipText();
     else if (connectToNodeAs == "target")
@@ -93,7 +79,7 @@ const QString MyEdgeStyle::toolTipText(const QString& connectToNodeAs) {
     return "Select Node";
 }
 
-const QString MyEdgeStyle::sourceToolTipText() {
+const QString MyEdgeStyleBase::sourceToolTipText() {
     QString text = "Select ";
     for (int i = 0; i < _connectableSourceNodeCategories.size(); i++) {
         text.append(_connectableSourceNodeCategories.at(i));
@@ -103,7 +89,7 @@ const QString MyEdgeStyle::sourceToolTipText() {
     return text;
 }
 
-const QString MyEdgeStyle::targetToolTipText() {
+const QString MyEdgeStyleBase::targetToolTipText() {
     QString text = "Select ";
     for (int i = 0; i < _connectableTargetNodeCategories.size(); i++) {
         text.append(_connectableTargetNodeCategories.at(i));
@@ -113,7 +99,7 @@ const QString MyEdgeStyle::targetToolTipText() {
     return text;
 }
 
-void MyEdgeStyle::read(const QJsonObject &json) {
+void MyEdgeStyleBase::read(const QJsonObject &json) {
     MyElementStyleBase::read(json);
     
     _connectableSourceNodeCategories.clear();
@@ -138,7 +124,7 @@ void MyEdgeStyle::read(const QJsonObject &json) {
         arrowHeadStyle()->read(json["arrow-head"].toObject());
 }
 
-void MyEdgeStyle::write(QJsonObject &json) {
+void MyEdgeStyleBase::write(QJsonObject &json) {
     MyElementStyleBase::write(json);
     
     QJsonArray connectableSourceNodeCategoriesArray;
@@ -155,3 +141,32 @@ void MyEdgeStyle::write(QJsonObject &json) {
     arrowHeadStyle()->write(arrowHeadObject);
     json["arrow-head"] = arrowHeadObject;
 }
+
+// MyClassicEdgeStyle
+
+MyClassicEdgeStyle::MyClassicEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
+    if (name == "Default")
+        addDefaultShapeStyle();
+}
+
+void MyClassicEdgeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createLineStyle("line"));
+}
+
+MyShapeStyleBase* MyClassicEdgeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "line")
+        return createLineStyle("line");
+
+    return NULL;
+}
+
+
+
+
+
+
+
+
+
+
+

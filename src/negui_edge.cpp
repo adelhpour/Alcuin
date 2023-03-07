@@ -78,8 +78,8 @@ void MyEdgeBase::setArrowHead() {
         _isSetArrowHead = false;
     }
     
-    if (((MyEdgeStyle*)style())->arrowHeadStyle() && ((MyEdgeStyle*)style())->arrowHeadStyle()->shapeStyles().size()) {
-        _arrowHead = createArrowHead(name() + "_ArrowHead", ((MyEdgeStyle*)style())->arrowHeadStyle(), this);
+    if (((MyEdgeStyleBase*)style())->arrowHeadStyle() && ((MyEdgeStyleBase*)style())->arrowHeadStyle()->shapeStyles().size()) {
+        _arrowHead = createArrowHead(name() + "_ArrowHead", ((MyEdgeStyleBase*)style())->arrowHeadStyle(), this);
         _isSetArrowHead = true;
     }
 }
