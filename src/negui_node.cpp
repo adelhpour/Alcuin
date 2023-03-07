@@ -13,13 +13,6 @@ MyNodeBase::MyNodeBase(const QString& name, const qreal& x, const qreal& y) : My
     _isSetParentNode = false;
     _isParentNodeLocked = false;
     _position = QPointF(x, y);
-    _graphicsItem = createNodeSceneGraphicsItem(position());
-    connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
-    connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
-    connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
 MyNodeBase::~MyNodeBase() {
@@ -28,6 +21,15 @@ MyNodeBase::~MyNodeBase() {
 
 MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
     return NODE_ELEMENT;
+}
+
+void MyNodeBase::connectGraphicsItem() {
+    connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
+    connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
+    connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
+    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
 void MyNodeBase::addEdge(MyElementBase* e) {
@@ -122,7 +124,7 @@ void MyNodeBase::lockParentNode(const bool& locked) {
 }
 
 void MyNodeBase::resetPosition() {
-    setPosition(((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents().center());
+    setPosition(((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents().center());
 }
 
 const QPointF MyNodeBase::position() const {
@@ -130,7 +132,7 @@ const QPointF MyNodeBase::position() const {
 }
 
 const QRectF MyNodeBase::getExtents() {
-    return ((MyNodeSceneGraphicsItem*)graphicsItem())->getExtents();
+    return ((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents();
 }
 
 QWidget* MyNodeBase::getFeatureMenu() {
@@ -213,10 +215,16 @@ void MyNodeBase::write(QJsonObject &json) {
 
 MyClassicNode::MyClassicNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
     _areChildNodesLocked = false;
+    _graphicsItem = createGraphicsItem(position());
+    connectGraphicsItem();
 }
 
 MyNodeBase::NODE_TYPE MyClassicNode::nodeType() {
     return CLASSIC_NODE;
+}
+
+MyElementGraphicsItemBase* MyClassicNode::createGraphicsItem(const QPointF &position) {
+    return createClassicNodeSceneGraphicsItem(position);
 }
 
 void MyClassicNode::addChildNode(MyElementBase* n) {
@@ -255,7 +263,7 @@ void MyClassicNode::setPosition(const QPointF& position) {
     if (!areChildNodesLocked()) {
         for (MyElementBase* node : qAsConst(childNodes())) {
             ((MyNodeBase*)node)->lockParentNode(true);
-            ((MyNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
+            ((MyClassicNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
         }
     }
     else
@@ -295,17 +303,22 @@ const QRectF MyClassicNode::getExtents() {
 void MyClassicNode::adjustExtents() {
     QRectF extents = getExtents();
     lockChildNodes(true);
-    ((MyNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
-    ((MyNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
-    ((MyNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+    ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
+    ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
+    ((MyClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
 }
 
 // MyCentroidNode
 
 MyCentroidNode::MyCentroidNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
-
+    _graphicsItem = createGraphicsItem(position());
+    connectGraphicsItem();
 }
 
 MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
     return CENTROID_NODE;
+}
+
+MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
+    return createCentroidNodeSceneGraphicsItem(position);
 }

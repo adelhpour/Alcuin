@@ -20,6 +20,8 @@ public:
     ELEMENT_TYPE type() override;
 
     virtual NODE_TYPE nodeType() = 0;
+
+    void connectGraphicsItem();
     
     // add to edges
     void addEdge(MyElementBase* e);
@@ -29,6 +31,8 @@ public:
     
     // get edges
     QList<MyElementBase*>& edges();
+
+    virtual MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
     
     void updateGraphicsItem() override;
     
@@ -106,6 +110,8 @@ public:
 
     NODE_TYPE nodeType() override;
 
+    MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
     // add to child nodes
     void addChildNode(MyElementBase* n);
 
@@ -148,6 +154,8 @@ public:
     MyCentroidNode(const QString& name, const qreal& x, const qreal& y);
 
     NODE_TYPE nodeType() override;
+
+    MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
 protected:
     QList<MyElementBase*> _childNodes;
