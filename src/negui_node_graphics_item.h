@@ -10,26 +10,18 @@ class MyNodeGraphicsItemBase : public MyElementGraphicsItemBase {
 public:
     
     MyNodeGraphicsItemBase(QGraphicsItem *parent = nullptr);
-    
+
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
 };
 
-class MyNodeSceneGraphicsItem : public MyNodeGraphicsItemBase {
+class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {
     Q_OBJECT
     
 public:
-    
-    MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
-    
-    void clearResizeHandledGraphicsItems() override;
-    
-    void moveBy(qreal dx, qreal dy);
+
+    MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
     
     void deparent();
-    
-    void moveChildItems(const QPointF& movedDistance);
-    
-    void adjustOriginalPosition();
     
     void enableNormalMode() override;
 
@@ -43,9 +35,6 @@ public:
 
     void enableRemoveMode() override;
     
-public slots:
-    void updateExtents(const QRectF& extents);
-    
 signals:
     
     void askForDeparent();
@@ -56,20 +45,55 @@ signals:
     
 protected:
     
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-    
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    
     void keyPressEvent(QKeyEvent *event) override;
     
     void keyReleaseEvent(QKeyEvent *event) override;
     
-    void focusOutEvent(QFocusEvent *event) override;
-    
     bool _reparent;
     QPointF _mousePressedPosition;
+};
+
+class MyClassicNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+
+    void clearResizeHandledGraphicsItems() override;
+
+    void moveBy(qreal dx, qreal dy);
+
+    void moveChildItems(const QPointF& movedDistance);
+
+    void adjustOriginalPosition();
+
+public slots:
+            void updateExtents(const QRectF& extents);
+
+protected:
+
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void focusOutEvent(QFocusEvent *event) override;
+
+    QPointF _mousePressedPosition;
+};
+
+class MyCentroidNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+
+protected:
+
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {

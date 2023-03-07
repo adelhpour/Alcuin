@@ -31,15 +31,14 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
         item->setZValue(zValue());
     }
 
-    
     return item;
 }
 
-// MyNodeSceneGraphicsItem
+// MyNodeSceneGraphicsItemBase
 
-MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
+MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
     _originalPosition = position;
-    
+
     // make it movable
     setFlag(QGraphicsItem::ItemIsMovable, true);
     
@@ -54,93 +53,43 @@ MyNodeSceneGraphicsItem::MyNodeSceneGraphicsItem(const QPointF &position, QGraph
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItem::clearResizeHandledGraphicsItems() {
-    MyElementGraphicsItemBase::clearResizeHandledGraphicsItems();
-    emit askForResetPosition();
-    adjustOriginalPosition();
-    emit askForCreateChangeStageCommand();
-}
-
-void MyNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
-    if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
-        QGraphicsItem::moveBy(dx, dy);
-    else
-        emit askForResetPosition();
-}
-
-void MyNodeSceneGraphicsItem::deparent() {
+void MyNodeSceneGraphicsItemBase::deparent() {
     if (_reparent)
         emit askForDeparent();
 }
 
-void MyNodeSceneGraphicsItem::moveChildItems(const QPointF& movedDistance) {
-    for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-        if (casted_item)
-            casted_item->setMovedDistance(movedDistance);
-    }
-}
-
-void MyNodeSceneGraphicsItem::adjustOriginalPosition() {
-    QPointF extentsCenter = getExtents().center();
-    for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-        if (casted_item)
-            casted_item->adjustOriginalPosition(extentsCenter - (_originalPosition + pos()));
-    }
-    _originalPosition = extentsCenter - pos();
-}
-
-void MyNodeSceneGraphicsItem::enableNormalMode() {
+void MyNodeSceneGraphicsItemBase::enableNormalMode() {
     MyElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);
 }
 
-void MyNodeSceneGraphicsItem::enableAddNodeMode() {
+void MyNodeSceneGraphicsItemBase::enableAddNodeMode() {
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNodeSceneGraphicsItem::enableSelectNodeMode() {
+void MyNodeSceneGraphicsItemBase::enableSelectNodeMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNodeSceneGraphicsItem::enableAddEdgeMode() {
+void MyNodeSceneGraphicsItemBase::enableAddEdgeMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNodeSceneGraphicsItem::enableSelectEdgeMode() {
+void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNodeSceneGraphicsItem::enableRemoveMode() {
+void MyNodeSceneGraphicsItemBase::enableRemoveMode() {
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-void MyNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
-    for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-        if (casted_item)
-            casted_item->updateExtents(QRectF(extents.x(), extents.y(), extents.width(), extents.height()));
-    }
-}
-
-QVariant MyNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &value) {
-    if (change == ItemPositionChange) {
-        deparent();
-        moveChildItems(value.toPointF());
-        emit askForResetPosition();
-    }
-    
-    return QGraphicsItem::itemChange(change, value);
-}
-
-void MyNodeSceneGraphicsItem::keyPressEvent(QKeyEvent *event) {
+void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
     QGraphicsItem::keyPressEvent(event);
     if (!event->isAccepted()) {
         if (event->key() == Qt::Key_Shift) {
@@ -151,7 +100,7 @@ void MyNodeSceneGraphicsItem::keyPressEvent(QKeyEvent *event) {
     }
 }
 
-void MyNodeSceneGraphicsItem::keyReleaseEvent(QKeyEvent *event) {
+void MyNodeSceneGraphicsItemBase::keyReleaseEvent(QKeyEvent *event) {
     QGraphicsItem::keyReleaseEvent(event);
     if (!event->isAccepted()) {
         if (event->key() == Qt::Key_Shift) {
@@ -162,13 +111,69 @@ void MyNodeSceneGraphicsItem::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-void MyNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+// MyClassicNodeSceneGraphicsItem
+
+MyClassicNodeSceneGraphicsItem::MyClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
+
+}
+
+void MyClassicNodeSceneGraphicsItem::clearResizeHandledGraphicsItems() {
+    MyElementGraphicsItemBase::clearResizeHandledGraphicsItems();
+    emit askForResetPosition();
+    adjustOriginalPosition();
+    emit askForCreateChangeStageCommand();
+}
+
+void MyClassicNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
+    if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
+        QGraphicsItem::moveBy(dx, dy);
+    else
+        emit askForResetPosition();
+}
+
+void MyClassicNodeSceneGraphicsItem::moveChildItems(const QPointF& movedDistance) {
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->setMovedDistance(movedDistance);
+    }
+}
+
+void MyClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
+    QPointF extentsCenter = getExtents().center();
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->adjustOriginalPosition(extentsCenter - (_originalPosition + pos()));
+    }
+    _originalPosition = extentsCenter - pos();
+}
+
+void MyClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->updateExtents(QRectF(extents.x(), extents.y(), extents.width(), extents.height()));
+    }
+}
+
+QVariant MyClassicNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &value) {
+    if (change == ItemPositionChange) {
+        deparent();
+        moveChildItems(value.toPointF());
+        emit askForResetPosition();
+    }
+
+    return QGraphicsItem::itemChange(change, value);
+}
+
+void MyClassicNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     MyElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
         _mousePressedPosition = event->scenePos();
 }
 
-void MyNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     MyElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
@@ -178,10 +183,25 @@ void MyNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void MyNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
+void MyClassicNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFocused(false);
     QGraphicsItem::focusOutEvent(event);
+}
+
+// MyCentroidNodeSceneGraphicsItem
+
+MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
+
+}
+
+QVariant MyCentroidNodeSceneGraphicsItem::itemChange(GraphicsItemChange change, const QVariant &value) {
+    if (change == ItemPositionChange) {
+        deparent();
+        emit askForResetPosition();
+    }
+
+    return QGraphicsItem::itemChange(change, value);
 }
 
 // MyNodeIconGraphicsItem
