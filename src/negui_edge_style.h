@@ -6,9 +6,15 @@
 class MyEdgeStyleBase : public MyElementStyleBase {
 public:
 
+    typedef enum {
+        CLASSIC_EDGE_STYLE,
+    } EDGE_STYLE_TYPE;
+
     MyEdgeStyleBase(const QString& name);
     
     const QString type() const override;
+
+    virtual EDGE_STYLE_TYPE edgeStyleType() = 0;
     
     bool isConnectableToNodeCategory(const QString& connectedNodeCategory, const QString& connectToNodeAs);
     
@@ -46,6 +52,8 @@ class MyClassicEdgeStyle : public MyEdgeStyleBase {
 public:
 
     MyClassicEdgeStyle(const QString& name);
+
+    EDGE_STYLE_TYPE edgeStyleType() override;
 
     void addDefaultShapeStyle() override;
 

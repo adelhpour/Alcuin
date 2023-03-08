@@ -149,6 +149,10 @@ MyClassicEdgeStyle::MyClassicEdgeStyle(const QString& name) : MyEdgeStyleBase(na
         addDefaultShapeStyle();
 }
 
+MyEdgeStyleBase::EDGE_STYLE_TYPE MyClassicEdgeStyle::edgeStyleType() {
+    return  CLASSIC_EDGE_STYLE;
+}
+
 void MyClassicEdgeStyle::addDefaultShapeStyle() {
     _shapeStyles.push_back(createLineStyle("line"));
 }
