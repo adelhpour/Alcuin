@@ -43,6 +43,10 @@ MyClassicArrowHeadStyle::MyClassicArrowHeadStyle(const QString& name) : MyArrowH
     ((MyAddRemoveArrowHeadShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
 }
 
+MyArrowHeadStyleBase::ARROW_HEAD_STYLE_TYPE MyClassicArrowHeadStyle::arrowHeadStyleType() {
+    return  CLASSIC_ARROW_HEAD_STYLE;
+}
+
 void MyClassicArrowHeadStyle::addDefaultShapeStyle() {
 
 }
