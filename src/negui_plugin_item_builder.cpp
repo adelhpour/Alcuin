@@ -1,5 +1,7 @@
 #include "negui_plugin_item_builder.h"
-#include "negui_element_style_builder.h"
+#include "negui_node_style_builder.h"
+#include "negui_edge_style_builder.h"
+#include "negui_template_style_builder.h"
 #include "negui_import_tools.h"
 #include "negui_export_tools.h"
 #include "negui_autolayout_engines.h"

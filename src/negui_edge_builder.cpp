@@ -1,5 +1,5 @@
 #include "negui_edge_builder.h"
-#include "negui_element_style_builder.h"
+#include "negui_edge_style_builder.h"
 #include "negui_edge.h"
 #include "negui_edge_style.h"
 

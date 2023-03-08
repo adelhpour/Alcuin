@@ -1,5 +1,6 @@
 #include "negui_template_style.h"
-#include "negui_element_style_builder.h"
+#include "negui_node_style_builder.h"
+#include "negui_edge_style_builder.h"
 #include "negui_element_icon_builder.h"
 #include <QJsonObject>
 #include <QJsonArray>
