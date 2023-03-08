@@ -6,9 +6,16 @@
 class MyNodeStyleBase : public MyElementStyleBase {
 public:
 
+    typedef enum {
+        CLASSIC_NODE_STYLE,
+        CENTROID_NODE_STYLE,
+    } NODE_STYLE_TYPE;
+
     MyNodeStyleBase(const QString& name);
     
     const QString type() const override;
+
+    virtual NODE_STYLE_TYPE nodeStyleType() = 0;
 
     QObject* createIconBuilder() override;
 
@@ -30,6 +37,8 @@ class MyClassicNodeStyle : public MyNodeStyleBase {
 public:
 
     MyClassicNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
 
     void addDefaultShapeStyle() override;
 
@@ -58,6 +67,8 @@ class MyCentroidNodeStyle : public MyNodeStyleBase {
 public:
 
     MyCentroidNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
 
     void addDefaultShapeStyle() override;
 

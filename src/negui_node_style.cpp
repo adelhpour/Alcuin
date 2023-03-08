@@ -58,6 +58,10 @@ MyClassicNodeStyle::MyClassicNodeStyle(const QString& name) : MyNodeStyleBase(na
     ((MyAddRemoveNodeShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
 }
 
+MyNodeStyleBase::NODE_STYLE_TYPE MyClassicNodeStyle::nodeStyleType() {
+    return CLASSIC_NODE_STYLE;
+}
+
 void MyClassicNodeStyle::addDefaultShapeStyle() {
     _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
 }
@@ -113,6 +117,10 @@ void MyClassicNodeStyle::write(QJsonObject &json) {
 
 MyCentroidNodeStyle::MyCentroidNodeStyle(const QString& name) : MyNodeStyleBase(name) {
     _parentCategories.push_back("Node");
+}
+
+MyNodeStyleBase::NODE_STYLE_TYPE MyCentroidNodeStyle::nodeStyleType() {
+    return CENTROID_NODE_STYLE;
 }
 
 void MyCentroidNodeStyle::addDefaultShapeStyle() {
