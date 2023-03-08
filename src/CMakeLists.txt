@@ -15,7 +15,9 @@ set(gui_sources
 		negui_node.cpp
 		negui_edge.cpp
 		negui_arrow_head.cpp
-		negui_element_builder.cpp
+		negui_node_builder.cpp
+		negui_edge_builder.cpp
+		negui_arrow_head_builder.cpp
 		negui_new_edge_builder.cpp
 		negui_element_style_base.cpp
 		negui_template_style.cpp
@@ -70,7 +72,9 @@ set(gui_headers
 		negui_node.h
 		negui_edge.h
 		negui_arrow_head.h
-		negui_element_builder.h
+		negui_node_builder.h
+		negui_edge_builder.h
+		negui_arrow_head_builder.h
 		negui_new_edge_builder.h
 		negui_element_style_base.h
 		negui_template_style.h
