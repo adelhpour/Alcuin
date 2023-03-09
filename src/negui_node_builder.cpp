@@ -19,11 +19,13 @@ MyElementBase* createNode(const QString& name, MyElementStyleBase* nodeStyle, co
 MyElementBase* createNode(const QJsonObject &json) {
     MyElementBase* node = NULL;
     if (json.contains("id") && json["id"].isString() && json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble()) {
-        MyElementStyleBase* nodeStyle = createNodeStyle(json);
-        if (nodeStyle) {
-            node = createNode(json["id"].toString(), nodeStyle, json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
-            if (json.contains("parent") && json["parent"].isString())
-                ((MyClassicNode*)node)->setParentNodeId(json["parent"].toString());
+        if (json.contains("style") && json["style"].isObject()) {
+            MyElementStyleBase* nodeStyle = createNodeStyle(json["style"].toObject());
+            if (nodeStyle) {
+                node = createNode(json["id"].toString(), nodeStyle, json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
+                if (json.contains("parent") && json["parent"].isString())
+                    ((MyClassicNode*)node)->setParentNodeId(json["parent"].toString());
+            }
         }
     }
 

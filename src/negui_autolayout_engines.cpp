@@ -92,7 +92,7 @@ void MyAutoLayoutEngine::read(const QJsonObject &json) {
                     parameter = new MyStringParameter(parameterObject["parameter"].toString());
                 else if (parameterObject["type"].toString() == "nominal")
                     parameter = new MyNominalParameter(parameterObject["parameter"].toString());
-                
+
                 if (parameter) {
                     parameter->read(parameterObject);
                     addParameter(parameter);

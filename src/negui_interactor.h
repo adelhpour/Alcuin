@@ -26,35 +26,32 @@ public:
     
     MyInteractor(QObject *parent = nullptr);
     
+    void readPluginItemsInfo(const QJsonObject &json);
+    
     // import interface
     bool setImportInterface(ImportInterface* importInterface, const QString &path);
     ImportInterface* importInterface();
     const bool isSetImportInterface() const { return _isSetImportInterface; }
-    void readImportInfo(const QJsonObject &json);
     
     // data export interface
     bool setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path);
     DataExportInterface* dataExportInterface();
     const bool isSetDataExportInterface() const { return _isSetDataExportInterface; }
-    void readDataExportInfo(const QJsonObject &json);
     
     // print export interface
     bool setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path);
     PrintExportInterface* printExportInterface();
     const bool isSetPrintExportInterface() const { return _isSetPrintExportInterface; }
-    void readPrintExportInfo(const QJsonObject &json);
     
     // element style interface
     bool setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &path);
     ElementStyleInterface* elementStyleInterface();
     const bool isSetElementStyleInterface() const { return _isSetElementStyleInterface; }
-    void readElementStylesInfo(const QJsonObject &json);
     
     // autolayout interface
     bool setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path);
     AutoLayoutInterface* autoLayoutInterface();
     const bool isSetAutoLayoutInterface() const { return _isSetAutoLayoutInterface; }
-    void readAutoLayoutInfo(const QJsonObject &json);
     
     QList<MyPluginItemBase*>& plugins();
     

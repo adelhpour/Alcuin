@@ -17,9 +17,10 @@ MyElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, My
 MyElementBase* createEdge(const QJsonObject &json, MyElementBase* startNode, MyElementBase* endNode) {
     MyElementBase* edge = NULL;
     if (startNode && endNode && json.contains("id") && json["id"].isString()) {
-        MyElementStyleBase* edgeStyle = createEdgeStyle(json);
-        if (edgeStyle) {
-            edge = createEdge(json["id"].toString(), edgeStyle, startNode, endNode);
+        if (json.contains("style") && json["style"].isObject()) {
+            MyElementStyleBase* edgeStyle = createEdgeStyle(json["style"].toObject());
+            if (edgeStyle)
+                edge = createEdge(json["id"].toString(), edgeStyle, startNode, endNode);
         }
     }
 

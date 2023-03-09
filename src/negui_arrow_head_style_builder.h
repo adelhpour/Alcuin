@@ -3,6 +3,6 @@
 
 #include "negui_element_style_base.h"
 
-MyElementStyleBase* createArrowHeadStyle(const QString& name);
+MyElementStyleBase* createArrowHeadStyle(const QJsonObject &json);
 
 #endif

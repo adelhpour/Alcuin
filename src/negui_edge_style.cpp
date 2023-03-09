@@ -11,7 +11,9 @@ MyEdgeStyleBase::MyEdgeStyleBase(const QString& name) : MyElementStyleBase(name)
     _category = "Edge";
     _connectableSourceNodeCategories.push_back("Node");
     _connectableTargetNodeCategories.push_back("Node");
-    _arrowHeadStyle = createArrowHeadStyle(name + "_ArrowHead");
+    QJsonObject arrowHeadStyleObject;
+    arrowHeadStyleObject["name"] = name + "_ArrowHead";
+    _arrowHeadStyle = createArrowHeadStyle(arrowHeadStyleObject);
     _iconSize = QSize(75, 45);
 }
 

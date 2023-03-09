@@ -3,14 +3,14 @@
 
 #include "negui_plugin_item_base.h"
 
-MyPluginItemBase* createPluginItem(const QString& name, const QString& type);
+MyPluginItemBase* createPluginItem(const QJsonObject &json);
 
-MyPluginItemBase* createImportTool(const QString& name);
+MyPluginItemBase* createImportTool(const QJsonObject &json);
 
-MyPluginItemBase* createDataExportTool(const QString& name);
+MyPluginItemBase* createDataExportTool(const QJsonObject &json);
 
-MyPluginItemBase* createPrintExportTool(const QString& name);
+MyPluginItemBase* createPrintExportTool(const QJsonObject &json);
 
-MyPluginItemBase* createAutoLayoutEngine(const QString& name);
+MyPluginItemBase* createAutoLayoutEngine(const QJsonObject &json);
 
 #endif

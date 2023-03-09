@@ -3,8 +3,6 @@
 
 #include "negui_element_style_base.h"
 
-MyElementStyleBase* createEdgeStyle(const QString& name);
-
 MyElementStyleBase* createEdgeStyle(const QJsonObject &json);
 
 #endif

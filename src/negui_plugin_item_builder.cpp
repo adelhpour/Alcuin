@@ -6,37 +6,63 @@
 #include "negui_export_tools.h"
 #include "negui_autolayout_engines.h"
 
-MyPluginItemBase* createPluginItem(const QString& name, const QString& type) {
-    if (type == "importtool")
-        return createImportTool(name);
-    else if (type == "dataexporttool")
-        return createDataExportTool(name);
-    else if (type == "printexporttool")
-        return createPrintExportTool(name);
-    else if (type == "nodestyle")
-        return createNodeStyle(name);
-    else if (type == "edgestyle")
-        return createEdgeStyle(name);
-    else if (type == "templatestyle")
-        return createTemplateStyle(name);
-    else if (type == "autolayoutengine")
-        return createAutoLayoutEngine(name);
+MyPluginItemBase* createPluginItem(const QJsonObject &json) {
+    if (json.contains("type") && json["type"].isString()) {
+        if (json["type"].toString() == "importtool")
+            return createImportTool(json);
+        else if (json["type"].toString() == "dataexporttool")
+            return createDataExportTool(json);
+        else if (json["type"].toString() == "printexporttool")
+            return createPrintExportTool(json);
+        else if (json["type"].toString() == "nodestyle")
+            return createNodeStyle(json);
+        else if (json["type"].toString() == "edgestyle")
+            return createEdgeStyle(json);
+        else if (json["type"].toString() == "templatestyle")
+            return createTemplateStyle(json);
+        else if (json["type"].toString() == "autolayoutengine")
+            return createAutoLayoutEngine(json);
+    }
     
     return NULL;
 }
 
-MyPluginItemBase* createImportTool(const QString& name) {
-    return new MyImportTool(name);
+MyPluginItemBase* createImportTool(const QJsonObject &json) {
+    MyPluginItemBase* pluginItem = NULL;
+    if (json.contains("name") && json["name"].isString()) {
+        pluginItem = new MyImportTool(json["name"].toString());
+        pluginItem->read(json);
+    }
+
+    return pluginItem;
 }
 
-MyPluginItemBase* createDataExportTool(const QString& name) {
-    return new MyDataExportTool(name);
+MyPluginItemBase* createDataExportTool(const QJsonObject &json) {
+    MyPluginItemBase* pluginItem = NULL;
+    if (json.contains("name") && json["name"].isString()) {
+        pluginItem = new MyDataExportTool(json["name"].toString());
+        pluginItem->read(json);
+    }
+
+    return pluginItem;
 }
 
-MyPluginItemBase* createPrintExportTool(const QString& name) {
-    return new MyPrintExportTool(name);
+MyPluginItemBase* createPrintExportTool(const QJsonObject &json) {
+    MyPluginItemBase* pluginItem = NULL;
+    if (json.contains("name") && json["name"].isString()) {
+        pluginItem = new MyPrintExportTool(json["name"].toString());
+        pluginItem->read(json);
+    }
+
+    return pluginItem;
 }
 
-MyPluginItemBase* createAutoLayoutEngine(const QString& name) {
-    return new MyAutoLayoutEngine(name);
+MyPluginItemBase* createAutoLayoutEngine(const QJsonObject &json) {
+    MyPluginItemBase* pluginItem = NULL;
+    if (json.contains("name") && json["name"].isString()) {
+        pluginItem = new MyAutoLayoutEngine(json["name"].toString());
+        pluginItem->read(json);
+    }
+
+    return pluginItem;
 }

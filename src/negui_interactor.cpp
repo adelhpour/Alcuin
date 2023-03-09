@@ -49,11 +49,24 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     enableNormalMode();
 };
 
+void MyInteractor::readPluginItemsInfo(const QJsonObject &json) {
+    if (json.contains("items") && json["items"].isArray()) {
+        QJsonArray itemsArray = json["items"].toArray();
+        MyPluginItemBase* item = NULL;
+        for (int itemIndex = 0; itemIndex < itemsArray.size(); ++itemIndex) {
+            QJsonObject itemObject = itemsArray[itemIndex].toObject();
+            item = createPluginItem(itemsArray[itemIndex].toObject());
+            if (item)
+                _plugins.push_back(item);
+        }
+    }
+}
+
 bool MyInteractor::setImportInterface(ImportInterface* importInterface, const QString &path) {
     if (importInterface) {
         _importInterface = importInterface;
         if (!_importInterface->initialize(path)) {
-            readImportInfo(_importInterface->loadItemsInfo());
+            readPluginItemsInfo(_importInterface->loadItemsInfo());
             _isSetImportInterface = true;
         }
     }
@@ -65,27 +78,11 @@ ImportInterface* MyInteractor::importInterface() {
     return _importInterface;
 }
 
-void MyInteractor::readImportInfo(const QJsonObject &json) {
-    // tools
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray toolsArray = json["items"].toArray();
-        MyPluginItemBase* tool = NULL;
-        for (int toolIndex = 0; toolIndex < toolsArray.size(); ++toolIndex) {
-            QJsonObject toolObject = toolsArray[toolIndex].toObject();
-            if (toolObject.contains("name") && toolObject["name"].isString()) {
-                tool = new MyImportTool(toolObject["name"].toString());
-                tool->read(toolObject);
-                _plugins.push_back(tool);
-            }
-        }
-    }
-}
-
 bool MyInteractor::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path) {
     if (dataExportInterface) {
         _dataExportInterface = dataExportInterface;
         if (!_dataExportInterface->initialize(path)) {
-            readDataExportInfo(_dataExportInterface->loadItemsInfo());
+            readPluginItemsInfo(_dataExportInterface->loadItemsInfo());
             _isSetDataExportInterface = true;
         }
     }
@@ -97,27 +94,11 @@ DataExportInterface* MyInteractor::dataExportInterface() {
     return _dataExportInterface;
 }
 
-void MyInteractor::readDataExportInfo(const QJsonObject &json) {
-    // tools
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray toolsArray = json["items"].toArray();
-        MyPluginItemBase* tool = NULL;
-        for (int toolIndex = 0; toolIndex < toolsArray.size(); ++toolIndex) {
-            QJsonObject toolObject = toolsArray[toolIndex].toObject();
-            if (toolObject.contains("name") && toolObject["name"].isString()) {
-                tool = new MyDataExportTool(toolObject["name"].toString());
-                tool->read(toolObject);
-                _plugins.push_back(tool);
-            }
-        }
-    }
-}
-
 bool MyInteractor::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path) {
     if (printExportInterface) {
         _printExportInterface = printExportInterface;
         if (!_printExportInterface->initialize(path)) {
-            readPrintExportInfo(_printExportInterface->loadItemsInfo());
+            readPluginItemsInfo(_printExportInterface->loadItemsInfo());
             _isSetPrintExportInterface = true;
         }
     }
@@ -129,22 +110,6 @@ PrintExportInterface* MyInteractor::printExportInterface() {
     return _printExportInterface;
 }
 
-void MyInteractor::readPrintExportInfo(const QJsonObject &json) {
-    // tools
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray toolsArray = json["items"].toArray();
-        MyPluginItemBase* tool = NULL;
-        for (int toolIndex = 0; toolIndex < toolsArray.size(); ++toolIndex) {
-            QJsonObject toolObject = toolsArray[toolIndex].toObject();
-            if (toolObject.contains("name") && toolObject["name"].isString()) {
-                tool = new MyPrintExportTool(toolObject["name"].toString());
-                tool->read(toolObject);
-                _plugins.push_back(tool);
-            }
-        }
-    }
-}
-
 QList<MyPluginItemBase*>& MyInteractor::plugins() {
     return _plugins;
 }
@@ -153,7 +118,7 @@ bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleI
     if (elementStyleInterface) {
         _elementStyleInterface = elementStyleInterface;
         if (!_elementStyleInterface->initialize(path)) {
-            readElementStylesInfo(_elementStyleInterface->loadItemsInfo());
+            readPluginItemsInfo(_elementStyleInterface->loadItemsInfo());
             _isSetElementStyleInterface = true;
         }
     }
@@ -165,29 +130,12 @@ ElementStyleInterface* MyInteractor::elementStyleInterface() {
     return _elementStyleInterface;
 }
 
-void MyInteractor::readElementStylesInfo(const QJsonObject &json) {
-    // element styles
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray stylesArray = json["items"].toArray();
-        MyPluginItemBase* style = NULL;
-        for (int styleIndex = 0; styleIndex < stylesArray.size(); ++styleIndex) {
-            QJsonObject styleObject = stylesArray[styleIndex].toObject();
-            if (styleObject.contains("name") && styleObject["name"].isString() && styleObject.contains("type") && styleObject["type"].isString()) {
-                MyPluginItemBase* style = createPluginItem(styleObject["name"].toString(), styleObject["type"].toString());
-                if (style) {
-                    style->read(styleObject);
-                    _plugins.push_back(style);
-                }
-            }
-        }
-    }
-}
-
+#include <iostream>
 bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path) {
     if (autoLayoutInterface) {
         _autoLayoutInterface = autoLayoutInterface;
         if (!_autoLayoutInterface->initialize(path)) {
-            readAutoLayoutInfo(_autoLayoutInterface->loadItemsInfo());
+            readPluginItemsInfo(_autoLayoutInterface->loadItemsInfo());
             _isSetAutoLayoutInterface = true;
         }
     }
@@ -197,22 +145,6 @@ bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterfa
 
 AutoLayoutInterface* MyInteractor::autoLayoutInterface() {
     return _autoLayoutInterface;
-}
-
-void MyInteractor::readAutoLayoutInfo(const QJsonObject &json) {
-    // engines
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray enginesArray = json["items"].toArray();
-        MyPluginItemBase* engine = NULL;
-        for (int engineIndex = 0; engineIndex < enginesArray.size(); ++engineIndex) {
-            QJsonObject engineObject = enginesArray[engineIndex].toObject();
-            if (engineObject.contains("name") && engineObject["name"].isString()) {
-                engine = new MyAutoLayoutEngine(engineObject["name"].toString());
-                engine->read(engineObject);
-                _plugins.push_back(engine);
-            }
-        }
-    }
 }
 
 QUndoStack* MyInteractor::undoStack() {
@@ -784,10 +716,16 @@ QToolButton* MyInteractor::populateExportMenu() {
 
 QList<QToolButton*> MyInteractor::populateAddElementMenu() {
     QList<QToolButton*> buttons;
-    if (!getPluginsOfType(plugins(), "nodestyle").size())
-        _plugins.push_back(createNodeStyle("Default"));
-    if (!getPluginsOfType(plugins(), "edgestyle").size())
-        _plugins.push_back(createEdgeStyle("Default"));
+    if (!getPluginsOfType(plugins(), "nodestyle").size()) {
+        QJsonObject styleObject;
+        styleObject["name"] = "Default";
+        _plugins.push_back(createNodeStyle(styleObject));
+    }
+    if (!getPluginsOfType(plugins(), "edgestyle").size()) {
+        QJsonObject styleObject;
+        styleObject["name"] = "Default";
+        _plugins.push_back(createEdgeStyle(styleObject));
+    }
     QList<QString> pluginsCategories = getPluginsCategories(plugins());
     for (QString category : pluginsCategories) {
         QList<MyPluginItemBase*> nodeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category);
@@ -1039,15 +977,13 @@ QString getElementUniqueName(QList<MyElementBase*> elements, const QString& defa
 MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* nodeStyle) {
     QJsonObject styleObject;
     nodeStyle->write(styleObject);
-    MyElementStyleBase* style = createNodeStyle(name);
-    style->read(styleObject);
-    return style;
+    styleObject["name"] = name;
+    return createNodeStyle(styleObject);
 }
 
 MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle) {
     QJsonObject styleObject;
     edgeStyle->write(styleObject);
-    MyElementStyleBase* style = createEdgeStyle(name);
-    style->read(styleObject);
-    return style;
+    styleObject["name"] = name;
+    return createEdgeStyle(styleObject);
 }

@@ -3,6 +3,6 @@
 
 #include "negui_element_style_base.h"
 
-MyElementStyleBase* createTemplateStyle(const QString& name);
+MyElementStyleBase* createTemplateStyle(const QJsonObject &json);
 
 #endif

@@ -87,14 +87,17 @@ const QString MyTemplateStyle::toolTipText() {
     return "Select Node";
 }
 
+#include <iostream>
+#include <QJsonDocument>
 void MyTemplateStyle::read(const QJsonObject &json) {
     MyPluginItemBase::read(json);
     
     // intermediary node
     deleteIntermediaryNodeStyle();
     if (json.contains("intermediary-node") && json["intermediary-node"].isObject()) {
-        _intermediaryNodeStyle = createNodeStyle(name() + "_IntermediaryNode");
-        _intermediaryNodeStyle->read(json["intermediary-node"].toObject());
+        QJsonObject styleObject = json["intermediary-node"].toObject();
+        styleObject["name"] = name() + "_IntermediaryNode";
+        _intermediaryNodeStyle = createNodeStyle(styleObject);
     }
     
     // source edges
@@ -105,11 +108,9 @@ void MyTemplateStyle::read(const QJsonObject &json) {
         for (int sourceEdgeStyleIndex = 0; sourceEdgeStyleIndex < sourceEdgeStylesArray.size(); ++sourceEdgeStyleIndex) {
             QJsonObject sourceEdgeStyleObject = sourceEdgeStylesArray[sourceEdgeStyleIndex].toObject();
             if (sourceEdgeStyleObject.contains("name") && sourceEdgeStyleObject["name"].isString()) {
-                sourceEdgeStyle = createEdgeStyle(sourceEdgeStyleObject["name"].toString());
-                if (sourceEdgeStyle) {
-                    sourceEdgeStyle->read(sourceEdgeStyleObject);
+                sourceEdgeStyle = createEdgeStyle(sourceEdgeStyleObject);
+                if (sourceEdgeStyle)
                     _sourceEdgeStyles.push_back(sourceEdgeStyle);
-                }
             }
         }
     }
@@ -122,11 +123,9 @@ void MyTemplateStyle::read(const QJsonObject &json) {
         for (int targetEdgeStyleIndex = 0; targetEdgeStyleIndex < targetEdgeStylesArray.size(); ++targetEdgeStyleIndex) {
             QJsonObject targetEdgeStyleObject = targetEdgeStylesArray[targetEdgeStyleIndex].toObject();
             if (targetEdgeStyleObject.contains("name") && targetEdgeStyleObject["name"].isString()) {
-                targetEdgeStyle = createEdgeStyle(targetEdgeStyleObject["name"].toString());
-                if (targetEdgeStyle) {
-                    targetEdgeStyle->read(targetEdgeStyleObject);
+                targetEdgeStyle = createEdgeStyle(targetEdgeStyleObject);
+                if (targetEdgeStyle)
                     _targetEdgeStyles.push_back(targetEdgeStyle);
-                }
             }
         }
     }
