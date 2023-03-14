@@ -5,4 +5,6 @@
 
 MyElementStyleBase* createNodeStyle(const QJsonObject &json);
 
+const bool isCentroidNodeStyle(const QJsonObject &json);
+
 #endif
