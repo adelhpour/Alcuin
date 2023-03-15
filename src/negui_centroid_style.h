@@ -11,7 +11,7 @@ public:
     SHAPE_STYLE type() override;
     
     const QRectF getShapeExtents() override;
-    
+
     // set the value of radius
     void setRadius(const qreal& rx) const;
     

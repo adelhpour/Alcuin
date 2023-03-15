@@ -762,6 +762,19 @@ void MyCornerCurvatureParameter::reset() {
     setStep(1.0);
 }
 
+// MyNodeCentroidRadiusParameter
+
+MyNodeCentroidRadiusParameter::MyNodeCentroidRadiusParameter(const QString& name) : MyDimensionalParameter(name) {
+    reset();
+}
+
+void MyNodeCentroidRadiusParameter::reset() {
+    setDefaultValue(1.000);
+    setMin(1.000);
+    setMax(5.000);
+    setStep(1.000);
+}
+
 // MyStrokeParameter
 
 MyStrokeParameter::MyStrokeParameter() : MyColorParameter("stroke") {

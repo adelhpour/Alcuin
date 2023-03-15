@@ -4,14 +4,7 @@
 // MyCentroidStyleBase
 
 MyCentroidStyleBase::MyCentroidStyleBase(const QString& name) : MyShapeStyleBase(name) {
-    // stroke-width
-    _parameters.push_back(new MyStrokeWidthParameter());
-    
-    // stroke
-    _parameters.push_back(new MyStrokeParameter());
-    
-    // fill
-    _parameters.push_back(new MyFillParameter());
+
 }
 
 MyShapeStyleBase::SHAPE_STYLE MyCentroidStyleBase::type() {
@@ -32,14 +25,14 @@ const qreal MyCentroidStyleBase::radius() const {
     MyParameterBase* parameter = findParameter("radius");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
-    
+
     return 0.000;
 }
 
 void MyCentroidStyleBase::read(const QJsonObject &json) {
     MyShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
-    
+
     // radius
     if (json.contains("radius") && json["radius"].isDouble()) {
         parameter = findParameter("radius");
@@ -51,7 +44,7 @@ void MyCentroidStyleBase::read(const QJsonObject &json) {
 void MyCentroidStyleBase::write(QJsonObject &json) {
     MyShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
-    
+
     // radius
     parameter = findParameter("radius");
     if (parameter)
@@ -62,7 +55,7 @@ void MyCentroidStyleBase::write(QJsonObject &json) {
 
 MyNodeCentroidStyle::MyNodeCentroidStyle(const QString& name) : MyCentroidStyleBase(name) {
     // radius
-    //_parameters.push_back(new MyNodeCentroidRadiusParameter("radius"));
-    
+    _parameters.push_back(new MyNodeCentroidRadiusParameter("radius"));
+
     reset();
 }

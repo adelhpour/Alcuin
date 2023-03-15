@@ -547,6 +547,15 @@ public:
     void reset() override;
 };
 
+class MyNodeCentroidRadiusParameter : public  MyDimensionalParameter {
+public:
+
+    MyNodeCentroidRadiusParameter(const QString& name);
+
+    // reset the values of the parameter
+    void reset() override;
+};
+
 class MyStrokeParameter : public MyColorParameter {
 public:
     
