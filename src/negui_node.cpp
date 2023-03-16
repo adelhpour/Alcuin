@@ -87,7 +87,7 @@ void MyNodeBase::reparent() {
 void MyNodeBase::setPosition(const QPointF& position) {
     // position
     _position = position;
-    
+
     // adjust parent extents
     if (!isParentNodeLocked()) {
         if (parentNode())
@@ -95,7 +95,7 @@ void MyNodeBase::setPosition(const QPointF& position) {
     }
     else
         lockParentNode(false);
-    
+
     // edges
     for (MyElementBase *edge : qAsConst(edges()))
         ((MyEdgeBase*)edge)->updatePoints();
@@ -143,15 +143,15 @@ const qreal MyNodeBase::endEdgePadding() {
 QWidget* MyNodeBase::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    
+
     // parent
     contentLayout->addWidget(new MyLabel("Parent"), contentLayout->rowCount(), 0);
     contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1);
-    
+
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
-    
+
     return featureMenu;
 }
 
@@ -162,7 +162,7 @@ const qint32 MyNodeBase::calculateZValue() {
         incrementZValue += 4;
         parent = ((MyNodeBase*)parent)->parentNode();
     }
-    
+
     return incrementZValue;
 }
 
@@ -173,11 +173,11 @@ void MyNodeBase::read(const QJsonObject &json) {
             setPosition(QPointF(json["position"]["x"].toDouble(), json["position"]["y"].toDouble()));
         }
     }
-    
+
     // parent
     if (json.contains("parent") && json["parent"].isString())
         setParentNodeId(json["parent"].toString());
-    
+
     // style
     if (json.contains("style") && json["style"].isObject())
         style()->read(json["style"].toObject());
@@ -186,24 +186,24 @@ void MyNodeBase::read(const QJsonObject &json) {
 void MyNodeBase::write(QJsonObject &json) {
     // id
     json["id"] = name();
-    
+
     QRectF extents = getExtents();
     // position
     QJsonObject positionObject;
     positionObject["x"] = extents.center().x();
     positionObject["y"] = extents.center().y();
     json["position"] = positionObject;
-    
+
     // dimensions
     QJsonObject dimensionsObject;
     dimensionsObject["width"] = extents.width();
     dimensionsObject["height"] = extents.height();
     json["dimensions"] = dimensionsObject;
-    
+
     // parent node
     if (parentNodeId() != "N/A")
         json["parent"] = parentNodeId();
-    
+
     // style
     QJsonObject styleObject;
     style()->write(styleObject);
@@ -311,13 +311,13 @@ void MyClassicNode::adjustExtents() {
 QWidget* MyClassicNode::getFeatureMenu() {
     QWidget* featureMenu = MyNodeBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    
+
     // add remove buttons
     connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
     connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
     connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
     contentLayout->addWidget(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
-    
+
     return featureMenu;
 }
 

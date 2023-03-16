@@ -94,7 +94,7 @@ const QRectF MyElementGraphicsItemBase::getExtents() const {
         }
         return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
     }
-    
+
     return QRectF(_originalPosition.x() + x(), _originalPosition.y() + y(), 0.0, 0.0);
 }
 

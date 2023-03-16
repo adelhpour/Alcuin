@@ -22,6 +22,8 @@ public:
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
     
     void deparent();
+
+    void moveChildItems(const QPointF& movedDistance);
     
     void enableNormalMode() override;
 
@@ -44,6 +46,8 @@ signals:
     void askForResetPosition();
     
 protected:
+
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
     
     void keyPressEvent(QKeyEvent *event) override;
     
@@ -64,16 +68,13 @@ public:
 
     void moveBy(qreal dx, qreal dy);
 
-    void moveChildItems(const QPointF& movedDistance);
-
     void adjustOriginalPosition();
 
 public slots:
-            void updateExtents(const QRectF& extents);
+
+    void updateExtents(const QRectF& extents);
 
 protected:
-
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
@@ -90,10 +91,6 @@ class MyCentroidNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
 public:
 
     MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
-
-protected:
-
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {
