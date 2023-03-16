@@ -63,6 +63,8 @@ public:
     const bool isParentNodeLocked() const { return _isParentNodeLocked; }
 
     const QRectF getExtents() override;
+
+    const qreal endEdgePadding();
     
     QWidget* getFeatureMenu() override;
     
@@ -99,6 +101,7 @@ protected:
     QPointF _position;
     bool _isSetParentNode;
     bool _isParentNodeLocked;
+    qreal _endEdgePadding;
 };
 
 class MyClassicNode : public MyNodeBase {

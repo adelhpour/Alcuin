@@ -219,10 +219,8 @@ const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* co
     QPointF connectedNodePosition = connectedNodeExtents.center();
     qreal mainNodeRadius = getRadius(mainNodeExtents, connectedNodePosition);
     qreal connectedNodeRadius = getRadius(connectedNodeExtents, mainNodePosition);
-    if (qSqrt(((connectedNodePosition - mainNodePosition).x() * (connectedNodePosition - mainNodePosition).x()) + ((connectedNodePosition - mainNodePosition).y() * (connectedNodePosition - mainNodePosition).y())) > (mainNodeRadius + connectedNodeRadius + 10.0)) {
-        mainNodeRadius += 5;
-        connectedNodeRadius += 5;
-    }
+    if (qSqrt(((connectedNodePosition - mainNodePosition).x() * (connectedNodePosition - mainNodePosition).x()) + ((connectedNodePosition - mainNodePosition).y() * (connectedNodePosition - mainNodePosition).y())) > (mainNodeRadius + connectedNodeRadius + 10.0))
+        mainNodeRadius += ((MyNodeBase*)mainNode)->endEdgePadding();
     qreal slope = qAtan2(connectedNodePosition.y() - mainNodePosition.y(), connectedNodePosition.x() - mainNodePosition.x());
     return QPointF(mainNodePosition.x() + mainNodeRadius * qCos(slope), mainNodePosition.y() + mainNodeRadius * qSin(slope));
 }

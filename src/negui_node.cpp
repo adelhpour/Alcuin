@@ -13,6 +13,7 @@ MyNodeBase::MyNodeBase(const QString& name, const qreal& x, const qreal& y) : My
     _isSetParentNode = false;
     _isParentNodeLocked = false;
     _position = QPointF(x, y);
+    _endEdgePadding = 0.0;
 }
 
 MyNodeBase::~MyNodeBase() {
@@ -135,6 +136,10 @@ const QRectF MyNodeBase::getExtents() {
     return ((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents();
 }
 
+const qreal MyNodeBase::endEdgePadding() {
+    return  _endEdgePadding;
+}
+
 QWidget* MyNodeBase::getFeatureMenu() {
     QWidget* featureMenu = MyElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
@@ -211,6 +216,7 @@ MyClassicNode::MyClassicNode(const QString& name, const qreal& x, const qreal& y
     _areChildNodesLocked = false;
     _graphicsItem = createGraphicsItem(position());
     connectGraphicsItem();
+    _endEdgePadding = 5.0;
 }
 
 MyNodeBase::NODE_TYPE MyClassicNode::nodeType() {
