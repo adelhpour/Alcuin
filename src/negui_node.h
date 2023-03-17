@@ -21,7 +21,7 @@ public:
 
     virtual NODE_TYPE nodeType() = 0;
 
-    void connectGraphicsItem();
+    virtual void connectGraphicsItem();
     
     // add to edges
     void addEdge(MyElementBase* e);
@@ -160,7 +160,13 @@ public:
 
     NODE_TYPE nodeType() override;
 
+    void connectGraphicsItem() override;
+
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+private slots:
+
+    void adjustConnectedEdges();
 
 protected:
     QList<MyElementBase*> _childNodes;

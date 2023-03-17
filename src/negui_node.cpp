@@ -332,6 +332,15 @@ MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
     return CENTROID_NODE;
 }
 
+void MyCentroidNode::connectGraphicsItem() {
+    MyNodeBase::connectGraphicsItem();
+    connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(adjustConnectedEdges()));
+}
+
 MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
     return createCentroidNodeSceneGraphicsItem(position);
+}
+
+void MyCentroidNode::adjustConnectedEdges() {
+
 }
