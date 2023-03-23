@@ -17,9 +17,11 @@ public:
     QRectF getExtents() override;
     
     QGraphicsItem* getResizeHandledGraphicsItem() override;
+
+    const QRectF getFocusedRect();
     
     void setZValue(qreal z) override;
-    
+
     void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
     
 public slots:

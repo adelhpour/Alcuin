@@ -42,11 +42,22 @@ QRectF MyCentroidGraphicsItem::getExtents() {
 }
 
 void MyCentroidGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    
+
 }
 
 QGraphicsItem* MyCentroidGraphicsItem::getResizeHandledGraphicsItem() {
-    return NULL;
+    QGraphicsEllipseItem* resizeHandledGraphicsItem = new QGraphicsEllipseItem(getFocusedRect());
+    resizeHandledGraphicsItem->setPen(((MyCentroidStyleBase*)style())->selectedPen());
+    resizeHandledGraphicsItem->setBrush(((MyCentroidStyleBase*)style())->selectedBrush());
+    resizeHandledGraphicsItem->setZValue(zValue());
+    return resizeHandledGraphicsItem;
+}
+
+const QRectF MyCentroidGraphicsItem::getFocusedRect() {
+    QRectF extentsRect = getExtents();
+    qreal rectWidth = qMax(extentsRect.width(), 4.0);
+    qreal rectHeight = qMax(extentsRect.height(), 4.0);
+    return QRectF(extentsRect.x() - 0.5 * (rectWidth - extentsRect.width()), extentsRect.y() - 0.5 * (rectHeight - extentsRect.height()), rectWidth, rectHeight);
 }
 
 void MyCentroidGraphicsItem::setZValue(qreal z) {
