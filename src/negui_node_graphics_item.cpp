@@ -195,14 +195,13 @@ MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &
     setAcceptHoverEvents(true);
 }
 
-#include "iostream"
 void MyCentroidNodeSceneGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-    std::cout << "enter" << std::endl;
+    setFocused(true);
     QGraphicsItem::hoverEnterEvent(event);
 }
 
 void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-    std::cout << "leave" << std::endl;
+    setFocused(false);
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
