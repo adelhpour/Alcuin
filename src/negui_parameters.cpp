@@ -578,6 +578,19 @@ void MyStrokeWidthParameter::reset() {
     setStep(1);
 }
 
+// MyCentroidStrokeWidthParameter
+
+MyCentroidStrokeWidthParameter::MyCentroidStrokeWidthParameter() : MyStrokeWidthParameter() {
+    reset();
+}
+
+void MyCentroidStrokeWidthParameter::reset() {
+    setDefaultValue(2);
+    setMin(1);
+    setMax(20);
+    setStep(1);
+}
+
 // MyPositionalParameter
 
 MyPositionalParameter::MyPositionalParameter(const QString& name) : MyDoubleParameter(name) {
@@ -769,10 +782,10 @@ MyNodeCentroidRadiusParameter::MyNodeCentroidRadiusParameter(const QString& name
 }
 
 void MyNodeCentroidRadiusParameter::reset() {
-    setDefaultValue(1.000);
-    setMin(1.000);
+    setDefaultValue(0.100);
+    setMin(0.010);
     setMax(5.000);
-    setStep(1.000);
+    setStep(0.010);
 }
 
 // MyStrokeParameter
@@ -785,6 +798,16 @@ void MyStrokeParameter::reset() {
     setDefaultValue("black");
 }
 
+// MyCentroidStrokeParameter
+
+MyCentroidStrokeParameter::MyCentroidStrokeParameter() : MyStrokeParameter() {
+    reset();
+}
+
+void MyCentroidStrokeParameter::reset() {
+    setDefaultValue("transparent");
+}
+
 // MyFillParameter
 
 MyFillParameter::MyFillParameter() : MyColorParameter("fill") {
@@ -792,6 +815,16 @@ MyFillParameter::MyFillParameter() : MyColorParameter("fill") {
 }
 
 void MyFillParameter::reset() {
+    setDefaultValue("transparent");
+}
+
+// MyCentroidFillParameter
+
+MyCentroidFillParameter::MyCentroidFillParameter() : MyFillParameter() {
+    reset();
+}
+
+void MyCentroidFillParameter::reset() {
     setDefaultValue("white");
 }
 

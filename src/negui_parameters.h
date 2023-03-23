@@ -403,6 +403,15 @@ public:
     void reset() override;
 };
 
+class MyCentroidStrokeWidthParameter : public MyStrokeWidthParameter {
+public:
+
+    MyCentroidStrokeWidthParameter();
+
+    // reset the values of the parameter
+    void reset() override;
+};
+
 class MyPositionalParameter : public MyDoubleParameter {
 public:
     
@@ -565,11 +574,29 @@ public:
     void reset() override;
 };
 
+class MyCentroidStrokeParameter : public MyStrokeParameter {
+public:
+
+    MyCentroidStrokeParameter();
+
+    // reset the values of the parameter
+    void reset() override;
+};
+
 class MyFillParameter : public MyColorParameter {
 public:
     
     MyFillParameter();
     
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyCentroidFillParameter : public MyFillParameter {
+public:
+
+    MyCentroidFillParameter();
+
     // reset the values of the parameter
     void reset() override;
 };
