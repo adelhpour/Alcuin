@@ -1732,12 +1732,12 @@ MyColorPickerMenu::MyColorPickerMenu() {
     MyColorTileButton* snowButton = new MyColorTileButton("Snow", "#FFFAFA");
     allColorsContentLayout->addWidget(snowButton, rowCount++, columnCount);
     connect(snowButton, &QPushButton::clicked, this, [this, snowButton] () { this->colorTileButtonPicked(snowButton); });
-    
-    // ivory
-    MyColorTileButton* ivoryButton = new MyColorTileButton("Ivory", "#FFFFF0");
-    allColorsContentLayout->addWidget(ivoryButton, rowCount++, columnCount);
-    connect(ivoryButton, &QPushButton::clicked, this, [this, ivoryButton] () { this->colorTileButtonPicked(ivoryButton); });
-    
+
+    // transparent
+    MyColorTileButton* transparentButton = new MyColorTileButton("Transparent", "#FFFFF00");
+    allColorsContentLayout->addWidget(transparentButton, rowCount++, columnCount);
+    connect(transparentButton, &QPushButton::clicked, this, [this, transparentButton] () { this->colorTileButtonPicked(transparentButton); });
+
     // white
     MyColorTileButton* whiteButton = new MyColorTileButton("White", "#FFFFFF");
     allColorsContentLayout->addWidget(whiteButton, rowCount++, columnCount);
