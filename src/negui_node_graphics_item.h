@@ -91,6 +91,12 @@ class MyCentroidNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
 public:
 
     MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+
+protected:
+
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
+
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {

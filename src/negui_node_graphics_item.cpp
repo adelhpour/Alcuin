@@ -192,7 +192,18 @@ void MyClassicNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
 // MyCentroidNodeSceneGraphicsItem
 
 MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
+    setAcceptHoverEvents(true);
+}
 
+#include "iostream"
+void MyCentroidNodeSceneGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+    std::cout << "enter" << std::endl;
+    QGraphicsItem::hoverEnterEvent(event);
+}
+
+void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+    std::cout << "leave" << std::endl;
+    QGraphicsItem::hoverLeaveEvent(event);
 }
 
 // MyNodeIconGraphicsItem
