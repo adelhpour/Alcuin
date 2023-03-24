@@ -19,7 +19,7 @@ public:
     
     bool isConnectableToNode(MyElementBase* node);
     
-    const bool canBuildEdgeUsingSelcetedNodes();
+    const bool canBuildEdgeUsingSelectedNodes();
     
     void buildNewEdge(MyElementBase* sourceNode, MyElementBase* targetNode, MyElementStyleBase* newEdgeStyle);
     

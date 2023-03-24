@@ -15,7 +15,7 @@ MyNewEdgeBuilderBase::MyNewEdgeBuilderBase(MyElementStyleBase* style) {
 
 void MyNewEdgeBuilderBase::build(MyElementBase* node) {
     if (canSelectNodeAsConnectedNode(node)) {
-        if (canBuildEdgeUsingSelcetedNodes()) {
+        if (canBuildEdgeUsingSelectedNodes()) {
             buildNewEdge();
             _isNewEdgeBuilt = true;
         }
@@ -39,7 +39,7 @@ bool MyNewEdgeBuilderBase::isConnectableToNode(MyElementBase* node) {
     return ((MyEdgeStyleBase*)edgeStyle())->isConnectableToNodeCategory(node->style()->category(), connectToNodeAs()) ? true : false;
 }
 
-const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelcetedNodes() {
+const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelectedNodes() {
     if (selectedEdgeSourceNodes().size() + selectedEdgeTargetNodes().size() == numberOfRequiredSourceNodes() + numberOfRequiredTargetNodes())
         return true;
     
