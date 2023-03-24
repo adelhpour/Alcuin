@@ -205,6 +205,18 @@ void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
+void MyCentroidNodeSceneGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    setFocused(false);
+    MyElementGraphicsItemBase::mouseMoveEvent(event);
+    setFocused(true);
+}
+
+void MyCentroidNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->button() == Qt::LeftButton)
+        setFocused(false);
+    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+}
+
 // MyNodeIconGraphicsItem
 
 MyNodeIconGraphicsItem::MyNodeIconGraphicsItem(const QPointF& position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {

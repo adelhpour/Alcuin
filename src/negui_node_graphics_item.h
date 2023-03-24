@@ -97,6 +97,10 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
 
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override;
+
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {
