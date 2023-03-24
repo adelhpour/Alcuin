@@ -64,7 +64,7 @@ public:
 
     MyClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
-    void clearResizeHandledGraphicsItems() override;
+    void clearFocusedGraphicsItems() override;
 
     void moveBy(qreal dx, qreal dy);
 

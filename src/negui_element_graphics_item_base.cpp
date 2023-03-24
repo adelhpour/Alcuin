@@ -7,8 +7,8 @@
 MyElementGraphicsItemBase::MyElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
-    connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearResizeHandledGraphicsItems()));
-    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForClearResizeHandledGraphicsItems()));
+    connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearFocusedGraphicsItems()));
+    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForClearFocusedGraphicsItems()));
 }
 
 void MyElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
@@ -40,33 +40,33 @@ QList<MyShapeStyleBase*> MyElementGraphicsItemBase::getShapeStyles() {
     return _shapeStyles;
 }
 
-QList<QGraphicsItem*> MyElementGraphicsItemBase::createResizeHandledGraphicsItems() {
-    QList<QGraphicsItem*> resizeHandledGraphicsItems;
-    QGraphicsItem* resizeHandledGraphicsItem = NULL;
+QList<QGraphicsItem*> MyElementGraphicsItemBase::createFocusedGraphicsItems() {
+    QList<QGraphicsItem*> FocusedGraphicsItems;
+    QGraphicsItem* FocusedGraphicsItem = NULL;
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item) {
-            resizeHandledGraphicsItem = casted_item->getResizeHandledGraphicsItem();
-            if (resizeHandledGraphicsItem)
-                resizeHandledGraphicsItems.push_back((resizeHandledGraphicsItem));
+            FocusedGraphicsItem = casted_item->getFocusedGraphicsItem();
+            if (FocusedGraphicsItem)
+                FocusedGraphicsItems.push_back((FocusedGraphicsItem));
         }
     }
     
-    return resizeHandledGraphicsItems;
+    return FocusedGraphicsItems;
 }
 
-void MyElementGraphicsItemBase::addResizeHandledGraphicsItems() {
-    _resizeHandledGraphicsItems = createResizeHandledGraphicsItems();
-    for (QGraphicsItem* item : _resizeHandledGraphicsItems)
+void MyElementGraphicsItemBase::addFocusedGraphicsItems() {
+    _focusedGraphicsItems = createFocusedGraphicsItems();
+    for (QGraphicsItem* item : _focusedGraphicsItems)
         emit askForAddGraphicsItem(item);
 }
 
-void MyElementGraphicsItemBase::clearResizeHandledGraphicsItems() {
-    for (QGraphicsItem* item : _resizeHandledGraphicsItems) {
+void MyElementGraphicsItemBase::clearFocusedGraphicsItems() {
+    for (QGraphicsItem* item : _focusedGraphicsItems) {
         emit askForRemoveGraphicsItem(item);
         delete item;
     }
-    _resizeHandledGraphicsItems.clear();
+    _focusedGraphicsItems.clear();
 }
 
 const QRectF MyElementGraphicsItemBase::getExtents() const {
@@ -118,9 +118,9 @@ void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
 
 void MyElementGraphicsItemBase::setFocused(const bool& isFocused) {
     if (isFocused)
-        addResizeHandledGraphicsItems();
+        addFocusedGraphicsItems();
     else
-        clearResizeHandledGraphicsItems();
+        clearFocusedGraphicsItems();
 }
 
 void MyElementGraphicsItemBase::setCursor(const QCursor &cursor) {
@@ -143,7 +143,7 @@ void MyElementGraphicsItemBase::setZValue(qreal z) {
 }
 
 void MyElementGraphicsItemBase::enableNormalMode() {
-    clearResizeHandledGraphicsItems();
+    clearFocusedGraphicsItems();
 }
 
 void MyElementGraphicsItemBase::enableAddNodeMode() {

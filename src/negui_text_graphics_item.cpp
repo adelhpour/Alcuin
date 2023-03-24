@@ -66,12 +66,12 @@ void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionM
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyTextGraphicsItem::getResizeHandledGraphicsItem() {
-    QRectF resizeRect = getExtents();
-    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyResizeHandledGraphicsItem(resizeRect, zValue());
-    MyShapeGraphicsItemBase::connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
-    
-    return resizeHandledGraphicsItem;
+QGraphicsItem* MyTextGraphicsItem::getFocusedGraphicsItem() {
+    QRectF focusedRect = getExtents();
+    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyResizeHandledGraphicsItem(focusedRect, zValue());
+    MyShapeGraphicsItemBase::connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
+
+    return focusedGraphicsItem;
 }
 
 void MyTextGraphicsItem::setZValue(qreal z) {

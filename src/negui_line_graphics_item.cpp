@@ -78,11 +78,11 @@ QRectF MyLineGraphicsItem::getExtents() {
     return path().boundingRect();
 }
 
-QGraphicsItem* MyLineGraphicsItem::getResizeHandledGraphicsItem() {
-    MyBezierAdjustHandledGraphicsItems* bezierAdjustHandledGraphicsItems = new MyBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), getControlPoint2(), getEndPoint(), zValue());
-    connect(bezierAdjustHandledGraphicsItems, SIGNAL(controlPointsAreUpdated(const QPointF&, const QPointF&)), this, SLOT(setControlPoints(const QPointF&, const QPointF&)));
+QGraphicsItem* MyLineGraphicsItem::getFocusedGraphicsItem() {
+    MyBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MyBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), getControlPoint2(), getEndPoint(), zValue());
+    connect(focusedGraphicsItems, SIGNAL(controlPointsAreUpdated(const QPointF&, const QPointF&)), this, SLOT(setControlPoints(const QPointF&, const QPointF&)));
     
-    return bezierAdjustHandledGraphicsItems;
+    return focusedGraphicsItems;
 }
 
 void MyLineGraphicsItem::setZValue(qreal z) {

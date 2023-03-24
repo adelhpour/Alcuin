@@ -135,8 +135,8 @@ MyClassicNodeSceneGraphicsItem::MyClassicNodeSceneGraphicsItem(const QPointF &po
 
 }
 
-void MyClassicNodeSceneGraphicsItem::clearResizeHandledGraphicsItems() {
-    MyElementGraphicsItemBase::clearResizeHandledGraphicsItems();
+void MyClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
+    MyElementGraphicsItemBase::clearFocusedGraphicsItems();
     emit askForResetPosition();
     adjustOriginalPosition();
     emit askForCreateChangeStageCommand();

@@ -130,7 +130,7 @@ public slots:
     void enableSelectEdgeMode(const QString& edgeCategory = "");
     void enableRemoveMode();
     
-    void clearElementsResizeHandledGraphicsItems();
+    void clearElementsFocusedGraphicsItems();
     
 private slots:
         

@@ -45,12 +45,12 @@ void MyCentroidGraphicsItem::adjustOriginalPosition(const QPointF& originalPosit
 
 }
 
-QGraphicsItem* MyCentroidGraphicsItem::getResizeHandledGraphicsItem() {
-    QGraphicsEllipseItem* resizeHandledGraphicsItem = new QGraphicsEllipseItem(getFocusedRect());
-    resizeHandledGraphicsItem->setPen(((MyCentroidStyleBase*)style())->selectedPen());
-    resizeHandledGraphicsItem->setBrush(((MyCentroidStyleBase*)style())->selectedBrush());
-    resizeHandledGraphicsItem->setZValue(zValue());
-    return resizeHandledGraphicsItem;
+QGraphicsItem* MyCentroidGraphicsItem::getFocusedGraphicsItem() {
+    QGraphicsEllipseItem* focusedGraphicsItem = new QGraphicsEllipseItem(getFocusedRect());
+    focusedGraphicsItem->setPen(((MyCentroidStyleBase*)style())->selectedPen());
+    focusedGraphicsItem->setBrush(((MyCentroidStyleBase*)style())->selectedBrush());
+    focusedGraphicsItem->setZValue(zValue());
+    return focusedGraphicsItem;
 }
 
 const QRectF MyCentroidGraphicsItem::getFocusedRect() {

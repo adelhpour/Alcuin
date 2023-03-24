@@ -59,12 +59,12 @@ void MyPolygonGraphicsItem::adjustOriginalPosition(const QPointF& originalPositi
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyPolygonGraphicsItem::getResizeHandledGraphicsItem() {
-    QRectF resizeRect = getExtents();
-    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyResizeHandledGraphicsItem(resizeRect, zValue());
-    connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+QGraphicsItem* MyPolygonGraphicsItem::getFocusedGraphicsItem() {
+    QRectF focusedRect = getExtents();
+    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyResizeHandledGraphicsItem(focusedRect, zValue());
+    connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
     
-    return resizeHandledGraphicsItem;
+    return focusedGraphicsItem;
 }
 
 void MyPolygonGraphicsItem::setZValue(qreal z) {

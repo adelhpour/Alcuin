@@ -64,12 +64,12 @@ void MyEllipseGraphicsItem::adjustOriginalPosition(const QPointF& originalPositi
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyEllipseGraphicsItem::getResizeHandledGraphicsItem() {
-    QRectF resizeRect = getExtents();
-    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyResizeHandledGraphicsItem(resizeRect, zValue());
-    connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
-    
-    return resizeHandledGraphicsItem;
+QGraphicsItem* MyEllipseGraphicsItem::getFocusedGraphicsItem() {
+    QRectF focusedRect = getExtents();
+    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyResizeHandledGraphicsItem(focusedRect, zValue());
+    connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+
+    return focusedGraphicsItem;
 }
 
 void MyEllipseGraphicsItem::setZValue(qreal z) {

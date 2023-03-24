@@ -22,11 +22,11 @@ public:
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
-    QList<QGraphicsItem*> createResizeHandledGraphicsItems();
+    QList<QGraphicsItem*> createFocusedGraphicsItems();
     
-    void addResizeHandledGraphicsItems();
+    void addFocusedGraphicsItems();
     
-    virtual void clearResizeHandledGraphicsItems();
+    virtual void clearFocusedGraphicsItems();
     
     const QRectF getExtents() const;
     
@@ -61,7 +61,7 @@ signals:
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
-    void askForClearResizeHandledGraphicsItems();
+    void askForClearFocusedGraphicsItems();
     
 protected:
     
@@ -73,7 +73,7 @@ protected:
     
     QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;
-    QList<QGraphicsItem*> _resizeHandledGraphicsItems;
+    QList<QGraphicsItem*> _focusedGraphicsItems;
     bool _isChosen;
 };
 

@@ -244,7 +244,7 @@ void MyInteractor::addNode(MyElementBase* n) {
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
-        connect(n->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
+        connect(n->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
         emit askForAddGraphicsItem(n->graphicsItem());
     }
 }
@@ -337,7 +337,7 @@ void MyInteractor::addEdge(MyElementBase* e) {
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
-        connect(e->graphicsItem(), SIGNAL(askForClearResizeHandledGraphicsItems()), this, SLOT(clearElementsResizeHandledGraphicsItems()));
+        connect(e->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
@@ -569,11 +569,11 @@ void MyInteractor::enableRemoveMode() {
     emit askForSetToolTip("Select Item");
 }
 
-void MyInteractor::clearElementsResizeHandledGraphicsItems() {
+void MyInteractor::clearElementsFocusedGraphicsItems() {
     for (MyElementBase *node : qAsConst(nodes()))
-        node->graphicsItem()->clearResizeHandledGraphicsItems();
+        node->graphicsItem()->clearFocusedGraphicsItems();
     for (MyElementBase *edge : qAsConst(edges()))
-        edge->graphicsItem()->clearResizeHandledGraphicsItems();
+        edge->graphicsItem()->clearFocusedGraphicsItems();
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {

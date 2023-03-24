@@ -93,13 +93,13 @@ void MyRectGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionM
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyRectGraphicsItem::getResizeHandledGraphicsItem() {
-    QRectF resizeRect = getExtents();
-    MyResizeHandledGraphicsItemBase* resizeHandledGraphicsItem = new MyRoundedRectangleResizeHandledGraphicsItem(resizeRect, ((MyRectStyleBase*)style())->rx(), ((MyRectStyleBase*)style())->ry(), zValue());
-    connect(resizeHandledGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
-    connect(resizeHandledGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
-    
-    return resizeHandledGraphicsItem;
+QGraphicsItem* MyRectGraphicsItem::getFocusedGraphicsItem() {
+    QRectF focusedRect = getExtents();
+    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyRoundedRectangleResizeHandledGraphicsItem(focusedRect, ((MyRectStyleBase*)style())->rx(), ((MyRectStyleBase*)style())->ry(), zValue());
+    connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
+    connect(focusedGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
+
+    return focusedGraphicsItem;
 }
 
 void MyRectGraphicsItem::setZValue(qreal z) {
