@@ -79,6 +79,8 @@ public:
     void buildNewEdge() override;
     
     void buildIntermediaryNode();
+
+    void setIntermediaryNodeParent();
     
     MyElementBase* intermediaryNode();
     

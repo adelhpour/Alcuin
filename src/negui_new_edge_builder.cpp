@@ -116,6 +116,7 @@ void MyNewTemplateBuilder::buildNewEdge() {
         MyNewEdgeBuilderBase::buildNewEdge(selectedEdgeSourceNode, intermediaryNode(), edgeStyle(selectedEdgeSourceNode));
     for (MyElementBase* selectedEdgeTargetNode : selectedEdgeTargetNodes())
         MyNewEdgeBuilderBase::buildNewEdge(intermediaryNode(), selectedEdgeTargetNode, edgeStyle(selectedEdgeTargetNode));
+    setIntermediaryNodeParent();
 }
 
 void MyNewTemplateBuilder::buildIntermediaryNode() {
@@ -124,6 +125,23 @@ void MyNewTemplateBuilder::buildIntermediaryNode() {
         _intermediaryNode = createNode(askForNodeUniqueName(((MyTemplateStyle*)style())->intermediaryNodeStyle()), getCopyNodeStyle(style()->name() + "_" + ((MyTemplateStyle*)style())->intermediaryNodeStyle()->name(), ((MyTemplateStyle*)style())->intermediaryNodeStyle()), position.x(), position.y());
         askForAddNode(_intermediaryNode);
     }
+}
+
+void MyNewTemplateBuilder::setIntermediaryNodeParent() {
+    MyElementBase* parentNode = NULL;
+    for (MyElementBase* selectedEdgeSourceNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes()) {
+        if (!((MyNodeBase*)selectedEdgeSourceNode)->isSetParentNode())
+            return;
+        if (!parentNode)
+            parentNode = ((MyNodeBase*)selectedEdgeSourceNode)->parentNode();
+        else {
+            if (((MyNodeBase*)selectedEdgeSourceNode)->parentNodeId() != parentNode->name())
+                return;
+        }
+    }
+
+    if (parentNode != NULL)
+        ((MyNodeBase*)_intermediaryNode)->setParentNode(parentNode);
 }
 
 MyElementBase* MyNewTemplateBuilder::intermediaryNode() {
