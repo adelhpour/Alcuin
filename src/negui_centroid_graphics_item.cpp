@@ -55,8 +55,8 @@ QGraphicsItem* MyCentroidGraphicsItem::getFocusedGraphicsItem() {
 
 const QRectF MyCentroidGraphicsItem::getFocusedRect() {
     QRectF extentsRect = getExtents();
-    qreal rectWidth = qMax(extentsRect.width(), 4.0);
-    qreal rectHeight = qMax(extentsRect.height(), 4.0);
+    qreal rectWidth = qMax(extentsRect.width(), 5.0);
+    qreal rectHeight = qMax(extentsRect.height(), 5.0);
     return QRectF(extentsRect.x() - 0.5 * (rectWidth - extentsRect.width()), extentsRect.y() - 0.5 * (rectHeight - extentsRect.height()), rectWidth, rectHeight);
 }
 
