@@ -41,18 +41,18 @@ QList<MyShapeStyleBase*> MyElementGraphicsItemBase::getShapeStyles() {
 }
 
 QList<QGraphicsItem*> MyElementGraphicsItemBase::createFocusedGraphicsItems() {
-    QList<QGraphicsItem*> FocusedGraphicsItems;
-    QGraphicsItem* FocusedGraphicsItem = NULL;
+    QList<QGraphicsItem*> focusedGraphicsItems;
+    QGraphicsItem* focusedGraphicsItem = NULL;
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item) {
-            FocusedGraphicsItem = casted_item->getFocusedGraphicsItem();
-            if (FocusedGraphicsItem)
-                FocusedGraphicsItems.push_back((FocusedGraphicsItem));
+            focusedGraphicsItem = casted_item->getFocusedGraphicsItem();
+            if (focusedGraphicsItem)
+                focusedGraphicsItems.push_back((focusedGraphicsItem));
         }
     }
     
-    return FocusedGraphicsItems;
+    return focusedGraphicsItems;
 }
 
 void MyElementGraphicsItemBase::addFocusedGraphicsItems() {
