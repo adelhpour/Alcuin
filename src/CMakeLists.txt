@@ -33,7 +33,9 @@ set(gui_sources
 		negui_node_graphics_item.cpp
 		negui_edge_graphics_item.cpp
 		negui_arrow_head_graphics_item.cpp
-		negui_element_graphics_item_builder.cpp
+		negui_node_graphics_item_builder.cpp
+		negui_edge_graphics_item_builder.cpp
+		negui_arrow_head_graphics_item_builder.cpp
 		negui_shape_style_base.cpp
 		negui_1d_shape_style_base.cpp
 		negui_2d_shape_style_base.cpp
@@ -95,7 +97,9 @@ set(gui_headers
 		negui_node_graphics_item.h
 		negui_edge_graphics_item.h
 		negui_arrow_head_graphics_item.h
-		negui_element_graphics_item_builder.h
+		negui_node_graphics_item_builder.h
+		negui_edge_graphics_item_builder.h
+		negui_arrow_head_graphics_item_builder.h
 		negui_shape_style_base.h
 		negui_1d_shape_style_base.h
 		negui_2d_shape_style_base.h

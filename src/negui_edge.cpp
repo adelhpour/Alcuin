@@ -2,7 +2,7 @@
 #include "negui_node.h"
 #include "negui_arrow_head.h"
 #include "negui_arrow_head_builder.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_edge_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_edge_graphics_item.h"
 #include <QtMath>

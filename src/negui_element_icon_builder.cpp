@@ -1,5 +1,7 @@
 #include "negui_element_icon_builder.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_node_graphics_item_builder.h"
+#include "negui_edge_graphics_item_builder.h"
+#include "negui_arrow_head_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_template_style.h"
 #include <QtMath>

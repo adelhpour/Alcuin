@@ -1,7 +1,7 @@
 #include "negui_node.h"
 #include "negui_edge.h"
 #include "negui_node_style.h"
-#include "negui_element_graphics_item_builder.h"
+#include "negui_node_graphics_item_builder.h"
 #include "negui_node_graphics_item.h"
 #include <QJsonObject>
 
