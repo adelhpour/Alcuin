@@ -78,7 +78,6 @@ void MyNodeBase::reparent() {
     if (parentNode && ((MyClassicNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyleBase*)style())->parentCategories())) {
         ((MyClassicNodeStyle*)parentNode->style())->convertToParentCategory();
         setParentNode((MyNodeBase*)parentNode);
-        graphicsItem()->setZValue(calculateZValue());
         ((MyClassicNode*)parentNode)->adjustExtents();
         resetPosition();
     }
@@ -118,6 +117,7 @@ void MyNodeBase::setParentNode(MyElementBase* parentNode) {
     _isSetParentNode = true;
     _parentNodeId = parentNode->name();
     ((MyClassicNode*)_parentNode)->addChildNode(this);
+    graphicsItem()->setZValue(calculateZValue());
 }
 
 void MyNodeBase::lockParentNode(const bool& locked) {
