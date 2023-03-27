@@ -3,7 +3,7 @@
 
 // MyTextStyle
 
-MyTextStyle::MyTextStyle(const QString& name) : MyShapeStyleBase(name) {
+MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
     // plain-text
     _parameters.push_back(new MyStringParameter("plain-text"));
     

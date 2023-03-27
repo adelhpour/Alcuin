@@ -33,7 +33,7 @@ void MyRectGraphicsItem::updateStyle() {
 
 void MyRectGraphicsItem::setSelectedWithStroke(const bool& selected) {
     if (selected)
-        setPen(style()->selectedPen());
+        setPen(((MyRectStyleBase*)style())->selectedPen());
     else
         setPen(((MyRectStyleBase*)style())->pen());
     QGraphicsItem::setSelected(selected);
@@ -41,7 +41,7 @@ void MyRectGraphicsItem::setSelectedWithStroke(const bool& selected) {
 
 void MyRectGraphicsItem::setSelectedWithFill(const bool& selected) {
     if (selected)
-        setBrush(style()->selectedBrush());
+        setBrush(((MyRectStyleBase*)style())->selectedBrush());
     else
         setBrush(((MyRectStyleBase*)style())->brush());
     QGraphicsItem::setSelected(selected);

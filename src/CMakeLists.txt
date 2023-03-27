@@ -35,6 +35,8 @@ set(gui_sources
 		negui_arrow_head_graphics_item.cpp
 		negui_element_graphics_item_builder.cpp
 		negui_shape_style_base.cpp
+		negui_1d_shape_style_base.cpp
+		negui_2d_shape_style_base.cpp
 		negui_ellipse_style.cpp
 		negui_rect_style.cpp
 		negui_polygon_style.cpp
@@ -95,6 +97,8 @@ set(gui_headers
 		negui_arrow_head_graphics_item.h
 		negui_element_graphics_item_builder.h
 		negui_shape_style_base.h
+		negui_1d_shape_style_base.h
+		negui_2d_shape_style_base.h
 		negui_ellipse_style.h
 		negui_rect_style.h
 		negui_polygon_style.h

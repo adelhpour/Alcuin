@@ -1,9 +1,9 @@
 #ifndef __NEGUI_POLYGON_STYLE_H
 #define __NEGUI_POLYGON_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_2d_shape_style_base.h"
 
-class MyPolygonStyleBase : public MyShapeStyleBase {
+class MyPolygonStyleBase : public My2DShapeStyleBase {
 public:
     
     MyPolygonStyleBase(const QString& name);

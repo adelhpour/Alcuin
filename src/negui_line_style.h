@@ -1,9 +1,9 @@
 #ifndef __NEGUI_LINE_STYLE_H
 #define __NEGUI_LINE_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_1d_shape_style_base.h"
 
-class MyLineStyle : public MyShapeStyleBase {
+class MyLineStyle : public My1DShapeStyleBase {
 public:
     
     MyLineStyle(const QString& name);

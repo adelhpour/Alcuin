@@ -3,7 +3,7 @@
 
 // MyCentroidStyleBase
 
-MyCentroidStyleBase::MyCentroidStyleBase(const QString& name) : MyShapeStyleBase(name) {
+MyCentroidStyleBase::MyCentroidStyleBase(const QString& name) : My2DShapeStyleBase(name) {
 
 }
 

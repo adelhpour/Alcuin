@@ -23,7 +23,7 @@ void MyCentroidGraphicsItem::updateStyle() {
 
 void MyCentroidGraphicsItem::setSelectedWithStroke(const bool& selected) {
     if (selected)
-        setPen(style()->selectedPen());
+        setPen(((MyCentroidStyleBase*)style())->selectedPen());
     else
         setPen(((MyCentroidStyleBase*)style())->pen());
     QGraphicsItem::setSelected(selected);

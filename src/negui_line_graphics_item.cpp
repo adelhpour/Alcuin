@@ -21,7 +21,7 @@ void MyLineGraphicsItem::updateStyle() {
 
 void MyLineGraphicsItem::setSelectedWithStroke(const bool& selected) {
     if (selected)
-        setPen(style()->selectedPen());
+        setPen(((MyLineStyle*)style())->selectedPen());
     else
         setPen(((MyLineStyle*)style())->pen());
     QGraphicsItem::setSelected(selected);

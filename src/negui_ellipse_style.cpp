@@ -3,7 +3,7 @@
 
 // MyEllipseStyleBase
 
-MyEllipseStyleBase::MyEllipseStyleBase(const QString& name) : MyShapeStyleBase(name) {
+MyEllipseStyleBase::MyEllipseStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke-width
     _parameters.push_back(new MyStrokeWidthParameter());
     

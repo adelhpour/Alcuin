@@ -1,9 +1,9 @@
 #ifndef __NEGUI_ELLIPSE_STYLE_H
 #define __NEGUI_ELLIPSE_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_2d_shape_style_base.h"
 
-class MyEllipseStyleBase : public MyShapeStyleBase {
+class MyEllipseStyleBase : public My2DShapeStyleBase {
 public:
     
     MyEllipseStyleBase(const QString& name);

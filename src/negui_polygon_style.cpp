@@ -5,7 +5,7 @@
 
 // MyPolygonStyleBase
 
-MyPolygonStyleBase::MyPolygonStyleBase(const QString& name) : MyShapeStyleBase(name) {
+MyPolygonStyleBase::MyPolygonStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke-width
     _parameters.push_back(new MyStrokeWidthParameter());
     

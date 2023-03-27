@@ -3,7 +3,7 @@
 
 // MyLineStyle
 
-MyLineStyle::MyLineStyle(const QString& name) : MyShapeStyleBase(name) {
+MyLineStyle::MyLineStyle(const QString& name) : My1DShapeStyleBase(name) {
     // stroke-width
     _parameters.push_back(new MyStrokeWidthParameter());
     

@@ -1,9 +1,9 @@
 #ifndef __NEGUI_TEXT_STYLE_H
 #define __NEGUI_TEXT_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_2d_shape_style_base.h"
 
-class MyTextStyle : public MyShapeStyleBase {
+class MyTextStyle : public My2DShapeStyleBase {
 public:
     
     MyTextStyle(const QString& name);

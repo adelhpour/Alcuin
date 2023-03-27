@@ -1,9 +1,9 @@
 #ifndef __NEGUI_RECT_STYLE_H
 #define __NEGUI_RECT_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_2d_shape_style_base.h"
 
-class MyRectStyleBase : public MyShapeStyleBase {
+class MyRectStyleBase : public My2DShapeStyleBase {
 public:
     
     MyRectStyleBase(const QString& name);

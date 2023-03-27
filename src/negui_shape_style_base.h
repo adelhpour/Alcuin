@@ -28,18 +28,6 @@ public:
     // find a parameter among the list of parameters using its name
     MyParameterBase* findParameter(const QString& name) const;
     
-    // get the pen for the border line
-    const QPen pen() const;
-    
-    // get the pen with selected stroke color
-    const QPen selectedPen() const;
-    
-    // get the brush for fill color
-    const QBrush brush() const;
-    
-    // get the brush with selected fill color
-    const QBrush selectedBrush() const;
-    
     virtual const QRectF getShapeExtents() = 0;
     
     // poupulate the menu layout with the style features

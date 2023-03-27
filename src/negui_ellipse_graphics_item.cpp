@@ -22,7 +22,7 @@ void MyEllipseGraphicsItem::updateStyle() {
 
 void MyEllipseGraphicsItem::setSelectedWithStroke(const bool& selected) {
     if (selected)
-        setPen(style()->selectedPen());
+        setPen(((MyEllipseStyleBase*)style())->selectedPen());
     else
         setPen(((MyEllipseStyleBase*)style())->pen());
     QGraphicsItem::setSelected(selected);
@@ -30,7 +30,7 @@ void MyEllipseGraphicsItem::setSelectedWithStroke(const bool& selected) {
 
 void MyEllipseGraphicsItem::setSelectedWithFill(const bool& selected) {
     if (selected)
-        setBrush(style()->selectedBrush());
+        setBrush(((MyEllipseStyleBase*)style())->selectedBrush());
     else
         setBrush(((MyEllipseStyleBase*)style())->brush());
     QGraphicsItem::setSelected(selected);

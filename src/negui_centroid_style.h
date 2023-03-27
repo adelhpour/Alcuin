@@ -1,9 +1,9 @@
 #ifndef __NEGUI_CENTROID_STYLE_H
 #define __NEGUI_CENTROID_STYLE_H
 
-#include "negui_shape_style_base.h"
+#include "negui_2d_shape_style_base.h"
 
-class MyCentroidStyleBase : public MyShapeStyleBase {
+class MyCentroidStyleBase : public My2DShapeStyleBase {
 public:
     
     MyCentroidStyleBase(const QString& name);
