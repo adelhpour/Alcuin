@@ -4,6 +4,7 @@
 #include "negui_node_builder.h"
 #include "negui_edge_builder.h"
 #include "negui_new_edge_builder.h"
+#include "negui_selection_area_builder.h"
 #include "negui_node_style_builder.h"
 #include "negui_edge_style_builder.h"
 #include "negui_plugin_item_builder.h"
@@ -580,7 +581,7 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (mode() == NORMAL_MODE) {
         if (!_selectionAreaBuilder)
-            _selectionAreaBuilder = new QWidget();
+            _selectionAreaBuilder = new MySelectionAreaBuilder();
         //((MySelectionAreaBuilder*) _selectionAreaBuilder)->build(position);
         //if (((MySelectionAreaBuilder*) _selectionAreaBuilder)->isSelectionAreaBuilt())
             //deleteSelectionAreaBuilder();
