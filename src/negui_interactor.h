@@ -131,6 +131,7 @@ public slots:
     void enableRemoveMode();
     
     void clearElementsFocusedGraphicsItems();
+    void displaySelectionArea(const QPointF& position);
     
 private slots:
         
@@ -202,6 +203,7 @@ protected:
     
     // builder
     QObject* _newEdgeBuilder;
+    QObject* _selectionAreaBuilder;
     
     // network
     QRectF _networkExtents;

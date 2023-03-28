@@ -42,6 +42,16 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     }
 }
 
+void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    emit mouseLeftButtonIsMoved(event->scenePos());
+    QGraphicsScene::mouseMoveEvent(event);
+}
+
+void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    emit mouseLeftButtonIsReleased(event->scenePos());
+    QGraphicsScene::mouseReleaseEvent(event);
+}
+
 void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
     QGraphicsScene::keyPressEvent(event);
     if (!event->isAccepted()) {

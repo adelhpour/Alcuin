@@ -42,6 +42,7 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     
     // builder
     _newEdgeBuilder = NULL;
+    _selectionAreaBuilder = NULL;
     
     loadPlugins();
     resetNetwork();
@@ -574,6 +575,16 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
         node->graphicsItem()->clearFocusedGraphicsItems();
     for (MyElementBase *edge : qAsConst(edges()))
         edge->graphicsItem()->clearFocusedGraphicsItems();
+}
+
+void MyInteractor::displaySelectionArea(const QPointF& position) {
+    if (mode() == NORMAL_MODE) {
+        if (!_selectionAreaBuilder)
+            _selectionAreaBuilder = new QWidget();
+        //((MySelectionAreaBuilder*) _selectionAreaBuilder)->build(position);
+        //if (((MySelectionAreaBuilder*) _selectionAreaBuilder)->isSelectionAreaBuilt())
+            //deleteSelectionAreaBuilder();
+    }
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
