@@ -590,7 +590,15 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
 
 void MyInteractor::setSelectionAreaCoveredNodesSelected() {
     if (_selectionAreaGraphicsItem) {
-        QRectF selectionAreaExtents = ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->getExtents();
+        QList<QGraphicsItem *> sekectedItems = _selectionAreaGraphicsItem->collidingItems();
+        for (QGraphicsItem* item : qAsConst(sekectedItems)) {
+            if (item->parentItem()) {
+                for (MyElementBase* node : qAsConst(nodes())) {
+                    if (node->graphicsItem() == item->parentItem())
+                        node->setSelected(true);
+                }
+            }
+        }
     }
 }
 
