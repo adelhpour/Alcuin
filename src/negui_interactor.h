@@ -132,7 +132,6 @@ public slots:
     
     void clearElementsFocusedGraphicsItems();
     void displaySelectionArea(const QPointF& position);
-    void setSelectionAreaCoveredNodesSelected();
     void clearSelectionArea();
     
 private slots:
@@ -143,6 +142,7 @@ private slots:
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyElementBase* parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position);
     void createChangeStageCommand();
+    void setSelectionAreaCoveredNodesSelected();
     
 protected:
     

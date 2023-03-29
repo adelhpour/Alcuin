@@ -581,24 +581,24 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (mode() == NORMAL_MODE) {
         if (!_selectionAreaGraphicsItem) {
-            for (MyElementBase* node : qAsConst(nodes()))
-                node->setSelected(false);
+            //for (MyElementBase* node : qAsConst(nodes()))
+                //node->setSelected(false);
             _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
             emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
         }
         ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->updateExtents(position);
+        setSelectionAreaCoveredNodesSelected();
     }
 }
 
 void MyInteractor::setSelectionAreaCoveredNodesSelected() {
-    if (_selectionAreaGraphicsItem) {
-        QList<QGraphicsItem *> sekectedItems = _selectionAreaGraphicsItem->collidingItems();
-        for (QGraphicsItem* item : qAsConst(sekectedItems)) {
+    QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
+    for (MyElementBase* node : qAsConst(nodes())) {
+        node->setSelected(false);
+        for (QGraphicsItem* item : qAsConst(selectedItems)) {
             if (item->parentItem()) {
-                for (MyElementBase* node : qAsConst(nodes())) {
-                    if (node->graphicsItem() == item->parentItem())
-                        node->setSelected(true);
-                }
+                if (node->graphicsItem() == item->parentItem())
+                    node->setSelected(true);
             }
         }
     }
