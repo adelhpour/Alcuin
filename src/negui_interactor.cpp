@@ -4,7 +4,7 @@
 #include "negui_node_builder.h"
 #include "negui_edge_builder.h"
 #include "negui_new_edge_builder.h"
-#include "negui_selection_area_builder.h"
+#include "negui_selection_area_graphics_item.h"
 #include "negui_node_style_builder.h"
 #include "negui_edge_style_builder.h"
 #include "negui_plugin_item_builder.h"
@@ -43,7 +43,7 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     
     // builder
     _newEdgeBuilder = NULL;
-    _selectionAreaBuilder = NULL;
+    _selectionAreaGraphicsItem = NULL;
     
     loadPlugins();
     resetNetwork();
@@ -580,11 +580,19 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (mode() == NORMAL_MODE) {
-        if (!_selectionAreaBuilder)
-            _selectionAreaBuilder = new MySelectionAreaBuilder();
-        //((MySelectionAreaBuilder*) _selectionAreaBuilder)->build(position);
-        //if (((MySelectionAreaBuilder*) _selectionAreaBuilder)->isSelectionAreaBuilt())
-            //deleteSelectionAreaBuilder();
+        if (!_selectionAreaGraphicsItem) {
+            _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
+            emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
+        }
+        ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->updateExtents(position);
+    }
+}
+
+void MyInteractor::clearSelectionArea() {
+    if (_selectionAreaGraphicsItem) {
+        askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
+        delete _selectionAreaGraphicsItem;
+        _selectionAreaGraphicsItem = NULL;
     }
 }
 
