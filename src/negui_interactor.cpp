@@ -581,6 +581,8 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (mode() == NORMAL_MODE) {
         if (!_selectionAreaGraphicsItem) {
+            for (MyElementBase* node : qAsConst(nodes()))
+                node->setSelected(false);
             _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
             emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
         }
