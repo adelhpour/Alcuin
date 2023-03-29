@@ -4,6 +4,7 @@
 
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
     setSceneRect(30.0, 20.0, 840.0, 560.0);
+    _isLeftButtonPressed = false;
 }
 
 void MyGraphicsScene::setSceneRect(qreal x, qreal y, qreal width, qreal height) {
@@ -26,6 +27,7 @@ QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position)
     return QGraphicsScene::items(position);
 }
 
+#include <iostream>
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted()) {
@@ -36,6 +38,7 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             // if a node is added
             if (items().size() != numberOfItems)
                 event->accept();
+            _isLeftButtonPressed = true;
         }
         else if (event->button() == Qt::RightButton)
             emit mouseRightButtonIsPressed();
@@ -43,12 +46,14 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    emit mouseLeftButtonIsMoved(event->scenePos());
+    if (_isLeftButtonPressed)
+        emit mousePressedLeftButtonIsMoved(event->scenePos());
     QGraphicsScene::mouseMoveEvent(event);
 }
 
 void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    emit mouseLeftButtonIsReleased(event->scenePos());
+    _isLeftButtonPressed = false;
+    emit mouseLeftButtonIsReleased();
     QGraphicsScene::mouseReleaseEvent(event);
 }
 

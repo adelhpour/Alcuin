@@ -8,5 +8,5 @@ MySelectionAreaGraphicsItem::MySelectionAreaGraphicsItem(const QPointF& initialP
 }
 
 void MySelectionAreaGraphicsItem::updateExtents(const QPointF& position) {
-    //set(_initialPosition, position);
+    setRect(qMin(_initialPosition.x(), position.x()), qMin(_initialPosition.y(), position.y()), qAbs(position.x() - _initialPosition.x()), qAbs(position.y() - _initialPosition.y()));
 }
