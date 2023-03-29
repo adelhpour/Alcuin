@@ -588,6 +588,12 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
     }
 }
 
+void MyInteractor::setSelectionAreaCoveredNodesSelected() {
+    if (_selectionAreaGraphicsItem) {
+        QRectF selectionAreaExtents = ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->getExtents();
+    }
+}
+
 void MyInteractor::clearSelectionArea() {
     if (_selectionAreaGraphicsItem) {
         askForRemoveGraphicsItem(_selectionAreaGraphicsItem);

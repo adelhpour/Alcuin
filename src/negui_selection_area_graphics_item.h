@@ -12,6 +12,8 @@ public:
 
     void updateExtents(const QPointF& position);
 
+    const QRectF getExtents();
+
     const QPen defaultPen();
 
     const QBrush defaultBrush();

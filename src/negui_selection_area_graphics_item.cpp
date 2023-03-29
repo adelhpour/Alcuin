@@ -13,6 +13,10 @@ void MySelectionAreaGraphicsItem::updateExtents(const QPointF& position) {
     setRect(qMin(_initialPosition.x(), position.x()), qMin(_initialPosition.y(), position.y()), qAbs(position.x() - _initialPosition.x()), qAbs(position.y() - _initialPosition.y()));
 }
 
+const QRectF MySelectionAreaGraphicsItem::getExtents() {
+    return rect();
+}
+
 const QPen MySelectionAreaGraphicsItem::defaultPen() {
     return QPen(QColor("#4169e1"));
 }

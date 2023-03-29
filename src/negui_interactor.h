@@ -132,6 +132,7 @@ public slots:
     
     void clearElementsFocusedGraphicsItems();
     void displaySelectionArea(const QPointF& position);
+    void setSelectionAreaCoveredNodesSelected();
     void clearSelectionArea();
     
 private slots:
