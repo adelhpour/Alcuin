@@ -31,7 +31,7 @@ const qreal MyCentroidStyleBase::radius() const {
 
 #include "iostream"
 void MyCentroidStyleBase::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
 
     // radius
@@ -43,7 +43,7 @@ void MyCentroidStyleBase::read(const QJsonObject &json) {
 }
 
 void MyCentroidStyleBase::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
 
     // radius

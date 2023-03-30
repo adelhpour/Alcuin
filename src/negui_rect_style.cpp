@@ -125,7 +125,7 @@ const qreal MyRectStyleBase::ry() const {
 }
 
 void MyRectStyleBase::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
     // x
@@ -172,7 +172,7 @@ void MyRectStyleBase::read(const QJsonObject &json) {
 }
 
 void MyRectStyleBase::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
     // x

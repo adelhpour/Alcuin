@@ -64,7 +64,7 @@ const QPoint MyLineStyle::relativeP2() const {
 }
 
 void MyLineStyle::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My1DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
     // control p1
@@ -97,7 +97,7 @@ void MyLineStyle::read(const QJsonObject &json) {
 }
 
 void MyLineStyle::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My1DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
     // relative p1

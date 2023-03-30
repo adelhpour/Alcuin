@@ -89,7 +89,7 @@ void MyPolygonStyleBase::reset() {
 }
 
 void MyPolygonStyleBase::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
     // points
@@ -115,7 +115,7 @@ void MyPolygonStyleBase::read(const QJsonObject &json) {
 }
 
 void MyPolygonStyleBase::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
     // points

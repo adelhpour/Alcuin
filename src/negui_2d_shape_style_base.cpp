@@ -30,7 +30,7 @@ const QBrush My2DShapeStyleBase::selectedBrush() const {
 }
 
 void My2DShapeStyleBase::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My1DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
 
     // fill
@@ -42,7 +42,7 @@ void My2DShapeStyleBase::read(const QJsonObject &json) {
 }
 
 void My2DShapeStyleBase::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My1DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
 
     // fill

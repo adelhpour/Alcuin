@@ -91,7 +91,7 @@ const qreal MyEllipseStyleBase::ry() const {
 }
 
 void MyEllipseStyleBase::read(const QJsonObject &json) {
-    MyShapeStyleBase::read(json);
+    My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
     // cx
@@ -124,7 +124,7 @@ void MyEllipseStyleBase::read(const QJsonObject &json) {
 }
 
 void MyEllipseStyleBase::write(QJsonObject &json) {
-    MyShapeStyleBase::write(json);
+    My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
     // cx
