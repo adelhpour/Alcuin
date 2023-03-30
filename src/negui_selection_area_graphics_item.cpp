@@ -7,6 +7,7 @@ MySelectionAreaGraphicsItem::MySelectionAreaGraphicsItem(const QPointF& initialP
     setRect(_initialPosition.x(), _initialPosition.y(), 0.0, 0.0);
     setPen(defaultPen());
     setBrush(defaultBrush());
+    setZValue(-1);
 }
 
 void MySelectionAreaGraphicsItem::updateExtents(const QPointF& position) {
