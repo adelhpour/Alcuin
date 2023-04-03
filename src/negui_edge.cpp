@@ -19,6 +19,7 @@ MyEdgeBase::MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementB
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdges()), this, SIGNAL(askForUpdateConnectedEdges()));
     if (startNode && endNode) {
         _startNode = startNode;
         ((MyNodeBase*)_startNode)->addEdge(this);

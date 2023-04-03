@@ -13,6 +13,7 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
         connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateConnectedEdges()));
         item->setZValue(zValue());
     }
         

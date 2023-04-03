@@ -20,6 +20,8 @@ signals:
     
     void askForUpdateArrowHeadPlacement();
 
+    void askForUpdateConnectedEdges();
+
 protected:
     QLineF _initialLine;
 };
