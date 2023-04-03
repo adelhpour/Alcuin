@@ -78,7 +78,7 @@ public slots:
     void updateArrowHeadPlacement();
 
 signals:
-    void askForUpdateConnectedEdges();
+    void askForAdjustConnectedEdges();
 
 protected:
     MyElementBase* _startNode;

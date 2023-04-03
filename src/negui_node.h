@@ -24,10 +24,10 @@ public:
     virtual void connectGraphicsItem();
     
     // add to edges
-    void addEdge(MyElementBase* e);
+    virtual void addEdge(MyElementBase* e);
     
     // remove from edges
-    void removeEdge(MyElementBase* e);
+    virtual void removeEdge(MyElementBase* e);
     
     // get edges
     QList<MyElementBase*>& edges();
@@ -163,6 +163,12 @@ public:
     void connectGraphicsItem() override;
 
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    // add to edges
+    void addEdge(MyElementBase* e) override;
+
+    // remove from edges
+    void removeEdge(MyElementBase* e) override;
 
 private slots:
 
