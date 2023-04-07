@@ -168,6 +168,8 @@ public:
     // remove from edges
     void removeEdge(MyElementBase* e) override;
 
+    const QLineF createControlBezierLine(const QPointF& updatedPoint);
+
 private slots:
 
     void adjustConnectedEdges(const QPointF&);

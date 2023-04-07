@@ -348,5 +348,19 @@ void MyCentroidNode::removeEdge(MyElementBase* e) {
 
 #include "iostream"
 void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
-    std::cout << "x: " << updatedPoint.x() << ", y: " << updatedPoint.y() << std::endl;
+    QLineF controlBezierLine = createControlBezierLine(updatedPoint);
+}
+
+const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint) {
+    QPointF lineEndPoint = position();
+    if (position().x() < updatedPoint.x())
+        lineEndPoint -= QPointF(updatedPoint.x() - position().x(), 0);
+    else
+        lineEndPoint += QPointF(position().x() - updatedPoint.x(), 0);
+    if (position().y() < updatedPoint.y())
+        lineEndPoint -= QPointF(0, updatedPoint.y() - position().y());
+    else
+        lineEndPoint += QPointF(0, position().y() - updatedPoint.y());
+
+    return QLineF(updatedPoint, lineEndPoint);
 }
