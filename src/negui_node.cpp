@@ -332,26 +332,24 @@ MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
     return CENTROID_NODE;
 }
 
-void MyCentroidNode::connectGraphicsItem() {
-    MyNodeBase::connectGraphicsItem();
-    connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(adjustConnectedEdges()));
-}
-
 MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
     return createCentroidNodeSceneGraphicsItem(position);
 }
 
 void MyCentroidNode::addEdge(MyElementBase* e) {
     MyNodeBase::addEdge(e);
-    connect(e, SIGNAL(askForAdjustConnectedEdges(MyElementBase*)), this, SLOT(adjustConnectedEdges(MyElementBase*)));
+    connect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
 }
 
 void MyCentroidNode::removeEdge(MyElementBase* e) {
     MyNodeBase::removeEdge(e);
-    disconnect(e, SIGNAL(askForAdjustConnectedEdges(MyElementBase*)), this, SLOT(adjustConnectedEdges(MyElementBase*)));
+    disconnect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
 }
 
-void MyCentroidNode::adjustConnectedEdges(MyElementBase(*)) {
+#include "iostream"
+void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
+    //const QPointF handlePosition = getConnectedEdgeHandlePosition(updatedEdge);
+    std::cout << "x: " << updatedPoint.x() << ", y: " << updatedPoint.y() << std::endl;
     //for (MyElementBase* connectedEdge : edges())
         //std::cout << connectedEdge->name().toStdString() << std::endl;
     //std::cout << std::endl;

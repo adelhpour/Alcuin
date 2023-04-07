@@ -12,8 +12,8 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     MyShapeGraphicsItemBase* item = NULL;
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPointAreUpdated()), this, SIGNAL(askForUpdateConnectedEdges()));
+        connect(item, SIGNAL(lineControlPointIsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPointIsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdges(const QPointF)));
         item->setZValue(zValue());
     }
         

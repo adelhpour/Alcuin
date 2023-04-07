@@ -17,7 +17,9 @@ public:
     
 signals:
     
-    void controlPointsAreUpdated(const QPointF&, const QPointF&);
+    void startControlPointIsUpdated(const QPointF&);
+
+    void endControlPointIsUpdated(const QPointF&);
     
 public slots:
     

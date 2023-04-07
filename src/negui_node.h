@@ -160,8 +160,6 @@ public:
 
     NODE_TYPE nodeType() override;
 
-    void connectGraphicsItem() override;
-
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to edges
@@ -172,7 +170,7 @@ public:
 
 private slots:
 
-    void adjustConnectedEdges(MyElementBase*);
+    void adjustConnectedEdges(const QPointF&);
 
 protected:
     QList<MyElementBase*> _childNodes;

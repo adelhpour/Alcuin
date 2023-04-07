@@ -25,12 +25,12 @@ void MyBezierAdjustHandledGraphicsItems::createBezierEndAdjustHandledGraphicsIte
 
 void MyBezierAdjustHandledGraphicsItems::updateStartAdjustHandledGraphicsItem(const QPointF& startControlPoint) {
     ((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem)->updatePostion(startControlPoint);
-    emit controlPointsAreUpdated(startControlPoint, ((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem)->position());
+    emit startControlPointIsUpdated(startControlPoint);
 }
 
 void MyBezierAdjustHandledGraphicsItems::updateEndAdjustHandledGraphicsItem(const QPointF& endControlPoint) {
     ((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem)->updatePostion(endControlPoint);
-    emit controlPointsAreUpdated(((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem)->position(), endControlPoint);
+    emit endControlPointIsUpdated(endControlPoint);
 }
 
 // MyBezierAdjustHandledGraphicsItem

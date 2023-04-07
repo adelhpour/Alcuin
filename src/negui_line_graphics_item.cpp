@@ -35,14 +35,20 @@ const QPointF MyLineGraphicsItem::getStartPoint() {
     return _line.p1();
 }
 
-void MyLineGraphicsItem::setControlPoints(const QPointF& controlPoint1, const QPointF& controlPoint2) {
-    if (isSetStyle()) {
+void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
+    if (isSetStyle())
         ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
-        ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
-    }
     
     updateStyle();
-    emit lineControlPointAreUpdated();
+    emit lineControlPointIsUpdated(controlPoint1);
+}
+
+void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
+    if (isSetStyle())
+        ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
+
+    updateStyle();
+    emit lineControlPointIsUpdated(controlPoint2);
 }
 
 const QPointF MyLineGraphicsItem::getControlPoint1() {
@@ -80,8 +86,9 @@ QRectF MyLineGraphicsItem::getExtents() {
 
 QGraphicsItem* MyLineGraphicsItem::getFocusedGraphicsItem() {
     MyBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MyBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), getControlPoint2(), getEndPoint(), zValue());
-    connect(focusedGraphicsItems, SIGNAL(controlPointsAreUpdated(const QPointF&, const QPointF&)), this, SLOT(setControlPoints(const QPointF&, const QPointF&)));
-    
+    connect(focusedGraphicsItems, SIGNAL(startControlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint1(const QPointF&)));
+    connect(focusedGraphicsItems, SIGNAL(endControlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint2(const QPointF&)));
+
     return focusedGraphicsItems;
 }
 

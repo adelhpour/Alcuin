@@ -20,7 +20,7 @@ signals:
     
     void askForUpdateArrowHeadPlacement();
 
-    void askForUpdateConnectedEdges();
+    void askForUpdateConnectedEdges(const QPointF&);
 
 protected:
     QLineF _initialLine;

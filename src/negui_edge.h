@@ -78,7 +78,7 @@ public slots:
     void updateArrowHeadPlacement();
 
 signals:
-    void askForAdjustConnectedEdges();
+    void askForAdjustConnectedEdges(const QPointF&);
 
 protected:
     MyElementBase* _startNode;
