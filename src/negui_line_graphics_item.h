@@ -37,7 +37,9 @@ public:
     
 signals:
     
-    void lineControlPointIsUpdated(const QPointF&);
+    void lineControlPoint1IsUpdated(const QPointF&);
+
+    void lineControlPoint2IsUpdated(const QPointF&);
     
 public slots:
     

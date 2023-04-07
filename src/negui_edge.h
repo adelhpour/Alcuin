@@ -74,6 +74,10 @@ public:
     void write(QJsonObject &json) override;
     
 public slots:
+
+    void adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint);
+
+    void adjustConnectedEdgesToEndNode(const QPointF& updatedEndPoint);
     
     void updateArrowHeadPlacement();
 

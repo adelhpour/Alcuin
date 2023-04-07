@@ -12,8 +12,9 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     MyShapeGraphicsItemBase* item = NULL;
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPointIsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPointIsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdges(const QPointF)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)));
         item->setZValue(zValue());
     }
         
@@ -93,7 +94,6 @@ void MyEdgeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
     setFocused(false);
     QGraphicsItem::focusOutEvent(event);
 }
-
 
 // MyEdgeIconGraphicsItem
 

@@ -348,9 +348,5 @@ void MyCentroidNode::removeEdge(MyElementBase* e) {
 
 #include "iostream"
 void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
-    //const QPointF handlePosition = getConnectedEdgeHandlePosition(updatedEdge);
     std::cout << "x: " << updatedPoint.x() << ", y: " << updatedPoint.y() << std::endl;
-    //for (MyElementBase* connectedEdge : edges())
-        //std::cout << connectedEdge->name().toStdString() << std::endl;
-    //std::cout << std::endl;
 }

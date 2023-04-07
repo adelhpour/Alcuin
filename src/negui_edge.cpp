@@ -19,7 +19,8 @@ MyEdgeBase::MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementB
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(displayFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdges(const QPointF&)), this, SIGNAL(askForAdjustConnectedEdges(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));
     if (startNode && endNode) {
         _startNode = startNode;
         ((MyNodeBase*)_startNode)->addEdge(this);
@@ -104,6 +105,16 @@ void MyEdgeBase::updatePoints() {
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
     updateArrowHeadPlacement();
+}
+
+void MyEdgeBase::adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint) {
+    if (((MyNodeBase*)startNode())->nodeType() == MyNodeBase::CENTROID_NODE)
+        emit askForAdjustConnectedEdges(updatedStartPoint);
+}
+
+void MyEdgeBase::adjustConnectedEdgesToEndNode(const QPointF& updatedEndPoint) {
+    if (((MyNodeBase*)endNode())->nodeType() == MyNodeBase::CENTROID_NODE)
+        emit askForAdjustConnectedEdges(updatedEndPoint);
 }
 
 void MyEdgeBase::updateArrowHeadPlacement() {
