@@ -343,14 +343,16 @@ MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &pos
 
 void MyCentroidNode::addEdge(MyElementBase* e) {
     MyNodeBase::addEdge(e);
-    connect(e, SIGNAL(askForAdjustConnectedEdges()), this, SLOT(adjustConnectedEdges()));
+    connect(e, SIGNAL(askForAdjustConnectedEdges(MyElementBase*)), this, SLOT(adjustConnectedEdges(MyElementBase*)));
 }
 
 void MyCentroidNode::removeEdge(MyElementBase* e) {
     MyNodeBase::removeEdge(e);
-    disconnect(e, SIGNAL(askForAdjustConnectedEdges()), this, SLOT(adjustConnectedEdges()));
+    disconnect(e, SIGNAL(askForAdjustConnectedEdges(MyElementBase*)), this, SLOT(adjustConnectedEdges(MyElementBase*)));
 }
 
-void MyCentroidNode::adjustConnectedEdges() {
-
+void MyCentroidNode::adjustConnectedEdges(MyElementBase(*)) {
+    //for (MyElementBase* connectedEdge : edges())
+        //std::cout << connectedEdge->name().toStdString() << std::endl;
+    //std::cout << std::endl;
 }

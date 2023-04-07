@@ -172,7 +172,7 @@ public:
 
 private slots:
 
-    void adjustConnectedEdges();
+    void adjustConnectedEdges(MyElementBase*);
 
 protected:
     QList<MyElementBase*> _childNodes;
