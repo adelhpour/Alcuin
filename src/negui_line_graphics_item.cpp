@@ -38,7 +38,7 @@ const QPointF MyLineGraphicsItem::getStartPoint() {
 void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
     if (isSetStyle())
         ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
-    
+
     updateStyle();
     emit lineControlPoint1IsUpdated(controlPoint1);
 }
@@ -65,6 +65,34 @@ const QPointF MyLineGraphicsItem::getControlPoint2() {
         controlPoint2 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP2().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP2().y() * (_line.p2() - _line.p1()).y());
     
     return controlPoint2;
+}
+
+void MyLineGraphicsItem::adjustLineControlPoint1ToControlBezierLine(const QLineF& controlBezierLine) {
+    QPointF controlPoint1;
+    QPointF endPoint = getEndPoint();
+    qreal distanceToBezierLineStartPoint = ((controlBezierLine.p1().x() - endPoint.x()) * (controlBezierLine.p1().x() - endPoint.x())) + ((controlBezierLine.p1().y() - endPoint.y()) * (controlBezierLine.p1().y() - endPoint.y()));
+    qreal distanceToBezierLineEndPoint = ((controlBezierLine.p2().x() - endPoint.x()) * (controlBezierLine.p2().x() - endPoint.x())) + ((controlBezierLine.p2().y() - endPoint.y()) * (controlBezierLine.p2().y() - endPoint.y()));
+
+    if (distanceToBezierLineStartPoint > distanceToBezierLineEndPoint)
+        controlPoint1 = controlBezierLine.p2();
+    else
+        controlPoint1 = controlBezierLine.p1();
+    ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
+    updateStyle();
+}
+
+void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF& controlBezierLine) {
+    QPointF controlPoint2;
+    QPointF startPoint = getStartPoint();
+    qreal distanceToBezierLineStartPoint = ((controlBezierLine.p1().x() - startPoint.x()) * (controlBezierLine.p1().x() - startPoint.x())) + ((controlBezierLine.p1().y() - startPoint.y()) * (controlBezierLine.p1().y() - startPoint.y()));
+    qreal distanceToBezierLineEndPoint = ((controlBezierLine.p2().x() - startPoint.x()) * (controlBezierLine.p2().x() - startPoint.x())) + ((controlBezierLine.p2().y() - startPoint.y()) * (controlBezierLine.p2().y() - startPoint.y()));
+
+    if (distanceToBezierLineStartPoint > distanceToBezierLineEndPoint)
+        controlPoint2 = controlBezierLine.p2();
+    else
+        controlPoint2 = controlBezierLine.p1();
+    ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
+    updateStyle();
 }
 
 const QPointF MyLineGraphicsItem::getEndPoint() {

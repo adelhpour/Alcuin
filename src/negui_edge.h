@@ -19,8 +19,13 @@ public:
     ELEMENT_TYPE type() override;
 
     virtual EDGE_TYPE edgeType() = 0;
-    
+
+    void setStartNode(MyElementBase* startNode);
+
     MyElementBase* startNode();
+
+    void setEndNode(MyElementBase* endNode);
+
     MyElementBase* endNode();
     
     void updateGraphicsItem() override;

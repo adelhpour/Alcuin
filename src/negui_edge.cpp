@@ -21,12 +21,8 @@ MyEdgeBase::MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementB
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));
-    if (startNode && endNode) {
-        _startNode = startNode;
-        ((MyNodeBase*)_startNode)->addEdge(this);
-        _endNode = endNode;
-        ((MyNodeBase*)_endNode)->addEdge(this);
-    }
+    setStartNode(startNode);
+    setEndNode(endNode);
 }
 
 MyEdgeBase::~MyEdgeBase() {
@@ -39,6 +35,20 @@ MyEdgeBase::~MyEdgeBase() {
 MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
     return EDGE_ELEMENT;
 };
+
+void MyEdgeBase::setStartNode(MyElementBase* startNode) {
+    _startNode = startNode;
+    ((MyNodeBase*)_startNode)->addEdge(this);
+    if (((MyNodeBase*)_startNode)->nodeType() == MyNodeBase::CENTROID_NODE)
+        connect(_startNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)));
+}
+
+void MyEdgeBase::setEndNode(MyElementBase* endNode) {
+    _endNode = endNode;
+    ((MyNodeBase*)_endNode)->addEdge(this);
+    if (((MyNodeBase*)_endNode)->nodeType() == MyNodeBase::CENTROID_NODE)
+        connect(_endNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)));
+}
 
 MyElementBase* MyEdgeBase::startNode() {
     return _startNode;

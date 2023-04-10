@@ -170,6 +170,10 @@ public:
 
     const QLineF createControlBezierLine(const QPointF& updatedPoint);
 
+signals:
+
+    void controlBezierLineIsUpdated(const QLineF&);
+
 private slots:
 
     void adjustConnectedEdges(const QPointF&);

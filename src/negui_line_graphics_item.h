@@ -46,6 +46,10 @@ public slots:
     void setControlPoint1(const QPointF& controlPoint1);
 
     void setControlPoint2(const QPointF& controlPoint2);
+
+    void adjustLineControlPoint1ToControlBezierLine(const QLineF& controlBezierLine);
+
+    void adjustLineControlPoint2ToControlBezierLine(const QLineF& controlBezierLine);
 };
 
 #endif

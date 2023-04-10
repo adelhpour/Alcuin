@@ -346,9 +346,8 @@ void MyCentroidNode::removeEdge(MyElementBase* e) {
     disconnect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
 }
 
-#include "iostream"
 void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
-    QLineF controlBezierLine = createControlBezierLine(updatedPoint);
+    emit controlBezierLineIsUpdated(createControlBezierLine(updatedPoint));
 }
 
 const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint) {

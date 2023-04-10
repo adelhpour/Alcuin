@@ -15,6 +15,10 @@ public:
     void setLine(const QLineF &line);
     
     const qreal getEndSlope() const;
+
+    void adjustStartPointToControlBezierLine(const QLineF& controlBezierLine);
+
+    void adjustEndPointToControlBezierLine(const QLineF& controlBezierLine);
     
 signals:
     
@@ -23,6 +27,10 @@ signals:
     void askForUpdateConnectedEdgesToStartNode(const QPointF&);
 
     void askForUpdateConnectedEdgesToEndNode(const QPointF&);
+
+    void askForAdjustStartPointToControlBezierLine(const QLineF&);
+
+    void askForAdjustEndPointToControlBezierLine(const QLineF&);
 
 protected:
     QLineF _initialLine;
