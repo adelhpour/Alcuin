@@ -514,6 +514,14 @@ MyRelativePointParameter::MyRelativePointParameter(const QString& name) : MyPoin
     reset();
 }
 
+// MyBasePointParameter
+
+MyBasePointParameter::MyBasePointParameter(const QString& name) : MyPointParameterBase(name) {
+    _x = new MyPositionalParameter("x (%)");
+    _y = new MyPositionalParameter("y (%)");
+    reset();
+}
+
 // MyColorParameter
 
 MyColorParameter::MyColorParameter(const QString& name) : MyParameterBase(name) {

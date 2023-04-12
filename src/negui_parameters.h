@@ -357,6 +357,12 @@ public:
     MyRelativePointParameter(const QString& name);
 };
 
+class MyBasePointParameter : public MyPointParameterBase {
+public:
+
+    MyBasePointParameter(const QString& name);
+};
+
 class MyColorParameter : public MyParameterBase {
 public:
     

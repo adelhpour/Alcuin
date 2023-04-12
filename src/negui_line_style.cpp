@@ -11,10 +11,10 @@ MyLineStyle::MyLineStyle(const QString& name) : My1DShapeStyleBase(name) {
     _parameters.push_back(new MyStrokeParameter());
     
     // control point 1
-    _parameters.push_back(new MyRelativePointParameter("ControlPoint1"));
+    _parameters.push_back(new MyBasePointParameter("ControlPoint1"));
     
     // control point 2
-    _parameters.push_back(new MyRelativePointParameter("ControlPoint2"));
+    _parameters.push_back(new MyBasePointParameter("ControlPoint2"));
     
     reset();
 }
