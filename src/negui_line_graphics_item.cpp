@@ -40,7 +40,7 @@ void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
         ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
 
     updateStyle();
-    emit lineControlPoint1IsUpdated(controlPoint1);
+    emit lineControlPoint1IsUpdated(getControlPoint1());
 }
 
 void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
@@ -48,7 +48,7 @@ void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
         ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
 
     updateStyle();
-    emit lineControlPoint2IsUpdated(controlPoint2);
+    emit lineControlPoint2IsUpdated(getControlPoint2());
 }
 
 const QPointF MyLineGraphicsItem::getControlPoint1() {
