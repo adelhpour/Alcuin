@@ -35,6 +35,10 @@ const QPointF MyLineGraphicsItem::getStartPoint() {
     return _line.p1();
 }
 
+const QPointF MyLineGraphicsItem::getEndPoint() {
+    return _line.p2();
+}
+
 void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
     if (isSetStyle())
         ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
@@ -43,20 +47,20 @@ void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
     emit lineControlPoint1IsUpdated(getControlPoint1());
 }
 
+const QPointF MyLineGraphicsItem::getControlPoint1() {
+    QPointF controlPoint1 = _line.p1();
+    if (isSetStyle())
+        controlPoint1 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP1().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP1().y() * (_line.p2() - _line.p1()).y());
+
+    return controlPoint1;
+}
+
 void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
     if (isSetStyle())
         ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
 
     updateStyle();
     emit lineControlPoint2IsUpdated(getControlPoint2());
-}
-
-const QPointF MyLineGraphicsItem::getControlPoint1() {
-    QPointF controlPoint1 = _line.p1();
-    if (isSetStyle())
-        controlPoint1 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP1().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP1().y() * (_line.p2() - _line.p1()).y());
-    
-    return controlPoint1;
 }
 
 const QPointF MyLineGraphicsItem::getControlPoint2() {
@@ -93,10 +97,6 @@ void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF
         controlPoint2 = controlBezierLine.p1();
     ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
     updateStyle();
-}
-
-const QPointF MyLineGraphicsItem::getEndPoint() {
-    return _line.p2();
 }
 
 const qreal MyLineGraphicsItem::getEndSlope() {
