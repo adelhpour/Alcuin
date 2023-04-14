@@ -13,9 +13,9 @@ void MyLineGraphicsItem::updateStyle() {
     if (isSetStyle()) {
         // pen
         setPen(((MyLineStyle*)style())->pen());
-        
+
         // line
-        setLine(_line);
+        resetLine();
     }
 }
 
@@ -65,7 +65,7 @@ const QPointF MyLineGraphicsItem::getControlPoint2() {
     QPointF controlPoint2 = _line.p2();
     if (isSetStyle())
         controlPoint2 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP2().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP2().y() * (_line.p2() - _line.p1()).y());
-    
+
     return controlPoint2;
 }
 
@@ -80,7 +80,7 @@ void MyLineGraphicsItem::adjustLineControlPoint1ToControlBezierLine(const QLineF
     else
         controlPoint1 = controlBezierLine.p1();
     ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
-    updateStyle();
+    resetLine();
 }
 
 void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF& controlBezierLine) {
@@ -94,7 +94,7 @@ void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF
     else
         controlPoint2 = controlBezierLine.p1();
     ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
-    updateStyle();
+    resetLine();
 }
 
 const qreal MyLineGraphicsItem::getEndSlope() {
@@ -124,6 +124,12 @@ void MyLineGraphicsItem::setZValue(qreal z) {
 
 void MyLineGraphicsItem::setLine(const QLineF& line) {
     _line = line;
+    resetLine();
+    emit lineControlPoint1IsUpdated(getControlPoint1());
+    emit lineControlPoint2IsUpdated(getControlPoint2());
+}
+
+void MyLineGraphicsItem::resetLine() {
     QPainterPath path;
     path.moveTo(getStartPoint());
     path.cubicTo(getControlPoint1(), getControlPoint2(), getEndPoint());

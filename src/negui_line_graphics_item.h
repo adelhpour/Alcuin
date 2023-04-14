@@ -34,6 +34,8 @@ public:
     void setZValue(qreal z) override;
     
     void setLine(const QLineF& line) override;
+
+    void resetLine();
     
 signals:
     
