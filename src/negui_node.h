@@ -170,6 +170,8 @@ public:
 
     const QLineF createControlBezierLine(const QPointF& updatedPoint);
 
+    const QLineF adjustControlBezierLine(const QLineF& controlBezierLine);
+
 signals:
 
     void controlBezierLineIsUpdated(const QLineF&);
