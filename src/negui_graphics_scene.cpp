@@ -27,7 +27,6 @@ QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position)
     return QGraphicsScene::items(position);
 }
 
-#include <iostream>
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted()) {
@@ -55,6 +54,11 @@ void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     _isLeftButtonPressed = false;
     emit mouseLeftButtonIsReleased();
     QGraphicsScene::mouseReleaseEvent(event);
+}
+
+void MyGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+    emit mouseLeftButtonIsDoubleClicked();
+    QGraphicsScene::mouseDoubleClickEvent(event);
 }
 
 void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {

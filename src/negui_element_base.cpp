@@ -87,16 +87,16 @@ QWidget* MyElementBase::getFeatureMenu() {
     // name
     contentLayout->addWidget(new MyLabel("Name"), contentLayout->rowCount(), 0);
     contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1);
-    
+
     return featureMenu;
 }
 
-void MyElementBase::displayFeatureMenu() {
+void MyElementBase::createFeatureMenu() {
     MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu());
     featureMenu->setShapeStyles(style()->shapeStyles());
-    if (featureMenu->exec() == QDialog::Accepted) {
-        updateStyle(featureMenu->getShapeStyles());
+    connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+        updateStyle(shapeStyles);
         updateGraphicsItem();
-        emit askForCreateChangeStageCommand();
-    }
+        emit askForCreateChangeStageCommand(); } );
+    emit askForDisplayFeatureMenu(featureMenu);
 }

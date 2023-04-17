@@ -63,10 +63,12 @@ signals:
     void elementObject(MyElementBase*);
     
     void askForCreateChangeStageCommand();
+
+    void askForDisplayFeatureMenu(QWidget*);
     
 protected slots:
     
-    void displayFeatureMenu();
+    void createFeatureMenu();
     
 protected:
     

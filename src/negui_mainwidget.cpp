@@ -19,8 +19,8 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(toolBar(), 0, 0);
-    layout->addWidget(view(), 2, 0);
+    layout->addWidget(toolBar(), 0, 0, 1, 2);
+    layout->addWidget(view(), 1, 0, 1, 1);
     setLayout(layout);
 }
 
@@ -32,11 +32,16 @@ void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
     _view = new MyGraphicsView(this);
     _interactor = new MyInteractor(this);
+    _featureMenu = NULL;
     
     ((MyToolBar*)toolBar())->addButtons(((MyInteractor*)interactor())->getMenuButtons());
 }
 
 void MyNetworkEditorWidget::setInteractions() {
+    /// network editor widget
+    // feature menu
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
+
     /// graphics view
     // export screen scene
     connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, QPrinter::OutputFormat)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, QPrinter::OutputFormat)));
@@ -46,11 +51,11 @@ void MyNetworkEditorWidget::setInteractions() {
     
     // reset scale
     connect((MyInteractor*)interactor(), SIGNAL(askForResetScale()), (MyGraphicsView*)view(), SLOT(resetScale()));
-    
+
     // enter key pressed
     connect((MyGraphicsView*)view(), SIGNAL(enterKeyIsPressed()), (MyInteractor*)interactor(), SIGNAL(enterKeyIsPressed()));
-    
-    /// graphcis scene
+
+    /// graphics scene
     // set scene rect
     connect((MyInteractor*)interactor(), SIGNAL(askForSetSceneRect(qreal, qreal, qreal, qreal)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setSceneRect(qreal, qreal, qreal, qreal)));
     
@@ -78,6 +83,9 @@ void MyNetworkEditorWidget::setInteractions() {
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseRightButtonIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
+
+    // remove menu
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {
@@ -90,4 +98,18 @@ QWidget* MyNetworkEditorWidget::toolBar() {
 
 QWidget* MyNetworkEditorWidget::view() {
     return _view;
+}
+
+void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
+    removeFeatureMenu();
+    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 1, 1, 1);
+    _featureMenu = featureMenu;
+}
+
+void MyNetworkEditorWidget::removeFeatureMenu() {
+    if (_featureMenu) {
+        layout()->removeWidget(_featureMenu);
+        delete _featureMenu;
+        _featureMenu = NULL;
+    }
 }

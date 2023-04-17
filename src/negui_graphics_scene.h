@@ -19,6 +19,7 @@ signals:
     void mousePressedLeftButtonIsMoved(const QPointF& position);
     void mouseLeftButtonIsReleased();
     void mouseRightButtonIsPressed();
+    void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
 
 public slots:
@@ -34,6 +35,7 @@ protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
     bool _isLeftButtonPressed;

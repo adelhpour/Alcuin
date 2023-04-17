@@ -100,6 +100,7 @@ signals:
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
+    void askForDisplayFeatureMenu(QWidget*);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     
     void enterKeyIsPressed();

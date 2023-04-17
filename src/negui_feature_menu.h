@@ -9,7 +9,7 @@
 #include <QTreeView>
 #include <QGridLayout>
 
-class MyFeatureMenu : public QDialog {
+class MyFeatureMenu : public MyGroupBox {
     Q_OBJECT
 
 public:
@@ -27,6 +27,8 @@ public:
 signals:
     
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
+
+    void isUpdated(QList<MyShapeStyleBase*>);
     
 private slots:
     

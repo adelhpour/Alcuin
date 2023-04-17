@@ -22,7 +22,12 @@ public:
     QObject* interactor();
     QWidget* toolBar();
     QWidget* view();
-    
+
+private slots:
+
+    void displayFeatureMenu(QWidget* featureMenu);
+    void removeFeatureMenu();
+
 protected:
     
     void setWidgets();
@@ -31,6 +36,7 @@ protected:
     QWidget* _toolBar;
     QWidget* _view;
     QObject* _interactor;
+    QWidget* _featureMenu;
 };
 
 #endif

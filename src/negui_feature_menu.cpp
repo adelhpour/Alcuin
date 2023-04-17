@@ -3,32 +3,24 @@
 
 // MyFeatureMenu
 
-MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : QDialog(parent) {
+MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyGroupBox(parent) {
     _expandableWidgetSize = QSize(0, 0);
     setWindowTitle("Features");
     setStyleSheet("QDialog {background-color: white;}");
     QGridLayout* contentLayout = new QGridLayout(this);
-    
+
     // element feature menu
     _elementFeatureMenu = elementFeatureMenu;
     connect(_elementFeatureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addShapeStyle(MyShapeStyleBase*)));
     connect(_elementFeatureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
     connect(this, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), _elementFeatureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)));
     contentLayout->addWidget(elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
-    
+
     // shape style tree view
     _shapeStylesTreeView = new MyShapeStyleTreeView(this);
     connect(_shapeStylesTreeView, SIGNAL(extentsAreUpdated(const QSize&)), this, SLOT(setExpandableWidgetSize(const QSize&)));
     contentLayout->addWidget(_shapeStylesTreeView, contentLayout->rowCount(), 0, 1, 2);
-    
-    // apply/cancel buttons
-    QDialogButtonBox* dialogBoxButtons = new QDialogButtonBox(Qt::Horizontal, this);
-    dialogBoxButtons->addButton(QDialogButtonBox::Cancel);
-    dialogBoxButtons->addButton(QString("Apply"), QDialogButtonBox::AcceptRole);
-    QObject::connect(dialogBoxButtons, SIGNAL(accepted()), this, SLOT(accept()));
-    QObject::connect(dialogBoxButtons, SIGNAL(rejected()), this, SLOT(reject()));
-    contentLayout->addWidget(dialogBoxButtons, contentLayout->rowCount(), 0, 1, 2);
-    
+
     setLayout(contentLayout);
     updateDialogBoxExtents();
 }
