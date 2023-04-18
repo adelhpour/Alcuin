@@ -47,7 +47,7 @@ void MyFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
 
 void MyFeatureMenu::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
     addShapeStyle(shapeStyle);
-    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->exapndLastBranch();
+    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandLastBranch();
     emit isUpdated(shapeStyles());
 }
 
@@ -264,7 +264,7 @@ void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsign
     }
 }
 
-void MyShapeStyleTreeView::exapndLastBranch() {
+void MyShapeStyleTreeView::expandLastBranch() {
     expand(treeModel->indexFromItem((treeModel->item(treeModel->rowCount() - 1))));
 }
 

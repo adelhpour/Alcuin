@@ -101,7 +101,7 @@ public:
     
     void removeBranches(const QString& rootTitle= "", const unsigned int& staticbranches = 0);
     
-    void exapndLastBranch();
+    void expandLastBranch();
     
     const QSize collapsedSize() const;
     
