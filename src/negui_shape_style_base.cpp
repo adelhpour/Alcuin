@@ -15,6 +15,11 @@ const QList<MyParameterBase*>& MyShapeStyleBase::parameters() const {
     return _parameters;
 }
 
+void MyShapeStyleBase::addParameter(MyParameterBase* parameter) {
+    _parameters.push_back(parameter);
+    connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
+}
+
 MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
     for (MyParameterBase* parameter : qAsConst(parameters())) {
         if (parameter->name() == name) {

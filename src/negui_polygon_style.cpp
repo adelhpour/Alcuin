@@ -7,14 +7,14 @@
 
 MyPolygonStyleBase::MyPolygonStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke-width
-    _parameters.push_back(new MyStrokeWidthParameter());
+    addParameter(new MyStrokeWidthParameter());
     
     // stroke
-    _parameters.push_back(new MyStrokeParameter());
+    addParameter(new MyStrokeParameter());
     
     // fill
-    _parameters.push_back(new MyFillParameter());
-    
+    addParameter(new MyFillParameter());
+
     reset();
 }
 
@@ -106,7 +106,7 @@ void MyPolygonStyleBase::read(const QJsonObject &json) {
                 // y
                 if (pointObject.contains("y") && pointObject["y"].isDouble())
                     point->setDefaultValueY(pointObject["y"].toDouble());
-                _parameters.push_back(point);
+                addParameter(point);
             }
         }
     }
@@ -143,22 +143,22 @@ void MyNodePolygonStyle::addDefaultPoints() {
     point = new MyAbsolutePointParameter("point1");
     point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point2");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(25.0);
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point3");
     point->setDefaultValueX(25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point4");
     point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
-    _parameters.push_back(point);
+    addParameter(point);
 }
 
 // MyArrowHeadPolygonStyle
@@ -172,20 +172,20 @@ void MyArrowHeadPolygonStyle::addDefaultPoints() {
     point = new MyAbsolutePointParameter("point1");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point2");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(0.0);
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point3");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(5.0);
-    _parameters.push_back(point);
+    addParameter(point);
     
     point = new MyAbsolutePointParameter("point4");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
-    _parameters.push_back(point);
+    addParameter(point);
 }

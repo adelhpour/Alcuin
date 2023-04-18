@@ -15,7 +15,9 @@
 #include <QPushButton>
 #include <QGridLayout>
 
-class MyParameterBase : public MyBase {
+class MyParameterBase : public QObject, public MyBase {
+    Q_OBJECT
+
 public:
     
     MyParameterBase(const QString& name);
@@ -45,6 +47,10 @@ public:
     
     // reset the values of the parameter
     virtual void reset() = 0;
+
+signals:
+
+    void isUpdated();
 
 protected:
     QWidget* _inputWidget;

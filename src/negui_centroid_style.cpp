@@ -4,7 +4,7 @@
 // MyCentroidStyleBase
 
 MyCentroidStyleBase::MyCentroidStyleBase(const QString& name) : My2DShapeStyleBase(name) {
-
+    reset();
 }
 
 MyShapeStyleBase::SHAPE_STYLE MyCentroidStyleBase::type() {
@@ -29,7 +29,6 @@ const qreal MyCentroidStyleBase::radius() const {
     return 0.000;
 }
 
-#include "iostream"
 void MyCentroidStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
@@ -56,16 +55,16 @@ void MyCentroidStyleBase::write(QJsonObject &json) {
 
 MyNodeCentroidStyle::MyNodeCentroidStyle(const QString& name) : MyCentroidStyleBase(name) {
     // radius
-    _parameters.push_back(new MyNodeCentroidRadiusParameter("radius"));
+    addParameter(new MyNodeCentroidRadiusParameter("radius"));
 
     // stroke-width
-    _parameters.push_back(new MyCentroidStrokeWidthParameter());
+    addParameter(new MyCentroidStrokeWidthParameter());
 
     // stroke
-    _parameters.push_back(new MyCentroidStrokeParameter());
+    addParameter(new MyCentroidStrokeParameter());
 
     // fill
-    _parameters.push_back(new MyCentroidFillParameter());
+    addParameter(new MyCentroidFillParameter());
 
     reset();
 }

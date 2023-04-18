@@ -5,13 +5,11 @@
 
 MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyGroupBox(parent) {
     _expandableWidgetSize = QSize(0, 0);
-    setWindowTitle("Features");
-    setStyleSheet("QDialog {background-color: white;}");
     QGridLayout* contentLayout = new QGridLayout(this);
 
     // element feature menu
     _elementFeatureMenu = elementFeatureMenu;
-    connect(_elementFeatureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addShapeStyle(MyShapeStyleBase*)));
+    connect(_elementFeatureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addNewShapeStyle(MyShapeStyleBase*)));
     connect(_elementFeatureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
     connect(this, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), _elementFeatureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)));
     contentLayout->addWidget(elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
@@ -22,76 +20,55 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyG
     contentLayout->addWidget(_shapeStylesTreeView, contentLayout->rowCount(), 0, 1, 2);
 
     setLayout(contentLayout);
-    updateDialogBoxExtents();
+    updateExtents();
+}
+
+QList<MyShapeStyleBase*> MyFeatureMenu::shapeStyles() {
+    for (MyShapeStyleBase* shapeStyle : qAsConst(_shapeStyles)) {
+        for (MyParameterBase* parameter : qAsConst(shapeStyle->parameters()))
+            parameter->setDefaultValue();
+    }
+
+    return _shapeStyles;
 }
 
 void MyFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
-    _shapeStyles = shapeStyles;
-    setShapeStyles();
-}
-
-void MyFeatureMenu::setShapeStyles() {
-    QList<MyShapeStyleBase*> temporaryShapeStyles = getTemporaryShapeStyles();
-    emit askForSetRemovingMenu(temporaryShapeStyles);
-    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(temporaryShapeStyles);
+    clearShapeStyles();
+    for (MyShapeStyleBase* shapeStyle : shapeStyles)
+        addShapeStyle(shapeStyle);
 }
 
 void MyFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
-    _temporaryAddedShapeStyles.push_back(shapeStyle);
-    setShapeStyles();
+    _shapeStyles.push_back(shapeStyle);
+    connect(shapeStyle, &MyShapeStyleBase::isUpdated, this, [this] () { emit isUpdated(this->shapeStyles()); });
+    emit askForSetRemovingMenu(_shapeStyles);
+    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
+}
+
+void MyFeatureMenu::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
+    addShapeStyle(shapeStyle);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->exapndLastBranch();
+    emit isUpdated(shapeStyles());
 }
 
 void MyFeatureMenu::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
-    _temporaryRemovedShapeStyles.push_back(shapeStyle);
-    setShapeStyles();
+    _shapeStyles.removeOne(shapeStyle);
+    emit askForSetRemovingMenu(_shapeStyles);
+    ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
+    emit isUpdated(shapeStyles());
 }
 
-QList<MyShapeStyleBase*> MyFeatureMenu::getShapeStyles() {
-    QList<MyShapeStyleBase*> temporaryShapeStyles = getTemporaryShapeStyles();
-    for (MyShapeStyleBase* temporaryShapeStyle : qAsConst(temporaryShapeStyles)) {
-        for (MyParameterBase* parameter : qAsConst(temporaryShapeStyle->parameters()))
-             parameter->setDefaultValue();
-    }
-        
-    return temporaryShapeStyles;
-}
-
-QList<MyShapeStyleBase*> MyFeatureMenu::getTemporaryShapeStyles() {
-    QList<MyShapeStyleBase*> temporaryShapeStyles;
-    bool shapeStyleIsRemoved = false;
-    
-    for (MyShapeStyleBase* shapeStyle : qAsConst(_shapeStyles)) {
-        shapeStyleIsRemoved = false;
-        for (MyShapeStyleBase* temporaryremovedShapeStyle : qAsConst(_temporaryRemovedShapeStyles)) {
-            if (shapeStyle == temporaryremovedShapeStyle)
-                shapeStyleIsRemoved = true;
-        }
-        
-        if (!shapeStyleIsRemoved)
-            temporaryShapeStyles.push_back(shapeStyle);
-    }
-    
-    for (MyShapeStyleBase* temporaryAddedShapeStyle : qAsConst(_temporaryAddedShapeStyles)) {
-        shapeStyleIsRemoved = false;
-        for (MyShapeStyleBase* temporaryremovedShapeStyle : qAsConst(_temporaryRemovedShapeStyles)) {
-            if (temporaryAddedShapeStyle == temporaryremovedShapeStyle)
-                shapeStyleIsRemoved = true;
-        }
-        
-        if (!shapeStyleIsRemoved)
-            temporaryShapeStyles.push_back(temporaryAddedShapeStyle);
-    }
-    
-    return temporaryShapeStyles;
+void MyFeatureMenu::clearShapeStyles() {
+    while(shapeStyles().size())
+        delete shapeStyles().takeLast();
 }
 
 void MyFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
     _expandableWidgetSize = expandableWidgetSize;
-    updateDialogBoxExtents();
+    updateExtents();
 }
 
-void MyFeatureMenu::updateDialogBoxExtents() {
+void MyFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
     qint32 menuHeight = 0;
     

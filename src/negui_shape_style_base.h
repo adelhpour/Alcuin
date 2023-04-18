@@ -4,7 +4,9 @@
 #include "negui_base.h"
 #include "negui_parameters.h"
 
-class MyShapeStyleBase : public MyBase {
+class MyShapeStyleBase : public QObject, public MyBase {
+    Q_OBJECT
+
 public:
     
     typedef enum {
@@ -24,13 +26,15 @@ public:
     
     // get parameters
     const QList<MyParameterBase*>& parameters() const;
+
+    void addParameter(MyParameterBase* parameter);
     
     // find a parameter among the list of parameters using its name
     MyParameterBase* findParameter(const QString& name) const;
-    
+
     virtual const QRectF getShapeExtents() = 0;
     
-    // poupulate the menu layout with the style features
+    // populate the menu layout with the style features
     virtual void populateFeaturesMenu(QGridLayout* featureMenuLayout);
     
     // set the default values of each parameter
@@ -44,6 +48,10 @@ public:
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+
+signals:
+
+    void isUpdated();
 
 protected:
     QList<MyParameterBase*> _parameters;

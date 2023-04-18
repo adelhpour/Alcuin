@@ -5,17 +5,17 @@
 
 MyLineStyle::MyLineStyle(const QString& name) : My1DShapeStyleBase(name) {
     // stroke-width
-    _parameters.push_back(new MyStrokeWidthParameter());
+    addParameter(new MyStrokeWidthParameter());
     
     // stroke
-    _parameters.push_back(new MyStrokeParameter());
+    addParameter(new MyStrokeParameter());
     
     // control point 1
-    _parameters.push_back(new MyBasePointParameter("ControlPoint1"));
+    addParameter(new MyBasePointParameter("ControlPoint1"));
     
     // control point 2
-    _parameters.push_back(new MyBasePointParameter("ControlPoint2"));
-    
+    addParameter(new MyBasePointParameter("ControlPoint2"));
+
     reset();
 }
 

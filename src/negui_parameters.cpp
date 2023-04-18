@@ -63,8 +63,10 @@ const qreal& MyDoubleParameter::step() const {
 }
 
 QWidget* MyDoubleParameter::inputWidget() {
-    if (!_inputWidget)
+    if (!_inputWidget) {
         _inputWidget = new MyDoubleSpinBox();
+        connect(_inputWidget, SIGNAL(editingFinished()), this, SIGNAL(isUpdated()));
+    }
     ((MyDoubleSpinBox*)_inputWidget)->setMinimum(min());
     ((MyDoubleSpinBox*)_inputWidget)->setMaximum(max());
     ((MyDoubleSpinBox*)_inputWidget)->setSingleStep(step());
@@ -169,8 +171,10 @@ const qint32& MyIntegerParameter::step() const {
 }
 
 QWidget* MyIntegerParameter::inputWidget() {
-    if (!_inputWidget)
+    if (!_inputWidget) {
         _inputWidget = new MySpinBox();
+        connect(_inputWidget, SIGNAL(editingFinished()), this, SIGNAL(isUpdated()));
+    }
     ((MySpinBox*)_inputWidget)->setMinimum(min());
     ((MySpinBox*)_inputWidget)->setMaximum(max());
     ((MySpinBox*)_inputWidget)->setSingleStep(step());
@@ -255,6 +259,7 @@ QWidget* MyBooleanParameter::inputWidget() {
         ((MyComboBox*)_inputWidget)->setCurrentText("true");
     else
         ((MyComboBox*)_inputWidget)->setCurrentText("false");
+    connect(_inputWidget, SIGNAL(currentIndexChanged(int)), this, SIGNAL(isUpdated()));
     
     return _inputWidget;
 }
@@ -308,8 +313,10 @@ const QString& MyStringParameter::defaultValue() const {
 }
 
 QWidget* MyStringParameter::inputWidget() {
-    if (!_inputWidget)
+    if (!_inputWidget) {
         _inputWidget = new MyLineEdit();
+        connect(_inputWidget, SIGNAL(editingFinished()), this, SIGNAL(isUpdated()));
+    }
     ((MyLineEdit*)_inputWidget)->setText(defaultValue());
 
     return _inputWidget;
@@ -375,6 +382,7 @@ QWidget* MyNominalParameter::inputWidget() {
     ((MyComboBox*)_inputWidget)->clear();
     ((MyComboBox*)_inputWidget)->addItems(items());
     ((MyComboBox*)_inputWidget)->setCurrentText(defaultValue());
+    connect(_inputWidget, SIGNAL(currentIndexChanged(int)), this, SIGNAL(isUpdated()));
     
     return _inputWidget;
 }
@@ -502,7 +510,9 @@ void MyPointParameterBase::write(QJsonObject &json) {
 
 MyAbsolutePointParameter::MyAbsolutePointParameter(const QString& name) : MyPointParameterBase(name) {
     _x = new MyPositionalParameter("x");
+    connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyPositionalParameter("y");
+    connect(_y, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     reset();
 }
 
@@ -510,7 +520,9 @@ MyAbsolutePointParameter::MyAbsolutePointParameter(const QString& name) : MyPoin
 
 MyRelativePointParameter::MyRelativePointParameter(const QString& name) : MyPointParameterBase(name) {
     _x = new MyRelativePositionalParameter("x (%)");
+    connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyRelativePositionalParameter("y (%)");
+    connect(_y, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     reset();
 }
 
@@ -518,7 +530,9 @@ MyRelativePointParameter::MyRelativePointParameter(const QString& name) : MyPoin
 
 MyBasePointParameter::MyBasePointParameter(const QString& name) : MyPointParameterBase(name) {
     _x = new MyPositionalParameter("x (%)");
+    connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyPositionalParameter("y (%)");
+    connect(_y, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     reset();
 }
 
@@ -545,8 +559,10 @@ const QString& MyColorParameter::defaultValue() const {
 }
 
 QWidget* MyColorParameter::inputWidget() {
-    if (!_inputWidget)
+    if (!_inputWidget) {
         _inputWidget = new MyColorPickerButton();
+        connect(((MyColorPickerMenu*)((MyColorPickerButton*)_inputWidget)->menu()), &MyColorPickerMenu::colorChosen, this, [this] (const QString& color) {emit isUpdated(); });
+    }
     ((MyColorPickerButton*)_inputWidget)->setCurrentColor(defaultValue());
     
     return _inputWidget;

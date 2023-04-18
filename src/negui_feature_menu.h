@@ -15,15 +15,15 @@ class MyFeatureMenu : public MyGroupBox {
 public:
     
     MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent = nullptr);
-    
+
+    QList<MyShapeStyleBase*> shapeStyles();
+
     void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles);
-    
-    void setShapeStyles();
-    
-    QList<MyShapeStyleBase*> getShapeStyles();
-    
-    QList<MyShapeStyleBase*> getTemporaryShapeStyles();
-    
+
+    void addShapeStyle(MyShapeStyleBase* shapeStyle);
+
+    void clearShapeStyles();
+
 signals:
     
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
@@ -31,22 +31,20 @@ signals:
     void isUpdated(QList<MyShapeStyleBase*>);
     
 private slots:
-    
-    void setExpandableWidgetSize(const QSize& expandableWidgetSize);
-    
-    void addShapeStyle(MyShapeStyleBase* shapeStyle);
-    
+
+    void addNewShapeStyle(MyShapeStyleBase* shapeStyle);
+
     void removeShapeStyle(MyShapeStyleBase* shapeStyle);
+
+    void setExpandableWidgetSize(const QSize& expandableWidgetSize);
     
 protected:
     
-    void updateDialogBoxExtents();
+    void updateExtents();
     
     QWidget* _elementFeatureMenu;
     QTreeView* _shapeStylesTreeView;
     QList<MyShapeStyleBase*> _shapeStyles;
-    QList<MyShapeStyleBase*> _temporaryAddedShapeStyles;
-    QList<MyShapeStyleBase*> _temporaryRemovedShapeStyles;
     QSize _expandableWidgetSize;
 };
 

@@ -5,13 +5,15 @@
 
 MyEllipseStyleBase::MyEllipseStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke-width
-    _parameters.push_back(new MyStrokeWidthParameter());
+    addParameter(new MyStrokeWidthParameter());
     
     // stroke
-    _parameters.push_back(new MyStrokeParameter());
+    addParameter(new MyStrokeParameter());
     
     // fill
-    _parameters.push_back(new MyFillParameter());
+    addParameter(new MyFillParameter());
+
+    reset();
 }
 
 MyShapeStyleBase::SHAPE_STYLE MyEllipseStyleBase::type() {
@@ -152,16 +154,16 @@ void MyEllipseStyleBase::write(QJsonObject &json) {
 
 MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
     // cx
-    _parameters.push_back(new MyNodeEllipsePositionalParameter("cx"));
+    addParameter(new MyNodeEllipsePositionalParameter("cx"));
     
     // cy
-    _parameters.push_back(new MyNodeEllipsePositionalParameter("cy"));
+    addParameter(new MyNodeEllipsePositionalParameter("cy"));
     
     // rx
-    _parameters.push_back(new MyNodeEllipseDimensionalParameter("rx"));
+    addParameter(new MyNodeEllipseDimensionalParameter("rx"));
     
     // ry
-    _parameters.push_back(new MyNodeEllipseDimensionalParameter("ry"));
+    addParameter(new MyNodeEllipseDimensionalParameter("ry"));
     
     reset();
 }
@@ -170,16 +172,16 @@ MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase
 
 MyArrowHeadEllipseStyle::MyArrowHeadEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
     // cx
-    _parameters.push_back(new MyArrowHeadEllipseCxParameter());
+    addParameter(new MyArrowHeadEllipseCxParameter());
     
     // cy
-    _parameters.push_back(new MyArrowHeadEllipseCyParameter());
+    addParameter(new MyArrowHeadEllipseCyParameter());
     
     // rx
-    _parameters.push_back(new MyArrowHeadEllipseDimensionalParameter("rx"));
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("rx"));
     
     // ry
-    _parameters.push_back(new MyArrowHeadEllipseDimensionalParameter("ry"));
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("ry"));
     
     reset();
 }

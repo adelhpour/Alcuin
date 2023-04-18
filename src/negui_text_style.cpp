@@ -5,41 +5,41 @@
 
 MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
     // plain-text
-    _parameters.push_back(new MyStringParameter("plain-text"));
+    addParameter(new MyStringParameter("plain-text"));
     
     // stroke
-    _parameters.push_back(new MyColorParameter("color"));
+    addParameter(new MyColorParameter("color"));
     
     // font-family
-    _parameters.push_back(new MyFontFamilyParameter());
+    addParameter(new MyFontFamilyParameter());
     
     // font-size
-    _parameters.push_back(new MyFontSizeParameter());
+    addParameter(new MyFontSizeParameter());
     
     // font-weight
-    _parameters.push_back(new MyFontWeightParameter());
+    addParameter(new MyFontWeightParameter());
     
     // font-style
-    _parameters.push_back(new MyFontStyleParameter());
+    addParameter(new MyFontStyleParameter());
     
     // x
-    _parameters.push_back(new MyNodeTextPositionalParameter("x"));
+    addParameter(new MyNodeTextPositionalParameter("x"));
     
     // y
-    _parameters.push_back(new MyNodeTextPositionalParameter("y"));
+    addParameter(new MyNodeTextPositionalParameter("y"));
     
     // width
-    _parameters.push_back(new MyNodeTextDimensionalParameter("width"));
+    addParameter(new MyNodeTextDimensionalParameter("width"));
     
     // height
-    _parameters.push_back(new MyNodeTextDimensionalParameter("height"));
+    addParameter(new MyNodeTextDimensionalParameter("height"));
     
     // horizontal alignment
-    _parameters.push_back(new MyTextAnchorParameter());
+    addParameter(new MyTextAnchorParameter());
     
     // vertical alignment
-    _parameters.push_back(new MyVTextAnchorParameter());
-    
+    addParameter(new MyVTextAnchorParameter());
+
     reset();
 }
 

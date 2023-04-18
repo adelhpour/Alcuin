@@ -5,19 +5,21 @@
 
 MyRectStyleBase::MyRectStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke-width
-    _parameters.push_back(new MyStrokeWidthParameter());
+    addParameter(new MyStrokeWidthParameter());
     
     // stroke
-    _parameters.push_back(new MyStrokeParameter());
+    addParameter(new MyStrokeParameter());
     
     // fill
-    _parameters.push_back(new MyFillParameter());
+    addParameter(new MyFillParameter());
     
     // rx
-    _parameters.push_back(new MyCornerCurvatureParameter("rx"));
+    addParameter(new MyCornerCurvatureParameter("rx"));
     
     // ry
-    _parameters.push_back(new MyCornerCurvatureParameter("ry"));
+    addParameter(new MyCornerCurvatureParameter("ry"));
+
+    reset();
 }
 
 MyShapeStyleBase::SHAPE_STYLE MyRectStyleBase::type() {
@@ -210,16 +212,16 @@ void MyRectStyleBase::write(QJsonObject &json) {
 
 MyNodeRectStyle::MyNodeRectStyle(const QString& name) : MyRectStyleBase(name) {
     // x
-    _parameters.push_back(new MyNodeRectPositionalParameter("x"));
+    addParameter(new MyNodeRectPositionalParameter("x"));
     
     // y
-    _parameters.push_back(new MyNodeRectPositionalParameter("y"));
+    addParameter(new MyNodeRectPositionalParameter("y"));
     
     // width
-    _parameters.push_back(new MyNodeRectDimensionalParameter("width"));
+    addParameter(new MyNodeRectDimensionalParameter("width"));
     
     // height
-    _parameters.push_back(new MyNodeRectDimensionalParameter("height"));
+    addParameter(new MyNodeRectDimensionalParameter("height"));
     
     reset();
 }
@@ -228,16 +230,16 @@ MyNodeRectStyle::MyNodeRectStyle(const QString& name) : MyRectStyleBase(name) {
 
 MyArrowHeadRectStyle::MyArrowHeadRectStyle(const QString& name) : MyRectStyleBase(name) {
     // x
-    _parameters.push_back(new MyArrowHeadRectXParameter());
+    addParameter(new MyArrowHeadRectXParameter());
     
     // y
-    _parameters.push_back(new MyArrowHeadRectYParameter());
+    addParameter(new MyArrowHeadRectYParameter());
     
     // width
-    _parameters.push_back(new MyArrowHeadRectDimensionalParameter("width"));
+    addParameter(new MyArrowHeadRectDimensionalParameter("width"));
     
     // height
-    _parameters.push_back(new MyArrowHeadRectDimensionalParameter("height"));
+    addParameter(new MyArrowHeadRectDimensionalParameter("height"));
     
     reset();
 }
