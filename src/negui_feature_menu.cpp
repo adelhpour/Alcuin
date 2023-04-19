@@ -12,7 +12,7 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyG
     connect(_elementFeatureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), this, SLOT(addNewShapeStyle(MyShapeStyleBase*)));
     connect(_elementFeatureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
     connect(this, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), _elementFeatureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
+    contentLayout->addWidget(_elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
 
     // shape style tree view
     _shapeStylesTreeView = new MyShapeStyleTreeView(this);
