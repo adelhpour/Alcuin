@@ -109,7 +109,7 @@ void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
 void MyNetworkEditorWidget::removeFeatureMenu() {
     if (_featureMenu) {
         layout()->removeWidget(_featureMenu);
-        _featureMenu->deleteLater();
+        //_featureMenu->deleteLater();
         _featureMenu = NULL;
     }
 }
