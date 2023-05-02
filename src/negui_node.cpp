@@ -363,7 +363,7 @@ const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint
 
     return adjustControlBezierLine(QLineF(updatedPoint, lineEndPoint));
 }
-#include "iostream"
+
 const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezierLine) {
     qreal minimumLength = 5.0;
     qreal maximumLength = 100.0;
