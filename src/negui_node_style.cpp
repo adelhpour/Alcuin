@@ -53,9 +53,6 @@ MyClassicNodeStyle::MyClassicNodeStyle(const QString& name) : MyNodeStyleBase(na
     _convertibleParentCategory = "Node";
     if (name == "Default")
         addDefaultShapeStyle();
-
-    _addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
-    ((MyAddRemoveNodeShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
 }
 
 MyNodeStyleBase::NODE_STYLE_TYPE MyClassicNodeStyle::nodeStyleType() {
@@ -97,8 +94,10 @@ void MyClassicNodeStyle::convertToParentCategory() {
     _category = convertibleParentCategory();
 }
 
-QWidget* MyClassicNodeStyle::getAddRemoveShapeStylesButtons() {
-    return _addRemoveShapeStylesButtons;
+QWidget* MyClassicNodeStyle::addRemoveShapeStylesButtons() {
+    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
+    return addRemoveShapeStylesButtons;
 }
 
 void MyClassicNodeStyle::read(const QJsonObject &json) {

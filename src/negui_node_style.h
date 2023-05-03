@@ -50,7 +50,7 @@ public:
 
     void convertToParentCategory();
 
-    QWidget* getAddRemoveShapeStylesButtons();
+    QWidget* addRemoveShapeStylesButtons();
 
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
@@ -60,7 +60,6 @@ public:
 
 protected:
     QString _convertibleParentCategory;
-    QWidget* _addRemoveShapeStylesButtons;
 };
 
 class MyCentroidNodeStyle : public MyNodeStyleBase {

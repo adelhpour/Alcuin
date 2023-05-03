@@ -313,10 +313,11 @@ QWidget* MyClassicNode::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
     // add remove buttons
-    connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), ((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(((MyClassicNodeStyle*)style())->getAddRemoveShapeStylesButtons(), contentLayout->rowCount(), 1);
+    QWidget* addRemoveShapeStylesButtons = ((MyClassicNodeStyle*)style())->addRemoveShapeStylesButtons();
+    connect(addRemoveShapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(addRemoveShapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), addRemoveShapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(addRemoveShapeStylesButtons, contentLayout->rowCount(), 1);
 
     return featureMenu;
 }

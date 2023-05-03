@@ -39,8 +39,7 @@ void MyArrowHeadStyleBase::write(QJsonObject &json) {
 // MyClassicArrowHeadStyle
 
 MyClassicArrowHeadStyle::MyClassicArrowHeadStyle(const QString& name) : MyArrowHeadStyleBase(name) {
-    _addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
-    ((MyAddRemoveArrowHeadShapeStylesButtons*)_addRemoveShapeStylesButtons)->setAddingMenu();
+
 }
 
 MyArrowHeadStyleBase::ARROW_HEAD_STYLE_TYPE MyClassicArrowHeadStyle::arrowHeadStyleType() {
@@ -62,8 +61,10 @@ MyShapeStyleBase* MyClassicArrowHeadStyle::createShapeStyle(const QString& shape
     return NULL;
 }
 
-QWidget* MyClassicArrowHeadStyle::getAddRemoveShapeStylesButtons() {
-    return _addRemoveShapeStylesButtons;
+QWidget* MyClassicArrowHeadStyle::addRemoveShapeStylesButtons() {
+    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
+    ((MyAddRemoveArrowHeadShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
+    return addRemoveShapeStylesButtons;
 }
 
 // MyAddRemoveArrowHeadShapeStylesButtons
