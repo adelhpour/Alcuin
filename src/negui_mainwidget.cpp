@@ -102,7 +102,7 @@ QWidget* MyNetworkEditorWidget::view() {
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 1, 1, 1);
+    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 1, 1, 1, Qt::AlignTop);
     _featureMenu = featureMenu;
 }
 
