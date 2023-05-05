@@ -172,7 +172,19 @@ public:
 
     const QLineF adjustControlBezierLine(const QLineF& controlBezierLine);
 
-signals:
+    const qreal getAdjustControlBezierLineStartPointX(const QLineF& controlBezierLine);
+
+    const qreal getAdjustControlBezierLineEndPointX(const QLineF& controlBezierLine);
+
+    const qreal getAdjustControlBezierLineStartPointY(const QLineF& controlBezierLine);
+
+    const qreal getAdjustControlBezierLineEndPointY(const QLineF& controlBezierLine);
+
+    const qreal getAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX);
+
+    const qreal getAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY);
+
+    signals:
 
     void controlBezierLineIsUpdated(const QLineF&);
 

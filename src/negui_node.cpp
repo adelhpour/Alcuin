@@ -366,51 +366,73 @@ const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint
 }
 
 const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezierLine) {
+    // x
+    qreal adjustedStartPointX = getAdjustControlBezierLineStartPointX(controlBezierLine);
+    qreal adjustedEndPointX = getAdjustControlBezierLineEndPointX(controlBezierLine);
+
+    qreal adjustmentLengthX = getAdjustmentLengthX(adjustedStartPointX, adjustedEndPointX);
+    adjustedStartPointX -= 0.5 * adjustmentLengthX;
+    adjustedEndPointX += 0.5 * adjustmentLengthX;
+
+    // y
+    qreal adjustedStartPointY = getAdjustControlBezierLineStartPointY(controlBezierLine);
+    qreal adjustedEndPointY = getAdjustControlBezierLineEndPointY(controlBezierLine);
+
+    qreal adjustmentLengthY = getAdjustmentLengthY(adjustedStartPointY, adjustedEndPointY);
+    adjustedStartPointX -= 0.5 * adjustmentLengthY;
+    adjustedEndPointX += 0.5 * adjustmentLengthY;
+
+    return QLineF(adjustedStartPointX, adjustedStartPointY, adjustedEndPointX, adjustedEndPointY);
+}
+
+const qreal MyCentroidNode::getAdjustControlBezierLineStartPointX(const QLineF& controlBezierLine) {
+    if (controlBezierLine.p1().x() < controlBezierLine.p2().x())
+        return controlBezierLine.p1().x();
+    else
+        return controlBezierLine.p2().x();
+}
+
+const qreal MyCentroidNode::getAdjustControlBezierLineEndPointX(const QLineF& controlBezierLine) {
+    if (controlBezierLine.p1().x() < controlBezierLine.p2().x())
+        return controlBezierLine.p2().x();
+    else
+        return controlBezierLine.p1().x();
+}
+
+const qreal MyCentroidNode::getAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX) {
     qreal minimumLength = 5.0;
     qreal maximumLength = 100.0;
 
-    // x
-    qreal adjustedStartPointX;
-    qreal adjustedEndPointX;
-    if (controlBezierLine.p1().x() < controlBezierLine.p2().x()) {
-        adjustedStartPointX = controlBezierLine.p1().x();
-        adjustedEndPointX = controlBezierLine.p2().x();
-    }
-    else {
-        adjustedStartPointX = controlBezierLine.p2().x();
-        adjustedEndPointX = controlBezierLine.p1().x();
-    }
+    if ((adjustedEndPointX - adjustedStartPointX) < minimumLength)
+        return minimumLength - (adjustedEndPointX - adjustedStartPointX);
+    else if ((adjustedEndPointX - adjustedStartPointX) > maximumLength)
+        return -((adjustedEndPointX - adjustedStartPointX) - maximumLength);
 
-    if ((adjustedEndPointX - adjustedStartPointX) < minimumLength) {
-        adjustedStartPointX -= 0.5 * (minimumLength - (adjustedEndPointX - adjustedStartPointX));
-        adjustedEndPointX += 0.5 * (minimumLength - (adjustedEndPointX - adjustedStartPointX));
-    }
-    else if ((adjustedEndPointX - adjustedStartPointX) > maximumLength) {
-        adjustedStartPointX += 0.5 * ((adjustedEndPointX - adjustedStartPointX) - maximumLength);
-        adjustedEndPointX -= 0.5 * ((adjustedEndPointX - adjustedStartPointX) - maximumLength);
-    }
+    return 0.0;
+}
 
-    // y
-    qreal adjustedStartPointY;
-    qreal adjustedEndPointY;
+const qreal MyCentroidNode::getAdjustControlBezierLineStartPointY(const QLineF& controlBezierLine) {
+    if (controlBezierLine.p1().y() < controlBezierLine.p2().y())
+        return controlBezierLine.p1().y();
+    else
+        return controlBezierLine.p2().y();
+}
 
-    if (controlBezierLine.p1().y() < controlBezierLine.p2().y()) {
-        adjustedStartPointY = controlBezierLine.p1().y();
-        adjustedEndPointY = controlBezierLine.p2().y();
-    }
-    else {
-        adjustedStartPointY = controlBezierLine.p2().y();
-        adjustedEndPointY = controlBezierLine.p1().y();
-    }
+const qreal MyCentroidNode::getAdjustControlBezierLineEndPointY(const QLineF& controlBezierLine) {
+    if (controlBezierLine.p1().y() < controlBezierLine.p2().y())
+        return controlBezierLine.p2().y();
+    else
+        return controlBezierLine.p1().y();
+}
 
-    if ((adjustedEndPointY - adjustedStartPointY) < minimumLength) {
-        adjustedStartPointY -= 0.5 * (minimumLength - (adjustedEndPointY - adjustedStartPointY));
-        adjustedEndPointY += 0.5 * (minimumLength - (adjustedEndPointY - adjustedStartPointY));
-    }
-    else if ((adjustedEndPointY - adjustedStartPointY) > maximumLength) {
-        adjustedStartPointY += 0.5 * ((adjustedEndPointY - adjustedStartPointY) - maximumLength);
-        adjustedEndPointY -= 0.5 * ((adjustedEndPointY - adjustedStartPointY) - maximumLength);
-    }
+const qreal MyCentroidNode::getAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY) {
+    qreal minimumLength = 5.0;
+    qreal maximumLength = 100.0;
 
-    return QLineF(adjustedStartPointX, adjustedStartPointY, adjustedEndPointX, adjustedEndPointY);
+    if ((adjustedEndPointY - adjustedStartPointY) < minimumLength)
+        return minimumLength - (adjustedEndPointY - adjustedStartPointY);
+    else if ((adjustedEndPointY - adjustedStartPointY) > maximumLength)
+        return -((adjustedEndPointY - adjustedStartPointY) - maximumLength);
+
+    return 0.0;
 }
