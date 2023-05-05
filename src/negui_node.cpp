@@ -352,17 +352,7 @@ void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
 }
 
 const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint) {
-    QPointF lineEndPoint = position();
-    if (position().x() < updatedPoint.x())
-        lineEndPoint -= QPointF(updatedPoint.x() - position().x(), 0);
-    else
-        lineEndPoint += QPointF(position().x() - updatedPoint.x(), 0);
-    if (position().y() < updatedPoint.y())
-        lineEndPoint -= QPointF(0, updatedPoint.y() - position().y());
-    else
-        lineEndPoint += QPointF(0, position().y() - updatedPoint.y());
-
-    return adjustControlBezierLine(QLineF(updatedPoint, lineEndPoint));
+    return adjustControlBezierLine(QLineF(updatedPoint, 2 * position() - updatedPoint));
 }
 
 const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezierLine) {
@@ -370,7 +360,7 @@ const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezier
     qreal adjustedStartPointX = getAdjustControlBezierLineStartPointX(controlBezierLine);
     qreal adjustedEndPointX = getAdjustControlBezierLineEndPointX(controlBezierLine);
 
-    qreal adjustmentLengthX = getAdjustmentLengthX(adjustedStartPointX, adjustedEndPointX);
+    qreal adjustmentLengthX = getControlBezierLineAdjustmentLengthX(adjustedStartPointX, adjustedEndPointX);
     adjustedStartPointX -= 0.5 * adjustmentLengthX;
     adjustedEndPointX += 0.5 * adjustmentLengthX;
 
@@ -378,7 +368,7 @@ const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezier
     qreal adjustedStartPointY = getAdjustControlBezierLineStartPointY(controlBezierLine);
     qreal adjustedEndPointY = getAdjustControlBezierLineEndPointY(controlBezierLine);
 
-    qreal adjustmentLengthY = getAdjustmentLengthY(adjustedStartPointY, adjustedEndPointY);
+    qreal adjustmentLengthY = getControlBezierLineAdjustmentLengthY(adjustedStartPointY, adjustedEndPointY);
     adjustedStartPointX -= 0.5 * adjustmentLengthY;
     adjustedEndPointX += 0.5 * adjustmentLengthY;
 
@@ -399,7 +389,7 @@ const qreal MyCentroidNode::getAdjustControlBezierLineEndPointX(const QLineF& co
         return controlBezierLine.p1().x();
 }
 
-const qreal MyCentroidNode::getAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX) {
+const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX) {
     qreal minimumLength = 5.0;
     qreal maximumLength = 100.0;
 
@@ -425,7 +415,7 @@ const qreal MyCentroidNode::getAdjustControlBezierLineEndPointY(const QLineF& co
         return controlBezierLine.p1().y();
 }
 
-const qreal MyCentroidNode::getAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY) {
+const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY) {
     qreal minimumLength = 5.0;
     qreal maximumLength = 100.0;
 
