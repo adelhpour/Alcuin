@@ -115,7 +115,7 @@ void MyEdgeBase::updatePoints() {
     QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
     ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
-    updateArrowHeadPlacement();
+    emit updateArrowHeadPlacement();
 }
 
 void MyEdgeBase::adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint) {
