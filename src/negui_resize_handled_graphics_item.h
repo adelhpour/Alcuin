@@ -93,9 +93,9 @@ public:
     
     MyHandleGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QPointF& center);
+    void updatePosition(const QPointF& center);
     
-    virtual void updatePostion(const QRectF &rect);
+    virtual void updatePosition(const QRectF &rect);
     
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -129,7 +129,7 @@ public:
     
     MyMiddleLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -140,7 +140,7 @@ public:
     
     MyTopLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -151,7 +151,7 @@ public:
     
     MyTopMiddleResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -162,7 +162,7 @@ public:
     
     MyTopRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -173,7 +173,7 @@ public:
     
     MyMiddleRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -184,7 +184,7 @@ public:
     
     MyBottomRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -195,7 +195,7 @@ public:
     
     MyBottomMiddleResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -206,7 +206,7 @@ public:
     
     MyBottomLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect) override;
+    void updatePosition(const QRectF &rect) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -219,7 +219,7 @@ public:
     
     MyCurvatureRadiusControlHandleGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
-    virtual void updatePostion(const QRectF &rect, qreal radius);
+    virtual void updatePosition(const QRectF &rect, qreal radius);
     
 signals:
     void handlePositionUpdated(const qreal&);
@@ -233,7 +233,7 @@ public:
     
     MyCurvatureRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect, qreal radius) override;
+    void updatePosition(const QRectF &rect, qreal radius) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
@@ -244,7 +244,7 @@ public:
     
     MyCurvatureRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QRectF &rect, qreal radius) override;
+    void updatePosition(const QRectF &rect, qreal radius) override;
     
 protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;

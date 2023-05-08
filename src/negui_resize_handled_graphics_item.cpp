@@ -95,7 +95,7 @@ void MyResizeHandledGraphicsItemBase::updateRectUsingOffsetRect(const QRectF& of
 
 void MyResizeHandledGraphicsItemBase::updateHandleItemsPositions() {
     for (QGraphicsItem* handleItem : _resizeHandleItems)
-        ((MyResizeHandleGraphicsItemBase*)handleItem)->updatePostion(_resizeRect->rect());
+        ((MyResizeHandleGraphicsItemBase*)handleItem)->updatePosition(_resizeRect->rect());
 }
 
 // MyResizeHandledGraphicsItem
@@ -152,8 +152,8 @@ void MyRoundedRectangleResizeHandledGraphicsItem::updateRectUsingRadiusYHandlePo
 
 void MyRoundedRectangleResizeHandledGraphicsItem::updateHandleItemsPositions() {
     MyResizeHandledGraphicsItemBase::updateHandleItemsPositions();
-    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusXHandleItem)->updatePostion(_resizeRect->rect(), _radiusX);
-    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusYHandleItem)->updatePostion(_resizeRect->rect(), _radiusY);
+    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusXHandleItem)->updatePosition(_resizeRect->rect(), _radiusX);
+    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusYHandleItem)->updatePosition(_resizeRect->rect(), _radiusY);
 }
 
 // MyHandleGraphicsItemBase
@@ -163,11 +163,11 @@ MyHandleGraphicsItemBase::MyHandleGraphicsItemBase(QGraphicsItem *parent) : QGra
     _handleRadius = 2.0;
 }
 
-void MyHandleGraphicsItemBase::updatePostion(const QPointF& center) {
+void MyHandleGraphicsItemBase::updatePosition(const QPointF& center) {
     setRect(QRectF(center.x() - _handleRadius, center.y() - _handleRadius, 2 * _handleRadius, 2 * _handleRadius));
 }
 
-void MyHandleGraphicsItemBase::updatePostion(const QRectF &rect) {
+void MyHandleGraphicsItemBase::updatePosition(const QRectF &rect) {
     _rect = rect;
 }
 
@@ -208,12 +208,12 @@ const bool MyResizeHandleGraphicsItemBase::isLeftwardMovePossbile(const QPointF&
 // MyMiddleLeftResizeHandleGraphicsItem
 
 MyMiddleLeftResizeHandleGraphicsItem::MyMiddleLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyMiddleLeftResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(QPointF(rect.x(), rect.y() + 0.5 * rect.height()));
+void MyMiddleLeftResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(QPointF(rect.x(), rect.y() + 0.5 * rect.height()));
 }
 
 void MyMiddleLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -227,12 +227,12 @@ void MyMiddleLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEve
 // MyTopLeftResizeHandleGraphicsItem
 
 MyTopLeftResizeHandleGraphicsItem::MyTopLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyTopLeftResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(rect.topLeft());
+void MyTopLeftResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(rect.topLeft());
 }
 
 void MyTopLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -254,12 +254,12 @@ void MyTopLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent 
 // MyTopMiddleResizeHandleGraphicsItem
 
 MyTopMiddleResizeHandleGraphicsItem::MyTopMiddleResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyTopMiddleResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(QPointF(rect.x() + 0.5 * rect.width(), rect.y()));
+void MyTopMiddleResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(QPointF(rect.x() + 0.5 * rect.width(), rect.y()));
 }
 
 void MyTopMiddleResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -273,12 +273,12 @@ void MyTopMiddleResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEven
 // MyTopRightResizeHandleGraphicsItem
 
 MyTopRightResizeHandleGraphicsItem::MyTopRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyTopRightResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(rect.topRight());
+void MyTopRightResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(rect.topRight());
 }
 
 void MyTopRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -300,12 +300,12 @@ void MyTopRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent
 // MyMiddleRightResizeHandleGraphicsItem
 
 MyMiddleRightResizeHandleGraphicsItem::MyMiddleRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    MyResizeHandleGraphicsItemBase::updatePostion(QPointF(rect.x() + rect.width(), rect.y() + 0.5 * rect.height()));
+    MyResizeHandleGraphicsItemBase::updatePosition(QPointF(rect.x() + rect.width(), rect.y() + 0.5 * rect.height()));
 }
 
-void MyMiddleRightResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(QPointF(rect.x() + rect.width(), rect.y() + 0.5 * rect.height()));
+void MyMiddleRightResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(QPointF(rect.x() + rect.width(), rect.y() + 0.5 * rect.height()));
 }
 
 void MyMiddleRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -319,12 +319,12 @@ void MyMiddleRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEv
 // MyBottomRightResizeHandleGraphicsItem
 
 MyBottomRightResizeHandleGraphicsItem::MyBottomRightResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyBottomRightResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(rect.bottomRight());
+void MyBottomRightResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(rect.bottomRight());
 }
 
 void MyBottomRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -346,12 +346,12 @@ void MyBottomRightResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEv
 // MyBottomMiddleResizeHandleGraphicsItem
 
 MyBottomMiddleResizeHandleGraphicsItem::MyBottomMiddleResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyBottomMiddleResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(QPointF(rect.x() + 0.5 * rect.width(), rect.y() + rect.height()));
+void MyBottomMiddleResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(QPointF(rect.x() + 0.5 * rect.width(), rect.y() + rect.height()));
 }
 
 void MyBottomMiddleResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -365,12 +365,12 @@ void MyBottomMiddleResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseE
 // MyBottomLeftResizeHandleGraphicsItem
 
 MyBottomLeftResizeHandleGraphicsItem::MyBottomLeftResizeHandleGraphicsItem(const QRectF &rect, QGraphicsItem *parent) : MyResizeHandleGraphicsItemBase(parent) {
-    updatePostion(rect);
+    updatePosition(rect);
 }
 
-void MyBottomLeftResizeHandleGraphicsItem::updatePostion(const QRectF &rect) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
-    MyHandleGraphicsItemBase::updatePostion(rect.bottomLeft());
+void MyBottomLeftResizeHandleGraphicsItem::updatePosition(const QRectF &rect) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
+    MyHandleGraphicsItemBase::updatePosition(rect.bottomLeft());
 }
 
 void MyBottomLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -403,20 +403,20 @@ MyCurvatureRadiusControlHandleGraphicsItemBase::MyCurvatureRadiusControlHandleGr
     setBrush(brush);
 }
 
-void MyCurvatureRadiusControlHandleGraphicsItemBase::updatePostion(const QRectF &rect, qreal radius) {
-    MyHandleGraphicsItemBase::updatePostion(rect);
+void MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(const QRectF &rect, qreal radius) {
+    MyHandleGraphicsItemBase::updatePosition(rect);
     _radius = radius;
 }
 
 // MyCurvatureRadiusXControlHandleGraphicsItem
 
 MyCurvatureRadiusXControlHandleGraphicsItem::MyCurvatureRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyCurvatureRadiusControlHandleGraphicsItemBase(parent) {
-    updatePostion(rect, radius);
+    updatePosition(rect, radius);
 }
 
-void MyCurvatureRadiusXControlHandleGraphicsItem::updatePostion(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePostion(rect, radius);
-    MyHandleGraphicsItemBase::updatePostion(rect.topLeft() + QPointF(qMin(radius, 0.5 * rect.width()), 0.0));
+void MyCurvatureRadiusXControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
+    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
+    MyHandleGraphicsItemBase::updatePosition(rect.topLeft() + QPointF(qMin(radius, 0.5 * rect.width()), 0.0));
 }
 
 void MyCurvatureRadiusXControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -427,12 +427,12 @@ void MyCurvatureRadiusXControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneM
 // MyCurvatureRadiusYControlHandleGraphicsItem
 
 MyCurvatureRadiusYControlHandleGraphicsItem::MyCurvatureRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyCurvatureRadiusControlHandleGraphicsItemBase(parent) {
-    updatePostion(rect, radius);
+    updatePosition(rect, radius);
 }
 
-void MyCurvatureRadiusYControlHandleGraphicsItem::updatePostion(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePostion(rect, radius);
-    MyHandleGraphicsItemBase::updatePostion(rect.topLeft() + QPointF(0.0, qMin(radius, 0.5 * rect.height())));
+void MyCurvatureRadiusYControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
+    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
+    MyHandleGraphicsItemBase::updatePosition(rect.topLeft() + QPointF(0.0, qMin(radius, 0.5 * rect.height())));
 }
 
 void MyCurvatureRadiusYControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
