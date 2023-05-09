@@ -190,6 +190,8 @@ public:
 
 private slots:
 
+    void adjustNodeToConnectedEdges(const QPointF&);
+
     void adjustConnectedEdges(const QPointF&);
 
 protected:

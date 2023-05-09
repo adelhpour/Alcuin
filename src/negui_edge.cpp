@@ -169,6 +169,10 @@ void MyEdgeBase::enableRemoveMode() {
         arrowHead()->enableRemoveMode();
 }
 
+const QPointF MyEdgeBase::middlePosition() {
+    return 0.5 * (((MyNodeBase*)startNode())->getExtents().center() + ((MyNodeBase*)endNode())->getExtents().center());
+}
+
 const QRectF MyEdgeBase::getExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }

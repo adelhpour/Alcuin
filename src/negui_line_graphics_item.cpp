@@ -127,8 +127,6 @@ void MyLineGraphicsItem::setZValue(qreal z) {
 void MyLineGraphicsItem::setLine(const QLineF& line) {
     _line = line;
     resetLine();
-    emit lineControlPoint1IsUpdated(getControlPoint1());
-    emit lineControlPoint2IsUpdated(getControlPoint2());
 }
 
 void MyLineGraphicsItem::resetLine() {

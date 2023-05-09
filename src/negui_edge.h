@@ -65,6 +65,8 @@ public:
     
     // enable the remove mode of the edge
     void enableRemoveMode() override;
+
+    const QPointF middlePosition();
     
     const QRectF getExtents() override;
     
@@ -88,6 +90,8 @@ public slots:
 
 signals:
     void askForAdjustConnectedEdges(const QPointF&);
+
+    void askForAdjustNodeToConnectedEdges(const QPointF&);
 
 protected:
     MyElementBase* _startNode;
