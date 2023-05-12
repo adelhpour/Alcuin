@@ -44,10 +44,14 @@ signals:
     void askForReparent();
     
     void askForResetPosition();
+
+    void positionChangedByMouseMoveEvent();
     
 protected:
 
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     
     void keyPressEvent(QKeyEvent *event) override;
     

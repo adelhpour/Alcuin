@@ -91,7 +91,9 @@ public slots:
 signals:
     void askForAdjustConnectedEdges(const QPointF&);
 
-    void askForAdjustNodeToConnectedEdges(const QPointF&);
+    void askForAdjustNodePositionToNeighborNodes();
+
+    void askForDisconnectNodePositionFromNeighborNodes();
 
 protected:
     MyElementBase* _startNode;

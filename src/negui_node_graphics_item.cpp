@@ -107,6 +107,11 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     return QGraphicsItem::itemChange(change, value);
 }
 
+void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+    MyElementGraphicsItemBase::mouseMoveEvent(event);
+    emit positionChangedByMouseMoveEvent();
+}
+
 void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
     QGraphicsItem::keyPressEvent(event);
     if (!event->isAccepted()) {
@@ -207,7 +212,7 @@ void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *
 
 void MyCentroidNodeSceneGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     setFocused(false);
-    MyElementGraphicsItemBase::mouseMoveEvent(event);
+    MyNodeSceneGraphicsItemBase::mouseMoveEvent(event);
     setFocused(true);
 }
 

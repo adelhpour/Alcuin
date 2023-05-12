@@ -119,13 +119,17 @@ void MyEdgeBase::updatePoints() {
 }
 
 void MyEdgeBase::adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint) {
-    if (((MyNodeBase*)startNode())->nodeType() == MyNodeBase::CENTROID_NODE)
+    if (((MyNodeBase*)startNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
         emit askForAdjustConnectedEdges(updatedStartPoint);
+        emit askForDisconnectNodePositionFromNeighborNodes();
+    }
 }
 
 void MyEdgeBase::adjustConnectedEdgesToEndNode(const QPointF& updatedEndPoint) {
-    if (((MyNodeBase*)endNode())->nodeType() == MyNodeBase::CENTROID_NODE)
+    if (((MyNodeBase*)endNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
         emit askForAdjustConnectedEdges(updatedEndPoint);
+        emit askForDisconnectNodePositionFromNeighborNodes();
+    }
 }
 
 void MyEdgeBase::updateArrowHeadPlacement() {

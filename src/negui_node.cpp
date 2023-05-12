@@ -30,6 +30,7 @@ void MyNodeBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedEdges()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
@@ -166,6 +167,13 @@ const qint32 MyNodeBase::calculateZValue() {
     return incrementZValue;
 }
 
+void MyNodeBase::adjustConnectedEdges() {
+    for (MyElementBase *edge : qAsConst(edges())) {
+        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
+        ((MyEdgeBase *) edge)->askForAdjustConnectedEdges(((MyEdgeBase *) edge)->middlePosition());
+    }
+}
+
 void MyNodeBase::read(const QJsonObject &json) {
     // position
     if (json.contains("position") && json["position"].isObject()) {
@@ -270,10 +278,6 @@ void MyClassicNode::setPosition(const QPointF& position) {
         lockChildNodes(false);
 
     MyNodeBase::setPosition(position);
-
-    // edges
-    for (MyElementBase *edge : qAsConst(edges()))
-        ((MyEdgeBase*)edge)->askForAdjustNodeToConnectedEdges(((MyEdgeBase*)edge)->middlePosition());
 }
 
 const QRectF MyClassicNode::getExtents() {
@@ -329,12 +333,18 @@ QWidget* MyClassicNode::getFeatureMenu() {
 // MyCentroidNode
 
 MyCentroidNode::MyCentroidNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
+    _doesNodePositionDependOnNeighboringNodes = true;
     _graphicsItem = createGraphicsItem(position());
     connectGraphicsItem();
 }
 
 MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
     return CENTROID_NODE;
+}
+
+void MyCentroidNode::connectGraphicsItem() {
+    MyNodeBase::connectGraphicsItem();
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
 }
 
 MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
@@ -344,24 +354,29 @@ MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &pos
 void MyCentroidNode::addEdge(MyElementBase* e) {
     MyNodeBase::addEdge(e);
     connect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
-    connect(e, SIGNAL(askForAdjustNodeToConnectedEdges(const QPointF&)), this, SLOT(adjustNodeToConnectedEdges(const QPointF&)));
+    connect(e, SIGNAL(askForDisconnectNodePositionFromNeighborNodes()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
+    connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
 }
 
 void MyCentroidNode::removeEdge(MyElementBase* e) {
     MyNodeBase::removeEdge(e);
     disconnect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
-    disconnect(e, SIGNAL(askForAdjustNodeToConnectedEdges(const QPointF&)), this, SLOT(adjustNodeToConnectedEdges(const QPointF&)));
+    disconnect(e, SIGNAL(askForDisconnectNodePositionFromNeighborNodes()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
+    disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
 }
 
-void MyCentroidNode::adjustNodeToConnectedEdges(const QPointF& movedEdgeMiddlePosition) {
-    if (edges().size()) {
-        QPointF updatedPosition = QPointF(0.0, 0.0);
-        for (MyElementBase *edge : qAsConst(edges()))
-            updatedPosition += ((MyEdgeBase*)edge)->middlePosition();
-        updatedPosition /= edges().size();
+void MyCentroidNode::adjustNodePositionToNeighborNodes() {
+    if (_doesNodePositionDependOnNeighboringNodes && edges().size()) {
+        QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
         ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
-        adjustConnectedEdges(movedEdgeMiddlePosition);
     }
+}
+
+const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
+    QPointF position = QPointF(0.0, 0.0);
+    for (MyElementBase *edge : qAsConst(edges()))
+        position += ((MyEdgeBase*)edge)->middlePosition();
+    return position /= edges().size();
 }
 
 void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
@@ -442,4 +457,8 @@ const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthY(const qreal& a
         return -((adjustedEndPointY - adjustedStartPointY) - maximumLength);
 
     return 0.0;
+}
+
+void MyCentroidNode::disconnectNodePositionFromNeighborNodes() {
+    _doesNodePositionDependOnNeighboringNodes = false;
 }

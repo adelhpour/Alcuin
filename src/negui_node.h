@@ -94,6 +94,8 @@ public slots:
     // set the position of the node
     virtual void setPosition(const QPointF& position);
 
+    void adjustConnectedEdges();
+
 protected:
     QString _parentNodeId;
     MyElementBase* _parentNode;
@@ -160,6 +162,8 @@ public:
 
     NODE_TYPE nodeType() override;
 
+    void connectGraphicsItem() override;
+
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to edges
@@ -169,6 +173,8 @@ public:
     void removeEdge(MyElementBase* e) override;
 
     const QLineF createControlBezierLine(const QPointF& updatedPoint);
+
+    const QPointF getNodeUpdatedPositionUsingConnectedEdges();
 
     const QLineF adjustControlBezierLine(const QLineF& controlBezierLine);
 
@@ -190,13 +196,16 @@ public:
 
 private slots:
 
-    void adjustNodeToConnectedEdges(const QPointF&);
+    void adjustNodePositionToNeighborNodes();
 
     void adjustConnectedEdges(const QPointF&);
+
+    void disconnectNodePositionFromNeighborNodes();
 
 protected:
     QList<MyElementBase*> _childNodes;
     bool _areChildNodesLocked;
+    bool _doesNodePositionDependOnNeighboringNodes;
 };
 
 #endif
