@@ -2,6 +2,8 @@
 #define __NEGUI_PARAMETERS_H
 
 #include "negui_base.h"
+#include <QObject>
+#include <QWidget>
 
 class MyParameterBase : public QObject, public MyBase {
     Q_OBJECT
