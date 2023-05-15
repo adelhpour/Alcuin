@@ -9,7 +9,7 @@
 #include <QTreeView>
 #include <QGridLayout>
 
-class MyFeatureMenu : public QFrame {
+class MyFeatureMenu : public MyFrame {
     Q_OBJECT
 
 public:
@@ -46,14 +46,6 @@ protected:
     QTreeView* _shapeStylesTreeView;
     QList<MyShapeStyleBase*> _shapeStyles;
     QSize _expandableWidgetSize;
-};
-
-class MyFrame : public QFrame {
-    Q_OBJECT
-
-public:
-
-    MyFrame(QWidget* parent = nullptr);
 };
 
 class MyMenuItemFrame : public MyFrame {
