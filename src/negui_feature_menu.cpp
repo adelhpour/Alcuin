@@ -71,7 +71,7 @@ void MyFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
     qint32 menuHeight = 0;
     
-    QSize elementFeatureMenuSize = ((MyMenuItemFrame*)_elementFeatureMenu)->extents();
+    QSize elementFeatureMenuSize = ((MyFeatureMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)
         menuWidth = elementFeatureMenuSize.width();
     menuHeight += elementFeatureMenuSize.height();
@@ -83,13 +83,13 @@ void MyFeatureMenu::updateExtents() {
     setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
 }
 
-// MyMenuItemFrame
+// MyFeatureMenuItemFrame
 
-MyMenuItemFrame::MyMenuItemFrame(QWidget* parent) : MyFrame(parent) {
+MyFeatureMenuItemFrame::MyFeatureMenuItemFrame(QWidget* parent) : MyFrame(parent) {
     setLayout(new QGridLayout());
 }
 
-const QSize MyMenuItemFrame::extents() const {
+const QSize MyFeatureMenuItemFrame::extents() const {
     qint32 totalWidth = 0;
     qint32 totalHeight = 0;
     qint32 rowWidth = 0;
@@ -188,7 +188,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
         
         QWidget* branchWidget = indexWidget(treeModel->itemFromIndex(index)->child(0)->index());
         if (branchWidget)
-            emit extentsAreUpdated(((MyMenuItemFrame*)branchWidget)->extents() + collapsedSize());
+            emit extentsAreUpdated(((MyFeatureMenuItemFrame*)branchWidget)->extents() + collapsedSize());
         this->scrollTo(index, QAbstractItemView::PositionAtTop);
     });
     
@@ -200,7 +200,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
 void MyShapeStyleTreeView::setBranches(QList<MyShapeStyleBase*> shapeStyles) {
     clearModel();
     for (MyShapeStyleBase* shapeStyle : shapeStyles) {
-        MyMenuItemFrame* shapeStyleBranch = new MyMenuItemFrame(this);
+        MyFeatureMenuItemFrame* shapeStyleBranch = new MyFeatureMenuItemFrame(this);
         QGridLayout* shapeStylesContentLayout = (QGridLayout*)(shapeStyleBranch->layout());
         shapeStyle->populateFeaturesMenu(shapeStylesContentLayout);
         addBranchWidget(shapeStyleBranch, shapeStyle->name());

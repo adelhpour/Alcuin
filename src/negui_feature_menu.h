@@ -47,7 +47,7 @@ protected:
     QSize _expandableWidgetSize;
 };
 
-class MyMenuItemFrame : public MyFrame {
+class MyFeatureMenuItemFrame : public MyFrame {
     Q_OBJECT
     
 signals:
@@ -59,7 +59,7 @@ signals:
     
 public:
     
-    MyMenuItemFrame(QWidget* parent = nullptr);
+    MyFeatureMenuItemFrame(QWidget* parent = nullptr);
     
     const QSize extents() const;
 };

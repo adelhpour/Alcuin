@@ -74,7 +74,7 @@ void MyElementBase::enableRemoveMode() {
 }
 
 QWidget* MyElementBase::getFeatureMenu() {
-    MyMenuItemFrame* featureMenu = new MyMenuItemFrame();
+    MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
     // title
