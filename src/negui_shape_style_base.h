@@ -35,7 +35,7 @@ public:
     virtual const QRectF getShapeExtents() = 0;
     
     // populate the menu layout with the style features
-    virtual void populateFeaturesMenu(QGridLayout* featureMenuLayout);
+    virtual void populateFeaturesMenu(QLayout* featureMenuLayout);
     
     // set the default values of each parameter
     virtual void updateFeatures();

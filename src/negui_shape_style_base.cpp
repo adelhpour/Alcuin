@@ -29,10 +29,10 @@ MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
     return NULL;
 }
 
-void MyShapeStyleBase::populateFeaturesMenu(QGridLayout* featureMenuLayout) {
+void MyShapeStyleBase::populateFeaturesMenu(QLayout* featureMenuLayout) {
     for (MyParameterBase* parameter : qAsConst(parameters())) {
-        featureMenuLayout->addWidget(new MyLabel(parameter->name()), featureMenuLayout->rowCount(), 0);
-        featureMenuLayout->addWidget(parameter->inputWidget(), featureMenuLayout->rowCount() - 1, 1);
+        ((QGridLayout*)featureMenuLayout)->addWidget(new MyLabel(parameter->name()), ((QGridLayout*)featureMenuLayout)->rowCount(), 0);
+        ((QGridLayout*)featureMenuLayout)->addWidget(parameter->inputWidget(), ((QGridLayout*)featureMenuLayout)->rowCount() - 1, 1);
     }
 }
 
