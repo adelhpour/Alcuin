@@ -2,9 +2,8 @@
 #define __NEGUI_FEATURE_MENU_H
 
 #include "negui_shape_style_base.h"
+#include "negui_parameters.h"
 
-#include <QDialog>
-#include <QDialogButtonBox>
 #include <QStandardItem>
 #include <QTreeView>
 #include <QGridLayout>
