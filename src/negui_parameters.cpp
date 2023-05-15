@@ -470,29 +470,28 @@ void MyPointParameterBase::setDefaultValue() {
 QWidget* MyPointParameterBase::createInputWidget() {
     QWidget* widget = new QWidget();
     qint32 fixedWidth = 0;
-    QHBoxLayout* contentLayout = new QHBoxLayout(widget);
+    QGridLayout* contentLayout = new QGridLayout(widget);
+
+    // x
     MyLabel* xLabel = new MyLabel(_x->name());
-    xLabel->setFixedWidth(60);
-    xLabel->setAlignment(Qt::AlignRight);
-    contentLayout->addWidget(xLabel);
+    xLabel->setFixedWidth(40);
+    xLabel->setAlignment(Qt::AlignLeft);
+    contentLayout->addWidget(xLabel, 0, 0);
     fixedWidth += xLabel->size().width();
-    contentLayout->addItem(new MySpacerItem(7, 0));
-    fixedWidth += 7;
-    contentLayout->addWidget(_x->inputWidget());
+    contentLayout->addWidget(_x->inputWidget(), 0 , 1);
     fixedWidth += _x->inputWidget()->size().width();
-    contentLayout->addItem(new MySpacerItem(25, 0));
-    fixedWidth += 25;
+
+    // y
     MyLabel* yLabel = new MyLabel(_y->name());
-    yLabel->setFixedWidth(60);
-    yLabel->setAlignment(Qt::AlignRight);
-    contentLayout->addWidget(yLabel);
+    yLabel->setFixedWidth(40);
+    yLabel->setAlignment(Qt::AlignLeft);
+    contentLayout->addWidget(yLabel, 1, 0);
     fixedWidth += yLabel->size().width();
-    contentLayout->addItem(new MySpacerItem(7, 0));
-    fixedWidth += 7;
-    contentLayout->addWidget(_y->inputWidget());
+    contentLayout->addWidget(_y->inputWidget(), 1 , 1);
     fixedWidth += _y->inputWidget()->size().width();
+
     widget->setLayout(contentLayout);
-    widget->setFixedSize(fixedWidth, 35);
+    widget->setFixedWidth(0.5 * 1.2 * fixedWidth);
 
     return widget;
 }
