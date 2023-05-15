@@ -3,17 +3,6 @@
 
 #include "negui_base.h"
 
-#include <QSpacerItem>
-#include <QLabel>
-#include <QLineEdit>
-#include <QSpinBox>
-#include <QDoubleSpinBox>
-#include <QComboBox>
-#include <QMenu>
-#include <QToolButton>
-#include <QPushButton>
-#include <QGridLayout>
-
 class MyParameterBase : public QObject, public MyBase {
     Q_OBJECT
 
@@ -706,118 +695,6 @@ public:
 
     // reset the values of the parameter
     void reset() override;
-};
-
-class MyColorPickerButton : public QToolButton {
-    Q_OBJECT
-
-public:
-    MyColorPickerButton(QWidget *parent = nullptr);
-
-    const QString& currentColor() const;
-
-    void setBackgroundColor(const QString& color);
-
-public slots:
-
-            void setCurrentColor(const QString& color);
-
-protected:
-    QMenu* _colorPickerMenu;
-    QString _currentColor;
-};
-
-class MyColorPickerMenu : public QMenu {
-    Q_OBJECT
-
-public:
-    MyColorPickerMenu();
-
-    signals:
-            void colorChosen(const QString&);
-
-private slots:
-            void colorTileButtonPicked(QPushButton* colorTileButton);
-};
-
-class MyColorTileButton : public QPushButton {
-
-public:
-    MyColorTileButton(const QString& color, const QString& value, QWidget* parent = 0);
-
-    const QString& color() const;
-
-    const QString& value() const;
-
-protected:
-    QString _color;
-    QString _value;
-};
-
-class MySpacerItem : public QSpacerItem {
-
-public:
-
-    MySpacerItem(int w, int h);
-};
-
-class MyLabel : public QLabel {
-
-public:
-
-    MyLabel(const QString& text = "", QWidget* parent = nullptr);
-};
-
-class MyTitleLabel : public MyLabel {
-
-public:
-
-    MyTitleLabel(const QString& text = "", QWidget* parent = nullptr);
-};
-
-class MyLineEdit : public QLineEdit {
-
-public:
-
-    MyLineEdit(const QString &contents = "", QWidget* parent = nullptr);
-
-    void setText(const QString &contents);
-};
-
-class MyReadOnlyLineEdit : public MyLineEdit {
-
-public:
-
-    MyReadOnlyLineEdit(const QString &contents = "", QWidget* parent = nullptr);
-};
-
-class MySpinBox : public QSpinBox {
-
-public:
-
-    MySpinBox(QWidget* parent = nullptr);
-};
-
-class MyDoubleSpinBox : public QDoubleSpinBox {
-
-public:
-
-    MyDoubleSpinBox(QWidget* parent = nullptr);
-};
-
-class MyComboBox : public QComboBox {
-
-public:
-
-    MyComboBox(QWidget* parent = nullptr);
-};
-
-class MyFrame : public QFrame {
-    Q_OBJECT
-
-public:
-
-    MyFrame(QWidget* parent = nullptr);
 };
 
 #endif

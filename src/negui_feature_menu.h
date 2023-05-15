@@ -2,11 +2,7 @@
 #define __NEGUI_FEATURE_MENU_H
 
 #include "negui_shape_style_base.h"
-#include "negui_parameters.h"
-
-#include <QStandardItem>
-#include <QTreeView>
-#include <QGridLayout>
+#include "negui_customized_menu_widgets.h"
 
 class MyFeatureMenu : public MyFrame {
     Q_OBJECT
@@ -45,73 +41,6 @@ protected:
     QTreeView* _shapeStylesTreeView;
     QList<MyShapeStyleBase*> _shapeStyles;
     QSize _expandableWidgetSize;
-};
-
-class MyFeatureMenuItemFrame : public MyFrame {
-    Q_OBJECT
-    
-signals:
-    void askForAddShapeStyle(MyShapeStyleBase*);
-    
-    void askForRemoveShapeStyle(MyShapeStyleBase*);
-    
-    void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
-    
-public:
-    
-    MyFeatureMenuItemFrame(QWidget* parent = nullptr);
-    
-    const QSize extents() const;
-};
-
-class MyStandardItem : public QStandardItem {
-    
-public:
-    
-    MyStandardItem(const QString& text = "", const qreal& fontsize = qreal(12.0), const bool& isbold = false, const QColor& color = QColor(Qt::black));
-};
-
-class MyShapeStyleTreeView : public QTreeView {
-    Q_OBJECT
-    
-public:
-    
-    MyShapeStyleTreeView(QWidget* parent = nullptr);
-    
-    void clearModel();
-    
-    /// Containers
-    // branches
-    typedef std::vector<std::pair<MyStandardItem*, MyStandardItem*>> branchVec;
-    
-    /// Iterators
-    // branches
-    typedef branchVec::iterator branchIt;
-    typedef branchVec::const_iterator constBranchIt;
-    
-    /// Functions related to beginning and end of containers
-    // branches
-    const constBranchIt BranchesBegin() const { return _branches.begin(); }
-    const constBranchIt BranchesEnd() const { return _branches.end(); }
-    
-    void setBranches(QList<MyShapeStyleBase*> shapeStyles);
-    
-    void addBranchWidget(QWidget* branchWidget = NULL, const QString& branchTitle = "", const QString& rootTitle= "");
-    
-    void removeBranches(const QString& rootTitle= "", const unsigned int& staticbranches = 0);
-    
-    void expandLastBranch();
-    
-    const QSize collapsedSize() const;
-    
-signals:
-    
-    void extentsAreUpdated(const QSize& expandableWidgetSize);
-    
-protected:
-    
-    QStandardItemModel* treeModel;
-    branchVec _branches;
 };
 
 #endif
