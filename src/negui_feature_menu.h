@@ -9,7 +9,7 @@
 #include <QTreeView>
 #include <QGridLayout>
 
-class MyFeatureMenu : public MyGroupBox {
+class MyFeatureMenu : public QFrame {
     Q_OBJECT
 
 public:
@@ -48,7 +48,7 @@ protected:
     QSize _expandableWidgetSize;
 };
 
-class MyMenuItemGroupBox : public MyGroupBox {
+class MyMenuItemFrame : public QFrame {
     Q_OBJECT
     
 signals:
@@ -60,7 +60,7 @@ signals:
     
 public:
     
-    MyMenuItemGroupBox(QWidget* parent = nullptr);
+    MyMenuItemFrame(QWidget* parent = nullptr);
     
     const QSize extents() const;
 };

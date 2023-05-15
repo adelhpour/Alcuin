@@ -1999,11 +1999,10 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
     setFixedSize(120, 20);
 }
 
-// MyGroupBox
+// MyFrame
 
-MyGroupBox::MyGroupBox(QWidget* parent) : QGroupBox(parent) {
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
-    setStyleSheet("QGroupBox { background-color: white; border: no-border;}");
+MyFrame::MyFrame(QWidget* parent) : QFrame(parent) {
+    setStyleSheet("QFrame { background-color: white; border: no-border;}");
     setContentsMargins(0, 0, 0, 0);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
 }

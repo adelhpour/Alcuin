@@ -9,7 +9,6 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QComboBox>
-#include <QGroupBox>
 #include <QMenu>
 #include <QToolButton>
 #include <QPushButton>
@@ -813,12 +812,12 @@ public:
     MyComboBox(QWidget* parent = nullptr);
 };
 
-class MyGroupBox : public QGroupBox {
+class MyFrame : public QFrame {
     Q_OBJECT
 
 public:
 
-    MyGroupBox(QWidget* parent = nullptr);
+    MyFrame(QWidget* parent = nullptr);
 };
 
 #endif

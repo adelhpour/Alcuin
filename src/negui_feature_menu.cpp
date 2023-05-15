@@ -3,7 +3,7 @@
 
 // MyFeatureMenu
 
-MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyGroupBox(parent) {
+MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : QFrame(parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = new QGridLayout(this);
 
@@ -72,7 +72,7 @@ void MyFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
     qint32 menuHeight = 0;
     
-    QSize elementFeatureMenuSize = ((MyMenuItemGroupBox*)_elementFeatureMenu)->extents();
+    QSize elementFeatureMenuSize = ((MyMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)
         menuWidth = elementFeatureMenuSize.width();
     menuHeight += elementFeatureMenuSize.height();
@@ -84,13 +84,13 @@ void MyFeatureMenu::updateExtents() {
     setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
 }
 
-// MyMenuItemGroupBox
+// MyMenuItemFrame
 
-MyMenuItemGroupBox::MyMenuItemGroupBox(QWidget* parent) : MyGroupBox(parent) {
+MyMenuItemFrame::MyMenuItemFrame(QWidget* parent) : QFrame(parent) {
     setLayout(new QGridLayout());
 }
 
-const QSize MyMenuItemGroupBox::extents() const {
+const QSize MyMenuItemFrame::extents() const {
     qint32 totalWidth = 0;
     qint32 totalHeight = 0;
     qint32 rowWidth = 0;
@@ -189,7 +189,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
         
         QWidget* branchWidget = indexWidget(treeModel->itemFromIndex(index)->child(0)->index());
         if (branchWidget)
-            emit extentsAreUpdated(((MyMenuItemGroupBox*)branchWidget)->extents() + collapsedSize());
+            emit extentsAreUpdated(((MyMenuItemFrame*)branchWidget)->extents() + collapsedSize());
         this->scrollTo(index, QAbstractItemView::PositionAtTop);
     });
     
@@ -201,7 +201,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
 void MyShapeStyleTreeView::setBranches(QList<MyShapeStyleBase*> shapeStyles) {
     clearModel();
     for (MyShapeStyleBase* shapeStyle : shapeStyles) {
-        MyMenuItemGroupBox* shapeStyleBranch = new MyMenuItemGroupBox(this);
+        MyMenuItemFrame* shapeStyleBranch = new MyMenuItemFrame(this);
         QGridLayout* shapeStylesContentLayout = (QGridLayout*)(shapeStyleBranch->layout());
         shapeStyle->populateFeaturesMenu(shapeStylesContentLayout);
         addBranchWidget(shapeStyleBranch, shapeStyle->name());
