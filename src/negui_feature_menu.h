@@ -48,7 +48,15 @@ protected:
     QSize _expandableWidgetSize;
 };
 
-class MyMenuItemFrame : public QFrame {
+class MyFrame : public QFrame {
+    Q_OBJECT
+
+public:
+
+    MyFrame(QWidget* parent = nullptr);
+};
+
+class MyMenuItemFrame : public MyFrame {
     Q_OBJECT
     
 signals:

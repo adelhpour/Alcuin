@@ -812,12 +812,4 @@ public:
     MyComboBox(QWidget* parent = nullptr);
 };
 
-class MyFrame : public QFrame {
-    Q_OBJECT
-
-public:
-
-    MyFrame(QWidget* parent = nullptr);
-};
-
 #endif

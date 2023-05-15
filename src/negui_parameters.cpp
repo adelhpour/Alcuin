@@ -1998,11 +1998,3 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
     setAttribute(Qt::WA_MacShowFocusRect, 0);
     setFixedSize(120, 20);
 }
-
-// MyFrame
-
-MyFrame::MyFrame(QWidget* parent) : QFrame(parent) {
-    setStyleSheet("QFrame { background-color: white; border: no-border;}");
-    setContentsMargins(0, 0, 0, 0);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-}

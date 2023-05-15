@@ -84,9 +84,17 @@ void MyFeatureMenu::updateExtents() {
     setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
 }
 
+// MyFrame
+
+MyFrame::MyFrame(QWidget* parent) : QFrame(parent) {
+    setStyleSheet("QFrame { background-color: white; border: no-border;}");
+    setContentsMargins(0, 0, 0, 0);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+}
+
 // MyMenuItemFrame
 
-MyMenuItemFrame::MyMenuItemFrame(QWidget* parent) : QFrame(parent) {
+MyMenuItemFrame::MyMenuItemFrame(QWidget* parent) : MyFrame(parent) {
     setLayout(new QGridLayout());
 }
 
