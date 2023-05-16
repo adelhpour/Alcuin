@@ -5,6 +5,7 @@
 #include "negui_edge_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_edge_graphics_item.h"
+#include "negui_customized_common_widgets.h"
 
 #include <QtMath>
 #include <QJsonObject>
