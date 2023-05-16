@@ -61,7 +61,8 @@ set(gui_sources
 		negui_bezier_adjust_handled_graphics_item.cpp
 		negui_parameters.cpp
 		negui_customized_common_widgets.cpp
-		negui_customized_menu_widgets.cpp
+		negui_customized_mode_menu_widgets.cpp
+		negui_customized_feature_menu_widgets.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu.cpp
 		negui_import_tools.cpp
@@ -129,6 +130,7 @@ set(gui_headers
 		negui_bezier_adjust_handled_graphics_item.h
 		negui_parameters.h
 		negui_customized_common_widgets.h
+		negui_customized_mode_menu_widgets.h
         negui_customized_feature_menu_widgets.h
 		negui_mode_menu.h
 		negui_feature_menu.h
