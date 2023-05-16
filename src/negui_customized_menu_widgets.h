@@ -2,6 +2,7 @@
 #define __NEGUI_CUSTOMIZED_MENU_WIDGETS_H
 
 #include "negui_customized_common_widgets.h"
+#include "negui_shape_style_base.h"
 
 #include <QSpacerItem>
 #include <QLabel>
