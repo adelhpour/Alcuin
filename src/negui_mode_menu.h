@@ -9,6 +9,8 @@ class MyModeMenu : public MyFrame {
 public:
 
     MyModeMenu(QWidget *parent = nullptr);
+
+    void addButtons(QList<QToolButton*> buttons);
 };
 
 #endif
