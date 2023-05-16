@@ -4,6 +4,8 @@
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
 
+#include <QGridLayout>
+
 // MyNetworkEditorWidget
 
 MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) {
