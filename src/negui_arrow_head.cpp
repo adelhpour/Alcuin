@@ -3,7 +3,11 @@
 #include "negui_arrow_head_style.h"
 #include "negui_arrow_head_graphics_item_builder.h"
 #include "negui_arrow_head_graphics_item.h"
+#include "negui_customized_common_widgets.h"
+
+
 #include <QJsonObject>
+#include <QGridLayout>
 
 // MyArrowHeadBase
 
