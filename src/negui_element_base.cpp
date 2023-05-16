@@ -1,6 +1,8 @@
 #include "negui_element_base.h"
 #include "negui_feature_menu.h"
 
+#include <QGridLayout>
+
 // MyElementBase
 
 MyElementBase::MyElementBase(const QString& name) : MyBase(name) {
