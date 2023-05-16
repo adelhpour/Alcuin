@@ -1,6 +1,8 @@
 #ifndef __NEGUI_CUSTOMIZED_MENU_WIDGETS_H
 #define __NEGUI_CUSTOMIZED_MENU_WIDGETS_H
 
+#include "negui_customized_common_widgets.h"
+
 #include <QSpacerItem>
 #include <QLabel>
 #include <QLineEdit>
