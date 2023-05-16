@@ -2,7 +2,7 @@
 #define __NEGUI_FEATURE_MENU_H
 
 #include "negui_shape_style_base.h"
-#include "negui_customized_menu_widgets.h"
+#include "negui_customized_feature_menu_widgets.h"
 
 class MyFeatureMenu : public MyFrame {
     Q_OBJECT

@@ -1,5 +1,5 @@
 #include "negui_parameters.h"
-#include "negui_customized_menu_widgets.h"
+#include "negui_customized_feature_menu_widgets.h"
 
 #include <QJsonArray>
 #include <QGridLayout>

@@ -129,7 +129,7 @@ set(gui_headers
 		negui_bezier_adjust_handled_graphics_item.h
 		negui_parameters.h
 		negui_customized_common_widgets.h
-		negui_customized_menu_widgets.h
+        negui_customized_feature_menu_widgets.h
 		negui_mode_menu.h
 		negui_feature_menu.h
 		negui_interfaces.h
