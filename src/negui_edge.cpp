@@ -5,8 +5,10 @@
 #include "negui_edge_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_edge_graphics_item.h"
+
 #include <QtMath>
 #include <QJsonObject>
+#include <QGridLayout>
 
 // MyEdgeBase
 
