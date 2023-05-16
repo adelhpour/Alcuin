@@ -9,6 +9,8 @@
 #include <QUndoStack>
 #include <QWidgetAction>
 #include <QPrinter>
+#include <QToolButton>
+#include <QPushButton>
 
 class MyInteractor : public QObject {
     Q_OBJECT
