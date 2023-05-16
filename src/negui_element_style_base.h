@@ -5,6 +5,7 @@
 #include "negui_shape_style_base.h"
 
 #include <QDialogButtonBox>
+#include <QPushButton>
 #include <QMenu>
 
 class MyElementStyleBase : public QObject, public MyPluginItemBase {
