@@ -1,7 +1,10 @@
 #include "negui_autolayout_engines.h"
+#include "negui_customized_common_widgets.h"
+
 #include <QDialogButtonBox>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QGridLayout>
 
 // MyAutoLayoutEngine
 
@@ -39,7 +42,7 @@ int MyAutoLayoutEngine::takeParameters() {
         modificationBox->resize(300, 150);
         QWidget* inputWidget = NULL;
         for (MyParameterBase *parameter : qAsConst(parameters())) {
-            modificationBoxLayout.addWidget(new QLabel(parameter->name()), modificationBoxLayout.rowCount(), 0);
+            modificationBoxLayout.addWidget(new MyLabel(parameter->name()), modificationBoxLayout.rowCount(), 0);
             inputWidget = parameter->inputWidget();
             if (inputWidget)
                 modificationBoxLayout.addWidget(inputWidget, modificationBoxLayout.rowCount() - 1, 1);
