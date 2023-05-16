@@ -3,6 +3,8 @@
 
 #include "negui_shape_style_base.h"
 
+#include <QPen>
+
 class My1DShapeStyleBase : public MyShapeStyleBase {
 public:
 
