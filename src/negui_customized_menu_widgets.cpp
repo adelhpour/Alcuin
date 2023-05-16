@@ -1,5 +1,8 @@
 #include "negui_customized_menu_widgets.h"
 
+#include <QGridLayout>
+#include <QWidgetAction>
+
 // MyFeatureMenuItemFrame
 
 MyFeatureMenuItemFrame::MyFeatureMenuItemFrame(QWidget* parent) : MyFrame(parent) {
