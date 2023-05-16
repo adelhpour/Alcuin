@@ -11,9 +11,13 @@
 #include "negui_import_tools.h"
 #include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
+#include "negui_customized_common_widgets.h"
+
+
 #include <QCoreApplication>
 #include <QFileDialog>
 #include <QJsonArray>
+#include <QVBoxLayout>
 
 // MyInteractor
 
