@@ -1,5 +1,8 @@
 #include "negui_shape_style_base.h"
+#include "negui_customized_common_widgets.h"
+
 #include <QJsonObject>
+#include <QGridLayout>
 
 // MyShapeStyleBase
 
