@@ -1,6 +1,8 @@
 #include "negui_parameters.h"
 #include "negui_customized_menu_widgets.h"
 
+#include <QGridLayout>
+
 // MyParameterBase
 
 MyParameterBase::MyParameterBase(const QString& name) : MyBase(name) {
