@@ -3,7 +3,9 @@
 #include "negui_node_style.h"
 #include "negui_node_graphics_item_builder.h"
 #include "negui_node_graphics_item.h"
+
 #include <QJsonObject>
+#include <QGridLayout>
 
 // MyNodeBase
 
