@@ -110,7 +110,8 @@ signals:
 public slots:
     
     // menus
-    QList<QToolButton*> getMenuButtons();
+    QList<QToolButton*> getToolBarMenuButtons();
+    QList<QToolButton*> getModeMenuButtons();
     
     // network
     void createNetwork(const QJsonObject &json);

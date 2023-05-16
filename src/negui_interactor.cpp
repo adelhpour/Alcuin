@@ -694,13 +694,12 @@ void MyInteractor::loadPlugins() {
     }
 }
 
-QList<QToolButton*> MyInteractor::getMenuButtons() {
+QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     QList<QToolButton*> buttons;
     if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(populateImportMenu());
     if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
         buttons.push_back(populateExportMenu());
-    buttons.append(populateAddElementMenu());
     buttons.push_back(populateRemoveItemMenu());
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(populateAutoLayoutMenu());
@@ -709,6 +708,10 @@ QList<QToolButton*> MyInteractor::getMenuButtons() {
     buttons.push_back(populateResetSceneMenu());
     
     return buttons;
+}
+
+QList<QToolButton*> MyInteractor::getModeMenuButtons() {
+    return populateAddElementMenu();
 }
 
 QToolButton* MyInteractor::populateImportMenu() {
