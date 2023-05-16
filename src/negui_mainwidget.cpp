@@ -1,6 +1,7 @@
 #include "negui_mainwidget.h"
 #include "negui_interactor.h"
 #include "negui_toolbar.h"
+#include "negui_mode_menu.h"
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
 
@@ -21,8 +22,9 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(toolBar(), 0, 0, 1, 2);
-    layout->addWidget(view(), 1, 0, 1, 1);
+    layout->addWidget(toolBar(), 0, 0, 1, 3);
+    layout->addWidget(modeMenu(), 1, 0, 1, 1);
+    layout->addWidget(view(), 1, 1, 1, 1);
     setLayout(layout);
 }
 
@@ -32,6 +34,7 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 
 void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
+    _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
@@ -98,13 +101,17 @@ QWidget* MyNetworkEditorWidget::toolBar() {
     return _toolBar;
 }
 
+QWidget* MyNetworkEditorWidget::modeMenu() {
+    return _modeMenu;
+}
+
 QWidget* MyNetworkEditorWidget::view() {
     return _view;
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 1, 1, 1, Qt::AlignTop);
+    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 2, 1, 1, Qt::AlignTop);
     _featureMenu = featureMenu;
 }
 

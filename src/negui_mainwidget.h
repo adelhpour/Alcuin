@@ -21,6 +21,7 @@ public:
     
     QObject* interactor();
     QWidget* toolBar();
+    QWidget* modeMenu();
     QWidget* view();
 
 private slots:
@@ -36,6 +37,7 @@ protected:
     QWidget* _toolBar;
     QWidget* _view;
     QObject* _interactor;
+    QWidget* _modeMenu;
     QWidget* _featureMenu;
 };
 
