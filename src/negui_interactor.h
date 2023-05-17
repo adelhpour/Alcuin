@@ -225,41 +225,6 @@ protected:
     QJsonObject _stageInfo;
 };
 
-class MyUndoStack : public QUndoStack {
-    
-public:
-    
-    MyUndoStack(QObject *parent = nullptr);
-    
-    void addCommand(QUndoCommand* command);
-    
-    void clear();
-};
-
-class MyWidgetAction : public QWidgetAction {
-    Q_OBJECT
-    
-public:
-    
-    MyWidgetAction(QObject* parent = nullptr);
-    
-    void setItems(QList<MyPluginItemBase*> items);
-    
-signals:
-    void itemIsChosen(MyPluginItemBase*);
-    
-protected:
-    QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
-    QPushButton* createItemPreviewButton(MyPluginItemBase* item);
-};
-
-class MyItemPreviewButton : public QPushButton {
-    
-public:
-    
-    MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
-};
-
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
 MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
 MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);

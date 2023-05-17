@@ -63,7 +63,7 @@ set(gui_sources
 		negui_customized_common_widgets.cpp
 		negui_customized_mode_menu_widgets.cpp
 		negui_customized_feature_menu_widgets.cpp
-		negui_change_stage_command.cpp
+		negui_customized_interactor_widgets.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu.cpp
 		negui_import_tools.cpp
@@ -133,7 +133,7 @@ set(gui_headers
 		negui_customized_common_widgets.h
 		negui_customized_mode_menu_widgets.h
         negui_customized_feature_menu_widgets.h
-		negui_change_stage_command.h
+		negui_customized_interactor_widgets.h
 		negui_mode_menu.h
 		negui_feature_menu.h
 		negui_interfaces.h
