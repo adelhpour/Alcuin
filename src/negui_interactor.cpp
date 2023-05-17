@@ -136,7 +136,6 @@ ElementStyleInterface* MyInteractor::elementStyleInterface() {
     return _elementStyleInterface;
 }
 
-#include <iostream>
 bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path) {
     if (autoLayoutInterface) {
         _autoLayoutInterface = autoLayoutInterface;
@@ -700,7 +699,6 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
         buttons.push_back(populateImportMenu());
     if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
         buttons.push_back(populateExportMenu());
-    buttons.push_back(populateRemoveItemMenu());
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(populateAutoLayoutMenu());
     buttons.push_back(populateUndoActionMenu());
@@ -710,8 +708,12 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     return buttons;
 }
 
-QList<QToolButton*> MyInteractor::getModeMenuButtons() {
+QList<QToolButton*> MyInteractor::getModeMenuAddButtons() {
     return populateAddElementMenu();
+}
+
+QToolButton* MyInteractor::getModeMenuRemoveButton() {
+    return populateRemoveItemMenu();
 }
 
 QToolButton* MyInteractor::populateImportMenu() {
@@ -879,19 +881,6 @@ void MyUndoStack::addCommand(QUndoCommand* command) {
 
 void MyUndoStack::clear() {
     QUndoStack::clear();
-}
-
-// MyToolButton
-
-MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
-    setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
-}
-
-// MyToolButtonMenu
-
-MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
-    setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
 }
 
 // MyWidgetAction

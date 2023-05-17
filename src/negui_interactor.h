@@ -111,7 +111,8 @@ public slots:
     
     // menus
     QList<QToolButton*> getToolBarMenuButtons();
-    QList<QToolButton*> getModeMenuButtons();
+    QList<QToolButton*> getModeMenuAddButtons();
+    QToolButton* getModeMenuRemoveButton();
     
     // network
     void createNetwork(const QJsonObject &json);
@@ -225,20 +226,6 @@ public:
     void addCommand(QUndoCommand* command);
     
     void clear();
-};
-
-class MyToolButton : public QToolButton {
-    
-public:
-    
-    MyToolButton(QWidget* parent = nullptr);
-};
-
-class MyToolButtonMenu : public QMenu {
-    
-public:
-    
-    MyToolButtonMenu(QWidget* parent = nullptr);
 };
 
 class MyWidgetAction : public QWidgetAction {
