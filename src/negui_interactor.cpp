@@ -708,6 +708,14 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     return buttons;
 }
 
+QToolButton* MyInteractor::getNormalModeButton() {
+    return new MyToolButton();
+}
+
+QToolButton* MyInteractor::getSelectModeButton() {
+    return new MyToolButton();
+}
+
 QList<QToolButton*> MyInteractor::getAddModeButtons() {
     return populateAddElementMenu();
 }

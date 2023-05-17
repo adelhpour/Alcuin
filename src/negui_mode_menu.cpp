@@ -10,12 +10,22 @@ MyModeMenu::MyModeMenu(QWidget *parent) : MyFrame(parent) {
     setLayout(contentLayout);
 }
 
-void MyModeMenu::setAddButtons(QList<QToolButton*> buttons) {
+void MyModeMenu::setNormalModeButton(QToolButton* button) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+}
+
+void MyModeMenu::setSelectModeButton(QToolButton* button) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+}
+
+void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     contentLayout->addWidget(createAddButton(buttons), contentLayout->rowCount(), 0);
 }
 
-void MyModeMenu::setRemoveButton(QToolButton* button) {
+void MyModeMenu::setRemoveModeButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
 }

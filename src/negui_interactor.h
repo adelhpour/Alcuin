@@ -111,6 +111,8 @@ public slots:
     
     // menus
     QList<QToolButton*> getToolBarMenuButtons();
+    QToolButton* getNormalModeButton();
+    QToolButton* getSelectModeButton();
     QList<QToolButton*> getAddModeButtons();
     QToolButton* getRemoveModeButton();
     

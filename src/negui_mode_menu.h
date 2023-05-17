@@ -12,9 +12,13 @@ public:
 
     MyModeMenu(QWidget *parent = nullptr);
 
-    void setAddButtons(QList<QToolButton*> buttons);
+    void setNormalModeButton(QToolButton* button);
 
-    void setRemoveButton(QToolButton* button);
+    void setSelectModeButton(QToolButton* button);
+
+    void setAddModeButtons(QList<QToolButton*> buttons);
+
+    void setRemoveModeButton(QToolButton* button);
 
     QToolButton* createAddButton(QList<QToolButton*> buttons);
 
