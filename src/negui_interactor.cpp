@@ -696,14 +696,14 @@ void MyInteractor::loadPlugins() {
 QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     QList<QToolButton*> buttons;
     if (getPluginsOfType(plugins(), "importtool").size())
-        buttons.push_back(populateImportMenu());
+        buttons.push_back(createImportMenuButton());
     if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
-        buttons.push_back(populateExportMenu());
+        buttons.push_back(createExportMenuButton());
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
-        buttons.push_back(populateAutoLayoutMenu());
-    buttons.push_back(populateUndoActionMenu());
-    buttons.push_back(populateRedoActionMenu());
-    buttons.push_back(populateResetSceneMenu());
+        buttons.push_back(createAutoLayoutMenuButton());
+    buttons.push_back(createUndoActionMenuButton());
+    buttons.push_back(createRedoActionMenuButton());
+    buttons.push_back(createResetSceneMenuButton());
     
     return buttons;
 }
@@ -717,14 +717,14 @@ QToolButton* MyInteractor::getSelectModeButton() {
 }
 
 QList<QToolButton*> MyInteractor::getAddModeButtons() {
-    return populateAddElementMenu();
+    return createAddElementMenuButtons();
 }
 
 QToolButton* MyInteractor::getRemoveModeButton() {
-    return populateRemoveItemMenu();
+    return createRemoveElementMenuButton();
 }
 
-QToolButton* MyInteractor::populateImportMenu() {
+QToolButton* MyInteractor::createImportMenuButton() {
     MyToolButton* button = new MyToolButton();
     MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* importWidgetAction = new MyWidgetAction(subMenu);
@@ -737,7 +737,7 @@ QToolButton* MyInteractor::populateImportMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateExportMenu() {
+QToolButton* MyInteractor::createExportMenuButton() {
     QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
     QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
     
@@ -769,7 +769,7 @@ QToolButton* MyInteractor::populateExportMenu() {
     return button;
 }
 
-QList<QToolButton*> MyInteractor::populateAddElementMenu() {
+QList<QToolButton*> MyInteractor::createAddElementMenuButtons() {
     QList<QToolButton*> buttons;
     if (!getPluginsOfType(plugins(), "nodestyle").size()) {
         QJsonObject styleObject;
@@ -829,7 +829,7 @@ QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*
     return widgetAction;
 }
 
-QToolButton* MyInteractor::populateRemoveItemMenu() {
+QToolButton* MyInteractor::createRemoveElementMenuButton() {
     MyToolButton* button = new MyToolButton();
     button->setText("Remove");
     button->setToolTip(tr("Remove an item from the network"));
@@ -837,7 +837,7 @@ QToolButton* MyInteractor::populateRemoveItemMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateAutoLayoutMenu() {
+QToolButton* MyInteractor::createAutoLayoutMenuButton() {
     MyToolButton* button = new MyToolButton();
     MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* autoLayoutWidgetAction = new MyWidgetAction(subMenu);
@@ -850,7 +850,7 @@ QToolButton* MyInteractor::populateAutoLayoutMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateUndoActionMenu() {
+QToolButton* MyInteractor::createUndoActionMenuButton() {
     QAction* action = undoStack()->createUndoAction(this, tr("Undo"));
     action->setShortcuts(QKeySequence::Undo);
     
@@ -859,7 +859,7 @@ QToolButton* MyInteractor::populateUndoActionMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateRedoActionMenu() {
+QToolButton* MyInteractor::createRedoActionMenuButton() {
     QAction* action = undoStack()->createRedoAction(this, tr("Redo"));
     action->setShortcuts(QKeySequence::Redo);
     
@@ -868,7 +868,7 @@ QToolButton* MyInteractor::populateRedoActionMenu() {
     return button;
 }
 
-QToolButton* MyInteractor::populateResetSceneMenu() {
+QToolButton* MyInteractor::createResetSceneMenuButton() {
     MyToolButton* button = new MyToolButton();
     button->setText("Reset");
     button->setToolTip(tr("Remove all network elements from the scene"));

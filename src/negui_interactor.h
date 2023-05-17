@@ -157,18 +157,18 @@ protected:
     void loadPlugins();
     
     // menus
-    QToolButton* populateImportMenu();
-    QToolButton* populateExportMenu();
-    QList<QToolButton*> populateAddElementMenu();
+    QToolButton* createImportMenuButton();
+    QToolButton* createExportMenuButton();
+    QList<QToolButton*> createAddElementMenuButtons();
     QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
     QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
     QWidgetAction* createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent);
     QWidgetAction* createEdgeStyleWidgetAction(QList<MyPluginItemBase*> edgeStyles, QWidget* parent);
-    QToolButton* populateRemoveItemMenu();
-    QToolButton* populateAutoLayoutMenu();
-    QToolButton* populateUndoActionMenu();
-    QToolButton* populateRedoActionMenu();
-    QToolButton* populateResetSceneMenu();
+    QToolButton* createRemoveElementMenuButton();
+    QToolButton* createAutoLayoutMenuButton();
+    QToolButton* createUndoActionMenuButton();
+    QToolButton* createRedoActionMenuButton();
+    QToolButton* createResetSceneMenuButton();
     
     // import interface
     ImportInterface* _importInterface;
