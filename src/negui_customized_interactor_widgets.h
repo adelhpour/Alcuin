@@ -51,8 +51,8 @@ public:
 
     void setItems(QList<MyPluginItemBase*> items);
 
-    signals:
-            void itemIsChosen(MyPluginItemBase*);
+signals:
+    void itemIsChosen(MyPluginItemBase*);
 
 protected:
     QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
