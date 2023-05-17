@@ -786,40 +786,52 @@ QToolButton* MyInteractor::createExportMenuButton() {
 }
 
 QList<QToolButton*> MyInteractor::createAddElementMenuButtons() {
-    QList<QToolButton*> buttons;
+    addDefaultNodeStyle();
+    addDefaultEdgeStyle();
+    return createElementStyleButtons();
+}
+
+QList<QToolButton*> MyInteractor::createElementStyleButtons() {
+    QList<QToolButton*> elementStyleButtons;
+    for (QString category : getPluginsCategories(plugins()))
+        elementStyleButtons.push_back(createPluginItemToolButton(createCategoryMenu(getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins(), "edgestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins(), "templatestyle"), category)), category));
+
+    return elementStyleButtons;
+}
+
+QMenu* MyInteractor::createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory) {
+    QMenu* menu = new MyToolButtonMenu();
+    // node
+    if (nodeStylesOfCategory.size())
+        menu->addAction(createNodeStyleWidgetAction(nodeStylesOfCategory, menu));
+    if (nodeStylesOfCategory.size() && (edgeStylesOfCategory.size() || templateStylesOfCategory.size()))
+        menu->addSeparator();
+    // edge
+    if (edgeStylesOfCategory.size())
+        menu->addAction(createEdgeStyleWidgetAction(edgeStylesOfCategory, menu));
+    if (edgeStylesOfCategory.size() && templateStylesOfCategory.size())
+        menu->addSeparator();
+    // template
+    if (templateStylesOfCategory.size())
+        menu->addAction(createEdgeStyleWidgetAction(templateStylesOfCategory, menu));
+
+    return menu;
+}
+
+void MyInteractor::addDefaultNodeStyle() {
     if (!getPluginsOfType(plugins(), "nodestyle").size()) {
         QJsonObject styleObject;
         styleObject["name"] = "Default";
         _plugins.push_back(createNodeStyle(styleObject));
     }
+}
+
+void MyInteractor::addDefaultEdgeStyle() {
     if (!getPluginsOfType(plugins(), "edgestyle").size()) {
         QJsonObject styleObject;
         styleObject["name"] = "Default";
         _plugins.push_back(createEdgeStyle(styleObject));
     }
-    QList<QString> pluginsCategories = getPluginsCategories(plugins());
-    for (QString category : pluginsCategories) {
-        QList<MyPluginItemBase*> nodeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category);
-        QList<MyPluginItemBase*> edgeStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "edgestyle"), category);
-        QList<MyPluginItemBase*> templateStylesOfCategory = getPluginsOfCategory(getPluginsOfType(plugins(), "templatestyle"), category);
-        MyToolButtonMenu* subMenu = new MyToolButtonMenu();
-        // node
-        if (nodeStylesOfCategory.size())
-            subMenu->addAction(createNodeStyleWidgetAction(nodeStylesOfCategory, subMenu));
-        if (nodeStylesOfCategory.size() && (edgeStylesOfCategory.size() || templateStylesOfCategory.size()))
-            subMenu->addSeparator();
-        // edge
-        if (edgeStylesOfCategory.size())
-            subMenu->addAction(createEdgeStyleWidgetAction(edgeStylesOfCategory, subMenu));
-        if (edgeStylesOfCategory.size() && templateStylesOfCategory.size())
-            subMenu->addSeparator();
-        // template
-        if (templateStylesOfCategory.size())
-            subMenu->addAction(createEdgeStyleWidgetAction(templateStylesOfCategory, subMenu));
-        buttons.push_back(createPluginItemToolButton(subMenu, category));
-    }
-    
-    return buttons;
 }
 
 QToolButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QString& text) {
