@@ -112,7 +112,7 @@ public slots:
     // menus
     QList<QToolButton*> getToolBarMenuButtons();
     QList<QToolButton*> getAddModeButtons();
-    QToolButton* getModeMenuRemoveButton();
+    QToolButton* getRemoveModeButton();
     
     // network
     void createNetwork(const QJsonObject &json);

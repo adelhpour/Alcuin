@@ -712,7 +712,7 @@ QList<QToolButton*> MyInteractor::getAddModeButtons() {
     return populateAddElementMenu();
 }
 
-QToolButton* MyInteractor::getModeMenuRemoveButton() {
+QToolButton* MyInteractor::getRemoveModeButton() {
     return populateRemoveItemMenu();
 }
 
