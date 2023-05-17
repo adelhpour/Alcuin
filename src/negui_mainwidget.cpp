@@ -23,7 +23,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(toolBar(), 0, 0, 1, 3);
-    layout->addWidget(modeMenu(), 1, 0, 1, 1);
+    layout->addWidget(modeMenu(), 1, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
     layout->addWidget(view(), 1, 1, 1, 1);
     setLayout(layout);
 }
