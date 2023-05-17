@@ -12,25 +12,28 @@ MyModeMenu::MyModeMenu(QWidget *parent) : MyFrame(parent) {
 
 void MyModeMenu::setNormalModeButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+    contentLayout->addWidget(decorateNormalButton(button), contentLayout->rowCount(), 0);
+}
+
+QToolButton* MyModeMenu::decorateNormalButton(QToolButton* button) {
+    return button;
 }
 
 void MyModeMenu::setSelectModeButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+    contentLayout->addWidget(decorateSelectButton(button), contentLayout->rowCount(), 0);
+}
+
+QToolButton* MyModeMenu::decorateSelectButton(QToolButton* button) {
+    return button;
 }
 
 void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(createAddButton(buttons), contentLayout->rowCount(), 0);
+    contentLayout->addWidget(decorateAddButton(buttons), contentLayout->rowCount(), 0);
 }
 
-void MyModeMenu::setRemoveModeButton(QToolButton* button) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
-}
-
-QToolButton* MyModeMenu::createAddButton(QList<QToolButton*> buttons) {
+QToolButton* MyModeMenu::decorateAddButton(QList<QToolButton*> buttons) {
     QToolButton* addButton = new MyToolButton();
     addButton->setMenu(createAddButtonMenu(buttons));
 
@@ -50,4 +53,13 @@ QWidgetAction* MyModeMenu::createButtonWidgetAction(QToolButton* button) {
     widgetAction->setDefaultWidget(button);
 
     return widgetAction;
+}
+
+void MyModeMenu::setRemoveModeButton(QToolButton* button) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    contentLayout->addWidget(decorateRemoveButton(button), contentLayout->rowCount(), 0);
+}
+
+QToolButton* MyModeMenu::decorateRemoveButton(QToolButton* button) {
+    return button;
 }

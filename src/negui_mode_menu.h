@@ -14,17 +14,23 @@ public:
 
     void setNormalModeButton(QToolButton* button);
 
+    QToolButton* decorateNormalButton(QToolButton* button);
+
     void setSelectModeButton(QToolButton* button);
+
+    QToolButton* decorateSelectButton(QToolButton* button);
 
     void setAddModeButtons(QList<QToolButton*> buttons);
 
-    void setRemoveModeButton(QToolButton* button);
-
-    QToolButton* createAddButton(QList<QToolButton*> buttons);
+    QToolButton* decorateAddButton(QList<QToolButton*> buttons);
 
     QMenu* createAddButtonMenu(QList<QToolButton*> buttons);
 
     QWidgetAction* createButtonWidgetAction(QToolButton* button);
+
+    void setRemoveModeButton(QToolButton* button);
+
+    QToolButton* decorateRemoveButton(QToolButton* button);
 };
 
 #endif
