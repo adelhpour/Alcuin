@@ -40,7 +40,7 @@ void MyNetworkEditorWidget::setWidgets() {
     _featureMenu = NULL;
     
     ((MyToolBar*)toolBar())->addButtons(((MyInteractor*)interactor())->getToolBarMenuButtons());
-    ((MyModeMenu*)modeMenu())->setAddButtons(((MyInteractor*)interactor())->getModeMenuAddButtons());
+    ((MyModeMenu*)modeMenu())->setAddButtons(((MyInteractor*)interactor())->getAddModeButtons());
     ((MyModeMenu*)modeMenu())->setRemoveButton(((MyInteractor*)interactor())->getModeMenuRemoveButton());
 }
 

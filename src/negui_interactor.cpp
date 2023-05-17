@@ -708,7 +708,7 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     return buttons;
 }
 
-QList<QToolButton*> MyInteractor::getModeMenuAddButtons() {
+QList<QToolButton*> MyInteractor::getAddModeButtons() {
     return populateAddElementMenu();
 }
 
