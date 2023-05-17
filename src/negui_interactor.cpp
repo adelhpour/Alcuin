@@ -12,6 +12,7 @@
 #include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
 #include "negui_customized_common_widgets.h"
+#include "negui_change_stage_command.h"
 
 
 #include <QCoreApplication>
@@ -976,29 +977,6 @@ MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent
         setIcon(item->icon());
         setIconSize(item->iconSize());
     }
-}
-
-// MyChangeStageCommand
-
-MyChangeStageCommand::MyChangeStageCommand(const QJsonObject& previousStageInfo, const QJsonObject& currentStageInfo, QUndoCommand* parent) : QUndoCommand(parent) {
-    _previousStageInfo = previousStageInfo;
-    _currentStageInfo = currentStageInfo;
-}
-
-void MyChangeStageCommand::undo() {
-    emit askForCreateNetwork(_previousStageInfo);
-}
-
-void MyChangeStageCommand::redo() {
-    emit askForCreateNetwork(_currentStageInfo);
-}
-
-const QJsonObject& MyChangeStageCommand::previousStageInfo() {
-    return _previousStageInfo;
-}
-
-const QJsonObject& MyChangeStageCommand::currentStageInfo() {
-    return _currentStageInfo;
 }
 
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name) {

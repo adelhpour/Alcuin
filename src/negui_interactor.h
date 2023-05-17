@@ -260,28 +260,6 @@ public:
     MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
 };
 
-class MyChangeStageCommand : public QObject, public QUndoCommand {
-    Q_OBJECT
-    
-public:
-    
-    MyChangeStageCommand(const QJsonObject& previousStageInfo, const QJsonObject& currentStageInfo, QUndoCommand* parent = nullptr);
-
-    void undo() override;
-    void redo() override;
-    
-    const QJsonObject& previousStageInfo();
-    const QJsonObject& currentStageInfo();
-    
-signals:
-    void askForCreateNetwork(const QJsonObject&);
-
-protected:
-    
-    QJsonObject _previousStageInfo;
-    QJsonObject _currentStageInfo;
-};
-
 MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
 MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
 MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);
