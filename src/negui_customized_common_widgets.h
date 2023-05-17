@@ -80,4 +80,18 @@ public:
     MyComboBox(QWidget* parent = nullptr);
 };
 
+class MyToolButton : public QToolButton {
+
+public:
+
+    MyToolButton(QWidget* parent = nullptr);
+};
+
+class MyToolButtonMenu : public QMenu {
+
+public:
+
+    MyToolButtonMenu(QWidget* parent = nullptr);
+};
+
 #endif

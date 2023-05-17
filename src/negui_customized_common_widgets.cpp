@@ -91,3 +91,16 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
     setAttribute(Qt::WA_MacShowFocusRect, 0);
     setFixedSize(120, 20);
 }
+
+// MyToolButton
+
+MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
+    setPopupMode(QToolButton::InstantPopup);
+    setStyleSheet("QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+// MyToolButtonMenu
+
+MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
+    setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
+}
