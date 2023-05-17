@@ -103,4 +103,5 @@ MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
 
 MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
     setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
+    connect(this, &MyToolButtonMenu::menuItemIsChosen, this, [this] () { close(); });
 }

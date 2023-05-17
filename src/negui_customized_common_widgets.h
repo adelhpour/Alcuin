@@ -81,17 +81,25 @@ public:
 };
 
 class MyToolButton : public QToolButton {
+    Q_OBJECT
 
 public:
 
     MyToolButton(QWidget* parent = nullptr);
+
+signals:
+        void menuItemIsChosen();
 };
 
 class MyToolButtonMenu : public QMenu {
+    Q_OBJECT
 
 public:
 
     MyToolButtonMenu(QWidget* parent = nullptr);
+
+signals:
+    void menuItemIsChosen();
 };
 
 #endif

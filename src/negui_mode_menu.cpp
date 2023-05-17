@@ -42,8 +42,10 @@ QToolButton* MyModeMenu::decorateAddButton(QList<QToolButton*> buttons) {
 
 QMenu* MyModeMenu::createAddButtonMenu(QList<QToolButton*> buttons) {
     QMenu* addButtonMenu = new QMenu();
-    for (QToolButton* button : qAsConst(buttons))
+    for (QToolButton* button : qAsConst(buttons)) {
         addButtonMenu->addAction(createButtonWidgetAction(button));
+        connect((MyToolButton*)button, &MyToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
+    }
 
     return addButtonMenu;
 }

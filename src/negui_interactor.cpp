@@ -801,18 +801,30 @@ QList<QToolButton*> MyInteractor::createElementStyleButtons() {
 QMenu* MyInteractor::createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory) {
     QMenu* menu = new MyToolButtonMenu();
     // node
-    if (nodeStylesOfCategory.size())
-        menu->addAction(createNodeStyleWidgetAction(nodeStylesOfCategory, menu));
+    if (nodeStylesOfCategory.size()) {
+        QWidgetAction* nodeStyleWidgetAction = createNodeStyleWidgetAction(nodeStylesOfCategory, menu);
+        connect(nodeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddNodeMode(MyPluginItemBase*)));
+        connect(nodeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
+        menu->addAction(nodeStyleWidgetAction);
+    }
     if (nodeStylesOfCategory.size() && (edgeStylesOfCategory.size() || templateStylesOfCategory.size()))
         menu->addSeparator();
     // edge
-    if (edgeStylesOfCategory.size())
-        menu->addAction(createEdgeStyleWidgetAction(edgeStylesOfCategory, menu));
+    if (edgeStylesOfCategory.size()) {
+        QWidgetAction* edgeStyleWidgetAction = createEdgeStyleWidgetAction(edgeStylesOfCategory, menu);
+        connect(edgeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
+        connect(edgeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
+        menu->addAction(edgeStyleWidgetAction);
+    }
     if (edgeStylesOfCategory.size() && templateStylesOfCategory.size())
         menu->addSeparator();
     // template
-    if (templateStylesOfCategory.size())
-        menu->addAction(createEdgeStyleWidgetAction(templateStylesOfCategory, menu));
+    if (templateStylesOfCategory.size()) {
+        QWidgetAction* templateStyleWidgetAction = createEdgeStyleWidgetAction(templateStylesOfCategory, menu);
+        connect(templateStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
+        connect(templateStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
+        menu->addAction(templateStyleWidgetAction);
+    }
 
     return menu;
 }
@@ -838,20 +850,19 @@ QToolButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QStr
     button->setText(text);
     button->setToolTip("Add " + text + " to the network");
     button->setMenu(subMenu);
+    connect(subMenu, SIGNAL(menuItemIsChosen()), button, SIGNAL(menuItemIsChosen()));
     return button;
 }
 
 QWidgetAction* MyInteractor::createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent) {
     MyWidgetAction* widgetAction = new MyWidgetAction(parent);
     widgetAction->setItems(nodeStyles);
-    connect(widgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddNodeMode(MyPluginItemBase*)));
     return widgetAction;
 }
 
 QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*> edgeStyles, QWidget* parent) {
     MyWidgetAction* widgetAction = new MyWidgetAction(parent);
     widgetAction->setItems(edgeStyles);
-    connect(widgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
     return widgetAction;
 }
 

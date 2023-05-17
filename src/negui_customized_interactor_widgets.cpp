@@ -76,7 +76,7 @@ QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items)
 
 QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
     QPushButton* itemPreviewButton = new MyItemPreviewButton(item);
-    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); ((MyToolButtonMenu*)(this->parent()))->close(); });
+    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); });
 
     return itemPreviewButton;
 }
