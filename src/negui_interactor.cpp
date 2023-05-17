@@ -709,11 +709,11 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
 }
 
 QToolButton* MyInteractor::getNormalModeButton() {
-    return new MyToolButton();
+    return createNormalModeMenuButton();
 }
 
 QToolButton* MyInteractor::getSelectModeButton() {
-    return new MyToolButton();
+    return createSelectModeMenuButton();
 }
 
 QList<QToolButton*> MyInteractor::getAddModeButtons() {
@@ -722,6 +722,22 @@ QList<QToolButton*> MyInteractor::getAddModeButtons() {
 
 QToolButton* MyInteractor::getRemoveModeButton() {
     return createRemoveElementMenuButton();
+}
+
+QToolButton* MyInteractor::createNormalModeMenuButton() {
+    MyToolButton* button = new MyToolButton();
+    button->setText("Normal Mode");
+    button->setToolTip(tr("Set the scene mode to the normal mode"));
+    connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
+    return button;
+}
+
+QToolButton* MyInteractor::createSelectModeMenuButton() {
+    MyToolButton* button = new MyToolButton();
+    button->setText("Select Mode");
+    button->setToolTip(tr("Set the scene mode to the select mode"));
+    connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
+    return button;
 }
 
 QToolButton* MyInteractor::createImportMenuButton() {
@@ -813,7 +829,6 @@ QToolButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QStr
     button->setMenu(subMenu);
     return button;
 }
-
 
 QWidgetAction* MyInteractor::createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent) {
     MyWidgetAction* widgetAction = new MyWidgetAction(parent);

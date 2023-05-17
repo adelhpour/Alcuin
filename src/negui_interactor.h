@@ -156,7 +156,9 @@ protected:
     // plugins
     void loadPlugins();
     
-    // menus
+    // menu buttons
+    QToolButton* createNormalModeMenuButton();
+    QToolButton* createSelectModeMenuButton();
     QToolButton* createImportMenuButton();
     QToolButton* createExportMenuButton();
     QList<QToolButton*> createAddElementMenuButtons();
