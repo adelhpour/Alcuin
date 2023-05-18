@@ -16,6 +16,11 @@ void MyModeMenu::setNormalModeButton(QToolButton* button) {
 }
 
 QToolButton* MyModeMenu::decorateNormalButton(QToolButton* button) {
+    QPixmap pixmap("/Users/home/Downloads/feather/mouse-pointer.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
+
     return button;
 }
 
@@ -25,6 +30,11 @@ void MyModeMenu::setSelectModeButton(QToolButton* button) {
 }
 
 QToolButton* MyModeMenu::decorateSelectButton(QToolButton* button) {
+    QPixmap pixmap("/Users/home/Downloads/feather/maximize.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
+
     return button;
 }
 
@@ -34,10 +44,15 @@ void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
 }
 
 QToolButton* MyModeMenu::decorateAddButton(QList<QToolButton*> buttons) {
-    QToolButton* addButton = new MyToolButton();
-    addButton->setMenu(createAddButtonMenu(buttons));
+    QToolButton* button = new MyToolButton();
+    button->setMenu(createAddButtonMenu(buttons));
 
-    return addButton;
+    QPixmap pixmap("/Users/home/Downloads/feather/plus-square.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
+
+    return button;
 }
 
 QMenu* MyModeMenu::createAddButtonMenu(QList<QToolButton*> buttons) {
@@ -63,5 +78,40 @@ void MyModeMenu::setRemoveModeButton(QToolButton* button) {
 }
 
 QToolButton* MyModeMenu::decorateRemoveButton(QToolButton* button) {
+    QPixmap pixmap("/Users/home/Downloads/feather/minus-square.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
+    return button;
+}
+
+void MyModeMenu::setExtraButtons() {
+    setZoomInButton(new MyToolButton());
+    setZoomOutButton(new MyToolButton());
+}
+
+void MyModeMenu::setZoomInButton(QToolButton* button) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    contentLayout->addWidget(decorateZoomInButton(button), contentLayout->rowCount(), 0);
+}
+
+QToolButton* MyModeMenu::decorateZoomInButton(QToolButton* button) {
+    QPixmap pixmap("/Users/home/Downloads/feather/zoom-in.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
+    return button;
+}
+
+void MyModeMenu::setZoomOutButton(QToolButton* button) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    contentLayout->addWidget(decorateZoomOutButton(button), contentLayout->rowCount(), 0);
+}
+
+QToolButton* MyModeMenu::decorateZoomOutButton(QToolButton* button) {
+    QPixmap pixmap("/Users/home/Downloads/feather/zoom-out.svg");
+    QIcon buttonIcon(pixmap);
+    button->setIcon(buttonIcon);
+    button->setIconSize(pixmap.rect().size());
     return button;
 }
