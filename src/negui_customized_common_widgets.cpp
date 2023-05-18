@@ -96,7 +96,7 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
 
 MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
     setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0} QToolButton {background-color : white; }");
 }
 
 // MyToolButtonMenu
