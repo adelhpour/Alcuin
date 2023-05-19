@@ -724,7 +724,7 @@ QToolButton* MyInteractor::getRemoveModeButton() {
 }
 
 QToolButton* MyInteractor::createNormalModeMenuButton() {
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyModeToolButton();
     button->setText("Normal Mode");
     button->setToolTip(tr("Set the scene mode to the normal mode"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
@@ -732,7 +732,7 @@ QToolButton* MyInteractor::createNormalModeMenuButton() {
 }
 
 QToolButton* MyInteractor::createSelectModeMenuButton() {
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyModeToolButton();
     button->setText("Select Mode");
     button->setToolTip(tr("Set the scene mode to the select mode"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
@@ -740,8 +740,8 @@ QToolButton* MyInteractor::createSelectModeMenuButton() {
 }
 
 QToolButton* MyInteractor::createImportMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
+    QToolButton* button = new MyToolButton();
+    QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* importWidgetAction = new MyWidgetAction(subMenu);
     importWidgetAction->setItems(getPluginsOfType(plugins(), "importtool"));
     connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(readFromFile(MyPluginItemBase*)));
@@ -756,8 +756,8 @@ QToolButton* MyInteractor::createExportMenuButton() {
     QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
     QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
     
-    MyToolButton* button = new MyToolButton();
-    MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
+    QToolButton* button = new MyToolButton();
+    QMenu* subMenu = new MyToolButtonMenu(button);
     
     // data export
     if (dataExportPlugins.size()) {
@@ -867,7 +867,7 @@ QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*
 }
 
 QToolButton* MyInteractor::createRemoveElementMenuButton() {
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyModeToolButton();
     button->setText("Remove");
     button->setToolTip(tr("Remove an item from the network"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableRemoveMode);
@@ -875,8 +875,8 @@ QToolButton* MyInteractor::createRemoveElementMenuButton() {
 }
 
 QToolButton* MyInteractor::createAutoLayoutMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    MyToolButtonMenu* subMenu = new MyToolButtonMenu(button);
+    QToolButton* button = new MyToolButton();
+    QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* autoLayoutWidgetAction = new MyWidgetAction(subMenu);
     autoLayoutWidgetAction->setItems((getPluginsOfType(plugins(), "autolayoutengine")));
     connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(autoLayout(MyPluginItemBase*)));
@@ -891,7 +891,7 @@ QToolButton* MyInteractor::createUndoActionMenuButton() {
     QAction* action = undoStack()->createUndoAction(this, tr("Undo"));
     action->setShortcuts(QKeySequence::Undo);
     
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
     return button;
 }
@@ -900,13 +900,13 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
     QAction* action = undoStack()->createRedoAction(this, tr("Redo"));
     action->setShortcuts(QKeySequence::Redo);
     
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
     return button;
 }
 
 QToolButton* MyInteractor::createResetSceneMenuButton() {
-    MyToolButton* button = new MyToolButton();
+    QToolButton* button = new MyToolButton();
     button->setText("Reset");
     button->setToolTip(tr("Remove all network elements from the scene"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::resetNetwork);

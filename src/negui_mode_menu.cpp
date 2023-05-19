@@ -44,7 +44,7 @@ void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
 }
 
 QToolButton* MyModeMenu::decorateAddButton(QList<QToolButton*> buttons) {
-    QToolButton* button = new MyToolButton();
+    QToolButton* button = new MyModeToolButton();
     button->setMenu(createAddButtonMenu(buttons));
 
     QPixmap pixmap("/Users/home/Downloads/feather/plus-square.svg");
