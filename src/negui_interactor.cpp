@@ -472,7 +472,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 }
 
 void MyInteractor::selectNode(MyElementBase* element) {
-    if (getMode() == SELECT_NODE_MODE) {
+    if (getMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -481,7 +481,7 @@ void MyInteractor::selectNode(MyElementBase* element) {
 }
 
 void MyInteractor::selectEdge(MyElementBase* element) {
-    if (getMode() == SELECT_EDGE_MODE) {
+    if (getMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
