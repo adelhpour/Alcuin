@@ -26,6 +26,8 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     layout->addWidget(modeMenu(), 1, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
     layout->addWidget(view(), 1, 1, 1, 1);
     setLayout(layout);
+
+    setReadyToLaunch();
 }
 
 MyNetworkEditorWidget::~MyNetworkEditorWidget() {
@@ -49,9 +51,13 @@ void MyNetworkEditorWidget::setWidgets() {
 }
 
 void MyNetworkEditorWidget::setInteractions() {
-    /// network editor widget
-    // feature menu
+    /// feature menu
+    // display feature menu
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
+
+    /// mode menu
+    // set mode
+    connect((MyInteractor*)interactor(), SIGNAL(modeIsSet(const QString&)), modeMenu(), SLOT(setMode(const QString&)));
 
     /// graphics view
     // export screen scene
@@ -96,7 +102,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
 
     // remove menu
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {
@@ -127,4 +133,8 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         _featureMenu->deleteLater();
         _featureMenu = NULL;
     }
+}
+
+void MyNetworkEditorWidget::setReadyToLaunch() {
+    ((MyInteractor*)interactor())->enableNormalMode();
 }

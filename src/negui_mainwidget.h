@@ -33,6 +33,7 @@ protected:
     
     void setWidgets();
     void setInteractions();
+    void setReadyToLaunch();
     
     QWidget* _toolBar;
     QWidget* _view;
