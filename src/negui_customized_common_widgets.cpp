@@ -101,8 +101,8 @@ MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
 
 // MyModeToolButton
 
-MyModeToolButton::MyModeToolButton(QWidget* parent) : MyToolButton(parent) {
-
+MyModeToolButton::MyModeToolButton(const QString& mode, QWidget* parent) : MyToolButton(parent) {
+    _mode = mode;
 }
 
 void MyModeToolButton::setActive(const bool& active) {
@@ -113,11 +113,15 @@ void MyModeToolButton::setActive(const bool& active) {
 }
 
 void MyModeToolButton::setStyleToActiveForm() {
-    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
 }
 
 void MyModeToolButton::setStyleToInactiveForm() {
-    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+const QString& MyModeToolButton::mode() {
+    return _mode;
 }
 
 // MyToolButtonMenu

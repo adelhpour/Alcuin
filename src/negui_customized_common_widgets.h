@@ -96,13 +96,18 @@ class MyModeToolButton : public MyToolButton {
 
 public:
 
-    MyModeToolButton(QWidget* parent = nullptr);
+    MyModeToolButton(const QString& mode = "", QWidget* parent = nullptr);
 
     void setActive(const bool& active);
 
     void setStyleToActiveForm();
 
     void setStyleToInactiveForm();
+
+    const QString& mode();
+
+protected:
+    QString _mode;
 };
 
 class MyToolButtonMenu : public QMenu {
