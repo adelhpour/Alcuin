@@ -39,7 +39,22 @@ public:
     void setZoomOutButton(QToolButton* button);
 
     QToolButton* decorateZoomOutButton(QToolButton* button);
+
+    QList<QToolButton*> getButtons();
+
+public slots:
+
+    void setMode(const QString& mode);
+
+    void deactivateButtons();
+
+protected:
+    QList<QToolButton*> _buttons;
 };
+
+const bool isModeToolButton(QToolButton* button);
+
+const bool isButtonOfTheMode(MyModeToolButton* button, const QString& mode);
 
 #endif
 
