@@ -91,6 +91,20 @@ signals:
         void menuItemIsChosen();
 };
 
+class MyModeToolButton : public MyToolButton {
+    Q_OBJECT
+
+public:
+
+    MyModeToolButton(QWidget* parent = nullptr);
+
+    void setActive(const bool& active);
+
+    void setStyleToActiveForm();
+
+    void setStyleToInactiveForm();
+};
+
 class MyToolButtonMenu : public QMenu {
     Q_OBJECT
 

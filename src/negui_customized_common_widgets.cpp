@@ -96,7 +96,28 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
 
 MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
     setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0} QToolButton {background-color : white; }");
+    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+// MyModeToolButton
+
+MyModeToolButton::MyModeToolButton(QWidget* parent) : MyToolButton(parent) {
+
+}
+
+void MyModeToolButton::setActive(const bool& active) {
+    if (active)
+        setStyleToActiveForm();
+    else
+        setStyleToInactiveForm();
+}
+
+void MyModeToolButton::setStyleToActiveForm() {
+    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+void MyModeToolButton::setStyleToInactiveForm() {
+    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
 }
 
 // MyToolButtonMenu
