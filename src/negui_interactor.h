@@ -20,8 +20,9 @@ public:
     typedef enum {
         NORMAL_MODE,
         ADD_NODE_MODE,
-        SELECT_NODE_MODE,
         ADD_EDGE_MODE,
+        SELECT_MODE,
+        SELECT_NODE_MODE,
         SELECT_EDGE_MODE,
         REMOVE_MODE,
     } SceneMode;
@@ -134,8 +135,9 @@ public slots:
     // modes
     void enableNormalMode();
     void enableAddNodeMode(MyPluginItemBase* style);
-    void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableAddEdgeMode(MyPluginItemBase* style);
+    void enableSelectMode(const QString& elementCategory = "");
+    void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
     void enableRemoveMode();
     
@@ -151,7 +153,9 @@ private slots:
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyElementBase* parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position);
     void createChangeStageCommand();
-    void setSelectionAreaCoveredNodesSelected();
+    void createSelectionAreaGraphicsItem(const QPointF& position);
+    void selectSelectionAreaCoveredNodes();
+    void selectSelectionAreaCoveredEdges();
     
 protected:
     

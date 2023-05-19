@@ -182,10 +182,12 @@ const QString MyInteractor::getModeAsString() {
         return "Normal";
     else if (_mode == ADD_NODE_MODE)
         return "Add_Node";
-    else if (_mode == SELECT_NODE_MODE)
-        return "Select_Node";
     else if (_mode == ADD_EDGE_MODE)
         return "Add_Edge";
+    else if (_mode == SELECT_MODE)
+        return "Select";
+    else if (_mode == SELECT_NODE_MODE)
+        return "Select_Node";
     else if (_mode == SELECT_EDGE_MODE)
         return "Select_Edge";
     else if (_mode == REMOVE_MODE)
@@ -547,6 +549,29 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
 }
 
+void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
+    enableNormalMode();
+    setMode(ADD_EDGE_MODE);
+    setEdgeStyle(dynamic_cast<MyElementStyleBase*>(style));
+    for (MyElementBase *node : qAsConst(nodes()))
+        node->enableAddEdgeMode();
+    for (MyElementBase *edge : qAsConst(edges()))
+        edge->enableAddEdgeMode();
+
+    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
+}
+
+void MyInteractor::enableSelectMode(const QString& elementCategory) {
+    enableNormalMode();
+    setMode(SELECT_MODE);
+    for (MyElementBase *node : qAsConst(nodes()))
+        node->enableSelectNodeMode();
+    for (MyElementBase *edge : qAsConst(edges()))
+        edge->enableSelectEdgeMode();
+
+    emit askForSetToolTip("Select " + elementCategory);
+}
+
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
     enableNormalMode();
     setMode(SELECT_NODE_MODE);
@@ -556,18 +581,6 @@ void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
         edge->enableSelectNodeMode();
     
     emit askForSetToolTip("Select " + nodeCategory + " nodes");
-}
-
-void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
-    enableNormalMode();
-    setMode(ADD_EDGE_MODE);
-    setEdgeStyle(dynamic_cast<MyElementStyleBase*>(style));
-    for (MyElementBase *node : qAsConst(nodes()))
-        node->enableAddEdgeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
-        edge->enableAddEdgeMode();
-    
-    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
 }
 
 void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
@@ -600,19 +613,22 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
-    if (getMode() == NORMAL_MODE) {
-        if (!_selectionAreaGraphicsItem) {
-            //for (MyElementBase* node : qAsConst(nodes()))
-                //node->setSelected(false);
-            _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
-            emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
-        }
-        ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->updateExtents(position);
-        setSelectionAreaCoveredNodesSelected();
+    if (getMode() == SELECT_MODE) {
+        createSelectionAreaGraphicsItem(position);
+        selectSelectionAreaCoveredNodes();
+        selectSelectionAreaCoveredEdges();
     }
 }
 
-void MyInteractor::setSelectionAreaCoveredNodesSelected() {
+void MyInteractor::createSelectionAreaGraphicsItem(const QPointF& position) {
+    if (!_selectionAreaGraphicsItem) {
+        _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
+        emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
+    }
+    ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->updateExtents(position);
+}
+
+void MyInteractor::selectSelectionAreaCoveredNodes() {
     QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
     for (MyElementBase* node : qAsConst(nodes())) {
         node->setSelected(false);
@@ -620,6 +636,19 @@ void MyInteractor::setSelectionAreaCoveredNodesSelected() {
             if (item->parentItem()) {
                 if (node->graphicsItem() == item->parentItem())
                     node->setSelected(true);
+            }
+        }
+    }
+}
+
+void MyInteractor::selectSelectionAreaCoveredEdges() {
+    QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
+    for (MyElementBase* edge : qAsConst(edges())) {
+        edge->setSelected(false);
+        for (QGraphicsItem* item : qAsConst(selectedItems)) {
+            if (item->parentItem()) {
+                if (edge->graphicsItem() == item->parentItem())
+                    edge->setSelected(true);
             }
         }
     }
@@ -752,7 +781,7 @@ QToolButton* MyInteractor::createSelectModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Select");
     button->setText("Select Mode");
     button->setToolTip(tr("Set the scene mode to the select mode"));
-    connect(button, SIGNAL(clicked()), this, SLOT(enableSelectNodeMode()));
+    connect(button, SIGNAL(clicked()), this, SLOT(enableSelectMode()));
     return button;
 }
 
