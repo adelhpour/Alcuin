@@ -66,7 +66,6 @@ public:
     const QString getModeAsString();
     
     // network
-    void resetNetwork();
     void setNetworkExtents(const QJsonObject& json);
     void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
     const QRectF& networkExtents();
@@ -119,6 +118,7 @@ public slots:
     QToolButton* getRemoveModeButton();
     
     // network
+    void resetNetwork();
     void createNetwork(const QJsonObject &json);
     QJsonObject exportNetworkInfo();
     

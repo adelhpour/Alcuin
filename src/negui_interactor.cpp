@@ -744,7 +744,7 @@ QToolButton* MyInteractor::createNormalModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Normal");
     button->setText("Normal Mode");
     button->setToolTip(tr("Set the scene mode to the normal mode"));
-    connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
+    connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     return button;
 }
 
@@ -752,7 +752,7 @@ QToolButton* MyInteractor::createSelectModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Select");
     button->setText("Select Mode");
     button->setToolTip(tr("Set the scene mode to the select mode"));
-    connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
+    connect(button, SIGNAL(clicked()), this, SLOT(enableSelectNodeMode()));
     return button;
 }
 
@@ -887,7 +887,7 @@ QToolButton* MyInteractor::createRemoveElementMenuButton() {
     QToolButton* button = new MyModeToolButton("Remove");
     button->setText("Remove");
     button->setToolTip(tr("Remove an item from the network"));
-    connect(button, &QToolButton::clicked, this, &MyInteractor::enableRemoveMode);
+    connect(button, SIGNAL(clicked()), this, SLOT(enableRemoveMode()));
     return button;
 }
 
@@ -926,8 +926,8 @@ QToolButton* MyInteractor::createResetSceneMenuButton() {
     QToolButton* button = new MyToolButton();
     button->setText("Reset");
     button->setToolTip(tr("Remove all network elements from the scene"));
-    connect(button, &QToolButton::clicked, this, &MyInteractor::resetNetwork);
-    connect(button, &QToolButton::clicked, this, &MyInteractor::askForResetScale);
+    connect(button, SIGNAL(clicked()), this, SLOT(resetNetwork()));
+    connect(button, SIGNAL(clicked()), this, SIGNAL(askForResetScale()));
     return button;
 }
 
