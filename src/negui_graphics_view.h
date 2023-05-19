@@ -2,6 +2,7 @@
 #define __NEGUI_GRAPHICS_VIEW_H
 
 #include <QGraphicsView>
+#include <QToolButton>
 #include <QWheelEvent>
 #include <QPrinter>
 #include <QProxyStyle>
@@ -18,6 +19,12 @@ public:
     void setMaxScale(const qreal& maxScale);
     const qreal minScale() const;
     const qreal maxScale() const;
+    void animatedScale(const qint32& delta);
+
+    QToolButton* getZoomInButton();
+    QToolButton* getZoomOutButton();
+    QToolButton* createZoomInMenuButton();
+    QToolButton* createZoomOutMenuButton();
     
 signals:
     void enterKeyIsPressed();
@@ -38,11 +45,11 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     
-    int _numScheduledScalings;
+    qint32 _numScheduledScalings;
     qreal _minScale;
     qreal _maxScale;
-    int _panStartX;
-    int _panStartY;
+    qint32 _panStartX;
+    qint32 _panStartY;
     bool _panMode;
 };
 
@@ -51,7 +58,7 @@ class MyProxyStyle : public QProxyStyle {
 public:
     
     MyProxyStyle(QStyle *style = nullptr);
-    
+
     int styleHint(StyleHint hint, const QStyleOption* option = nullptr, const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const override;
 };
 

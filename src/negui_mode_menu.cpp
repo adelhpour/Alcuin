@@ -85,11 +85,6 @@ QToolButton* MyModeMenu::decorateRemoveButton(QToolButton* button) {
     return button;
 }
 
-void MyModeMenu::setExtraButtons() {
-    setZoomInButton(new MyToolButton());
-    setZoomOutButton(new MyToolButton());
-}
-
 void MyModeMenu::setZoomInButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     contentLayout->addWidget(decorateZoomInButton(button), contentLayout->rowCount(), 0);

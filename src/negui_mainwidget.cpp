@@ -44,7 +44,8 @@ void MyNetworkEditorWidget::setWidgets() {
     ((MyModeMenu*)modeMenu())->setSelectModeButton(((MyInteractor*)interactor())->getSelectModeButton());
     ((MyModeMenu*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons());
     ((MyModeMenu*)modeMenu())->setRemoveModeButton(((MyInteractor*)interactor())->getRemoveModeButton());
-    ((MyModeMenu*)modeMenu())->setExtraButtons();
+    ((MyModeMenu*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton());
+    ((MyModeMenu*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton());
 }
 
 void MyNetworkEditorWidget::setInteractions() {

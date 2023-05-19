@@ -1,5 +1,7 @@
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
+#include "negui_customized_common_widgets.h"
+
 #include <QScrollbar>
 #include <QTimeLine>
 
@@ -79,15 +81,43 @@ void MyGraphicsView::animFinished() {
     sender()->~QObject();
 }
 
-void MyGraphicsView::wheelEvent(QWheelEvent * event) {
-    _numScheduledScalings = event->delta();
-    
+void MyGraphicsView::animatedScale(const qint32& delta) {
+    _numScheduledScalings = delta;
+
     QTimeLine* anim = new QTimeLine(10, this);
     anim->setUpdateInterval(1);
-    
+
     connect(anim, SIGNAL(valueChanged(qreal)), SLOT(scalingTime(qreal)));
     connect(anim, SIGNAL(finished()), this, SLOT(animFinished()));
     anim->start();
+}
+
+QToolButton* MyGraphicsView::getZoomInButton() {
+    return createZoomInMenuButton();
+}
+
+QToolButton* MyGraphicsView::getZoomOutButton() {
+    return createZoomOutMenuButton();
+}
+
+QToolButton* MyGraphicsView::createZoomInMenuButton() {
+    MyToolButton* button = new MyToolButton();
+    button->setText("Zoom In");
+    button->setToolTip(tr("Zooming in"));
+    connect(button, &QToolButton::clicked, this, [this] () { animatedScale(100); });
+    return button;
+}
+
+QToolButton* MyGraphicsView::createZoomOutMenuButton() {
+    MyToolButton* button = new MyToolButton();
+    button->setText("Zoom Out");
+    button->setToolTip(tr("Zooming out"));
+    connect(button, &QToolButton::clicked, this, [this] () { animatedScale(-100); });
+    return button;
+}
+
+void MyGraphicsView::wheelEvent(QWheelEvent * event) {
+    animatedScale(event->delta());
 }
 
 void MyGraphicsView::mousePressEvent(QMouseEvent *event) {

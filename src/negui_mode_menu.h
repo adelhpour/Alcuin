@@ -32,8 +32,6 @@ public:
 
     QToolButton* decorateRemoveButton(QToolButton* button);
 
-    void setExtraButtons();
-
     void setZoomInButton(QToolButton* button);
 
     QToolButton* decorateZoomInButton(QToolButton* button);
