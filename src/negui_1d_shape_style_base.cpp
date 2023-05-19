@@ -38,7 +38,7 @@ const QPen My1DShapeStyleBase::selectedPen() const {
         pen.setWidth(((MyStrokeWidthParameter*)parameter)->defaultValue());
 
     // stroke
-    pen.setColor(QColor("#4169e1"));
+    pen.setColor(QColor("#0000CD"));
 
     return pen;
 }
