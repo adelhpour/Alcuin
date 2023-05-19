@@ -51,7 +51,6 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     loadPlugins();
     resetNetwork();
     _stageInfo = exportNetworkInfo();
-    enableNormalMode();
 };
 
 void MyInteractor::readPluginItemsInfo(const QJsonObject &json) {
@@ -171,10 +170,28 @@ void MyInteractor::createChangeStageCommand() {
 
 void MyInteractor::setMode(SceneMode mode) {
     _mode = mode;
+    emit modeIsSet(getModeAsString());
 }
 
-MyInteractor::SceneMode MyInteractor::mode() {
+MyInteractor::SceneMode MyInteractor::getMode() {
     return _mode;
+}
+
+const QString MyInteractor::getModeAsString() {
+    if (_mode == NORMAL_MODE)
+        return "Normal";
+    else if (_mode == ADD_NODE_MODE)
+        return "Add_Node";
+    else if (_mode == SELECT_NODE_MODE)
+        return "Select_Node";
+    else if (_mode == ADD_EDGE_MODE)
+        return "Add_Edge";
+    else if (_mode == SELECT_EDGE_MODE)
+        return "Select_Edge";
+    else if (_mode == REMOVE_MODE)
+        return "Remove";
+
+    return "";
 }
 
 void MyInteractor::createNetwork(const QJsonObject& json) {
@@ -255,7 +272,7 @@ void MyInteractor::addNode(MyElementBase* n) {
 }
 
 void MyInteractor::addNewNode(const QPointF& position) {
-    if (mode() == ADD_NODE_MODE) {
+    if (getMode() == ADD_NODE_MODE) {
         MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
         addNode(node);
         createChangeStageCommand();
@@ -351,7 +368,7 @@ void MyInteractor::addEdge(MyElementBase* e) {
 }
 
 void MyInteractor::addNewEdge(MyElementBase* element) {
-    if (mode() == ADD_EDGE_MODE) {
+    if (getMode() == ADD_EDGE_MODE) {
         if (!_newEdgeBuilder) {
             if (edgeStyle()->type() == "templatestyle") {
                 _newEdgeBuilder = new MyNewTemplateBuilder(edgeStyle());
@@ -453,7 +470,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 }
 
 void MyInteractor::selectNode(MyElementBase* element) {
-    if (mode() == SELECT_NODE_MODE) {
+    if (getMode() == SELECT_NODE_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -462,7 +479,7 @@ void MyInteractor::selectNode(MyElementBase* element) {
 }
 
 void MyInteractor::selectEdge(MyElementBase* element) {
-    if (mode() == SELECT_EDGE_MODE) {
+    if (getMode() == SELECT_EDGE_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -471,7 +488,7 @@ void MyInteractor::selectEdge(MyElementBase* element) {
 }
 
 void MyInteractor::removeItem(MyElementBase* element) {
-    if (mode() == REMOVE_MODE) {
+    if (getMode() == REMOVE_MODE) {
         if (element->type() == MyElementBase::NODE_ELEMENT) {
             removeNode(element);
             for (MyElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
@@ -583,7 +600,7 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
-    if (mode() == NORMAL_MODE) {
+    if (getMode() == NORMAL_MODE) {
         if (!_selectionAreaGraphicsItem) {
             //for (MyElementBase* node : qAsConst(nodes()))
                 //node->setSelected(false);
@@ -724,7 +741,7 @@ QToolButton* MyInteractor::getRemoveModeButton() {
 }
 
 QToolButton* MyInteractor::createNormalModeMenuButton() {
-    QToolButton* button = new MyModeToolButton();
+    QToolButton* button = new MyModeToolButton("Normal");
     button->setText("Normal Mode");
     button->setToolTip(tr("Set the scene mode to the normal mode"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
@@ -732,7 +749,7 @@ QToolButton* MyInteractor::createNormalModeMenuButton() {
 }
 
 QToolButton* MyInteractor::createSelectModeMenuButton() {
-    QToolButton* button = new MyModeToolButton();
+    QToolButton* button = new MyModeToolButton("Select");
     button->setText("Select Mode");
     button->setToolTip(tr("Set the scene mode to the select mode"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableNormalMode);
@@ -867,7 +884,7 @@ QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*
 }
 
 QToolButton* MyInteractor::createRemoveElementMenuButton() {
-    QToolButton* button = new MyModeToolButton();
+    QToolButton* button = new MyModeToolButton("Remove");
     button->setText("Remove");
     button->setToolTip(tr("Remove an item from the network"));
     connect(button, &QToolButton::clicked, this, &MyInteractor::enableRemoveMode);

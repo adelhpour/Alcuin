@@ -62,7 +62,8 @@ public:
     
     // modes
     void setMode(SceneMode mode);
-    SceneMode mode();
+    SceneMode getMode();
+    const QString getModeAsString();
     
     // network
     void resetNetwork();
@@ -104,6 +105,7 @@ signals:
     void askForSetToolTip(const QString& toolTip);
     void askForDisplayFeatureMenu(QWidget*);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
+    void modeIsSet(const QString&);
     
     void enterKeyIsPressed();
     
