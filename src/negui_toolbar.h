@@ -13,7 +13,7 @@ public:
     
 public slots:
     
-    void addButtons(QList<QToolButton*> buttons);
+    void setButtons(QList<QToolButton*> buttons);
 };
 
 #endif

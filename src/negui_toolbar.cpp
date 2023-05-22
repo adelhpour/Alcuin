@@ -7,7 +7,7 @@ MyToolBar::MyToolBar(QWidget* parent) : QToolBar(parent) {
     setContentsMargins(0, 0, 0, 0);
 };
 
-void MyToolBar::addButtons(QList<QToolButton*> buttons) {
+void MyToolBar::setButtons(QList<QToolButton*> buttons) {
     for (QToolButton* button : qAsConst(buttons))
         addWidget(button);
 }
