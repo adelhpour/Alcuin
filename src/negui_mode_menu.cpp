@@ -1,5 +1,6 @@
 #include "negui_mode_menu.h"
 #include "negui_customized_mode_menu_widgets.h"
+#include "negui_decorate_menu_buttons.h"
 
 #include <QGridLayout>
 
@@ -12,110 +13,45 @@ MyModeMenu::MyModeMenu(QWidget *parent) : MyFrame(parent) {
 
 void MyModeMenu::setNormalModeButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(decorateNormalButton(button), contentLayout->rowCount(), 0);
-    _buttons.push_back(button);
-}
-
-QToolButton* MyModeMenu::decorateNormalButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/mouse-pointer.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-
-    return button;
-}
-
-void MyModeMenu::setSelectModeButton(QToolButton* button) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(decorateSelectButton(button), contentLayout->rowCount(), 0);
-    _buttons.push_back(button);
-}
-
-QToolButton* MyModeMenu::decorateSelectButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/maximize.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-
-    return button;
-}
-
-void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    QToolButton* button = decorateAddButton(buttons);
+    decorateNormalModeButton(button);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
 }
 
-QToolButton* MyModeMenu::decorateAddButton(QList<QToolButton*> buttons) {
-    QToolButton* button = new MyModeToolButton("Add");
-    button->setMenu(createAddButtonMenu(buttons));
-
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/plus-square.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-
-    return button;
-}
-
-QMenu* MyModeMenu::createAddButtonMenu(QList<QToolButton*> buttons) {
-    QMenu* addButtonMenu = new QMenu();
-    for (QToolButton* button : qAsConst(buttons)) {
-        addButtonMenu->addAction(createButtonWidgetAction(button));
-        connect((MyToolButton*)button, &MyToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
-    }
-
-    return addButtonMenu;
-}
-
-QWidgetAction* MyModeMenu::createButtonWidgetAction(QToolButton* button) {
-    QWidgetAction* widgetAction = new QWidgetAction(this);
-    widgetAction->setDefaultWidget(button);
-
-    return widgetAction;
-}
-
-void MyModeMenu::setRemoveModeButton(QToolButton* button) {
+void MyModeMenu::setSelectModeButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(decorateRemoveButton(button), contentLayout->rowCount(), 0);
+    decorateSelectModeButton(button);
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
 }
 
-QToolButton* MyModeMenu::decorateRemoveButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/minus-square.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-    return button;
+void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QToolButton* button = decorateAddModeButton(buttons);
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+    _buttons.push_back(button);
+}
+
+void MyModeMenu::setRemoveModeButton(QToolButton* button) {
+    QGridLayout *contentLayout = (QGridLayout *) layout();
+    decorateRemoveModeButton(button);
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+    _buttons.push_back(button);
 }
 
 void MyModeMenu::setZoomInButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(decorateZoomInButton(button), contentLayout->rowCount(), 0);
+    decorateZoomInButton(button);
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
-}
-
-QToolButton* MyModeMenu::decorateZoomInButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/zoom-in.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-    return button;
 }
 
 void MyModeMenu::setZoomOutButton(QToolButton* button) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(decorateZoomOutButton(button), contentLayout->rowCount(), 0);
+    QGridLayout *contentLayout = (QGridLayout *) layout();
+    decorateZoomOutButton(button);
+    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
-}
 
-QToolButton* MyModeMenu::decorateZoomOutButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/zoom-out.svg");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
-    return button;
 }
 
 void MyModeMenu::setMode(const QString& mode) {
