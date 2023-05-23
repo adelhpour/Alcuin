@@ -102,16 +102,12 @@ QToolButton* MyGraphicsView::getZoomOutButton() {
 
 QToolButton* MyGraphicsView::createZoomInMenuButton() {
     MyToolButton* button = new MyToolButton();
-    button->setText("Zoom In");
-    button->setToolTip(tr("Zooming in"));
     connect(button, &QToolButton::clicked, this, [this] () { animatedScale(100); });
     return button;
 }
 
 QToolButton* MyGraphicsView::createZoomOutMenuButton() {
     MyToolButton* button = new MyToolButton();
-    button->setText("Zoom Out");
-    button->setToolTip(tr("Zooming out"));
     connect(button, &QToolButton::clicked, this, [this] () { animatedScale(-100); });
     return button;
 }
