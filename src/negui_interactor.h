@@ -174,8 +174,7 @@ protected:
     QMenu* createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory);
     QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
     QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
-    QWidgetAction* createNodeStyleWidgetAction(QList<MyPluginItemBase*> nodeStyles, QWidget* parent);
-    QWidgetAction* createEdgeStyleWidgetAction(QList<MyPluginItemBase*> edgeStyles, QWidget* parent);
+    QWidgetAction* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
     QToolButton* createRemoveElementMenuButton();
     QToolButton* createAutoLayoutMenuButton();
     QToolButton* createUndoActionMenuButton();
