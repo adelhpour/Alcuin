@@ -66,6 +66,7 @@ set(gui_sources
 		negui_customized_interactor_widgets.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu.cpp
+		negui_decorate_menu_buttons.cpp
 		negui_import_tools.cpp
 		negui_export_tools.cpp
 		negui_autolayout_engines.cpp
@@ -137,6 +138,7 @@ set(gui_headers
 		negui_mode_menu.h
 		negui_feature_menu.h
 		negui_interfaces.h
+		negui_decorate_menu_buttons.h
 		negui_import_tools.h
 		negui_export_tools.h
 		negui_autolayout_engines.h
