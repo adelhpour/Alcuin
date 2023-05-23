@@ -12,6 +12,7 @@
 #include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
 #include "negui_customized_interactor_widgets.h"
+#include "negui_decorate_menu_buttons.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -771,16 +772,12 @@ QToolButton* MyInteractor::getRemoveModeButton() {
 
 QToolButton* MyInteractor::createNormalModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Normal");
-    button->setText("Normal Mode");
-    button->setToolTip(tr("Set the scene mode to the normal mode"));
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     return button;
 }
 
 QToolButton* MyInteractor::createSelectModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Select");
-    button->setText("Select Mode");
-    button->setToolTip(tr("Set the scene mode to the select mode"));
     connect(button, SIGNAL(clicked()), this, SLOT(enableSelectMode()));
     return button;
 }
@@ -792,9 +789,8 @@ QToolButton* MyInteractor::createImportMenuButton() {
     importWidgetAction->setItems(getPluginsOfType(plugins(), "importtool"));
     connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(readFromFile(MyPluginItemBase*)));
     subMenu->addAction(importWidgetAction);
-    button->setText("Import");
-    button->setToolTip(tr("Import from a file"));
     button->setMenu(subMenu);
+    decorateImportButton(button);
     return button;
 }
 
@@ -823,10 +819,9 @@ QToolButton* MyInteractor::createExportMenuButton() {
         connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeFigureToFile(MyPluginItemBase*)));
         subMenu->addAction(printExportWidgetAction);
     }
-    
-    button->setText("Export");
-    button->setToolTip(tr("Export to a file"));
+
     button->setMenu(subMenu);
+    decorateExportButton(button);
     return button;
 }
 
@@ -914,8 +909,6 @@ QWidgetAction* MyInteractor::createEdgeStyleWidgetAction(QList<MyPluginItemBase*
 
 QToolButton* MyInteractor::createRemoveElementMenuButton() {
     QToolButton* button = new MyModeToolButton("Remove");
-    button->setText("Remove");
-    button->setToolTip(tr("Remove an item from the network"));
     connect(button, SIGNAL(clicked()), this, SLOT(enableRemoveMode()));
     return button;
 }
@@ -927,9 +920,8 @@ QToolButton* MyInteractor::createAutoLayoutMenuButton() {
     autoLayoutWidgetAction->setItems((getPluginsOfType(plugins(), "autolayoutengine")));
     connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(autoLayout(MyPluginItemBase*)));
     subMenu->addAction(autoLayoutWidgetAction);
-    button->setText("AutoLayout");
-    button->setToolTip(tr("Automatically set the position of the nodes and edges"));
     button->setMenu(subMenu);
+    decorateAutoLayoutButton(button);
     return button;
 }
 
@@ -939,6 +931,10 @@ QToolButton* MyInteractor::createUndoActionMenuButton() {
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
+    decorateUndoActionButton(button);
+    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateUndoActionButton(button); });
+    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateUndoActionButton(button); });
+    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateUndoActionButton(button); });
     return button;
 }
 
@@ -948,15 +944,18 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
+    decorateRedoActionButton(button);
+    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateRedoActionButton(button); });
+    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateRedoActionButton(button); });
+    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateRedoActionButton(button); });
     return button;
 }
 
 QToolButton* MyInteractor::createResetSceneMenuButton() {
     QToolButton* button = new MyToolButton();
-    button->setText("Reset");
-    button->setToolTip(tr("Remove all network elements from the scene"));
     connect(button, SIGNAL(clicked()), this, SLOT(resetNetwork()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForResetScale()));
+    decorateResetSceneButton(button);
     return button;
 }
 
