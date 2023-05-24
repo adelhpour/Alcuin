@@ -73,26 +73,31 @@ void MyNodeSceneGraphicsItemBase::enableNormalMode() {
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddNodeMode() {
+    MyElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectNodeMode() {
+    MyElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddEdgeMode() {
+    MyElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
+    MyElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableRemoveMode() {
+    MyElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }

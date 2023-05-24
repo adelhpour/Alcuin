@@ -58,22 +58,27 @@ void MyEdgeSceneGraphicsItem::enableNormalMode() {
 }
 
 void MyEdgeSceneGraphicsItem::enableAddNodeMode() {
+    MyElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableSelectNodeMode() {
+    MyElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableAddEdgeMode() {
+    MyElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
+    MyElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::PointingHandCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableRemoveMode() {
+    MyElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::PointingHandCursor);
 }
 

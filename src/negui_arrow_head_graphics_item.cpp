@@ -43,22 +43,27 @@ void MyArrowHeadSceneGraphicsItem::enableNormalMode() {
 }
 
 void MyArrowHeadSceneGraphicsItem::enableAddNodeMode() {
+    MyElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableSelectNodeMode() {
+    MyElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableAddEdgeMode() {
+    MyElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableSelectEdgeMode() {
+    MyElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableRemoveMode() {
+    MyElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::ArrowCursor);
 }
 
