@@ -130,3 +130,16 @@ MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
     setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
     connect(this, &MyToolButtonMenu::menuItemIsChosen, this, [this] () { close(); });
 }
+
+// MyToolButtonCategoryMenu
+
+MyToolButtonCategoryMenu::MyToolButtonCategoryMenu(QWidget* parent) : MyToolButtonMenu(parent) {
+    _horizontalPadding = 80;
+}
+
+bool MyToolButtonCategoryMenu::event(QEvent *event) {
+    if (event->type() == QEvent::Show)
+        move(pos() + QPoint(_horizontalPadding, 0));
+
+    return QMenu::event(event);
+}

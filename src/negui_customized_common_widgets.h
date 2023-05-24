@@ -13,6 +13,7 @@
 #include <QTreeView>
 #include <QStandardItem>
 #include <QStandardItem>
+#include <QEvent>
 
 class MyFrame : public QFrame {
     Q_OBJECT
@@ -119,6 +120,20 @@ public:
 
 signals:
     void menuItemIsChosen();
+};
+
+class MyToolButtonCategoryMenu : public MyToolButtonMenu {
+    Q_OBJECT
+
+public:
+
+    MyToolButtonCategoryMenu(QWidget* parent = nullptr);
+
+    bool event(QEvent *event) override;
+
+protected:
+
+    qint32 _horizontalPadding;
 };
 
 #endif

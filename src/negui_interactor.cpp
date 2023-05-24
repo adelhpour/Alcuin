@@ -840,7 +840,7 @@ QList<QToolButton*> MyInteractor::createElementStyleButtons() {
 }
 
 QMenu* MyInteractor::createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory) {
-    QMenu* menu = new MyToolButtonMenu();
+    QMenu* menu = new MyToolButtonCategoryMenu();
     // node
     if (nodeStylesOfCategory.size()) {
         QWidgetAction* nodeStyleWidgetAction = createElementStyleWidgetAction(nodeStylesOfCategory, menu);
