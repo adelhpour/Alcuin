@@ -76,6 +76,7 @@ protected:
     MyElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;
+    bool _canDisplayFeatureMenu;
 };
 
 #endif

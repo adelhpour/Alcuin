@@ -9,6 +9,7 @@ MyElementBase::MyElementBase(const QString& name) : MyBase(name) {
     _style = NULL;
     _isActive = false;
     _isSelected = false;
+    _canDisplayFeatureMenu = false;
 }
 
 MyElementGraphicsItemBase* MyElementBase::graphicsItem() {
@@ -52,26 +53,32 @@ const bool MyElementBase::isSelected() {
 
 void MyElementBase::enableNormalMode() {
     setSelected(false);
+    _canDisplayFeatureMenu = true;
     graphicsItem()->enableNormalMode();
 }
 
 void MyElementBase::enableAddNodeMode() {
+    _canDisplayFeatureMenu = false;
     graphicsItem()->enableAddNodeMode();
 }
 
 void MyElementBase::enableSelectNodeMode() {
+    _canDisplayFeatureMenu = false;
     graphicsItem()->enableSelectNodeMode();
 }
 
 void MyElementBase::enableAddEdgeMode() {
+    _canDisplayFeatureMenu = false;
     graphicsItem()->enableAddEdgeMode();
 }
 
 void MyElementBase::enableSelectEdgeMode() {
+    _canDisplayFeatureMenu = false;
     graphicsItem()->enableSelectEdgeMode();
 }
 
 void MyElementBase::enableRemoveMode() {
+    _canDisplayFeatureMenu = false;
     graphicsItem()->enableRemoveMode();
 }
 
@@ -94,11 +101,13 @@ QWidget* MyElementBase::getFeatureMenu() {
 }
 
 void MyElementBase::createFeatureMenu() {
-    MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu());
-    featureMenu->setShapeStyles(style()->shapeStyles());
-    connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
-        updateStyle(shapeStyles);
-        updateGraphicsItem();
-        emit askForCreateChangeStageCommand(); } );
-    emit askForDisplayFeatureMenu(featureMenu);
+    if (_canDisplayFeatureMenu) {
+        MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu());
+        featureMenu->setShapeStyles(style()->shapeStyles());
+        connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+            updateStyle(shapeStyles);
+            updateGraphicsItem();
+            emit askForCreateChangeStageCommand(); } );
+        emit askForDisplayFeatureMenu(featureMenu);
+    }
 }
