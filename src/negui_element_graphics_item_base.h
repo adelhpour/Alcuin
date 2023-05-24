@@ -75,6 +75,7 @@ protected:
     QList<MyShapeStyleBase*> _shapeStyles;
     QList<QGraphicsItem*> _focusedGraphicsItems;
     bool _isChosen;
+    bool _canDisplayFocusedGraphicsItems;
 };
 
 #endif
