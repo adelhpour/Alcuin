@@ -2,8 +2,8 @@
 #include "negui_node_style.h"
 #include <QJsonArray>
 
-MyElementStyleBase* createNodeStyle(const QJsonObject &json) {
-    MyElementStyleBase* style = NULL;
+MyNetworkElementStyleBase* createNodeStyle(const QJsonObject &json) {
+    MyNetworkElementStyleBase* style = NULL;
     if (json.contains("name") && json["name"].isString()) {
         if (isCentroidNodeStyle(json))
             style = new MyCentroidNodeStyle(json["name"].toString());

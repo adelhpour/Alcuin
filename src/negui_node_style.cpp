@@ -5,7 +5,7 @@
 
 // MyNodeStyleBase
 
-MyNodeStyleBase::MyNodeStyleBase(const QString& name) : MyElementStyleBase(name) {
+MyNodeStyleBase::MyNodeStyleBase(const QString& name) : MyNetworkElementStyleBase(name) {
     _category = "Node";
     _parentCategories.push_back("Node");
     _iconSize = QSize(40, 40);
@@ -28,7 +28,7 @@ QList<QString> MyNodeStyleBase::parentCategories() {
 }
 
 void MyNodeStyleBase::read(const QJsonObject &json) {
-    MyElementStyleBase::read(json);
+    MyNetworkElementStyleBase::read(json);
     _parentCategories.clear();
     if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
         QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
@@ -40,7 +40,7 @@ void MyNodeStyleBase::read(const QJsonObject &json) {
 }
 
 void MyNodeStyleBase::write(QJsonObject &json) {
-    MyElementStyleBase::write(json);
+    MyNetworkElementStyleBase::write(json);
     QJsonArray parentCategoriesArray;
     for (QString parentCategory : parentCategories())
         parentCategoriesArray.append(parentCategory);

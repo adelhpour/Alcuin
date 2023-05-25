@@ -19,11 +19,11 @@ void MyNetworkElementBase::updateGraphicsItem() {
     graphicsItem()->update(style()->shapeStyles(), calculateZValue());
 }
 
-MyElementStyleBase* MyNetworkElementBase::style() {
+MyNetworkElementStyleBase* MyNetworkElementBase::style() {
     return _style;
 }
 
-void MyNetworkElementBase::setStyle(MyElementStyleBase* style) {
+void MyNetworkElementBase::setStyle(MyNetworkElementStyleBase* style) {
     _style = style;
 }
 

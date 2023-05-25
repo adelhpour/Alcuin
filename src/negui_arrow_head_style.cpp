@@ -4,7 +4,7 @@
 
 // MyArrowHeadStyleBase
 
-MyArrowHeadStyleBase::MyArrowHeadStyleBase(const QString& name) : MyElementStyleBase(name) {
+MyArrowHeadStyleBase::MyArrowHeadStyleBase(const QString& name) : MyNetworkElementStyleBase(name) {
     _category = "ArrowHead";
 }
 
@@ -21,7 +21,7 @@ const QString MyArrowHeadStyleBase::toolTipText() {
 }
 
 void MyArrowHeadStyleBase::write(QJsonObject &json) {
-    MyElementStyleBase::write(json);
+    MyNetworkElementStyleBase::write(json);
     
     QRectF extents = getShapesExtents();
     

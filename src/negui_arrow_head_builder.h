@@ -3,6 +3,6 @@
 
 #include "negui_network_element_base.h"
 
-MyNetworkElementBase* createArrowHead(const QString& name, MyElementStyleBase* arrowHeadStyle, MyNetworkElementBase* edge);
+MyNetworkElementBase* createArrowHead(const QString& name, MyNetworkElementStyleBase* arrowHeadStyle, MyNetworkElementBase* edge);
 
 #endif

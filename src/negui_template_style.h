@@ -1,9 +1,9 @@
 #ifndef __NEGUI_TEMPLATE_STYLE_H
 #define __NEGUI_TEMPLATE_STYLE_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 
-class MyTemplateStyle : public MyElementStyleBase {
+class MyTemplateStyle : public MyNetworkElementStyleBase {
     Q_OBJECT
     
 public:
@@ -12,15 +12,15 @@ public:
     
     const QString type() const override;
     
-    MyElementStyleBase* intermediaryNodeStyle();
+    MyNetworkElementStyleBase* intermediaryNodeStyle();
     
     void deleteIntermediaryNodeStyle();
     
-    QList<MyElementStyleBase*> sourceEdgeStyles();
+    QList<MyNetworkElementStyleBase*> sourceEdgeStyles();
     
     void clearSourceEdgeStyles();
     
-    QList<MyElementStyleBase*> targetEdgeStyles();
+    QList<MyNetworkElementStyleBase*> targetEdgeStyles();
     
     void clearTargetEdgeStyles();
     
@@ -41,9 +41,9 @@ public:
     void write(QJsonObject &json) override;
 
 protected:
-    MyElementStyleBase* _intermediaryNodeStyle;
-    QList<MyElementStyleBase*> _sourceEdgeStyles;
-    QList<MyElementStyleBase*> _targetEdgeStyles;
+    MyNetworkElementStyleBase* _intermediaryNodeStyle;
+    QList<MyNetworkElementStyleBase*> _sourceEdgeStyles;
+    QList<MyNetworkElementStyleBase*> _targetEdgeStyles;
 };
 
 #endif

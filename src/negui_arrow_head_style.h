@@ -1,9 +1,9 @@
 #ifndef __NEGUI_ARROW_HEAD_STYLE_H
 #define __NEGUI_ARROW_HEAD_STYLE_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 
-class MyArrowHeadStyleBase : public MyElementStyleBase {
+class MyArrowHeadStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {

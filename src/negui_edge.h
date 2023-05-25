@@ -30,7 +30,7 @@ public:
     
     void updateGraphicsItem() override;
     
-    void setStyle(MyElementStyleBase* style) override;
+    void setStyle(MyNetworkElementStyleBase* style) override;
     
     void setSelected(const bool& selected) override;
     

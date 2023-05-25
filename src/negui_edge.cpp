@@ -68,7 +68,7 @@ void MyEdgeBase::updateGraphicsItem() {
     updatePoints();
 }
 
-void MyEdgeBase::setStyle(MyElementStyleBase* style) {
+void MyEdgeBase::setStyle(MyNetworkElementStyleBase* style) {
     MyNetworkElementBase::setStyle(style);
     setArrowHead();
 }

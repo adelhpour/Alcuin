@@ -70,8 +70,8 @@ public:
     void removeNode(MyNetworkElementBase* node);
     void updateNodeParents();
     void clearNodesInfo();
-    void setNodeStyle(MyElementStyleBase* style);
-    MyElementStyleBase* nodeStyle();
+    void setNodeStyle(MyNetworkElementStyleBase* style);
+    MyNetworkElementStyleBase* nodeStyle();
     
     // edges
     QList<MyNetworkElementBase*>& edges();
@@ -80,8 +80,8 @@ public:
     void addEdge(MyNetworkElementBase* edge);
     void removeEdge(MyNetworkElementBase* edge);
     void clearEdgesInfo();
-    void setEdgeStyle(MyElementStyleBase* style);
-    MyElementStyleBase* edgeStyle();
+    void setEdgeStyle(MyNetworkElementStyleBase* style);
+    MyNetworkElementStyleBase* edgeStyle();
     void deleteNewEdgeBuilder();
     bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
     
@@ -197,8 +197,8 @@ protected:
     QList<MyPluginItemBase*> _autoLayoutEngines;
     
     // element styles
-    MyElementStyleBase* _nodeStyle;
-    MyElementStyleBase* _edgeStyle;
+    MyNetworkElementStyleBase* _nodeStyle;
+    MyNetworkElementStyleBase* _edgeStyle;
     
     QList<MyPluginItemBase*> _plugins;
     
@@ -222,7 +222,7 @@ MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const Q
 MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
 MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
 QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
-MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* style);
-MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle);
+MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* style);
+MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle);
 
 #endif

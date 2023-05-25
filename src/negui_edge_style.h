@@ -1,9 +1,9 @@
 #ifndef __NEGUI_EDGE_STYLE_H
 #define __NEGUI_EDGE_STYLE_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 
-class MyEdgeStyleBase : public MyElementStyleBase {
+class MyEdgeStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {
@@ -26,7 +26,7 @@ public:
     
     QList<QString> connectableTargetNodeCategories();
     
-    MyElementStyleBase* arrowHeadStyle();
+    MyNetworkElementStyleBase* arrowHeadStyle();
     
     QObject* createIconBuilder() override;
     
@@ -43,7 +43,7 @@ public:
     void write(QJsonObject &json) override;
 
 protected:
-    MyElementStyleBase* _arrowHeadStyle;
+    MyNetworkElementStyleBase* _arrowHeadStyle;
     QList<QString> _connectableSourceNodeCategories;
     QList<QString> _connectableTargetNodeCategories;
 };

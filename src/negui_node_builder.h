@@ -3,7 +3,7 @@
 
 #include "negui_network_element_base.h"
 
-MyNetworkElementBase* createNode(const QString& name, MyElementStyleBase* nodeStyle, const qreal& x, const qreal& y);
+MyNetworkElementBase* createNode(const QString& name, MyNetworkElementStyleBase* nodeStyle, const qreal& x, const qreal& y);
 
 MyNetworkElementBase* createNode(const QJsonObject &json);
 

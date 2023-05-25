@@ -7,7 +7,7 @@
 
 // MyTemplateStyle
 
-MyTemplateStyle::MyTemplateStyle(const QString& name) : MyElementStyleBase(name) {
+MyTemplateStyle::MyTemplateStyle(const QString& name) : MyNetworkElementStyleBase(name) {
     _intermediaryNodeStyle = NULL;
     _iconSize = QSize(125, 65);
 }
@@ -16,7 +16,7 @@ const QString MyTemplateStyle::type() const {
     return "templatestyle";
 }
 
-MyElementStyleBase* MyTemplateStyle::intermediaryNodeStyle() {
+MyNetworkElementStyleBase* MyTemplateStyle::intermediaryNodeStyle() {
     return _intermediaryNodeStyle;
 }
 
@@ -26,7 +26,7 @@ void MyTemplateStyle::deleteIntermediaryNodeStyle() {
     _intermediaryNodeStyle = NULL;
 }
 
-QList<MyElementStyleBase*> MyTemplateStyle::sourceEdgeStyles() {
+QList<MyNetworkElementStyleBase*> MyTemplateStyle::sourceEdgeStyles() {
     return _sourceEdgeStyles;
 }
 
@@ -35,7 +35,7 @@ void MyTemplateStyle::clearSourceEdgeStyles() {
         delete _sourceEdgeStyles.takeLast();
 }
 
-QList<MyElementStyleBase*> MyTemplateStyle::targetEdgeStyles() {
+QList<MyNetworkElementStyleBase*> MyTemplateStyle::targetEdgeStyles() {
     return _targetEdgeStyles;
 }
 
@@ -47,9 +47,9 @@ void MyTemplateStyle::clearTargetEdgeStyles() {
 void MyTemplateStyle::addDefaultShapeStyle() {
     if (intermediaryNodeStyle())
         intermediaryNodeStyle()->addDefaultShapeStyle();
-    for (MyElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
+    for (MyNetworkElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
         sourceEdgeStyle->addDefaultShapeStyle();
-    for (MyElementStyleBase* targetEdgeStyle : targetEdgeStyles())
+    for (MyNetworkElementStyleBase* targetEdgeStyle : targetEdgeStyles())
         targetEdgeStyle->addDefaultShapeStyle();
 }
 
@@ -60,18 +60,18 @@ MyShapeStyleBase* MyTemplateStyle::createShapeStyle(const QString& shape) {
 void MyTemplateStyle::clearShapeStyles() {
     if (intermediaryNodeStyle())
         intermediaryNodeStyle()->clearShapeStyles();
-    for (MyElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
+    for (MyNetworkElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
         sourceEdgeStyle->clearShapeStyles();
-    for (MyElementStyleBase* targetEdgeStyle : targetEdgeStyles())
+    for (MyNetworkElementStyleBase* targetEdgeStyle : targetEdgeStyles())
         targetEdgeStyle->clearShapeStyles();
 }
 
 const QRectF MyTemplateStyle::getShapesExtents(QRectF defaultExtents) {
     if (intermediaryNodeStyle())
         defaultExtents = intermediaryNodeStyle()->getShapesExtents(defaultExtents);
-    for (MyElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
+    for (MyNetworkElementStyleBase* sourceEdgeStyle : sourceEdgeStyles())
         defaultExtents = sourceEdgeStyle->getShapesExtents(defaultExtents);
-    for (MyElementStyleBase* targetEdgeStyle : targetEdgeStyles())
+    for (MyNetworkElementStyleBase* targetEdgeStyle : targetEdgeStyles())
         defaultExtents = targetEdgeStyle->getShapesExtents(defaultExtents);
     return defaultExtents;
 }
@@ -104,7 +104,7 @@ void MyTemplateStyle::read(const QJsonObject &json) {
     clearSourceEdgeStyles();
     if (json.contains("source-edges") && json["source-edges"].isArray()) {
         QJsonArray sourceEdgeStylesArray = json["source-edges"].toArray();
-        MyElementStyleBase* sourceEdgeStyle = NULL;
+        MyNetworkElementStyleBase* sourceEdgeStyle = NULL;
         for (int sourceEdgeStyleIndex = 0; sourceEdgeStyleIndex < sourceEdgeStylesArray.size(); ++sourceEdgeStyleIndex) {
             QJsonObject sourceEdgeStyleObject = sourceEdgeStylesArray[sourceEdgeStyleIndex].toObject();
             if (sourceEdgeStyleObject.contains("name") && sourceEdgeStyleObject["name"].isString()) {
@@ -119,7 +119,7 @@ void MyTemplateStyle::read(const QJsonObject &json) {
     clearTargetEdgeStyles();
     if (json.contains("target-edges") && json["target-edges"].isArray()) {
         QJsonArray targetEdgeStylesArray = json["target-edges"].toArray();
-        MyElementStyleBase* targetEdgeStyle = NULL;
+        MyNetworkElementStyleBase* targetEdgeStyle = NULL;
         for (int targetEdgeStyleIndex = 0; targetEdgeStyleIndex < targetEdgeStylesArray.size(); ++targetEdgeStyleIndex) {
             QJsonObject targetEdgeStyleObject = targetEdgeStylesArray[targetEdgeStyleIndex].toObject();
             if (targetEdgeStyleObject.contains("name") && targetEdgeStyleObject["name"].isString()) {
@@ -144,7 +144,7 @@ void MyTemplateStyle::write(QJsonObject &json) {
     
     // source edges
     QJsonArray sourceEdgeStylesArray;
-    for (MyElementStyleBase* sourceEdgeStyle : sourceEdgeStyles()) {
+    for (MyNetworkElementStyleBase* sourceEdgeStyle : sourceEdgeStyles()) {
         QJsonObject sourceEdgeStyleObject;
         sourceEdgeStyle->write(sourceEdgeStyleObject);
         sourceEdgeStylesArray.append(sourceEdgeStyleObject);
@@ -153,7 +153,7 @@ void MyTemplateStyle::write(QJsonObject &json) {
     
     // target edges
     QJsonArray targetEdgeStylesArray;
-    for (MyElementStyleBase* targetEdgeStyle : targetEdgeStyles()) {
+    for (MyNetworkElementStyleBase* targetEdgeStyle : targetEdgeStyles()) {
         QJsonObject targetEdgeStyleObject;
         targetEdgeStyle->write(targetEdgeStyleObject);
         targetEdgeStylesArray.append(targetEdgeStyleObject);

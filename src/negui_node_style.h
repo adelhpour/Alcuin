@@ -1,9 +1,9 @@
 #ifndef __NEGUI_NODE_STYLE_H
 #define __NEGUI_NODE_STYLE_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 
-class MyNodeStyleBase : public MyElementStyleBase {
+class MyNodeStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {

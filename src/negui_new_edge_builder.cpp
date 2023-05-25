@@ -8,7 +8,7 @@
 
 // MyNewEdgeBuilderBase
 
-MyNewEdgeBuilderBase::MyNewEdgeBuilderBase(MyElementStyleBase* style) {
+MyNewEdgeBuilderBase::MyNewEdgeBuilderBase(MyNetworkElementStyleBase* style) {
     _style = style;
     _isNewEdgeBuilt = false;
 }
@@ -46,7 +46,7 @@ const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelectedNodes() {
     return false;
 }
 
-void MyNewEdgeBuilderBase::buildNewEdge(MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode, MyElementStyleBase* newEdgeStyle) {
+void MyNewEdgeBuilderBase::buildNewEdge(MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode, MyNetworkElementStyleBase* newEdgeStyle) {
     MyNetworkElementBase* newEdge = createEdge(askForEdgeUniqueName(newEdgeStyle), getCopyEdgeStyle(style()->name() + "_" + newEdgeStyle->name(), newEdgeStyle), sourceNode, targetNode);
     emit askForAddEdge(newEdge);
 }
@@ -78,13 +78,13 @@ const QString MyNewEdgeBuilderBase::connectToNodeAs() {
     return "source";
 }
 
-MyElementStyleBase* MyNewEdgeBuilderBase::style() {
+MyNetworkElementStyleBase* MyNewEdgeBuilderBase::style() {
     return _style;
 }
 
 // MyNewEdgeBuilder
 
-MyNewEdgeBuilder::MyNewEdgeBuilder(MyElementStyleBase* edgeStyle) : MyNewEdgeBuilderBase(edgeStyle) {
+MyNewEdgeBuilder::MyNewEdgeBuilder(MyNetworkElementStyleBase* edgeStyle) : MyNewEdgeBuilderBase(edgeStyle) {
     
 }
 
@@ -92,7 +92,7 @@ void MyNewEdgeBuilder::buildNewEdge() {
     MyNewEdgeBuilderBase::buildNewEdge(selectedEdgeSourceNodes().at(0), selectedEdgeTargetNodes().at(0), edgeStyle());
 }
 
-MyElementStyleBase* MyNewEdgeBuilder::edgeStyle() {
+MyNetworkElementStyleBase* MyNewEdgeBuilder::edgeStyle() {
     return style();
 }
 
@@ -106,7 +106,7 @@ const qint32 MyNewEdgeBuilder::numberOfRequiredTargetNodes() {
 
 // MyNewTemplateBuilder
 
-MyNewTemplateBuilder::MyNewTemplateBuilder(MyElementStyleBase* templateStyle) : MyNewEdgeBuilderBase(templateStyle) {
+MyNewTemplateBuilder::MyNewTemplateBuilder(MyNetworkElementStyleBase* templateStyle) : MyNewEdgeBuilderBase(templateStyle) {
     _intermediaryNode = NULL;
 }
 
@@ -157,7 +157,7 @@ const QPointF MyNewTemplateBuilder::intermediaryNodePosition() {
     return position;
 }
 
-MyElementStyleBase* MyNewTemplateBuilder::edgeStyle() {
+MyNetworkElementStyleBase* MyNewTemplateBuilder::edgeStyle() {
     if (selectedEdgeSourceNodes().size() < numberOfRequiredSourceNodes())
         return ((MyTemplateStyle*)style())->sourceEdgeStyles().at(selectedEdgeSourceNodes().size());
     else if (selectedEdgeTargetNodes().size() < numberOfRequiredTargetNodes())
@@ -166,7 +166,7 @@ MyElementStyleBase* MyNewTemplateBuilder::edgeStyle() {
     return ((MyTemplateStyle*)style())->sourceEdgeStyles().at(0);
 }
 
-MyElementStyleBase* MyNewTemplateBuilder::edgeStyle(MyNetworkElementBase* selectedNode) {
+MyNetworkElementStyleBase* MyNewTemplateBuilder::edgeStyle(MyNetworkElementBase* selectedNode) {
     if (selectedEdgeSourceNodes().indexOf(selectedNode) != -1)
         return ((MyTemplateStyle*)style())->sourceEdgeStyles().at(selectedEdgeSourceNodes().indexOf(selectedNode));
     else if (selectedEdgeTargetNodes().indexOf(selectedNode) != -1)

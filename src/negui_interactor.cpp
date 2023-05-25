@@ -301,14 +301,14 @@ void MyInteractor::clearNodesInfo() {
         delete nodes().takeLast();
 }
 
-void MyInteractor::setNodeStyle(MyElementStyleBase* style) {
+void MyInteractor::setNodeStyle(MyNetworkElementStyleBase* style) {
     if (style)
         _nodeStyle = style;
     else
         _nodeStyle = NULL;
 }
 
-MyElementStyleBase* MyInteractor::nodeStyle() {
+MyNetworkElementStyleBase* MyInteractor::nodeStyle() {
     return _nodeStyle;
 }
 
@@ -353,12 +353,12 @@ void MyInteractor::addNewEdge(MyNetworkElementBase* element) {
             if (edgeStyle()->type() == "templatestyle") {
                 _newEdgeBuilder = new MyNewTemplateBuilder(edgeStyle());
                 connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForAddNode, this, [this] (MyNetworkElementBase* node) { this->addNode(node); });
-                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForNodeUniqueName, this, [this] (MyElementStyleBase* nodeStyle) { return getElementUniqueName(this->nodes(), nodeStyle->category()); });
+                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForNodeUniqueName, this, [this] (MyNetworkElementStyleBase* nodeStyle) { return getElementUniqueName(this->nodes(), nodeStyle->category()); });
             }
             else
                 _newEdgeBuilder = new MyNewEdgeBuilder(edgeStyle());
             connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForAddEdge, this, [this] (MyNetworkElementBase* edge) { this->addEdge(edge); });
-            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForEdgeUniqueName, this, [this] (MyElementStyleBase* edgeStyle) { return getElementUniqueName(this->edges(), edgeStyle->category()); });
+            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForEdgeUniqueName, this, [this] (MyNetworkElementStyleBase* edgeStyle) { return getElementUniqueName(this->edges(), edgeStyle->category()); });
         }
         ((MyNewEdgeBuilderBase*)_newEdgeBuilder)->build(element);
         emit askForSetToolTip(((MyNewEdgeBuilderBase*)_newEdgeBuilder)->toolTipText());
@@ -384,14 +384,14 @@ void MyInteractor::clearEdgesInfo() {
         delete edges().takeLast();
 }
 
-void MyInteractor::setEdgeStyle(MyElementStyleBase* style) {
+void MyInteractor::setEdgeStyle(MyNetworkElementStyleBase* style) {
     if (style)
         _edgeStyle = style;
     else
         _edgeStyle = NULL;
 }
 
-MyElementStyleBase* MyInteractor::edgeStyle() {
+MyNetworkElementStyleBase* MyInteractor::edgeStyle() {
     return _edgeStyle;
 }
 
@@ -518,25 +518,25 @@ void MyInteractor::enableNormalMode() {
 void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddNodeMode();
-    setNodeStyle(dynamic_cast<MyElementStyleBase*>(style));
+    setNodeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableAddNodeMode();
     
-    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
+    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
 }
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddEdgeMode();
-    setEdgeStyle(dynamic_cast<MyElementStyleBase*>(style));
+    setEdgeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableAddEdgeMode();
 
-    emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
+    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
 }
 
 void MyInteractor::enableSelectMode(const QString& elementCategory) {
@@ -972,14 +972,14 @@ QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QStrin
     return name;
 }
 
-MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* nodeStyle) {
+MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* nodeStyle) {
     QJsonObject styleObject;
     nodeStyle->write(styleObject);
     styleObject["name"] = name;
     return createNodeStyle(styleObject);
 }
 
-MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle) {
+MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle) {
     QJsonObject styleObject;
     edgeStyle->write(styleObject);
     styleObject["name"] = name;

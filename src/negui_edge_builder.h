@@ -3,7 +3,7 @@
 
 #include "negui_network_element_base.h"
 
-MyNetworkElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
+MyNetworkElementBase* createEdge(const QString& name, MyNetworkElementStyleBase* edgeStyle, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
 
 MyNetworkElementBase* createEdge(const QJsonObject &json, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
 

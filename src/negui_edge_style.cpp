@@ -7,7 +7,7 @@
 
 // MyEdgeStyleBase
 
-MyEdgeStyleBase::MyEdgeStyleBase(const QString& name) : MyElementStyleBase(name) {
+MyEdgeStyleBase::MyEdgeStyleBase(const QString& name) : MyNetworkElementStyleBase(name) {
     _category = "Edge";
     _connectableSourceNodeCategories.push_back("Node");
     _connectableTargetNodeCategories.push_back("Node");
@@ -60,7 +60,7 @@ QList<QString> MyEdgeStyleBase::connectableTargetNodeCategories() {
     return _connectableTargetNodeCategories;
 }
 
-MyElementStyleBase* MyEdgeStyleBase::arrowHeadStyle() {
+MyNetworkElementStyleBase* MyEdgeStyleBase::arrowHeadStyle() {
     return _arrowHeadStyle;
 }
 
@@ -102,7 +102,7 @@ const QString MyEdgeStyleBase::targetToolTipText() {
 }
 
 void MyEdgeStyleBase::read(const QJsonObject &json) {
-    MyElementStyleBase::read(json);
+    MyNetworkElementStyleBase::read(json);
     
     _connectableSourceNodeCategories.clear();
     if (json.contains("connectable-source-node-categories") && json["connectable-source-node-categories"].isArray()) {
@@ -127,7 +127,7 @@ void MyEdgeStyleBase::read(const QJsonObject &json) {
 }
 
 void MyEdgeStyleBase::write(QJsonObject &json) {
-    MyElementStyleBase::write(json);
+    MyNetworkElementStyleBase::write(json);
     
     QJsonArray connectableSourceNodeCategoriesArray;
     for (QString connectableSourceNodeCategory : connectableSourceNodeCategories())

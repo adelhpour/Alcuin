@@ -1,7 +1,7 @@
 #ifndef __NEGUI_NEW_EDGE_BUILDER_H
 #define __NEGUI_NEW_EDGE_BUILDER_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 #include "negui_network_element_base.h"
 #include <QObject>
 
@@ -9,7 +9,7 @@ class MyNewEdgeBuilderBase : public QObject {
     Q_OBJECT
     
 public:
-    MyNewEdgeBuilderBase(MyElementStyleBase* style);
+    MyNewEdgeBuilderBase(MyNetworkElementStyleBase* style);
     
     void build(MyNetworkElementBase* node);
     
@@ -21,7 +21,7 @@ public:
     
     const bool canBuildEdgeUsingSelectedNodes();
     
-    void buildNewEdge(MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode, MyElementStyleBase* newEdgeStyle);
+    void buildNewEdge(MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode, MyNetworkElementStyleBase* newEdgeStyle);
     
     void addToselectedEdgeSourceNodes(MyNetworkElementBase* selectedSourceNode);
     
@@ -35,9 +35,9 @@ public:
     
     const QString connectToNodeAs();
     
-    MyElementStyleBase* style();
+    MyNetworkElementStyleBase* style();
     
-    virtual MyElementStyleBase* edgeStyle() = 0;
+    virtual MyNetworkElementStyleBase* edgeStyle() = 0;
     
     virtual const qint32 numberOfRequiredSourceNodes() = 0;
     
@@ -47,10 +47,10 @@ public:
     
 signals:
     void askForAddEdge(MyNetworkElementBase*);
-    QString askForEdgeUniqueName(MyElementStyleBase*);
+    QString askForEdgeUniqueName(MyNetworkElementStyleBase*);
     
 protected:
-    MyElementStyleBase* _style;
+    MyNetworkElementStyleBase* _style;
     QList<MyNetworkElementBase*> _selectedEdgeSourceNodes;
     QList<MyNetworkElementBase*> _selectedEdgeTargetNodes;
     bool _isNewEdgeBuilt;
@@ -59,11 +59,11 @@ protected:
 class MyNewEdgeBuilder : public MyNewEdgeBuilderBase {
     
 public:
-    MyNewEdgeBuilder(MyElementStyleBase* edgeStyle);
+    MyNewEdgeBuilder(MyNetworkElementStyleBase* edgeStyle);
     
     void buildNewEdge() override;
     
-    MyElementStyleBase* edgeStyle() override;
+    MyNetworkElementStyleBase* edgeStyle() override;
     
     const qint32 numberOfRequiredSourceNodes() override;
     
@@ -74,7 +74,7 @@ class MyNewTemplateBuilder : public MyNewEdgeBuilderBase {
     Q_OBJECT
     
 public:
-    MyNewTemplateBuilder(MyElementStyleBase* templateStyle);
+    MyNewTemplateBuilder(MyNetworkElementStyleBase* templateStyle);
     
     void buildNewEdge() override;
     
@@ -86,9 +86,9 @@ public:
     
     const QPointF intermediaryNodePosition();
     
-    MyElementStyleBase* edgeStyle() override;
+    MyNetworkElementStyleBase* edgeStyle() override;
     
-    MyElementStyleBase* edgeStyle(MyNetworkElementBase* selectedNode);
+    MyNetworkElementStyleBase* edgeStyle(MyNetworkElementBase* selectedNode);
     
     const qint32 numberOfRequiredSourceNodes() override;
     
@@ -96,13 +96,13 @@ public:
     
 signals:
     void askForAddNode(MyNetworkElementBase*);
-    QString askForNodeUniqueName(MyElementStyleBase*);
+    QString askForNodeUniqueName(MyNetworkElementStyleBase*);
     
 protected:
     MyNetworkElementBase* _intermediaryNode;
 };
 
-MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* nodeStyle);
-MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle);
+MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* nodeStyle);
+MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle);
 
 #endif

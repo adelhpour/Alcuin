@@ -4,7 +4,7 @@
 #include "negui_base.h"
 #include "negui_scene_mode_element_base.h"
 #include "negui_element_graphics_item_base.h"
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 
 class MyNetworkElementBase : public QObject, public MySceneModeElementBase, public MyBase{
     Q_OBJECT
@@ -25,9 +25,9 @@ public:
     
     virtual void updateGraphicsItem();
     
-    MyElementStyleBase* style();
+    MyNetworkElementStyleBase* style();
     
-    virtual void setStyle(MyElementStyleBase* style);
+    virtual void setStyle(MyNetworkElementStyleBase* style);
     
     void updateStyle(QList<MyShapeStyleBase*> shapeStyles);
     
@@ -74,7 +74,7 @@ protected slots:
 protected:
     
     MyElementGraphicsItemBase* _graphicsItem;
-    MyElementStyleBase* _style;
+    MyNetworkElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;
 };

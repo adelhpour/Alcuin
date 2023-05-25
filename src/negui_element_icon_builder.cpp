@@ -12,7 +12,7 @@
 
 // MyElementIconBuilderBase
 
-MyElementIconBuilderBase::MyElementIconBuilderBase(MyElementStyleBase* style) {
+MyElementIconBuilderBase::MyElementIconBuilderBase(MyNetworkElementStyleBase* style) {
     _style = style;
 }
 
@@ -54,13 +54,13 @@ const QIcon MyElementIconBuilderBase::icon() {
     return _icon;
 }
 
-MyElementStyleBase* MyElementIconBuilderBase::style() {
+MyNetworkElementStyleBase* MyElementIconBuilderBase::style() {
     return _style;
 }
 
 // MyNodeIconBuilder
 
-MyNodeIconBuilder::MyNodeIconBuilder(MyElementStyleBase* style) : MyElementIconBuilderBase(style) {
+MyNodeIconBuilder::MyNodeIconBuilder(MyNetworkElementStyleBase* style) : MyElementIconBuilderBase(style) {
     
 }
 
@@ -70,7 +70,7 @@ QList<QGraphicsItem*> MyNodeIconBuilder::getIconGraphicsItems() {
 
 // MyEdgeIconBuilder
 
-MyEdgeIconBuilder::MyEdgeIconBuilder(MyElementStyleBase* style) : MyElementIconBuilderBase(style) {
+MyEdgeIconBuilder::MyEdgeIconBuilder(MyNetworkElementStyleBase* style) : MyElementIconBuilderBase(style) {
     
 }
 
@@ -87,7 +87,7 @@ QList<QGraphicsItem*> MyEdgeIconBuilder::getIconGraphicsItems() {
 
 // MyArrowHeadIconBuilder
 
-MyArrowHeadIconBuilder::MyArrowHeadIconBuilder(MyElementStyleBase* style) : MyElementIconBuilderBase(style) {
+MyArrowHeadIconBuilder::MyArrowHeadIconBuilder(MyNetworkElementStyleBase* style) : MyElementIconBuilderBase(style) {
     
 }
 
@@ -97,7 +97,7 @@ QList<QGraphicsItem*> MyArrowHeadIconBuilder::getIconGraphicsItems() {
 
 // MyTemplateIconBuilder
 
-MyTemplateIconBuilder::MyTemplateIconBuilder(MyElementStyleBase* style) : MyElementIconBuilderBase(style) {
+MyTemplateIconBuilder::MyTemplateIconBuilder(MyNetworkElementStyleBase* style) : MyElementIconBuilderBase(style) {
     
 }
 
@@ -117,7 +117,7 @@ QList<QGraphicsItem*> MyTemplateIconBuilder::getSourceEdgeIconGraphicsItems() {
     QList<QGraphicsItem*> items;
     qreal verticalPadding = 0.0;
     qreal paddingRotation = 0.0;
-    for (MyElementStyleBase* sourceEdgeStyle : ((MyTemplateStyle*)style())->sourceEdgeStyles()) {
+    for (MyNetworkElementStyleBase* sourceEdgeStyle : ((MyTemplateStyle*)style())->sourceEdgeStyles()) {
         verticalPadding = getVerticalPadding(sourceEdgeStyle, ((MyTemplateStyle*)style())->sourceEdgeStyles());
         paddingRotation = qRadiansToDegrees(qAtan2(verticalPadding, (0.5 * getIconWidth())));
         items += getEdgeIconGraphicsItems(sourceEdgeStyle, QPointF(0.0, verticalPadding), QPointF(0.5 * (getIconWidth() - getIntermediaryShapeWidth()), 0.0));
@@ -131,7 +131,7 @@ QList<QGraphicsItem*> MyTemplateIconBuilder::getTargetEdgeIconGraphicsItems() {
     QList<QGraphicsItem*> items;
     qreal verticalPadding = 0.0;
     qreal paddingRotation = 0.0;
-    for (MyElementStyleBase* targetEdgeStyle : ((MyTemplateStyle*)style())->targetEdgeStyles()) {
+    for (MyNetworkElementStyleBase* targetEdgeStyle : ((MyTemplateStyle*)style())->targetEdgeStyles()) {
         verticalPadding = getVerticalPadding(targetEdgeStyle, ((MyTemplateStyle*)style())->targetEdgeStyles());
         paddingRotation = qRadiansToDegrees(qAtan2(verticalPadding, (0.5 * getIconWidth())));
         items += getEdgeIconGraphicsItems(targetEdgeStyle, QPointF(0.5 * (getIconWidth() + getIntermediaryShapeWidth()), 0.0), QPointF(getIconWidth(), verticalPadding));
@@ -157,7 +157,7 @@ qreal MyTemplateIconBuilder::getIntermediaryShapeWidth() {
     return intermediaryShapeWidth;
 }
 
-QList<QGraphicsItem*> getNodeIconGraphicsItems(MyElementStyleBase* style, const QPointF& position) {
+QList<QGraphicsItem*> getNodeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* nodeIconItem = createNodeIconGraphicsItem(position);
     ((MyElementGraphicsItemBase*)nodeIconItem)->addShapeItems(style->shapeStyles());
@@ -166,7 +166,7 @@ QList<QGraphicsItem*> getNodeIconGraphicsItems(MyElementStyleBase* style, const 
     return items;
 }
 
-QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyElementStyleBase* style, const QPointF& startPoint, const QPointF& endPoint) {
+QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& startPoint, const QPointF& endPoint) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* edgeIconItem = createEdgeIconGraphicsItem(startPoint, endPoint);
     ((MyElementGraphicsItemBase*)edgeIconItem)->addShapeItems(style->shapeStyles());
@@ -175,7 +175,7 @@ QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyElementStyleBase* style, const 
     return items;
 }
 
-QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyElementStyleBase* style, const QPointF& position, const qreal& rotation) {
+QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position, const qreal& rotation) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* arrowHeadIconItem = createArrowHeadIconGraphicsItem(position, rotation);
     ((MyElementGraphicsItemBase*)arrowHeadIconItem)->addShapeItems(style->shapeStyles());
@@ -184,7 +184,7 @@ QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyElementStyleBase* style, c
     return items;
 }
 
-qreal getVerticalPadding(MyElementStyleBase* style, QList<MyElementStyleBase*> styles) {
+qreal getVerticalPadding(MyNetworkElementStyleBase* style, QList<MyNetworkElementStyleBase*> styles) {
     if (styles.indexOf(style) != -1)
         return 9.0 * (2 * styles.indexOf(style) + 1 - styles.size());
     

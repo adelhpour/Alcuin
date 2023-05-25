@@ -1,14 +1,14 @@
 #ifndef __NEGUI_ELEMENT_ICON_BUILDER_H
 #define __NEGUI_ELEMENT_ICON_BUILDER_H
 
-#include "negui_element_style_base.h"
+#include "negui_network_element_style_base.h"
 #include <QGraphicsItem>
 
 class MyElementIconBuilderBase : public QObject {
     Q_OBJECT
     
 public:
-    MyElementIconBuilderBase(MyElementStyleBase* style);
+    MyElementIconBuilderBase(MyNetworkElementStyleBase* style);
     
     void build();
     
@@ -18,17 +18,17 @@ public:
     
     const QIcon icon();
     
-    MyElementStyleBase* style();
+    MyNetworkElementStyleBase* style();
     
 protected:
-    MyElementStyleBase* _style;
+    MyNetworkElementStyleBase* _style;
     QIcon _icon;
 };
 
 class MyNodeIconBuilder : public MyElementIconBuilderBase {
     
 public:
-    MyNodeIconBuilder(MyElementStyleBase* style);
+    MyNodeIconBuilder(MyNetworkElementStyleBase* style);
     
     QList<QGraphicsItem*> getIconGraphicsItems() override;
     
@@ -37,7 +37,7 @@ public:
 class MyEdgeIconBuilder : public MyElementIconBuilderBase {
     
 public:
-    MyEdgeIconBuilder(MyElementStyleBase* style);
+    MyEdgeIconBuilder(MyNetworkElementStyleBase* style);
     
     QList<QGraphicsItem*> getIconGraphicsItems() override;
     
@@ -46,7 +46,7 @@ public:
 class MyArrowHeadIconBuilder : public MyElementIconBuilderBase {
     
 public:
-    MyArrowHeadIconBuilder(MyElementStyleBase* style);
+    MyArrowHeadIconBuilder(MyNetworkElementStyleBase* style);
     
     QList<QGraphicsItem*> getIconGraphicsItems() override;
     
@@ -55,7 +55,7 @@ public:
 class MyTemplateIconBuilder : public MyElementIconBuilderBase {
     
 public:
-    MyTemplateIconBuilder(MyElementStyleBase* style);
+    MyTemplateIconBuilder(MyNetworkElementStyleBase* style);
     
     QList<QGraphicsItem*> getIconGraphicsItems() override;
     
@@ -70,12 +70,12 @@ public:
     qreal getIntermediaryShapeWidth();
 };
 
-QList<QGraphicsItem*> getNodeIconGraphicsItems(MyElementStyleBase* style, const QPointF& position);
+QList<QGraphicsItem*> getNodeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position);
 
-QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyElementStyleBase* style, const QPointF& startPoint, const QPointF& endPoint);
+QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& startPoint, const QPointF& endPoint);
 
-QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyElementStyleBase* style, const QPointF& position, const qreal& rotation);
+QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position, const qreal& rotation);
 
-qreal getVerticalPadding(MyElementStyleBase* style, QList<MyElementStyleBase*> styles);
+qreal getVerticalPadding(MyNetworkElementStyleBase* style, QList<MyNetworkElementStyleBase*> styles);
 
 #endif
