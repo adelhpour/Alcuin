@@ -1,6 +1,6 @@
 #include "negui_node_style.h"
 #include "negui_shape_style_builder.h"
-#include "negui_element_icon_builder.h"
+#include "negui_network_element_icon_builder.h"
 #include <QJsonArray>
 
 // MyNodeStyleBase

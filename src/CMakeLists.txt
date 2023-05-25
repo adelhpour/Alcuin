@@ -30,7 +30,7 @@ set(gui_sources
 		negui_edge_style_builder.cpp
 		negui_arrow_head_style_builder.cpp
 		negui_template_style_builder.cpp
-		negui_element_icon_builder.cpp
+		negui_network_element_icon_builder.cpp
 		negui_network_element_graphics_item_base.cpp
 		negui_node_graphics_item.cpp
 		negui_edge_graphics_item.cpp
@@ -102,7 +102,7 @@ set(gui_headers
 		negui_edge_style_builder.h
 		negui_arrow_head_style_builder.h
 		negui_template_style_builder.h
-		negui_element_icon_builder.h
+		negui_network_element_icon_builder.h
 		negui_network_element_graphics_item_base.h
 		negui_node_graphics_item.h
 		negui_edge_graphics_item.h

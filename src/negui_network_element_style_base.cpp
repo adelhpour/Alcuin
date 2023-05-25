@@ -1,5 +1,5 @@
 #include "negui_network_element_style_base.h"
-#include "negui_element_icon_builder.h"
+#include "negui_network_element_icon_builder.h"
 #include <QJsonObject>
 #include <QJsonArray>
 
@@ -65,8 +65,8 @@ const QRectF MyNetworkElementStyleBase::getShapesExtents(QRectF defaultExtents) 
 
 const QIcon MyNetworkElementStyleBase::icon() {
     QObject* iconBuilder = createIconBuilder();
-    ((MyElementIconBuilderBase*)iconBuilder)->build();
-    return ((MyElementIconBuilderBase*)iconBuilder)->icon();
+    ((MyNetworkElementIconBuilderBase*)iconBuilder)->build();
+    return ((MyNetworkElementIconBuilderBase*)iconBuilder)->icon();
 }
 
 void MyNetworkElementStyleBase::read(const QJsonObject &json) {
