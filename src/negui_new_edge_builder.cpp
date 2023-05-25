@@ -13,7 +13,7 @@ MyNewEdgeBuilderBase::MyNewEdgeBuilderBase(MyElementStyleBase* style) {
     _isNewEdgeBuilt = false;
 }
 
-void MyNewEdgeBuilderBase::build(MyElementBase* node) {
+void MyNewEdgeBuilderBase::build(MyNetworkElementBase* node) {
     if (canSelectNodeAsConnectedNode(node)) {
         if (canBuildEdgeUsingSelectedNodes()) {
             buildNewEdge();
@@ -22,7 +22,7 @@ void MyNewEdgeBuilderBase::build(MyElementBase* node) {
     }
 }
 
-const bool MyNewEdgeBuilderBase::canSelectNodeAsConnectedNode(MyElementBase* node) {
+const bool MyNewEdgeBuilderBase::canSelectNodeAsConnectedNode(MyNetworkElementBase* node) {
     if (!node->isSelected() && isConnectableToNode(node)) {
         node->setSelected(true);
         if (selectedEdgeSourceNodes().size() < numberOfRequiredSourceNodes())
@@ -35,7 +35,7 @@ const bool MyNewEdgeBuilderBase::canSelectNodeAsConnectedNode(MyElementBase* nod
     return false;
 }
 
-bool MyNewEdgeBuilderBase::isConnectableToNode(MyElementBase* node) {
+bool MyNewEdgeBuilderBase::isConnectableToNode(MyNetworkElementBase* node) {
     return ((MyEdgeStyleBase*)edgeStyle())->isConnectableToNodeCategory(node->style()->category(), connectToNodeAs()) ? true : false;
 }
 
@@ -46,24 +46,24 @@ const bool MyNewEdgeBuilderBase::canBuildEdgeUsingSelectedNodes() {
     return false;
 }
 
-void MyNewEdgeBuilderBase::buildNewEdge(MyElementBase* sourceNode, MyElementBase* targetNode, MyElementStyleBase* newEdgeStyle) {
-    MyElementBase* newEdge = createEdge(askForEdgeUniqueName(newEdgeStyle), getCopyEdgeStyle(style()->name() + "_" + newEdgeStyle->name(), newEdgeStyle), sourceNode, targetNode);
+void MyNewEdgeBuilderBase::buildNewEdge(MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode, MyElementStyleBase* newEdgeStyle) {
+    MyNetworkElementBase* newEdge = createEdge(askForEdgeUniqueName(newEdgeStyle), getCopyEdgeStyle(style()->name() + "_" + newEdgeStyle->name(), newEdgeStyle), sourceNode, targetNode);
     emit askForAddEdge(newEdge);
 }
 
-void MyNewEdgeBuilderBase::addToselectedEdgeSourceNodes(MyElementBase* selectedSourceNode) {
+void MyNewEdgeBuilderBase::addToselectedEdgeSourceNodes(MyNetworkElementBase* selectedSourceNode) {
     _selectedEdgeSourceNodes.push_back(selectedSourceNode);
 }
 
-QList<MyElementBase*> MyNewEdgeBuilderBase::selectedEdgeSourceNodes() {
+QList<MyNetworkElementBase*> MyNewEdgeBuilderBase::selectedEdgeSourceNodes() {
     return _selectedEdgeSourceNodes;
 }
 
-void MyNewEdgeBuilderBase::addToselectedEdgeTargetNodes(MyElementBase* selectedTargetNode) {
+void MyNewEdgeBuilderBase::addToselectedEdgeTargetNodes(MyNetworkElementBase* selectedTargetNode) {
     _selectedEdgeTargetNodes.push_back(selectedTargetNode);
 }
 
-QList<MyElementBase*> MyNewEdgeBuilderBase::selectedEdgeTargetNodes() {
+QList<MyNetworkElementBase*> MyNewEdgeBuilderBase::selectedEdgeTargetNodes() {
     return _selectedEdgeTargetNodes;
 }
 
@@ -112,9 +112,9 @@ MyNewTemplateBuilder::MyNewTemplateBuilder(MyElementStyleBase* templateStyle) : 
 
 void MyNewTemplateBuilder::buildNewEdge() {
     buildIntermediaryNode();
-    for (MyElementBase* selectedEdgeSourceNode : selectedEdgeSourceNodes())
+    for (MyNetworkElementBase* selectedEdgeSourceNode : selectedEdgeSourceNodes())
         MyNewEdgeBuilderBase::buildNewEdge(selectedEdgeSourceNode, intermediaryNode(), edgeStyle(selectedEdgeSourceNode));
-    for (MyElementBase* selectedEdgeTargetNode : selectedEdgeTargetNodes())
+    for (MyNetworkElementBase* selectedEdgeTargetNode : selectedEdgeTargetNodes())
         MyNewEdgeBuilderBase::buildNewEdge(intermediaryNode(), selectedEdgeTargetNode, edgeStyle(selectedEdgeTargetNode));
     setIntermediaryNodeParent();
 }
@@ -128,8 +128,8 @@ void MyNewTemplateBuilder::buildIntermediaryNode() {
 }
 
 void MyNewTemplateBuilder::setIntermediaryNodeParent() {
-    MyElementBase* parentNode = NULL;
-    for (MyElementBase* selectedEdgeSourceNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes()) {
+    MyNetworkElementBase* parentNode = NULL;
+    for (MyNetworkElementBase* selectedEdgeSourceNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes()) {
         if (!((MyNodeBase*)selectedEdgeSourceNode)->isSetParentNode())
             return;
         if (!parentNode)
@@ -144,13 +144,13 @@ void MyNewTemplateBuilder::setIntermediaryNodeParent() {
         ((MyNodeBase*)_intermediaryNode)->setParentNode(parentNode);
 }
 
-MyElementBase* MyNewTemplateBuilder::intermediaryNode() {
+MyNetworkElementBase* MyNewTemplateBuilder::intermediaryNode() {
     return _intermediaryNode;
 }
 
 const QPointF MyNewTemplateBuilder::intermediaryNodePosition() {
     QPointF position(0.0, 0.0);
-    for (MyElementBase* connectedNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes())
+    for (MyNetworkElementBase* connectedNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes())
         position += ((MyNodeBase*)connectedNode)->position();
     position /= selectedEdgeSourceNodes().size() + selectedEdgeTargetNodes().size();
     
@@ -166,7 +166,7 @@ MyElementStyleBase* MyNewTemplateBuilder::edgeStyle() {
     return ((MyTemplateStyle*)style())->sourceEdgeStyles().at(0);
 }
 
-MyElementStyleBase* MyNewTemplateBuilder::edgeStyle(MyElementBase* selectedNode) {
+MyElementStyleBase* MyNewTemplateBuilder::edgeStyle(MyNetworkElementBase* selectedNode) {
     if (selectedEdgeSourceNodes().indexOf(selectedNode) != -1)
         return ((MyTemplateStyle*)style())->sourceEdgeStyles().at(selectedEdgeSourceNodes().indexOf(selectedNode));
     else if (selectedEdgeTargetNodes().indexOf(selectedNode) != -1)

@@ -1,9 +1,9 @@
 #ifndef __NEGUI_EDGE_H
 #define __NEGUI_EDGE_H
 
-#include "negui_element_base.h"
+#include "negui_network_element_base.h"
 
-class MyEdgeBase : public MyElementBase {
+class MyEdgeBase : public MyNetworkElementBase {
     Q_OBJECT
     
 public:
@@ -12,7 +12,7 @@ public:
         CLASSIC_EDGE,
     } EDGE_TYPE;
     
-    MyEdgeBase(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
+    MyEdgeBase(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
     
     ~MyEdgeBase();
     
@@ -20,13 +20,13 @@ public:
 
     virtual EDGE_TYPE edgeType() = 0;
 
-    void setStartNode(MyElementBase* startNode);
+    void setStartNode(MyNetworkElementBase* startNode);
 
-    MyElementBase* startNode();
+    MyNetworkElementBase* startNode();
 
-    void setEndNode(MyElementBase* endNode);
+    void setEndNode(MyNetworkElementBase* endNode);
 
-    MyElementBase* endNode();
+    MyNetworkElementBase* endNode();
     
     void updateGraphicsItem() override;
     
@@ -34,7 +34,7 @@ public:
     
     void setSelected(const bool& selected) override;
     
-    MyElementBase* arrowHead();
+    MyNetworkElementBase* arrowHead();
     void setArrowHead();
     const bool isSetArrowHead() const { return _isSetArrowHead; }
     
@@ -96,9 +96,9 @@ signals:
     void askForDisconnectNodePositionFromNeighborNodes();
 
 protected:
-    MyElementBase* _startNode;
-    MyElementBase* _endNode;
-    MyElementBase* _arrowHead;
+    MyNetworkElementBase* _startNode;
+    MyNetworkElementBase* _endNode;
+    MyNetworkElementBase* _arrowHead;
     bool _isSetArrowHead;
     bool _isConnectedToNodes;
 };
@@ -108,12 +108,12 @@ class MyClassicEdge : public MyEdgeBase {
 
 public:
 
-    MyClassicEdge(const QString& name, MyElementBase* startNode, MyElementBase* endNode);
+    MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
 
     EDGE_TYPE edgeType() override;
 };
 
-const QPointF getEndOfTheLinePosition(MyElementBase* mainNode, MyElementBase* connectedNode);
+const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode);
 
 qreal getRadius(const QRectF& rect, const QPointF& point);
 

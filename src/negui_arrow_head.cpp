@@ -11,7 +11,7 @@
 
 // MyArrowHeadBase
 
-MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyElementBase* edge) : MyElementBase(name) {
+MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge) : MyNetworkElementBase(name) {
     _edge = edge;
     _position = QPointF(0.0, 0.0);
     _slope = 0.0;
@@ -29,12 +29,12 @@ MyArrowHeadBase::ELEMENT_TYPE MyArrowHeadBase::type() {
     return ARROW_HEAD_ELEMENT;
 };
 
-MyElementBase* MyArrowHeadBase::edge() {
+MyNetworkElementBase* MyArrowHeadBase::edge() {
     return _edge;
 }
 
 void MyArrowHeadBase::updateGraphicsItem() {
-    MyElementBase::updateGraphicsItem();
+    MyNetworkElementBase::updateGraphicsItem();
     updatePlacement(_position, _slope);
 }
 
@@ -46,7 +46,7 @@ void MyArrowHeadBase::updatePlacement(const QPointF& position, const qreal& slop
 }
 
 void MyArrowHeadBase::setSelected(const bool& selected) {
-    MyElementBase::setSelected(selected);
+    MyNetworkElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);
     
     if (!selected)
@@ -58,7 +58,7 @@ const QRectF MyArrowHeadBase::getExtents() {
 }
 
 QWidget* MyArrowHeadBase::getFeatureMenu() {
-    QWidget* featureMenu = MyElementBase::getFeatureMenu();
+    QWidget* featureMenu = MyNetworkElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
     // edge
@@ -86,7 +86,7 @@ void MyArrowHeadBase::write(QJsonObject &json) {
 
 // MyClassicArrowHead
 
-MyClassicArrowHead::MyClassicArrowHead(const QString& name, MyElementBase* edge) : MyArrowHeadBase(name, edge) {
+MyClassicArrowHead::MyClassicArrowHead(const QString& name, MyNetworkElementBase* edge) : MyArrowHeadBase(name, edge) {
 
 }
 

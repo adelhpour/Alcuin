@@ -1,9 +1,9 @@
 #ifndef __NEGUI_NODE_H
 #define __NEGUI_NODE_H
 
-#include "negui_element_base.h"
+#include "negui_network_element_base.h"
 
-class MyNodeBase : public MyElementBase {
+class MyNodeBase : public MyNetworkElementBase {
     Q_OBJECT
     
 public:
@@ -24,13 +24,13 @@ public:
     virtual void connectGraphicsItem();
     
     // add to edges
-    virtual void addEdge(MyElementBase* e);
+    virtual void addEdge(MyNetworkElementBase* e);
     
     // remove from edges
-    virtual void removeEdge(MyElementBase* e);
+    virtual void removeEdge(MyNetworkElementBase* e);
     
     // get edges
-    QList<MyElementBase*>& edges();
+    QList<MyNetworkElementBase*>& edges();
 
     virtual MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
     
@@ -48,10 +48,10 @@ public:
     void setParentNodeId(const QString& parentNodeId);
 
     // get the parent node of the node
-    MyElementBase* parentNode();
+    MyNetworkElementBase* parentNode();
 
     // set the parent node of the node
-    void setParentNode(MyElementBase* parentNode);
+    void setParentNode(MyNetworkElementBase* parentNode);
 
     // return true if the parent node of the node is set
     const bool isSetParentNode() const { return _isSetParentNode; }
@@ -78,7 +78,7 @@ public:
     
 signals:
     
-    MyElementBase* askForParentNodeAtPosition(MyElementBase* currentNode, const QPointF& position);
+    MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
     
 public slots:
     
@@ -98,8 +98,8 @@ public slots:
 
 protected:
     QString _parentNodeId;
-    MyElementBase* _parentNode;
-    QList<MyElementBase*> _edges;
+    MyNetworkElementBase* _parentNode;
+    QList<MyNetworkElementBase*> _edges;
     QPointF _position;
     bool _isSetParentNode;
     bool _isParentNodeLocked;
@@ -118,13 +118,13 @@ public:
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to child nodes
-    void addChildNode(MyElementBase* n);
+    void addChildNode(MyNetworkElementBase* n);
 
     // remove the node from child nodes
-    void removeChildNode(MyElementBase* n);
+    void removeChildNode(MyNetworkElementBase* n);
 
     // get the child nodes
-    QList<MyElementBase*>& childNodes();
+    QList<MyNetworkElementBase*>& childNodes();
 
     // lock the position of the child nodes
     void lockChildNodes(const bool& locked);
@@ -149,7 +149,7 @@ public slots:
     void setPosition(const QPointF& position) override;
 
 protected:
-    QList<MyElementBase*> _childNodes;
+    QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
 };
 
@@ -167,10 +167,10 @@ public:
     MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to edges
-    void addEdge(MyElementBase* e) override;
+    void addEdge(MyNetworkElementBase* e) override;
 
     // remove from edges
-    void removeEdge(MyElementBase* e) override;
+    void removeEdge(MyNetworkElementBase* e) override;
 
     const QLineF createControlBezierLine(const QPointF& updatedPoint);
 
@@ -203,7 +203,7 @@ private slots:
     void disconnectNodePositionFromNeighborNodes();
 
 protected:
-    QList<MyElementBase*> _childNodes;
+    QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
     bool _doesNodePositionDependOnNeighboringNodes;
 };

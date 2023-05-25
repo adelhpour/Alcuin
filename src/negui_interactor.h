@@ -1,7 +1,7 @@
 #ifndef __NEGUI_INTERACTOR_H
 #define __NEGUI_INTERACTOR_H
 
-#include "negui_element_base.h"
+#include "negui_network_element_base.h"
 #include "negui_interfaces.h"
 #include "negui_scene_mode_element_base.h"
 
@@ -63,27 +63,27 @@ public:
     const QRectF& networkExtents();
     
     // nodes
-    QList<MyElementBase*>& nodes();
+    QList<MyNetworkElementBase*>& nodes();
     void addNodes(const QJsonObject &json);
     void addNode(const QJsonObject& json);
-    void addNode(MyElementBase* node);
-    void removeNode(MyElementBase* node);
+    void addNode(MyNetworkElementBase* node);
+    void removeNode(MyNetworkElementBase* node);
     void updateNodeParents();
     void clearNodesInfo();
     void setNodeStyle(MyElementStyleBase* style);
     MyElementStyleBase* nodeStyle();
     
     // edges
-    QList<MyElementBase*>& edges();
+    QList<MyNetworkElementBase*>& edges();
     void addEdges(const QJsonObject &json);
     void addEdge(const QJsonObject& json);
-    void addEdge(MyElementBase* edge);
-    void removeEdge(MyElementBase* edge);
+    void addEdge(MyNetworkElementBase* edge);
+    void removeEdge(MyNetworkElementBase* edge);
     void clearEdgesInfo();
     void setEdgeStyle(MyElementStyleBase* style);
     MyElementStyleBase* edgeStyle();
     void deleteNewEdgeBuilder();
-    bool edgeExists(MyElementBase* n1, MyElementBase* n2);
+    bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
     
 signals:
     
@@ -116,12 +116,12 @@ public slots:
     
     // network elements
     void addNewNode(const QPointF& position);
-    void selectNode(MyElementBase* element);
-    void addNewEdge(MyElementBase* element);
-    void selectEdge(MyElementBase* element);
-    void removeItem(MyElementBase* element);
-    const QList<MyElementBase*> selectedNodes();
-    const QList<MyElementBase*> selectedEdges();
+    void selectNode(MyNetworkElementBase* element);
+    void addNewEdge(MyNetworkElementBase* element);
+    void selectEdge(MyNetworkElementBase* element);
+    void removeItem(MyNetworkElementBase* element);
+    const QList<MyNetworkElementBase*> selectedNodes();
+    const QList<MyNetworkElementBase*> selectedEdges();
     
     // modes
     void enableNormalMode() override;
@@ -142,7 +142,7 @@ private slots:
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
-    MyElementBase* parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position);
+    MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
     void createChangeStageCommand();
     void createSelectionAreaGraphicsItem(const QPointF& position);
     void selectSelectionAreaCoveredNodes();
@@ -206,8 +206,8 @@ protected:
     QUndoStack* _undoStack;
     
     // elements
-    QList<MyElementBase*> _nodes;
-    QList<MyElementBase*> _edges;
+    QList<MyNetworkElementBase*> _nodes;
+    QList<MyNetworkElementBase*> _edges;
     
     // builder
     QObject* _newEdgeBuilder;
@@ -218,10 +218,10 @@ protected:
     QJsonObject _stageInfo;
 };
 
-MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name);
-MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json);
-MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json);
-QString getElementUniqueName(QList<MyElementBase*> elements, const QString& defaultIdSection);
+MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
+MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
 MyElementStyleBase* getCopyNodeStyle(const QString& name, MyElementStyleBase* style);
 MyElementStyleBase* getCopyEdgeStyle(const QString& name, MyElementStyleBase* edgeStyle);
 

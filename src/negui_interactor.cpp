@@ -214,7 +214,7 @@ const QRectF& MyInteractor::networkExtents() {
     return _networkExtents;
 }
 
-QList<MyElementBase*>& MyInteractor::nodes() {
+QList<MyNetworkElementBase*>& MyInteractor::nodes() {
     return _nodes;
 }
 
@@ -228,20 +228,20 @@ void MyInteractor::addNodes(const QJsonObject &json) {
 }
 
 void MyInteractor::addNode(const QJsonObject &json) {
-    MyElementBase* node = createNode(json);
+    MyNetworkElementBase* node = createNode(json);
     if (node)
         addNode(node);
 }
 
-void MyInteractor::addNode(MyElementBase* n) {
+void MyInteractor::addNode(MyNetworkElementBase* n) {
     if (n && !n->isActive()) {
         _nodes.push_back(n);
         n->setActive(true);
         n->updateGraphicsItem();
-        connect(n, SIGNAL(askForParentNodeAtPosition(MyElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyElementBase*, const QPointF&)));
-        connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectNode(MyElementBase*)));
-        connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(addNewEdge(MyElementBase*)));
-        connect(n, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
+        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectNode(MyNetworkElementBase*)));
+        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
+        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -253,13 +253,13 @@ void MyInteractor::addNode(MyElementBase* n) {
 
 void MyInteractor::addNewNode(const QPointF& position) {
     if (getSceneMode() == ADD_NODE_MODE) {
-        MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
+        MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
         addNode(node);
         createChangeStageCommand();
     }
 }
 
-void MyInteractor::removeNode(MyElementBase* n) {
+void MyInteractor::removeNode(MyNetworkElementBase* n) {
     if (n && n->isActive()) {
         _nodes.removeOne(n);
         n->setActive(false);
@@ -268,21 +268,21 @@ void MyInteractor::removeNode(MyElementBase* n) {
 }
 
 void MyInteractor::updateNodeParents() {
-    MyElementBase* parentNode = NULL;
-    for (MyElementBase *node : qAsConst(nodes())) {
+    MyNetworkElementBase* parentNode = NULL;
+    for (MyNetworkElementBase *node : qAsConst(nodes())) {
         parentNode = findElement(nodes(), ((MyNodeBase*)node)->parentNodeId());
         if (parentNode)
             ((MyNodeBase*)node)->setParentNode((MyNodeBase*)parentNode);
     }
 }
 
-MyElementBase* MyInteractor::parentNodeAtPosition(MyElementBase* currentNode, const QPointF& position) {
+MyNetworkElementBase* MyInteractor::parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position) {
     QList<QGraphicsItem *> items = askForItemsAtPosition(position);
-    MyElementBase* parentNode = NULL;
+    MyNetworkElementBase* parentNode = NULL;
     qint32 parentNodeZValue = INT_MIN;
     for (QGraphicsItem* item : qAsConst(items)) {
         if (item->parentItem()) {
-            for (MyElementBase* node : qAsConst(nodes())) {
+            for (MyNetworkElementBase* node : qAsConst(nodes())) {
                 if (node->graphicsItem() == item->parentItem() && node != currentNode) {
                     if (item->parentItem()->zValue() > parentNodeZValue) {
                         parentNode = node;
@@ -312,7 +312,7 @@ MyElementStyleBase* MyInteractor::nodeStyle() {
     return _nodeStyle;
 }
 
-QList<MyElementBase*>& MyInteractor::edges() {
+QList<MyNetworkElementBase*>& MyInteractor::edges() {
     return _edges;
 }
 
@@ -325,17 +325,17 @@ void MyInteractor::addEdges(const QJsonObject &json) {
 }
 
 void MyInteractor::addEdge(const QJsonObject &json) {
-    MyElementBase* edge = createEdge(json, findStartNode(nodes(), json), findEndNode(nodes(), json));
+    MyNetworkElementBase* edge = createEdge(json, findStartNode(nodes(), json), findEndNode(nodes(), json));
     if (edge)
         addEdge(edge);
 }
 
-void MyInteractor::addEdge(MyElementBase* e) {
+void MyInteractor::addEdge(MyNetworkElementBase* e) {
     if (e && !edgeExists(((MyEdgeBase*)e)->startNode(), ((MyEdgeBase*)e)->endNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
-        connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(selectEdge(MyElementBase*)));
-        connect(e, SIGNAL(elementObject(MyElementBase*)), this, SLOT(removeItem(MyElementBase*)));
+        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectEdge(MyNetworkElementBase*)));
+        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -347,17 +347,17 @@ void MyInteractor::addEdge(MyElementBase* e) {
     }
 }
 
-void MyInteractor::addNewEdge(MyElementBase* element) {
+void MyInteractor::addNewEdge(MyNetworkElementBase* element) {
     if (getSceneMode() == ADD_EDGE_MODE) {
         if (!_newEdgeBuilder) {
             if (edgeStyle()->type() == "templatestyle") {
                 _newEdgeBuilder = new MyNewTemplateBuilder(edgeStyle());
-                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForAddNode, this, [this] (MyElementBase* node) { this->addNode(node); });
+                connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForAddNode, this, [this] (MyNetworkElementBase* node) { this->addNode(node); });
                 connect((MyNewTemplateBuilder*)_newEdgeBuilder, &MyNewTemplateBuilder::askForNodeUniqueName, this, [this] (MyElementStyleBase* nodeStyle) { return getElementUniqueName(this->nodes(), nodeStyle->category()); });
             }
             else
                 _newEdgeBuilder = new MyNewEdgeBuilder(edgeStyle());
-            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForAddEdge, this, [this] (MyElementBase* edge) { this->addEdge(edge); });
+            connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForAddEdge, this, [this] (MyNetworkElementBase* edge) { this->addEdge(edge); });
             connect((MyNewEdgeBuilderBase*)_newEdgeBuilder, &MyNewEdgeBuilderBase::askForEdgeUniqueName, this, [this] (MyElementStyleBase* edgeStyle) { return getElementUniqueName(this->edges(), edgeStyle->category()); });
         }
         ((MyNewEdgeBuilderBase*)_newEdgeBuilder)->build(element);
@@ -369,7 +369,7 @@ void MyInteractor::addNewEdge(MyElementBase* element) {
     }
 }
 
-void MyInteractor::removeEdge(MyElementBase* e) {
+void MyInteractor::removeEdge(MyNetworkElementBase* e) {
     if (e && e->isActive()) {
         e->setActive(false);
         _edges.removeOne(e);
@@ -396,15 +396,15 @@ MyElementStyleBase* MyInteractor::edgeStyle() {
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
-    for (MyElementBase* selectedNode : selectedNodes())
+    for (MyNetworkElementBase* selectedNode : selectedNodes())
         selectedNode->setSelected(false);
     if (_newEdgeBuilder)
         _newEdgeBuilder->deleteLater();
     _newEdgeBuilder = NULL;
 }
 
-bool MyInteractor::edgeExists(MyElementBase* n1, MyElementBase* n2) {
-    for (MyElementBase *edge : qAsConst(edges())) {
+bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2) {
+    for (MyNetworkElementBase *edge : qAsConst(edges())) {
         if ((((MyEdgeBase*)edge)->startNode() == n1 && ((MyEdgeBase*)edge)->endNode() == n2) || (((MyEdgeBase*)edge)->startNode() == n2 && ((MyEdgeBase*)edge)->endNode() == n1)) {
             return true;
         }
@@ -430,7 +430,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
     
     // nodes
     QJsonArray nodesArray;
-    for (MyElementBase *node : qAsConst(nodes())) {
+    for (MyNetworkElementBase *node : qAsConst(nodes())) {
         QJsonObject nodeObject;
         node->write(nodeObject);
         nodesArray.append(nodeObject);
@@ -439,7 +439,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
     
     // edges
     QJsonArray edgesArray;
-    for (MyElementBase *edge : qAsConst(edges())) {
+    for (MyNetworkElementBase *edge : qAsConst(edges())) {
         QJsonObject edgeObject;
         edge->write(edgeObject);
         edgesArray.append(edgeObject);
@@ -449,7 +449,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
     return json;
 }
 
-void MyInteractor::selectNode(MyElementBase* element) {
+void MyInteractor::selectNode(MyNetworkElementBase* element) {
     if (getSceneMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
@@ -458,7 +458,7 @@ void MyInteractor::selectNode(MyElementBase* element) {
     }
 }
 
-void MyInteractor::selectEdge(MyElementBase* element) {
+void MyInteractor::selectEdge(MyNetworkElementBase* element) {
     if (getSceneMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
@@ -467,14 +467,14 @@ void MyInteractor::selectEdge(MyElementBase* element) {
     }
 }
 
-void MyInteractor::removeItem(MyElementBase* element) {
+void MyInteractor::removeItem(MyNetworkElementBase* element) {
     if (getSceneMode() == REMOVE_MODE) {
-        if (element->type() == MyElementBase::NODE_ELEMENT) {
+        if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
             removeNode(element);
-            for (MyElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
+            for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
                 removeEdge(edge);
         }
-        else if (element->type() == MyElementBase::EDGE_ELEMENT) {
+        else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
             ((MyEdgeBase*)element)->connectToNodes(false);
             removeEdge(element);
         }
@@ -482,9 +482,9 @@ void MyInteractor::removeItem(MyElementBase* element) {
     }
 }
 
-const QList<MyElementBase*> MyInteractor::selectedNodes() {
-    QList<MyElementBase*> selectedNodesList;
-    for (MyElementBase *node : qAsConst(nodes())) {
+const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
+    QList<MyNetworkElementBase*> selectedNodesList;
+    for (MyNetworkElementBase *node : qAsConst(nodes())) {
         if (node->isSelected())
             selectedNodesList.push_back(node);
     }
@@ -492,9 +492,9 @@ const QList<MyElementBase*> MyInteractor::selectedNodes() {
     return selectedNodesList;
 }
 
-const QList<MyElementBase*> MyInteractor::selectedEdges() {
-    QList<MyElementBase*> selectedEdgesList;
-    for (MyElementBase *edge : qAsConst(edges())) {
+const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
+    QList<MyNetworkElementBase*> selectedEdgesList;
+    for (MyNetworkElementBase *edge : qAsConst(edges())) {
         if (edge->isSelected())
             selectedEdgesList.push_back(edge);
     }
@@ -507,9 +507,9 @@ void MyInteractor::enableNormalMode() {
     setNodeStyle(NULL);
     setEdgeStyle(NULL);
     deleteNewEdgeBuilder();
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableNormalMode();
     
     emit askForSetToolTip("");
@@ -519,9 +519,9 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddNodeMode();
     setNodeStyle(dynamic_cast<MyElementStyleBase*>(style));
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableAddNodeMode();
     
     emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
@@ -531,9 +531,9 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddEdgeMode();
     setEdgeStyle(dynamic_cast<MyElementStyleBase*>(style));
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableAddEdgeMode();
 
     emit askForSetToolTip(((MyElementStyleBase*)style)->toolTipText());
@@ -542,9 +542,9 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
 void MyInteractor::enableSelectMode(const QString& elementCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectMode();
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableSelectEdgeMode();
 
     emit askForSetToolTip("Select " + elementCategory);
@@ -553,9 +553,9 @@ void MyInteractor::enableSelectMode(const QString& elementCategory) {
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectNodeMode();
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableSelectNodeMode();
     
     emit askForSetToolTip("Select " + nodeCategory + " nodes");
@@ -564,9 +564,9 @@ void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
 void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectEdgeMode();
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectEdgeMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableSelectEdgeMode();
     
     emit askForSetToolTip("Select " + edgeCategory + " edges");
@@ -575,18 +575,18 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
 void MyInteractor::enableRemoveMode() {
     enableNormalMode();
     MySceneModeElementBase::enableRemoveMode();
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableRemoveMode();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableRemoveMode();
     
     emit askForSetToolTip("Select Item");
 }
 
 void MyInteractor::clearElementsFocusedGraphicsItems() {
-    for (MyElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->graphicsItem()->clearFocusedGraphicsItems();
-    for (MyElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->graphicsItem()->clearFocusedGraphicsItems();
 }
 
@@ -608,7 +608,7 @@ void MyInteractor::createSelectionAreaGraphicsItem(const QPointF& position) {
 
 void MyInteractor::selectSelectionAreaCoveredNodes() {
     QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
-    for (MyElementBase* node : qAsConst(nodes())) {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
         node->setSelected(false);
         for (QGraphicsItem* item : qAsConst(selectedItems)) {
             if (item->parentItem()) {
@@ -621,7 +621,7 @@ void MyInteractor::selectSelectionAreaCoveredNodes() {
 
 void MyInteractor::selectSelectionAreaCoveredEdges() {
     QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
-    for (MyElementBase* edge : qAsConst(edges())) {
+    for (MyNetworkElementBase* edge : qAsConst(edges())) {
         edge->setSelected(false);
         for (QGraphicsItem* item : qAsConst(selectedItems)) {
             if (item->parentItem()) {
@@ -930,8 +930,8 @@ QToolButton* MyInteractor::createResetSceneMenuButton() {
     return button;
 }
 
-MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name) {
-    for (MyElementBase *element : qAsConst(elements)) {
+MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name) {
+    for (MyNetworkElementBase *element : qAsConst(elements)) {
         if (element->name() == name)
             return element;
     }
@@ -939,28 +939,28 @@ MyElementBase* findElement(QList<MyElementBase*> elements, const QString& name) 
     return NULL;
 }
 
-MyElementBase* findStartNode(QList<MyElementBase*> nodes, const QJsonObject &json) {
+MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
     if (json.contains("start") && json["start"].isObject() && json["start"].toObject().contains("node") && json["start"]["node"].isString())
         return findElement(nodes, json["start"]["node"].toString());
     
     return NULL;
 }
 
-MyElementBase* findEndNode(QList<MyElementBase*> nodes, const QJsonObject &json) {
+MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
     if (json.contains("end") && json["end"].isObject() && json["end"].toObject().contains("node") && json["end"]["node"].isString())
         return findElement(nodes, json["end"]["node"].toString());
     
     return NULL;
 }
 
-QString getElementUniqueName(QList<MyElementBase*> elements, const QString& defaultNameSection) {
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
     QString name;
     qreal k = 0;
     bool isSimilarNameFound = true;
     while(isSimilarNameFound) {
         name = defaultNameSection + "_" + QString::number(k);
         isSimilarNameFound = false;
-        for (MyElementBase *element : qAsConst(elements)) {
+        for (MyNetworkElementBase *element : qAsConst(elements)) {
             if (element->name() == name) {
                 isSimilarNameFound = true;
                 break;

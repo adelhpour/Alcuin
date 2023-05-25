@@ -1,9 +1,9 @@
 #ifndef __NEGUI_ARROW_HEAD_H
 #define __NEGUI_ARROW_HEAD_H
 
-#include "negui_element_base.h"
+#include "negui_network_element_base.h"
 
-class MyArrowHeadBase : public MyElementBase {
+class MyArrowHeadBase : public MyNetworkElementBase {
 
 public:
 
@@ -11,7 +11,7 @@ public:
         CLASSIC_ARROW_HEAD,
     } ARROW_HEAD_TYPE;
 
-    MyArrowHeadBase(const QString& name, MyElementBase* edge);
+    MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge);
     
     ~MyArrowHeadBase();
     
@@ -20,7 +20,7 @@ public:
     virtual ARROW_HEAD_TYPE arrowHeadType() = 0;
     
     // get the edge this arrow head belongs to
-    MyElementBase* edge();
+    MyNetworkElementBase* edge();
     
     void updateGraphicsItem() override;
     
@@ -41,7 +41,7 @@ public:
     void write(QJsonObject &json) override;
     
 protected:
-    MyElementBase* _edge;
+    MyNetworkElementBase* _edge;
     QPointF _position;
     qreal _slope;
 };
@@ -51,7 +51,7 @@ class MyClassicArrowHead : public MyArrowHeadBase {
 
 public:
 
-    MyClassicArrowHead(const QString& name, MyElementBase* edge);
+    MyClassicArrowHead(const QString& name, MyNetworkElementBase* edge);
 
     ARROW_HEAD_TYPE arrowHeadType() override;
 

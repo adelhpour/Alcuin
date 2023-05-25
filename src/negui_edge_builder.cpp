@@ -3,8 +3,8 @@
 #include "negui_edge.h"
 #include "negui_edge_style.h"
 
-MyElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, MyElementBase* startNode, MyElementBase* endNode) {
-    MyElementBase* edge = NULL;
+MyNetworkElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) {
+    MyNetworkElementBase* edge = NULL;
     if (((MyEdgeStyleBase*)edgeStyle)->edgeStyleType() == MyEdgeStyleBase::CLASSIC_EDGE_STYLE)
         edge = new MyClassicEdge(name, startNode, endNode);
 
@@ -14,8 +14,8 @@ MyElementBase* createEdge(const QString& name, MyElementStyleBase* edgeStyle, My
     return edge;
 }
 
-MyElementBase* createEdge(const QJsonObject &json, MyElementBase* startNode, MyElementBase* endNode) {
-    MyElementBase* edge = NULL;
+MyNetworkElementBase* createEdge(const QJsonObject &json, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) {
+    MyNetworkElementBase* edge = NULL;
     if (startNode && endNode && json.contains("id") && json["id"].isString()) {
         if (json.contains("style") && json["style"].isObject()) {
             MyElementStyleBase* edgeStyle = createEdgeStyle(json["style"].toObject());
