@@ -1,11 +1,13 @@
 #ifndef __NEGUI_ELEMENT_GRAPHICS_ITEM_BASE_H
 #define __NEGUI_ELEMENT_GRAPHICS_ITEM_BASE_H
 
+#include "negui_scene_mode_element_base.h"
 #include "negui_shape_graphics_item_base.h"
+
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-class MyElementGraphicsItemBase : public QObject, public QGraphicsItemGroup {
+class MyElementGraphicsItemBase : public QObject, public MySceneModeElementBase, public QGraphicsItemGroup {
     Q_OBJECT
     
 public:
@@ -42,17 +44,7 @@ public:
     
     void setZValue(qreal z);
     
-    virtual void enableNormalMode();
-    
-    virtual void enableAddNodeMode();
-    
-    virtual void enableSelectNodeMode();
-    
-    virtual void enableAddEdgeMode();
-    
-    virtual void enableSelectEdgeMode();
-    
-    virtual void enableRemoveMode();
+    void enableNormalMode() override;
     
 signals:
     
@@ -75,7 +67,6 @@ protected:
     QList<MyShapeStyleBase*> _shapeStyles;
     QList<QGraphicsItem*> _focusedGraphicsItems;
     bool _isChosen;
-    bool _canDisplayFocusedGraphicsItems;
 };
 
 #endif

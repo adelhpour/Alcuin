@@ -5,7 +5,6 @@
 // MyElementGraphicsItemBase
 
 MyElementGraphicsItemBase::MyElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
-    _canDisplayFocusedGraphicsItems = false;
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearFocusedGraphicsItems()));
@@ -118,7 +117,7 @@ void MyElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
 }
 
 void MyElementGraphicsItemBase::setFocused(const bool& isFocused) {
-    if (isFocused && _canDisplayFocusedGraphicsItems)
+    if (isFocused && getSceneMode() == NORMAL_MODE)
         addFocusedGraphicsItems();
     else
         clearFocusedGraphicsItems();
@@ -144,28 +143,8 @@ void MyElementGraphicsItemBase::setZValue(qreal z) {
 }
 
 void MyElementGraphicsItemBase::enableNormalMode() {
-    _canDisplayFocusedGraphicsItems = true;
+    MySceneModeElementBase::enableNormalMode();
     clearFocusedGraphicsItems();
-}
-
-void MyElementGraphicsItemBase::enableAddNodeMode() {
-    _canDisplayFocusedGraphicsItems = false;
-}
-
-void MyElementGraphicsItemBase::enableSelectNodeMode() {
-    _canDisplayFocusedGraphicsItems = false;
-}
-
-void MyElementGraphicsItemBase::enableAddEdgeMode() {
-    _canDisplayFocusedGraphicsItems = false;
-}
-
-void MyElementGraphicsItemBase::enableSelectEdgeMode() {
-    _canDisplayFocusedGraphicsItems = false;
-}
-
-void MyElementGraphicsItemBase::enableRemoveMode() {
-    _canDisplayFocusedGraphicsItems = false;
 }
 
 void MyElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {

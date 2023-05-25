@@ -3,6 +3,7 @@
 
 #include "negui_element_base.h"
 #include "negui_interfaces.h"
+#include "negui_scene_mode_element_base.h"
 
 #include <QObject>
 #include <QPluginLoader>
@@ -12,20 +13,12 @@
 #include <QToolButton>
 #include <QPushButton>
 
-class MyInteractor : public QObject {
+
+
+class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
     
 public:
-    
-    typedef enum {
-        NORMAL_MODE,
-        ADD_NODE_MODE,
-        ADD_EDGE_MODE,
-        SELECT_MODE,
-        SELECT_NODE_MODE,
-        SELECT_EDGE_MODE,
-        REMOVE_MODE,
-    } SceneMode;
     
     MyInteractor(QObject *parent = nullptr);
     
@@ -62,9 +55,7 @@ public:
     QUndoStack* undoStack();
     
     // modes
-    void setMode(SceneMode mode);
-    SceneMode getMode();
-    const QString getModeAsString();
+    void setSceneMode(SceneMode sceneMode) override;
     
     // network
     void setNetworkExtents(const QJsonObject& json);
@@ -133,13 +124,13 @@ public slots:
     const QList<MyElementBase*> selectedEdges();
     
     // modes
-    void enableNormalMode();
+    void enableNormalMode() override;
     void enableAddNodeMode(MyPluginItemBase* style);
     void enableAddEdgeMode(MyPluginItemBase* style);
     void enableSelectMode(const QString& elementCategory = "");
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
-    void enableRemoveMode();
+    void enableRemoveMode() override;
     
     void clearElementsFocusedGraphicsItems();
     void displaySelectionArea(const QPointF& position);
@@ -213,9 +204,6 @@ protected:
     
     // undo stack
     QUndoStack* _undoStack;
-    
-    // modes
-    SceneMode _mode;
     
     // elements
     QList<MyElementBase*> _nodes;

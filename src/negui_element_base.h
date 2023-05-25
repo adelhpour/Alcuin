@@ -1,11 +1,12 @@
 #ifndef __NEGUI_ELEMENT_BASE_H
 #define __NEGUI_ELEMENT_BASE_H
 
+#include "negui_scene_mode_element_base.h"
 #include "negui_base.h"
 #include "negui_element_graphics_item_base.h"
 #include "negui_element_style_base.h"
 
-class MyElementBase : public QObject, public MyBase {
+class MyElementBase : public QObject, public MySceneModeElementBase, public MyBase{
     Q_OBJECT
     
 public:
@@ -40,17 +41,17 @@ public:
     
     const bool isSelected();
     
-    virtual void enableNormalMode();
+    void enableNormalMode() override;
     
-    virtual void enableAddNodeMode();
+    void enableAddNodeMode() override;
     
-    virtual void enableSelectNodeMode();
+    void enableSelectNodeMode() override;
     
-    virtual void enableAddEdgeMode();
+    void enableAddEdgeMode() override;
     
-    virtual void enableSelectEdgeMode();
+    void enableSelectEdgeMode() override;
     
-    virtual void enableRemoveMode();
+    void enableRemoveMode() override;
     
     virtual const QRectF getExtents() = 0;
     
@@ -76,7 +77,6 @@ protected:
     MyElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;
-    bool _canDisplayFeatureMenu;
 };
 
 #endif

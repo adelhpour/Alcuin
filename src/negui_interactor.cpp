@@ -169,32 +169,9 @@ void MyInteractor::createChangeStageCommand() {
     }
 }
 
-void MyInteractor::setMode(SceneMode mode) {
-    _mode = mode;
-    emit modeIsSet(getModeAsString());
-}
-
-MyInteractor::SceneMode MyInteractor::getMode() {
-    return _mode;
-}
-
-const QString MyInteractor::getModeAsString() {
-    if (_mode == NORMAL_MODE)
-        return "Normal";
-    else if (_mode == ADD_NODE_MODE)
-        return "Add_Node";
-    else if (_mode == ADD_EDGE_MODE)
-        return "Add_Edge";
-    else if (_mode == SELECT_MODE)
-        return "Select";
-    else if (_mode == SELECT_NODE_MODE)
-        return "Select_Node";
-    else if (_mode == SELECT_EDGE_MODE)
-        return "Select_Edge";
-    else if (_mode == REMOVE_MODE)
-        return "Remove";
-
-    return "";
+void MyInteractor::setSceneMode(SceneMode sceneMode) {
+    MySceneModeElementBase::setSceneMode(sceneMode);
+    emit modeIsSet(getSceneModeAsString());
 }
 
 void MyInteractor::createNetwork(const QJsonObject& json) {
@@ -275,7 +252,7 @@ void MyInteractor::addNode(MyElementBase* n) {
 }
 
 void MyInteractor::addNewNode(const QPointF& position) {
-    if (getMode() == ADD_NODE_MODE) {
+    if (getSceneMode() == ADD_NODE_MODE) {
         MyElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
         addNode(node);
         createChangeStageCommand();
@@ -371,7 +348,7 @@ void MyInteractor::addEdge(MyElementBase* e) {
 }
 
 void MyInteractor::addNewEdge(MyElementBase* element) {
-    if (getMode() == ADD_EDGE_MODE) {
+    if (getSceneMode() == ADD_EDGE_MODE) {
         if (!_newEdgeBuilder) {
             if (edgeStyle()->type() == "templatestyle") {
                 _newEdgeBuilder = new MyNewTemplateBuilder(edgeStyle());
@@ -473,7 +450,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 }
 
 void MyInteractor::selectNode(MyElementBase* element) {
-    if (getMode() == SELECT_MODE) {
+    if (getSceneMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -482,7 +459,7 @@ void MyInteractor::selectNode(MyElementBase* element) {
 }
 
 void MyInteractor::selectEdge(MyElementBase* element) {
-    if (getMode() == SELECT_MODE) {
+    if (getSceneMode() == SELECT_MODE) {
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -491,7 +468,7 @@ void MyInteractor::selectEdge(MyElementBase* element) {
 }
 
 void MyInteractor::removeItem(MyElementBase* element) {
-    if (getMode() == REMOVE_MODE) {
+    if (getSceneMode() == REMOVE_MODE) {
         if (element->type() == MyElementBase::NODE_ELEMENT) {
             removeNode(element);
             for (MyElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
@@ -526,7 +503,7 @@ const QList<MyElementBase*> MyInteractor::selectedEdges() {
 }
 
 void MyInteractor::enableNormalMode() {
-    setMode(NORMAL_MODE);
+    MySceneModeElementBase::enableNormalMode();
     setNodeStyle(NULL);
     setEdgeStyle(NULL);
     deleteNewEdgeBuilder();
@@ -540,7 +517,7 @@ void MyInteractor::enableNormalMode() {
 
 void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
-    setMode(ADD_NODE_MODE);
+    MySceneModeElementBase::enableAddNodeMode();
     setNodeStyle(dynamic_cast<MyElementStyleBase*>(style));
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
@@ -552,7 +529,7 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
-    setMode(ADD_EDGE_MODE);
+    MySceneModeElementBase::enableAddEdgeMode();
     setEdgeStyle(dynamic_cast<MyElementStyleBase*>(style));
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();
@@ -564,7 +541,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
 
 void MyInteractor::enableSelectMode(const QString& elementCategory) {
     enableNormalMode();
-    setMode(SELECT_MODE);
+    MySceneModeElementBase::enableSelectMode();
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
     for (MyElementBase *edge : qAsConst(edges()))
@@ -575,7 +552,7 @@ void MyInteractor::enableSelectMode(const QString& elementCategory) {
 
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
     enableNormalMode();
-    setMode(SELECT_NODE_MODE);
+    MySceneModeElementBase::enableSelectNodeMode();
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
     for (MyElementBase *edge : qAsConst(edges()))
@@ -586,7 +563,7 @@ void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
 
 void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     enableNormalMode();
-    setMode(SELECT_EDGE_MODE);
+    MySceneModeElementBase::enableSelectEdgeMode();
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableSelectEdgeMode();
     for (MyElementBase *edge : qAsConst(edges()))
@@ -597,7 +574,7 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
 
 void MyInteractor::enableRemoveMode() {
     enableNormalMode();
-    setMode(REMOVE_MODE);
+    MySceneModeElementBase::enableRemoveMode();
     for (MyElementBase *node : qAsConst(nodes()))
         node->enableRemoveMode();
     for (MyElementBase *edge : qAsConst(edges()))
@@ -614,7 +591,7 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
-    if (getMode() == SELECT_MODE) {
+    if (getSceneMode() == SELECT_MODE) {
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
