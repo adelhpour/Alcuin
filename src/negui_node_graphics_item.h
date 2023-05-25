@@ -1,10 +1,10 @@
 #ifndef __NEGUI_NODE_GRAPHICS_ITEM_H
 #define __NEGUI_NODE_GRAPHICS_ITEM_H
 
-#include "negui_element_graphics_item_base.h"
+#include "negui_network_element_graphics_item_base.h"
 #include <QKeyEvent>
 
-class MyNodeGraphicsItemBase : public MyElementGraphicsItemBase {
+class MyNodeGraphicsItemBase : public MyNetworkElementGraphicsItemBase {
     Q_OBJECT
     
 public:

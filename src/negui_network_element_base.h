@@ -3,7 +3,7 @@
 
 #include "negui_base.h"
 #include "negui_scene_mode_element_base.h"
-#include "negui_element_graphics_item_base.h"
+#include "negui_network_element_graphics_item_base.h"
 #include "negui_network_element_style_base.h"
 
 class MyNetworkElementBase : public QObject, public MySceneModeElementBase, public MyBase{
@@ -21,7 +21,7 @@ public:
     
     virtual ELEMENT_TYPE type() = 0;
     
-    MyElementGraphicsItemBase* graphicsItem();
+    MyNetworkElementGraphicsItemBase* graphicsItem();
     
     virtual void updateGraphicsItem();
     
@@ -73,7 +73,7 @@ protected slots:
     
 protected:
     
-    MyElementGraphicsItemBase* _graphicsItem;
+    MyNetworkElementGraphicsItemBase* _graphicsItem;
     MyNetworkElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;

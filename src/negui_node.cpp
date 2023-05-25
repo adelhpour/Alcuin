@@ -28,7 +28,7 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 }
 
 void MyNodeBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
@@ -234,7 +234,7 @@ MyNodeBase::NODE_TYPE MyClassicNode::nodeType() {
     return CLASSIC_NODE;
 }
 
-MyElementGraphicsItemBase* MyClassicNode::createGraphicsItem(const QPointF &position) {
+MyNetworkElementGraphicsItemBase* MyClassicNode::createGraphicsItem(const QPointF &position) {
     return createClassicNodeSceneGraphicsItem(position);
 }
 
@@ -350,7 +350,7 @@ void MyCentroidNode::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
 }
 
-MyElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
+MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
     return createCentroidNodeSceneGraphicsItem(position);
 }
 

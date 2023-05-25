@@ -11,7 +11,7 @@ MyNetworkElementBase::MyNetworkElementBase(const QString& name) : MyBase(name) {
     _isSelected = false;
 }
 
-MyElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
+MyNetworkElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
     return _graphicsItem;
 }
 

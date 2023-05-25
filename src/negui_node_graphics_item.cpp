@@ -4,7 +4,7 @@
 
 // MyNodeGraphicsItemBase
 
-MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
+MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyNetworkElementGraphicsItemBase(parent) {
     enableNormalMode();
 }
 
@@ -67,37 +67,37 @@ void MyNodeSceneGraphicsItemBase::moveChildItems(const QPointF& movedDistance) {
 }
 
 void MyNodeSceneGraphicsItemBase::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
+    MyNetworkElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, true);
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddNodeMode() {
-    MyElementGraphicsItemBase::enableAddNodeMode();
+    MyNetworkElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectNodeMode() {
-    MyElementGraphicsItemBase::enableSelectNodeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddEdgeMode() {
-    MyElementGraphicsItemBase::enableAddEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
-    MyElementGraphicsItemBase::enableSelectEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::ArrowCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableRemoveMode() {
-    MyElementGraphicsItemBase::enableRemoveMode();
+    MyNetworkElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
@@ -113,7 +113,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
 }
 
 void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    MyElementGraphicsItemBase::mouseMoveEvent(event);
+    MyNetworkElementGraphicsItemBase::mouseMoveEvent(event);
     emit positionChangedByMouseMoveEvent();
 }
 
@@ -146,7 +146,7 @@ MyClassicNodeSceneGraphicsItem::MyClassicNodeSceneGraphicsItem(const QPointF &po
 }
 
 void MyClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
-    MyElementGraphicsItemBase::clearFocusedGraphicsItems();
+    MyNetworkElementGraphicsItemBase::clearFocusedGraphicsItems();
     emit askForResetPosition();
     adjustOriginalPosition();
     emit askForCreateChangeStageCommand();
@@ -178,13 +178,13 @@ void MyClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 void MyClassicNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    MyElementGraphicsItemBase::mousePressEvent(event);
+    MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
         _mousePressedPosition = event->scenePos();
 }
 
 void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
             setFocused(true);
@@ -224,7 +224,7 @@ void MyCentroidNodeSceneGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
 void MyCentroidNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton)
         setFocused(false);
-    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
 }
 
 // MyNodeIconGraphicsItem

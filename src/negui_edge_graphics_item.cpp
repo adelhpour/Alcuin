@@ -4,7 +4,7 @@
 
 // MyEdgeGraphicsItemBase
 
-MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
+MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyNetworkElementGraphicsItemBase(parent) {
     enableNormalMode();
 }
 
@@ -53,43 +53,43 @@ MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdge
 }
 
 void MyEdgeSceneGraphicsItem::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
+    MyNetworkElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableAddNodeMode() {
-    MyElementGraphicsItemBase::enableAddNodeMode();
+    MyNetworkElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableSelectNodeMode() {
-    MyElementGraphicsItemBase::enableSelectNodeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableAddEdgeMode() {
-    MyElementGraphicsItemBase::enableAddEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
-    MyElementGraphicsItemBase::enableSelectEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::PointingHandCursor);
 }
 
 void MyEdgeSceneGraphicsItem::enableRemoveMode() {
-    MyElementGraphicsItemBase::enableRemoveMode();
+    MyNetworkElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::PointingHandCursor);
 }
 
 void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    MyElementGraphicsItemBase::mousePressEvent(event);
+    MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
         _mousePressedPosition = event->scenePos();
 }
 
 void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    MyElementGraphicsItemBase::mouseReleaseEvent(event);
+    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
             setFocused(true);

@@ -160,7 +160,7 @@ qreal MyTemplateIconBuilder::getIntermediaryShapeWidth() {
 QList<QGraphicsItem*> getNodeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* nodeIconItem = createNodeIconGraphicsItem(position);
-    ((MyElementGraphicsItemBase*)nodeIconItem)->addShapeItems(style->shapeStyles());
+    ((MyNetworkElementGraphicsItemBase*)nodeIconItem)->addShapeItems(style->shapeStyles());
     items.push_back(nodeIconItem);
     
     return items;
@@ -169,7 +169,7 @@ QList<QGraphicsItem*> getNodeIconGraphicsItems(MyNetworkElementStyleBase* style,
 QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& startPoint, const QPointF& endPoint) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* edgeIconItem = createEdgeIconGraphicsItem(startPoint, endPoint);
-    ((MyElementGraphicsItemBase*)edgeIconItem)->addShapeItems(style->shapeStyles());
+    ((MyNetworkElementGraphicsItemBase*)edgeIconItem)->addShapeItems(style->shapeStyles());
     items.push_back(edgeIconItem);
     
     return items;
@@ -178,7 +178,7 @@ QList<QGraphicsItem*> getEdgeIconGraphicsItems(MyNetworkElementStyleBase* style,
 QList<QGraphicsItem*> getArrowHeadIconGraphicsItems(MyNetworkElementStyleBase* style, const QPointF& position, const qreal& rotation) {
     QList<QGraphicsItem*> items;
     QGraphicsItem* arrowHeadIconItem = createArrowHeadIconGraphicsItem(position, rotation);
-    ((MyElementGraphicsItemBase*)arrowHeadIconItem)->addShapeItems(style->shapeStyles());
+    ((MyNetworkElementGraphicsItemBase*)arrowHeadIconItem)->addShapeItems(style->shapeStyles());
     items.push_back(arrowHeadIconItem);
     
     return items;

@@ -32,7 +32,7 @@ public:
     // get edges
     QList<MyNetworkElementBase*>& edges();
 
-    virtual MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
+    virtual MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
     
     void updateGraphicsItem() override;
     
@@ -115,7 +115,7 @@ public:
 
     NODE_TYPE nodeType() override;
 
-    MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to child nodes
     void addChildNode(MyNetworkElementBase* n);
@@ -164,7 +164,7 @@ public:
 
     void connectGraphicsItem() override;
 
-    MyElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     // add to edges
     void addEdge(MyNetworkElementBase* e) override;

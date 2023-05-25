@@ -5,7 +5,7 @@
 
 // MyArrowHeadGraphicsItemBase
 
-MyArrowHeadGraphicsItemBase::MyArrowHeadGraphicsItemBase(QGraphicsItem *parent) : MyElementGraphicsItemBase(parent) {
+MyArrowHeadGraphicsItemBase::MyArrowHeadGraphicsItemBase(QGraphicsItem *parent) : MyNetworkElementGraphicsItemBase(parent) {
     enableNormalMode();
 }
 
@@ -38,32 +38,32 @@ void MyArrowHeadSceneGraphicsItem::update(const QPointF& position, const qreal& 
 }
 
 void MyArrowHeadSceneGraphicsItem::enableNormalMode() {
-    MyElementGraphicsItemBase::enableNormalMode();
+    MyNetworkElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableAddNodeMode() {
-    MyElementGraphicsItemBase::enableAddNodeMode();
+    MyNetworkElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableSelectNodeMode() {
-    MyElementGraphicsItemBase::enableSelectNodeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableAddEdgeMode() {
-    MyElementGraphicsItemBase::enableAddEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableSelectEdgeMode() {
-    MyElementGraphicsItemBase::enableSelectEdgeMode();
+    MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
 void MyArrowHeadSceneGraphicsItem::enableRemoveMode() {
-    MyElementGraphicsItemBase::enableRemoveMode();
+    MyNetworkElementGraphicsItemBase::enableRemoveMode();
     setCursor(Qt::ArrowCursor);
 }
 
