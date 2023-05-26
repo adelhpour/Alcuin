@@ -58,6 +58,8 @@ public:
     void setSceneMode(SceneMode sceneMode) override;
     
     // network
+    void saveCurrentNetwork();
+    const qint32& currentNetworkNameIndex();
     void setNetworkExtents(const QJsonObject& json);
     void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
     const QRectF& networkExtents();
@@ -97,6 +99,7 @@ signals:
     void askForDisplayFeatureMenu(QWidget*);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
+    void currentNetworkNameIsUpdated(const QString&);
     
     void enterKeyIsPressed();
     
@@ -110,6 +113,7 @@ public slots:
     QToolButton* getRemoveModeButton();
     
     // network
+    void resetNetworkCanvas();
     void resetNetwork();
     void createNetwork(const QJsonObject &json);
     QJsonObject exportNetworkInfo();
@@ -216,12 +220,14 @@ protected:
     // network
     QRectF _networkExtents;
     QJsonObject _stageInfo;
+    qint32 _currentNetworkNameIndex;
 };
 
+QString getNetworkUniqueName(const qint32& currentNetworkNameIndex);
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
 MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
 MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
 MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
-QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
 MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* style);
 MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle);
 

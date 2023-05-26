@@ -48,6 +48,9 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     // builder
     _newEdgeBuilder = NULL;
     _selectionAreaGraphicsItem = NULL;
+
+    // network
+    _currentNetworkNameIndex = 1;
     
     loadPlugins();
     resetNetwork();
@@ -181,11 +184,28 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
     addEdges(json);
 }
 
+void MyInteractor::resetNetworkCanvas() {
+    saveCurrentNetwork();
+    undoStack()->clear();
+    resetNetwork();
+    emit currentNetworkNameIsUpdated(getNetworkUniqueName(currentNetworkNameIndex()));
+}
+
+void MyInteractor::saveCurrentNetwork() {
+    if (undoStack()->canUndo())
+        ++_currentNetworkNameIndex;
+}
+
+
 void MyInteractor::resetNetwork() {
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
     setNetworkExtents(30.0, 20.0, 840.0, 560.0);
+}
+
+const qint32& MyInteractor::currentNetworkNameIndex() {
+    return _currentNetworkNameIndex;
 }
 
 void MyInteractor::setNetworkExtents(const QJsonObject& json) {
@@ -924,10 +944,33 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
 
 QToolButton* MyInteractor::createResetSceneMenuButton() {
     QToolButton* button = new MyToolButton();
-    connect(button, SIGNAL(clicked()), this, SLOT(resetNetwork()));
+    connect(button, SIGNAL(clicked()), this, SLOT(resetNetworkCanvas()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForResetScale()));
     decorateResetSceneButton(button);
     return button;
+}
+
+QString getNetworkUniqueName(const qint32& currentNetworkNameIndex) {
+    return "network" + QString::number(currentNetworkNameIndex);
+}
+
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
+    QString name;
+    qreal k = 0;
+    bool isSimilarNameFound = true;
+    while(isSimilarNameFound) {
+        name = defaultNameSection + "_" + QString::number(k);
+        isSimilarNameFound = false;
+        for (MyNetworkElementBase *element : qAsConst(elements)) {
+            if (element->name() == name) {
+                isSimilarNameFound = true;
+                break;
+            }
+        }
+        ++k;
+    }
+
+    return name;
 }
 
 MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name) {
@@ -951,25 +994,6 @@ MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJso
         return findElement(nodes, json["end"]["node"].toString());
     
     return NULL;
-}
-
-QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
-    QString name;
-    qreal k = 0;
-    bool isSimilarNameFound = true;
-    while(isSimilarNameFound) {
-        name = defaultNameSection + "_" + QString::number(k);
-        isSimilarNameFound = false;
-        for (MyNetworkElementBase *element : qAsConst(elements)) {
-            if (element->name() == name) {
-                isSimilarNameFound = true;
-                break;
-            }
-        }
-        ++k;
-    }
-    
-    return name;
 }
 
 MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* nodeStyle) {
