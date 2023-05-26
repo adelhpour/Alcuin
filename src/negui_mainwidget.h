@@ -18,8 +18,9 @@ public:
     
     explicit MyNetworkEditorWidget(QWidget *parent = nullptr);
     ~MyNetworkEditorWidget();
-    
+
     QObject* interactor();
+    QWidget* title();
     QWidget* toolBar();
     QWidget* modeMenu();
     QWidget* view();
@@ -34,10 +35,11 @@ protected:
     void setWidgets();
     void setInteractions();
     void setReadyToLaunch();
-    
+
+    QObject* _interactor;
+    QWidget* _title;
     QWidget* _toolBar;
     QWidget* _view;
-    QObject* _interactor;
     QWidget* _modeMenu;
     QWidget* _featureMenu;
 };

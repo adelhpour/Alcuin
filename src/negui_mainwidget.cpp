@@ -22,9 +22,10 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(toolBar(), 0, 0, 1, 3);
-    layout->addWidget(modeMenu(), 1, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
-    layout->addWidget(view(), 1, 1, 1, 1);
+    layout->addWidget(title(), 0, 0, 1, 3, Qt::AlignCenter);
+    layout->addWidget(toolBar(), 1, 0, 1, 3);
+    layout->addWidget(modeMenu(), 2, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
+    layout->addWidget(view(), 2, 1, 1, 1);
     setLayout(layout);
 
     setReadyToLaunch();
@@ -35,6 +36,7 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 }
 
 void MyNetworkEditorWidget::setWidgets() {
+    _title = new QLabel(this);
     _toolBar = new MyToolBar(this);
     _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
@@ -51,6 +53,10 @@ void MyNetworkEditorWidget::setWidgets() {
 }
 
 void MyNetworkEditorWidget::setInteractions() {
+    /// main widget
+    // set title
+    connect((MyInteractor*)interactor(), &MyInteractor::currentNetworkNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
+
     /// feature menu
     // display feature menu
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
@@ -108,6 +114,10 @@ QObject* MyNetworkEditorWidget::interactor() {
     return _interactor;
 }
 
+QWidget* MyNetworkEditorWidget::title() {
+    return _title;
+}
+
 QWidget* MyNetworkEditorWidget::toolBar() {
     return _toolBar;
 }
@@ -122,7 +132,7 @@ QWidget* MyNetworkEditorWidget::view() {
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((QGridLayout*)layout())->addWidget(featureMenu, 1, 2, 1, 1, Qt::AlignTop);
+    ((QGridLayout*)layout())->addWidget(featureMenu, 2, 2, 1, 1, Qt::AlignTop);
     _featureMenu = featureMenu;
 }
 
@@ -135,5 +145,6 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
 }
 
 void MyNetworkEditorWidget::setReadyToLaunch() {
+    ((MyInteractor*)interactor())->resetNetworkCanvas();
     ((MyInteractor*)interactor())->enableNormalMode();
 }
