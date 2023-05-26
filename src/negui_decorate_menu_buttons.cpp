@@ -4,7 +4,7 @@
 void decorateImportButton(QToolButton* button) {
     button->setText("Import");
     button->setToolTip("Import from a file");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/file-plus.svg");
+    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/folder.svg");
 }
 
 void decorateExportButton(QToolButton* button) {
@@ -29,8 +29,8 @@ void decorateRedoActionButton(QToolButton* button) {
 
 void decorateResetSceneButton(QToolButton* button) {
     button->setText("Reset");
-    button->setToolTip("Remove all network elements from the scene");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/trash-2.svg");
+    button->setToolTip("Remove all network elements from the scene and create a new canvas");
+    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/file.svg");
 }
 
 void decorateNormalModeButton(QToolButton* button) {
