@@ -66,4 +66,12 @@ public:
     MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
 };
 
+class MyAutoSaveDialog : public MyDialog {
+    Q_OBJECT
+
+public:
+
+    MyAutoSaveDialog(QWidget *parent = nullptr);
+};
+
 #endif

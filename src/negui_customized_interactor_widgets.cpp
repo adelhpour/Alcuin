@@ -98,3 +98,9 @@ MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent
     }
 }
 
+// MyAutoSaveDialog
+
+MyAutoSaveDialog::MyAutoSaveDialog(QWidget *parent) {
+
+}
+
