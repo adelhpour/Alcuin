@@ -194,8 +194,11 @@ void MyInteractor::resetNetworkCanvas() {
 void MyInteractor::saveCurrentNetwork() {
     if (undoStack()->canUndo()) {
         QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
-        if (dataExportPlugins.size())
-            writeDataToFile(dataExportPlugins.at(0));
+        if (dataExportPlugins.size()) {
+            QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(createNetworkDefaultName());
+            if (autoSaveMessageBox->exec() == QMessageBox::Yes)
+                writeDataToFile(dataExportPlugins.at(0));
+        }
         ++_currentNetworkNameIndex;
     }
 }

@@ -7,6 +7,7 @@
 #include <QUndoStack>
 #include <QWidgetAction>
 #include <QPushButton>
+#include <QMessageBox>
 #include <QVBoxLayout>
 
 class MyUndoStack : public QUndoStack {
@@ -66,12 +67,12 @@ public:
     MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
 };
 
-class MyAutoSaveDialog : public MyDialog {
+class MyAutoSaveMessageBox : public QMessageBox {
     Q_OBJECT
 
 public:
 
-    MyAutoSaveDialog(QWidget *parent = nullptr);
+    MyAutoSaveMessageBox(const QString& networkName, QWidget *parent = nullptr);
 };
 
 #endif
