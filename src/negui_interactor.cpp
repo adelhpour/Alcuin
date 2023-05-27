@@ -188,12 +188,25 @@ void MyInteractor::resetNetworkCanvas() {
     saveCurrentNetwork();
     undoStack()->clear();
     resetNetwork();
-    emit currentNetworkNameIsUpdated(getNetworkUniqueName(currentNetworkNameIndex()));
+    emit currentNetworkNameIsUpdated(createNetworkDefaultName());
 }
 
 void MyInteractor::saveCurrentNetwork() {
-    if (undoStack()->canUndo())
+    if (undoStack()->canUndo()) {
+        QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
+        if (dataExportPlugins.size())
+            writeDataToFile(dataExportPlugins.at(0));
         ++_currentNetworkNameIndex;
+    }
+}
+
+const QString MyInteractor::createNetworkDefaultName() {
+    QString networkName = "network";
+    QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
+    if (dataExportPlugins.size() && !((MyExportToolBase*)dataExportPlugins.at(0))->defaultSaveFileName().isEmpty())
+        networkName = ((MyExportToolBase*)dataExportPlugins.at(0))->defaultSaveFileName();
+
+    return networkName + QString::number(currentNetworkNameIndex());
 }
 
 

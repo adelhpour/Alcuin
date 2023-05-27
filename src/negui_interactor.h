@@ -59,6 +59,7 @@ public:
     
     // network
     void saveCurrentNetwork();
+    const QString createNetworkDefaultName();
     const qint32& currentNetworkNameIndex();
     void setNetworkExtents(const QJsonObject& json);
     void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
