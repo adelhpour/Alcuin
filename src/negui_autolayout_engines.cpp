@@ -34,10 +34,10 @@ QList<MyParameterBase*>& MyAutoLayoutEngine::parameters() {
 
 int MyAutoLayoutEngine::takeParameters() {
     if (parameters().size()) {
-        MyDialog* modificationBox = new MyParameterSetDialog(parameters());
-        modificationBox->setWindowTitle(name() + " AutoLayout Engine");
-        modificationBox->setButtons();
-        if (modificationBox->exec() == QDialog::Rejected)
+        MyDialog* parameterSetDialog = new MyParameterSetDialog(parameters());
+        parameterSetDialog->setWindowTitle(name() + " AutoLayout Engine");
+        parameterSetDialog->setButtons();
+        if (parameterSetDialog->exec() == QDialog::Rejected)
             return -1;
     }
 
