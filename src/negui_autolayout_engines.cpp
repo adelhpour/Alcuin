@@ -1,7 +1,5 @@
 #include "negui_autolayout_engines.h"
-#include "negui_customized_common_widgets.h"
 
-#include <QDialogButtonBox>
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QGridLayout>
@@ -36,28 +34,13 @@ QList<MyParameterBase*>& MyAutoLayoutEngine::parameters() {
 
 int MyAutoLayoutEngine::takeParameters() {
     if (parameters().size()) {
-        MyDialog* modificationBox =  new MyDialog();
+        MyDialog* modificationBox = new MyParameterSetDialog(parameters());
         modificationBox->setWindowTitle(name() + " AutoLayout Engine");
-        QGridLayout modificationBoxLayout(modificationBox);
-        modificationBox->resize(300, 150);
-        QWidget* inputWidget = NULL;
-        for (MyParameterBase *parameter : qAsConst(parameters())) {
-            modificationBoxLayout.addWidget(new MyLabel(parameter->name()), modificationBoxLayout.rowCount(), 0);
-            inputWidget = parameter->inputWidget();
-            if (inputWidget)
-                modificationBoxLayout.addWidget(inputWidget, modificationBoxLayout.rowCount() - 1, 1);
-        }
-        QDialogButtonBox modificationBoxButtons(Qt::Horizontal, modificationBox);
-        modificationBoxButtons.addButton(QDialogButtonBox::Cancel);
-        modificationBoxButtons.addButton(QString("Apply"), QDialogButtonBox::AcceptRole);
-        modificationBoxLayout.addWidget(&modificationBoxButtons, modificationBoxLayout.rowCount(), 0, 1, 2);
-        QObject::connect(&modificationBoxButtons, SIGNAL(accepted()), modificationBox, SLOT(accept()));
-        QObject::connect(&modificationBoxButtons, SIGNAL(rejected()), modificationBox, SLOT(reject()));
-        
+        modificationBox->setButtons();
         if (modificationBox->exec() == QDialog::Rejected)
             return -1;
     }
-    
+
     return 0;
 }
 
@@ -103,7 +86,7 @@ void MyAutoLayoutEngine::read(const QJsonObject &json) {
             }
         }
     }
-    
+
     // icon directory
     if (json.contains("icon-file") && json["icon-file"].isString())
         _iconDirectory = json["icon-file"].toString();
@@ -112,7 +95,7 @@ void MyAutoLayoutEngine::read(const QJsonObject &json) {
 void MyAutoLayoutEngine::write(QJsonObject &json) {
     // name
     json["name"] = name();
-    
+
     // parameters
     QJsonArray parametersArray;
     for (MyParameterBase *parameter : qAsConst(parameters())) {
@@ -121,13 +104,20 @@ void MyAutoLayoutEngine::write(QJsonObject &json) {
         parametersArray.append(parameterObject);
     }
     json["parameters"] = parametersArray;
-    
+
     // icon directory
     json["icon-file"] = iconDirectory();
 }
 
-// MyDialog
+// MyParameterSetDialog
 
-MyDialog::MyDialog(QWidget *parent) : QDialog(parent) {
-    setStyleSheet("QDialog {background-color: white;}");
+MyParameterSetDialog::MyParameterSetDialog(QList<MyParameterBase*> parameters, QWidget *parent) : MyDialog(parent) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QWidget* inputWidget = NULL;
+    for (MyParameterBase *parameter : qAsConst(parameters)) {
+        contentLayout->addWidget(new MyLabel(parameter->name()), contentLayout->rowCount(), 0);
+        inputWidget = parameter->inputWidget();
+        if (inputWidget)
+            contentLayout->addWidget(inputWidget, contentLayout->rowCount() - 1, 1);
+    }
 }

@@ -1,5 +1,7 @@
 #include "negui_customized_common_widgets.h"
 
+#include <QGridLayout>
+
 // MyFrame
 
 MyFrame::MyFrame(QWidget* parent) : QFrame(parent) {
@@ -142,4 +144,23 @@ bool MyToolButtonCategoryMenu::event(QEvent *event) {
         move(pos() + QPoint(_horizontalPadding, 0));
 
     return QMenu::event(event);
+}
+
+// MyDialog
+
+MyDialog::MyDialog(QWidget *parent) : QDialog(parent) {
+    setStyleSheet("QDialog {background-color: white;}");
+    resize(300, 150);
+    setLayout(new QGridLayout());
+}
+
+void MyDialog::setButtons() {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QDialogButtonBox* buttons = new QDialogButtonBox(Qt::Horizontal, this);
+    buttons->addButton(QDialogButtonBox::Cancel);
+    buttons->addButton(QString("Apply"), QDialogButtonBox::AcceptRole);
+    QObject::connect(buttons, SIGNAL(accepted()), this, SLOT(accept()));
+    QObject::connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
+    contentLayout->addWidget(buttons, contentLayout->rowCount(), 0, 1, 2);
+
 }

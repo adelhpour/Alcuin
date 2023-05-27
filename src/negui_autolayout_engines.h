@@ -3,7 +3,7 @@
 
 #include "negui_plugin_item_base.h"
 #include "negui_parameters.h"
-#include <QDialog>
+#include "negui_customized_common_widgets.h"
 
 class MyAutoLayoutEngine : public MyPluginItemBase {
     
@@ -35,12 +35,12 @@ protected:
     QString _iconDirectory;
 };
 
-class MyDialog : public QDialog {
+class MyParameterSetDialog : public MyDialog {
     Q_OBJECT
 
 public:
-    
-    MyDialog(QWidget *parent = nullptr);
+
+    MyParameterSetDialog(QList<MyParameterBase*> parameters, QWidget *parent = nullptr);
 };
 
 #endif

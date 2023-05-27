@@ -14,6 +14,8 @@
 #include <QStandardItem>
 #include <QStandardItem>
 #include <QEvent>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 class MyFrame : public QFrame {
     Q_OBJECT
@@ -134,6 +136,16 @@ public:
 protected:
 
     qint32 _horizontalPadding;
+};
+
+class MyDialog : public QDialog {
+    Q_OBJECT
+
+public:
+
+    MyDialog(QWidget *parent = nullptr);
+
+    void setButtons();
 };
 
 #endif
