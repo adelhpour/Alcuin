@@ -677,12 +677,14 @@ void MyInteractor::clearSelectionArea() {
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
+    saveCurrentNetwork();
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName();
     if (!fileName.isEmpty()) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
         emit askForResetScale();
-        createChangeStageCommand();
         enableNormalMode();
+        undoStack()->clear();
+        emit currentNetworkNameIsUpdated(fileName);
     }
 }
 
