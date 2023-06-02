@@ -45,7 +45,6 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
     // undo stack
     _undoStack = new MyUndoStack(this);
-    _isCurrentNetworkUnsaved = false;
     
     // builder
     _newEdgeBuilder = NULL;
@@ -174,7 +173,7 @@ void MyInteractor::createChangeStageCommand() {
         _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
     }
     if (currentStageInfo != _stageInfo) {
-        _isCurrentNetworkUnsaved = true;
+        ((MyFileManager*)fileManager())->setCurrentNetworkUnsaved(true);
         MyChangeStageCommand* changeStageCommand = new MyChangeStageCommand(_stageInfo, currentStageInfo);
         ((MyUndoStack*)undoStack())->addCommand(changeStageCommand);
         connect(changeStageCommand, SIGNAL(askForCreateNetwork(const QJsonObject&)), this, SLOT(createNetwork(const QJsonObject&)));
@@ -195,22 +194,10 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
 }
 
 void MyInteractor::setNewNetworkCanvas() {
-    if (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork())
+    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         saveCurrentNetwork();
     resetNetworkCanvas();
     ((MyFileManager*)fileManager())->reset();
-}
-
-const bool MyInteractor::isCurrentNetworkUnsaved() {
-    return _isCurrentNetworkUnsaved;
-}
-
-const bool MyInteractor::isWillingToSaveCurrentNetwork() {
-    QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(((MyFileManager*)fileManager())->currentFileName());
-    if (autoSaveMessageBox->exec() == QMessageBox::Yes)
-        return true;
-    
-    return false;
 }
 
 void MyInteractor::saveCurrentNetwork() {
@@ -221,7 +208,6 @@ void MyInteractor::saveCurrentNetwork() {
 }
 
 void MyInteractor::resetNetworkCanvas() {
-    _isCurrentNetworkUnsaved = false;
     resetCanvas();
     resetNetwork();
 }
@@ -692,7 +678,7 @@ void MyInteractor::clearSelectionArea() {
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
-    if (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork())
+    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         saveCurrentNetwork();
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName();
     if (!fileName.isEmpty()) {
@@ -719,7 +705,6 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& 
     ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
     ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
     ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-    _isCurrentNetworkUnsaved = false;
 }
 
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {

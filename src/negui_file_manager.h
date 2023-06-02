@@ -41,6 +41,14 @@ public:
 
     const QString createDefaultFileName();
 
+    const bool canSaveCurrentNetwork();
+
+    const bool isWillingToSaveCurrentNetwork();
+
+    const bool isCurrentNetworkUnsaved();
+
+    void setCurrentNetworkUnsaved(const bool& currentNetworkUnsaved);
+
 signals:
 
     QJsonObject askForNetworkInfo();
@@ -53,6 +61,7 @@ protected:
     QString _lastSavedFileName;;
     MyPluginItemBase* _currentExportTool;
     qint32 _defaultFileNameIndex;
+    bool _isCurrentNetworkUnsaved;
 };
 
 MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName);

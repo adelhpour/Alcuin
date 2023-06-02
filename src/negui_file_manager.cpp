@@ -1,4 +1,5 @@
 #include "negui_file_manager.h"
+#include "negui_customized_common_widgets.h"
 
 // MyFileManager
 
@@ -6,12 +7,14 @@ MyFileManager::MyFileManager(QList<MyPluginItemBase*> importTools, QList<MyPlugi
     _importTools = importTools;
     _exportTools = exportTools;
     _defaultFileNameIndex = 0;
+    _isCurrentNetworkUnsaved = false;
 }
 
 void MyFileManager::reset() {
     resetCurrentExportTool();
     resetCurrentFileName();
     resetLastSavedFileName();
+    _isCurrentNetworkUnsaved = false;
 }
 
 QList<MyPluginItemBase*> MyFileManager::importTools() {
@@ -63,6 +66,7 @@ void MyFileManager::resetLastSavedFileName() {
 
 void MyFileManager::setLastSavedFileName(const QString& fileName) {
     _lastSavedFileName = fileName;
+    _isCurrentNetworkUnsaved = false;
 }
 
 const QString MyFileManager::lastSavedFileName() {
@@ -76,6 +80,26 @@ const QString MyFileManager::createDefaultFileName() {
     ++_defaultFileNameIndex;
 
     return fileName + QString::number(_defaultFileNameIndex);
+}
+
+const bool MyFileManager::canSaveCurrentNetwork() {
+    return (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork());
+}
+
+const bool MyFileManager::isWillingToSaveCurrentNetwork() {
+    QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(currentFileName());
+    if (autoSaveMessageBox->exec() == QMessageBox::Yes)
+        return true;
+
+    return false;
+}
+
+const bool MyFileManager::isCurrentNetworkUnsaved() {
+    return _isCurrentNetworkUnsaved;
+}
+
+void MyFileManager::setCurrentNetworkUnsaved(const bool& currentNetworkUnsaved) {
+    _isCurrentNetworkUnsaved = currentNetworkUnsaved;
 }
 
 MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName) {

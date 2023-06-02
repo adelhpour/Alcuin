@@ -117,8 +117,6 @@ public slots:
     void setNewNetworkCanvas();
     void createNetwork(const QJsonObject &json);
     QJsonObject exportNetworkInfo();
-    const bool isCurrentNetworkUnsaved();
-    const bool isWillingToSaveCurrentNetwork();
     
     // network elements
     void addNewNode(const QPointF& position);
@@ -217,7 +215,6 @@ protected:
     
     // undo stack
     QUndoStack* _undoStack;
-    bool _isCurrentNetworkUnsaved;
     
     // elements
     QList<MyNetworkElementBase*> _nodes;
