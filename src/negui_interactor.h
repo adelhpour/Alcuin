@@ -13,8 +13,6 @@
 #include <QToolButton>
 #include <QPushButton>
 
-
-
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
     
@@ -48,19 +46,21 @@ public:
     bool setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path);
     AutoLayoutInterface* autoLayoutInterface();
     const bool isSetAutoLayoutInterface() const { return _isSetAutoLayoutInterface; }
-    
+
     QList<MyPluginItemBase*>& plugins();
     
     // undo stack
     QUndoStack* undoStack();
+
+    QObject* fileManager();
     
     // modes
     void setSceneMode(SceneMode sceneMode) override;
     
     // network
-    void saveCurrentNetwork();
-    const QString createNetworkDefaultName();
-    const qint32& currentNetworkNameIndex();
+    void resetNetworkCanvas();
+    void resetCanvas();
+    void resetNetwork();
     void setNetworkExtents(const QJsonObject& json);
     void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
     const QRectF& networkExtents();
@@ -100,7 +100,7 @@ signals:
     void askForDisplayFeatureMenu(QWidget*);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
-    void currentNetworkNameIsUpdated(const QString&);
+    void currentFileNameIsUpdated(const QString&);
     
     void enterKeyIsPressed();
     
@@ -114,10 +114,11 @@ public slots:
     QToolButton* getRemoveModeButton();
     
     // network
-    void resetNetworkCanvas();
-    void resetNetwork();
+    void setNewNetworkCanvas();
     void createNetwork(const QJsonObject &json);
     QJsonObject exportNetworkInfo();
+    const bool isCurrentNetworkUnsaved();
+    const bool isWillingToSaveCurrentNetwork();
     
     // network elements
     void addNewNode(const QPointF& position);
@@ -142,9 +143,12 @@ public slots:
     void clearSelectionArea();
     
 private slots:
-        
+
+    void saveCurrentNetwork();
+
     void readFromFile(MyPluginItemBase* importTool);
     void writeDataToFile(MyPluginItemBase* exportTool);
+    void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
@@ -154,15 +158,19 @@ private slots:
     void selectSelectionAreaCoveredEdges();
     
 protected:
-    
+
     // plugins
     void loadPlugins();
+
+    // file manager
+    void setFileManager();
     
     // menu buttons
     QToolButton* createNormalModeMenuButton();
     QToolButton* createSelectModeMenuButton();
     QToolButton* createImportMenuButton();
     QToolButton* createExportMenuButton();
+    QToolButton* createSaveMenuButton();
     QList<QToolButton*> createAddElementMenuButtons();
     void addDefaultNodeStyle();
     void addDefaultEdgeStyle();
@@ -209,6 +217,7 @@ protected:
     
     // undo stack
     QUndoStack* _undoStack;
+    bool _isCurrentNetworkUnsaved;
     
     // elements
     QList<MyNetworkElementBase*> _nodes;
@@ -221,10 +230,11 @@ protected:
     // network
     QRectF _networkExtents;
     QJsonObject _stageInfo;
-    qint32 _currentNetworkNameIndex;
+
+    // file
+    QObject* _fileManager;
 };
 
-QString getNetworkUniqueName(const qint32& currentNetworkNameIndex);
 QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
 MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
 MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);

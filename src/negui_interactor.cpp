@@ -1,4 +1,5 @@
 #include "negui_interactor.h"
+#include "negui_file_manager.h"
 #include "negui_node.h"
 #include "negui_edge.h"
 #include "negui_node_builder.h"
@@ -41,18 +42,22 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     // autolayout interface
     _autoLayoutInterface = NULL;
     _isSetAutoLayoutInterface = false;
-    
+
     // undo stack
     _undoStack = new MyUndoStack(this);
+    _isCurrentNetworkUnsaved = false;
     
     // builder
     _newEdgeBuilder = NULL;
     _selectionAreaGraphicsItem = NULL;
 
-    // network
-    _currentNetworkNameIndex = 1;
-    
+    // plugins
     loadPlugins();
+
+    // file manager
+    setFileManager();
+
+    // network
     resetNetwork();
     _stageInfo = exportNetworkInfo();
 };
@@ -158,6 +163,10 @@ QUndoStack* MyInteractor::undoStack() {
     return _undoStack;
 }
 
+QObject* MyInteractor::fileManager() {
+    return _fileManager;
+}
+
 void MyInteractor::createChangeStageCommand() {
     QJsonObject currentStageInfo = exportNetworkInfo();
     if (undoStack()->count() > undoStack()->index()) {
@@ -165,6 +174,7 @@ void MyInteractor::createChangeStageCommand() {
         _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
     }
     if (currentStageInfo != _stageInfo) {
+        _isCurrentNetworkUnsaved = true;
         MyChangeStageCommand* changeStageCommand = new MyChangeStageCommand(_stageInfo, currentStageInfo);
         ((MyUndoStack*)undoStack())->addCommand(changeStageCommand);
         connect(changeStageCommand, SIGNAL(askForCreateNetwork(const QJsonObject&)), this, SLOT(createNetwork(const QJsonObject&)));
@@ -184,44 +194,49 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
     addEdges(json);
 }
 
-void MyInteractor::resetNetworkCanvas() {
-    saveCurrentNetwork();
-    undoStack()->clear();
-    resetNetwork();
-    emit currentNetworkNameIsUpdated(createNetworkDefaultName());
+void MyInteractor::setNewNetworkCanvas() {
+    if (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork())
+        saveCurrentNetwork();
+    resetNetworkCanvas();
+    ((MyFileManager*)fileManager())->reset();
+}
+
+const bool MyInteractor::isCurrentNetworkUnsaved() {
+    return _isCurrentNetworkUnsaved;
+}
+
+const bool MyInteractor::isWillingToSaveCurrentNetwork() {
+    QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(((MyFileManager*)fileManager())->currentFileName());
+    if (autoSaveMessageBox->exec() == QMessageBox::Yes)
+        return true;
+    
+    return false;
 }
 
 void MyInteractor::saveCurrentNetwork() {
-    if (undoStack()->canUndo()) {
-        QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
-        if (dataExportPlugins.size()) {
-            QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(createNetworkDefaultName());
-            if (autoSaveMessageBox->exec() == QMessageBox::Yes)
-                writeDataToFile(dataExportPlugins.at(0));
-        }
-        ++_currentNetworkNameIndex;
-    }
+    if (((MyFileManager*)fileManager())->lastSavedFileName().isEmpty())
+        writeDataToFile(((MyFileManager*)fileManager())->currentExportTool());
+    else
+        writeDataToFile(((MyFileManager*)fileManager())->currentExportTool(), ((MyFileManager*)fileManager())->currentFileName());
 }
 
-const QString MyInteractor::createNetworkDefaultName() {
-    QString networkName = "network";
-    QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
-    if (dataExportPlugins.size() && !((MyExportToolBase*)dataExportPlugins.at(0))->defaultSaveFileName().isEmpty())
-        networkName = ((MyExportToolBase*)dataExportPlugins.at(0))->defaultSaveFileName();
-
-    return networkName + QString::number(currentNetworkNameIndex());
+void MyInteractor::resetNetworkCanvas() {
+    _isCurrentNetworkUnsaved = false;
+    resetCanvas();
+    resetNetwork();
 }
 
+void MyInteractor::resetCanvas() {
+    emit askForResetScale();
+    enableNormalMode();
+    undoStack()->clear();
+}
 
 void MyInteractor::resetNetwork() {
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
     setNetworkExtents(30.0, 20.0, 840.0, 560.0);
-}
-
-const qint32& MyInteractor::currentNetworkNameIndex() {
-    return _currentNetworkNameIndex;
 }
 
 void MyInteractor::setNetworkExtents(const QJsonObject& json) {
@@ -677,28 +692,34 @@ void MyInteractor::clearSelectionArea() {
 }
 
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
-    saveCurrentNetwork();
+    if (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork())
+        saveCurrentNetwork();
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName();
     if (!fileName.isEmpty()) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
-        emit askForResetScale();
-        enableNormalMode();
-        undoStack()->clear();
-        emit currentNetworkNameIsUpdated(fileName);
+        resetCanvas();
+        ((MyFileManager*)fileManager())->setCurrentExportToolCompatibleWithImportTool(importTool);
+        ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
+        ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
     }
 }
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
+    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->currentFileName());
+    if (!fileName.isEmpty())
+        writeDataToFile(exportTool, fileName);
+}
+
+void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QJsonObject graphInfoObject = exportNetworkInfo();
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName();
-    if (!fileName.isEmpty()) {
-        ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibiliy(graphInfoObject, exportTool->name()));
-        
-        if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
-            dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
-        }
-        ((MyDataExportTool*)exportTool)->showMessages();
-    }
+    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibiliy(graphInfoObject, exportTool->name()));
+    if (((MyDataExportTool*)exportTool)->isInfoCompatible())
+        dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
+    ((MyDataExportTool*)exportTool)->showMessages();
+    ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
+    ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
+    ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
+    _isCurrentNetworkUnsaved = false;
 }
 
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
@@ -754,12 +775,19 @@ void MyInteractor::loadPlugins() {
     }
 }
 
+void MyInteractor::setFileManager() {
+    _fileManager = new MyFileManager(getPluginsOfType(plugins(), "importtool"), getPluginsOfType(plugins(), "dataexporttool"));
+    connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
+}
+
 QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     QList<QToolButton*> buttons;
     if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(createImportMenuButton());
-    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size())
+    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size()) {
         buttons.push_back(createExportMenuButton());
+        buttons.push_back(createSaveMenuButton());
+    }
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(createAutoLayoutMenuButton());
     buttons.push_back(createUndoActionMenuButton());
@@ -837,6 +865,13 @@ QToolButton* MyInteractor::createExportMenuButton() {
 
     button->setMenu(subMenu);
     decorateExportButton(button);
+    return button;
+}
+
+QToolButton* MyInteractor::createSaveMenuButton() {
+    QToolButton* button = new MyToolButton();
+    connect(button, SIGNAL(clicked()), this, SLOT(saveCurrentNetwork()));
+    decorateSaveButton(button);
     return button;
 }
 
@@ -936,7 +971,6 @@ QToolButton* MyInteractor::createAutoLayoutMenuButton() {
 
 QToolButton* MyInteractor::createUndoActionMenuButton() {
     QAction* action = undoStack()->createUndoAction(this, tr("Undo"));
-    action->setShortcuts(QKeySequence::Undo);
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
@@ -949,7 +983,6 @@ QToolButton* MyInteractor::createUndoActionMenuButton() {
 
 QToolButton* MyInteractor::createRedoActionMenuButton() {
     QAction* action = undoStack()->createRedoAction(this, tr("Redo"));
-    action->setShortcuts(QKeySequence::Redo);
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
@@ -962,14 +995,9 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
 
 QToolButton* MyInteractor::createResetSceneMenuButton() {
     QToolButton* button = new MyToolButton();
-    connect(button, SIGNAL(clicked()), this, SLOT(resetNetworkCanvas()));
-    connect(button, SIGNAL(clicked()), this, SIGNAL(askForResetScale()));
+    connect(button, SIGNAL(clicked()), this, SLOT(setNewNetworkCanvas()));
     decorateResetSceneButton(button);
     return button;
-}
-
-QString getNetworkUniqueName(const qint32& currentNetworkNameIndex) {
-    return "network" + QString::number(currentNetworkNameIndex);
 }
 
 QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
