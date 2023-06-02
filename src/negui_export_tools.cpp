@@ -11,6 +11,10 @@ MyExportToolBase::MyExportToolBase(const QString& name) : MyPluginItemBase(name)
     _iconSize = QSize(75, 25);
 }
 
+const QString MyExportToolBase::getSaveFileName(const QString& saveFileName) const {
+    return QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension() + ") File", saveFileName, "(*." + fileExtension() + ")");
+}
+
 const QString MyExportToolBase::getSaveFileName() const {
     return QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension() + ") File", defaultSaveFileName(), "(*." + fileExtension() + ")");
 }
