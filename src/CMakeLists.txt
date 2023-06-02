@@ -9,6 +9,7 @@ set(gui_sources
 		negui_graphics_scene.cpp
 		negui_scene_mode_element_base.cpp
 		negui_interactor.cpp
+		negui_file_manager.cpp
 		negui_base.cpp
 		negui_plugin_item_base.cpp
 		negui_plugin_item_builder.cpp
@@ -81,6 +82,7 @@ set(gui_headers
 		negui_graphics_scene.h
 		negui_scene_mode_element_base.h
 		negui_interactor.h
+		negui_file_manager.h
 		negui_base.h
 		negui_plugin_item_base.h
 		negui_plugin_item_builder.h
