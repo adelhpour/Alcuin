@@ -55,7 +55,7 @@ void MyNetworkEditorWidget::setWidgets() {
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
     // set title
-    connect((MyInteractor*)interactor(), &MyInteractor::currentNetworkNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
+    connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
 
     /// feature menu
     // display feature menu
@@ -145,6 +145,5 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
 }
 
 void MyNetworkEditorWidget::setReadyToLaunch() {
-    ((MyInteractor*)interactor())->resetNetworkCanvas();
-    ((MyInteractor*)interactor())->enableNormalMode();
+    ((MyInteractor*)interactor())->setNewNetworkCanvas();
 }
