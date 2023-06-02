@@ -8,6 +8,8 @@ void decorateImportButton(QToolButton* button);
 
 void decorateExportButton(QToolButton* button);
 
+void decorateSaveButton(QToolButton* button);
+
 void decorateAutoLayoutButton(QToolButton* button);
 
 void decorateUndoActionButton(QToolButton* button);

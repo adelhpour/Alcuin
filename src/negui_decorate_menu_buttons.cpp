@@ -10,6 +10,12 @@ void decorateImportButton(QToolButton* button) {
 void decorateExportButton(QToolButton* button) {
     button->setText("Export");
     button->setToolTip("Export to a file");
+    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/share.svg");
+}
+
+void decorateSaveButton(QToolButton* button) {
+    button->setText("Save");
+    button->setToolTip("Save to a file");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/save.svg");
 }
 
@@ -20,10 +26,12 @@ void decorateAutoLayoutButton(QToolButton* button) {
 }
 
 void decorateUndoActionButton(QToolButton* button) {
+    button->setShortcut(QKeySequence::Undo);
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/rotate-ccw.svg");
 }
 
 void decorateRedoActionButton(QToolButton* button) {
+    button->setShortcut(QKeySequence::Redo);
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/rotate-cw.svg");
 }
 
