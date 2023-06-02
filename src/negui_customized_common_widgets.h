@@ -16,6 +16,7 @@
 #include <QEvent>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QMessageBox>
 
 class MyFrame : public QFrame {
     Q_OBJECT
@@ -146,6 +147,14 @@ public:
     MyDialog(QWidget *parent = nullptr);
 
     void setButtons();
+};
+
+class MyAutoSaveMessageBox : public QMessageBox {
+    Q_OBJECT
+
+public:
+
+    MyAutoSaveMessageBox(const QString& networkName, QWidget *parent = nullptr);
 };
 
 #endif

@@ -164,3 +164,13 @@ void MyDialog::setButtons() {
     contentLayout->addWidget(buttons, contentLayout->rowCount(), 0, 1, 2);
 
 }
+
+// MyAutoSaveMessageBox
+
+MyAutoSaveMessageBox::MyAutoSaveMessageBox(const QString& networkName, QWidget *parent) {
+    setWindowTitle("Save Action");
+    setText("Do you want to save the changes made to the network \"" + networkName + "\"?");
+    setInformativeText("Your changes will be lost if you don’t save them.");
+    setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    setDefaultButton(QMessageBox::Yes);
+}

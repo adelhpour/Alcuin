@@ -97,14 +97,3 @@ MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent
         setIconSize(item->iconSize());
     }
 }
-
-// MyAutoSaveMessageBox
-
-MyAutoSaveMessageBox::MyAutoSaveMessageBox(const QString& networkName, QWidget *parent) {
-    setWindowTitle("Save Action");
-    setText("Do you want to save the changes made to the network \"" + networkName + "\"?");
-    setInformativeText("Your changes will be lost if you don’t save them.");
-    setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    setDefaultButton(QMessageBox::Yes);
-}
-
