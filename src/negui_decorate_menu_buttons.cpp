@@ -1,6 +1,8 @@
 #include "negui_decorate_menu_buttons.h"
 #include "negui_customized_common_widgets.h"
 
+#include <QShortcut>
+
 void decorateImportButton(QToolButton* button) {
     button->setText("Import");
     button->setToolTip("Import from a file");
@@ -14,6 +16,7 @@ void decorateExportButton(QToolButton* button) {
 }
 
 void decorateSaveButton(QToolButton* button) {
+    QShortcut* shortcut = new QShortcut(QKeySequence::Save, button, SLOT(click()));
     button->setText("Save");
     button->setToolTip("Save to a file");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/save.svg");
@@ -36,6 +39,7 @@ void decorateRedoActionButton(QToolButton* button) {
 }
 
 void decorateResetSceneButton(QToolButton* button) {
+    QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
     button->setText("Reset");
     button->setToolTip("Remove all network elements from the scene and create a new canvas");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/file.svg");
