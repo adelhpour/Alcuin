@@ -18,13 +18,6 @@ void MyModeMenu::setNormalModeButton(QToolButton* button) {
     _buttons.push_back(button);
 }
 
-void MyModeMenu::setSelectModeButton(QToolButton* button) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    decorateSelectModeButton(button);
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
-    _buttons.push_back(button);
-}
-
 void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     QToolButton* button = decorateAddModeButton(buttons);

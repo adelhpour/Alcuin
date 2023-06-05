@@ -12,8 +12,6 @@ public:
 
     void setNormalModeButton(QToolButton* button);
 
-    void setSelectModeButton(QToolButton* button);
-
     void setAddModeButtons(QList<QToolButton*> buttons);
 
     void setRemoveModeButton(QToolButton* button);

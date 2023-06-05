@@ -786,10 +786,6 @@ QToolButton* MyInteractor::getNormalModeButton() {
     return createNormalModeMenuButton();
 }
 
-QToolButton* MyInteractor::getSelectModeButton() {
-    return createSelectModeMenuButton();
-}
-
 QList<QToolButton*> MyInteractor::getAddModeButtons() {
     return createAddElementMenuButtons();
 }
@@ -801,12 +797,6 @@ QToolButton* MyInteractor::getRemoveModeButton() {
 QToolButton* MyInteractor::createNormalModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
-    return button;
-}
-
-QToolButton* MyInteractor::createSelectModeMenuButton() {
-    QToolButton* button = new MyModeToolButton("Select");
-    connect(button, SIGNAL(clicked()), this, SLOT(enableSelectMode()));
     return button;
 }
 

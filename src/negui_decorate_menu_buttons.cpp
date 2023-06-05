@@ -51,12 +51,6 @@ void decorateNormalModeButton(QToolButton* button) {
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/mouse-pointer.svg");
 }
 
-void decorateSelectModeButton(QToolButton* button) {
-    button->setText("Select Mode");
-    button->setToolTip("Set the scene mode to the select mode");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/maximize.svg");
-}
-
 void decorateRemoveModeButton(QToolButton* button) {
     button->setText("Remove");
     button->setToolTip("Remove an item from the network");

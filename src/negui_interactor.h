@@ -109,7 +109,6 @@ public slots:
     // menus
     QList<QToolButton*> getToolBarMenuButtons();
     QToolButton* getNormalModeButton();
-    QToolButton* getSelectModeButton();
     QList<QToolButton*> getAddModeButtons();
     QToolButton* getRemoveModeButton();
     
@@ -165,7 +164,6 @@ protected:
     
     // menu buttons
     QToolButton* createNormalModeMenuButton();
-    QToolButton* createSelectModeMenuButton();
     QToolButton* createImportMenuButton();
     QToolButton* createExportMenuButton();
     QToolButton* createSaveMenuButton();
