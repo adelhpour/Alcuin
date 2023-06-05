@@ -628,7 +628,7 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
-    if (getSceneMode() == SELECT_MODE) {
+    if (getSceneMode() == NORMAL_MODE) {
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
