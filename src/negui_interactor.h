@@ -119,12 +119,14 @@ public slots:
     
     // network elements
     void addNewNode(const QPointF& position);
-    void selectNode(MyNetworkElementBase* element);
     void addNewEdge(MyNetworkElementBase* element);
-    void selectEdge(MyNetworkElementBase* element);
     void removeItem(MyNetworkElementBase* element);
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
+    void selectElement(MyNetworkElementBase* element);
+    void selectElements(const bool& selected);
+    void selectNodes(const bool& selected);
+    void selectEdges(const bool& selected);
     
     // modes
     void enableNormalMode() override;

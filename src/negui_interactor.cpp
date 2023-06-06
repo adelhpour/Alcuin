@@ -276,7 +276,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         n->setActive(true);
         n->updateGraphicsItem();
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
-        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectNode(MyNetworkElementBase*)));
+        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
@@ -371,7 +371,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
     if (e && !edgeExists(((MyEdgeBase*)e)->startNode(), ((MyEdgeBase*)e)->endNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
-        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectEdge(MyNetworkElementBase*)));
+        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
@@ -486,17 +486,24 @@ QJsonObject MyInteractor::exportNetworkInfo() {
     return json;
 }
 
-void MyInteractor::selectNode(MyNetworkElementBase* element) {
-    if (getSceneMode() == SELECT_MODE) {
-        if (!element->isSelected())
-            element->setSelected(true);
-        else
-            element->setSelected(false);
-    }
+void MyInteractor::selectElements(const bool& selected) {
+    selectNodes(selected);
+    selectEdges(selected);
 }
 
-void MyInteractor::selectEdge(MyNetworkElementBase* element) {
-    if (getSceneMode() == SELECT_MODE) {
+void MyInteractor::selectNodes(const bool& selected) {
+    for (MyNetworkElementBase* node : qAsConst(nodes()))
+        node->setSelected(selected);
+}
+
+void MyInteractor::selectEdges(const bool& selected) {
+    for (MyNetworkElementBase* edge : qAsConst(edges()))
+        edge->setSelected(selected);
+}
+
+void MyInteractor::selectElement(MyNetworkElementBase* element) {
+    if (getSceneMode() == NORMAL_MODE) {
+        selectElements(false);
         if (!element->isSelected())
             element->setSelected(true);
         else
