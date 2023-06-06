@@ -119,7 +119,7 @@ void MyGraphicsView::wheelEvent(QWheelEvent * event) {
 void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
     QGraphicsView::mousePressEvent(event);
     if (!event->isAccepted()) {
-        if (event->button() == Qt::LeftButton) {
+        if (event->button() == Qt::RightButton) {
             _panMode = true;
             _panStartX = event->x();
             _panStartY = event->y();
@@ -142,7 +142,7 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
     if (_panMode) {
-        if (event->button() == Qt::LeftButton) {
+        if (event->button() == Qt::RightButton) {
             _panMode = false;
             event->accept();
         }
