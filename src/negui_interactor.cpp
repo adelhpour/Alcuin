@@ -503,7 +503,8 @@ void MyInteractor::selectEdges(const bool& selected) {
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
     if (getSceneMode() == NORMAL_MODE) {
-        selectElements(false);
+        if (!askForWhetherShiftKeyIsPressed())
+            selectElements(false);
         if (!element->isSelected())
             element->setSelected(true);
         else
@@ -591,7 +592,7 @@ void MyInteractor::enableSelectMode(const QString& elementCategory) {
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableSelectEdgeMode();
 
-    emit askForSetToolTip("Select " + elementCategory);
+    emit askForSetToolTip("Select" + elementCategory);
 }
 
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
@@ -636,6 +637,8 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (getSceneMode() == NORMAL_MODE) {
+        if (!askForWhetherShiftKeyIsPressed())
+            selectElements(false);
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
@@ -653,7 +656,6 @@ void MyInteractor::createSelectionAreaGraphicsItem(const QPointF& position) {
 void MyInteractor::selectSelectionAreaCoveredNodes() {
     QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
     for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        node->setSelected(false);
         for (QGraphicsItem* item : qAsConst(selectedItems)) {
             if (item->parentItem()) {
                 if (node->graphicsItem() == item->parentItem())
@@ -666,7 +668,6 @@ void MyInteractor::selectSelectionAreaCoveredNodes() {
 void MyInteractor::selectSelectionAreaCoveredEdges() {
     QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
     for (MyNetworkElementBase* edge : qAsConst(edges())) {
-        edge->setSelected(false);
         for (QGraphicsItem* item : qAsConst(selectedItems)) {
             if (item->parentItem()) {
                 if (edge->graphicsItem() == item->parentItem())

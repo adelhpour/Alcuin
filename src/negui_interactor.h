@@ -101,6 +101,7 @@ signals:
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
+    const bool askForWhetherShiftKeyIsPressed();
     
     void enterKeyIsPressed();
     
