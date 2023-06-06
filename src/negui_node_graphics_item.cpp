@@ -120,7 +120,7 @@ void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event
 void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
     QGraphicsItem::keyPressEvent(event);
     if (!event->isAccepted()) {
-        if (event->key() == Qt::Key_Shift) {
+        if (event->key() == Qt::Key_Control) {
             if (_isChosen)
                 _reparent = true;
             event->accept();
@@ -131,7 +131,7 @@ void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
 void MyNodeSceneGraphicsItemBase::keyReleaseEvent(QKeyEvent *event) {
     QGraphicsItem::keyReleaseEvent(event);
     if (!event->isAccepted()) {
-        if (event->key() == Qt::Key_Shift) {
+        if (event->key() == Qt::Key_Control) {
             emit askForReparent();
             _reparent = false;
             event->accept();
