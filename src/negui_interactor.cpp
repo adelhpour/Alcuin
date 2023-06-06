@@ -278,7 +278,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
-        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
+        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -372,7 +372,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeItem(MyNetworkElementBase*)));
+        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -511,7 +511,7 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
     }
 }
 
-void MyInteractor::removeItem(MyNetworkElementBase* element) {
+void MyInteractor::removeElement(MyNetworkElementBase* element) {
     if (getSceneMode() == REMOVE_MODE) {
         if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
             removeNode(element);

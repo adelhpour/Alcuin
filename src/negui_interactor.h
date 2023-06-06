@@ -120,7 +120,7 @@ public slots:
     // network elements
     void addNewNode(const QPointF& position);
     void addNewEdge(MyNetworkElementBase* element);
-    void removeItem(MyNetworkElementBase* element);
+    void removeElement(MyNetworkElementBase* element);
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
