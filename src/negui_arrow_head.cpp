@@ -15,8 +15,6 @@ MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge
     _edge = edge;
     _position = QPointF(0.0, 0.0);
     _slope = 0.0;
-    _graphicsItem = createArrowHeadSceneGraphicsItem();
-    connectGraphicsItem();
 }
 
 MyArrowHeadBase::~MyArrowHeadBase() {
@@ -91,7 +89,8 @@ void MyArrowHeadBase::write(QJsonObject &json) {
 // MyClassicArrowHead
 
 MyClassicArrowHead::MyClassicArrowHead(const QString& name, MyNetworkElementBase* edge) : MyArrowHeadBase(name, edge) {
-
+    _graphicsItem = createArrowHeadSceneGraphicsItem();
+    connectGraphicsItem();
 }
 
 MyArrowHeadBase::ARROW_HEAD_TYPE MyClassicArrowHead::arrowHeadType() {

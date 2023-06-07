@@ -13,14 +13,10 @@
 
 // MyEdgeBase
 
-MyEdgeBase::MyEdgeBase(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyNetworkElementBase(name) {
+MyEdgeBase::MyEdgeBase(const QString& name) : MyNetworkElementBase(name) {
     _arrowHead = NULL;
     _isSetArrowHead = false;
     _isConnectedToNodes = false;
-    _graphicsItem = createEdgeSceneGraphicsItem();
-    connectGraphicsItem();
-    setStartNode(startNode);
-    setEndNode(endNode);
 }
 
 MyEdgeBase::~MyEdgeBase() {
@@ -252,8 +248,11 @@ void MyEdgeBase::write(QJsonObject &json) {
 
 // MyClassicEdge
 
-MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyEdgeBase(name, startNode, endNode) {
-
+MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyEdgeBase(name) {
+    _graphicsItem = createEdgeSceneGraphicsItem();
+    connectGraphicsItem();
+    setStartNode(startNode);
+    setEndNode(endNode);
 }
 
 MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {

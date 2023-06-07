@@ -12,7 +12,7 @@ public:
         CLASSIC_EDGE,
     } EDGE_TYPE;
     
-    MyEdgeBase(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
+    MyEdgeBase(const QString& name);
     
     ~MyEdgeBase();
     
