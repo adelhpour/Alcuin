@@ -18,7 +18,6 @@ signals:
     void mouseLeftButtonIsPressed(const QPointF& position);
     void mousePressedLeftButtonIsMoved(const QPointF& position);
     void mouseLeftButtonIsReleased();
-    void mouseRightButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
     void askForSelectAll();
