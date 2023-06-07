@@ -163,6 +163,10 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         event->accept();
         emit askForCreateChangeStageCommand();
     }
+    if (event->button() == Qt::RightButton) {
+        event->accept();
+        emit mouseRightButtonIsReleased();
+    }
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {

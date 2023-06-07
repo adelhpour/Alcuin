@@ -22,6 +22,7 @@ void MyNetworkElementBase::updateGraphicsItem() {
 void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(mouseRightButtonIsReleased()), this, SLOT(createRightClickMenu()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
@@ -115,4 +116,8 @@ void MyNetworkElementBase::createFeatureMenu() {
             emit askForCreateChangeStageCommand(); } );
         emit askForDisplayFeatureMenu(featureMenu);
     }
+}
+
+void MyNetworkElementBase::createRightClickMenu() {
+
 }

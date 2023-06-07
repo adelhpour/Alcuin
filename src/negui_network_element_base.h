@@ -72,6 +72,8 @@ signals:
 protected slots:
     
     void createFeatureMenu();
+
+    void createRightClickMenu();
     
 protected:
     

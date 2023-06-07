@@ -50,6 +50,7 @@ signals:
     
     void mouseLeftButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
+    void mouseRightButtonIsReleased();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
