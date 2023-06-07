@@ -26,9 +26,7 @@ MyArrowHeadBase::ELEMENT_TYPE MyArrowHeadBase::type() {
 };
 
 void MyArrowHeadBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+    MyNetworkElementBase::connectGraphicsItem();
 }
 
 MyNetworkElementBase* MyArrowHeadBase::edge() {

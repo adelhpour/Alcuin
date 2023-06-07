@@ -31,9 +31,7 @@ MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
 };
 
 void MyEdgeBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+    MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));

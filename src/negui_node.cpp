@@ -28,13 +28,11 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 }
 
 void MyNodeBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
+    MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedEdges()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
 
 void MyNodeBase::addEdge(MyNetworkElementBase* e) {
