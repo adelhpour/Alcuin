@@ -18,12 +18,7 @@ MyEdgeBase::MyEdgeBase(const QString& name, MyNetworkElementBase* startNode, MyN
     _isSetArrowHead = false;
     _isConnectedToNodes = false;
     _graphicsItem = createEdgeSceneGraphicsItem();
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
-    connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));
+    connectGraphicsItem();
     setStartNode(startNode);
     setEndNode(endNode);
 }
@@ -38,6 +33,15 @@ MyEdgeBase::~MyEdgeBase() {
 MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
     return EDGE_ELEMENT;
 };
+
+void MyEdgeBase::connectGraphicsItem() {
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+    connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));
+}
 
 void MyEdgeBase::setStartNode(MyNetworkElementBase* startNode) {
     _startNode = startNode;

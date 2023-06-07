@@ -16,9 +16,7 @@ MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge
     _position = QPointF(0.0, 0.0);
     _slope = 0.0;
     _graphicsItem = createArrowHeadSceneGraphicsItem();
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
-    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
-    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+    connectGraphicsItem();
 }
 
 MyArrowHeadBase::~MyArrowHeadBase() {
@@ -28,6 +26,12 @@ MyArrowHeadBase::~MyArrowHeadBase() {
 MyArrowHeadBase::ELEMENT_TYPE MyArrowHeadBase::type() {
     return ARROW_HEAD_ELEMENT;
 };
+
+void MyArrowHeadBase::connectGraphicsItem() {
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(createFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+}
 
 MyNetworkElementBase* MyArrowHeadBase::edge() {
     return _edge;

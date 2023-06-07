@@ -18,6 +18,8 @@ public:
     ELEMENT_TYPE type() override;
 
     virtual ARROW_HEAD_TYPE arrowHeadType() = 0;
+
+    virtual void connectGraphicsItem();
     
     // get the edge this arrow head belongs to
     MyNetworkElementBase* edge();
