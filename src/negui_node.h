@@ -21,7 +21,7 @@ public:
 
     virtual NODE_TYPE nodeType() = 0;
 
-    virtual void connectGraphicsItem();
+    void connectGraphicsItem() override;
     
     // add to edges
     virtual void addEdge(MyNetworkElementBase* e);

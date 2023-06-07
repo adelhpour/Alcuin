@@ -20,7 +20,7 @@ public:
 
     virtual EDGE_TYPE edgeType() = 0;
 
-    virtual void connectGraphicsItem();
+    void connectGraphicsItem() override;
 
     void setStartNode(MyNetworkElementBase* startNode);
 

@@ -24,6 +24,8 @@ public:
     MyNetworkElementGraphicsItemBase* graphicsItem();
     
     virtual void updateGraphicsItem();
+
+    virtual void connectGraphicsItem();
     
     MyNetworkElementStyleBase* style();
     

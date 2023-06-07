@@ -19,6 +19,10 @@ void MyNetworkElementBase::updateGraphicsItem() {
     graphicsItem()->update(style()->shapeStyles(), calculateZValue());
 }
 
+void MyNetworkElementBase::connectGraphicsItem() {
+
+}
+
 MyNetworkElementStyleBase* MyNetworkElementBase::style() {
     return _style;
 }
