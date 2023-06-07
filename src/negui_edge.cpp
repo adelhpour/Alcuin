@@ -250,6 +250,16 @@ void MyEdgeBase::write(QJsonObject &json) {
     json["style"] = styleObject;
 }
 
+// MyClassicEdge
+
+MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyEdgeBase(name, startNode, endNode) {
+
+}
+
+MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {
+    return CLASSIC_EDGE;
+}
+
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {
     QRectF mainNodeExtents = ((MyNodeBase*)mainNode)->getExtents();
     QRectF connectedNodeExtents = ((MyNodeBase*)connectedNode)->getExtents();
@@ -280,14 +290,4 @@ qreal getRadius(const QRectF& rect, const QPointF& point) {
     }
 
     return qMax(rect.width(), rect.height());
-}
-
-// MyClassicEdge
-
-MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyEdgeBase(name, startNode, endNode) {
-
-}
-
-MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {
-    return CLASSIC_EDGE;
 }
