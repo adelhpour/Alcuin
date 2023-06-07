@@ -29,7 +29,7 @@ public slots:
     void removeGraphicsItem(QGraphicsItem* item);
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
-    const bool isShiftKeyPressed();
+    const bool isShiftModifierPressed();
     
 protected:
     
@@ -41,7 +41,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
     bool _isLeftButtonPressed;
-    bool _isShiftKeyPressed;
+    bool _isShiftModifierPressed;
 };
 
 #endif

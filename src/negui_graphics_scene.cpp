@@ -5,7 +5,7 @@
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
     setSceneRect(30.0, 20.0, 840.0, 560.0);
     _isLeftButtonPressed = false;
-    _isShiftKeyPressed = false;
+    _isShiftModifierPressed = false;
 }
 
 void MyGraphicsScene::setSceneRect(qreal x, qreal y, qreal width, qreal height) {
@@ -28,8 +28,8 @@ QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position)
     return QGraphicsScene::items(position);
 }
 
-const bool MyGraphicsScene::isShiftKeyPressed() {
-    return _isShiftKeyPressed;
+const bool MyGraphicsScene::isShiftModifierPressed() {
+    return _isShiftModifierPressed;
 }
 
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
@@ -72,8 +72,9 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
         if (event->key() == Qt::Key_Escape) {
             emit escapeKeyIsPressed();
             event->accept();
-        } else if (event->key() == Qt::Key_Shift) {
-            _isShiftKeyPressed = true;
+        }
+        else if (event->modifiers() == Qt::ShiftModifier) {
+            _isShiftModifierPressed = true;
             event->accept();
         }
     }
@@ -83,7 +84,7 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
     QGraphicsScene::keyReleaseEvent(event);
     if (!event->isAccepted()) {
         if (event->key() == Qt::Key_Shift) {
-            _isShiftKeyPressed = false;
+            _isShiftModifierPressed = false;
             event->accept();
         }
     }

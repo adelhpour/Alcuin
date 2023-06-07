@@ -503,7 +503,7 @@ void MyInteractor::selectEdges(const bool& selected) {
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
     if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftKeyIsPressed())
+        if (!askForWhetherShiftModifierIsPressed())
             selectElements(false);
         if (!element->isSelected())
             element->setSelected(true);
@@ -637,7 +637,7 @@ void MyInteractor::clearElementsFocusedGraphicsItems() {
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftKeyIsPressed())
+        if (!askForWhetherShiftModifierIsPressed())
             selectElements(false);
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
