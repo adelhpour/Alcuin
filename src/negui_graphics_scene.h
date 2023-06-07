@@ -21,6 +21,7 @@ signals:
     void mouseRightButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
+    void askForSelectAll();
 
 public slots:
     

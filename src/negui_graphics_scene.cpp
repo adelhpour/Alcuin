@@ -77,6 +77,8 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
             _isShiftModifierPressed = true;
             event->accept();
         }
+        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A)
+            emit askForSelectAll();
     }
 }
 
