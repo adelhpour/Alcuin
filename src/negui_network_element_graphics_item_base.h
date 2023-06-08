@@ -50,7 +50,6 @@ signals:
     
     void mouseLeftButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
-    void mouseRightButtonIsReleased();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
@@ -63,6 +62,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     
     QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;

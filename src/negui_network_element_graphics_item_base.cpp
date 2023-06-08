@@ -163,10 +163,6 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         event->accept();
         emit askForCreateChangeStageCommand();
     }
-    if (event->button() == Qt::RightButton) {
-        event->accept();
-        emit mouseRightButtonIsReleased();
-    }
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
@@ -177,4 +173,13 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
         return;
     }
     event->ignore();
+}
+
+void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+    QGraphicsItem::contextMenuEvent(event);
+    //QMenu menu;
+    //menu.addAction("cutAct");
+    //menu.addAction("copyAct");
+    //menu.addAction("pasteAct");
+    //menu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
 }
