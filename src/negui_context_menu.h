@@ -3,12 +3,28 @@
 
 #include <QMenu>
 
-class MyContextMenu : public QMenu {
+class MyContextMenuBase : public QMenu {
     Q_OBJECT
 
 public:
 
-    MyContextMenu(QWidget *parent = nullptr);
+    MyContextMenuBase(QWidget *parent = nullptr);
+};
+
+class MyGraphicsSceneContextMenu : public MyContextMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyGraphicsSceneContextMenu(QWidget *parent = nullptr);
+};
+
+class MyGraphicsItemContextMenu : public MyContextMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyGraphicsItemContextMenu(QWidget *parent = nullptr);
 };
 
 #endif
