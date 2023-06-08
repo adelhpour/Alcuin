@@ -1,4 +1,5 @@
 #include "negui_graphics_scene.h"
+#include "negui_context_menu.h"
 
 // MyGraphicsScene
 
@@ -88,4 +89,10 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
             event->accept();
         }
     }
+}
+
+void MyGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
+    QGraphicsScene::contextMenuEvent(event);
+    MyGraphicsSceneContextMenu contextMenu;
+    contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
 }
