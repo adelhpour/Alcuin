@@ -30,6 +30,7 @@ public slots:
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
     const bool isShiftModifierPressed();
+    void displayContextMenu(const QPointF& position);
     
 protected:
     
@@ -39,7 +40,6 @@ protected:
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
     bool _isLeftButtonPressed;
     bool _isShiftModifierPressed;

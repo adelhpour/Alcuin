@@ -16,10 +16,12 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     _maxScale = 3.0;
     _numScheduledScalings = 0;
     _panMode = false;
+    _isPanned = false;
     
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setGeometry(75, 50, 900, 600);
     setScene(new MyGraphicsScene(this));
+    connect(this, SIGNAL(askForDisplayContextMenu(const QPointF&)), scene(), SLOT(displayContextMenu(const QPointF&)));
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 };
 
@@ -131,6 +133,7 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
 void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
     if (_panMode) {
+        _isPanned = true;
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - _panStartX));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - _panStartY));
         _panStartX = event->x();
@@ -141,11 +144,11 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
 
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
-    if (_panMode) {
-        if (event->button() == Qt::RightButton) {
-            _panMode = false;
-            event->accept();
-        }
+    if (event->button() == Qt::RightButton) {
+        if (!_isPanned)
+            emit askForDisplayContextMenu(event->pos());
+        _isPanned = false;
+        _panMode = false;
     }
 }
 

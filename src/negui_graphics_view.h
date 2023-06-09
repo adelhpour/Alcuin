@@ -28,6 +28,7 @@ public:
     
 signals:
     void enterKeyIsPressed();
+    void askForDisplayContextMenu(const QPointF& position);
     
 private slots:
     
@@ -51,6 +52,7 @@ protected:
     qint32 _panStartX;
     qint32 _panStartY;
     bool _panMode;
+    bool _isPanned;
 };
 
 class MyProxyStyle : public QProxyStyle {

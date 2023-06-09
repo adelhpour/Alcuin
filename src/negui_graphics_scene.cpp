@@ -55,9 +55,11 @@ void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    _isLeftButtonPressed = false;
-    emit mouseLeftButtonIsReleased();
     QGraphicsScene::mouseReleaseEvent(event);
+    if (event->button() == Qt::LeftButton) {
+        _isLeftButtonPressed = false;
+        emit mouseLeftButtonIsReleased();
+    }
 }
 
 void MyGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
@@ -91,11 +93,7 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-void MyGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-    QGraphicsScene::contextMenuEvent(event);
-    if (!event->isAccepted()) {
-        MyGraphicsSceneContextMenu contextMenu;
-        contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
-        event->accept();
-    }
+void MyGraphicsScene::displayContextMenu(const QPointF& position) {
+    MyGraphicsSceneContextMenu contextMenu;
+    contextMenu.exec(QPoint(position.x(), position.y()));
 }
