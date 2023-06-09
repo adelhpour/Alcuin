@@ -11,6 +11,8 @@ public:
     MyArrowHeadGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+
+    QMenu* createContextMenu() override;
 };
 
 class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {

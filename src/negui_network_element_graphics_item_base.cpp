@@ -1,5 +1,4 @@
 #include "negui_network_element_graphics_item_base.h"
-#include "negui_context_menu.h"
 
 #include <QGraphicsSceneMouseEvent>
 
@@ -179,7 +178,7 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
 
 void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     QGraphicsItem::contextMenuEvent(event);
-    MyGraphicsItemContextMenu contextMenu;
-    contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
+    QMenu* contextMenu = createContextMenu();
+    contextMenu->exec(QPoint(event->scenePos().x(), event->scenePos().y()));
     event->accept();
 }

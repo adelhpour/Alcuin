@@ -12,6 +12,8 @@ public:
     MyNodeGraphicsItemBase(QGraphicsItem *parent = nullptr);
 
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+
+    QMenu* createContextMenu() override;
 };
 
 class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {

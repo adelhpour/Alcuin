@@ -1,5 +1,7 @@
 #include "negui_arrow_head_graphics_item.h"
 #include "negui_shape_graphics_item_builder.h"
+#include "negui_context_menu.h"
+
 #include <QtMath>
 #include <QPainter>
 
@@ -22,6 +24,10 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
         item->setZValue(zValue());
     
     return item;
+}
+
+QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
+    return new MyGraphicsItemContextMenu();
 }
 
 // MyArrowHeadSceneGraphicsItem

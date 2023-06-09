@@ -6,6 +6,7 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
 
 class MyNetworkElementGraphicsItemBase : public QObject, public MySceneModeElementBase, public QGraphicsItemGroup {
     Q_OBJECT
@@ -21,6 +22,8 @@ public:
     void addShapeItem(MyShapeStyleBase* style);
     
     virtual MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) = 0;
+
+    virtual QMenu* createContextMenu() = 0;
     
     QList<MyShapeStyleBase*> getShapeStyles();
     

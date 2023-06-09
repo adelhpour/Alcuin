@@ -1,5 +1,7 @@
 #include "negui_node_graphics_item.h"
 #include "negui_shape_graphics_item_builder.h"
+#include "negui_context_menu.h"
+
 #include <QtMath>
 
 // MyNodeGraphicsItemBase
@@ -32,6 +34,10 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
     }
 
     return item;
+}
+
+QMenu* MyNodeGraphicsItemBase::createContextMenu() {
+    return new MyGraphicsItemContextMenu();
 }
 
 // MyNodeSceneGraphicsItemBase

@@ -1,6 +1,7 @@
 #include "negui_edge_graphics_item.h"
 #include "negui_shape_graphics_item_builder.h"
 #include "negui_1d_shape_graphics_item_base.h"
+#include "negui_context_menu.h"
 
 // MyEdgeGraphicsItemBase
 
@@ -21,6 +22,10 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     }
         
     return item;
+}
+
+QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
+    return new MyGraphicsItemContextMenu();
 }
 
 void MyEdgeGraphicsItemBase::setLine(const QLineF &line) {

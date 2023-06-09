@@ -11,6 +11,8 @@ public:
     MyEdgeGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+
+    QMenu* createContextMenu() override;
     
     void setLine(const QLineF &line);
     
