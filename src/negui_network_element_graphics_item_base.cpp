@@ -181,4 +181,5 @@ void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMen
     QGraphicsItem::contextMenuEvent(event);
     MyGraphicsItemContextMenu contextMenu;
     contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
+    event->accept();
 }

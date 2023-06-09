@@ -93,6 +93,9 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
 
 void MyGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     QGraphicsScene::contextMenuEvent(event);
-    MyGraphicsSceneContextMenu contextMenu;
-    contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
+    if (!event->isAccepted()) {
+        MyGraphicsSceneContextMenu contextMenu;
+        contextMenu.exec(QPoint(event->scenePos().x(), event->scenePos().y()));
+        event->accept();
+    }
 }
