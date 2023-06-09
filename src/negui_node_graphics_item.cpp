@@ -37,7 +37,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
 }
 
 QMenu* MyNodeGraphicsItemBase::createContextMenu() {
-    return new MyGraphicsItemContextMenu();
+    return new MyNodeGraphicsItemContextMenu();
 }
 
 // MyNodeSceneGraphicsItemBase

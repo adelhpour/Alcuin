@@ -27,7 +27,7 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
 }
 
 QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
-    return new MyGraphicsItemContextMenu();
+    return new MyArrowHeadGraphicsItemContextMenu();
 }
 
 // MyArrowHeadSceneGraphicsItem

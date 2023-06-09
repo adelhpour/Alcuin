@@ -25,7 +25,7 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
 }
 
 QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
-    return new MyGraphicsItemContextMenu();
+    return new MyEdgeGraphicsItemContextMenu();
 }
 
 void MyEdgeGraphicsItemBase::setLine(const QLineF &line) {
