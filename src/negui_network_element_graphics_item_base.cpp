@@ -179,6 +179,6 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
 void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
     QGraphicsItem::contextMenuEvent(event);
     QMenu* contextMenu = createContextMenu();
-    contextMenu->exec(QPoint(event->scenePos().x(), event->scenePos().y()));
+    contextMenu->exec(QPoint(event->screenPos().x(), event->screenPos().y()));
     event->accept();
 }
