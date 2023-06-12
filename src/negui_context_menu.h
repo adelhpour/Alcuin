@@ -19,7 +19,15 @@ public:
     MyGraphicsSceneContextMenu(QWidget *parent = nullptr);
 };
 
-class MyNodeGraphicsItemContextMenu : public MyContextMenuBase {
+class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyGraphicsItemContextMenuBase(QWidget *parent = nullptr);
+};
+
+class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
     Q_OBJECT
 
 public:
@@ -27,7 +35,7 @@ public:
     MyNodeGraphicsItemContextMenu(QWidget *parent = nullptr);
 };
 
-class MyEdgeGraphicsItemContextMenu : public MyContextMenuBase {
+class MyEdgeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
     Q_OBJECT
 
 public:
@@ -35,7 +43,7 @@ public:
     MyEdgeGraphicsItemContextMenu(QWidget *parent = nullptr);
 };
 
-class MyArrowHeadGraphicsItemContextMenu : public MyContextMenuBase {
+class MyArrowHeadGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
     Q_OBJECT
 
 public:

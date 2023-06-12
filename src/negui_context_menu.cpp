@@ -12,20 +12,26 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     addAction("sceneAct");
 }
 
+// MyGraphicsItemContextMenuBase
+
+MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
+
+}
+
 // MyNodeGraphicsItemContextMenu
 
-MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
+MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     addAction("nodeAct");
 }
 
 // MyEdgeGraphicsItemContextMenu
 
-MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
+MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     addAction("edgeAct");
 }
 
 // MyArrowHeadGraphicsItemContextMenu
 
-MyArrowHeadGraphicsItemContextMenu::MyArrowHeadGraphicsItemContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
+MyArrowHeadGraphicsItemContextMenu::MyArrowHeadGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     addAction("arrowheadAct");
 }
