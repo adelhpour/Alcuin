@@ -25,6 +25,10 @@ class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
 public:
 
     MyGraphicsItemContextMenuBase(QWidget *parent = nullptr);
+
+signals:
+
+    void askForCreateFeatureMenu();
 };
 
 class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

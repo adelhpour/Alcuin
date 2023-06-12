@@ -15,7 +15,7 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
 // MyGraphicsItemContextMenuBase
 
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
-
+    connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
 }
 
 // MyNodeGraphicsItemContextMenu

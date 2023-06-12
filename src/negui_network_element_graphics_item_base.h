@@ -57,6 +57,7 @@ signals:
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
     void askForClearFocusedGraphicsItems();
+    void askForCreateFeatureMenu();
     
 protected:
     

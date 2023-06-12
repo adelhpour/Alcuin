@@ -9,7 +9,8 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearFocusedGraphicsItems()));
-    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForClearFocusedGraphicsItems()));
+    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(this, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForClearFocusedGraphicsItems()));
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
@@ -180,6 +181,7 @@ void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMen
     QGraphicsItem::contextMenuEvent(event);
     if (getSceneMode() == NORMAL_MODE) {
         QMenu* contextMenu = createContextMenu();
+        connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
         contextMenu->exec(QPoint(event->screenPos().x(), event->screenPos().y()));
         event->accept();
     }
