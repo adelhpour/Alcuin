@@ -6,6 +6,13 @@ MyContextMenuBase::MyContextMenuBase(QWidget *parent) : QMenu(parent) {
 
 }
 
+void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& enabled) {
+    for (QAction* action : actions()) {
+        if (action->text() == actionText)
+            action->setEnabled(enabled);
+    }
+}
+
 // MyGraphicsSceneContextMenu
 
 MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyContextMenuBase(parent) {

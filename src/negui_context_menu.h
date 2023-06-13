@@ -9,6 +9,8 @@ class MyContextMenuBase : public QMenu {
 public:
 
     MyContextMenuBase(QWidget *parent = nullptr);
+
+    void setActionEnabled(const QString& actionText, const bool& enabled);
 };
 
 class MyGraphicsSceneContextMenu : public MyContextMenuBase {
