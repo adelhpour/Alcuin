@@ -27,7 +27,12 @@ MyShapeGraphicsItemBase* MyArrowHeadGraphicsItemBase::createShapeGraphicsItem(My
 }
 
 QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
-    return new MyArrowHeadGraphicsItemContextMenu();
+    QMenu* contextMenu = new MyArrowHeadGraphicsItemContextMenu();
+    connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
+    return contextMenu;
 }
 
 // MyArrowHeadSceneGraphicsItem

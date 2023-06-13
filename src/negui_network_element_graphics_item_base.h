@@ -59,6 +59,7 @@ signals:
     void askForClearFocusedGraphicsItems();
     void askForCreateFeatureMenu();
     void askForCopyNetworkElementStyle();
+    const bool askForWhetherCopiedElementStyleIsSet();
     
 protected:
     

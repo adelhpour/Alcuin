@@ -6,6 +6,11 @@ MyContextMenuBase::MyContextMenuBase(QWidget *parent) : QMenu(parent) {
 
 }
 
+void MyContextMenuBase::initializeActionsStatus() {
+    for (QAction* action : actions())
+        action->setEnabled(true);
+}
+
 void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& enabled) {
     for (QAction* action : actions()) {
         if (action->text() == actionText)
@@ -25,7 +30,12 @@ MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : 
     connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
-    setActionEnabled("Paste", false);
+}
+
+void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
+    MyContextMenuBase::initializeActionsStatus();
+    if (!askForWhetherCopiedElementStyleIsSet())
+        setActionEnabled("Paste", false);
 }
 
 // MyNodeGraphicsItemContextMenu

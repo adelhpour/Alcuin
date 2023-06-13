@@ -160,6 +160,8 @@ private slots:
     void createSelectionAreaGraphicsItem(const QPointF& position);
     void selectSelectionAreaCoveredNodes();
     void selectSelectionAreaCoveredEdges();
+    const bool isSetCopiedNodeStyle();
+    const bool isSetCopiedEdgeStyle();
     
 protected:
 

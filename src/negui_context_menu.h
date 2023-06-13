@@ -11,6 +11,12 @@ public:
     MyContextMenuBase(QWidget *parent = nullptr);
 
     void setActionEnabled(const QString& actionText, const bool& enabled);
+
+    virtual void initializeActionsStatus();
+
+signals:
+
+    const bool askForWhetherCopiedElementStyleIsSet();
 };
 
 class MyGraphicsSceneContextMenu : public MyContextMenuBase {
@@ -27,6 +33,8 @@ class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
 public:
 
     MyGraphicsItemContextMenuBase(QWidget *parent = nullptr);
+
+    void initializeActionsStatus() override;
 
 signals:
 

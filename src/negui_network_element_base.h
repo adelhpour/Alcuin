@@ -70,6 +70,8 @@ signals:
     void askForDisplayFeatureMenu(QWidget*);
 
     void askForCopyNetworkElementStyle(MyNetworkElementStyleBase*);
+
+    const bool askForWhetherCopiedElementStyleIsSet();
     
 protected slots:
     
