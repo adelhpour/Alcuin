@@ -24,6 +24,9 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    QAction* action = addAction("Paste");
+    connect(action, SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    setActionEnabled("Paste", false);
 }
 
 // MyNodeGraphicsItemContextMenu
