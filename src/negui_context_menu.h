@@ -29,6 +29,8 @@ public:
 signals:
 
     void askForCreateFeatureMenu();
+
+    void askForCopyNetworkElementStyle();
 };
 
 class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

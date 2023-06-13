@@ -58,6 +58,7 @@ signals:
     void askForCreateChangeStageCommand();
     void askForClearFocusedGraphicsItems();
     void askForCreateFeatureMenu();
+    void askForCopyNetworkElementStyle();
     
 protected:
     

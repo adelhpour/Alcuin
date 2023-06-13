@@ -16,22 +16,23 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
 
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
 }
 
 // MyNodeGraphicsItemContextMenu
 
 MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-    addAction("nodeAct");
+
 }
 
 // MyEdgeGraphicsItemContextMenu
 
 MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-    addAction("edgeAct");
+
 }
 
 // MyArrowHeadGraphicsItemContextMenu
 
 MyArrowHeadGraphicsItemContextMenu::MyArrowHeadGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-    addAction("arrowheadAct");
+
 }

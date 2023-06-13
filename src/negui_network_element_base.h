@@ -68,6 +68,8 @@ signals:
     void askForCreateChangeStageCommand();
 
     void askForDisplayFeatureMenu(QWidget*);
+
+    void askForCopyNetworkElementStyle(MyNetworkElementStyleBase*);
     
 protected slots:
     

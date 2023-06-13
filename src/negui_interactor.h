@@ -75,6 +75,7 @@ public:
     void clearNodesInfo();
     void setNodeStyle(MyNetworkElementStyleBase* style);
     MyNetworkElementStyleBase* nodeStyle();
+    MyNetworkElementStyleBase* copiedNodeStyle();
     
     // edges
     QList<MyNetworkElementBase*>& edges();
@@ -85,6 +86,7 @@ public:
     void clearEdgesInfo();
     void setEdgeStyle(MyNetworkElementStyleBase* style);
     MyNetworkElementStyleBase* edgeStyle();
+    MyNetworkElementStyleBase* copiedEdgeStyle();
     void deleteNewEdgeBuilder();
     bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
     
@@ -128,6 +130,8 @@ public slots:
     void selectElements(const bool& selected);
     void selectNodes(const bool& selected);
     void selectEdges(const bool& selected);
+    void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
+    void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     
     // modes
     void enableNormalMode() override;
@@ -211,6 +215,10 @@ protected:
     // element styles
     MyNetworkElementStyleBase* _nodeStyle;
     MyNetworkElementStyleBase* _edgeStyle;
+
+    // copied styles
+    MyNetworkElementStyleBase* _copiedNodeStyle;
+    MyNetworkElementStyleBase* _copiedEdgeStyle;
     
     QList<MyPluginItemBase*> _plugins;
     

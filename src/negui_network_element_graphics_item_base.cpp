@@ -182,6 +182,7 @@ void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMen
     if (getSceneMode() == NORMAL_MODE) {
         QMenu* contextMenu = createContextMenu();
         connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
+        connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
         contextMenu->exec(QPoint(event->screenPos().x(), event->screenPos().y()));
         event->accept();
     }

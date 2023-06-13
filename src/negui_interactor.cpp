@@ -281,6 +281,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
@@ -349,6 +350,17 @@ MyNetworkElementStyleBase* MyInteractor::nodeStyle() {
     return _nodeStyle;
 }
 
+void MyInteractor::setCopiedNodeStyle(MyNetworkElementStyleBase* style) {
+    if (style)
+        _copiedNodeStyle = style;
+    else
+        _copiedNodeStyle = NULL;
+}
+
+MyNetworkElementStyleBase* MyInteractor::copiedNodeStyle() {
+    return _copiedNodeStyle;
+}
+
 QList<MyNetworkElementBase*>& MyInteractor::edges() {
     return _edges;
 }
@@ -375,6 +387,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
@@ -430,6 +443,17 @@ void MyInteractor::setEdgeStyle(MyNetworkElementStyleBase* style) {
 
 MyNetworkElementStyleBase* MyInteractor::edgeStyle() {
     return _edgeStyle;
+}
+
+void MyInteractor::setCopiedEdgeStyle(MyNetworkElementStyleBase* style) {
+    if (style)
+        _copiedEdgeStyle = style;
+    else
+        _copiedEdgeStyle = NULL;
+}
+
+MyNetworkElementStyleBase* MyInteractor::copiedEdgeStyle() {
+    return _copiedEdgeStyle;
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
@@ -550,7 +574,9 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
     setNodeStyle(NULL);
+    setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
+    setCopiedEdgeStyle(NULL);
     deleteNewEdgeBuilder();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
