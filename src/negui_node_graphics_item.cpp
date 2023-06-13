@@ -38,9 +38,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
 
 QMenu* MyNodeGraphicsItemBase::createContextMenu() {
     QMenu* contextMenu = new MyNodeGraphicsItemContextMenu();
-    connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
-    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+    connectContextMenu(contextMenu);
     ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
     return contextMenu;
 }

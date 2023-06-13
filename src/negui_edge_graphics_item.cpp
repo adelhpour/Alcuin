@@ -26,9 +26,7 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
 
 QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
     QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
-    connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
-    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+    connectContextMenu(contextMenu);
     ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
     return contextMenu;
 }

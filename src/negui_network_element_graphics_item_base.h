@@ -24,6 +24,8 @@ public:
     virtual MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) = 0;
 
     virtual QMenu* createContextMenu() = 0;
+
+    void connectContextMenu(QMenu* contextMenu);
     
     QList<MyShapeStyleBase*> getShapeStyles();
     

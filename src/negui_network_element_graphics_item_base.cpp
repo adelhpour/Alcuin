@@ -38,6 +38,12 @@ void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
     }
 }
 
+void MyNetworkElementGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
+    connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+}
+
 QList<MyShapeStyleBase*> MyNetworkElementGraphicsItemBase::getShapeStyles() {
     return _shapeStyles;
 }
