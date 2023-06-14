@@ -94,6 +94,8 @@ void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
         _mousePressedPosition = event->scenePos();
+    else if (event->button() == Qt::RightButton)
+        event->accept();
 }
 
 void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
