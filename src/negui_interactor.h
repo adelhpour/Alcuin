@@ -161,7 +161,9 @@ private slots:
     void selectSelectionAreaCoveredNodes();
     void selectSelectionAreaCoveredEdges();
     const bool isSetCopiedNodeStyle();
+    void pasteCopiedNodeStyle(MyNetworkElementBase* element);
     const bool isSetCopiedEdgeStyle();
+    void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
     
 protected:
 

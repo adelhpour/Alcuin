@@ -71,6 +71,8 @@ signals:
 
     void askForCopyNetworkElementStyle(MyNetworkElementStyleBase*);
 
+    void askForPasteNetworkElementStyle(MyNetworkElementBase*);
+
     const bool askForWhetherCopiedElementStyleIsSet();
     
 protected slots:

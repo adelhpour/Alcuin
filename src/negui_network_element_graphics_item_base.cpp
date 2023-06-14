@@ -41,6 +41,7 @@ void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
 void MyNetworkElementGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
     connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForPasteNetworkElementStyle()), this, SIGNAL(askForPasteNetworkElementStyle()));
     connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
 }
 
