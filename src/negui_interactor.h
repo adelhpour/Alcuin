@@ -129,7 +129,9 @@ public slots:
     void selectElement(MyNetworkElementBase* element);
     void selectElements(const bool& selected);
     void selectNodes(const bool& selected);
+    const bool isAnyNodesSelected();
     void selectEdges(const bool& selected);
+    const bool isAnyEdgesSelected();
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     

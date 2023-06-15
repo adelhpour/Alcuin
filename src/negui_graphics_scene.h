@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QMenu>
 
 class MyGraphicsScene : public QGraphicsScene {
     Q_OBJECT
@@ -12,6 +13,10 @@ class MyGraphicsScene : public QGraphicsScene {
 public:
     
     MyGraphicsScene(QWidget* parent = nullptr);
+
+    QMenu* createContextMenu();
+
+    void connectContextMenu(QMenu* contextMenu);
     
 signals:
     
@@ -21,6 +26,10 @@ signals:
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
     void askForSelectAll();
+    const bool askForWhetherAnyElementsAreSelected();
+    const bool askForWhetherCopiedElementStyleIsSet();
+    void askForCopyNetworkElementStyle();
+    void askForPasteNetworkElementStyle();
 
 public slots:
     

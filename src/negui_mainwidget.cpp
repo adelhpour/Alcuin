@@ -112,6 +112,12 @@ void MyNetworkEditorWidget::setInteractions() {
 
     // remove menu
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
+
+    // context menu
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherCopiedElementStyleIsSet()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreSelected()), (MyInteractor*)interactor(), SLOT(isAnyNodesSelected()));
+    //connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCopyNetworkElementStyle()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
+    //connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteNetworkElementStyle()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {

@@ -591,6 +591,13 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
     return selectedNodesList;
 }
 
+const bool MyInteractor::isAnyNodesSelected() {
+    if (selectedNodes().size())
+        return true;
+
+    return false;
+}
+
 const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
     QList<MyNetworkElementBase*> selectedEdgesList;
     for (MyNetworkElementBase *edge : qAsConst(edges())) {
@@ -599,6 +606,13 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
     }
     
     return selectedEdgesList;
+}
+
+const bool MyInteractor::isAnyEdgesSelected() {
+    if (selectedEdges().size())
+        return true;
+
+    return false;
 }
 
 void MyInteractor::enableNormalMode() {

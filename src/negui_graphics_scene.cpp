@@ -33,6 +33,25 @@ const bool MyGraphicsScene::isShiftModifierPressed() {
     return _isShiftModifierPressed;
 }
 
+QMenu* MyGraphicsScene::createContextMenu() {
+    QMenu* contextMenu = new MyGraphicsSceneContextMenu();
+    connectContextMenu(contextMenu);
+    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
+    return contextMenu;
+}
+
+void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
+    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForPasteNetworkElementStyle()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
+    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+}
+
+void MyGraphicsScene::displayContextMenu(const QPointF& position) {
+    QMenu* contextMenu = createContextMenu();
+    contextMenu->exec(QPoint(position.x(), position.y()));
+}
+
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted()) {
@@ -91,9 +110,4 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
             event->accept();
         }
     }
-}
-
-void MyGraphicsScene::displayContextMenu(const QPointF& position) {
-    MyGraphicsSceneContextMenu contextMenu;
-    contextMenu.exec(QPoint(position.x(), position.y()));
 }
