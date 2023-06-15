@@ -147,6 +147,8 @@ public slots:
     void clearElementsFocusedGraphicsItems();
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
+
+    void pasteNetworkElement(const QPointF& position);
     
 private slots:
 

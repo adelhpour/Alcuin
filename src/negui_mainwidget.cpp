@@ -117,7 +117,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherCopiedElementStyleIsSet()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreSelected()), (MyInteractor*)interactor(), SLOT(isAnyNodesSelected()));
     //connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCopyNetworkElementStyle()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
-    //connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteNetworkElementStyle()), (MyInteractor*)interactor(), SLOT(isSetCopiedNodeStyle()));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteNetworkElement(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteNetworkElement(const QPointF &)));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {

@@ -29,7 +29,7 @@ signals:
     const bool askForWhetherAnyElementsAreSelected();
     const bool askForWhetherCopiedElementStyleIsSet();
     void askForCopyNetworkElementStyle();
-    void askForPasteNetworkElementStyle();
+    void askForPasteNetworkElement(const QPointF& position);
 
 public slots:
     
@@ -52,6 +52,7 @@ protected:
 
     bool _isLeftButtonPressed;
     bool _isShiftModifierPressed;
+    QPointF _mousePressedPosition;
 };
 
 #endif

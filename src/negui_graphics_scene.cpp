@@ -42,7 +42,7 @@ QMenu* MyGraphicsScene::createContextMenu() {
 
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(contextMenu, SIGNAL(askForPasteNetworkElementStyle()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteNetworkElement, this, [this] () { emit askForPasteNetworkElement(_mousePressedPosition); });
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
     connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
 }
@@ -64,6 +64,8 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                 event->accept();
             _isLeftButtonPressed = true;
         }
+        else if (event->button() == Qt::RightButton)
+            _mousePressedPosition = event->scenePos();
     }
 }
 

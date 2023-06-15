@@ -486,6 +486,12 @@ void MyInteractor::pasteCopiedEdgeStyle(MyNetworkElementBase* element) {
     createChangeStageCommand();
 }
 
+void MyInteractor::pasteNetworkElement(const QPointF& position) {
+    MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(), copiedNodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), copiedNodeStyle()->category()) + "_style", copiedNodeStyle()), position.x(), position.y());
+    addNode(node);
+    createChangeStageCommand();
+}
+
 void MyInteractor::deleteNewEdgeBuilder() {
     for (MyNetworkElementBase* selectedNode : selectedNodes())
         selectedNode->setSelected(false);

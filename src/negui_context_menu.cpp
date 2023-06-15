@@ -22,7 +22,7 @@ void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& 
 
 MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElement()));
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
