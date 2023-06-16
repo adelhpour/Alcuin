@@ -10,6 +10,23 @@ void MySceneModeElementBase::setSceneMode(SceneMode sceneMode) {
     _sceneMode = sceneMode;
 }
 
+void MySceneModeElementBase::setSceneMode(const QString& mode) {
+    if (mode == "Normal")
+        setSceneMode(NORMAL_MODE);
+    else if (mode == "Add_Node")
+        setSceneMode(ADD_NODE_MODE);
+    else if (mode == "Add_Edge")
+        setSceneMode(ADD_EDGE_MODE);
+    else if (mode == "Select")
+        setSceneMode(SELECT_MODE);
+    else if (mode == "Select_Node")
+        setSceneMode(SELECT_NODE_MODE);
+    else if (mode == "Select_Edge")
+        setSceneMode(SELECT_EDGE_MODE);
+    else if (mode == "Remove")
+        setSceneMode(REMOVE_MODE);
+}
+
 MySceneModeElementBase::SceneMode MySceneModeElementBase::getSceneMode() {
     return _sceneMode;
 }

@@ -48,8 +48,10 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
 }
 
 void MyGraphicsScene::displayContextMenu(const QPointF& position) {
-    QMenu* contextMenu = createContextMenu();
-    contextMenu->exec(QPoint(position.x(), position.y()));
+    if (getSceneMode() == NORMAL_MODE) {
+        QMenu* contextMenu = createContextMenu();
+        contextMenu->exec(QPoint(position.x(), position.y()));
+    }
 }
 
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {

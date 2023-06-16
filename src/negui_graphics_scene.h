@@ -1,13 +1,15 @@
 #ifndef __NEGUI_GRAPHICS_SCENE_H
 #define __NEGUI_GRAPHICS_SCENE_H
 
+#include "negui_scene_mode_element_base.h"
+
 #include <QWidget>
 #include <QGraphicsScene>
 #include <QKeyEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
 
-class MyGraphicsScene : public QGraphicsScene {
+class MyGraphicsScene :public QGraphicsScene, public MySceneModeElementBase {
     Q_OBJECT
     
 public:

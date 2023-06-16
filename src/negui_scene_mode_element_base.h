@@ -21,6 +21,8 @@ public:
 
     virtual void setSceneMode(SceneMode mode);
 
+    virtual void setSceneMode(const QString& mode);
+
     SceneMode getSceneMode();
 
     const QString getSceneModeAsString();
