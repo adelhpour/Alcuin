@@ -27,7 +27,9 @@ public:
     void updateGraphicsItem() override;
     
     void updatePlacement(const QPointF& position, const qreal& slope);
-    
+
+    const bool isCopyable() override;
+
     void setSelected(const bool& selected) override;
     
     const QRectF getExtents() override;

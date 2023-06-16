@@ -494,9 +494,19 @@ void MyInteractor::pasteCopiedEdgeStyle(MyNetworkElementBase* element) {
     createChangeStageCommand();
 }
 
-const bool MyInteractor::areAnyCopyableElementsSelected() {
-    if (selectedNodes().size())
+const bool MyInteractor::areSelectedElementsCopyable() {
+    if (selectedNodes().size() || selectedEdges().size()) {
+        for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+            if (!selectedNode->isCopyable())
+                return false;
+        }
+        for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+            if (!selectedEdge->isCopyable())
+                return false;
+        }
+
         return true;
+    }
 
     return false;
 }

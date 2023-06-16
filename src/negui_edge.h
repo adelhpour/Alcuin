@@ -33,6 +33,8 @@ public:
     void updateGraphicsItem() override;
     
     void setStyle(MyNetworkElementStyleBase* style) override;
+
+    const bool isCopyable() override;
     
     void setSelected(const bool& selected) override;
     

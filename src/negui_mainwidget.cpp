@@ -114,7 +114,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
 
     // context menu
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyCopyableElementsAreSelected()), (MyInteractor*)interactor(), SLOT(areAnyCopyableElementsSelected()));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCopyable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCopyable()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreCopied()), (MyInteractor*)interactor(), SLOT(areAnyElementsCopied()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteNetworkElements(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteNetworkElements(const QPointF &)));
 }

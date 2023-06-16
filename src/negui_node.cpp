@@ -54,6 +54,13 @@ void MyNodeBase::updateGraphicsItem() {
     resetPosition();
 }
 
+const bool MyNodeBase::isCopyable() {
+    if (isSelected())
+        return true;
+
+    return false;
+}
+
 void MyNodeBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     if (selected)

@@ -45,6 +45,13 @@ void MyArrowHeadBase::updatePlacement(const QPointF& position, const qreal& slop
     graphicsItem()->setZValue(calculateZValue());
 }
 
+const bool MyArrowHeadBase::isCopyable() {
+    if (edge()->isCopyable())
+        return true;
+
+    return false;
+}
+
 void MyArrowHeadBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);

@@ -26,7 +26,7 @@ signals:
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
     void askForSelectAll();
-    const bool askForWhetherAnyCopyableElementsAreSelected();
+    const bool askForWhetherSelectedElementsAreCopyable();
     const bool askForWhetherAnyElementsAreCopied();
     void askForCopyNetworkElements();
     void askForPasteNetworkElements(const QPointF& position);

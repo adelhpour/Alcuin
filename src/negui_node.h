@@ -35,6 +35,8 @@ public:
     virtual MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
     
     void updateGraphicsItem() override;
+
+    const bool isCopyable() override;
     
     void setSelected(const bool& selected) override;
 

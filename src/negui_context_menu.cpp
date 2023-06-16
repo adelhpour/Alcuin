@@ -27,7 +27,7 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
     MyContextMenuBase::initializeActionsStatus();
-    if (!askForWhetherAnyCopyableElementsAreSelected())
+    if (!askForWhetherSelectedElementsAreCopyable())
         setActionEnabled("Copy", false);
     if (!askForWhetherAnyElementsAreCopied())
         setActionEnabled("Paste", false);

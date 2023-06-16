@@ -38,6 +38,8 @@ public:
     virtual bool setActive(const bool& active);
     
     const bool isActive() const { return _isActive; }
+
+    virtual const bool isCopyable() = 0;
     
     virtual void setSelected(const bool& selected);
     

@@ -26,7 +26,7 @@ public:
 
 signals:
 
-    const bool askForWhetherAnyCopyableElementsAreSelected();
+    const bool askForWhetherSelectedElementsAreCopyable();
 
     const bool askForWhetherAnyElementsAreCopied();
 

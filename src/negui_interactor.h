@@ -133,7 +133,7 @@ public slots:
     void setCopiedNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
-    const bool areAnyCopyableElementsSelected();
+    const bool areSelectedElementsCopyable();
     const bool areAnyElementsCopied();
     
     // modes

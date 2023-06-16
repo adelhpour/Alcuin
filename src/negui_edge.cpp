@@ -71,6 +71,13 @@ void MyEdgeBase::setStyle(MyNetworkElementStyleBase* style) {
     setArrowHead();
 }
 
+const bool MyEdgeBase::isCopyable() {
+    if (isSelected() && startNode()->isCopyable() && endNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
 void MyEdgeBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);
