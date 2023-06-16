@@ -281,9 +281,10 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(n, SIGNAL(askForCopyNode(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedNodeStyle(MyNetworkElementBase*)));
-        connect(n, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SLOT(isSetCopiedNodeStyle()));
+        connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
@@ -352,6 +353,13 @@ MyNetworkElementStyleBase* MyInteractor::nodeStyle() {
     return _nodeStyle;
 }
 
+void MyInteractor::setCopiedNode(MyNetworkElementBase* node) {
+    if (node)
+        _copiedNode = node;
+    else
+        _copiedNode = NULL;
+}
+
 const bool MyInteractor::isSetCopiedNodeStyle() {
     if (_copiedNodeStyle)
         return true;
@@ -404,7 +412,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedEdgeStyle(MyNetworkElementBase*)));
-        connect(e, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SLOT(isSetCopiedEdgeStyle()));
+        connect(e, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedEdgeStyle()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
@@ -486,7 +494,18 @@ void MyInteractor::pasteCopiedEdgeStyle(MyNetworkElementBase* element) {
     createChangeStageCommand();
 }
 
-void MyInteractor::pasteNetworkElement(const QPointF& position) {
+const bool MyInteractor::areAnyCopyableElementsSelected() {
+    if (selectedNodes().size())
+        return true;
+
+    return false;
+}
+
+const bool MyInteractor::areAnyElementsCopied() {
+    return false;
+}
+
+void MyInteractor::pasteNetworkElements(const QPointF& position) {
     MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(), copiedNodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), copiedNodeStyle()->category()) + "_style", copiedNodeStyle()), position.x(), position.y());
     addNode(node);
     createChangeStageCommand();
@@ -597,13 +616,6 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
     return selectedNodesList;
 }
 
-const bool MyInteractor::isAnyNodesSelected() {
-    if (selectedNodes().size())
-        return true;
-
-    return false;
-}
-
 const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
     QList<MyNetworkElementBase*> selectedEdgesList;
     for (MyNetworkElementBase *edge : qAsConst(edges())) {
@@ -614,16 +626,10 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
     return selectedEdgesList;
 }
 
-const bool MyInteractor::isAnyEdgesSelected() {
-    if (selectedEdges().size())
-        return true;
-
-    return false;
-}
-
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
     setNodeStyle(NULL);
+    setCopiedNode(NULL);
     setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
     setCopiedEdgeStyle(NULL);

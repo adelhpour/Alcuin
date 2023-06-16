@@ -21,15 +21,15 @@ void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& 
 // MyGraphicsSceneContextMenu
 
 MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
-    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElement()));
+    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElements()));
+    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElements()));
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
     MyContextMenuBase::initializeActionsStatus();
-    if (!askForWhetherAnyElementsAreSelected())
+    if (!askForWhetherAnyCopyableElementsAreSelected())
         setActionEnabled("Copy", false);
-    if (!askForWhetherCopiedElementStyleIsSet())
+    if (!askForWhetherAnyElementsAreCopied())
         setActionEnabled("Paste", false);
 }
 
@@ -37,26 +37,27 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
 
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
-    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
 }
 
 void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
     MyContextMenuBase::initializeActionsStatus();
-    if (!askForWhetherCopiedElementStyleIsSet())
-        setActionEnabled("Paste", false);
+    if (!askForWhetherElementStyleIsCopied())
+        setActionEnabled("Paste Style", false);
 }
 
 // MyNodeGraphicsItemContextMenu
 
 MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-
+    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNode()));
+    connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(addAction("Paste Style"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
 }
 
 // MyEdgeGraphicsItemContextMenu
 
 MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-
+    connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
+    connect(addAction("Paste Style"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
 }
 
 // MyArrowHeadGraphicsItemContextMenu

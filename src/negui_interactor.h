@@ -129,11 +129,12 @@ public slots:
     void selectElement(MyNetworkElementBase* element);
     void selectElements(const bool& selected);
     void selectNodes(const bool& selected);
-    const bool isAnyNodesSelected();
     void selectEdges(const bool& selected);
-    const bool isAnyEdgesSelected();
+    void setCopiedNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
+    const bool areAnyCopyableElementsSelected();
+    const bool areAnyElementsCopied();
     
     // modes
     void enableNormalMode() override;
@@ -148,7 +149,7 @@ public slots:
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 
-    void pasteNetworkElement(const QPointF& position);
+    void pasteNetworkElements(const QPointF& position);
     
 private slots:
 
@@ -223,6 +224,9 @@ protected:
     // element styles
     MyNetworkElementStyleBase* _nodeStyle;
     MyNetworkElementStyleBase* _edgeStyle;
+
+    // copied elements
+    MyNetworkElementBase* _copiedNode;
 
     // copied styles
     MyNetworkElementStyleBase* _copiedNodeStyle;

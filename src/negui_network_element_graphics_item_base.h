@@ -25,7 +25,7 @@ public:
 
     virtual QMenu* createContextMenu() = 0;
 
-    void connectContextMenu(QMenu* contextMenu);
+    virtual void connectContextMenu(QMenu* contextMenu);
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
@@ -62,7 +62,7 @@ signals:
     void askForCreateFeatureMenu();
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
-    const bool askForWhetherCopiedElementStyleIsSet();
+    const bool askForWhetherElementStyleIsCopied();
     
 protected:
     

@@ -41,10 +41,10 @@ QMenu* MyGraphicsScene::createContextMenu() {
 }
 
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
-    connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteNetworkElement, this, [this] () { emit askForPasteNetworkElement(_mousePressedPosition); });
-    connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
-    connect(contextMenu, SIGNAL(askForWhetherCopiedElementStyleIsSet()), this, SIGNAL(askForWhetherCopiedElementStyleIsSet()));
+    connect(contextMenu, SIGNAL(askForCopyNetworkElements()), this, SIGNAL(askForCopyNetworkElements()));
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteNetworkElements, this, [this] () { emit askForPasteNetworkElements(_mousePressedPosition); });
+    connect(contextMenu, SIGNAL(askForWhetherAnyCopyableElementsAreSelected()), this, SIGNAL(askForWhetherAnyCopyableElementsAreSelected()));
+    connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
 }
 
 void MyGraphicsScene::displayContextMenu(const QPointF& position) {

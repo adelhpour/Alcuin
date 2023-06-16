@@ -26,10 +26,10 @@ signals:
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
     void askForSelectAll();
-    const bool askForWhetherAnyElementsAreSelected();
-    const bool askForWhetherCopiedElementStyleIsSet();
-    void askForCopyNetworkElementStyle();
-    void askForPasteNetworkElement(const QPointF& position);
+    const bool askForWhetherAnyCopyableElementsAreSelected();
+    const bool askForWhetherAnyElementsAreCopied();
+    void askForCopyNetworkElements();
+    void askForPasteNetworkElements(const QPointF& position);
 
 public slots:
     

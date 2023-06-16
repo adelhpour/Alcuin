@@ -13,12 +13,6 @@ public:
     void setActionEnabled(const QString& actionText, const bool& enabled);
 
     virtual void initializeActionsStatus();
-
-signals:
-
-    const bool askForWhetherAnyElementsAreSelected();
-
-    const bool askForWhetherCopiedElementStyleIsSet();
 };
 
 class MyGraphicsSceneContextMenu : public MyContextMenuBase {
@@ -32,9 +26,13 @@ public:
 
 signals:
 
-    void askForCopyNetworkElementStyle();
+    const bool askForWhetherAnyCopyableElementsAreSelected();
 
-    void askForPasteNetworkElement();
+    const bool askForWhetherAnyElementsAreCopied();
+
+    void askForCopyNetworkElements();
+
+    void askForPasteNetworkElements();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
@@ -48,11 +46,14 @@ public:
 
 signals:
 
+    const bool askForWhetherElementStyleIsCopied();
+
     void askForCreateFeatureMenu();
 
     void askForCopyNetworkElementStyle();
 
     void askForPasteNetworkElementStyle();
+
 };
 
 class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
@@ -61,6 +62,10 @@ class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
 public:
 
     MyNodeGraphicsItemContextMenu(QWidget *parent = nullptr);
+
+signals:
+
+    void askForCopyNode();
 };
 
 class MyEdgeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
