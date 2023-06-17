@@ -21,10 +21,11 @@ void MyNetworkElementBase::updateGraphicsItem() {
 
 void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, SIGNAL(askForWhetherGraphicsItemIsSelected()), this, SLOT(isSelected()));
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElementStyle, this, [this] () { emit askForCopyNetworkElementStyle(this->style()); } );
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForPasteNetworkElementStyle, this, [this] () { emit askForPasteNetworkElementStyle(this); } );
-    connect(_graphicsItem, SIGNAL(askForWhetherAnyOtherElementsAreSelected()), this, SIGNAL(askForWhetherAnyOtherElementsAreSelected()));
+    connect(_graphicsItem, SIGNAL(askForWhetherAnyOtherElementsAreSelected()), this, SLOT(areAnyOtherElementsSelected()));
     connect(_graphicsItem, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }
@@ -58,6 +59,10 @@ void MyNetworkElementBase::setSelected(const bool& selected) {
 
 const bool MyNetworkElementBase::isSelected() {
     return _isSelected;
+}
+
+const bool MyNetworkElementBase::areAnyOtherElementsSelected() {
+    return askForWhetherAnyOtherElementsAreSelected(this);
 }
 
 void MyNetworkElementBase::enableNormalMode() {

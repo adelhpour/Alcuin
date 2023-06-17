@@ -43,8 +43,6 @@ public:
     
     virtual void setSelected(const bool& selected);
     
-    const bool isSelected();
-    
     void enableNormalMode() override;
     
     void enableAddNodeMode() override;
@@ -77,11 +75,17 @@ signals:
 
     const bool askForWhetherElementStyleIsCopied();
 
-    const bool askForWhetherAnyOtherElementsAreSelected();
+    const bool askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*);
+
+public slots:
+
+    const bool isSelected();
     
 protected slots:
     
     void createFeatureMenu();
+
+    const bool areAnyOtherElementsSelected();
     
 protected:
     

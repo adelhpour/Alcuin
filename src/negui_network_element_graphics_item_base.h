@@ -55,6 +55,7 @@ signals:
     
     void mouseLeftButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
+    const bool askForWhetherGraphicsItemIsSelected();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
