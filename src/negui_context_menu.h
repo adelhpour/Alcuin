@@ -30,9 +30,9 @@ signals:
 
     const bool askForWhetherAnyElementsAreCopied();
 
-    void askForCopyNetworkElements();
+    void askForCopySelectedNetworkElements();
 
-    void askForPasteNetworkElements();
+    void askForPasteCopiedNetworkElements();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {

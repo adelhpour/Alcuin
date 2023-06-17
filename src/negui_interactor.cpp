@@ -519,8 +519,8 @@ const bool MyInteractor::areAnyElementsCopied() {
     return false;
 }
 
-void MyInteractor::pasteNetworkElements(const QPointF& position) {
-    MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(), copiedNodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), copiedNodeStyle()->category()) + "_style", copiedNodeStyle()), position.x(), position.y());
+void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
+    MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(),  _copiedNode->style()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), _copiedNode->style()->category()) + "_style", _copiedNode->style()), position.x(), position.y());
     addNode(node);
     createChangeStageCommand();
 }

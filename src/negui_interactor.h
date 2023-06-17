@@ -149,7 +149,7 @@ public slots:
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 
-    void pasteNetworkElements(const QPointF& position);
+    void pasteCopiedNetworkElements(const QPointF& position);
     
 private slots:
 

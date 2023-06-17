@@ -21,8 +21,8 @@ void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& 
 // MyGraphicsSceneContextMenu
 
 MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
-    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElements()));
-    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElements()));
+    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopySelectedNetworkElements()));
+    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
