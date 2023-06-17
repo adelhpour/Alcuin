@@ -16,10 +16,6 @@ public:
     QMenu* createContextMenu() override;
 
     void connectContextMenu(QMenu* contextMenu) override;
-
-signals:
-
-    void askForCopyNode();
 };
 
 class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {

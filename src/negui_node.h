@@ -81,8 +81,6 @@ public:
 signals:
     
     MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
-
-    void askForCopyNode(MyNetworkElementBase*);
     
 public slots:
     

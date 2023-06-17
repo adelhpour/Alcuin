@@ -45,7 +45,6 @@ QMenu* MyNodeGraphicsItemBase::createContextMenu() {
 
 void MyNodeGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
     MyNetworkElementGraphicsItemBase::connectContextMenu(contextMenu);
-    connect(contextMenu, SIGNAL(askForCopyNode()), this, SIGNAL(askForCopyNode()));
 }
 
 // MyNodeSceneGraphicsItemBase

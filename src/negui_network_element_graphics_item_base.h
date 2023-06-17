@@ -61,6 +61,7 @@ signals:
     void askForCreateChangeStageCommand();
     void askForClearFocusedGraphicsItems();
     void askForCreateFeatureMenu();
+    void askForCopyNetworkElement();
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
     const bool askForWhetherElementStyleIsCopied();

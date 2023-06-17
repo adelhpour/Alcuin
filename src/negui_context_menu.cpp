@@ -48,7 +48,7 @@ void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
 // MyNodeGraphicsItemContextMenu
 
 MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
-    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNode()));
+    connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElement()));
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste Style"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
 }

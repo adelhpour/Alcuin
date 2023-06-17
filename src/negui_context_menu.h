@@ -50,6 +50,8 @@ signals:
 
     void askForCreateFeatureMenu();
 
+    void askForCopyNetworkElement();
+
     void askForCopyNetworkElementStyle();
 
     void askForPasteNetworkElementStyle();
@@ -62,10 +64,6 @@ class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
 public:
 
     MyNodeGraphicsItemContextMenu(QWidget *parent = nullptr);
-
-signals:
-
-    void askForCopyNode();
 };
 
 class MyEdgeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

@@ -353,7 +353,6 @@ MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
 void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
-    connect((MyNodeGraphicsItemBase*)_graphicsItem, &MyNodeGraphicsItemBase::askForCopyNode, this, [this] () { emit askForCopyNode(this); } );
 }
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {

@@ -69,6 +69,8 @@ signals:
 
     void askForDisplayFeatureMenu(QWidget*);
 
+    void askForCopyNetworkElement(MyNetworkElementBase*);
+
     void askForCopyNetworkElementStyle(MyNetworkElementStyleBase*);
 
     void askForPasteNetworkElementStyle(MyNetworkElementBase*);
