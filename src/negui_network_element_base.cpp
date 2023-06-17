@@ -24,6 +24,7 @@ void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElementStyle, this, [this] () { emit askForCopyNetworkElementStyle(this->style()); } );
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForPasteNetworkElementStyle, this, [this] () { emit askForPasteNetworkElementStyle(this); } );
+    connect(_graphicsItem, SIGNAL(askForWhetherAnyOtherElementsAreSelected()), this, SIGNAL(askForWhetherAnyOtherElementsAreSelected()));
     connect(_graphicsItem, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
 }

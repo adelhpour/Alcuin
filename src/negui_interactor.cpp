@@ -285,6 +285,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedNodeStyle(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
+        connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected()), this, SLOT(areAnyOtherElementsSelected()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
@@ -599,6 +600,19 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
         else
             element->setSelected(false);
     }
+}
+
+const bool MyInteractor::areAnyOtherElementsSelected() {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+        if (node->isSelected())
+            return true;
+    }
+    for (MyNetworkElementBase* edge : qAsConst(edges())) {
+        if (edge->isSelected())
+            return true;
+    }
+
+    return false;
 }
 
 void MyInteractor::removeElement(MyNetworkElementBase* element) {

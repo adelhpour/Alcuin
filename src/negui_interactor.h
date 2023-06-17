@@ -169,6 +169,7 @@ private slots:
     void pasteCopiedNodeStyle(MyNetworkElementBase* element);
     const bool isSetCopiedEdgeStyle();
     void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
+    const bool areAnyOtherElementsSelected();
     
 protected:
 
