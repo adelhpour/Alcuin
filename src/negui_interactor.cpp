@@ -355,10 +355,9 @@ MyNetworkElementStyleBase* MyInteractor::nodeStyle() {
 }
 
 void MyInteractor::setCopiedNode(MyNetworkElementBase* node) {
+    _copiedNetworkElements.clear();
     if (node)
-        _copiedNode = node;
-    else
-        _copiedNode = NULL;
+        _copiedNetworkElements.push_back(node);
 }
 
 const bool MyInteractor::isSetCopiedNodeStyle() {
@@ -513,16 +512,31 @@ const bool MyInteractor::areSelectedElementsCopyable() {
 }
 
 const bool MyInteractor::areAnyElementsCopied() {
-    if (_copiedNode)
+    if (copiedNetworkElements().size())
         return true;
 
     return false;
 }
 
+void MyInteractor::copySelectedNetworkElements() {
+    _copiedNetworkElements.clear();
+    for (MyNetworkElementBase* selectedNode : selectedNodes())
+        _copiedNetworkElements.push_back(selectedNode);
+    for (MyNetworkElementBase* selectedEdge : selectedEdges())
+        _copiedNetworkElements.push_back(selectedEdge);
+}
+
 void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
-    MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(),  _copiedNode->style()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), _copiedNode->style()->category()) + "_style", _copiedNode->style()), position.x(), position.y());
-    addNode(node);
+    for (MyNetworkElementBase* copiedElement : copiedNetworkElements()) {
+        MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(),  copiedElement->style()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), copiedElement->style()->category()) + "_style", copiedElement->style()), position.x(), position.y());
+        addNode(node);
+    }
+
     createChangeStageCommand();
+}
+
+QList<MyNetworkElementBase*> MyInteractor::copiedNetworkElements() {
+    return _copiedNetworkElements;
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {

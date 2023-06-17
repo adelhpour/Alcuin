@@ -87,6 +87,7 @@ public:
     void setEdgeStyle(MyNetworkElementStyleBase* style);
     MyNetworkElementStyleBase* edgeStyle();
     MyNetworkElementStyleBase* copiedEdgeStyle();
+    QList<MyNetworkElementBase*> copiedNetworkElements();
     void deleteNewEdgeBuilder();
     bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
     
@@ -170,6 +171,7 @@ private slots:
     const bool isSetCopiedEdgeStyle();
     void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
     const bool areAnyOtherElementsSelected(MyNetworkElementBase* element);
+    void copySelectedNetworkElements();
     
 protected:
 
@@ -227,7 +229,7 @@ protected:
     MyNetworkElementStyleBase* _edgeStyle;
 
     // copied elements
-    MyNetworkElementBase* _copiedNode;
+    QList<MyNetworkElementBase*> _copiedNetworkElements;
 
     // copied styles
     MyNetworkElementStyleBase* _copiedNodeStyle;
