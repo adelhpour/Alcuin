@@ -33,30 +33,30 @@ MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
 void MyEdgeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToStartNode(const QPointF&)));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToEndNode(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToSourceNode(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToTargetNode(const QPointF&)));
 }
 
-void MyEdgeBase::setStartNode(MyNetworkElementBase* startNode) {
-    _startNode = startNode;
-    ((MyNodeBase*)_startNode)->addEdge(this);
-    if (((MyNodeBase*)_startNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_startNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)));
+void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
+    _sourceNode = sourceNode;
+    ((MyNodeBase*)_sourceNode)->addEdge(this);
+    if (((MyNodeBase*)_sourceNode)->nodeType() == MyNodeBase::CENTROID_NODE)
+        connect(_sourceNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustSourcePointToControlBezierLine(const QLineF&)));
 }
 
-void MyEdgeBase::setEndNode(MyNetworkElementBase* endNode) {
-    _endNode = endNode;
-    ((MyNodeBase*)_endNode)->addEdge(this);
-    if (((MyNodeBase*)_endNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_endNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)));
+void MyEdgeBase::setTargetNode(MyNetworkElementBase* targetNode) {
+    _targetNode = targetNode;
+    ((MyNodeBase*)_targetNode)->addEdge(this);
+    if (((MyNodeBase*)_targetNode)->nodeType() == MyNodeBase::CENTROID_NODE)
+        connect(_targetNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustTargetPointToControlBezierLine(const QLineF&)));
 }
 
-MyNetworkElementBase* MyEdgeBase::startNode() {
-    return _startNode;
+MyNetworkElementBase* MyEdgeBase::sourceNode() {
+    return _sourceNode;
 }
 
-MyNetworkElementBase* MyEdgeBase::endNode() {
-    return _endNode;
+MyNetworkElementBase* MyEdgeBase::targetNode() {
+    return _targetNode;
 }
 
 void MyEdgeBase::updateGraphicsItem() {
@@ -72,7 +72,7 @@ void MyEdgeBase::setStyle(MyNetworkElementStyleBase* style) {
 }
 
 const bool MyEdgeBase::isCopyable() {
-    if (isSelected() && startNode()->isCopyable() && endNode()->isCopyable())
+    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
         return true;
 
     return false;
@@ -106,7 +106,7 @@ void MyEdgeBase::setArrowHead() {
 }
 
 bool MyEdgeBase::setActive(const bool& active) {
-    if (active && startNode() && startNode()->isActive() && endNode() && endNode()->isActive()) {
+    if (active && sourceNode() && sourceNode()->isActive() && targetNode() && targetNode()->isActive()) {
         updatePoints();
         return _isActive = true;
     }
@@ -119,30 +119,30 @@ bool MyEdgeBase::connectToNodes(const bool& connect) {
 }
 
 void MyEdgeBase::updatePoints() {
-    QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
-    QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
-    ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(startPosition.x(), startPosition.y(), endPosition.x(), endPosition.y()));
+    QPointF sourcePosition = getEndOfTheLinePosition(sourceNode(), targetNode());
+    QPointF targetPosition = getEndOfTheLinePosition(targetNode(), sourceNode());
+    ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
     emit updateArrowHeadPlacement();
 }
 
-void MyEdgeBase::adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint) {
-    if (((MyNodeBase*)startNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
-        emit askForAdjustConnectedEdges(updatedStartPoint);
+void MyEdgeBase::adjustConnectedEdgesToSourceNode(const QPointF& updatedSourcePoint) {
+    if (((MyNodeBase*)sourceNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
+        emit askForAdjustConnectedEdges(updatedSourcePoint);
         emit askForDisconnectNodePositionFromNeighborNodes();
     }
 }
 
-void MyEdgeBase::adjustConnectedEdgesToEndNode(const QPointF& updatedEndPoint) {
-    if (((MyNodeBase*)endNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
-        emit askForAdjustConnectedEdges(updatedEndPoint);
+void MyEdgeBase::adjustConnectedEdgesToTargetNode(const QPointF& updatedTargetPoint) {
+    if (((MyNodeBase*)targetNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
+        emit askForAdjustConnectedEdges(updatedTargetPoint);
         emit askForDisconnectNodePositionFromNeighborNodes();
     }
 }
 
 void MyEdgeBase::updateArrowHeadPlacement() {
     if (isSetArrowHead())
-        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(endNode(), startNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
+        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(targetNode(), sourceNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
 }
 
 void MyEdgeBase::enableNormalMode() {
@@ -182,7 +182,7 @@ void MyEdgeBase::enableRemoveMode() {
 }
 
 const QPointF MyEdgeBase::middlePosition() {
-    return 0.5 * (((MyNodeBase*)startNode())->getExtents().center() + ((MyNodeBase*)endNode())->getExtents().center());
+    return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
 }
 
 const QRectF MyEdgeBase::getExtents() {
@@ -195,17 +195,17 @@ QWidget* MyEdgeBase::getFeatureMenu() {
 
     // source node
     contentLayout->addWidget(new MyLabel("Source"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(startNode()->name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(sourceNode()->name()), contentLayout->rowCount() - 1, 1);
 
     // target node
     contentLayout->addWidget(new MyLabel("Target"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(endNode()->name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(targetNode()->name()), contentLayout->rowCount() - 1, 1);
 
     return featureMenu;
 }
 
 const qint32 MyEdgeBase::calculateZValue() {
-    return qMax(startNode()->calculateZValue(), endNode()->calculateZValue()) - 2;
+    return qMax(sourceNode()->calculateZValue(), targetNode()->calculateZValue()) - 2;
 }
 
 void MyEdgeBase::read(const QJsonObject &json) {
@@ -217,32 +217,32 @@ void MyEdgeBase::write(QJsonObject &json) {
     json["id"] = name();
 
     QJsonObject positionObject;
-    // start node
-    QJsonObject startObject;
-    if (startNode()) {
-        startObject["node"] = startNode()->name();
+    // source node
+    QJsonObject sourceObject;
+    if (sourceNode()) {
+        sourceObject["node"] = sourceNode()->name();
 
-        QPointF startPosition = getEndOfTheLinePosition(startNode(), endNode());
+        QPointF sourcePosition = getEndOfTheLinePosition(sourceNode(), targetNode());
         QJsonObject positionObject;
-        positionObject["x"] = startPosition.x();
-        positionObject["y"] = startPosition.y();
-        startObject["position"] = positionObject;
+        positionObject["x"] = sourcePosition.x();
+        positionObject["y"] = sourcePosition.y();
+        sourceObject["position"] = positionObject;
 
-        json["start"] = startObject;
+        json["source"] = sourceObject;
     }
 
-    // end node
-    QJsonObject endObject;
-    if (endNode()) {
-        endObject["node"] = endNode()->name();
+    // target node
+    QJsonObject targetObject;
+    if (targetNode()) {
+        targetObject["node"] = targetNode()->name();
 
-        QPointF endPosition = getEndOfTheLinePosition(endNode(), startNode());
+        QPointF targetPosition = getEndOfTheLinePosition(targetNode(), sourceNode());
         QJsonObject positionObject;
-        positionObject["x"] = endPosition.x();
-        positionObject["y"] = endPosition.y();
-        endObject["position"] = positionObject;
+        positionObject["x"] = targetPosition.x();
+        positionObject["y"] = targetPosition.y();
+        targetObject["position"] = positionObject;
 
-        json["end"] = endObject;
+        json["target"] = targetObject;
     }
 
     // style
@@ -253,11 +253,11 @@ void MyEdgeBase::write(QJsonObject &json) {
 
 // MyClassicEdge
 
-MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode) : MyEdgeBase(name) {
+MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
     _graphicsItem = createEdgeSceneGraphicsItem();
     connectGraphicsItem();
-    setStartNode(startNode);
-    setEndNode(endNode);
+    setSourceNode(sourceNode);
+    setTargetNode(targetNode);
 }
 
 MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {

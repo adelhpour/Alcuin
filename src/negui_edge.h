@@ -22,13 +22,13 @@ public:
 
     void connectGraphicsItem() override;
 
-    void setStartNode(MyNetworkElementBase* startNode);
+    void setSourceNode(MyNetworkElementBase* sourceNode);
 
-    MyNetworkElementBase* startNode();
+    MyNetworkElementBase* sourceNode();
 
-    void setEndNode(MyNetworkElementBase* endNode);
+    void setTargetNode(MyNetworkElementBase* targetNode);
 
-    MyNetworkElementBase* endNode();
+    MyNetworkElementBase* targetNode();
     
     void updateGraphicsItem() override;
     
@@ -45,13 +45,13 @@ public:
     // determine whether the edge is visible on the scene
     bool setActive(const bool& active) override;
     
-    // determine whether the edge is connected to its start and end nodes
+    // determine whether the edge is connected to its source and target nodes
     bool connectToNodes(const bool& connect);
     
-    // return true if the edge is connected to its start and end nodes
+    // return true if the edge is connected to its source and target nodes
     const bool isConnectedToNodes() const { return _isConnectedToNodes; }
     
-    // update the ending points of the edge using the start and end node positions
+    // update the ending points of the edge using the source and target node positions
     void updatePoints();
     
     // enable the normal mode of the edge
@@ -86,9 +86,9 @@ public:
     
 public slots:
 
-    void adjustConnectedEdgesToStartNode(const QPointF& updatedStartPoint);
+    void adjustConnectedEdgesToSourceNode(const QPointF& updatedSourcePoint);
 
-    void adjustConnectedEdgesToEndNode(const QPointF& updatedEndPoint);
+    void adjustConnectedEdgesToTargetNode(const QPointF& updatedTargetPoint);
     
     void updateArrowHeadPlacement();
 
@@ -100,8 +100,8 @@ signals:
     void askForDisconnectNodePositionFromNeighborNodes();
 
 protected:
-    MyNetworkElementBase* _startNode;
-    MyNetworkElementBase* _endNode;
+    MyNetworkElementBase* _sourceNode;
+    MyNetworkElementBase* _targetNode;
     MyNetworkElementBase* _arrowHead;
     bool _isSetArrowHead;
     bool _isConnectedToNodes;
@@ -112,7 +112,7 @@ class MyClassicEdge : public MyEdgeBase {
 
 public:
 
-    MyClassicEdge(const QString& name, MyNetworkElementBase* startNode, MyNetworkElementBase* endNode);
+    MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
 };

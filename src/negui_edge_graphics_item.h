@@ -26,9 +26,9 @@ signals:
     
     void askForUpdateArrowHeadPlacement();
 
-    void askForUpdateConnectedEdgesToStartNode(const QPointF&);
+    void askForUpdateConnectedEdgesToSourceNode(const QPointF&);
 
-    void askForUpdateConnectedEdgesToEndNode(const QPointF&);
+    void askForUpdateConnectedEdgesToTargetNode(const QPointF&);
 
     void askForAdjustStartPointToControlBezierLine(const QLineF&);
 

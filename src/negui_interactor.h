@@ -258,8 +258,8 @@ protected:
 
 QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
 MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
-MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
-MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
 MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* style);
 MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle);
 

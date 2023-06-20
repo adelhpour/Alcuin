@@ -14,8 +14,8 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
     if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
         item = createLineShape(_initialLine, this);
         connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToStartNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToEndNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
         connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
         connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
         item->setZValue(zValue());
