@@ -20,6 +20,7 @@ set(gui_sources
 		negui_node_builder.cpp
 		negui_edge_builder.cpp
 		negui_arrow_head_builder.cpp
+		negui_copied_network_elements_paster.cpp
 		negui_new_edge_builder.cpp
 		negui_selection_area_graphics_item.cpp
 		negui_network_element_style_base.cpp
@@ -94,6 +95,7 @@ set(gui_headers
 		negui_node_builder.h
 		negui_edge_builder.h
 		negui_arrow_head_builder.h
+        negui_copied_network_elements_paster.h
 		negui_new_edge_builder.h
 		negui_selection_area_graphics_item.h
 		negui_network_element_style_base.h

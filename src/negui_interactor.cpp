@@ -5,6 +5,7 @@
 #include "negui_node_builder.h"
 #include "negui_edge_builder.h"
 #include "negui_new_edge_builder.h"
+#include "negui_copied_network_elements_paster.h"
 #include "negui_selection_area_graphics_item.h"
 #include "negui_node_style_builder.h"
 #include "negui_edge_style_builder.h"
@@ -397,13 +398,13 @@ void MyInteractor::addEdges(const QJsonObject &json) {
 }
 
 void MyInteractor::addEdge(const QJsonObject &json) {
-    MyNetworkElementBase* edge = createEdge(json, findStartNode(nodes(), json), findEndNode(nodes(), json));
+    MyNetworkElementBase* edge = createEdge(json, findSourceNode(nodes(), json), findTargetNode(nodes(), json));
     if (edge)
         addEdge(edge);
 }
 
 void MyInteractor::addEdge(MyNetworkElementBase* e) {
-    if (e && !edgeExists(((MyEdgeBase*)e)->startNode(), ((MyEdgeBase*)e)->endNode()) && e->setActive(true)) {
+    if (e && !edgeExists(((MyEdgeBase*)e)->sourceNode(), ((MyEdgeBase*)e)->targetNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
@@ -527,11 +528,13 @@ void MyInteractor::copySelectedNetworkElements() {
 }
 
 void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
-    for (MyNetworkElementBase* copiedElement : copiedNetworkElements()) {
-        MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(),  copiedElement->style()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), copiedElement->style()->category()) + "_style", copiedElement->style()), position.x(), position.y());
-        addNode(node);
-    }
-
+    MyCopiedNetworkElementsPaster* copiedNetworkElementsPaster = new MyCopiedNetworkElementsPaster(copiedNetworkElements(), position);
+    connect(copiedNetworkElementsPaster, &MyCopiedNetworkElementsPaster::askForAddNode, this, [this] (MyNetworkElementBase* node) { this->addNode(node); });
+    connect(copiedNetworkElementsPaster, &MyCopiedNetworkElementsPaster::askForNodeUniqueName, this, [this] (MyNetworkElementStyleBase* nodeStyle) { return getElementUniqueName(this->nodes(), nodeStyle->category()); });
+    connect(copiedNetworkElementsPaster, &MyCopiedNetworkElementsPaster::askForAddEdge, this, [this] (MyNetworkElementBase* edge) { this->addEdge(edge); });
+    connect(copiedNetworkElementsPaster, &MyCopiedNetworkElementsPaster::askForEdgeUniqueName, this, [this] (MyNetworkElementStyleBase* edgeStyle) { return getElementUniqueName(this->edges(), edgeStyle->category()); });
+    copiedNetworkElementsPaster->paste();
+    copiedNetworkElementsPaster->deleteLater();
     createChangeStageCommand();
 }
 
@@ -549,7 +552,7 @@ void MyInteractor::deleteNewEdgeBuilder() {
 
 bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2) {
     for (MyNetworkElementBase *edge : qAsConst(edges())) {
-        if ((((MyEdgeBase*)edge)->startNode() == n1 && ((MyEdgeBase*)edge)->endNode() == n2) || (((MyEdgeBase*)edge)->startNode() == n2 && ((MyEdgeBase*)edge)->endNode() == n1)) {
+        if ((((MyEdgeBase*)edge)->sourceNode() == n1 && ((MyEdgeBase*)edge)->targetNode() == n2) || (((MyEdgeBase*)edge)->sourceNode() == n2 && ((MyEdgeBase*)edge)->targetNode() == n1)) {
             return true;
         }
     }
@@ -1134,16 +1137,16 @@ MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const Q
     return NULL;
 }
 
-MyNetworkElementBase* findStartNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
-    if (json.contains("start") && json["start"].isObject() && json["start"].toObject().contains("node") && json["start"]["node"].isString())
-        return findElement(nodes, json["start"]["node"].toString());
+MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("source") && json["source"].isObject() && json["source"].toObject().contains("node") && json["source"]["node"].isString())
+        return findElement(nodes, json["source"]["node"].toString());
     
     return NULL;
 }
 
-MyNetworkElementBase* findEndNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
-    if (json.contains("end") && json["end"].isObject() && json["end"].toObject().contains("node") && json["end"]["node"].isString())
-        return findElement(nodes, json["end"]["node"].toString());
+MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("target") && json["target"].isObject() && json["target"].toObject().contains("node") && json["target"]["node"].isString())
+        return findElement(nodes, json["target"]["node"].toString());
     
     return NULL;
 }
