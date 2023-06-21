@@ -45,7 +45,7 @@ MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : 
 void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
     MyContextMenuBase::initializeActionsStatus();
     if (!askForWhetherElementStyleIsCopied())
-        setActionEnabled("Paste Style", false);
+        setActionEnabled("Paste", false);
 }
 
 // MyNodeGraphicsItemContextMenu
@@ -61,8 +61,8 @@ MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : 
 
 MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
-    connect(addAction("Paste Style"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
-    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
+    connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForRemoveNetworkElement()));
 }
 
 // MyArrowHeadGraphicsItemContextMenu
