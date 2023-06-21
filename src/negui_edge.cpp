@@ -41,14 +41,14 @@ void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
     _sourceNode = sourceNode;
     ((MyNodeBase*)_sourceNode)->addEdge(this);
     if (((MyNodeBase*)_sourceNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_sourceNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustSourcePointToControlBezierLine(const QLineF&)));
+        connect(_sourceNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)));
 }
 
 void MyEdgeBase::setTargetNode(MyNetworkElementBase* targetNode) {
     _targetNode = targetNode;
     ((MyNodeBase*)_targetNode)->addEdge(this);
     if (((MyNodeBase*)_targetNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_targetNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustTargetPointToControlBezierLine(const QLineF&)));
+        connect(_targetNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)));
 }
 
 MyNetworkElementBase* MyEdgeBase::sourceNode() {
