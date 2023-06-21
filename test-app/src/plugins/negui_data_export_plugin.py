@@ -56,7 +56,7 @@ def checkForSBMLCompatibiliy(graphInfoString):
         
     for e_index in range(len(graphInfo['edges'])):
         if 'id' in list(graphInfo['edges'][e_index].keys()):
-            if graphInfo['edges'][e_index]['start']['node'] in parentIds or graphInfo['edges'][e_index]['end']['node'] in parentIds:
+            if graphInfo['edges'][e_index]['source']['node'] in parentIds or graphInfo['edges'][e_index]['target']['node'] in parentIds:
                 compartmentEdgesAreCompatible = False
                 break;
             
