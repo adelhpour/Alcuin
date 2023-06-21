@@ -66,8 +66,10 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                 event->accept();
             _isLeftButtonPressed = true;
         }
-        else if (event->button() == Qt::RightButton)
+        else if (event->button() == Qt::RightButton) {
+            emit mouseRightButtonIsPressed();
             _mousePressedPosition = event->scenePos();
+        }
     }
 }
 
