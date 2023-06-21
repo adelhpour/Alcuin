@@ -356,7 +356,7 @@ MyNetworkElementStyleBase* MyInteractor::nodeStyle() {
 }
 
 void MyInteractor::setCopiedNode(MyNetworkElementBase* node) {
-    _copiedNetworkElements.clear();
+    resetCopiedNetworkElements();
     if (node)
         _copiedNetworkElements.push_back(node);
 }
@@ -527,7 +527,7 @@ const bool MyInteractor::areAnyElementsSelected() {
 }
 
 void MyInteractor::copySelectedNetworkElements() {
-    _copiedNetworkElements.clear();
+    resetCopiedNetworkElements();
     for (MyNetworkElementBase* selectedNode : selectedNodes())
         _copiedNetworkElements.push_back(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
@@ -547,6 +547,10 @@ void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
 
 QList<MyNetworkElementBase*> MyInteractor::copiedNetworkElements() {
     return _copiedNetworkElements;
+}
+
+void MyInteractor::resetCopiedNetworkElements() {
+    _copiedNetworkElements.clear();
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
@@ -690,11 +694,12 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
 
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
-    //setCopiedNode(NULL);
+    resetCopiedNetworkElements();
+    setCopiedNode(NULL);
     setNodeStyle(NULL);
-    //setCopiedNodeStyle(NULL);
+    setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
-    //setCopiedEdgeStyle(NULL);
+    setCopiedEdgeStyle(NULL);
     deleteNewEdgeBuilder();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();

@@ -88,6 +88,7 @@ public:
     MyNetworkElementStyleBase* edgeStyle();
     MyNetworkElementStyleBase* copiedEdgeStyle();
     QList<MyNetworkElementBase*> copiedNetworkElements();
+    void resetCopiedNetworkElements();
     void deleteNewEdgeBuilder();
     bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
     
