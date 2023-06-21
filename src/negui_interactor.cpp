@@ -672,11 +672,11 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
 
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
+    //setCopiedNode(NULL);
     setNodeStyle(NULL);
-    setCopiedNode(NULL);
-    setCopiedNodeStyle(NULL);
+    //setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
-    setCopiedEdgeStyle(NULL);
+    //setCopiedEdgeStyle(NULL);
     deleteNewEdgeBuilder();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
