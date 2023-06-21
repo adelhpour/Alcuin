@@ -111,6 +111,8 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
             emit askForCopySelectedNetworkElements();
         else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
             emit askForPasteCopiedNetworkElements(_cursorPosition);
+        else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
+            emit askForRemoveSelectedNetworkElements();
     }
 }
 
