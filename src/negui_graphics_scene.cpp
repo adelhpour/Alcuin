@@ -103,6 +103,8 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
         }
         else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A)
             emit askForSelectAll();
+        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C)
+            emit askForCopySelectedNetworkElements();
     }
 }
 
