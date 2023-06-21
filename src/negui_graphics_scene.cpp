@@ -43,8 +43,10 @@ QMenu* MyGraphicsScene::createContextMenu() {
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopySelectedNetworkElements()), this, SIGNAL(askForCopySelectedNetworkElements()));
     connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_cursorPosition); });
+    connect(contextMenu, SIGNAL(askForRemoveSelectedNetworkElements()), this, SIGNAL(askForRemoveSelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCopyable()), this, SIGNAL(askForWhetherSelectedElementsAreCopyable()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
+    connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
 }
 
 void MyGraphicsScene::displayContextMenu(const QPointF& position) {
@@ -67,7 +69,7 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
             _isLeftButtonPressed = true;
         }
         else if (event->button() == Qt::RightButton) {
-            emit mouseRightButtonIsPressed();
+            //emit mouseRightButtonIsPressed();
         }
     }
 }

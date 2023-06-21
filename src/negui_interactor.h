@@ -124,7 +124,8 @@ public slots:
     // network elements
     void addNewNode(const QPointF& position);
     void addNewEdge(MyNetworkElementBase* element);
-    void removeElement(MyNetworkElementBase* element);
+    void removeNetworkElement(MyNetworkElementBase* element);
+    void removeSelectedNetworkElements();
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
@@ -136,6 +137,7 @@ public slots:
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     const bool areSelectedElementsCopyable();
     const bool areAnyElementsCopied();
+    const bool areAnyElementsSelected();
     
     // modes
     void enableNormalMode() override;
@@ -194,7 +196,7 @@ protected:
     QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
     QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
     QWidgetAction* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
-    QToolButton* createRemoveElementMenuButton();
+    QToolButton* createRemoveNetworkElementMenuButton();
     QToolButton* createAutoLayoutMenuButton();
     QToolButton* createUndoActionMenuButton();
     QToolButton* createRedoActionMenuButton();

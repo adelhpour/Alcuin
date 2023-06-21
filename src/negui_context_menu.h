@@ -30,9 +30,13 @@ signals:
 
     const bool askForWhetherAnyElementsAreCopied();
 
+    const bool askForWhetherAnyElementsAreSelected();
+
     void askForCopySelectedNetworkElements();
 
     void askForPasteCopiedNetworkElements();
+
+    void askForRemoveSelectedNetworkElements();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
@@ -56,6 +60,7 @@ signals:
 
     void askForPasteNetworkElementStyle();
 
+    void askForRemoveNetworkElement();
 };
 
 class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

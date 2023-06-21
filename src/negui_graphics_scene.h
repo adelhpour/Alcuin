@@ -31,8 +31,10 @@ signals:
     void askForSelectAll();
     const bool askForWhetherSelectedElementsAreCopyable();
     const bool askForWhetherAnyElementsAreCopied();
+    const bool askForWhetherAnyElementsAreSelected();
     void askForCopySelectedNetworkElements();
     void askForPasteCopiedNetworkElements(const QPointF& position);
+    void askForRemoveSelectedNetworkElements();
 
 public slots:
     

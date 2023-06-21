@@ -279,7 +279,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
-        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForRemoveNetworkElement(MyNetworkElementBase*)), this, SLOT(removeNetworkElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
@@ -408,7 +408,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(removeElement(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForRemoveNetworkElement(MyNetworkElementBase*)), this, SLOT(removeNetworkElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
@@ -514,6 +514,13 @@ const bool MyInteractor::areSelectedElementsCopyable() {
 
 const bool MyInteractor::areAnyElementsCopied() {
     if (copiedNetworkElements().size())
+        return true;
+
+    return false;
+}
+
+const bool MyInteractor::areAnyElementsSelected() {
+    if (selectedNodes().size() || selectedEdges().size())
         return true;
 
     return false;
@@ -635,19 +642,30 @@ const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* eleme
     return false;
 }
 
-void MyInteractor::removeElement(MyNetworkElementBase* element) {
-    if (getSceneMode() == REMOVE_MODE) {
-        if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
-            removeNode(element);
-            for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
-                removeEdge(edge);
-        }
-        else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
-            ((MyEdgeBase*)element)->connectToNodes(false);
-            removeEdge(element);
-        }
-        createChangeStageCommand();
+void MyInteractor::removeNetworkElement(MyNetworkElementBase* element) {
+    if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
+        removeNode(element);
+        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
+            removeEdge(edge);
     }
+    else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
+        ((MyEdgeBase*)element)->connectToNodes(false);
+        removeEdge(element);
+    }
+    createChangeStageCommand();
+}
+
+void MyInteractor::removeSelectedNetworkElements() {
+    for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+        removeNode(selectedNode);
+        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges()))
+            removeEdge(edge);
+    }
+    for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+        ((MyEdgeBase*)selectedEdge)->connectToNodes(false);
+        removeEdge(selectedEdge);
+    }
+    createChangeStageCommand();
 }
 
 const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
@@ -925,7 +943,7 @@ QList<QToolButton*> MyInteractor::getAddModeButtons() {
 }
 
 QToolButton* MyInteractor::getRemoveModeButton() {
-    return createRemoveElementMenuButton();
+    return createRemoveNetworkElementMenuButton();
 }
 
 QToolButton* MyInteractor::createNormalModeMenuButton() {
@@ -1060,7 +1078,7 @@ QWidgetAction* MyInteractor::createElementStyleWidgetAction(QList<MyPluginItemBa
     return widgetAction;
 }
 
-QToolButton* MyInteractor::createRemoveElementMenuButton() {
+QToolButton* MyInteractor::createRemoveNetworkElementMenuButton() {
     QToolButton* button = new MyModeToolButton("Remove");
     connect(button, SIGNAL(clicked()), this, SLOT(enableRemoveMode()));
     return button;

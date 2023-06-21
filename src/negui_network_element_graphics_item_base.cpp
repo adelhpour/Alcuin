@@ -43,6 +43,7 @@ void MyNetworkElementGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopyNetworkElement()), this, SIGNAL(askForCopyNetworkElement()));
     connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(contextMenu, SIGNAL(askForPasteNetworkElementStyle()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    connect(contextMenu, SIGNAL(askForRemoveNetworkElement()), this, SIGNAL(askForRemoveNetworkElement()));
     connect(contextMenu, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
 }
 

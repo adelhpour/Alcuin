@@ -64,6 +64,7 @@ signals:
     void askForCopyNetworkElement();
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
+    void askForRemoveNetworkElement();
     const bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
     
