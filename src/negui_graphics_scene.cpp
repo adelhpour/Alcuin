@@ -42,7 +42,7 @@ QMenu* MyGraphicsScene::createContextMenu() {
 
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopySelectedNetworkElements()), this, SIGNAL(askForCopySelectedNetworkElements()));
-    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_mousePressedPosition); });
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_cursorPosition); });
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCopyable()), this, SIGNAL(askForWhetherSelectedElementsAreCopyable()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
 }
@@ -66,10 +66,6 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                 event->accept();
             _isLeftButtonPressed = true;
         }
-        else if (event->button() == Qt::RightButton) {
-            emit mouseRightButtonIsPressed();
-            _mousePressedPosition = event->scenePos();
-        }
     }
 }
 
@@ -77,6 +73,7 @@ void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if (_isLeftButtonPressed)
         emit mousePressedLeftButtonIsMoved(event->scenePos());
     QGraphicsScene::mouseMoveEvent(event);
+    _cursorPosition = event->scenePos();
 }
 
 void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -107,6 +104,8 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
             emit askForSelectAll();
         else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C)
             emit askForCopySelectedNetworkElements();
+        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
+            emit askForPasteCopiedNetworkElements(_cursorPosition);
     }
 }
 

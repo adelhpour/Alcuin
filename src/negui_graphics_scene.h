@@ -26,7 +26,6 @@ signals:
     void mousePressedLeftButtonIsMoved(const QPointF& position);
     void mouseLeftButtonIsReleased();
     void mouseLeftButtonIsDoubleClicked();
-    void mouseRightButtonIsPressed();
     void escapeKeyIsPressed();
     void askForSelectAll();
     const bool askForWhetherSelectedElementsAreCopyable();
@@ -55,7 +54,7 @@ protected:
 
     bool _isLeftButtonPressed;
     bool _isShiftModifierPressed;
-    QPointF _mousePressedPosition;
+    QPointF _cursorPosition;
 };
 
 #endif
