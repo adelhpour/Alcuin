@@ -93,11 +93,6 @@ void MyNetworkElementBase::enableSelectEdgeMode() {
     graphicsItem()->enableSelectEdgeMode();
 }
 
-void MyNetworkElementBase::enableRemoveMode() {
-    MySceneModeElementBase::enableRemoveMode();
-    graphicsItem()->enableRemoveMode();
-}
-
 QWidget* MyNetworkElementBase::getFeatureMenu() {
     MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();

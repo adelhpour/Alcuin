@@ -175,12 +175,6 @@ void MyEdgeBase::enableSelectEdgeMode() {
         arrowHead()->enableSelectEdgeMode();
 }
 
-void MyEdgeBase::enableRemoveMode() {
-    MyNetworkElementBase::enableRemoveMode();
-    if (isSetArrowHead())
-        arrowHead()->enableRemoveMode();
-}
-
 const QPointF MyEdgeBase::middlePosition() {
     return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
 }

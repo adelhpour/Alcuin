@@ -38,8 +38,6 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
-
-    void enableRemoveMode() override;
     
 signals:
     

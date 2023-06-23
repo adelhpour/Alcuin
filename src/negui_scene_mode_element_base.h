@@ -14,7 +14,6 @@ public:
         SELECT_MODE,
         SELECT_NODE_MODE,
         SELECT_EDGE_MODE,
-        REMOVE_MODE,
     } SceneMode;
 
     MySceneModeElementBase();
@@ -38,8 +37,6 @@ public:
     virtual void enableSelectNodeMode();
 
     virtual void enableSelectEdgeMode();
-
-    virtual void enableRemoveMode();
 
 protected:
     SceneMode _sceneMode;

@@ -115,7 +115,6 @@ public slots:
     QList<QToolButton*> getToolBarMenuButtons();
     QToolButton* getNormalModeButton();
     QList<QToolButton*> getAddModeButtons();
-    QToolButton* getRemoveModeButton();
     
     // network
     void setNewNetworkCanvas();
@@ -147,7 +146,6 @@ public slots:
     void enableSelectMode(const QString& elementCategory = "");
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
-    void enableRemoveMode() override;
     
     void clearElementsFocusedGraphicsItems();
     void displaySelectionArea(const QPointF& position);
@@ -197,7 +195,6 @@ protected:
     QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
     QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
     QWidgetAction* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
-    QToolButton* createRemoveNetworkElementMenuButton();
     QToolButton* createAutoLayoutMenuButton();
     QToolButton* createUndoActionMenuButton();
     QToolButton* createRedoActionMenuButton();

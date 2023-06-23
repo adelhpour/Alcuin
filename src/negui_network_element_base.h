@@ -53,8 +53,6 @@ public:
     
     void enableSelectEdgeMode() override;
     
-    void enableRemoveMode() override;
-    
     virtual const QRectF getExtents() = 0;
     
     virtual QWidget* getFeatureMenu();

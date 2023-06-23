@@ -66,9 +66,6 @@ public:
     void enableAddEdgeMode() override;
     
     void enableSelectEdgeMode() override;
-    
-    // enable the remove mode of the edge
-    void enableRemoveMode() override;
 
     const QPointF middlePosition();
     

@@ -85,11 +85,6 @@ void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
     setCursor(Qt::PointingHandCursor);
 }
 
-void MyEdgeSceneGraphicsItem::enableRemoveMode() {
-    MyNetworkElementGraphicsItemBase::enableRemoveMode();
-    setCursor(Qt::PointingHandCursor);
-}
-
 void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)

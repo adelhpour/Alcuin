@@ -766,17 +766,6 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     emit askForSetToolTip("Select " + edgeCategory + " edges");
 }
 
-void MyInteractor::enableRemoveMode() {
-    enableNormalMode();
-    MySceneModeElementBase::enableRemoveMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
-        node->enableRemoveMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
-        edge->enableRemoveMode();
-    
-    emit askForSetToolTip("Select Item");
-}
-
 void MyInteractor::clearElementsFocusedGraphicsItems() {
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->graphicsItem()->clearFocusedGraphicsItems();
@@ -947,10 +936,6 @@ QList<QToolButton*> MyInteractor::getAddModeButtons() {
     return createAddElementMenuButtons();
 }
 
-QToolButton* MyInteractor::getRemoveModeButton() {
-    return createRemoveNetworkElementMenuButton();
-}
-
 QToolButton* MyInteractor::createNormalModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
@@ -1081,12 +1066,6 @@ QWidgetAction* MyInteractor::createElementStyleWidgetAction(QList<MyPluginItemBa
     MyWidgetAction* widgetAction = new MyWidgetAction(parent);
     widgetAction->setItems(elementStyles);
     return widgetAction;
-}
-
-QToolButton* MyInteractor::createRemoveNetworkElementMenuButton() {
-    QToolButton* button = new MyModeToolButton("Remove");
-    connect(button, SIGNAL(clicked()), this, SLOT(enableRemoveMode()));
-    return button;
 }
 
 QToolButton* MyInteractor::createAutoLayoutMenuButton() {

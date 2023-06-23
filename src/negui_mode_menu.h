@@ -14,8 +14,6 @@ public:
 
     void setAddModeButtons(QList<QToolButton*> buttons);
 
-    void setRemoveModeButton(QToolButton* button);
-
     void setZoomInButton(QToolButton* button);
 
     void setZoomOutButton(QToolButton* button);

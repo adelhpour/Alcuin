@@ -25,13 +25,6 @@ void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons) {
     _buttons.push_back(button);
 }
 
-void MyModeMenu::setRemoveModeButton(QToolButton* button) {
-    QGridLayout *contentLayout = (QGridLayout *) layout();
-    decorateRemoveModeButton(button);
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
-    _buttons.push_back(button);
-}
-
 void MyModeMenu::setZoomInButton(QToolButton* button) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     decorateZoomInButton(button);
