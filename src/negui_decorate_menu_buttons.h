@@ -20,8 +20,6 @@ void decorateResetSceneButton(QToolButton* button);
 
 void decorateNormalModeButton(QToolButton* button);
 
-void decorateRemoveModeButton(QToolButton* button);
-
 void decorateZoomInButton(QToolButton* button);
 
 void decorateZoomOutButton(QToolButton* button);

@@ -51,12 +51,6 @@ void decorateNormalModeButton(QToolButton* button) {
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/mouse-pointer.svg");
 }
 
-void decorateRemoveModeButton(QToolButton* button) {
-    button->setText("Remove");
-    button->setToolTip("Remove an item from the network");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/minus-square.svg");
-}
-
 void decorateZoomInButton(QToolButton* button) {
     button->setText("Zoom In");
     button->setToolTip("Zooming in");
