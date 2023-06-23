@@ -923,7 +923,7 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(createAutoLayoutMenuButton());
     buttons.push_back(createUndoActionMenuButton());
-    buttons.push_back(createRedoActionMenuButton())
+    buttons.push_back(createRedoActionMenuButton());
     
     return buttons;
 }

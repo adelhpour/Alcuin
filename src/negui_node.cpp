@@ -169,10 +169,11 @@ const qint32 MyNodeBase::calculateZValue() {
 }
 
 void MyNodeBase::adjustConnectedEdges() {
-    for (MyNetworkElementBase *edge : qAsConst(edges())) {
-        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
-        ((MyEdgeBase *) edge)->askForAdjustConnectedEdges(((MyEdgeBase *) edge)->middlePosition());
-    }
+        for (MyNetworkElementBase *edge : qAsConst(edges())) {
+            ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
+            if (edges().size() > 2)
+                ((MyEdgeBase *) edge)->askForAdjustConnectedEdges(((MyEdgeBase *) edge)->middlePosition());
+        }
 }
 
 void MyNodeBase::read(const QJsonObject &json) {
