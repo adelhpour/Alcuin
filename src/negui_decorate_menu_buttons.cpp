@@ -4,27 +4,27 @@
 #include <QShortcut>
 
 void decorateImportButton(QToolButton* button) {
-    button->setText("Import");
-    button->setToolTip("Import from a file");
+    button->setText("Open");
+    button->setToolTip("Open");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/folder.svg");
 }
 
 void decorateExportButton(QToolButton* button) {
-    button->setText("Export");
-    button->setToolTip("Export to a file");
+    button->setText("SaveAs");
+    button->setToolTip("SaveAs");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/share.svg");
 }
 
 void decorateSaveButton(QToolButton* button) {
     QShortcut* shortcut = new QShortcut(QKeySequence::Save, button, SLOT(click()));
     button->setText("Save");
-    button->setToolTip("Save to a file");
+    button->setToolTip("Save");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/save.svg");
 }
 
 void decorateAutoLayoutButton(QToolButton* button) {
     button->setText("AutoLayout");
-    button->setToolTip("Automatically set the position of the nodes and edges");
+    button->setToolTip("AutoLayout");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/share-2.svg");
 }
 
@@ -40,8 +40,8 @@ void decorateRedoActionButton(QToolButton* button) {
 
 void decorateResetSceneButton(QToolButton* button) {
     QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
-    button->setText("Reset");
-    button->setToolTip("Remove all network elements from the scene and create a new canvas");
+    button->setText("New");
+    button->setToolTip("New");
     setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/file.svg");
 }
 
