@@ -96,9 +96,8 @@ void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
-        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
+        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01)
             setFocused(true);
-        }
     }
 }
 
