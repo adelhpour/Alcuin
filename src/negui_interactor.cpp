@@ -913,17 +913,17 @@ void MyInteractor::setFileManager() {
 
 QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     QList<QToolButton*> buttons;
+    buttons.push_back(createResetSceneMenuButton());
     if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(createImportMenuButton());
     if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size()) {
-        buttons.push_back(createExportMenuButton());
         buttons.push_back(createSaveMenuButton());
+        buttons.push_back(createExportMenuButton());
     }
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(createAutoLayoutMenuButton());
     buttons.push_back(createUndoActionMenuButton());
-    buttons.push_back(createRedoActionMenuButton());
-    buttons.push_back(createResetSceneMenuButton());
+    buttons.push_back(createRedoActionMenuButton())
     
     return buttons;
 }
