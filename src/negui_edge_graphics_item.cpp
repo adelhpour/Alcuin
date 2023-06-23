@@ -85,6 +85,13 @@ void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
     setCursor(Qt::PointingHandCursor);
 }
 
+void MyEdgeSceneGraphicsItem::setFocused(const bool& isFocused) {
+    if (!_focusedGraphicsItems.size()) {
+        MyNetworkElementGraphicsItemBase::setFocused(isFocused);
+        askForSetConnectedElementsFocused(isFocused);
+    }
+}
+
 void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)

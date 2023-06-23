@@ -35,6 +35,7 @@ void MyEdgeBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToSourceNode(const QPointF&)));
     connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToTargetNode(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForSetConnectedElementsFocused(const bool&)), this, SIGNAL(askForSetConnectedElementsFocused(const bool&)));
 }
 
 void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {

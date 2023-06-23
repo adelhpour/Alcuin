@@ -41,7 +41,7 @@ public:
     
     void setSelectedWithFill(const bool& selected);
     
-    void setFocused(const bool& isFocused);
+    virtual void setFocused(const bool& isFocused);
     
     void setCursor(const QCursor &cursor);
     

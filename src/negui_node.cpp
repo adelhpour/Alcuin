@@ -376,6 +376,7 @@ void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     connect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
     connect(e, SIGNAL(askForDisconnectNodePositionFromNeighborNodes()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    connect(e, SIGNAL(askForSetConnectedElementsFocused(const bool&)), this, SLOT(setConnectedElementsFocused(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
@@ -481,4 +482,10 @@ const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthY(const qreal& a
 
 void MyCentroidNode::disconnectNodePositionFromNeighborNodes() {
     _doesNodePositionDependOnNeighboringNodes = false;
+}
+
+void MyCentroidNode::setConnectedElementsFocused(const bool& isFocused) {
+    graphicsItem()->setFocused(isFocused);
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        edge->graphicsItem()->setFocused(isFocused);
 }

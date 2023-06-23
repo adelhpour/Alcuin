@@ -128,10 +128,9 @@ void MyNetworkElementGraphicsItemBase::setSelectedWithFill(const bool& selected)
 }
 
 void MyNetworkElementGraphicsItemBase::setFocused(const bool& isFocused) {
+    clearFocusedGraphicsItems();
     if (isFocused && getSceneMode() == NORMAL_MODE)
         addFocusedGraphicsItems();
-    else
-        clearFocusedGraphicsItems();
 }
 
 void MyNetworkElementGraphicsItemBase::setCursor(const QCursor &cursor) {
