@@ -8,9 +8,9 @@
 MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
+    connect(this, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForClearFocusedGraphicsItems()));
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearFocusedGraphicsItems()));
     connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
-    connect(this, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForClearFocusedGraphicsItems()));
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
