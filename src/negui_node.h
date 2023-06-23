@@ -35,8 +35,6 @@ public:
     virtual MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) = 0;
     
     void updateGraphicsItem() override;
-
-    const bool isCopyable() override;
     
     void setSelected(const bool& selected) override;
 
@@ -119,6 +117,8 @@ public:
 
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
+    const bool isCopyable() override;
+
     // add to child nodes
     void addChildNode(MyNetworkElementBase* n);
 
@@ -167,6 +167,8 @@ public:
     void connectGraphicsItem() override;
 
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    const bool isCopyable() override;
 
     // add to edges
     void addEdge(MyNetworkElementBase* e) override;

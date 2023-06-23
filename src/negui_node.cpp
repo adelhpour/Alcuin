@@ -54,13 +54,6 @@ void MyNodeBase::updateGraphicsItem() {
     resetPosition();
 }
 
-const bool MyNodeBase::isCopyable() {
-    if (isSelected())
-        return true;
-
-    return false;
-}
-
 void MyNodeBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     if (selected)
@@ -243,6 +236,13 @@ MyNetworkElementGraphicsItemBase* MyClassicNode::createGraphicsItem(const QPoint
     return createClassicNodeSceneGraphicsItem(position);
 }
 
+const bool MyClassicNode::isCopyable() {
+    if (isSelected())
+        return true;
+
+    return false;
+}
+
 void MyClassicNode::addChildNode(MyNetworkElementBase* n) {
     if (n) {
         _childNodes.push_back(n);
@@ -357,6 +357,17 @@ void MyCentroidNode::connectGraphicsItem() {
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
     return createCentroidNodeSceneGraphicsItem(position);
+}
+
+const bool MyCentroidNode::isCopyable() {
+    if (!isSelected())
+        return false;
+    for (MyNetworkElementBase* edge : edges()) {
+        if (!edge->isSelected())
+            return false;
+    }
+
+    return true;
 }
 
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
