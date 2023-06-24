@@ -83,6 +83,7 @@ void MyLineGraphicsItem::adjustLineControlPoint1ToControlBezierLine(const QLineF
         controlPoint1 = controlBezierLine.p1();
     ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
     resetLine();
+    emit askForAdjustFocusedGraphicsItems();
 }
 
 void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF& controlBezierLine) {
@@ -97,6 +98,7 @@ void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF
         controlPoint2 = controlBezierLine.p1();
     ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
     resetLine();
+    emit askForAdjustFocusedGraphicsItems();
 }
 
 const qreal MyLineGraphicsItem::getEndSlope() {
@@ -116,6 +118,7 @@ QGraphicsItem* MyLineGraphicsItem::getFocusedGraphicsItem() {
     MyBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MyBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), getControlPoint2(), getEndPoint(), zValue());
     connect(focusedGraphicsItems, SIGNAL(startControlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint1(const QPointF&)));
     connect(focusedGraphicsItems, SIGNAL(endControlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint2(const QPointF&)));
+    connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint1(), getControlPoint2());  });
 
     return focusedGraphicsItems;
 }

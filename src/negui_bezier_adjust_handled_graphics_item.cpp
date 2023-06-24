@@ -9,27 +9,41 @@ MyBezierAdjustHandledGraphicsItems::MyBezierAdjustHandledGraphicsItems(const QPo
     setZValue(zValue + 1);
     createBezierStartAdjustHandledGraphicsItem(startPoint, controlPoint1);
     createBezierEndAdjustHandledGraphicsItem(endPoint, controlPoint2);
+    _isPressed = false;
 }
 
 void MyBezierAdjustHandledGraphicsItems::createBezierStartAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint) {
     _startAdjustHandledGraphicsItem = new MyBezierAdjustHandledGraphicsItem(point, controlPoint);
     connect((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem, SIGNAL(adjustHandledGraphicsItemIsUpdated(const QPointF&)), this, SLOT(updateStartAdjustHandledGraphicsItem(const QPointF&)));
+    connect((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem, &MyBezierAdjustHandledGraphicsItem::isPressed, this, [this] () { _isPressed = true; });
+    connect((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem, &MyBezierAdjustHandledGraphicsItem::isReleased, this, [this] () { _isPressed = false; });
+
     addToGroup(_startAdjustHandledGraphicsItem);
 }
 
 void MyBezierAdjustHandledGraphicsItems::createBezierEndAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint) {
     _endAdjustHandledGraphicsItem = new MyBezierAdjustHandledGraphicsItem(point, controlPoint);
     connect((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem, SIGNAL(adjustHandledGraphicsItemIsUpdated(const QPointF&)), this, SLOT(updateEndAdjustHandledGraphicsItem(const QPointF&)));
+    connect((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem, &MyBezierAdjustHandledGraphicsItem::isPressed, this, [this] () { _isPressed = true; });
+    connect((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem, &MyBezierAdjustHandledGraphicsItem::isReleased, this, [this] () { _isPressed = false; });
+
     addToGroup(_endAdjustHandledGraphicsItem);
 }
 
+void MyBezierAdjustHandledGraphicsItems::adjust(const QPointF& controlPoint1, const QPointF& controlPoint2) {
+    if (!_isPressed) {
+        ((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem)->updatePosition(controlPoint1);
+        ((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem)->updatePosition(controlPoint2);
+    }
+}
+
 void MyBezierAdjustHandledGraphicsItems::updateStartAdjustHandledGraphicsItem(const QPointF& startControlPoint) {
-    ((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem)->updatePostion(startControlPoint);
+    ((MyBezierAdjustHandledGraphicsItem*)_startAdjustHandledGraphicsItem)->updatePosition(startControlPoint);
     emit startControlPointIsUpdated(startControlPoint);
 }
 
 void MyBezierAdjustHandledGraphicsItems::updateEndAdjustHandledGraphicsItem(const QPointF& endControlPoint) {
-    ((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem)->updatePostion(endControlPoint);
+    ((MyBezierAdjustHandledGraphicsItem*)_endAdjustHandledGraphicsItem)->updatePosition(endControlPoint);
     emit endControlPointIsUpdated(endControlPoint);
 }
 
@@ -49,12 +63,14 @@ void MyBezierAdjustHandledGraphicsItem::createLine(const QPointF& p1, const QPoi
 void MyBezierAdjustHandledGraphicsItem::createHandle(const QPointF& center) {
     _controlHandle = new MyBezierControlPointHandleGraphicsItem(center);
     connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(adjustHandledGraphicsItemIsUpdated(const QPointF&)));
+    connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
+    connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
     addToGroup(_controlHandle);
 }
 
-void MyBezierAdjustHandledGraphicsItem::updatePostion(const QPointF& controlPoint) {
+void MyBezierAdjustHandledGraphicsItem::updatePosition(const QPointF& controlPoint) {
     ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(((MyBezierAdjustLineGraphicsItem*)_line)->line().p1().x(), ((MyBezierAdjustLineGraphicsItem*)_line)->line().p1().y(), controlPoint.x(), controlPoint.y());
-    ((MyBezierControlPointHandleGraphicsItem*)_controlHandle)->updatePostion(controlPoint);
+    ((MyBezierControlPointHandleGraphicsItem*)_controlHandle)->updatePosition(controlPoint);
 }
 
 const QPointF MyBezierAdjustHandledGraphicsItem::position() {
@@ -88,10 +104,10 @@ MyBezierControlPointHandleGraphicsItem::MyBezierControlPointHandleGraphicsItem(c
     brush.setColor(QColor("#4169e1"));
     setBrush(brush);
     
-    updatePostion(center);
+    updatePosition(center);
 }
 
-void MyBezierControlPointHandleGraphicsItem::updatePostion(const QPointF& center) {
+void MyBezierControlPointHandleGraphicsItem::updatePosition(const QPointF& center) {
     setRect(QRectF(center.x() - _handleRadius, center.y() - _handleRadius, 2 * _handleRadius, 2 * _handleRadius));
 }
 
@@ -99,7 +115,17 @@ const QPointF MyBezierControlPointHandleGraphicsItem::position() {
     return rect().center();
 }
 
+void MyBezierControlPointHandleGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem::mousePressEvent(event);
+    emit isPressed();
+}
+
 void MyBezierControlPointHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseMoveEvent(event);
     emit positionChanged(event->pos());
+}
+
+void MyBezierControlPointHandleGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem::mouseReleaseEvent(event);
+    emit isReleased();
 }

@@ -9,11 +9,13 @@ class MyBezierAdjustHandledGraphicsItems: public QObject, public QGraphicsItemGr
     
 public:
     
-    MyBezierAdjustHandledGraphicsItems(const QPointF& startPoint, const QPointF& controPoint1, const QPointF& controlPoint2, const QPointF& endPoint, qreal zValue, QGraphicsItem *parent = nullptr);
+    MyBezierAdjustHandledGraphicsItems(const QPointF& startPoint, const QPointF& controlPoint1, const QPointF& controlPoint2, const QPointF& endPoint, qreal zValue, QGraphicsItem *parent = nullptr);
     
     void createBezierStartAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint);
     
     void createBezierEndAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint);
+
+    void adjust(const QPointF& controlPoint1, const QPointF& controlPoint2);
     
 signals:
     
@@ -30,7 +32,7 @@ public slots:
 protected:
     QGraphicsItem* _startAdjustHandledGraphicsItem;
     QGraphicsItem* _endAdjustHandledGraphicsItem;
-    
+    bool _isPressed;
 };
 
 class MyBezierAdjustHandledGraphicsItem: public QObject, public QGraphicsItemGroup {
@@ -44,13 +46,17 @@ public:
     
     void createHandle(const QPointF& center);
     
-    void updatePostion(const QPointF& controlPoint);
+    void updatePosition(const QPointF& controlPoint);
     
     const QPointF position();
     
 signals:
     
     void adjustHandledGraphicsItemIsUpdated(const QPointF&);
+
+    void isPressed();
+
+    void isReleased();
     
 protected:
     QGraphicsItem* _line;
@@ -72,17 +78,25 @@ public:
     
     MyBezierControlPointHandleGraphicsItem(const QPointF& center, QGraphicsItem *parent = nullptr);
     
-    void updatePostion(const QPointF& center);
+    void updatePosition(const QPointF& center);
     
     const QPointF position();
     
 signals:
     
     void positionChanged(const QPointF&);
+
+    void isPressed();
+
+    void isReleased();
     
 protected:
+
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     
     qreal _handleRadius;
 };
