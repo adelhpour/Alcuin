@@ -673,13 +673,17 @@ const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* eleme
 
 void MyInteractor::removeNetworkElement(MyNetworkElementBase* element) {
     if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
-        removeNode(element);
-        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges()))
+        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges())) {
             removeEdge(edge);
+            delete edge;
+        }
+        removeNode(element);
+        delete element;
     }
     else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
         ((MyEdgeBase*)element)->connectToNodes(false);
         removeEdge(element);
+        delete element;
     }
     createChangeStageCommand();
 }
