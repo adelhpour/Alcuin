@@ -64,6 +64,17 @@ void MyNodeBase::setSelected(const bool& selected) {
     }
 }
 
+const bool MyNodeBase::isCuttable() {
+    if (!isSelected())
+        return false;
+    for (MyNetworkElementBase* edge : edges()) {
+        if (!edge->isSelected())
+            return false;
+    }
+
+    return true;
+}
+
 void MyNodeBase::deparent() {
     if (_parentNode) {
         ((MyClassicNode*)_parentNode)->removeChildNode(this);

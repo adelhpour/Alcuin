@@ -35,6 +35,8 @@ public:
     void setStyle(MyNetworkElementStyleBase* style) override;
 
     const bool isCopyable() override;
+
+    const bool isCuttable() override;
     
     void setSelected(const bool& selected) override;
     

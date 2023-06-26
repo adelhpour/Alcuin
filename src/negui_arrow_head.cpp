@@ -52,6 +52,13 @@ const bool MyArrowHeadBase::isCopyable() {
     return false;
 }
 
+const bool MyArrowHeadBase::isCuttable() {
+    if (edge()->isCopyable())
+        return true;
+
+    return false;
+}
+
 void MyArrowHeadBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);

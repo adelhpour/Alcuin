@@ -30,9 +30,11 @@ signals:
     void escapeKeyIsPressed();
     void askForSelectAll();
     const bool askForWhetherSelectedElementsAreCopyable();
+    const bool askForWhetherSelectedElementsAreCuttable();
     const bool askForWhetherAnyElementsAreCopied();
     const bool askForWhetherAnyElementsAreSelected();
     void askForCopySelectedNetworkElements();
+    void askForCutSelectedNetworkElements();
     void askForPasteCopiedNetworkElements(const QPointF& position);
     void askForRemoveSelectedNetworkElements();
 

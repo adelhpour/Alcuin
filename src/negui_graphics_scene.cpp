@@ -42,9 +42,11 @@ QMenu* MyGraphicsScene::createContextMenu() {
 
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopySelectedNetworkElements()), this, SIGNAL(askForCopySelectedNetworkElements()));
+    connect(contextMenu, SIGNAL(askForCutSelectedNetworkElements()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_cursorPosition); });
     connect(contextMenu, SIGNAL(askForRemoveSelectedNetworkElements()), this, SIGNAL(askForRemoveSelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCopyable()), this, SIGNAL(askForWhetherSelectedElementsAreCopyable()));
+    connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCuttable()), this, SIGNAL(askForWhetherSelectedElementsAreCuttable()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
 }

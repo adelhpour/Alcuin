@@ -79,6 +79,13 @@ const bool MyEdgeBase::isCopyable() {
     return false;
 }
 
+const bool MyEdgeBase::isCuttable() {
+    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
 void MyEdgeBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
     graphicsItem()->setSelectedWithStroke(selected);

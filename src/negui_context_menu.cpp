@@ -22,6 +22,7 @@ void MyContextMenuBase::setActionEnabled(const QString& actionText, const bool& 
 
 MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopySelectedNetworkElements()));
+    connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
     connect(addAction("Remove"), SIGNAL(triggered()), this, SIGNAL(askForRemoveSelectedNetworkElements()));
 }
@@ -30,6 +31,8 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
     MyContextMenuBase::initializeActionsStatus();
     if (!askForWhetherSelectedElementsAreCopyable())
         setActionEnabled("Copy", false);
+    if (!askForWhetherSelectedElementsAreCuttable())
+        setActionEnabled("Cut", false);
     if (!askForWhetherAnyElementsAreCopied())
         setActionEnabled("Paste", false);
     if (!askForWhetherAnyElementsAreSelected())

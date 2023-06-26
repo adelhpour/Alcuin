@@ -136,6 +136,7 @@ public slots:
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     const bool areSelectedElementsCopyable();
+    const bool areSelectedElementsCuttable();
     const bool areAnyElementsCopied();
     const bool areAnyElementsSelected();
     
@@ -173,6 +174,7 @@ private slots:
     void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
     const bool areAnyOtherElementsSelected(MyNetworkElementBase* element);
     void copySelectedNetworkElements();
+    void cutSelectedNetworkElements();
     
 protected:
 

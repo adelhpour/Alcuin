@@ -38,6 +38,8 @@ public:
     
     void setSelected(const bool& selected) override;
 
+    const bool isCuttable() override;
+
     // get the position of the node
     const QPointF position() const;
 

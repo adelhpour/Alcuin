@@ -512,6 +512,23 @@ const bool MyInteractor::areSelectedElementsCopyable() {
     return false;
 }
 
+const bool MyInteractor::areSelectedElementsCuttable() {
+    if (selectedNodes().size() || selectedEdges().size()) {
+        for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+            if (!selectedNode->isCuttable())
+                return false;
+        }
+        for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+            if (!selectedEdge->isCuttable())
+                return false;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
 const bool MyInteractor::areAnyElementsCopied() {
     if (copiedNetworkElements().size())
         return true;
@@ -532,6 +549,14 @@ void MyInteractor::copySelectedNetworkElements() {
         _copiedNetworkElements.push_back(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
         _copiedNetworkElements.push_back(selectedEdge);
+}
+
+void MyInteractor::cutSelectedNetworkElements() {
+    copySelectedNetworkElements();
+    for (MyNetworkElementBase* selectedNode : selectedNodes())
+        removeNode(selectedNode);
+    for (MyNetworkElementBase* selectedEdge : selectedEdges())
+        removeEdge(selectedEdge);
 }
 
 void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
@@ -661,9 +686,9 @@ void MyInteractor::removeNetworkElement(MyNetworkElementBase* element) {
 
 void MyInteractor::removeSelectedNetworkElements() {
     for (MyNetworkElementBase* selectedNode : selectedNodes()) {
-        removeNode(selectedNode);
         for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges()))
             removeEdge(edge);
+        removeNode(selectedNode);
     }
     for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
         ((MyEdgeBase*)selectedEdge)->connectToNodes(false);
