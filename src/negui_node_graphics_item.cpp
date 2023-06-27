@@ -113,6 +113,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     if (change == ItemPositionChange) {
         deparent();
         moveChildItems(value.toPointF());
+       setFocused(false);
         emit askForResetPosition();
     }
 
