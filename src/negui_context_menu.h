@@ -60,6 +60,8 @@ signals:
 
     void askForCopyNetworkElement();
 
+    void askForCutNetworkElement();
+
     void askForCopyNetworkElementStyle();
 
     void askForPasteNetworkElementStyle();

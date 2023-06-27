@@ -71,6 +71,8 @@ signals:
 
     void askForCopyNetworkElement(MyNetworkElementBase*);
 
+    void askForCutNetworkElement(MyNetworkElementBase*);
+
     void askForCopyNetworkElementStyle(MyNetworkElementStyleBase*);
 
     void askForPasteNetworkElementStyle(MyNetworkElementBase*);

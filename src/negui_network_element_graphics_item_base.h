@@ -62,6 +62,7 @@ signals:
     void askForClearFocusedGraphicsItems();
     void askForCreateFeatureMenu();
     void askForCopyNetworkElement();
+    void askForCutNetworkElement();
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
     void askForRemoveNetworkElement();

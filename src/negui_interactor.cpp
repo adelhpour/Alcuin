@@ -283,6 +283,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForCutNetworkElement(MyNetworkElementBase*)), this, SLOT(setCutNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedNodeStyle(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
@@ -359,6 +360,11 @@ void MyInteractor::setCopiedNode(MyNetworkElementBase* node) {
     resetCopiedNetworkElements();
     if (node)
         _copiedNetworkElements.push_back(node);
+}
+
+void MyInteractor::setCutNode(MyNetworkElementBase* node) {
+    setCopiedNode(node);
+    removeNode(node);
 }
 
 const bool MyInteractor::isSetCopiedNodeStyle() {

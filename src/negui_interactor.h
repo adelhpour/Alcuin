@@ -133,6 +133,7 @@ public slots:
     void selectNodes(const bool& selected);
     void selectEdges(const bool& selected);
     void setCopiedNode(MyNetworkElementBase* node);
+    void setCutNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     const bool areSelectedElementsCopyable();
