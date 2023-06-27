@@ -54,8 +54,7 @@ void MyNodeBase::updateGraphicsItem() {
     resetPosition();
 }
 
-void MyNodeBase::setSelected(const bool& selected) {
-    MyNetworkElementBase::setSelected(selected);
+void MyNodeBase::setSelectedWithColor(const bool& selected) {
     if (selected)
         graphicsItem()->setSelectedWithFill(selected);
     else {

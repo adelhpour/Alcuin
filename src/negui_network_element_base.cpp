@@ -58,6 +58,7 @@ bool MyNetworkElementBase::setActive(const bool& active) {
 
 void MyNetworkElementBase::setSelected(const bool& selected) {
     _isSelected = selected;
+    graphicsItem()->setFocused(selected);
 }
 
 const bool MyNetworkElementBase::isSelected() {

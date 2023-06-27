@@ -44,6 +44,8 @@ public:
     virtual const bool isCuttable() = 0;
     
     virtual void setSelected(const bool& selected);
+
+    virtual void setSelectedWithColor(const bool& selected) = 0;
     
     void enableNormalMode() override;
     

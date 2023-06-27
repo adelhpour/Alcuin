@@ -87,12 +87,17 @@ const bool MyEdgeBase::isCuttable() {
 
 void MyEdgeBase::setSelected(const bool& selected) {
     MyNetworkElementBase::setSelected(selected);
+    if (isSetArrowHead())
+        arrowHead()->setSelected(selected);
+}
+
+void MyEdgeBase::setSelectedWithColor(const bool& selected) {
     graphicsItem()->setSelectedWithStroke(selected);
     if (!selected)
         graphicsItem()->setSelectedWithFill(selected);
 
     if (isSetArrowHead())
-        arrowHead()->setSelected(selected);
+        arrowHead()->setSelectedWithColor(selected);
 }
 
 MyNetworkElementBase* MyEdgeBase::arrowHead() {

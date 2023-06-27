@@ -59,8 +59,7 @@ const bool MyArrowHeadBase::isCuttable() {
     return false;
 }
 
-void MyArrowHeadBase::setSelected(const bool& selected) {
-    MyNetworkElementBase::setSelected(selected);
+void MyArrowHeadBase::setSelectedWithColor(const bool& selected) {
     graphicsItem()->setSelectedWithStroke(selected);
     
     if (!selected)

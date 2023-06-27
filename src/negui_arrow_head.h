@@ -32,8 +32,8 @@ public:
 
     const bool isCuttable() override;
 
-    void setSelected(const bool& selected) override;
-    
+    void setSelectedWithColor(const bool& selected) override;
+
     const QRectF getExtents() override;
 
     QWidget* getFeatureMenu() override;

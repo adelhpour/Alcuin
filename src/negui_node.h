@@ -36,7 +36,7 @@ public:
     
     void updateGraphicsItem() override;
     
-    void setSelected(const bool& selected) override;
+    void setSelectedWithColor(const bool& selected) override;
 
     const bool isCuttable() override;
 

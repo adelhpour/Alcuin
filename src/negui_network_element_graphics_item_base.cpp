@@ -130,7 +130,7 @@ void MyNetworkElementGraphicsItemBase::setSelectedWithFill(const bool& selected)
 
 void MyNetworkElementGraphicsItemBase::setFocused(const bool& isFocused) {
     clearFocusedGraphicsItems();
-    if (isFocused && getSceneMode() == NORMAL_MODE)
+    if (isFocused)
         addFocusedGraphicsItems();
 }
 
