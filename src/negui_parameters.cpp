@@ -649,8 +649,8 @@ MyPositionalParameter::MyPositionalParameter(const QString& name) : MyDoublePara
 
 void MyPositionalParameter::reset() {
     setDefaultValue(0.0);
-    setMin(-1000.0);
-    setMax(1000.0);
+    setMin(-10000.0);
+    setMax(10000.0);
     setStep(1.0);
 }
 
@@ -821,7 +821,7 @@ MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name) : My
 void MyCornerCurvatureParameter::reset() {
     setDefaultValue(0.0000);
     setMin(0.0);
-    setMax(1000.0);
+    setMax(10000.0);
     setStep(1.0);
 }
 
