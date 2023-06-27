@@ -24,7 +24,7 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopySelectedNetworkElements()));
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
-    connect(addAction("Remove"), SIGNAL(triggered()), this, SIGNAL(askForRemoveSelectedNetworkElements()));
+    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
@@ -36,7 +36,7 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
     if (!askForWhetherAnyElementsAreCopied())
         setActionEnabled("Paste", false);
     if (!askForWhetherAnyElementsAreSelected())
-        setActionEnabled("Remove", false);
+        setActionEnabled("Delete", false);
 }
 
 // MyGraphicsItemContextMenuBase
@@ -58,7 +58,7 @@ MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : 
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutNetworkElement()));
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
-    connect(addAction("Remove"), SIGNAL(triggered()), this, SIGNAL(askForRemoveNetworkElement()));
+    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
 }
 
 // MyEdgeGraphicsItemContextMenu
@@ -66,7 +66,7 @@ MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : 
 MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
-    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForRemoveNetworkElement()));
+    connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
 }
 
 // MyArrowHeadGraphicsItemContextMenu

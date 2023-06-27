@@ -44,7 +44,7 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopySelectedNetworkElements()), this, SIGNAL(askForCopySelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForCutSelectedNetworkElements()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_cursorPosition); });
-    connect(contextMenu, SIGNAL(askForRemoveSelectedNetworkElements()), this, SIGNAL(askForRemoveSelectedNetworkElements()));
+    connect(contextMenu, SIGNAL(askForDeleteSelectedNetworkElements()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCopyable()), this, SIGNAL(askForWhetherSelectedElementsAreCopyable()));
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCuttable()), this, SIGNAL(askForWhetherSelectedElementsAreCuttable()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
@@ -116,7 +116,7 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
         else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
             emit askForPasteCopiedNetworkElements(_cursorPosition);
         else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
-            emit askForRemoveSelectedNetworkElements();
+            emit askForDeleteSelectedNetworkElements();
     }
 }
 

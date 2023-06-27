@@ -77,7 +77,7 @@ signals:
 
     void askForPasteNetworkElementStyle(MyNetworkElementBase*);
 
-    void askForRemoveNetworkElement(MyNetworkElementBase*);
+    void askForDeleteNetworkElement(MyNetworkElementBase*);
 
     const bool askForWhetherElementStyleIsCopied();
 

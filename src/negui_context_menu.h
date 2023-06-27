@@ -40,7 +40,7 @@ signals:
 
     void askForPasteCopiedNetworkElements();
 
-    void askForRemoveSelectedNetworkElements();
+    void askForDeleteSelectedNetworkElements();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
@@ -66,7 +66,7 @@ signals:
 
     void askForPasteNetworkElementStyle();
 
-    void askForRemoveNetworkElement();
+    void askForDeleteNetworkElement();
 };
 
 class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

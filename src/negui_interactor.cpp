@@ -279,7 +279,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
-        connect(n, SIGNAL(askForRemoveNetworkElement(MyNetworkElementBase*)), this, SLOT(removeNetworkElement(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
@@ -414,7 +414,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(e, SIGNAL(askForRemoveNetworkElement(MyNetworkElementBase*)), this, SLOT(removeNetworkElement(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
@@ -677,23 +677,24 @@ const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* eleme
     return false;
 }
 
-void MyInteractor::removeNetworkElement(MyNetworkElementBase* element) {
-    if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
-        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)element)->edges())) {
-            removeEdge(edge);
-            delete edge;
-        }
-        removeNode(element);
-        delete element;
+void MyInteractor::deleteNode(MyNetworkElementBase* node) {
+    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {\
+        ((MyNodeBase*)node)->removeEdge(edge);
+        removeEdge(edge);
+        delete edge;
     }
-    else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
-        removeEdge(element);
-        delete element;
-    }
+    removeNode(node);
+    delete node;
     createChangeStageCommand();
 }
 
-void MyInteractor::removeSelectedNetworkElements() {
+void MyInteractor::deleteEdge(MyNetworkElementBase* edge) {
+    removeEdge(edge);
+    delete edge;
+    createChangeStageCommand();
+}
+
+void MyInteractor::deleteSelectedNetworkElements() {
     for (MyNetworkElementBase* selectedNode : selectedNodes()) {
         for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges()))
             removeEdge(edge);
