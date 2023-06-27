@@ -46,13 +46,7 @@ public:
     
     // determine whether the edge is visible on the scene
     bool setActive(const bool& active) override;
-    
-    // determine whether the edge is connected to its source and target nodes
-    bool connectToNodes(const bool& connect);
-    
-    // return true if the edge is connected to its source and target nodes
-    const bool isConnectedToNodes() const { return _isConnectedToNodes; }
-    
+
     // update the ending points of the edge using the source and target node positions
     void updatePoints();
     
@@ -105,7 +99,6 @@ protected:
     MyNetworkElementBase* _targetNode;
     MyNetworkElementBase* _arrowHead;
     bool _isSetArrowHead;
-    bool _isConnectedToNodes;
 };
 
 class MyClassicEdge : public MyEdgeBase {

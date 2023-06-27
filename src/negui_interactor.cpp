@@ -687,7 +687,6 @@ void MyInteractor::removeNetworkElement(MyNetworkElementBase* element) {
         delete element;
     }
     else if (element->type() == MyNetworkElementBase::EDGE_ELEMENT) {
-        ((MyEdgeBase*)element)->connectToNodes(false);
         removeEdge(element);
         delete element;
     }
@@ -700,10 +699,8 @@ void MyInteractor::removeSelectedNetworkElements() {
             removeEdge(edge);
         removeNode(selectedNode);
     }
-    for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
-        ((MyEdgeBase*)selectedEdge)->connectToNodes(false);
+    for (MyNetworkElementBase* selectedEdge : selectedEdges())
         removeEdge(selectedEdge);
-    }
     createChangeStageCommand();
 }
 

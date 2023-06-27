@@ -16,7 +16,6 @@
 MyEdgeBase::MyEdgeBase(const QString& name) : MyNetworkElementBase(name) {
     _arrowHead = NULL;
     _isSetArrowHead = false;
-    _isConnectedToNodes = false;
 }
 
 MyEdgeBase::~MyEdgeBase() {
@@ -120,10 +119,6 @@ bool MyEdgeBase::setActive(const bool& active) {
     }
 
     return _isActive = false;
-}
-
-bool MyEdgeBase::connectToNodes(const bool& connect) {
-    return _isConnectedToNodes = connect;
 }
 
 void MyEdgeBase::updatePoints() {
