@@ -681,27 +681,29 @@ void MyInteractor::deleteNode(MyNetworkElementBase* node) {
     for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
         ((MyNodeBase*)node)->removeEdge(edge);
         removeEdge(edge);
-        delete edge;
     }
     removeNode(node);
-    delete node;
     createChangeStageCommand();
 }
 
 void MyInteractor::deleteEdge(MyNetworkElementBase* edge) {
     removeEdge(edge);
-    delete edge;
     createChangeStageCommand();
 }
 
 void MyInteractor::deleteSelectedNetworkElements() {
     for (MyNetworkElementBase* selectedNode : selectedNodes()) {
-        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges()))
+        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges())) {
+            ((MyNodeBase*)selectedNode)->removeEdge(edge);
             removeEdge(edge);
+        }
         removeNode(selectedNode);
     }
-    for (MyNetworkElementBase* selectedEdge : selectedEdges())
-        removeEdge(selectedEdge);
+    for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+        if (selectedEdge) {
+            removeEdge(selectedEdge);
+        }
+    }
     createChangeStageCommand();
 }
 
