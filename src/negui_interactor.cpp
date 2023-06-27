@@ -678,7 +678,7 @@ const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* eleme
 }
 
 void MyInteractor::deleteNode(MyNetworkElementBase* node) {
-    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {\
+    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
         ((MyNodeBase*)node)->removeEdge(edge);
         removeEdge(edge);
         delete edge;
