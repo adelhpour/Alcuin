@@ -187,7 +187,7 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
 }
 
 void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-    if (!(askForWhetherGraphicsItemIsSelected() && askForWhetherAnyOtherElementsAreSelected())) {
+    if (!(askForWhetherNetworkElementIsSelected() && askForWhetherAnyOtherElementsAreSelected())) {
         QGraphicsItem::contextMenuEvent(event);
         if (getSceneMode() == NORMAL_MODE) {
             QMenu* contextMenu = createContextMenu();

@@ -27,7 +27,7 @@ void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDeleteNetworkElement, this, [this] () { emit askForDeleteNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForSetNetworkElementSelected(const bool&)), this, SLOT(setSelected(const bool&)));
-    connect(_graphicsItem, SIGNAL(askForWhetherGraphicsItemIsSelected()), this, SLOT(isSelected()));
+    connect(_graphicsItem, SIGNAL(askForWhetherNetworkElementIsSelected()), this, SLOT(isSelected()));
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElement, this, [this] () { emit askForCopyNetworkElement(this); } );
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCutNetworkElement, this, [this] () { emit askForCutNetworkElement(this); } );
