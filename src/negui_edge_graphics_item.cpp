@@ -88,8 +88,8 @@ void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
 void MyEdgeSceneGraphicsItem::setFocused(const bool& isFocused) {
     bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
     MyNetworkElementGraphicsItemBase::setFocused(isFocused);
-    //if (!focusedGraphicsItemsAlreadyExist)
-        //askForSetConnectedElementsFocused(isFocused);
+    if (isFocused && !focusedGraphicsItemsAlreadyExist)
+        askForSetConnectedElementsFocused(isFocused);
 }
 
 void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {

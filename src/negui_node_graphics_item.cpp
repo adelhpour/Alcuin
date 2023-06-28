@@ -213,6 +213,12 @@ MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &
     setAcceptHoverEvents(true);
 }
 
+void MyCentroidNodeSceneGraphicsItem::setFocused(const bool& isFocused) {
+    bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
+    if (!focusedGraphicsItemsAlreadyExist || !isFocused)
+        MyNetworkElementGraphicsItemBase::setFocused(isFocused);
+}
+
 void MyCentroidNodeSceneGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
     setFocused(true);
     QGraphicsItem::hoverEnterEvent(event);

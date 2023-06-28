@@ -98,6 +98,8 @@ public:
 
     MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    void setFocused(const bool& isFocused) override;
+
 protected:
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
