@@ -11,6 +11,11 @@ MyNetworkElementBase::MyNetworkElementBase(const QString& name) : MyBase(name) {
     _isSelected = false;
 }
 
+MyNetworkElementBase::~MyNetworkElementBase() {
+    _graphicsItem->setFocused(false);
+    delete _graphicsItem;
+}
+
 MyNetworkElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
     return _graphicsItem;
 }

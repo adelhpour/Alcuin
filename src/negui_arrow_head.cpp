@@ -17,10 +17,6 @@ MyArrowHeadBase::MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge
     _slope = 0.0;
 }
 
-MyArrowHeadBase::~MyArrowHeadBase() {
-    delete _graphicsItem;
-}
-
 MyArrowHeadBase::ELEMENT_TYPE MyArrowHeadBase::type() {
     return ARROW_HEAD_ELEMENT;
 };

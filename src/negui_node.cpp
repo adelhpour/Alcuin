@@ -19,10 +19,6 @@ MyNodeBase::MyNodeBase(const QString& name, const qreal& x, const qreal& y) : My
     _endEdgePadding = 0.0;
 }
 
-MyNodeBase::~MyNodeBase() {
-    delete _graphicsItem;
-}
-
 MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
     return NODE_ELEMENT;
 }

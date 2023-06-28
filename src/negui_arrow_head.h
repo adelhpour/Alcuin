@@ -13,8 +13,6 @@ public:
 
     MyArrowHeadBase(const QString& name, MyNetworkElementBase* edge);
     
-    ~MyArrowHeadBase();
-    
     ELEMENT_TYPE type() override;
 
     virtual ARROW_HEAD_TYPE arrowHeadType() = 0;

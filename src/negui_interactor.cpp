@@ -307,6 +307,7 @@ void MyInteractor::removeNode(MyNetworkElementBase* n) {
     if (n && n->isActive()) {
         _nodes.removeOne(n);
         n->setActive(false);
+        n->setSelected(false);
         emit askForRemoveGraphicsItem(n->graphicsItem());
     }
 }
@@ -453,8 +454,9 @@ void MyInteractor::addNewEdge(MyNetworkElementBase* element) {
 
 void MyInteractor::removeEdge(MyNetworkElementBase* e) {
     if (e && e->isActive()) {
-        e->setActive(false);
         _edges.removeOne(e);
+        e->setActive(false);
+        e->setSelected(false);
         emit askForRemoveGraphicsItem(e->graphicsItem());
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());

@@ -19,8 +19,6 @@ MyEdgeBase::MyEdgeBase(const QString& name) : MyNetworkElementBase(name) {
 }
 
 MyEdgeBase::~MyEdgeBase() {
-    delete _graphicsItem;
-
     if (isSetArrowHead())
         delete _arrowHead;
 }

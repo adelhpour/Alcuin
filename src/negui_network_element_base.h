@@ -18,6 +18,8 @@ public:
     } ELEMENT_TYPE;
 
     MyNetworkElementBase(const QString& name);
+
+    ~MyNetworkElementBase();
     
     virtual ELEMENT_TYPE type() = 0;
     

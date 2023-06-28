@@ -15,8 +15,6 @@ public:
     
     MyNodeBase(const QString& name, const qreal& x, const qreal& y);
     
-    ~MyNodeBase();
-    
     ELEMENT_TYPE type() override;
 
     virtual NODE_TYPE nodeType() = 0;
