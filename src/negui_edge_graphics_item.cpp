@@ -108,11 +108,6 @@ void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void MyEdgeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
-    setFocused(false);
-    QGraphicsItem::focusOutEvent(event);
-}
-
 // MyEdgeIconGraphicsItem
 
 MyEdgeIconGraphicsItem::MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {

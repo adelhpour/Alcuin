@@ -201,12 +201,6 @@ void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent 
     }
 }
 
-void MyClassicNodeSceneGraphicsItem::focusOutEvent(QFocusEvent *event) {
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-    setFocused(false);
-    QGraphicsItem::focusOutEvent(event);
-}
-
 // MyCentroidNodeSceneGraphicsItem
 
 MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
