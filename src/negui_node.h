@@ -206,7 +206,7 @@ private slots:
 
     void disconnectNodePositionFromNeighborNodes();
 
-    void setConnectedElementsFocused(const bool& isFocused);
+    void setConnectedElementsSelected(const bool& isSelected);
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;

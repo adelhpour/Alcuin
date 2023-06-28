@@ -86,8 +86,9 @@ void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
 }
 
 void MyEdgeSceneGraphicsItem::setFocused(const bool& isFocused) {
+    bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
     MyNetworkElementGraphicsItemBase::setFocused(isFocused);
-    if (isFocused && !askForWhetherNetworkElementIsSelected())
+    if (isFocused && !focusedGraphicsItemsAlreadyExist)
         askForSetConnectedElementsFocused(isFocused);
 }
 

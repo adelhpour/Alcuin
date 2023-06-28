@@ -94,7 +94,7 @@ signals:
 
     void askForDisconnectNodePositionFromNeighborNodes();
 
-    void askForSetConnectedElementsFocused(const bool& isFocused);
+    void askForSetConnectedElementsSelected(const bool& isSelected);
 
 protected:
     MyNetworkElementBase* _sourceNode;
