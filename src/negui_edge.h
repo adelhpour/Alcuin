@@ -15,7 +15,7 @@ public:
     MyEdgeBase(const QString& name);
     
     ~MyEdgeBase();
-    
+
     ELEMENT_TYPE type() override;
 
     virtual EDGE_TYPE edgeType() = 0;
@@ -37,8 +37,6 @@ public:
     const bool isCopyable() override;
 
     const bool isCuttable() override;
-    
-    void setSelected(const bool& selected) override;
 
     void setSelectedWithColor(const bool& selected) override;
     
@@ -80,6 +78,8 @@ public:
     void write(QJsonObject &json) override;
     
 public slots:
+
+    void setSelected(const bool& selected) override;
 
     void adjustConnectedEdgesToSourceNode(const QPointF& updatedSourcePoint);
 

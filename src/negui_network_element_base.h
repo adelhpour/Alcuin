@@ -44,8 +44,6 @@ public:
     virtual const bool isCopyable() = 0;
 
     virtual const bool isCuttable() = 0;
-    
-    virtual void setSelected(const bool& selected);
 
     virtual void setSelectedWithColor(const bool& selected) = 0;
     
@@ -88,6 +86,8 @@ signals:
     const bool askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*);
 
 public slots:
+
+    virtual void setSelected(const bool& selected);
 
     const bool isSelected();
     

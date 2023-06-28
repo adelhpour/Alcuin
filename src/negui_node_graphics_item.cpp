@@ -113,7 +113,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     if (change == ItemPositionChange) {
         deparent();
         moveChildItems(value.toPointF());
-       setFocused(false);
+        emit askForSetNetworkElementSelected(false);
         emit askForResetPosition();
     }
 
@@ -194,10 +194,8 @@ void MyClassicNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *e
 void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
-        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01) {
-            setFocused(true);
-            setFlag(QGraphicsItem::ItemIsMovable, false);
-        }
+        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01)
+            emit askForSetNetworkElementSelected(true);
     }
 }
 
@@ -214,24 +212,24 @@ void MyCentroidNodeSceneGraphicsItem::setFocused(const bool& isFocused) {
 }
 
 void MyCentroidNodeSceneGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-    setFocused(true);
+    emit askForSetNetworkElementSelected(true);
     QGraphicsItem::hoverEnterEvent(event);
 }
 
 void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-    setFocused(false);
+    emit askForSetNetworkElementSelected(false);
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
 void MyCentroidNodeSceneGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    setFocused(false);
+    emit askForSetNetworkElementSelected(false);
     MyNodeSceneGraphicsItemBase::mouseMoveEvent(event);
-    setFocused(true);
+    emit askForSetNetworkElementSelected(true);
 }
 
 void MyCentroidNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton)
-        setFocused(false);
+        emit askForSetNetworkElementSelected(false);
     MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
 }
 
