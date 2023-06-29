@@ -34,8 +34,16 @@ void MyFileManager::setCurrentFileName(const QString& fileName) {
     emit currentFileNameIsUpdated(_currentFileName);
 }
 
-const QString MyFileManager::currentFileName() {
+const QString& MyFileManager::currentFileName() {
     return _currentFileName;
+}
+
+void MyFileManager::setWorkingDirectory(const QString& workingDirectory) {
+    _workingDirectory = workingDirectory;
+}
+
+const QString& MyFileManager::workingDirectory() {
+    return _workingDirectory;
 }
 
 void MyFileManager::resetCurrentExportTool() {

@@ -13,8 +13,8 @@ const QString MyImportTool::type() const {
     return "importtool";
 }
 
-const QString MyImportTool::getOpenFileName() const {
-    return QFileDialog::getOpenFileName(NULL, "Select the (." + fileExtension() + ") File", ".", fileExtension() + " files (*." + fileExtension() + ")");
+const QString MyImportTool::getOpenFileName(const QString& workingDirectory) const {
+    return QFileDialog::getOpenFileName(NULL, "Select the (." + fileExtension() + ") File", workingDirectory, fileExtension() + " files (*." + fileExtension() + ")");
 }
 
 const QString& MyImportTool::fileExtension() const {

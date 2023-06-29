@@ -14,10 +14,10 @@ public:
     const QString& fileExtension() const;
 
     // get the save file name from the user by popping up a file dialog and using the entered save file name
-    const QString getSaveFileName(const QString& saveFileName) const;
+    const QString getSaveFileName(const QString& workingDirectory, const QString& saveFileName) const;
     
     // get the save file name from the user by popping up a file dialog
-    const QString getSaveFileName() const;
+    const QString getSaveFileName(const QString& workingDirectory) const;
     
     // get the icon associated with this plugin
     const QIcon icon() override;

@@ -23,7 +23,11 @@ public:
 
     void setCurrentFileName(const QString& fileName);
 
-    const QString currentFileName();
+    const QString& currentFileName();
+
+    void setWorkingDirectory(const QString& workingDirectory);
+
+    const QString& workingDirectory();
 
     void resetCurrentExportTool();
 
@@ -58,7 +62,8 @@ protected:
     QList<MyPluginItemBase*> _importTools;
     QList<MyPluginItemBase*> _exportTools;
     QString _currentFileName;
-    QString _lastSavedFileName;;
+    QString _workingDirectory;
+    QString _lastSavedFileName;
     MyPluginItemBase* _currentExportTool;
     qint32 _defaultFileNameIndex;
     bool _isCurrentNetworkUnsaved;

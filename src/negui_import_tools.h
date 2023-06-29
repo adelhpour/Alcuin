@@ -11,7 +11,7 @@ public:
     const QString type() const override;
     
     // get the open file name from the user by poping up a file dialog
-    const QString getOpenFileName() const;
+    const QString getOpenFileName(const QString& workingDirectory) const;
     
     // get the file extension of the import tool
     const QString& fileExtension() const;

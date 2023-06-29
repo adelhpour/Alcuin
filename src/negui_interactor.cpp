@@ -863,18 +863,19 @@ void MyInteractor::clearSelectionArea() {
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
     if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         saveCurrentNetwork();
-    QString fileName = ((MyImportTool*)importTool)->getOpenFileName();
+    QString fileName = ((MyImportTool*)importTool)->getOpenFileName(((MyFileManager*)fileManager())->workingDirectory());
     if (!fileName.isEmpty()) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
         resetCanvas();
         ((MyFileManager*)fileManager())->setCurrentExportToolCompatibleWithImportTool(importTool);
         ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
         ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
+        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
     }
 }
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->currentFileName());
+    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory(), ((MyFileManager*)fileManager())->currentFileName());
     if (!fileName.isEmpty())
         writeDataToFile(exportTool, fileName);
 }
@@ -888,10 +889,11 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& 
     ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
     ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
     ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
+    ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
 }
 
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName();
+    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory());
     if (!fileName.isEmpty()) {
         emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->outputFormat());
     }
