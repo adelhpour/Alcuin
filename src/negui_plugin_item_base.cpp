@@ -19,7 +19,8 @@ const QSize& MyPluginItemBase::iconSize() const {
 }
 
 void MyPluginItemBase::read(const QJsonObject &json) {
-    _category.clear();
+    if (name() != "Default")
+        _category.clear();
     if (json.contains("category") && json["category"].isString())
         _category = json["category"].toString();
     if (json.contains("sub-category") && json["sub-category"].isString())

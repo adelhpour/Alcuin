@@ -51,8 +51,6 @@ void MyNodeStyleBase::write(QJsonObject &json) {
 
 MyClassicNodeStyle::MyClassicNodeStyle(const QString& name) : MyNodeStyleBase(name) {
     _convertibleParentCategory = "Node";
-    if (name == "Default")
-        addDefaultShapeStyle();
 }
 
 MyNodeStyleBase::NODE_STYLE_TYPE MyClassicNodeStyle::nodeStyleType() {

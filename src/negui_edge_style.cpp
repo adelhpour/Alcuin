@@ -147,8 +147,7 @@ void MyEdgeStyleBase::write(QJsonObject &json) {
 // MyClassicEdgeStyle
 
 MyClassicEdgeStyle::MyClassicEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
-    if (name == "Default")
-        addDefaultShapeStyle();
+
 }
 
 MyEdgeStyleBase::EDGE_STYLE_TYPE MyClassicEdgeStyle::edgeStyleType() {
