@@ -24,6 +24,8 @@ public:
     QWidget* toolBar();
     QWidget* modeMenu();
     QWidget* view();
+    void readSettings();
+    void writeSettings();
 
 private slots:
 
@@ -35,6 +37,7 @@ protected:
     void setWidgets();
     void setInteractions();
     void setReadyToLaunch();
+    void closeEvent(QCloseEvent *event) override;
 
     QObject* _interactor;
     QWidget* _title;

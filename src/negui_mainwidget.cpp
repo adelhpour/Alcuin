@@ -6,6 +6,7 @@
 #include "negui_graphics_scene.h"
 
 #include <QGridLayout>
+#include <QSettings>
 
 // MyNetworkEditorWidget
 
@@ -16,6 +17,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setMinimumSize(120, 80);
     resize(1050, 700);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    readSettings();
 
     setWidgets();
     setInteractions();
@@ -32,7 +34,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
 }
 
 MyNetworkEditorWidget::~MyNetworkEditorWidget() {
-    
+    close();
 }
 
 void MyNetworkEditorWidget::setWidgets() {
@@ -164,4 +166,30 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
 
 void MyNetworkEditorWidget::setReadyToLaunch() {
     ((MyInteractor*)interactor())->setNewNetworkCanvas();
+}
+
+void MyNetworkEditorWidget::readSettings() {
+    QSettings settings("MyCompany", "NetworkEditorGUI");
+    settings.beginGroup("NetworkEditorWidget");
+    const auto geometry1 = settings.value("geometry", QByteArray()).toByteArray();
+    if (geometry1.isEmpty())
+        setGeometry(200, 200, 1050, 700);
+    else
+        restoreGeometry(geometry1);
+    settings.endGroup();
+}
+
+void MyNetworkEditorWidget::writeSettings() {
+    QSettings settings("MyCompany", "NetworkEditorGUI");
+    settings.beginGroup("NetworkEditorWidget");
+    if (dynamic_cast<QWidget*>(parent()))
+        settings.setValue("geometry", ((QWidget*)parent())->saveGeometry());
+    else
+        settings.setValue("geometry", saveGeometry());
+    settings.endGroup();
+}
+
+void MyNetworkEditorWidget::closeEvent(QCloseEvent *event) {
+    writeSettings();
+    QWidget::closeEvent(event);
 }
