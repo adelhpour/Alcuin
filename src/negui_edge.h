@@ -10,6 +10,7 @@ public:
 
     typedef enum {
         CLASSIC_EDGE,
+        CONNECTED_TO_CENTROID_NODE_EDGE,
     } EDGE_TYPE;
     
     MyEdgeBase(const QString& name);
@@ -109,6 +110,16 @@ class MyClassicEdge : public MyEdgeBase {
 public:
 
     MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
+
+    EDGE_TYPE edgeType() override;
+};
+
+class MyConnectedToCentroidNodeEdge : public MyEdgeBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
 };

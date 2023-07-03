@@ -260,8 +260,21 @@ MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNo
     setTargetNode(targetNode);
 }
 
-MyClassicEdge::EDGE_TYPE MyClassicEdge::edgeType() {
+MyEdgeBase::EDGE_TYPE MyClassicEdge::edgeType() {
     return CLASSIC_EDGE;
+}
+
+// MyConnectedToCentroidNodeEdge
+
+MyConnectedToCentroidNodeEdge::MyConnectedToCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
+    _graphicsItem = createEdgeSceneGraphicsItem();
+    connectGraphicsItem();
+    setSourceNode(sourceNode);
+    setTargetNode(targetNode);
+}
+
+MyEdgeBase::EDGE_TYPE MyConnectedToCentroidNodeEdge::edgeType() {
+    return CONNECTED_TO_CENTROID_NODE_EDGE;
 }
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {
