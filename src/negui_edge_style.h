@@ -8,6 +8,7 @@ public:
 
     typedef enum {
         CLASSIC_EDGE_STYLE,
+        CONNECTED_TO_CENTROID_NODE_EDGE_STYLE,
     } EDGE_STYLE_TYPE;
 
     MyEdgeStyleBase(const QString& name);
@@ -52,6 +53,18 @@ class MyClassicEdgeStyle : public MyEdgeStyleBase {
 public:
 
     MyClassicEdgeStyle(const QString& name);
+
+    EDGE_STYLE_TYPE edgeStyleType() override;
+
+    void addDefaultShapeStyle() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+};
+
+class MyConnectedToCentroidNodeEdgeStyle : public MyEdgeStyleBase {
+public:
+
+    MyConnectedToCentroidNodeEdgeStyle(const QString& name);
 
     EDGE_STYLE_TYPE edgeStyleType() override;
 

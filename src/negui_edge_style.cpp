@@ -165,6 +165,27 @@ MyShapeStyleBase* MyClassicEdgeStyle::createShapeStyle(const QString& shape) {
     return NULL;
 }
 
+// MyConnectedToCentroidNodeEdgeStyle
+
+MyConnectedToCentroidNodeEdgeStyle::MyConnectedToCentroidNodeEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
+
+}
+
+MyEdgeStyleBase::EDGE_STYLE_TYPE MyConnectedToCentroidNodeEdgeStyle::edgeStyleType() {
+    return  CONNECTED_TO_CENTROID_NODE_EDGE_STYLE;
+}
+
+void MyConnectedToCentroidNodeEdgeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createConnectedToCentroidNodeLineStyle("line"));
+}
+
+MyShapeStyleBase* MyConnectedToCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "line")
+        return createConnectedToCentroidNodeLineStyle("line");
+
+    return NULL;
+}
+
 
 
 
