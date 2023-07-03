@@ -7,6 +7,8 @@ MyNetworkElementBase* createEdge(const QString& name, MyNetworkElementStyleBase*
     MyNetworkElementBase* edge = NULL;
     if (((MyEdgeStyleBase*)edgeStyle)->edgeStyleType() == MyEdgeStyleBase::CLASSIC_EDGE_STYLE)
         edge = new MyClassicEdge(name, sourceNode, targetNode);
+    else if(((MyEdgeStyleBase*)edgeStyle)->edgeStyleType() == MyEdgeStyleBase::CONNECTED_TO_CENTROID_NODE_EDGE_STYLE)
+        edge = new MyConnectedToCentroidNodeEdge(name, sourceNode, targetNode);
 
     if (edge)
         edge->setStyle(edgeStyle);

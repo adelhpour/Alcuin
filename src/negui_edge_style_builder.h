@@ -5,4 +5,6 @@
 
 MyNetworkElementStyleBase* createEdgeStyle(const QJsonObject &json);
 
+const bool isConnectedToCentroidNodeEdgeStyle(const QJsonObject &json);
+
 #endif
