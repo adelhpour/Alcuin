@@ -12,7 +12,7 @@ MyLineGraphicsItem::MyLineGraphicsItem(const QLineF& line, QGraphicsItem *parent
 void MyLineGraphicsItem::updateStyle() {
     if (isSetStyle()) {
         // pen
-        setPen(((MyLineStyle*)style())->pen());
+        setPen(((MyLineStyleBase*)style())->pen());
 
         // line
         resetLine();
@@ -21,9 +21,9 @@ void MyLineGraphicsItem::updateStyle() {
 
 void MyLineGraphicsItem::setSelectedWithStroke(const bool& selected) {
     if (selected)
-        setPen(((MyLineStyle*)style())->selectedPen());
+        setPen(((MyLineStyleBase*)style())->selectedPen());
     else
-        setPen(((MyLineStyle*)style())->pen());
+        setPen(((MyLineStyleBase*)style())->pen());
     QGraphicsItem::setSelected(selected);
 }
 
@@ -41,7 +41,7 @@ const QPointF MyLineGraphicsItem::getEndPoint() {
 
 void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
     if (isSetStyle())
-        ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
+        ((MyLineStyleBase*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
 
     resetLine();
     emit lineControlPoint1IsUpdated(getControlPoint1());
@@ -50,14 +50,14 @@ void MyLineGraphicsItem::setControlPoint1(const QPointF& controlPoint1) {
 const QPointF MyLineGraphicsItem::getControlPoint1() {
     QPointF controlPoint1 = _line.p1();
     if (isSetStyle())
-        controlPoint1 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP1().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP1().y() * (_line.p2() - _line.p1()).y());
+        controlPoint1 += QPointF(0.01 * ((MyLineStyleBase*)style())->relativeP1().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyleBase*)style())->relativeP1().y() * (_line.p2() - _line.p1()).y());
 
     return controlPoint1;
 }
 
 void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
     if (isSetStyle())
-        ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
+        ((MyLineStyleBase*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
 
     resetLine();
     emit lineControlPoint2IsUpdated(getControlPoint2());
@@ -66,7 +66,7 @@ void MyLineGraphicsItem::setControlPoint2(const QPointF& controlPoint2) {
 const QPointF MyLineGraphicsItem::getControlPoint2() {
     QPointF controlPoint2 = _line.p2();
     if (isSetStyle())
-        controlPoint2 += QPointF(0.01 * ((MyLineStyle*)style())->relativeP2().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyle*)style())->relativeP2().y() * (_line.p2() - _line.p1()).y());
+        controlPoint2 += QPointF(0.01 * ((MyLineStyleBase*)style())->relativeP2().x() * (_line.p2() - _line.p1()).x(), 0.01 * ((MyLineStyleBase*)style())->relativeP2().y() * (_line.p2() - _line.p1()).y());
 
     return controlPoint2;
 }
@@ -81,7 +81,7 @@ void MyLineGraphicsItem::adjustLineControlPoint1ToControlBezierLine(const QLineF
         controlPoint1 = controlBezierLine.p2();
     else
         controlPoint1 = controlBezierLine.p1();
-    ((MyLineStyle*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
+    ((MyLineStyleBase*)style())->setRelativeP1(QPointF(100.0 * (controlPoint1.x() - _line.p1().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint1.y() - _line.p1().y()) / (_line.p2() - _line.p1()).y()));
     resetLine();
     emit askForAdjustFocusedGraphicsItems();
 }
@@ -96,7 +96,7 @@ void MyLineGraphicsItem::adjustLineControlPoint2ToControlBezierLine(const QLineF
         controlPoint2 = controlBezierLine.p2();
     else
         controlPoint2 = controlBezierLine.p1();
-    ((MyLineStyle*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
+    ((MyLineStyleBase*)style())->setRelativeP2(QPointF(100.0 * (controlPoint2.x() - _line.p2().x()) / (_line.p2() - _line.p1()).x(), 100.0 * (controlPoint2.y() - _line.p2().y()) / (_line.p2() - _line.p1()).y()));
     resetLine();
     emit askForAdjustFocusedGraphicsItems();
 }

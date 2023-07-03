@@ -3,10 +3,10 @@
 
 #include "negui_1d_shape_style_base.h"
 
-class MyLineStyle : public My1DShapeStyleBase {
+class MyLineStyleBase : public My1DShapeStyleBase {
 public:
     
-    MyLineStyle(const QString& name);
+    MyLineStyleBase(const QString& name);
     
     SHAPE_STYLE type() override;
     
@@ -29,6 +29,18 @@ public:
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+};
+
+class MyClassicLineStyle : public MyLineStyleBase {
+public:
+
+    MyClassicLineStyle(const QString& name);
+};
+
+class MyConnectedToCentroidNodeLineStyle : public MyLineStyleBase {
+public:
+
+    MyConnectedToCentroidNodeLineStyle(const QString& name);
 };
 
 #endif

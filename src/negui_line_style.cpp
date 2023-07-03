@@ -1,9 +1,9 @@
 #include "negui_line_style.h"
 #include <QJsonObject>
 
-// MyLineStyle
+// MyLineStyleBase
 
-MyLineStyle::MyLineStyle(const QString& name) : My1DShapeStyleBase(name) {
+MyLineStyleBase::MyLineStyleBase(const QString& name) : My1DShapeStyleBase(name) {
     // stroke-width
     addParameter(new MyStrokeWidthParameter());
     
@@ -19,15 +19,15 @@ MyLineStyle::MyLineStyle(const QString& name) : My1DShapeStyleBase(name) {
     reset();
 }
 
-MyShapeStyleBase::SHAPE_STYLE MyLineStyle::type() {
+MyShapeStyleBase::SHAPE_STYLE MyLineStyleBase::type() {
     return LINE_SHAPE_STYLE;
 }
 
-const QRectF MyLineStyle::getShapeExtents() {
+const QRectF MyLineStyleBase::getShapeExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }
 
-void MyLineStyle::setRelativeP1(const QPointF& relativeP1) const {
+void MyLineStyleBase::setRelativeP1(const QPointF& relativeP1) const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint1");
     if (parameter) {
@@ -36,7 +36,7 @@ void MyLineStyle::setRelativeP1(const QPointF& relativeP1) const {
     }
 }
 
-const QPoint MyLineStyle::relativeP1() const {
+const QPoint MyLineStyleBase::relativeP1() const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint1");
     if (parameter)
@@ -45,7 +45,7 @@ const QPoint MyLineStyle::relativeP1() const {
     return point;
 }
 
-void MyLineStyle::setRelativeP2(const QPointF& relativeP2) const {
+void MyLineStyleBase::setRelativeP2(const QPointF& relativeP2) const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint2");
     if (parameter) {
@@ -54,7 +54,7 @@ void MyLineStyle::setRelativeP2(const QPointF& relativeP2) const {
     }
 }
 
-const QPoint MyLineStyle::relativeP2() const {
+const QPoint MyLineStyleBase::relativeP2() const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint2");
     if (parameter)
@@ -63,7 +63,7 @@ const QPoint MyLineStyle::relativeP2() const {
     return point;
 }
 
-void MyLineStyle::read(const QJsonObject &json) {
+void MyLineStyleBase::read(const QJsonObject &json) {
     My1DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
@@ -96,7 +96,7 @@ void MyLineStyle::read(const QJsonObject &json) {
     }
 }
 
-void MyLineStyle::write(QJsonObject &json) {
+void MyLineStyleBase::write(QJsonObject &json) {
     My1DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
@@ -117,4 +117,16 @@ void MyLineStyle::write(QJsonObject &json) {
         p2Object["y"] = ((MyRelativePointParameter*)parameter)->defaultValueY();
         json["p2"] = p2Object;
     }
+}
+
+// MyClassicLineStyle
+
+MyClassicLineStyle::MyClassicLineStyle(const QString& name) : MyLineStyleBase(name) {
+
+}
+
+// MyConnectedToCentroidNodeLineStyle
+
+MyConnectedToCentroidNodeLineStyle::MyConnectedToCentroidNodeLineStyle(const QString& name) : MyLineStyleBase(name) {
+
 }

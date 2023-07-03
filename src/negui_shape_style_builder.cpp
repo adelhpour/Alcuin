@@ -46,8 +46,13 @@ MyShapeStyleBase* createArrowHeadDefaultPolygonStyle(const QString& shape) {
     return shapeStyle;
 }
 
-MyShapeStyleBase* createLineStyle(const QString& shape) {
-    return new MyLineStyle(shape);
+
+MyShapeStyleBase* createClassicLineStyle(const QString& shape) {
+    return new MyClassicLineStyle(shape);
+}
+
+MyShapeStyleBase* createConnectedToCentroidNodeLineStyle(const QString& shape) {
+    return new MyConnectedToCentroidNodeLineStyle(shape);
 }
 
 MyShapeStyleBase* createTextStyle(const QString& shape) {

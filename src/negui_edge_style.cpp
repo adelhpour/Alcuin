@@ -155,12 +155,12 @@ MyEdgeStyleBase::EDGE_STYLE_TYPE MyClassicEdgeStyle::edgeStyleType() {
 }
 
 void MyClassicEdgeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(createLineStyle("line"));
+    _shapeStyles.push_back(createClassicLineStyle("line"));
 }
 
 MyShapeStyleBase* MyClassicEdgeStyle::createShapeStyle(const QString& shape) {
     if (shape == "line")
-        return createLineStyle("line");
+        return createClassicLineStyle("line");
 
     return NULL;
 }
