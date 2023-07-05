@@ -3,7 +3,11 @@
 
 #include "negui_network_element_graphics_item_base.h"
 
-MyNetworkElementGraphicsItemBase* createEdgeSceneGraphicsItem();
+MyNetworkElementGraphicsItemBase* createClassicEdgeSceneGraphicsItem();
+
+MyNetworkElementGraphicsItemBase* createConnectedToSourceCentroidNodeEdgeSceneGraphicsItem();
+
+MyNetworkElementGraphicsItemBase* createConnectedToTargetCentroidNodeEdgeSceneGraphicsItem();
 
 MyNetworkElementGraphicsItemBase* createEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint);
 
