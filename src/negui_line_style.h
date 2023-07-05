@@ -5,10 +5,18 @@
 
 class MyLineStyleBase : public My1DShapeStyleBase {
 public:
+
+    typedef enum {
+        CLASSIC_LINE_STYLE,
+        CONNECTED_TO_START_CENTROID_SHAPE_LINE_STYLE,
+        CONNECTED_TO_END_CENTROID_SHAPE_LINE_STYLE,
+    } LINE_STYLE_TYPE;
     
     MyLineStyleBase(const QString& name);
     
     SHAPE_STYLE type() override;
+
+    virtual LINE_STYLE_TYPE lineType() = 0;
     
     const QRectF getShapeExtents() override;
     
@@ -35,12 +43,24 @@ class MyClassicLineStyle : public MyLineStyleBase {
 public:
 
     MyClassicLineStyle(const QString& name);
+
+    LINE_STYLE_TYPE lineType() override;
 };
 
-class MyConnectedToCentroidNodeLineStyle : public MyLineStyleBase {
+class MyConnectedToStartCentroidShapeLineStyle : public MyLineStyleBase {
 public:
 
-    MyConnectedToCentroidNodeLineStyle(const QString& name);
+    MyConnectedToStartCentroidShapeLineStyle(const QString& name);
+
+    LINE_STYLE_TYPE lineType() override;
+};
+
+class MyConnectedToEndCentroidShapeLineStyle : public MyLineStyleBase {
+public:
+
+    MyConnectedToEndCentroidShapeLineStyle(const QString& name);
+
+    LINE_STYLE_TYPE lineType() override;
 };
 
 #endif

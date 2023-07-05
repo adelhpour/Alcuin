@@ -125,8 +125,26 @@ MyClassicLineStyle::MyClassicLineStyle(const QString& name) : MyLineStyleBase(na
 
 }
 
+MyLineStyleBase::LINE_STYLE_TYPE MyClassicLineStyle::lineType() {
+    return CLASSIC_LINE_STYLE;
+}
+
 // MyConnectedToCentroidNodeLineStyle
 
-MyConnectedToCentroidNodeLineStyle::MyConnectedToCentroidNodeLineStyle(const QString& name) : MyLineStyleBase(name) {
+MyConnectedToStartCentroidShapeLineStyle::MyConnectedToStartCentroidShapeLineStyle(const QString& name) : MyLineStyleBase(name) {
 
+}
+
+MyLineStyleBase::LINE_STYLE_TYPE MyConnectedToStartCentroidShapeLineStyle::lineType() {
+    return CONNECTED_TO_START_CENTROID_SHAPE_LINE_STYLE;
+}
+
+// MyConnectedToEndCentroidShapeLineStyle
+
+MyConnectedToEndCentroidShapeLineStyle::MyConnectedToEndCentroidShapeLineStyle(const QString& name) : MyLineStyleBase(name) {
+
+}
+
+MyLineStyleBase::LINE_STYLE_TYPE MyConnectedToEndCentroidShapeLineStyle::lineType() {
+    return CONNECTED_TO_END_CENTROID_SHAPE_LINE_STYLE;
 }
