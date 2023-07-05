@@ -4,12 +4,12 @@
 #include "negui_1d_shape_graphics_item_base.h"
 #include <QGraphicsItem>
 
-class MyLineGraphicsItem: public My1DShapeGraphicsItemBase, public QGraphicsPathItem {
+class MyLineGraphicsItemBase: public My1DShapeGraphicsItemBase, public QGraphicsPathItem {
     Q_OBJECT
     
 public:
-    
-    MyLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
+
+    MyLineGraphicsItemBase(const QLineF& line, QGraphicsItem *parent);
     
     void updateStyle() override;
     
@@ -28,8 +28,6 @@ public:
     const qreal getEndSlope() override;
     
     QRectF getExtents() override;
-    
-    QGraphicsItem* getFocusedGraphicsItem() override;
     
     void setZValue(qreal z) override;
     
@@ -52,6 +50,36 @@ public slots:
     void adjustLineControlPoint1ToControlBezierLine(const QLineF& controlBezierLine);
 
     void adjustLineControlPoint2ToControlBezierLine(const QLineF& controlBezierLine);
+};
+
+class MyClassicLineGraphicsItem: public MyLineGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
+
+    QGraphicsItem* getFocusedGraphicsItem() override;
+};
+
+class MyConnectedToStartCentroidShapeLineGraphicsItem: public MyLineGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToStartCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
+
+    QGraphicsItem* getFocusedGraphicsItem() override;
+};
+
+class MyConnectedToEndCentroidShapeLineGraphicsItem: public MyLineGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToEndCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
+
+    QGraphicsItem* getFocusedGraphicsItem() override;
 };
 
 #endif
