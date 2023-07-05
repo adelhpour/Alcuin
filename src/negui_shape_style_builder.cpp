@@ -51,8 +51,12 @@ MyShapeStyleBase* createClassicLineStyle(const QString& shape) {
     return new MyClassicLineStyle(shape);
 }
 
-MyShapeStyleBase* createConnectedToCentroidNodeLineStyle(const QString& shape) {
-    return new MyConnectedToCentroidNodeLineStyle(shape);
+MyShapeStyleBase* createConnectedToStartCentroidShapeLineStyle(const QString& shape) {
+    return new MyConnectedToStartCentroidShapeLineStyle(shape);
+}
+
+MyShapeStyleBase* createConnectedToEndCentroidShapeLineStyle(const QString& shape) {
+    return new MyConnectedToEndCentroidShapeLineStyle(shape);
 }
 
 MyShapeStyleBase* createTextStyle(const QString& shape) {
