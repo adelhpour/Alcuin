@@ -127,7 +127,7 @@ bool MyEdgeBase::setActive(const bool& active) {
 void MyEdgeBase::updatePoints() {
     QPointF sourcePosition = getEndOfTheLinePosition(sourceNode(), targetNode());
     QPointF targetPosition = getEndOfTheLinePosition(targetNode(), sourceNode());
-    ((MyEdgeSceneGraphicsItem*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
+    ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
     emit updateArrowHeadPlacement();
 }
@@ -148,7 +148,7 @@ void MyEdgeBase::adjustConnectedEdgesToTargetNode(const QPointF& updatedTargetPo
 
 void MyEdgeBase::updateArrowHeadPlacement() {
     if (isSetArrowHead())
-        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(targetNode(), sourceNode()), ((MyEdgeSceneGraphicsItem*)graphicsItem())->getEndSlope());
+        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(targetNode(), sourceNode()), ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->getEndSlope());
 }
 
 void MyEdgeBase::enableNormalMode() {
@@ -254,7 +254,7 @@ void MyEdgeBase::write(QJsonObject &json) {
 // MyClassicEdge
 
 MyClassicEdge::MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
-    _graphicsItem = createEdgeSceneGraphicsItem();
+    _graphicsItem = createClassicEdgeSceneGraphicsItem();
     connectGraphicsItem();
     setSourceNode(sourceNode);
     setTargetNode(targetNode);
@@ -264,17 +264,30 @@ MyEdgeBase::EDGE_TYPE MyClassicEdge::edgeType() {
     return CLASSIC_EDGE;
 }
 
-// MyConnectedToCentroidNodeEdge
+// MyConnectedToSourceCentroidNodeEdge
 
-MyConnectedToCentroidNodeEdge::MyConnectedToCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
-    _graphicsItem = createEdgeSceneGraphicsItem();
+MyConnectedToSourceCentroidNodeEdge::MyConnectedToSourceCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
+    _graphicsItem = createConnectedToSourceCentroidNodeEdgeSceneGraphicsItem();
     connectGraphicsItem();
     setSourceNode(sourceNode);
     setTargetNode(targetNode);
 }
 
-MyEdgeBase::EDGE_TYPE MyConnectedToCentroidNodeEdge::edgeType() {
-    return CONNECTED_TO_CENTROID_NODE_EDGE;
+MyEdgeBase::EDGE_TYPE MyConnectedToSourceCentroidNodeEdge::edgeType() {
+    return CONNECTED_TO_SOURCE_CENTROID_NODE_EDGE;
+}
+
+// MyConnectedToTargetCentroidNodeEdge
+
+MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
+    _graphicsItem = createConnectedToTargetCentroidNodeEdgeSceneGraphicsItem();
+    connectGraphicsItem();
+    setSourceNode(sourceNode);
+    setTargetNode(targetNode);
+}
+
+MyEdgeBase::EDGE_TYPE MyConnectedToTargetCentroidNodeEdge::edgeType() {
+    return CONNECTED_TO_TARGET_CENTROID_NODE_EDGE;
 }
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {
