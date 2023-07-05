@@ -4,12 +4,47 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 
-class MyBezierAdjustHandledGraphicsItems: public QObject, public QGraphicsItemGroup {
+class MyBezierAdjustHandledGraphicsItemsBase: public QObject, public QGraphicsItemGroup {
+    Q_OBJECT
+
+public:
+
+    MyBezierAdjustHandledGraphicsItemsBase(qreal zValue, QGraphicsItem *parent = nullptr);
+
+protected:
+    bool _isPressed;
+};
+
+class MySinglePointBezierAdjustHandledGraphicsItems: public QObject, public QGraphicsItemGroup {
+    Q_OBJECT
+
+public:
+
+    MySinglePointBezierAdjustHandledGraphicsItems(const QPointF& point, const QPointF& controlPoint, qreal zValue, QGraphicsItem *parent = nullptr);
+
+    void createBezierAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint);
+
+    void adjust(const QPointF& point);
+
+signals:
+
+    void controlPointIsUpdated(const QPointF&);
+
+public slots:
+
+    void updateAdjustHandledGraphicsItem(const QPointF& controlPoint);
+
+protected:
+    QGraphicsItem* _adjustHandledGraphicsItem;
+    bool _isPressed;
+};
+
+class MyDoublePointBezierAdjustHandledGraphicsItems: public QObject, public QGraphicsItemGroup {
     Q_OBJECT
     
 public:
-    
-    MyBezierAdjustHandledGraphicsItems(const QPointF& startPoint, const QPointF& controlPoint1, const QPointF& controlPoint2, const QPointF& endPoint, qreal zValue, QGraphicsItem *parent = nullptr);
+
+    MyDoublePointBezierAdjustHandledGraphicsItems(const QPointF& startPoint, const QPointF& controlPoint1, const QPointF& controlPoint2, const QPointF& endPoint, qreal zValue, QGraphicsItem *parent = nullptr);
     
     void createBezierStartAdjustHandledGraphicsItem(const QPointF& point, const QPointF& controlPoint);
     
