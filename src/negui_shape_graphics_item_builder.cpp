@@ -18,8 +18,16 @@ MyShapeGraphicsItemBase* createPolygonShape(qreal x, qreal y, QGraphicsItem *par
     return new MyPolygonGraphicsItem(x, y, parent);
 }
 
-MyShapeGraphicsItemBase* createLineShape(const QLineF& line, QGraphicsItem *parent) {
-    return new MyLineGraphicsItem(line, parent);
+MyShapeGraphicsItemBase* createClassicLineShape(const QLineF& line, QGraphicsItem *parent) {
+    return new MyClassicLineGraphicsItem(line, parent);
+}
+
+MyShapeGraphicsItemBase* createConnectedToStartCentroidShapeLineShape(const QLineF& line, QGraphicsItem *parent) {
+    return new MyConnectedToStartCentroidShapeLineGraphicsItem(line, parent);
+}
+
+MyShapeGraphicsItemBase* createConnectedToEndCentroidShapeLineShape(const QLineF& line, QGraphicsItem *parent) {
+    return new MyConnectedToEndCentroidShapeLineGraphicsItem(line, parent);
 }
 
 MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent) {

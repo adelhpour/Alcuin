@@ -10,7 +10,11 @@ MyShapeGraphicsItemBase* createRectShape(qreal x, qreal y, QGraphicsItem *parent
 
 MyShapeGraphicsItemBase* createPolygonShape(qreal x, qreal y, QGraphicsItem *parent);
 
-MyShapeGraphicsItemBase* createLineShape(const QLineF& line, QGraphicsItem *parent);
+MyShapeGraphicsItemBase* createClassicLineShape(const QLineF& line, QGraphicsItem *parent);
+
+MyShapeGraphicsItemBase* createConnectedToStartCentroidShapeLineShape(const QLineF& line, QGraphicsItem *parent);
+
+MyShapeGraphicsItemBase* createConnectedToEndCentroidShapeLineShape(const QLineF& line, QGraphicsItem *parent);
 
 MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent);
 
