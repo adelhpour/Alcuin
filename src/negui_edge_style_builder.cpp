@@ -4,8 +4,10 @@
 MyNetworkElementStyleBase* createEdgeStyle(const QJsonObject &json) {
     MyNetworkElementStyleBase* style = NULL;
     if (json.contains("name") && json["name"].isString()) {
-        if (isConnectedToCentroidNodeEdgeStyle(json))
-            style = new MyConnectedToCentroidNodeEdgeStyle(json["name"].toString());
+        if (isConnectedToSourceCentroidNode())
+            style = new MyConnectedToSourceCentroidNodeEdgeStyle(json["name"].toString());
+        else if (isConnectedToTargetCentroidNode())
+            style = new MyConnectedToTargetCentroidNodeEdgeStyle(json["name"].toString());
         else
             style = new MyClassicEdgeStyle(json["name"].toString());
         style->read(json);
@@ -14,6 +16,10 @@ MyNetworkElementStyleBase* createEdgeStyle(const QJsonObject &json) {
     return style;
 }
 
-const bool isConnectedToCentroidNodeEdgeStyle(const QJsonObject &json) {
-    return  false;
+const bool isConnectedToSourceCentroidNode() {
+    return false;
+}
+
+const bool isConnectedToTargetCentroidNode() {
+    return true;
 }
