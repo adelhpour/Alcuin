@@ -9,21 +9,6 @@ MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyNetwor
     enableNormalMode();
 }
 
-MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
-        item = createLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
-        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
-        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
-        item->setZValue(zValue());
-    }
-        
-    return item;
-}
-
 QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
     QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
     connectContextMenu(contextMenu);
@@ -53,46 +38,46 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
     return endSlope;
 }
 
-// MyEdgeSceneGraphicsItem
+// MyEdgeSceneGraphicsItemBase
 
-MyEdgeSceneGraphicsItem::MyEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
+MyEdgeSceneGraphicsItemBase::MyEdgeSceneGraphicsItemBase(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
     _initialLine = QLineF(0.0, 0.0, 0.0, 0.0);
     setZValue(0);
 }
 
-void MyEdgeSceneGraphicsItem::enableNormalMode() {
+void MyEdgeSceneGraphicsItemBase::enableNormalMode() {
     MyNetworkElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::ArrowCursor);
 }
 
-void MyEdgeSceneGraphicsItem::enableAddNodeMode() {
+void MyEdgeSceneGraphicsItemBase::enableAddNodeMode() {
     MyNetworkElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
-void MyEdgeSceneGraphicsItem::enableSelectNodeMode() {
+void MyEdgeSceneGraphicsItemBase::enableSelectNodeMode() {
     MyNetworkElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::ArrowCursor);
 }
 
-void MyEdgeSceneGraphicsItem::enableAddEdgeMode() {
+void MyEdgeSceneGraphicsItemBase::enableAddEdgeMode() {
     MyNetworkElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::ArrowCursor);
 }
 
-void MyEdgeSceneGraphicsItem::enableSelectEdgeMode() {
+void MyEdgeSceneGraphicsItemBase::enableSelectEdgeMode() {
     MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::PointingHandCursor);
 }
 
-void MyEdgeSceneGraphicsItem::setFocused(const bool& isFocused) {
+void MyEdgeSceneGraphicsItemBase::setFocused(const bool& isFocused) {
     bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
     MyNetworkElementGraphicsItemBase::setFocused(isFocused);
     if (isFocused && !focusedGraphicsItemsAlreadyExist)
         askForSetConnectedElementsFocused(isFocused);
 }
 
-void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+void MyEdgeSceneGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mousePressEvent(event);
     if (event->button() == Qt::LeftButton)
         _mousePressedPosition = event->scenePos();
@@ -100,7 +85,7 @@ void MyEdgeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
         event->accept();
 }
 
-void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+void MyEdgeSceneGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01)
@@ -108,10 +93,88 @@ void MyEdgeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+// MyClassicEdgeSceneGraphicsItem
+
+MyClassicEdgeSceneGraphicsItem::MyClassicEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+
+}
+
+MyShapeGraphicsItemBase* MyClassicEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
+        item = createClassicLineShape(_initialLine, this);
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
+        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
+        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
+        item->setZValue(zValue());
+    }
+
+    return item;
+}
+
+// MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem
+
+MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+
+}
+
+MyShapeGraphicsItemBase* MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
+        item = createConnectedToStartCentroidShapeLineShape(_initialLine, this);
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
+        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
+        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
+        item->setZValue(zValue());
+    }
+
+    return item;
+}
+
+// MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem
+
+MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+
+}
+
+MyShapeGraphicsItemBase* MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
+        item = createConnectedToEndCentroidShapeLineShape(_initialLine, this);
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
+        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
+        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
+        item->setZValue(zValue());
+    }
+
+    return item;
+}
+
 // MyEdgeIconGraphicsItem
 
 MyEdgeIconGraphicsItem::MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
     _initialLine = QLineF(startPoint, endPoint);
+}
+
+MyShapeGraphicsItemBase* MyEdgeIconGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
+        item = createClassicLineShape(_initialLine, this);
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
+        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
+        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
+        item->setZValue(zValue());
+    }
+
+    return item;
 }
 
 void MyEdgeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {

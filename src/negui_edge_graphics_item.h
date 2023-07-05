@@ -9,8 +9,6 @@ class MyEdgeGraphicsItemBase: public MyNetworkElementGraphicsItemBase {
 public:
     
     MyEdgeGraphicsItemBase(QGraphicsItem *parent = nullptr);
-    
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
 
     QMenu* createContextMenu() override;
     
@@ -38,12 +36,12 @@ protected:
     QLineF _initialLine;
 };
 
-class MyEdgeSceneGraphicsItem: public MyEdgeGraphicsItemBase {
+class MyEdgeSceneGraphicsItemBase: public MyEdgeGraphicsItemBase {
     Q_OBJECT
     
 public:
     
-    MyEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+    MyEdgeSceneGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     void enableNormalMode() override;
 
@@ -70,12 +68,44 @@ protected:
     QPointF _mousePressedPosition;
 };
 
+class MyClassicEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyClassicEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+};
+
+class MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+};
+
+class MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
+
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+};
+
 class MyEdgeIconGraphicsItem: public MyEdgeGraphicsItemBase {
     Q_OBJECT
     
 public:
     
     MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent = nullptr);
+
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
     
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };
