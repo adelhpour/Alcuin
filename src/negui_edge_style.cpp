@@ -165,28 +165,47 @@ MyShapeStyleBase* MyClassicEdgeStyle::createShapeStyle(const QString& shape) {
     return NULL;
 }
 
-// MyConnectedToCentroidNodeEdgeStyle
+// MyConnectedToSourceCentroidNodeEdgeStyle
 
-MyConnectedToCentroidNodeEdgeStyle::MyConnectedToCentroidNodeEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
+MyConnectedToSourceCentroidNodeEdgeStyle::MyConnectedToSourceCentroidNodeEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
 
 }
 
-MyEdgeStyleBase::EDGE_STYLE_TYPE MyConnectedToCentroidNodeEdgeStyle::edgeStyleType() {
-    return  CONNECTED_TO_CENTROID_NODE_EDGE_STYLE;
+MyEdgeStyleBase::EDGE_STYLE_TYPE MyConnectedToSourceCentroidNodeEdgeStyle::edgeStyleType() {
+    return  CONNECTED_TO_SOURCE_CENTROID_NODE_EDGE_STYLE;
 }
 
-void MyConnectedToCentroidNodeEdgeStyle::addDefaultShapeStyle() {
-    _shapeStyles.push_back(createConnectedToCentroidNodeLineStyle("line"));
+void MyConnectedToSourceCentroidNodeEdgeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createConnectedToStartCentroidShapeLineStyle("line"));
 }
 
-MyShapeStyleBase* MyConnectedToCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
+MyShapeStyleBase* MyConnectedToSourceCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
     if (shape == "line")
-        return createConnectedToCentroidNodeLineStyle("line");
+        return createConnectedToStartCentroidShapeLineStyle("line");
 
     return NULL;
 }
 
+// MyConnectedToTargetCentroidNodeEdgeStyle
 
+MyConnectedToTargetCentroidNodeEdgeStyle::MyConnectedToTargetCentroidNodeEdgeStyle(const QString& name) : MyEdgeStyleBase(name) {
+
+}
+
+MyEdgeStyleBase::EDGE_STYLE_TYPE MyConnectedToTargetCentroidNodeEdgeStyle::edgeStyleType() {
+    return  CONNECTED_TO_TARGET_CENTROID_NODE_EDGE_STYLE;
+}
+
+void MyConnectedToTargetCentroidNodeEdgeStyle::addDefaultShapeStyle() {
+    _shapeStyles.push_back(createConnectedToEndCentroidShapeLineStyle("line"));
+}
+
+MyShapeStyleBase* MyConnectedToTargetCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "line")
+        return createConnectedToEndCentroidShapeLineStyle("line");
+
+    return NULL;
+}
 
 
 
