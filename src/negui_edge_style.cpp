@@ -180,8 +180,8 @@ void MyConnectedToSourceCentroidNodeEdgeStyle::addDefaultShapeStyle() {
 }
 
 MyShapeStyleBase* MyConnectedToSourceCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
-    if (shape == "line")
-        return createConnectedToStartCentroidShapeLineStyle("line");
+    if (shape == "connected-to-source-centroid-shape-line")
+        return createConnectedToStartCentroidShapeLineStyle("connected-to-source-centroid-shape-line");
 
     return NULL;
 }
@@ -201,8 +201,8 @@ void MyConnectedToTargetCentroidNodeEdgeStyle::addDefaultShapeStyle() {
 }
 
 MyShapeStyleBase* MyConnectedToTargetCentroidNodeEdgeStyle::createShapeStyle(const QString& shape) {
-    if (shape == "line")
-        return createConnectedToEndCentroidShapeLineStyle("line");
+    if (shape == "connected-to-target-centroid-shape-line")
+        return createConnectedToEndCentroidShapeLineStyle("connected-to-target-centroid-shape-line");
 
     return NULL;
 }
