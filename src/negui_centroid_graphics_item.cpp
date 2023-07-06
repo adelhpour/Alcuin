@@ -1,6 +1,6 @@
 #include "negui_centroid_graphics_item.h"
 #include "negui_centroid_style.h"
-#include "negui_resize_handled_graphics_item.h"
+#include "negui_centroid_adjust_handled_graphics_item.h"
 
 // MyCentroidGraphicsItem
 
@@ -46,10 +46,8 @@ void MyCentroidGraphicsItem::adjustOriginalPosition(const QPointF& originalPosit
 }
 
 QGraphicsItem* MyCentroidGraphicsItem::getFocusedGraphicsItem() {
-    QGraphicsEllipseItem* focusedGraphicsItem = new QGraphicsEllipseItem(getFocusedRect());
-    focusedGraphicsItem->setPen(((MyCentroidStyleBase*)style())->selectedPen());
-    focusedGraphicsItem->setBrush(((MyCentroidStyleBase*)style())->selectedBrush());
-    focusedGraphicsItem->setZValue(zValue());
+    MyCentroidAdjustHandledGraphicsItems* focusedGraphicsItem = new MyCentroidAdjustHandledGraphicsItems(getFocusedRect(), QLineF(), zValue());
+    connect(focusedGraphicsItem, SIGNAL(lineIsUpdated(const QLineF&)), this, SLOT(updateAdjustLine(const QLineF&)));
     return focusedGraphicsItem;
 }
 

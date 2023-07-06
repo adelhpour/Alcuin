@@ -62,6 +62,7 @@ set(gui_sources
 		negui_shape_graphics_item_builder.cpp
 		negui_resize_handled_graphics_item.cpp
 		negui_bezier_adjust_handled_graphics_item.cpp
+		negui_centroid_adjust_handled_graphics_item.cpp
 		negui_parameters.cpp
 		negui_customized_common_widgets.cpp
 		negui_customized_mode_menu_widgets.cpp
@@ -137,6 +138,7 @@ set(gui_headers
 		negui_shape_graphics_item_builder.h
 		negui_resize_handled_graphics_item.h
 		negui_bezier_adjust_handled_graphics_item.h
+		negui_centroid_adjust_handled_graphics_item.h
 		negui_parameters.h
 		negui_customized_common_widgets.h
 		negui_customized_mode_menu_widgets.h
