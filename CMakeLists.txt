@@ -79,7 +79,7 @@ if(BUILD_TEST_APP)
 endif()
 
 ## build the documentation
-option(BUILD_DOCS "Build the documentation" ON)
+option(BUILD_DOCS "Build the documentation" OFF)
 
 if(BUILD_DOCS)
 	add_subdirectory(docs)
