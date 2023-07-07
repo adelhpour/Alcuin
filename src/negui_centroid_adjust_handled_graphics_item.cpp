@@ -1,4 +1,5 @@
 #include "negui_centroid_adjust_handled_graphics_item.h"
+#include "negui_bezier_control_point_handle_graphics_item.h"
 
 #include <QPen>
 
@@ -7,6 +8,8 @@ MyCentroidAdjustHandledGraphicsItems::MyCentroidAdjustHandledGraphicsItems(const
     setZValue(zValue + 1);
     createCentroidFocusedGraphicsItem(rect);
     createBezierAdjustLineFocusedGraphicsItem(line);
+    createBezierControlPointHandleGraphicsItem(line.p1());
+    createBezierControlPointHandleGraphicsItem(line.p2());
     _isPressed = false;
 }
 
@@ -21,4 +24,12 @@ void MyCentroidAdjustHandledGraphicsItems::createBezierAdjustLineFocusedGraphics
     _bezierAdjustLineFocusedGraphicsItem = new QGraphicsLineItem(line);
     ((QGraphicsLineItem*)_bezierAdjustLineFocusedGraphicsItem)->setPen(QPen(QColor("#0000CD")));
     addToGroup(_bezierAdjustLineFocusedGraphicsItem);
+}
+
+void MyCentroidAdjustHandledGraphicsItems::createBezierControlPointHandleGraphicsItem(const QPointF& point) {
+    _controlHandle = new MyBezierControlPointHandleGraphicsItem(point);
+    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(adjustHandledGraphicsItemIsUpdated(const QPointF&)));
+    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
+    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
+    addToGroup(_controlHandle);
 }

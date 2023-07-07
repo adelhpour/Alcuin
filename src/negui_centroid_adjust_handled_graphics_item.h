@@ -2,7 +2,6 @@
 #define __NEGUI_CENTROID_ADJUST_HANDLED_GRAPHICS_ITEM_H
 
 #include <QGraphicsItem>
-#include <QGraphicsSceneMouseEvent>
 
 class MyCentroidAdjustHandledGraphicsItems: public QObject, public QGraphicsItemGroup {
     Q_OBJECT
@@ -15,9 +14,12 @@ public:
 
     void createBezierAdjustLineFocusedGraphicsItem(const QLineF &line);
 
+    void createBezierControlPointHandleGraphicsItem(const QPointF& point);
+
 protected:
     QGraphicsItem* _centroidFocusedGraphicsItem;
     QGraphicsItem* _bezierAdjustLineFocusedGraphicsItem;
+    QGraphicsItem* _controlHandle;
     bool _isPressed;
 };
 #endif
