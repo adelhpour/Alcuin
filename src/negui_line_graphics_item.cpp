@@ -145,9 +145,15 @@ QGraphicsItem* MyClassicLineGraphicsItem::getFocusedGraphicsItem() {
     return focusedGraphicsItems;
 }
 
+// MyConnectedToCentroidShapeLineGraphicsItemBase
+
+MyConnectedToCentroidShapeLineGraphicsItemBase::MyConnectedToCentroidShapeLineGraphicsItemBase(const QLineF& line, QGraphicsItem *parent): MyLineGraphicsItemBase(line, parent) {
+
+}
+
 // MyConnectedToStartCentroidShapeLineGraphicsItem
 
-MyConnectedToStartCentroidShapeLineGraphicsItem::MyConnectedToStartCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent): MyLineGraphicsItemBase(line, parent) {
+MyConnectedToStartCentroidShapeLineGraphicsItem::MyConnectedToStartCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent): MyConnectedToCentroidShapeLineGraphicsItemBase(line, parent) {
 
 }
 
@@ -159,9 +165,13 @@ QGraphicsItem* MyConnectedToStartCentroidShapeLineGraphicsItem::getFocusedGraphi
     return focusedGraphicsItems;
 }
 
+const QPointF MyConnectedToStartCentroidShapeLineGraphicsItem::connectedToCentroidNodeControlPoint() {
+    return getControlPoint2();
+}
+
 // MyConnectedToEndCentroidShapeLineGraphicsItem
 
-MyConnectedToEndCentroidShapeLineGraphicsItem::MyConnectedToEndCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent): MyLineGraphicsItemBase(line, parent) {
+MyConnectedToEndCentroidShapeLineGraphicsItem::MyConnectedToEndCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent): MyConnectedToCentroidShapeLineGraphicsItemBase(line, parent) {
 
 }
 
@@ -171,4 +181,8 @@ QGraphicsItem* MyConnectedToEndCentroidShapeLineGraphicsItem::getFocusedGraphics
     connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint2());  });
 
     return focusedGraphicsItems;
+}
+
+const QPointF MyConnectedToEndCentroidShapeLineGraphicsItem::connectedToCentroidNodeControlPoint() {
+    return getControlPoint1();
 }

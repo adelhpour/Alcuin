@@ -9,6 +9,25 @@ MyEdgeGraphicsItemBase::MyEdgeGraphicsItemBase(QGraphicsItem *parent) : MyNetwor
     enableNormalMode();
 }
 
+MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
+        item = createLineShapeGraphicsItem();
+        connectShapeGraphicsItem(item);
+        item->setZValue(zValue());
+    }
+
+    return item;
+}
+
+void MyEdgeGraphicsItemBase::connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) {
+    connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
+    connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
+    connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
+    connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
+    connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
+}
+
 QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
     QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
     connectContextMenu(contextMenu);
@@ -99,61 +118,38 @@ MyClassicEdgeSceneGraphicsItem::MyClassicEdgeSceneGraphicsItem(QGraphicsItem *pa
 
 }
 
-MyShapeGraphicsItemBase* MyClassicEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
-        item = createClassicLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
-        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
-        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
-        item->setZValue(zValue());
-    }
-
-    return item;
+MyShapeGraphicsItemBase* MyClassicEdgeSceneGraphicsItem::createLineShapeGraphicsItem() {
+    return createClassicLineShape(_initialLine, this);
 }
 
+// MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase
+
+MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase::MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+
+}
+
+void MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase::connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) {
+    MyEdgeGraphicsItemBase::connectShapeGraphicsItem(item);
+    connect(this, SIGNAL(askForConnectedToCentroidNodeControlPoint()), item, SLOT(connectedToCentroidNodeControlPoint()));
+}
 // MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem
 
-MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase(parent) {
 
 }
 
-MyShapeGraphicsItemBase* MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
-        item = createConnectedToStartCentroidShapeLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
-        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
-        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
-        item->setZValue(zValue());
-    }
-
-    return item;
+MyShapeGraphicsItemBase* MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem::createLineShapeGraphicsItem() {
+    return createConnectedToStartCentroidShapeLineShape(_initialLine, this);
 }
 
 // MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem
 
-MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {
+MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase(parent) {
 
 }
 
-MyShapeGraphicsItemBase* MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
-        item = createConnectedToEndCentroidShapeLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
-        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
-        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
-        item->setZValue(zValue());
-    }
-
-    return item;
+MyShapeGraphicsItemBase* MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem::createLineShapeGraphicsItem() {
+    return createConnectedToEndCentroidShapeLineShape(_initialLine, this);
 }
 
 // MyEdgeIconGraphicsItem
@@ -162,19 +158,8 @@ MyEdgeIconGraphicsItem::MyEdgeIconGraphicsItem(const QPointF& startPoint, const 
     _initialLine = QLineF(startPoint, endPoint);
 }
 
-MyShapeGraphicsItemBase* MyEdgeIconGraphicsItem::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::LINE_SHAPE_STYLE) {
-        item = createClassicLineShape(_initialLine, this);
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-        connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-        connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
-        connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
-        connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
-        item->setZValue(zValue());
-    }
-
-    return item;
+MyShapeGraphicsItemBase* MyEdgeIconGraphicsItem::createLineShapeGraphicsItem() {
+    return createClassicLineShape(_initialLine, this);
 }
 
 void MyEdgeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {

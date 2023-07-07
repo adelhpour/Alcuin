@@ -10,6 +10,12 @@ public:
     
     MyEdgeGraphicsItemBase(QGraphicsItem *parent = nullptr);
 
+    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+
+    virtual MyShapeGraphicsItemBase* createLineShapeGraphicsItem() = 0;
+
+    virtual void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item);
+
     QMenu* createContextMenu() override;
     
     void setLine(const QLineF &line);
@@ -75,27 +81,41 @@ public:
 
     MyClassicEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
 
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+    MyShapeGraphicsItemBase* createLineShapeGraphicsItem() override;
 };
 
-class MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
+class MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase: public MyEdgeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase(QGraphicsItem *parent = nullptr);
+
+    void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) override;
+
+signals:
+
+    const QPointF askForConnectedToCentroidNodeControlPoint();
+};
+
+class MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem: public MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase {
     Q_OBJECT
 
 public:
 
     MyConnectedToSourceCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
 
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+    MyShapeGraphicsItemBase* createLineShapeGraphicsItem() override;
 };
 
-class MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
+class MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem: public MyConnectedToCentroidNodeEdgeSceneGraphicsItemBase {
     Q_OBJECT
 
 public:
 
     MyConnectedToTargetCentroidNodeEdgeSceneGraphicsItem(QGraphicsItem *parent = nullptr);
 
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+    MyShapeGraphicsItemBase* createLineShapeGraphicsItem() override;
 };
 
 class MyEdgeIconGraphicsItem: public MyEdgeGraphicsItemBase {
@@ -105,7 +125,7 @@ public:
     
     MyEdgeIconGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent = nullptr);
 
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+    MyShapeGraphicsItemBase* createLineShapeGraphicsItem() override;
     
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };

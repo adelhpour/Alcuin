@@ -408,7 +408,7 @@ const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
 }
 
 void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
-    emit controlBezierLineIsUpdated(createControlBezierLine(updatedPoint));
+    //emit controlBezierLineIsUpdated(createControlBezierLine(updatedPoint));
 }
 
 const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint) {
@@ -498,5 +498,19 @@ void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {
 }
 
 const QLineF MyCentroidNode::createBezierAdjustLine() {
-    return QLineF(10, 10, 400, 400);
+    QPointF startPoint = position();
+    QPointF endPoint = position();
+    for (MyNetworkElementBase* edge : edges()) {
+        QPointF controlPoint = ((MyConnectedToCentroidNodeEdgeBase*)edge)->askForConnectedToCentroidNodeControlPoint();
+        if (controlPoint.x() < startPoint.x())
+            startPoint.setX(controlPoint.x());
+        if (controlPoint.y() < startPoint.y())
+            startPoint.setY(controlPoint.y());
+        if (controlPoint.x() > endPoint.x())
+            endPoint.setX(controlPoint.x());
+        if (controlPoint.y() > startPoint.y())
+            endPoint.setY(controlPoint.y());
+    }
+
+    return QLineF(startPoint, endPoint);
 }

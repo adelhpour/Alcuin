@@ -115,7 +115,21 @@ public:
     EDGE_TYPE edgeType() override;
 };
 
-class MyConnectedToSourceCentroidNodeEdge : public MyEdgeBase {
+class MyConnectedToCentroidNodeEdgeBase : public MyEdgeBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToCentroidNodeEdgeBase(const QString& name);
+
+    void connectGraphicsItem() override;
+
+signals:
+
+    const QPointF askForConnectedToCentroidNodeControlPoint();
+};
+
+class MyConnectedToSourceCentroidNodeEdge : public MyConnectedToCentroidNodeEdgeBase {
     Q_OBJECT
 
 public:
@@ -125,7 +139,7 @@ public:
     EDGE_TYPE edgeType() override;
 };
 
-class MyConnectedToTargetCentroidNodeEdge : public MyEdgeBase {
+class MyConnectedToTargetCentroidNodeEdge : public MyConnectedToCentroidNodeEdgeBase {
     Q_OBJECT
 
 public:

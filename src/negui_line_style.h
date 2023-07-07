@@ -47,7 +47,13 @@ public:
     LINE_STYLE_TYPE lineType() override;
 };
 
-class MyConnectedToStartCentroidShapeLineStyle : public MyLineStyleBase {
+class MyConnectedToCentroidShapeLineStyleBase : public MyLineStyleBase {
+public:
+
+    MyConnectedToCentroidShapeLineStyleBase(const QString& name);
+};
+
+class MyConnectedToStartCentroidShapeLineStyle : public MyConnectedToCentroidShapeLineStyleBase {
 public:
 
     MyConnectedToStartCentroidShapeLineStyle(const QString& name);
@@ -55,7 +61,7 @@ public:
     LINE_STYLE_TYPE lineType() override;
 };
 
-class MyConnectedToEndCentroidShapeLineStyle : public MyLineStyleBase {
+class MyConnectedToEndCentroidShapeLineStyle : public MyConnectedToCentroidShapeLineStyleBase {
 public:
 
     MyConnectedToEndCentroidShapeLineStyle(const QString& name);

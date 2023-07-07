@@ -62,7 +62,14 @@ public:
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 };
 
-class MyConnectedToSourceCentroidNodeEdgeStyle : public MyEdgeStyleBase {
+class MyConnectedToCentroidNodeEdgeStyleBase : public MyEdgeStyleBase {
+public:
+
+    MyConnectedToCentroidNodeEdgeStyleBase(const QString& name);
+};
+
+class MyConnectedToSourceCentroidNodeEdgeStyle : public MyConnectedToCentroidNodeEdgeStyleBase {
+
 public:
 
     MyConnectedToSourceCentroidNodeEdgeStyle(const QString& name);
@@ -74,7 +81,7 @@ public:
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 };
 
-class MyConnectedToTargetCentroidNodeEdgeStyle : public MyEdgeStyleBase {
+class MyConnectedToTargetCentroidNodeEdgeStyle : public MyConnectedToCentroidNodeEdgeStyleBase {
 public:
 
     MyConnectedToTargetCentroidNodeEdgeStyle(const QString& name);

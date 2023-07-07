@@ -264,9 +264,20 @@ MyEdgeBase::EDGE_TYPE MyClassicEdge::edgeType() {
     return CLASSIC_EDGE;
 }
 
+// MyConnectedToCentroidNodeEdgeBase
+
+MyConnectedToCentroidNodeEdgeBase::MyConnectedToCentroidNodeEdgeBase(const QString& name) : MyEdgeBase(name) {
+
+}
+
+void MyConnectedToCentroidNodeEdgeBase::connectGraphicsItem() {
+    MyEdgeBase::connectGraphicsItem();
+    connect(this, SIGNAL(askForConnectedToCentroidNodeControlPoint()), _graphicsItem, SIGNAL(askForConnectedToCentroidNodeControlPoint()));
+}
+
 // MyConnectedToSourceCentroidNodeEdge
 
-MyConnectedToSourceCentroidNodeEdge::MyConnectedToSourceCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
+MyConnectedToSourceCentroidNodeEdge::MyConnectedToSourceCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyConnectedToCentroidNodeEdgeBase(name) {
     _graphicsItem = createConnectedToSourceCentroidNodeEdgeSceneGraphicsItem();
     connectGraphicsItem();
     setSourceNode(sourceNode);
@@ -279,7 +290,7 @@ MyEdgeBase::EDGE_TYPE MyConnectedToSourceCentroidNodeEdge::edgeType() {
 
 // MyConnectedToTargetCentroidNodeEdge
 
-MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyEdgeBase(name) {
+MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyConnectedToCentroidNodeEdgeBase(name) {
     _graphicsItem = createConnectedToTargetCentroidNodeEdgeSceneGraphicsItem();
     connectGraphicsItem();
     setSourceNode(sourceNode);

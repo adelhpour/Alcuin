@@ -62,7 +62,20 @@ public:
     QGraphicsItem* getFocusedGraphicsItem() override;
 };
 
-class MyConnectedToStartCentroidShapeLineGraphicsItem: public MyLineGraphicsItemBase {
+class MyConnectedToCentroidShapeLineGraphicsItemBase: public MyLineGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyConnectedToCentroidShapeLineGraphicsItemBase(const QLineF& line, QGraphicsItem *parent);
+
+public slots:
+
+    virtual const QPointF connectedToCentroidNodeControlPoint() = 0;
+
+};
+
+class MyConnectedToStartCentroidShapeLineGraphicsItem: public MyConnectedToCentroidShapeLineGraphicsItemBase {
     Q_OBJECT
 
 public:
@@ -70,9 +83,13 @@ public:
     MyConnectedToStartCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
 
     QGraphicsItem* getFocusedGraphicsItem() override;
+
+public slots:
+
+    const QPointF connectedToCentroidNodeControlPoint() override;
 };
 
-class MyConnectedToEndCentroidShapeLineGraphicsItem: public MyLineGraphicsItemBase {
+class MyConnectedToEndCentroidShapeLineGraphicsItem: public MyConnectedToCentroidShapeLineGraphicsItemBase {
     Q_OBJECT
 
 public:
@@ -80,6 +97,10 @@ public:
     MyConnectedToEndCentroidShapeLineGraphicsItem(const QLineF& line, QGraphicsItem *parent);
 
     QGraphicsItem* getFocusedGraphicsItem() override;
+
+public slots:
+
+    const QPointF connectedToCentroidNodeControlPoint() override;
 };
 
 #endif
