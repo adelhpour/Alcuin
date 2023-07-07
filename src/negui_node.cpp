@@ -360,6 +360,7 @@ MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
 void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
+    connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
 }
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
@@ -494,4 +495,8 @@ void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {
     setSelected(isSelected);
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->setSelected(isSelected);
+}
+
+const QLineF MyCentroidNode::createBezierAdjustLine() {
+    return QLineF(10, 10, 400, 400);
 }

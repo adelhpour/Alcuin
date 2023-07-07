@@ -13,8 +13,11 @@ public:
 
     void createCentroidFocusedGraphicsItem(const QRectF &rect);
 
+    void createBezierAdjustLineFocusedGraphicsItem(const QLineF &line);
+
 protected:
     QGraphicsItem* _centroidFocusedGraphicsItem;
+    QGraphicsItem* _bezierAdjustLineFocusedGraphicsItem;
     bool _isPressed;
 };
 #endif

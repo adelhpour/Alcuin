@@ -4,6 +4,8 @@
 #include "negui_2d_shape_graphics_item_base.h"
 
 class MyCentroidGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsEllipseItem {
+    Q_OBJECT
+
 public:
     
     MyCentroidGraphicsItem(qreal x, qreal y, QGraphicsItem *parent);
@@ -23,8 +25,13 @@ public:
     void setZValue(qreal z) override;
 
     void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+
+signals:
+
+    const QLineF askForGetBezierAdjustLine();
     
 public slots:
+
     void updateExtents(const QRectF& extents) override;
 };
 

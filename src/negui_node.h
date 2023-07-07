@@ -194,7 +194,7 @@ public:
 
     const qreal getControlBezierLineAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY);
 
-    signals:
+signals:
 
     void controlBezierLineIsUpdated(const QLineF&);
 
@@ -207,6 +207,8 @@ private slots:
     void disconnectNodePositionFromNeighborNodes();
 
     void setConnectedElementsSelected(const bool& isSelected);
+
+    const QLineF createBezierAdjustLine();
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;

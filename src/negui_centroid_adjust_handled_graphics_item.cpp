@@ -6,6 +6,7 @@ MyCentroidAdjustHandledGraphicsItems::MyCentroidAdjustHandledGraphicsItems(const
     setHandlesChildEvents(false);
     setZValue(zValue + 1);
     createCentroidFocusedGraphicsItem(rect);
+    createBezierAdjustLineFocusedGraphicsItem(line);
     _isPressed = false;
 }
 
@@ -14,4 +15,10 @@ void MyCentroidAdjustHandledGraphicsItems::createCentroidFocusedGraphicsItem(con
     ((QGraphicsEllipseItem*)_centroidFocusedGraphicsItem)->setPen(QPen(QColor("#0000CD")));
     ((QGraphicsEllipseItem*)_centroidFocusedGraphicsItem)->setBrush((QBrush(QColor("#4169e1"), Qt::SolidPattern)));
     addToGroup(_centroidFocusedGraphicsItem);
+}
+
+void MyCentroidAdjustHandledGraphicsItems::createBezierAdjustLineFocusedGraphicsItem(const QLineF &line) {
+    _bezierAdjustLineFocusedGraphicsItem = new QGraphicsLineItem(line);
+    ((QGraphicsLineItem*)_bezierAdjustLineFocusedGraphicsItem)->setPen(QPen(QColor("#0000CD")));
+    addToGroup(_bezierAdjustLineFocusedGraphicsItem);
 }

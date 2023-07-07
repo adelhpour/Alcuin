@@ -31,6 +31,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE) {
         item = createCentroidShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
+        connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
     }
 
     return item;
