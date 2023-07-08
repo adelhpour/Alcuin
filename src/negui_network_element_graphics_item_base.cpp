@@ -174,6 +174,8 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         event->accept();
         emit askForCreateChangeStageCommand();
     }
+    else if (event->button() == Qt::RightButton)
+        displayContextMenu(event->screenPos());
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
@@ -186,13 +188,11 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
     event->ignore();
 }
 
-void MyNetworkElementGraphicsItemBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event) {
-    if (!(askForWhetherNetworkElementIsSelected() && askForWhetherAnyOtherElementsAreSelected())) {
-        QGraphicsItem::contextMenuEvent(event);
-        if (getSceneMode() == NORMAL_MODE) {
+void MyNetworkElementGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        if (!(askForWhetherNetworkElementIsSelected() && askForWhetherAnyOtherElementsAreSelected())) {
             QMenu* contextMenu = createContextMenu();
-            contextMenu->exec(QPoint(event->screenPos().x(), event->screenPos().y()));
-            event->accept();
+            contextMenu->exec(position);
         }
     }
 }
