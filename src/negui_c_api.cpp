@@ -2,25 +2,25 @@
 #include "negui_interactor.h"
 #include <QJsonDocument>
 
-MyNetworkEditorWidget* MyNetworkEditorWidget_new(QWidget* parent) {
+QWidget* createNetworkEditorWidget(QWidget* parent) {
     return new MyNetworkEditorWidget(parent);
 }
 
-void MyNetworkEditorWidget_delete(MyNetworkEditorWidget* myNetworkEditorWidget) {
-    delete myNetworkEditorWidget;
+void deleteNetworkEditorWidget(QWidget* networkEditorWidget) {
+    delete networkEditorWidget;
 }
 
-void MyNetworkEditorWidget_setGraphInfo(MyNetworkEditorWidget* myNetworkEditorWidget, const char* graphInfo) {
-    if (myNetworkEditorWidget) {
+void setGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget, const char* graphInfo) {
+    if (networkEditorWidget) {
         QJsonDocument doc = QJsonDocument::fromJson(QString(graphInfo).toUtf8());
         if (!doc.isNull())
-            ((MyInteractor*)myNetworkEditorWidget->interactor())->createNetwork(doc.object());
+            ((MyInteractor*)((MyNetworkEditorWidget*)networkEditorWidget)->interactor())->createNetwork(doc.object());
     }
 }
 
-const char* MyNetworkEditorWidget_graphInfo(MyNetworkEditorWidget* myNetworkEditorWidget) {
-    if (myNetworkEditorWidget) {
-        QJsonObject object = ((MyInteractor*)myNetworkEditorWidget->interactor())->exportNetworkInfo();
+const char* getGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget) {
+    if (networkEditorWidget) {
+        QJsonObject object = ((MyInteractor*)((MyNetworkEditorWidget*)networkEditorWidget)->interactor())->exportNetworkInfo();
         return strdup(QJsonDocument(object).toJson(QJsonDocument::Compact).toStdString().c_str());
     }
     
