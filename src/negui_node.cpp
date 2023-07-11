@@ -501,16 +501,30 @@ void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {
 const QLineF MyCentroidNode::createBezierAdjustLine() {
     QPointF startPoint = position();
     QPointF endPoint = position();
+    qreal dx = 0;
+    qreal dy = 0;
     for (MyNetworkElementBase* edge : edges()) {
         QPointF controlPoint = ((MyConnectedToCentroidNodeEdgeBase*)edge)->askForConnectedToCentroidNodeControlPoint();
-        if (controlPoint.x() < startPoint.x())
-            startPoint.setX(controlPoint.x());
-        if (controlPoint.y() < startPoint.y())
-            startPoint.setY(controlPoint.y());
-        if (controlPoint.x() > endPoint.x())
-            endPoint.setX(controlPoint.x());
-        if (controlPoint.y() > startPoint.y())
-            endPoint.setY(controlPoint.y());
+        if (controlPoint.x() < startPoint.x()) {
+            dx = startPoint.x() - controlPoint.x();
+            startPoint.setX(startPoint.x() - dx);
+            endPoint.setX(endPoint.x() + dx);
+        }
+        if (controlPoint.y() < startPoint.y()) {
+            dy = startPoint.y() - controlPoint.y();
+            startPoint.setY(startPoint.y() - dy);
+            endPoint.setY(endPoint.y() + dy);
+        }
+        if (controlPoint.x() > endPoint.x()) {
+            dx = controlPoint.x() - endPoint.x();
+            startPoint.setX(startPoint.x() - dx);
+            endPoint.setX(endPoint.x() + dx);
+        }
+        if (controlPoint.y() > endPoint.y()) {
+            dy = controlPoint.y() - endPoint.y();
+            startPoint.setY(startPoint.y() - dy);
+            endPoint.setY(endPoint.y() + dy);
+        }
     }
 
     return QLineF(startPoint, endPoint);
