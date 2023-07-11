@@ -10,13 +10,17 @@ public:
 
     MyBezierControlPointHandleGraphicsItem(const QPointF& center, QGraphicsItem *parent = nullptr);
 
+    void setPen();
+
+    void setBrush();
+
     void updatePosition(const QPointF& center);
 
     const QPointF position();
 
-    signals:
+signals:
 
-            void positionChanged(const QPointF&);
+    void positionChanged(const QPointF&);
 
     void isPressed();
 
@@ -31,6 +35,13 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
     qreal _handleRadius;
+};
+
+class MyBezierAdjustLineGraphicsItem: public QGraphicsLineItem {
+
+public:
+
+    MyBezierAdjustLineGraphicsItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
 };
 
 #endif

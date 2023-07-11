@@ -1,5 +1,5 @@
 #include "negui_centroid_adjust_handled_graphics_item.h"
-#include "negui_bezier_control_point_handle_graphics_item.h"
+#include "negui_bezier_adjust_customized_graphics_items.h"
 
 #include <QPen>
 
@@ -8,8 +8,6 @@ MyCentroidAdjustHandledGraphicsItems::MyCentroidAdjustHandledGraphicsItems(const
     setZValue(zValue + 1);
     createCentroidFocusedGraphicsItem(rect);
     createBezierAdjustLineFocusedGraphicsItem(line);
-    createBezierControlPointHandleGraphicsItem(line.p1());
-    createBezierControlPointHandleGraphicsItem(line.p2());
     _isPressed = false;
 }
 
@@ -21,15 +19,66 @@ void MyCentroidAdjustHandledGraphicsItems::createCentroidFocusedGraphicsItem(con
 }
 
 void MyCentroidAdjustHandledGraphicsItems::createBezierAdjustLineFocusedGraphicsItem(const QLineF &line) {
-    _bezierAdjustLineFocusedGraphicsItem = new QGraphicsLineItem(line);
-    ((QGraphicsLineItem*)_bezierAdjustLineFocusedGraphicsItem)->setPen(QPen(QColor("#0000CD")));
-    addToGroup(_bezierAdjustLineFocusedGraphicsItem);
+    _centroidBezierAdjustHandledGraphicsItem = new MyCentroidBezierAdjustHandledGraphicsItem(line.p1(), line.p2());
+    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::startPositionIsUpdated, this, [this] (const QPointF& startPosition) {
+        ((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->updateStartPosition(startPosition);
+        emit bezierAdjustLineIsUpdated(((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->line()); });
+    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::endPositionIsUpdated, this, [this] (const QPointF& endPosition) {
+        ((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->updateEndPosition(endPosition);
+        emit bezierAdjustLineIsUpdated(((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->line()); });
+    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::isPressed, this, [this] () { _isPressed = true; });
+    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::isReleased, this, [this] () { _isPressed = false; });
+    addToGroup(_centroidBezierAdjustHandledGraphicsItem);
 }
 
-void MyCentroidAdjustHandledGraphicsItems::createBezierControlPointHandleGraphicsItem(const QPointF& point) {
-    _controlHandle = new MyBezierControlPointHandleGraphicsItem(point);
-    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(adjustHandledGraphicsItemIsUpdated(const QPointF&)));
-    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
-    //connect((MyBezierControlPointHandleGraphicsItem*)_controlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
-    addToGroup(_controlHandle);
+// MyCentroidBezierAdjustHandledGraphicsItem
+
+MyCentroidBezierAdjustHandledGraphicsItem::MyCentroidBezierAdjustHandledGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
+    setHandlesChildEvents(false);
+    createLine(startPoint, endPoint);
+    createStartHandle(startPoint);
+    createEndHandle(endPoint);
+}
+
+void MyCentroidBezierAdjustHandledGraphicsItem::createLine(const QPointF& p1, const QPointF& p2) {
+    _line = new MyBezierAdjustLineGraphicsItem(p1.x(), p1.y(), p2.x(), p2.y());
+    addToGroup(_line);
+}
+
+const QLineF MyCentroidBezierAdjustHandledGraphicsItem::line() {
+    return QLineF(startPosition().x(), startPosition().y(), endPosition().x(), endPosition().y());
+}
+
+void MyCentroidBezierAdjustHandledGraphicsItem::createStartHandle(const QPointF& center) {
+    _startControlHandle = new MyBezierControlPointHandleGraphicsItem(center);
+    connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(startPositionIsUpdated(const QPointF&)));
+    connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
+    connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
+    addToGroup(_startControlHandle);
+}
+
+void MyCentroidBezierAdjustHandledGraphicsItem::createEndHandle(const QPointF& center) {
+    _endControlHandle = new MyBezierControlPointHandleGraphicsItem(center);
+    connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(endPositionIsUpdated(const QPointF&)));
+    connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
+    connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
+    addToGroup(_endControlHandle);
+}
+
+const QPointF MyCentroidBezierAdjustHandledGraphicsItem::startPosition() {
+    return ((MyBezierControlPointHandleGraphicsItem*)_startControlHandle)->position();
+}
+
+void MyCentroidBezierAdjustHandledGraphicsItem::updateStartPosition(const QPointF& position) {
+    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(position.x(), position.y(), endPosition().x(), endPosition().y());
+    ((MyBezierControlPointHandleGraphicsItem*)_startControlHandle)->updatePosition(position);
+}
+
+const QPointF MyCentroidBezierAdjustHandledGraphicsItem::endPosition() {
+    return ((MyBezierControlPointHandleGraphicsItem*)_endControlHandle)->position();
+}
+
+void MyCentroidBezierAdjustHandledGraphicsItem::updateEndPosition(const QPointF& position) {
+    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(startPosition().x(), startPosition().y(), position.x(), position.y());
+    ((MyBezierControlPointHandleGraphicsItem*)_endControlHandle)->updatePosition(position);
 }

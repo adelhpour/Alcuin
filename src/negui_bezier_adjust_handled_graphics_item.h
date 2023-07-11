@@ -86,7 +86,7 @@ public:
     
 signals:
     
-    void adjustHandledGraphicsItemIsUpdated(const QPointF&);
+    void handlePositionIsUpdated(const QPointF&);
 
     void isPressed();
 
@@ -96,13 +96,6 @@ protected:
     QGraphicsItem* _line;
     QGraphicsItem* _controlHandle;
 
-};
-
-class MyBezierAdjustLineGraphicsItem: public QGraphicsLineItem {
-    
-public:
-    
-    MyBezierAdjustLineGraphicsItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent = nullptr);
 };
 
 #endif

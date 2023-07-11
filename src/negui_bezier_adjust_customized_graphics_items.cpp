@@ -1,4 +1,4 @@
-#include "negui_bezier_control_point_handle_graphics_item.h"
+#include "negui_bezier_adjust_customized_graphics_items.h"
 
 #include <QPen>
 #include <QCursor>
@@ -10,18 +10,24 @@ MyBezierControlPointHandleGraphicsItem::MyBezierControlPointHandleGraphicsItem(c
     setCursor(Qt::PointingHandCursor);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     _handleRadius = 2.0;
+    setPen();
+    setBrush();
 
+    updatePosition(center);
+}
+
+void MyBezierControlPointHandleGraphicsItem::setPen() {
     QPen pen;
     pen.setWidth(1.0);
     pen.setColor(QColor("#4169e1"));
-    setPen(pen);
+    QAbstractGraphicsShapeItem::setPen(pen);
+}
 
+void MyBezierControlPointHandleGraphicsItem::setBrush() {
     QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(QColor("#4169e1"));
-    setBrush(brush);
-
-    updatePosition(center);
+    QAbstractGraphicsShapeItem::setBrush(brush);
 }
 
 void MyBezierControlPointHandleGraphicsItem::updatePosition(const QPointF& center) {
@@ -45,4 +51,14 @@ void MyBezierControlPointHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseE
 void MyBezierControlPointHandleGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mouseReleaseEvent(event);
     emit isReleased();
+}
+
+//MyBezierAdjustLineGraphicsItem
+
+MyBezierAdjustLineGraphicsItem::MyBezierAdjustLineGraphicsItem(qreal x1, qreal y1, qreal x2, qreal y2, QGraphicsItem *parent) : QGraphicsLineItem(x1, y1, x2, y2, parent) {
+    QPen pen;
+    pen.setWidth(1.0);
+    pen.setColor(QColor("#4169e1"));
+    pen.setStyle(Qt::DashLine);
+    setPen(pen);
 }

@@ -29,6 +29,8 @@ public:
 signals:
 
     const QLineF askForGetBezierAdjustLine();
+
+    void bezierAdjustLineIsUpdated();
     
 public slots:
 

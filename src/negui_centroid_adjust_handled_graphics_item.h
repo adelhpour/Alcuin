@@ -14,12 +14,54 @@ public:
 
     void createBezierAdjustLineFocusedGraphicsItem(const QLineF &line);
 
-    void createBezierControlPointHandleGraphicsItem(const QPointF& point);
+signals:
+
+    void bezierAdjustLineIsUpdated(const QLineF&);
 
 protected:
     QGraphicsItem* _centroidFocusedGraphicsItem;
-    QGraphicsItem* _bezierAdjustLineFocusedGraphicsItem;
-    QGraphicsItem* _controlHandle;
+    QGraphicsItem* _centroidBezierAdjustHandledGraphicsItem;
     bool _isPressed;
 };
+
+class MyCentroidBezierAdjustHandledGraphicsItem: public QObject, public QGraphicsItemGroup {
+    Q_OBJECT
+
+public:
+
+    MyCentroidBezierAdjustHandledGraphicsItem(const QPointF& startPoint, const QPointF& endPoint, QGraphicsItem *parent = nullptr);
+
+    void createLine(const QPointF& p1, const QPointF& p2);
+
+    const QLineF line();
+
+    void createStartHandle(const QPointF& center);
+
+    void createEndHandle(const QPointF& center);
+
+    const QPointF startPosition();
+
+    void updateStartPosition(const QPointF& position);
+
+    const QPointF endPosition();
+
+    void updateEndPosition(const QPointF& position);
+
+signals:
+
+    void startPositionIsUpdated(const QPointF&);
+
+    void endPositionIsUpdated(const QPointF&);
+
+    void isPressed();
+
+    void isReleased();
+
+protected:
+    QGraphicsItem* _line;
+    QGraphicsItem* _startControlHandle;
+    QGraphicsItem* _endControlHandle;
+
+};
+
 #endif

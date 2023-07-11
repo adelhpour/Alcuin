@@ -47,7 +47,7 @@ void MyCentroidGraphicsItem::adjustOriginalPosition(const QPointF& originalPosit
 
 QGraphicsItem* MyCentroidGraphicsItem::getFocusedGraphicsItem() {
     MyCentroidAdjustHandledGraphicsItems* focusedGraphicsItem = new MyCentroidAdjustHandledGraphicsItems(getFocusedRect(), askForGetBezierAdjustLine(), zValue());
-    connect(focusedGraphicsItem, SIGNAL(lineIsUpdated(const QLineF&)), this, SLOT(updateAdjustLine(const QLineF&)));
+    connect(focusedGraphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
     return focusedGraphicsItem;
 }
 
