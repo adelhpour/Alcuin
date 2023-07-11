@@ -531,5 +531,5 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
 }
 
 void MyCentroidNode::adjustConnectedEdges(const QLineF& bezierAdjustLine) {
-    //emit controlBezierLineIsUpdated(bezierAdjustLine);
+    emit controlBezierLineIsUpdated(bezierAdjustLine);
 }

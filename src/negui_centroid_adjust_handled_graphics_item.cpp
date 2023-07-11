@@ -70,8 +70,10 @@ const QPointF MyCentroidBezierAdjustHandledGraphicsItem::startPosition() {
 }
 
 void MyCentroidBezierAdjustHandledGraphicsItem::updateStartPosition(const QPointF& position) {
-    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(position.x(), position.y(), endPosition().x(), endPosition().y());
+    QPointF newEndPosition = startPosition() + endPosition() - position;
+    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(position.x(), position.y(), newEndPosition.x(), newEndPosition.y());
     ((MyBezierControlPointHandleGraphicsItem*)_startControlHandle)->updatePosition(position);
+    ((MyBezierControlPointHandleGraphicsItem*)_endControlHandle)->updatePosition(newEndPosition);
 }
 
 const QPointF MyCentroidBezierAdjustHandledGraphicsItem::endPosition() {
@@ -79,6 +81,8 @@ const QPointF MyCentroidBezierAdjustHandledGraphicsItem::endPosition() {
 }
 
 void MyCentroidBezierAdjustHandledGraphicsItem::updateEndPosition(const QPointF& position) {
-    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(startPosition().x(), startPosition().y(), position.x(), position.y());
+    QPointF newStartPosition = startPosition() + endPosition() - position;
+    ((MyBezierAdjustLineGraphicsItem*)_line)->setLine(newStartPosition.x(), newStartPosition.y(), position.x(), position.y());
+    ((MyBezierControlPointHandleGraphicsItem*)_startControlHandle)->updatePosition(newStartPosition);
     ((MyBezierControlPointHandleGraphicsItem*)_endControlHandle)->updatePosition(position);
 }
