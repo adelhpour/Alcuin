@@ -30,7 +30,7 @@ signals:
 
     const QLineF askForGetBezierAdjustLine();
 
-    void bezierAdjustLineIsUpdated();
+    void bezierAdjustLineIsUpdated(const QLineF&);
     
 public slots:
 

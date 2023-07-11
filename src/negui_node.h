@@ -210,6 +210,8 @@ private slots:
 
     const QLineF createBezierAdjustLine();
 
+    void adjustConnectedEdges(const QLineF& bezierAdjustLine);
+
 protected:
     QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;

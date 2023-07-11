@@ -32,6 +32,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
         item = createCentroidShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
         connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
+        connect(item, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
     }
 
     return item;

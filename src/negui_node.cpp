@@ -361,6 +361,7 @@ void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
+    connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SLOT(adjustConnectedEdges(const QLineF&)));
 }
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
@@ -513,4 +514,8 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
     }
 
     return QLineF(startPoint, endPoint);
+}
+
+void MyCentroidNode::adjustConnectedEdges(const QLineF& bezierAdjustLine) {
+    //emit controlBezierLineIsUpdated(bezierAdjustLine);
 }

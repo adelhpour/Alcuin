@@ -21,6 +21,8 @@ signals:
 
     const QLineF askForGetBezierAdjustLine();
 
+    void bezierAdjustLineIsUpdated(const QLineF&);
+
 };
 
 class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {
