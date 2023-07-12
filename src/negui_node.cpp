@@ -356,7 +356,6 @@ MyNodeBase::NODE_TYPE MyCentroidNode::nodeType() {
 
 void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
-    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
     connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedBezierCurves()));
