@@ -15,8 +15,6 @@ public:
 
     QMenu* createContextMenu() override;
 
-    void connectContextMenu(QMenu* contextMenu) override;
-
 signals:
 
     const QLineF askForGetBezierAdjustLine();

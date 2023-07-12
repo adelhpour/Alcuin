@@ -45,10 +45,6 @@ QMenu* MyNodeGraphicsItemBase::createContextMenu() {
     return contextMenu;
 }
 
-void MyNodeGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
-    MyNetworkElementGraphicsItemBase::connectContextMenu(contextMenu);
-}
-
 // MyNodeSceneGraphicsItemBase
 
 MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
