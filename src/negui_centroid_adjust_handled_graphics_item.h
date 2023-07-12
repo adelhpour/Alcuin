@@ -21,7 +21,6 @@ signals:
 protected:
     QGraphicsItem* _centroidFocusedGraphicsItem;
     QGraphicsItem* _centroidBezierAdjustHandledGraphicsItem;
-    bool _isPressed;
 };
 
 class MyCentroidBezierAdjustHandledGraphicsItem: public QObject, public QGraphicsItemGroup {
@@ -52,10 +51,6 @@ signals:
     void startPositionIsUpdated(const QPointF&);
 
     void endPositionIsUpdated(const QPointF&);
-
-    void isPressed();
-
-    void isReleased();
 
 protected:
     QGraphicsItem* _line;

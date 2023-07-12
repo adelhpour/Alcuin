@@ -30,10 +30,6 @@ signals:
     
     void askForUpdateArrowHeadPlacement();
 
-    void askForUpdateConnectedEdgesToSourceNode(const QPointF&);
-
-    void askForUpdateConnectedEdgesToTargetNode(const QPointF&);
-
     void askForAdjustStartPointToControlBezierLine(const QLineF&);
 
     void askForAdjustEndPointToControlBezierLine(const QLineF&);

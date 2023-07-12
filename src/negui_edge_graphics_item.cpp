@@ -22,8 +22,6 @@ MyShapeGraphicsItemBase* MyEdgeGraphicsItemBase::createShapeGraphicsItem(MyShape
 
 void MyEdgeGraphicsItemBase::connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) {
     connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), SIGNAL(askForUpdateArrowHeadPlacement()));
-    connect(item, SIGNAL(lineControlPoint1IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)));
-    connect(item, SIGNAL(lineControlPoint2IsUpdated(const QPointF&)), this, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)));
     connect(this, SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint1ToControlBezierLine(const QLineF&)));
     connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
 }

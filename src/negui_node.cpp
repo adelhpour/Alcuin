@@ -175,11 +175,8 @@ const qint32 MyNodeBase::calculateZValue() {
 }
 
 void MyNodeBase::adjustConnectedEdges() {
-        for (MyNetworkElementBase *edge : qAsConst(edges())) {
-            ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
-            if (edges().size() > 2)
-                ((MyEdgeBase *) edge)->askForAdjustConnectedEdges(((MyEdgeBase *) edge)->middlePosition());
-        }
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
 }
 
 void MyNodeBase::read(const QJsonObject &json) {
@@ -361,7 +358,7 @@ void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
-    connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SLOT(adjustConnectedEdges(const QLineF&)));
+    connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
 }
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
@@ -381,23 +378,22 @@ const bool MyCentroidNode::isCopyable() {
 
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     MyNodeBase::addEdge(e);
-    connect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
-    connect(e, SIGNAL(askForDisconnectNodePositionFromNeighborNodes()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
     connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setConnectedElementsSelected(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
     MyNodeBase::removeEdge(e);
-    disconnect(e, SIGNAL(askForAdjustConnectedEdges(const QPointF&)), this, SLOT(adjustConnectedEdges(const QPointF&)));
-    disconnect(e, SIGNAL(askForDisconnectNodePositionFromNeighborNodes()), this, SLOT(disconnectNodePositionFromNeighborNodes()));
     disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setConnectedElementsSelected(const bool&)));
 }
 
 void MyCentroidNode::adjustNodePositionToNeighborNodes() {
     if (_doesNodePositionDependOnNeighboringNodes && edges().size()) {
         QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
         ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
+        if (edges().size() > 2)
+            emit bezierAdjustLineIsUpdated(createBezierAdjustLine());
     }
 }
 
@@ -406,86 +402,6 @@ const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         position += ((MyEdgeBase*)edge)->middlePosition();
     return position /= edges().size();
-}
-
-void MyCentroidNode::adjustConnectedEdges(const QPointF& updatedPoint) {
-    //emit controlBezierLineIsUpdated(createControlBezierLine(updatedPoint));
-}
-
-const QLineF MyCentroidNode::createControlBezierLine(const QPointF& updatedPoint) {
-    return adjustControlBezierLine(QLineF(updatedPoint, 2 * position() - updatedPoint));
-}
-
-const QLineF MyCentroidNode::adjustControlBezierLine(const QLineF& controlBezierLine) {
-    // x
-    qreal adjustedStartPointX = getAdjustControlBezierLineStartPointX(controlBezierLine);
-    qreal adjustedEndPointX = getAdjustControlBezierLineEndPointX(controlBezierLine);
-
-    qreal adjustmentLengthX = getControlBezierLineAdjustmentLengthX(adjustedStartPointX, adjustedEndPointX);
-    adjustedStartPointX -= 0.5 * adjustmentLengthX;
-    adjustedEndPointX += 0.5 * adjustmentLengthX;
-
-    // y
-    qreal adjustedStartPointY = getAdjustControlBezierLineStartPointY(controlBezierLine);
-    qreal adjustedEndPointY = getAdjustControlBezierLineEndPointY(controlBezierLine);
-
-    qreal adjustmentLengthY = getControlBezierLineAdjustmentLengthY(adjustedStartPointY, adjustedEndPointY);
-    adjustedStartPointX -= 0.5 * adjustmentLengthY;
-    adjustedEndPointX += 0.5 * adjustmentLengthY;
-
-    return QLineF(adjustedStartPointX, adjustedStartPointY, adjustedEndPointX, adjustedEndPointY);
-}
-
-const qreal MyCentroidNode::getAdjustControlBezierLineStartPointX(const QLineF& controlBezierLine) {
-    if (controlBezierLine.p1().x() < controlBezierLine.p2().x())
-        return controlBezierLine.p1().x();
-    else
-        return controlBezierLine.p2().x();
-}
-
-const qreal MyCentroidNode::getAdjustControlBezierLineEndPointX(const QLineF& controlBezierLine) {
-    if (controlBezierLine.p1().x() < controlBezierLine.p2().x())
-        return controlBezierLine.p2().x();
-    else
-        return controlBezierLine.p1().x();
-}
-
-const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX) {
-    qreal minimumLength = 5.0;
-    qreal maximumLength = 100.0;
-
-    if ((adjustedEndPointX - adjustedStartPointX) < minimumLength)
-        return minimumLength - (adjustedEndPointX - adjustedStartPointX);
-    else if ((adjustedEndPointX - adjustedStartPointX) > maximumLength)
-        return -((adjustedEndPointX - adjustedStartPointX) - maximumLength);
-
-    return 0.0;
-}
-
-const qreal MyCentroidNode::getAdjustControlBezierLineStartPointY(const QLineF& controlBezierLine) {
-    if (controlBezierLine.p1().y() < controlBezierLine.p2().y())
-        return controlBezierLine.p1().y();
-    else
-        return controlBezierLine.p2().y();
-}
-
-const qreal MyCentroidNode::getAdjustControlBezierLineEndPointY(const QLineF& controlBezierLine) {
-    if (controlBezierLine.p1().y() < controlBezierLine.p2().y())
-        return controlBezierLine.p2().y();
-    else
-        return controlBezierLine.p1().y();
-}
-
-const qreal MyCentroidNode::getControlBezierLineAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY) {
-    qreal minimumLength = 5.0;
-    qreal maximumLength = 100.0;
-
-    if ((adjustedEndPointY - adjustedStartPointY) < minimumLength)
-        return minimumLength - (adjustedEndPointY - adjustedStartPointY);
-    else if ((adjustedEndPointY - adjustedStartPointY) > maximumLength)
-        return -((adjustedEndPointY - adjustedStartPointY) - maximumLength);
-
-    return 0.0;
 }
 
 void MyCentroidNode::disconnectNodePositionFromNeighborNodes() {
@@ -503,33 +419,31 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
     QPointF endPoint = position();
     qreal dx = 0;
     qreal dy = 0;
+
     for (MyNetworkElementBase* edge : edges()) {
         QPointF controlPoint = ((MyConnectedToCentroidNodeEdgeBase*)edge)->askForConnectedToCentroidNodeControlPoint();
+        qreal maximumAllowedLengthChange = 40.0;
         if (controlPoint.x() < startPoint.x()) {
-            dx = startPoint.x() - controlPoint.x();
+            dx = qMin(startPoint.x() - controlPoint.x(), maximumAllowedLengthChange);
             startPoint.setX(startPoint.x() - dx);
             endPoint.setX(endPoint.x() + dx);
         }
         if (controlPoint.y() < startPoint.y()) {
-            dy = startPoint.y() - controlPoint.y();
+            dy = qMin(startPoint.y() - controlPoint.y(), maximumAllowedLengthChange);
             startPoint.setY(startPoint.y() - dy);
             endPoint.setY(endPoint.y() + dy);
         }
         if (controlPoint.x() > endPoint.x()) {
-            dx = controlPoint.x() - endPoint.x();
+            dx = qMin(controlPoint.x() - endPoint.x(), maximumAllowedLengthChange);
             startPoint.setX(startPoint.x() - dx);
             endPoint.setX(endPoint.x() + dx);
         }
         if (controlPoint.y() > endPoint.y()) {
-            dy = controlPoint.y() - endPoint.y();
+            dy = qMin(controlPoint.y() - endPoint.y(), maximumAllowedLengthChange);
             startPoint.setY(startPoint.y() - dy);
             endPoint.setY(endPoint.y() + dy);
         }
     }
 
     return QLineF(startPoint, endPoint);
-}
-
-void MyCentroidNode::adjustConnectedEdges(const QLineF& bezierAdjustLine) {
-    emit controlBezierLineIsUpdated(bezierAdjustLine);
 }

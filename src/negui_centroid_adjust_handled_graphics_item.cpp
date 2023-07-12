@@ -8,7 +8,6 @@ MyCentroidAdjustHandledGraphicsItems::MyCentroidAdjustHandledGraphicsItems(const
     setZValue(zValue + 1);
     createCentroidFocusedGraphicsItem(rect);
     createBezierAdjustLineFocusedGraphicsItem(line);
-    _isPressed = false;
 }
 
 void MyCentroidAdjustHandledGraphicsItems::createCentroidFocusedGraphicsItem(const QRectF &rect) {
@@ -26,8 +25,6 @@ void MyCentroidAdjustHandledGraphicsItems::createBezierAdjustLineFocusedGraphics
     connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::endPositionIsUpdated, this, [this] (const QPointF& endPosition) {
         ((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->updateEndPosition(endPosition);
         emit bezierAdjustLineIsUpdated(((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem)->line()); });
-    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::isPressed, this, [this] () { _isPressed = true; });
-    connect((MyCentroidBezierAdjustHandledGraphicsItem*)_centroidBezierAdjustHandledGraphicsItem, &MyCentroidBezierAdjustHandledGraphicsItem::isReleased, this, [this] () { _isPressed = false; });
     addToGroup(_centroidBezierAdjustHandledGraphicsItem);
 }
 
@@ -52,16 +49,12 @@ const QLineF MyCentroidBezierAdjustHandledGraphicsItem::line() {
 void MyCentroidBezierAdjustHandledGraphicsItem::createStartHandle(const QPointF& center) {
     _startControlHandle = new MyBezierControlPointHandleGraphicsItem(center);
     connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(startPositionIsUpdated(const QPointF&)));
-    connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
-    connect((MyBezierControlPointHandleGraphicsItem*)_startControlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
     addToGroup(_startControlHandle);
 }
 
 void MyCentroidBezierAdjustHandledGraphicsItem::createEndHandle(const QPointF& center) {
     _endControlHandle = new MyBezierControlPointHandleGraphicsItem(center);
     connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(positionChanged(const QPointF&)), this, SIGNAL(endPositionIsUpdated(const QPointF&)));
-    connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(isPressed()), this, SIGNAL(isPressed()));
-    connect((MyBezierControlPointHandleGraphicsItem*)_endControlHandle, SIGNAL(isReleased()), this, SIGNAL(isReleased()));
     addToGroup(_endControlHandle);
 }
 

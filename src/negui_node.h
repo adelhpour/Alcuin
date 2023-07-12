@@ -176,41 +176,21 @@ public:
     // remove from edges
     void removeEdge(MyNetworkElementBase* e) override;
 
-    const QLineF createControlBezierLine(const QPointF& updatedPoint);
-
     const QPointF getNodeUpdatedPositionUsingConnectedEdges();
-
-    const QLineF adjustControlBezierLine(const QLineF& controlBezierLine);
-
-    const qreal getAdjustControlBezierLineStartPointX(const QLineF& controlBezierLine);
-
-    const qreal getAdjustControlBezierLineEndPointX(const QLineF& controlBezierLine);
-
-    const qreal getControlBezierLineAdjustmentLengthX(const qreal& adjustedStartPointX, const qreal& adjustedEndPointX);
-
-    const qreal getAdjustControlBezierLineStartPointY(const QLineF& controlBezierLine);
-
-    const qreal getAdjustControlBezierLineEndPointY(const QLineF& controlBezierLine);
-
-    const qreal getControlBezierLineAdjustmentLengthY(const qreal& adjustedStartPointY, const qreal& adjustedEndPointY);
 
 signals:
 
-    void controlBezierLineIsUpdated(const QLineF&);
+    void bezierAdjustLineIsUpdated(const QLineF&);
 
 private slots:
 
     void adjustNodePositionToNeighborNodes();
-
-    void adjustConnectedEdges(const QPointF&);
 
     void disconnectNodePositionFromNeighborNodes();
 
     void setConnectedElementsSelected(const bool& isSelected);
 
     const QLineF createBezierAdjustLine();
-
-    void adjustConnectedEdges(const QLineF& bezierAdjustLine);
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;

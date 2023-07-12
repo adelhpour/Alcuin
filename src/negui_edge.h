@@ -82,15 +82,10 @@ public:
 public slots:
 
     void setSelected(const bool& selected) override;
-
-    void adjustConnectedEdgesToSourceNode(const QPointF& updatedSourcePoint);
-
-    void adjustConnectedEdgesToTargetNode(const QPointF& updatedTargetPoint);
     
     void updateArrowHeadPlacement();
 
 signals:
-    void askForAdjustConnectedEdges(const QPointF&);
 
     void askForAdjustNodePositionToNeighborNodes();
 

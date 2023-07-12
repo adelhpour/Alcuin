@@ -30,8 +30,6 @@ MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
 void MyEdgeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToSourceNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToSourceNode(const QPointF&)));
-    connect(_graphicsItem, SIGNAL(askForUpdateConnectedEdgesToTargetNode(const QPointF&)), this, SLOT(adjustConnectedEdgesToTargetNode(const QPointF&)));
     connect(_graphicsItem, SIGNAL(askForSetConnectedElementsFocused(const bool&)), this, SIGNAL(askForSetConnectedElementsSelected(const bool&)));
 }
 
@@ -39,14 +37,14 @@ void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
     _sourceNode = sourceNode;
     ((MyNodeBase*)_sourceNode)->addEdge(this);
     if (((MyNodeBase*)_sourceNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_sourceNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)));
+        connect(_sourceNode, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustStartPointToControlBezierLine(const QLineF&)));
 }
 
 void MyEdgeBase::setTargetNode(MyNetworkElementBase* targetNode) {
     _targetNode = targetNode;
     ((MyNodeBase*)_targetNode)->addEdge(this);
     if (((MyNodeBase*)_targetNode)->nodeType() == MyNodeBase::CENTROID_NODE)
-        connect(_targetNode, SIGNAL(controlBezierLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)));
+        connect(_targetNode, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), graphicsItem(), SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)));
 }
 
 MyNetworkElementBase* MyEdgeBase::sourceNode() {
@@ -130,20 +128,6 @@ void MyEdgeBase::updatePoints() {
     ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
     emit updateArrowHeadPlacement();
-}
-
-void MyEdgeBase::adjustConnectedEdgesToSourceNode(const QPointF& updatedSourcePoint) {
-    if (((MyNodeBase*)sourceNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
-        emit askForAdjustConnectedEdges(updatedSourcePoint);
-        emit askForDisconnectNodePositionFromNeighborNodes();
-    }
-}
-
-void MyEdgeBase::adjustConnectedEdgesToTargetNode(const QPointF& updatedTargetPoint) {
-    if (((MyNodeBase*)targetNode())->nodeType() == MyNodeBase::CENTROID_NODE) {
-        emit askForAdjustConnectedEdges(updatedTargetPoint);
-        emit askForDisconnectNodePositionFromNeighborNodes();
-    }
 }
 
 void MyEdgeBase::updateArrowHeadPlacement() {
