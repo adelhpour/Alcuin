@@ -188,6 +188,8 @@ private slots:
 
     void adjustNodePositionToNeighborNodes();
 
+    void adjustConnectedBezierCurves();
+
     void disconnectNodePositionFromNeighborNodes();
 
     void setConnectedElementsSelected(const bool& isSelected);
