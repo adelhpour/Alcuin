@@ -178,6 +178,8 @@ public:
 
     const QPointF getNodeUpdatedPositionUsingConnectedEdges();
 
+    const bool connectedBezierCurvesNeedsToBeAdjusted();
+
 signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);

@@ -392,9 +392,16 @@ void MyCentroidNode::adjustNodePositionToNeighborNodes() {
     if (_doesNodePositionDependOnNeighboringNodes && edges().size()) {
         QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
         ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
-        if (edges().size() > 2)
+        if (connectedBezierCurvesNeedsToBeAdjusted())
             emit bezierAdjustLineIsUpdated(createBezierAdjustLine());
     }
+}
+
+const bool MyCentroidNode::connectedBezierCurvesNeedsToBeAdjusted() {
+    if (edges().size() > 2)
+        return true;
+
+    return false;
 }
 
 const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
