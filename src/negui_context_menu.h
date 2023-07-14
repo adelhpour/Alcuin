@@ -69,12 +69,28 @@ signals:
     void askForDeleteNetworkElement();
 };
 
-class MyNodeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
+class MyNodeGraphicsItemContextMenuBase : public MyGraphicsItemContextMenuBase {
     Q_OBJECT
 
 public:
 
-    MyNodeGraphicsItemContextMenu(QWidget *parent = nullptr);
+    MyNodeGraphicsItemContextMenuBase(QWidget *parent = nullptr);
+};
+
+class MyCentroidNodeGraphicsItemContextMenu : public MyNodeGraphicsItemContextMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyCentroidNodeGraphicsItemContextMenu(QWidget *parent = nullptr);
+
+    void initializeActionsStatus() override;
+
+signals:
+
+    const bool askForWhetherNodePositionIsConnectedToNeighborNodes();
+
+    void askForConnectNodePositionToNeighborNodes(const bool&);
 };
 
 class MyEdgeGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {

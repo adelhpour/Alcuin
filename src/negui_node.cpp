@@ -345,7 +345,7 @@ QWidget* MyClassicNode::getFeatureMenu() {
 // MyCentroidNode
 
 MyCentroidNode::MyCentroidNode(const QString& name, const qreal& x, const qreal& y) : MyNodeBase(name, x, y) {
-    _doesNodePositionDependOnNeighboringNodes = true;
+    _isNodePositionConnectedToNeighborNodes = true;
     _graphicsItem = createGraphicsItem(position());
     connectGraphicsItem();
 }
@@ -359,6 +359,8 @@ void MyCentroidNode::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
     connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedBezierCurves()));
+    connect(_graphicsItem, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)), this, SLOT(connectNodePositionToNeighborNodes(const bool&)));
+    connect(_graphicsItem, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()), this, SLOT(isNodePositionConnectedToNeighborNodes()));
 }
 
 MyNetworkElementGraphicsItemBase* MyCentroidNode::createGraphicsItem(const QPointF &position) {
@@ -389,7 +391,7 @@ void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
 }
 
 void MyCentroidNode::adjustNodePositionToNeighborNodes() {
-    if (_doesNodePositionDependOnNeighboringNodes && edges().size()) {
+    if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
         QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
         ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
         adjustConnectedBezierCurves();
@@ -415,8 +417,12 @@ const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     return position /= edges().size();
 }
 
-void MyCentroidNode::disconnectNodePositionFromNeighborNodes() {
-    _doesNodePositionDependOnNeighboringNodes = false;
+const bool MyCentroidNode::isNodePositionConnectedToNeighborNodes() {
+    return _isNodePositionConnectedToNeighborNodes;
+}
+
+void MyCentroidNode::connectNodePositionToNeighborNodes(const bool& connected) {
+    _isNodePositionConnectedToNeighborNodes = connected;
 }
 
 void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {

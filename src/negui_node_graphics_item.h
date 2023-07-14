@@ -15,6 +15,8 @@ public:
 
     QMenu* createContextMenu() override;
 
+    virtual QMenu* createContextMenuObject();
+
 signals:
 
     const QLineF askForGetBezierAdjustLine();
@@ -101,7 +103,17 @@ public:
 
     MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    QMenu* createContextMenuObject() override;
+
+    void connectContextMenu(QMenu* contextMenu) override;
+
     void setFocused(const bool& isFocused) override;
+
+signals:
+
+    void askForConnectNodePositionToNeighborNodes(const bool&);
+
+    const bool askForWhetherNodePositionIsConnectedToNeighborNodes();
 
 protected:
 

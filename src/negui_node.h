@@ -190,7 +190,9 @@ private slots:
 
     void adjustConnectedBezierCurves();
 
-    void disconnectNodePositionFromNeighborNodes();
+    const bool isNodePositionConnectedToNeighborNodes();
+
+    void connectNodePositionToNeighborNodes(const bool& connected);
 
     void setConnectedElementsSelected(const bool& isSelected);
 
@@ -199,7 +201,7 @@ private slots:
 protected:
     QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
-    bool _doesNodePositionDependOnNeighboringNodes;
+    bool _isNodePositionConnectedToNeighborNodes;
 };
 
 #endif

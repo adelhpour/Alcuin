@@ -39,10 +39,14 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
 }
 
 QMenu* MyNodeGraphicsItemBase::createContextMenu() {
-    QMenu* contextMenu = new MyNodeGraphicsItemContextMenu();
+    QMenu* contextMenu = createContextMenuObject();
     connectContextMenu(contextMenu);
     ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
     return contextMenu;
+}
+
+QMenu* MyNodeGraphicsItemBase::createContextMenuObject() {
+    return new MyNodeGraphicsItemContextMenuBase();
 }
 
 // MyNodeSceneGraphicsItemBase
@@ -201,6 +205,16 @@ void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent 
 
 MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
     setAcceptHoverEvents(true);
+}
+
+QMenu* MyCentroidNodeSceneGraphicsItem::createContextMenuObject() {
+    return new MyCentroidNodeGraphicsItemContextMenu();
+}
+
+void MyCentroidNodeSceneGraphicsItem::connectContextMenu(QMenu* contextMenu) {
+    MyNetworkElementGraphicsItemBase::connectContextMenu(contextMenu);
+    connect(contextMenu, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)), this, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)));
+    connect(contextMenu, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()), this, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()));
 }
 
 void MyCentroidNodeSceneGraphicsItem::setFocused(const bool& isFocused) {

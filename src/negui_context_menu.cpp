@@ -1,4 +1,5 @@
 #include "negui_context_menu.h"
+#include "negui_customized_context_menu_widgets.h"
 
 // MyContextMenuBase
 
@@ -51,14 +52,30 @@ void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
         setActionEnabled("Paste", false);
 }
 
-// MyNodeGraphicsItemContextMenu
+// MyNodeGraphicsItemContextMenuBase
 
-MyNodeGraphicsItemContextMenu::MyNodeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
+MyNodeGraphicsItemContextMenuBase::MyNodeGraphicsItemContextMenuBase(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElement()));
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutNetworkElement()));
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
+}
+
+// MyCentroidNodeGraphicsItemContextMenu
+
+MyCentroidNodeGraphicsItemContextMenu::MyCentroidNodeGraphicsItemContextMenu(QWidget *parent) : MyNodeGraphicsItemContextMenuBase(parent) {
+    QAction* lockPositionAction = new MyCheckableAction("Independent Position");
+    addAction(lockPositionAction);
+    connect(lockPositionAction, &QAction::triggered, this, [this, lockPositionAction] () { emit askForConnectNodePositionToNeighborNodes(!lockPositionAction->isChecked()); });
+}
+
+void MyCentroidNodeGraphicsItemContextMenu::initializeActionsStatus() {
+    MyContextMenuBase::initializeActionsStatus();
+    for (QAction* action : actions()) {
+        if (action->text() == "Independent Position")
+            action->setChecked(!askForWhetherNodePositionIsConnectedToNeighborNodes());
+    }
 }
 
 // MyEdgeGraphicsItemContextMenu
