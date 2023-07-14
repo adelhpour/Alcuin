@@ -7,8 +7,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QMainWindow mainWindow;
     mainWindow.setCentralWidget(MyNetworkEditorWidget_new(&mainWindow));
-    if (mainWindow.centralWidget())
-        mainWindow.setGeometry(mainWindow.centralWidget()->geometry());
+    mainWindow.setGeometry(mainWindow.centralWidget()->geometry());
     mainWindow.show();
     return a.exec();
 }
