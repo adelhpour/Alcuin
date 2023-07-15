@@ -29,9 +29,10 @@ def loadJson(filename):
     
 
 def loadSBML(filename):
-    sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromSBMLModel()
-    sbml_graph_info.extract_info(filename)
-    networ_editor_json = sbmlplot.SBMLGraphInfoExportToNetworkEditor()
-    networ_editor_json.extract_graph_info(sbml_graph_info)
-    graph_info = networ_editor_json.export()
-    return json.dumps(graph_info)
+    network_info_import_from_sbml_model = sbmlplot.NetworkInfoImportFromSBMLModel()
+    print(filename)
+    network_info_import_from_sbml_model.extract_info(filename)
+    network_info_export_to_network_editor = sbmlplot.NetworkInfoExportToNetworkEditor()
+    network_info_export_to_network_editor.extract_graph_info(sbml_graph_info)
+    network_info = network_info_export_to_network_editor.export()
+    return json.dumps(network_info)
