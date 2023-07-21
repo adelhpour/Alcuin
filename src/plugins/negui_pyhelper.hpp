@@ -3,11 +3,20 @@
 #pragma once
 
 #include <Python.h>
+#include "iostream"
 
 class CPyInstance {
 public:
-    CPyInstance()
+    CPyInstance(const char* appPath)
     {
+
+#if EMBEDDABLE_PYTHON_DEVS_ARE_USED
+        std::string pythonVersion = std::to_string(EMBEDDABLE_PYTHON_DEVS_VERSION_MAJOR) + "." + std::to_string(EMBEDDABLE_PYTHON_DEVS_VERSION_MINOR);
+        std::string pythonHomeDirectory = std::string(appPath) + "/../Frameworks/Python.framework/Versions/" + pythonVersion;
+        std::wstring ws(pythonHomeDirectory.begin(), pythonHomeDirectory.end());
+        Py_SetPythonHome(ws.c_str());
+#endif
+
         Py_Initialize();
     }
 
@@ -16,20 +25,20 @@ public:
         Py_Finalize();
     }
     
-    void appendPath(const char* path) {
-        PyList_Append(PySys_GetObject("path"), PyUnicode_FromString(path));
+    void appendPath(const char* pluginsPath) {
+        PyList_Append(PySys_GetObject("path"), PyUnicode_FromString(pluginsPath));
     }
     
     PyObject* importModule(const char* module) {
         return PyImport_Import(PyUnicode_FromString(module));
     }
     
-    bool runFile(const char* path) {
-        FILE* fp = fopen(path, "r" );
+    bool runFile(const char* pluginsPath) {
+        FILE* fp = fopen(pluginsPath, "r" );
         if ( fp == NULL )
             return false;
         
-        int re = PyRun_SimpleFile(fp, path);
+        int re = PyRun_SimpleFile(fp, pluginsPath);
         fclose( fp );
 
         return (re == 0);
