@@ -7,13 +7,12 @@ class DataExportPlugin : public QObject, DataExportInterface {
     Q_INTERFACES(DataExportInterface)
 
 public:
-    int initialize(const QString &path) override;
+    int initialize(const QString &appPath, const QString &pluginsPath) override;
     const QJsonObject loadItemsInfo() override;
     void writeGraphInfoToFile(const QJsonObject& graphInfoObject, const QString& fileName, const QString& fileType) override;
     const QJsonObject checkForGraphInfoCompatibiliy(const QJsonObject& graphInfoObject, const QString& fileType) override;
     
 protected:
-    QString _path;
     CPyInstance* _pyInstance;
     CPyObject _script;
 };

@@ -23,27 +23,27 @@ public:
     void readPluginItemsInfo(const QJsonObject &json);
     
     // import interface
-    bool setImportInterface(ImportInterface* importInterface, const QString &path);
+    bool setImportInterface(ImportInterface* importInterface, const QString &appPath, const QString &pluginsPath);
     ImportInterface* importInterface();
     const bool isSetImportInterface() const { return _isSetImportInterface; }
     
     // data export interface
-    bool setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path);
+    bool setDataExportInterface(DataExportInterface* dataExportInterface, const QString &appPath, const QString &pluginsPath);
     DataExportInterface* dataExportInterface();
     const bool isSetDataExportInterface() const { return _isSetDataExportInterface; }
     
     // print export interface
-    bool setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path);
+    bool setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &appPath, const QString &pluginsPath);
     PrintExportInterface* printExportInterface();
     const bool isSetPrintExportInterface() const { return _isSetPrintExportInterface; }
     
     // element style interface
-    bool setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &path);
+    bool setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath);
     ElementStyleInterface* elementStyleInterface();
     const bool isSetElementStyleInterface() const { return _isSetElementStyleInterface; }
     
     // autolayout interface
-    bool setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path);
+    bool setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &appPath, const QString &pluginsPath);
     AutoLayoutInterface* autoLayoutInterface();
     const bool isSetAutoLayoutInterface() const { return _isSetAutoLayoutInterface; }
 

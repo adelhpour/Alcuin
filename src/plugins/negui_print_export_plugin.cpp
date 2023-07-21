@@ -1,10 +1,9 @@
 #include "negui_print_export_plugin.h"
 #include <QJsonDocument>
 
-int PrintExportPlugin::initialize(const QString &path) {
-    _path = path;
-    _pyInstance = new CPyInstance();
-    _pyInstance->appendPath(_path.toStdString().c_str());
+int PrintExportPlugin::initialize(const QString &appPath, const QString &pluginsPath) {
+    _pyInstance = new CPyInstance(appPath.toStdString().c_str());
+    _pyInstance->appendPath(pluginsPath.toStdString().c_str());
     _script.setObject(_pyInstance->importModule("negui_print_export_plugin"));
     if (_script)
         return 0;

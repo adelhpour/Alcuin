@@ -8,7 +8,7 @@
 class InterfaceBase {
 public:
     virtual ~InterfaceBase() = default;
-    virtual int initialize(const QString &path) = 0;
+    virtual int initialize(const QString &appPath, const QString &pluginsPath) = 0;
     virtual const QJsonObject loadItemsInfo() = 0;
 };
 

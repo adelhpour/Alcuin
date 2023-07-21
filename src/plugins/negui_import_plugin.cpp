@@ -1,10 +1,9 @@
 #include "negui_import_plugin.h"
 #include <QJsonDocument>
 
-int ImportPlugin::initialize(const QString &path) {
-    _path = path;
-    _pyInstance = new CPyInstance();
-    _pyInstance->appendPath(_path.toStdString().c_str());
+int ImportPlugin::initialize(const QString &appPath, const QString &pluginsPath) {
+    _pyInstance = new CPyInstance(appPath.toStdString().c_str());
+    _pyInstance->appendPath(pluginsPath.toStdString().c_str());
     _script.setObject(_pyInstance->importModule("negui_import_plugin"));
     if (_script)
         return 0;

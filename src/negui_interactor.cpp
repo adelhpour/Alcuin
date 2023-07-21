@@ -75,10 +75,10 @@ void MyInteractor::readPluginItemsInfo(const QJsonObject &json) {
     }
 }
 
-bool MyInteractor::setImportInterface(ImportInterface* importInterface, const QString &path) {
+bool MyInteractor::setImportInterface(ImportInterface* importInterface, const QString &appPath, const QString &pluginsPath) {
     if (importInterface) {
         _importInterface = importInterface;
-        if (!_importInterface->initialize(path)) {
+        if (!_importInterface->initialize(appPath, pluginsPath)) {
             readPluginItemsInfo(_importInterface->loadItemsInfo());
             _isSetImportInterface = true;
         }
@@ -91,10 +91,10 @@ ImportInterface* MyInteractor::importInterface() {
     return _importInterface;
 }
 
-bool MyInteractor::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &path) {
+bool MyInteractor::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &appPath, const QString &pluginsPath) {
     if (dataExportInterface) {
         _dataExportInterface = dataExportInterface;
-        if (!_dataExportInterface->initialize(path)) {
+        if (!_dataExportInterface->initialize(appPath, pluginsPath)) {
             readPluginItemsInfo(_dataExportInterface->loadItemsInfo());
             _isSetDataExportInterface = true;
         }
@@ -107,10 +107,10 @@ DataExportInterface* MyInteractor::dataExportInterface() {
     return _dataExportInterface;
 }
 
-bool MyInteractor::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &path) {
+bool MyInteractor::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &appPath, const QString &pluginsPath) {
     if (printExportInterface) {
         _printExportInterface = printExportInterface;
-        if (!_printExportInterface->initialize(path)) {
+        if (!_printExportInterface->initialize(appPath, pluginsPath)) {
             readPluginItemsInfo(_printExportInterface->loadItemsInfo());
             _isSetPrintExportInterface = true;
         }
@@ -127,10 +127,10 @@ QList<MyPluginItemBase*>& MyInteractor::plugins() {
     return _plugins;
 }
 
-bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &path) {
+bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
     if (elementStyleInterface) {
         _elementStyleInterface = elementStyleInterface;
-        if (!_elementStyleInterface->initialize(path)) {
+        if (!_elementStyleInterface->initialize(appPath, pluginsPath)) {
             readPluginItemsInfo(_elementStyleInterface->loadItemsInfo());
             _isSetElementStyleInterface = true;
         }
@@ -143,10 +143,10 @@ ElementStyleInterface* MyInteractor::elementStyleInterface() {
     return _elementStyleInterface;
 }
 
-bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &path) {
+bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &appPath, const QString &pluginsPath) {
     if (autoLayoutInterface) {
         _autoLayoutInterface = autoLayoutInterface;
-        if (!_autoLayoutInterface->initialize(path)) {
+        if (!_autoLayoutInterface->initialize(appPath, pluginsPath)) {
             readPluginItemsInfo(_autoLayoutInterface->loadItemsInfo());
             _isSetAutoLayoutInterface = true;
         }
@@ -912,7 +912,8 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
 }
 
 void MyInteractor::loadPlugins() {
-    QDir pluginsDir(QCoreApplication::applicationDirPath());
+    QDir appDir(QCoreApplication::applicationDirPath());
+    QDir pluginsDir = appDir;
 #if defined(Q_OS_WIN)
     if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
         pluginsDir.cdUp();
@@ -928,19 +929,19 @@ void MyInteractor::loadPlugins() {
         if (plugin) {
             // import interface
             if (qobject_cast<ImportInterface *>(plugin))
-                setImportInterface(qobject_cast<ImportInterface *>(plugin), pluginsDir.path());
+                setImportInterface(qobject_cast<ImportInterface *>(plugin), appDir.path(), pluginsDir.path());
             // data export interface
             else if (qobject_cast<DataExportInterface *>(plugin))
-                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), pluginsDir.path());
+                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), appDir.path(), pluginsDir.path());
             // print export interface
             else if (qobject_cast<PrintExportInterface *>(plugin))
-                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), pluginsDir.path());
+                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), appDir.path(), pluginsDir.path());
             // element style interface
             else if (qobject_cast<ElementStyleInterface *>(plugin))
-                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), pluginsDir.path());
+                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), appDir.path(), pluginsDir.path());
             // auto layout interface
             else if (qobject_cast<AutoLayoutInterface *>(plugin))
-                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), pluginsDir.path());
+                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), appDir.path(), pluginsDir.path());
         }
     }
 }

@@ -7,12 +7,11 @@ class ImportPlugin : public QObject, ImportInterface {
     Q_INTERFACES(ImportInterface)
 
 public:
-    int initialize(const QString &path) override;
+    int initialize(const QString &appPath, const QString &pluginsPath) override;
     const QJsonObject loadItemsInfo() override;
     const QJsonObject readGraphInfoFromFile(const QString& fileName, const QString& fileType) override;
     
 protected:
-    QString _path;
     CPyInstance* _pyInstance;
     CPyObject _script;
 };

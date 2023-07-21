@@ -1,10 +1,9 @@
 #include "negui_element_style_plugin.h"
 #include <QJsonDocument>
 
-int ElementStylePlugin::initialize(const QString &path) {
-    _path = path;
-    _pyInstance = new CPyInstance();
-    _pyInstance->appendPath(_path.toStdString().c_str());
+int ElementStylePlugin::initialize(const QString &appPath, const QString &pluginsPath) {
+    _pyInstance = new CPyInstance(appPath.toStdString().c_str());
+    _pyInstance->appendPath(pluginsPath.toStdString().c_str());
     _script.setObject(_pyInstance->importModule("negui_element_style_plugin"));
     if (_script)
         return 0;

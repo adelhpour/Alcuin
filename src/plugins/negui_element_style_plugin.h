@@ -7,11 +7,10 @@ class ElementStylePlugin : public QObject, ElementStyleInterface {
     Q_INTERFACES(ElementStyleInterface)
 
 public:
-    int initialize(const QString &path) override;
+    int initialize(const QString &appPath, const QString &pluginsPath) override;
     const QJsonObject loadItemsInfo() override;
     
 protected:
-    QString _path;
     CPyInstance* _pyInstance;
     CPyObject _script;
 };
