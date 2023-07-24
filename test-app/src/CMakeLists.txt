@@ -15,7 +15,7 @@ target_include_directories(NetworkEditorGUITestApp PUBLIC
 ## link libraries
 target_link_libraries(NetworkEditorGUITestApp
 	Qt5::Core
-	Qt5::Gui 
+	Qt5::Gui
 	Qt5::Widgets
 	Qt5::PrintSupport
 	${NETWORKEDITORGUI_LIBS})
@@ -77,6 +77,8 @@ elseif (UNIX)
 elseif (WIN32)
 	## install the dependencies
 	install(FILES ${NETWORKEDITORGUI_DLLS} DESTINATION bin COMPONENT networkeditor_gui_test_app)
+	install(FILES ${NETWORKEDITORGUI_PLUGINS_DLLS} DESTINATION bin/plugins COMPONENT networkeditor_gui_test_app)
+	install(FILES ${PY_SCRIPTS} DESTINATION bin/plugins COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui>          $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
