@@ -69,6 +69,10 @@ signals:
     void askForDeleteNetworkElement();
     const bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
+
+public slots:
+
+    void displayContextMenu(const QPoint& position);
     
 protected:
     
@@ -77,8 +81,6 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     
     QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;

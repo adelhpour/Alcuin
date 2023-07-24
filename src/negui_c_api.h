@@ -5,17 +5,14 @@
 
 extern "C" {
 
-typedef struct NEGUI_LIB_EXPORT QWidget QWidget;
+NEGUI_LIB_EXPORT QWidget* createNetworkEditorWidget(QWidget* parent = NULL);
 
-typedef struct NEGUI_LIB_EXPORT MyNetworkEditorWidget MyNetworkEditorWidget;
+NEGUI_LIB_EXPORT void deleteNetworkEditorWidget(QWidget* networkEditorWidget);
 
-NEGUI_LIB_EXPORT MyNetworkEditorWidget* MyNetworkEditorWidget_new(QWidget* parent = NULL);
+NEGUI_LIB_EXPORT void setGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget, const char* graphInfo);
 
-NEGUI_LIB_EXPORT void MyNetworkEditorWidget_delete(MyNetworkEditorWidget* myNetworkEditorWidget);
+NEGUI_LIB_EXPORT const char* getGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget);
 
-NEGUI_LIB_EXPORT void MyNetworkEditorWidget_setGraphInfo(MyNetworkEditorWidget* myNetworkEditorWidget, const char* graphInfo);
-
-NEGUI_LIB_EXPORT const char* MyNetworkEditorWidget_graphInfo(MyNetworkEditorWidget* myNetworkEditorWidget);
 }
 
 #endif
