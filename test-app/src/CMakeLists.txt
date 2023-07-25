@@ -92,7 +92,7 @@ elseif (WIN32)
 	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui>          $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
-	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources ${CMAKE_INSTALL_PREFIX}/resources)
+	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
 	## install the executable
 	install(TARGETS NetworkEditorGUITestApp DESTINATION bin COMPONENT networkeditor_gui_test_app)
