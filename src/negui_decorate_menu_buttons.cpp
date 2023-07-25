@@ -6,61 +6,61 @@
 void decorateImportButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Open");
     button->setToolTip("Open");
-    setIcon(button, iconsDirectory + "/folder.svg");
+    setIcon(button, iconsDirectory + "/open.png");
 }
 
 void decorateExportButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("SaveAs");
     button->setToolTip("SaveAs");
-    setIcon(button, iconsDirectory + "/share.svg");
+    setIcon(button, iconsDirectory + "/saveAs.png");
 }
 
 void decorateSaveButton(QToolButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::Save, button, SLOT(click()));
     button->setText("Save");
     button->setToolTip("Save");
-    setIcon(button, iconsDirectory + "/save.svg");
+    setIcon(button, iconsDirectory + "/save.png");
 }
 
 void decorateAutoLayoutButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("AutoLayout");
     button->setToolTip("AutoLayout");
-    setIcon(button, iconsDirectory + "/share-2.svg");
+    setIcon(button, iconsDirectory + "/autoLayout.png");
 }
 
 void decorateUndoActionButton(QToolButton* button, const QString& iconsDirectory) {
     button->setShortcut(QKeySequence::Undo);
-    setIcon(button, iconsDirectory + "/rotate-ccw.svg");
+    setIcon(button, iconsDirectory + "/undo.png");
 }
 
 void decorateRedoActionButton(QToolButton* button, const QString& iconsDirectory) {
     button->setShortcut(QKeySequence::Redo);
-    setIcon(button, iconsDirectory + "/rotate-cw.svg");
+    setIcon(button, iconsDirectory + "/redo.png");
 }
 
 void decorateResetSceneButton(QToolButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
     button->setText("New");
     button->setToolTip("New");
-    setIcon(button, iconsDirectory + "/file.svg");
+    setIcon(button, iconsDirectory + "/new.png");
 }
 
 void decorateNormalModeButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Normal Mode");
     button->setToolTip("Set the scene mode to the normal mode");
-    setIcon(button, iconsDirectory + "/mouse-pointer.svg");
+    setIcon(button, iconsDirectory + "/normal.png");
 }
 
 void decorateZoomInButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Zoom In");
     button->setToolTip("Zooming in");
-    setIcon(button, iconsDirectory + "/zoom-in.svg");
+    setIcon(button, iconsDirectory + "/zoomIn.png");
 }
 
 void decorateZoomOutButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Zoom Out");
     button->setToolTip("Zooming out");
-    setIcon(button, iconsDirectory + "/zoom-out.svg");
+    setIcon(button, iconsDirectory + "/zoomOut.png");
 }
 
 QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& iconsDirectory) {
@@ -74,7 +74,7 @@ QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& i
 }
 
 void decorateAddModeButton(QToolButton* button, const QString& iconsDirectory) {
-    QPixmap pixmap(iconsDirectory + "/plus-square.svg");
+    QPixmap pixmap(iconsDirectory + "/add.png");
     QIcon buttonIcon(pixmap);
     button->setIcon(buttonIcon);
     button->setIconSize(pixmap.rect().size());
@@ -98,7 +98,8 @@ QWidgetAction* createButtonWidgetAction(QToolButton* button, QWidget* parent) {
 }
 
 void setIcon(QToolButton* button, const QString& iconPath) {
-    QPixmap pixmap(iconPath);
+    QPixmap pixmap;
+    pixmap.load(iconPath);
     QIcon buttonIcon(pixmap);
     button->setIcon(buttonIcon);
     button->setIconSize(pixmap.rect().size());
