@@ -3,78 +3,78 @@
 
 #include <QShortcut>
 
-void decorateImportButton(QToolButton* button) {
+void decorateImportButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Open");
     button->setToolTip("Open");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/folder.svg");
+    setIcon(button, iconsDirectory + "/folder.svg");
 }
 
-void decorateExportButton(QToolButton* button) {
+void decorateExportButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("SaveAs");
     button->setToolTip("SaveAs");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/share.svg");
+    setIcon(button, iconsDirectory + "/share.svg");
 }
 
-void decorateSaveButton(QToolButton* button) {
+void decorateSaveButton(QToolButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::Save, button, SLOT(click()));
     button->setText("Save");
     button->setToolTip("Save");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/save.svg");
+    setIcon(button, iconsDirectory + "/save.svg");
 }
 
-void decorateAutoLayoutButton(QToolButton* button) {
+void decorateAutoLayoutButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("AutoLayout");
     button->setToolTip("AutoLayout");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/share-2.svg");
+    setIcon(button, iconsDirectory + "/share-2.svg");
 }
 
-void decorateUndoActionButton(QToolButton* button) {
+void decorateUndoActionButton(QToolButton* button, const QString& iconsDirectory) {
     button->setShortcut(QKeySequence::Undo);
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/rotate-ccw.svg");
+    setIcon(button, iconsDirectory + "/rotate-ccw.svg");
 }
 
-void decorateRedoActionButton(QToolButton* button) {
+void decorateRedoActionButton(QToolButton* button, const QString& iconsDirectory) {
     button->setShortcut(QKeySequence::Redo);
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/rotate-cw.svg");
+    setIcon(button, iconsDirectory + "/rotate-cw.svg");
 }
 
-void decorateResetSceneButton(QToolButton* button) {
+void decorateResetSceneButton(QToolButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
     button->setText("New");
     button->setToolTip("New");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/file.svg");
+    setIcon(button, iconsDirectory + "/file.svg");
 }
 
-void decorateNormalModeButton(QToolButton* button) {
+void decorateNormalModeButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Normal Mode");
     button->setToolTip("Set the scene mode to the normal mode");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/mouse-pointer.svg");
+    setIcon(button, iconsDirectory + "/mouse-pointer.svg");
 }
 
-void decorateZoomInButton(QToolButton* button) {
+void decorateZoomInButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Zoom In");
     button->setToolTip("Zooming in");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/zoom-in.svg");
+    setIcon(button, iconsDirectory + "/zoom-in.svg");
 }
 
-void decorateZoomOutButton(QToolButton* button) {
+void decorateZoomOutButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("Zoom Out");
     button->setToolTip("Zooming out");
-    setIcon(button, "/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/zoom-out.svg");
+    setIcon(button, iconsDirectory + "/zoom-out.svg");
 }
 
-QToolButton* decorateAddModeButton(QList<QToolButton*> buttons) {
+QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& iconsDirectory) {
     QToolButton* button = new MyModeToolButton("Add");
     button->setText("Add");
     button->setToolTip("Add an item to the network");
     button->setMenu(createAddButtonMenu(buttons));
-    decorateAddModeButton(button);
+    decorateAddModeButton(button, iconsDirectory);
 
     return button;
 }
 
-void decorateAddModeButton(QToolButton* button) {
-    QPixmap pixmap("/Users/home/Documents/Education/SystemsBiology/Projects/Made/NetworkEditorGUI/NetworkEditorGUI/NetworkEditorGUI/icons/plus-square.svg");
+void decorateAddModeButton(QToolButton* button, const QString& iconsDirectory) {
+    QPixmap pixmap(iconsDirectory + "/plus-square.svg");
     QIcon buttonIcon(pixmap);
     button->setIcon(buttonIcon);
     button->setIconSize(pixmap.rect().size());

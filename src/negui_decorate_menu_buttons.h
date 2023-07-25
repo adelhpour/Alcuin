@@ -4,29 +4,29 @@
 #include <QToolButton>
 #include <QWidgetAction>
 
-void decorateImportButton(QToolButton* button);
+void decorateImportButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateExportButton(QToolButton* button);
+void decorateExportButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateSaveButton(QToolButton* button);
+void decorateSaveButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateAutoLayoutButton(QToolButton* button);
+void decorateAutoLayoutButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateUndoActionButton(QToolButton* button);
+void decorateUndoActionButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateRedoActionButton(QToolButton* button);
+void decorateRedoActionButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateResetSceneButton(QToolButton* button);
+void decorateResetSceneButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateNormalModeButton(QToolButton* button);
+void decorateNormalModeButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateZoomInButton(QToolButton* button);
+void decorateZoomInButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateZoomOutButton(QToolButton* button);
+void decorateZoomOutButton(QToolButton* button, const QString& iconsDirectory);
 
-QToolButton* decorateAddModeButton(QList<QToolButton*> buttons);
+QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& iconsDirectory);
 
-void decorateAddModeButton(QToolButton* button);
+void decorateAddModeButton(QToolButton* button, const QString& iconsDirectory);
 
 QMenu* createAddButtonMenu(QList<QToolButton*> buttons);
 

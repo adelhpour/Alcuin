@@ -10,13 +10,13 @@ public:
 
     MyModeMenu(QWidget *parent = nullptr);
 
-    void setNormalModeButton(QToolButton* button);
+    void setNormalModeButton(QToolButton* button, const QString& iconsDirectoryPath);
 
-    void setAddModeButtons(QList<QToolButton*> buttons);
+    void setAddModeButtons(QList<QToolButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setZoomInButton(QToolButton* button);
+    void setZoomInButton(QToolButton* button, const QString& iconsDirectoryPath);
 
-    void setZoomOutButton(QToolButton* button);
+    void setZoomOutButton(QToolButton* button, const QString& iconsDirectoryPath);
 
     QList<QToolButton*> getButtons();
 

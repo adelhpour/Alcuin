@@ -44,12 +44,13 @@ void MyNetworkEditorWidget::setWidgets() {
     _view = new MyGraphicsView(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
-    
+
+    QString iconsDirectoryPath = ((MyInteractor*)interactor())->iconsDirectory().path();
     ((MyToolBar*)toolBar())->setButtons(((MyInteractor*)interactor())->getToolBarMenuButtons());
-    ((MyModeMenu*)modeMenu())->setNormalModeButton(((MyInteractor*)interactor())->getNormalModeButton());
-    ((MyModeMenu*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons());
-    ((MyModeMenu*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton());
-    ((MyModeMenu*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton());
+    ((MyModeMenu*)modeMenu())->setNormalModeButton(((MyInteractor*)interactor())->getNormalModeButton(), iconsDirectoryPath);
+    ((MyModeMenu*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons(), iconsDirectoryPath);
+    ((MyModeMenu*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton(), iconsDirectoryPath);
+    ((MyModeMenu*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton(), iconsDirectoryPath);
 }
 
 void MyNetworkEditorWidget::setInteractions() {

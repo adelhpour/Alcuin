@@ -6,6 +6,7 @@
 #include "negui_scene_mode_element_base.h"
 
 #include <QObject>
+#include <QDir>
 #include <QPluginLoader>
 #include <QUndoStack>
 #include <QWidgetAction>
@@ -91,6 +92,9 @@ public:
     void resetCopiedNetworkElements();
     void deleteNewEdgeBuilder();
     bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
+
+    QDir applicationDirectory();
+    QDir iconsDirectory();
     
 signals:
     
@@ -238,6 +242,8 @@ protected:
     // copied styles
     MyNetworkElementStyleBase* _copiedNodeStyle;
     MyNetworkElementStyleBase* _copiedEdgeStyle;
+
+    QDir _applicationDirectory;
     
     QList<MyPluginItemBase*> _plugins;
     

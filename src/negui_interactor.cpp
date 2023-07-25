@@ -51,6 +51,8 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     _newEdgeBuilder = NULL;
     _selectionAreaGraphicsItem = NULL;
 
+    _applicationDirectory = QDir(QCoreApplication::applicationDirPath());
+
     // plugins
     loadPlugins();
 
@@ -157,6 +159,18 @@ bool MyInteractor::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterfa
 
 AutoLayoutInterface* MyInteractor::autoLayoutInterface() {
     return _autoLayoutInterface;
+}
+
+QDir MyInteractor::applicationDirectory() {
+    return _applicationDirectory;
+}
+
+QDir MyInteractor::iconsDirectory() {
+#if defined(Q_OS_MAC)
+    return QDir(applicationDirectory().path() + "/../Resources/icons");
+#else
+    return QDir(applicationDirectory().path() + "/icons");
+#endif
 }
 
 QUndoStack* MyInteractor::undoStack() {
@@ -912,8 +926,7 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
 }
 
 void MyInteractor::loadPlugins() {
-    QDir appDir(QCoreApplication::applicationDirPath());
-    QDir pluginsDir = appDir;
+    QDir pluginsDir = applicationDirectory();
 #if defined(Q_OS_WIN)
     if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
         pluginsDir.cdUp();
@@ -929,19 +942,19 @@ void MyInteractor::loadPlugins() {
         if (plugin) {
             // import interface
             if (qobject_cast<ImportInterface *>(plugin))
-                setImportInterface(qobject_cast<ImportInterface *>(plugin), appDir.path(), pluginsDir.path());
+                setImportInterface(qobject_cast<ImportInterface *>(plugin), applicationDirectory().path(), pluginsDir.path());
             // data export interface
             else if (qobject_cast<DataExportInterface *>(plugin))
-                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), appDir.path(), pluginsDir.path());
+                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), applicationDirectory().path(), pluginsDir.path());
             // print export interface
             else if (qobject_cast<PrintExportInterface *>(plugin))
-                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), appDir.path(), pluginsDir.path());
+                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), applicationDirectory().path(), pluginsDir.path());
             // element style interface
             else if (qobject_cast<ElementStyleInterface *>(plugin))
-                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), appDir.path(), pluginsDir.path());
+                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), applicationDirectory().path(), pluginsDir.path());
             // auto layout interface
             else if (qobject_cast<AutoLayoutInterface *>(plugin))
-                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), appDir.path(), pluginsDir.path());
+                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), applicationDirectory().path(), pluginsDir.path());
         }
     }
 }
@@ -991,7 +1004,7 @@ QToolButton* MyInteractor::createImportMenuButton() {
     connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(readFromFile(MyPluginItemBase*)));
     subMenu->addAction(importWidgetAction);
     button->setMenu(subMenu);
-    decorateImportButton(button);
+    decorateImportButton(button, iconsDirectory().path());
     return button;
 }
 
@@ -1022,14 +1035,14 @@ QToolButton* MyInteractor::createExportMenuButton() {
     }
 
     button->setMenu(subMenu);
-    decorateExportButton(button);
+    decorateExportButton(button, iconsDirectory().path());
     return button;
 }
 
 QToolButton* MyInteractor::createSaveMenuButton() {
     QToolButton* button = new MyToolButton();
     connect(button, SIGNAL(clicked()), this, SLOT(saveCurrentNetwork()));
-    decorateSaveButton(button);
+    decorateSaveButton(button, iconsDirectory().path());
     return button;
 }
 
@@ -1117,7 +1130,7 @@ QToolButton* MyInteractor::createAutoLayoutMenuButton() {
     connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(autoLayout(MyPluginItemBase*)));
     subMenu->addAction(autoLayoutWidgetAction);
     button->setMenu(subMenu);
-    decorateAutoLayoutButton(button);
+    decorateAutoLayoutButton(button, iconsDirectory().path());
     return button;
 }
 
@@ -1126,10 +1139,10 @@ QToolButton* MyInteractor::createUndoActionMenuButton() {
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
-    decorateUndoActionButton(button);
-    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateUndoActionButton(button); });
-    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateUndoActionButton(button); });
-    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateUndoActionButton(button); });
+    decorateUndoActionButton(button, iconsDirectory().path());
+    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateUndoActionButton(button, iconsDirectory().path()); });
+    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateUndoActionButton(button, iconsDirectory().path()); });
+    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateUndoActionButton(button, iconsDirectory().path()); });
     return button;
 }
 
@@ -1138,17 +1151,17 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
     
     QToolButton* button = new MyToolButton();
     button->setDefaultAction(action);
-    decorateRedoActionButton(button);
-    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateRedoActionButton(button); });
-    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateRedoActionButton(button); });
-    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateRedoActionButton(button); });
+    decorateRedoActionButton(button, iconsDirectory().path());
+    connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateRedoActionButton(button, iconsDirectory().path()); });
+    connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateRedoActionButton(button, iconsDirectory().path()); });
+    connect(undoStack(), &MyUndoStack::canRedoChanged, this, [this, button] () { decorateRedoActionButton(button, iconsDirectory().path()); });
     return button;
 }
 
 QToolButton* MyInteractor::createResetSceneMenuButton() {
     QToolButton* button = new MyToolButton();
     connect(button, SIGNAL(clicked()), this, SLOT(setNewNetworkCanvas()));
-    decorateResetSceneButton(button);
+    decorateResetSceneButton(button, iconsDirectory().path());
     return button;
 }
 
