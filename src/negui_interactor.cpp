@@ -169,7 +169,7 @@ QDir MyInteractor::iconsDirectory() {
 #if defined(Q_OS_MAC)
     return QDir(applicationDirectory().path() + "/../Resources/icons");
 #else
-    return QDir(applicationDirectory().path() + "/icons");
+    return QDir(applicationDirectory().path() + "/resources/icons");
 #endif
 }
 
