@@ -180,7 +180,7 @@ install(FILES ${headers} DESTINATION include COMPONENT networkeditorgui_lib)
 
 ## install embeddable python
 if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})
-	install(DIRECTORY ${CMAKE_SOURCE_DIR}/Python.framework DESTINATION ${CMAKE_INSTALL_PREFIX})
+	install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/Python.framework)
 endif ()
 
 ## install resources
