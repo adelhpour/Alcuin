@@ -184,6 +184,6 @@ if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})
 endif ()
 
 ## install resources
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/icons DESTINATION ${CMAKE_INSTALL_PREFIX}/Resources)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/Resources DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 add_subdirectory(plugins)
