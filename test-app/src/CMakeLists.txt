@@ -38,6 +38,7 @@ if (APPLE)
 	## copy and bundle the dependencies and plugins
 	set(FRAMEWORKS_DIR $<TARGET_FILE_DIR:NetworkEditorGUITestApp>/../Frameworks)
 	set(PLUGINS_DIR $<TARGET_FILE_DIR:NetworkEditorGUITestApp>/../PlugIns)
+	set(RESOURCES_DIR $<TARGET_FILE_DIR:NetworkEditorGUITestApp>/../Resources)
 	add_custom_command(TARGET NetworkEditorGUITestApp POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${DEPENDENCIES_BUILD_DIR} ${FRAMEWORKS_DIR}/dependencies
@@ -57,7 +58,16 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QMacStylePlugin> ${PLUGINS_DIR}/styles
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${NETWORKEDITORGUI_PLUGINS_LIBS} ${PLUGINS_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_SCRIPTS} ${PLUGINS_DIR})
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_SCRIPTS} ${PLUGINS_DIR}
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_DIR}
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${NETWORKEDITORGUI_PREFIX}/Resources ${RESOURCES_DIR})
+
+	## install embeddable python
+	if (EXISTS "${NETWORKEDITORGUI_PREFIX}/Python.framework")
+		add_custom_command(TARGET NetworkEditorGUITestApp POST_BUILD
+				COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/Python.framework
+				COMMAND ${CMAKE_COMMAND} -E copy_directory "${NETWORKEDITORGUI_PREFIX}/Python.framework" ${FRAMEWORKS_DIR}/Python.framework)
+	endif ()
 
 	## install the bundle
 	install(TARGETS NetworkEditorGUITestApp BUNDLE DESTINATION bin COMPONENT networkeditor_gui_test_app)
