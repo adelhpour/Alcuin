@@ -60,7 +60,7 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${NETWORKEDITORGUI_PLUGINS_LIBS} ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_SCRIPTS} ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_directory ${NETWORKEDITORGUI_PREFIX}/Resources ${RESOURCES_DIR})
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${NETWORKEDITORGUI_PREFIX}/resources ${RESOURCES_DIR})
 
 	## install embeddable python
 	if (EXISTS "${NETWORKEDITORGUI_PREFIX}/Python.framework")
@@ -92,7 +92,7 @@ elseif (WIN32)
 	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui>          $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
-	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/Resources ${CMAKE_INSTALL_PREFIX}/Resources)
+	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources ${CMAKE_INSTALL_PREFIX}/resources)
 
 	## install the executable
 	install(TARGETS NetworkEditorGUITestApp DESTINATION bin COMPONENT networkeditor_gui_test_app)
