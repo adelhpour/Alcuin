@@ -178,4 +178,12 @@ install(TARGETS NetworkEditorGUI RUNTIME DESTINATION bin COMPONENT networkeditor
 file(GLOB headers ${CMAKE_SOURCE_DIR}/src/*.h)
 install(FILES ${headers} DESTINATION include COMPONENT networkeditorgui_lib)
 
+## install embeddable python
+if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})
+	install(DIRECTORY ${CMAKE_SOURCE_DIR}/Python.framework DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif ()
+
+## install resources
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/icons DESTINATION ${CMAKE_INSTALL_PREFIX}/Resources)
+
 add_subdirectory(plugins)
