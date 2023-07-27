@@ -23,7 +23,11 @@ MyLabel::MyLabel(const QString& text, QWidget* parent) : QLabel(parent) {
     QFont _font;
     _font.setBold(true);
     _font.setCapitalization(QFont::Capitalize);
+#if defined(Q_OS_WIN)
+    _font.setPointSize(6);
+#else
     _font.setPointSize(12);
+#endif
     setFont(_font);
 
     if (!text.isEmpty())
@@ -136,7 +140,11 @@ MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
 // MyToolButtonCategoryMenu
 
 MyToolButtonCategoryMenu::MyToolButtonCategoryMenu(QWidget* parent) : MyToolButtonMenu(parent) {
+#if defined(Q_OS_WIN)
+    _horizontalPadding = 180;
+#else
     _horizontalPadding = 80;
+#endif
 }
 
 bool MyToolButtonCategoryMenu::event(QEvent *event) {
