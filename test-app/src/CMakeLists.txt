@@ -93,6 +93,9 @@ elseif (WIN32)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
 	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+	if (EXISTS "${NETWORKEDITORGUI_PREFIX}/Python")
+		install(DIRECTORY "${NETWORKEDITORGUI_PREFIX}/Python/" DESTINATION bin)
+	endif ()
 
 	## install the executable
 	install(TARGETS NetworkEditorGUITestApp DESTINATION bin COMPONENT networkeditor_gui_test_app)
