@@ -10,7 +10,7 @@ public:
     CPyInstance(const char* appPath)
     {
 
-#if EMBEDDABLE_PYTHON_DEVS_ARE_USED
+#if EMBEDDABLE_PYTHON_DEVS_ARE_USED && defined(Q_OS_MAC)
         std::string pythonVersion = std::to_string(EMBEDDABLE_PYTHON_DEVS_VERSION_MAJOR) + "." + std::to_string(EMBEDDABLE_PYTHON_DEVS_VERSION_MINOR);
         std::string pythonHomeDirectory = std::string(appPath) + "/../Frameworks/Python.framework/Versions/" + pythonVersion;
         std::wstring ws(pythonHomeDirectory.begin(), pythonHomeDirectory.end());
