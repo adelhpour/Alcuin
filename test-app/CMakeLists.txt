@@ -32,7 +32,7 @@ elseif(UNIX)
 	else ()
 		file(GLOB NETWORKEDITORGUI_LIBS ${NETWORKEDITORGUI_PREFIX}/lib/*.so)
 		file(GLOB NETWORKEDITORGUI_PLUGINS_LIBS ${NETWORKEDITORGUI_PREFIX}/lib/plugins/*.so)
-		set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} "$ORIGIN;;$ORIGIN/../lib/dependencies")
+		set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} "$ORIGIN;$ORIGIN/../lib/dependencies")
 		## set C/C++ compiler flags
     		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -Wno-inline")
     		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fPIC -std=gnu++11 -Wl,--disable-new-dtags")
