@@ -71,8 +71,8 @@ QWidget* MyArrowHeadBase::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     
     // edge
-    contentLayout->addWidget(new MyLabel("Edge"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(edge()->name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyLabel("Edge"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(edge()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
     
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);

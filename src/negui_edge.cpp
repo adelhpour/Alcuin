@@ -178,12 +178,12 @@ QWidget* MyEdgeBase::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
     // source node
-    contentLayout->addWidget(new MyLabel("Source"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(sourceNode()->name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyLabel("Source"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(sourceNode()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     // target node
-    contentLayout->addWidget(new MyLabel("Target"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(targetNode()->name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyLabel("Target"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(targetNode()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     return featureMenu;
 }
