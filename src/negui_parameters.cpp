@@ -474,7 +474,11 @@ QWidget* MyPointParameterBase::createInputWidget() {
 
     // x
     MyLabel* xLabel = new MyLabel(_x->name());
+#if defined(Q_OS_WIN)
+    xLabel->setFixedWidth(80);
+#else
     xLabel->setFixedWidth(40);
+#endif
     xLabel->setAlignment(Qt::AlignLeft);
     contentLayout->addWidget(xLabel, 0, 0);
     fixedWidth += xLabel->size().width();
@@ -483,7 +487,11 @@ QWidget* MyPointParameterBase::createInputWidget() {
 
     // y
     MyLabel* yLabel = new MyLabel(_y->name());
+#if defined(Q_OS_WIN)
+    yLabel->setFixedWidth(80);
+#else
     yLabel->setFixedWidth(40);
+#endif
     yLabel->setAlignment(Qt::AlignLeft);
     contentLayout->addWidget(yLabel, 1, 0);
     fixedWidth += yLabel->size().width();
@@ -491,7 +499,6 @@ QWidget* MyPointParameterBase::createInputWidget() {
     fixedWidth += _y->inputWidget()->size().width();
 
     widget->setLayout(contentLayout);
-    widget->setFixedWidth(0.5 * 1.2 * fixedWidth);
 
     return widget;
 }
