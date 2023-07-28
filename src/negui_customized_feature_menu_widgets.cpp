@@ -47,7 +47,11 @@ MyColorPickerButton::MyColorPickerButton(QWidget *parent) : QToolButton(parent) 
     setToolButtonStyle(Qt::ToolButtonIconOnly);
     setStyleSheet("QToolButton { border: 1px solid LightSlateGray; border-radius: 6px; background-color: white} QToolButton::menu-indicator { image: none; }" );
     connect(this, SIGNAL(clicked()), this, SLOT(showMenu()));
-    setFixedSize(QSize(20, 20));
+#if defined(Q_OS_WIN)
+    setFixedSize(180, 25);
+#else
+    setFixedSize(120, 20);
+#endif
 }
 
 void MyColorPickerButton::setBackgroundColor(const QString& color)  {
@@ -67,6 +71,7 @@ const QString& MyColorPickerButton::currentColor() const {
 // MyColorPickerMenu
 
 MyColorPickerMenu::MyColorPickerMenu() {
+    setStyleSheet(" QMenu {background-color: white;}");
     /// all colors
     QWidgetAction* allColors = new QWidgetAction(this);
     QWidget* allColorsWidget = new QWidget(this);
@@ -934,8 +939,11 @@ MyColorTileButton::MyColorTileButton(const QString& color, const QString& value,
     setContentsMargins(0, 0, 0, 0);
     setStyleSheet(" QPushButton {background-color: " + _color + "; border-radius: 1px;} QToolTip { background-color: white;}");
     setToolTip(_color);
-    setFixedWidth(12);
-    setFixedHeight(12);
+#if defined(Q_OS_WIN)
+    setFixedSize(18, 18);
+#else
+    setFixedSize(12, 12);
+#endif
 }
 
 const QString& MyColorTileButton::color() const {
@@ -1038,7 +1046,11 @@ void MyShapeStyleTreeView::setBranches(QList<MyShapeStyleBase*> shapeStyles) {
 }
 
 void MyShapeStyleTreeView::addBranchWidget(QWidget* branchWidget, const QString& branchTitle, const QString& rootTitle) {
-    MyStandardItem* branch = new MyStandardItem(branchTitle, 12.0, true);
+    qreal fontSize = 12.0;
+#if defined(Q_OS_WIN)
+    fontSize = 8.0;
+#endif
+    MyStandardItem* branch = new MyStandardItem(branchTitle, fontSize, true);
     if (treeModel->findItems(rootTitle).empty())
         treeModel->invisibleRootItem()->appendRow(branch);
     else
