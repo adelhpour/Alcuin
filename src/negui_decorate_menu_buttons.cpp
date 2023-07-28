@@ -74,10 +74,9 @@ QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& i
 }
 
 void decorateAddModeButton(QToolButton* button, const QString& iconsDirectory) {
-    QPixmap pixmap(iconsDirectory + "/add.png");
-    QIcon buttonIcon(pixmap);
-    button->setIcon(buttonIcon);
-    button->setIconSize(pixmap.rect().size());
+    button->setText("Add Element");
+    button->setToolTip("Choose an element to add it ot the scene");
+    setIcon(button, iconsDirectory + "/add.png");
 }
 
 QMenu* createAddButtonMenu(QList<QToolButton*> buttons) {
@@ -102,5 +101,9 @@ void setIcon(QToolButton* button, const QString& iconPath) {
     pixmap.load(iconPath);
     QIcon buttonIcon(pixmap);
     button->setIcon(buttonIcon);
+#if defined(Q_OS_WIN)
+    button->setIconSize(QSize(60, 60));
+#else
     button->setIconSize(pixmap.rect().size());
+#endif
 }
