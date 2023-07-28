@@ -112,8 +112,8 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
     
     // name
-    contentLayout->addWidget(new MyLabel("Name"), contentLayout->rowCount(), 0);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1);
+    contentLayout->addWidget(new MyLabel("Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     return featureMenu;
 }
