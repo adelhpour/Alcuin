@@ -81,8 +81,12 @@ void MyFeatureMenu::updateExtents() {
     if (_expandableWidgetSize.width() > menuWidth)
         menuWidth = _expandableWidgetSize.width();
     menuHeight += _expandableWidgetSize.height();
-    
+#if defined(Q_OS_WIN)
+    setFixedSize(qMax(menuWidth, 600), qMax(menuHeight, 1200));
+#else
     setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
+#endif
+
 }
 
 
