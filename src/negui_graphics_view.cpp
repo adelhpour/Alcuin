@@ -12,8 +12,8 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setContentsMargins(0, 0, 0, 0);
     setStyle(new MyProxyStyle(style()));
     
-    _minScale = 1.0 / 3.0;
-    _maxScale = 3.0;
+    _minScale = 1.0 / 10.0;
+    _maxScale = 10.0;
     _numScheduledScalings = 0;
     _panMode = false;
     _isPanned = false;
