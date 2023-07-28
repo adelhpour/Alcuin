@@ -114,7 +114,7 @@ void MyNetworkEditorWidget::setInteractions() {
 
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseRightButtonIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
 
 
     // remove menu

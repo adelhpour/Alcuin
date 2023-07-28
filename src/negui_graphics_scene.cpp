@@ -70,9 +70,6 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
                 event->accept();
             _isLeftButtonPressed = true;
         }
-        else if (event->button() == Qt::RightButton) {
-            //emit mouseRightButtonIsPressed();
-        }
     }
 }
 
@@ -88,6 +85,10 @@ void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         _isLeftButtonPressed = false;
         emit mouseLeftButtonIsReleased();
+    }
+    else if (event->button() == Qt::RightButton) {
+        if (getSceneMode() != NORMAL_MODE)
+            emit askForEnableNormalMode();
     }
 }
 
