@@ -156,10 +156,12 @@ MyClassicNodeSceneGraphicsItem::MyClassicNodeSceneGraphicsItem(const QPointF &po
 }
 
 void MyClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
+    if (_focusedGraphicsItems.size()) {
+        emit askForResetPosition();
+        adjustOriginalPosition();
+        emit askForCreateChangeStageCommand();
+    }
     MyNetworkElementGraphicsItemBase::clearFocusedGraphicsItems();
-    emit askForResetPosition();
-    adjustOriginalPosition();
-    emit askForCreateChangeStageCommand();
 }
 
 void MyClassicNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
