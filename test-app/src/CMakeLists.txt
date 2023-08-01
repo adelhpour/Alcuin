@@ -92,7 +92,7 @@ elseif (WIN32)
 	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui>          $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
-	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION ${CMAKE_INSTALL_PREFIX}/bin COMPONENT networkeditor_gui_test_app)
 	## install embeddable python
 	if (EXISTS "${NETWORKEDITORGUI_PREFIX}/Python")
 		install(DIRECTORY "${NETWORKEDITORGUI_PREFIX}/Python/" DESTINATION bin COMPONENT networkeditor_gui_test_app)
