@@ -95,7 +95,7 @@ elseif (WIN32)
 	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 	## install embeddable python
 	if (EXISTS "${NETWORKEDITORGUI_PREFIX}/Python")
-		install(DIRECTORY "${NETWORKEDITORGUI_PREFIX}/Python/" DESTINATION bin)
+		install(DIRECTORY "${NETWORKEDITORGUI_PREFIX}/Python/" DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	endif ()
 
 	## install the executable
