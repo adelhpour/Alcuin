@@ -71,12 +71,19 @@ endif()
 add_subdirectory(src)
 
 ## build test-app
-set(BUILD_TEST_APP OFF CACHE BOOL "Build the test app that uses the network editor gui lib")
+#set(BUILD_TEST_APP OFF CACHE BOOL "Build the test app that uses the network editor gui lib")
 
-if(BUILD_TEST_APP)
-	include(ExternalProject)
-    #ExternalProject_Add(networkeditorguitestapp SOURCE_DIR ${CMAKE_SOURCE_DIR}/test-app BINARY_DIR ${CMAKE_BINARY_DIR}/test-app INSTALL_DIR ${CMAKE_INSTALL_DIR})
-endif()
+#if(BUILD_TEST_APP)
+	#add_subdirectory(test-app/src)
+#	include(ExternalProject)
+#    ExternalProject_Add(networkeditorguitestapp
+#			DEPENDS NetworkEditorGUI
+#			SOURCE_DIR ${CMAKE_SOURCE_DIR}/test-app
+#			BINARY_DIR ${CMAKE_BINARY_DIR}/test-app
+#			INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+#			CMAKE_ARGS	-DNETWORKEDITORGUI_PREFIX=${CMAKE_INSTALL_PREFIX}
+#						-DQt5_DIR="${Qt5_DIR}")
+#endif()
 
 ## build the documentation
 option(BUILD_DOCS "Build the documentation" OFF)
