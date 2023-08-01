@@ -58,3 +58,11 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "")
 endif()
 
 add_subdirectory(src)
+
+## Package the project
+option(BUILD_PACKAGING "Package NetworkEditorGUITestApp into binary distributions" OFF)
+if (${BUILD_PACKAGING})
+	add_subdirectory(packaging)
+endif()
+
+

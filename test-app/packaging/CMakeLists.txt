@@ -1,0 +1,46 @@
+# set CPack variables
+set(CPACK_PACKAGE_NAME "Network Editor GUI Test App")
+set(CPACK_PACKAGE_FILE_NAME "NetworkEditorGUITestApp")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Network Editor Project")
+set(CPACK_PACKAGE_VENDOR "Herbert Sauro's Lab")
+
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 0)
+
+set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN TRUE)
+set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED TRUE)
+set(CPACK_COMPONENTS_ALL networkeditor_gui_test_app Unspecified)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
+set(CPACK_VERBATIM_VARIABLES TRUE)
+#set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
+#set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+#set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+set(CPACK_GENERATOR IFW)
+set(CPACK_IFW_VERBOSE ON)
+
+
+if (WIN32)
+    set(CPACK_IFW_TARGET_DIRECTORY "C:/Program Files/${CPACK_PACKAGE_FILE_NAME}")
+    set(CPACK_IFW_PACKAGE_START_MENU_DIRECTORY CPACK_PACKAGE_NAME)
+elseif (UNIX)
+    set(CPACK_IFW_TARGET_DIRECTORY "/usr/local/${CPACK_PACKAGE_FILE_NAME}")
+endif ()
+
+find_program(CPACK_IFW_BINARYCREATOR_EXECUTABLE
+        NAMES binarycreator binarycreator.exe
+        REQUIRED
+        COMMENT "absolute path to the binarycreator executable. If you do not have binarycreator you will need to install Qt Installer Framework")
+
+include(CPack REQUIRED)
+include(CPackIFW REQUIRED)
+
+cpack_add_component(
+        networkeditor_gui_test_app
+        DISPLAY_NAME "Application"
+        DESCRIPTION "A Test Application for the Graphical User Interface of the Network Editor Project"
+)
+
+cpack_ifw_configure_component(
+        networkeditor_gui_test_app
+        DEFAULT TRUE)
