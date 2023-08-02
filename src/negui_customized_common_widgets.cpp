@@ -150,7 +150,7 @@ void MyModeToolButton::setStyleToActiveForm() {
 }
 
 void MyModeToolButton::setStyleToInactiveForm() {
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : white; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
 }
 
 const QString& MyModeToolButton::mode() {
