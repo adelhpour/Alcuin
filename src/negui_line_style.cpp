@@ -74,11 +74,11 @@ void MyLineStyleBase::read(const QJsonObject &json) {
         
         // x
         if (p1Object.contains("x") && p1Object["x"].isDouble())
-            ((MyRelativePointParameter*)parameter)->setDefaultValueX(p1Object["x"].toInt());
+            ((MyRelativePointParameter*)parameter)->setDefaultValueX(p1Object["x"].toDouble());
         
         // y
         if (p1Object.contains("y") && p1Object["y"].isDouble())
-            ((MyRelativePointParameter*)parameter)->setDefaultValueY(p1Object["y"].toInt());
+            ((MyRelativePointParameter*)parameter)->setDefaultValueY(p1Object["y"].toDouble());
     }
     
     // control p2
@@ -88,11 +88,11 @@ void MyLineStyleBase::read(const QJsonObject &json) {
         
         // x
         if (p2Object.contains("x") && p2Object["x"].isDouble())
-            ((MyRelativePointParameter*)parameter)->setDefaultValueX(p2Object["x"].toInt());
+            ((MyRelativePointParameter*)parameter)->setDefaultValueX(p2Object["x"].toDouble());
         
         // y
         if (p2Object.contains("y") && p2Object["y"].isDouble())
-            ((MyRelativePointParameter*)parameter)->setDefaultValueY(p2Object["y"].toInt());
+            ((MyRelativePointParameter*)parameter)->setDefaultValueY(p2Object["y"].toDouble());
     }
 }
 
