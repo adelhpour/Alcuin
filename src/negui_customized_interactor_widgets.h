@@ -64,6 +64,8 @@ class MyItemPreviewButton : public QPushButton {
 public:
 
     MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
+
+    void hoverOut();
 };
 
 #endif

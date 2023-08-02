@@ -76,7 +76,10 @@ QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items)
 
 QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
     QPushButton* itemPreviewButton = new MyItemPreviewButton(item);
-    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item] () { emit itemIsChosen(item); });
+    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item, itemPreviewButton] () {
+        ((MyItemPreviewButton*)itemPreviewButton)->hoverOut();
+        emit itemIsChosen(item);
+    });
 
     return itemPreviewButton;
 }
@@ -96,4 +99,8 @@ MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent
         setIcon(item->icon());
         setIconSize(item->iconSize());
     }
+}
+
+void MyItemPreviewButton::hoverOut() {
+    setStyleSheet("QPushButton { background-color: transparent}");
 }
