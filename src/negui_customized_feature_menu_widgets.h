@@ -120,9 +120,9 @@ public:
 
     const QSize collapsedSize() const;
 
-    signals:
+signals:
 
-            void extentsAreUpdated(const QSize& expandableWidgetSize);
+    void extentsAreUpdated(const QSize& expandableWidgetSize);
 
 protected:
 
