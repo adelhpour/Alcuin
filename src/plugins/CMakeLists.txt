@@ -99,7 +99,7 @@ install(FILES ${plugin_headers} DESTINATION include/plugins COMPONENT networkedi
 ## install embeddable python
 if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})
 	if (APPLE)
-		install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/Python.framework)
+		install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/Python.framework/Versions)
 	elseif (WIN32)
 		install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX})
 	endif ()
