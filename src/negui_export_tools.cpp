@@ -12,7 +12,7 @@ MyExportToolBase::MyExportToolBase(const QString& name) : MyPluginItemBase(name)
 }
 
 const QString MyExportToolBase::getSaveFileName(const QString& workingDirectory, const QString& saveFileName) const {
-    return QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension() + ") File", workingDirectory + saveFileName, "(*." + fileExtension() + ")");
+    return QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension() + ") File", workingDirectory + "/" + saveFileName, "(*." + fileExtension() + ")");
 }
 
 const QString MyExportToolBase::getSaveFileName(const QString& workingDirectory) const {

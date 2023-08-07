@@ -889,7 +889,7 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
 }
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory(), ((MyFileManager*)fileManager())->currentFileName());
+    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory(), ((MyFileManager*)fileManager())->currentBaseFileName());
     if (!fileName.isEmpty())
         writeDataToFile(exportTool, fileName);
 }

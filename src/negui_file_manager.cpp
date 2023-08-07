@@ -1,6 +1,8 @@
 #include "negui_file_manager.h"
 #include "negui_customized_common_widgets.h"
 
+#include <QFileInfo>
+
 // MyFileManager
 
 MyFileManager::MyFileManager(QList<MyPluginItemBase*> importTools, QList<MyPluginItemBase*> exportTools) {
@@ -36,6 +38,10 @@ void MyFileManager::setCurrentFileName(const QString& fileName) {
 
 const QString& MyFileManager::currentFileName() {
     return _currentFileName;
+}
+
+const QString MyFileManager::currentBaseFileName() {
+    return QFileInfo(currentFileName()).completeBaseName();
 }
 
 void MyFileManager::setWorkingDirectory(const QString& workingDirectory) {

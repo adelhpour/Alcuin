@@ -25,6 +25,8 @@ public:
 
     const QString& currentFileName();
 
+    const QString currentBaseFileName();
+
     void setWorkingDirectory(const QString& workingDirectory);
 
     const QString& workingDirectory();
