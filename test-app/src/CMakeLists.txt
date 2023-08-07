@@ -2,15 +2,17 @@ set(CMAKE_AUTOMOC ON)
 
 ### build the main gui
 ## set the required sources and headers
-set(gui_sources negui_main.cpp)
+set(source_files negui_main.cpp negui_main_window.cpp)
+
+set(header_files negui_main_window.h)
 
 ## build the bundle/executable
 add_executable(NetworkEditorGUITestApp WIN32 MACOSX_BUNDLE 
-	${gui_sources})
+	${source_files} ${header_files})
 
 ## include directories
 target_include_directories(NetworkEditorGUITestApp PUBLIC
-	${NETWORKEDITORGUI_INCLUDEDIR})
+		${NETWORKEDITORGUI_INCLUDEDIR})
 
 ## link libraries
 target_link_libraries(NetworkEditorGUITestApp
