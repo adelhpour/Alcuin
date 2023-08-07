@@ -2,7 +2,7 @@ set(CMAKE_AUTOMOC ON)
 
 ### build the library
 ## set the required sources and headers
-set(gui_sources
+set(source_files
 		negui_mainwidget.cpp
 		negui_toolbar.cpp
 		negui_graphics_view.cpp
@@ -79,7 +79,7 @@ set(gui_sources
 		negui_c_api.cpp
 		)
 
-set(gui_headers
+set(header_files
 		negui_mainwidget.h
 		negui_toolbar.h
 		negui_graphics_view.h
@@ -158,18 +158,14 @@ set(gui_headers
 		)
 
 ## build
-add_library(NetworkEditorGUI SHARED
-		${gui_sources}
-		${gui_headers}
-		)
+add_library(NetworkEditorGUI SHARED ${source_files} ${header_files})
 
 ## link libraries
 target_link_libraries(NetworkEditorGUI
 		Qt5::Core
 		Qt5::Gui
 		Qt5::Widgets
-		Qt5::PrintSupport
-		)
+		Qt5::PrintSupport)
 
 ## set library dist
 install(TARGETS NetworkEditorGUI RUNTIME DESTINATION bin COMPONENT networkeditorgui_lib LIBRARY DESTINATION lib COMPONENT networkeditorgui_lib ARCHIVE DESTINATION lib COMPONENT networkeditorgui_lib)
