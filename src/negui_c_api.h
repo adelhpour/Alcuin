@@ -1,7 +1,13 @@
 #ifndef __NEGUI_C_API_H
 #define __NEGUI_C_API_H
 
-#include "negui_mainwidget.h"
+#if defined MAKE_NEGUI_LIB
+#define NEGUI_LIB_EXPORT Q_DECL_EXPORT
+#else
+#define NEGUI_LIB_EXPORT Q_DECL_IMPORT
+#endif
+
+#include <QWidget>
 
 extern "C" {
 

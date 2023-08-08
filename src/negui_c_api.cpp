@@ -1,4 +1,5 @@
 #include "negui_c_api.h"
+#include "negui_main_widget.h"
 #include "negui_interactor.h"
 #include <QJsonDocument>
 
