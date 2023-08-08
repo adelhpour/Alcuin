@@ -9,6 +9,10 @@ class MyMenuBar : public QMenuBar {
 public:
 
     MyMenuBar(QWidget* parent = nullptr);
+
+signals:
+
+    void askForSetNewNetworkCanvas();
 };
 
 #endif
