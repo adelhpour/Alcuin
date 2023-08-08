@@ -3,7 +3,7 @@ set(CMAKE_AUTOMOC ON)
 ### build the library
 ## set the required sources and headers
 set(source_files
-		negui_mainwidget.cpp
+		negui_main_widget.cpp
 		negui_toolbar.cpp
 		negui_graphics_view.cpp
 		negui_graphics_scene.cpp
@@ -80,7 +80,7 @@ set(source_files
 		)
 
 set(header_files
-		negui_mainwidget.h
+        negui_main_widget.h
 		negui_toolbar.h
 		negui_graphics_view.h
 		negui_graphics_scene.h
