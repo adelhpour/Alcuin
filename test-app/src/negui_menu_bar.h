@@ -10,9 +10,13 @@ public:
 
     MyMenuBar(QWidget* parent = nullptr);
 
+    void setMenus();
+
 signals:
 
+    const QStringList askForListOfPluginItemNames(const QString&);
     void askForSetNewNetworkCanvas();
+    void askForReadFromFile(const QString&);
     void askForSelectElements();
 };
 

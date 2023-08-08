@@ -11,6 +11,8 @@ public:
     MyMainWindow(QWidget* parent = nullptr);
 
     void setMenuBar();
+
+    void connectToCentralWidget(QWidget* menuBar);
 };
 
 #endif

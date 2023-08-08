@@ -4,6 +4,10 @@
 #include <QMenu>
 
 MyMenuBar::MyMenuBar(QWidget* parent) : QMenuBar(parent) {
+
+}
+
+void MyMenuBar::setMenus() {
     /// file menu
     QMenu* fileMenu = addMenu(tr("&File"));
     // new
@@ -12,13 +16,16 @@ MyMenuBar::MyMenuBar(QWidget* parent) : QMenuBar(parent) {
     connect(newAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
     fileMenu->addSeparator();
     // open
-    QAction* openAction = new QAction(tr("&Open"), fileMenu);
-    fileMenu->addAction(openAction);
-    //connect(openAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    QMenu* openMenu = fileMenu->addMenu(tr("&Open"));
+    const QStringList importToolNames = askForListOfPluginItemNames("importtool");
+    for (const QString& importToolName: importToolNames) {
+        QAction* openAction = openMenu->addAction(importToolName);
+        connect(openAction, &QAction::triggered, this, [this, importToolName] () { askForReadFromFile(importToolName); });
+    }
     // open recent
     QAction* openRecentAction = new QAction(tr("&Open Recent"), fileMenu);
+    openRecentAction->setEnabled(false);
     fileMenu->addAction(openRecentAction);
-    //connect(openRecentAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
     fileMenu->addSeparator();
     // save
     QAction* saveAction = new QAction(tr("&Save"), fileMenu);
@@ -36,8 +43,8 @@ MyMenuBar::MyMenuBar(QWidget* parent) : QMenuBar(parent) {
     fileMenu->addSeparator();
     // print
     QAction* printAction = new QAction(tr("&Print"), fileMenu);
+    printAction->setEnabled(false);
     fileMenu->addAction(printAction);
-    //connect(printAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
     fileMenu->addSeparator();
     // exit
     QAction* exitAction = new QAction(tr("&Exit"), fileMenu);
@@ -84,8 +91,8 @@ MyMenuBar::MyMenuBar(QWidget* parent) : QMenuBar(parent) {
     editMenu->addSeparator();
     // preferences
     QAction* preferencesAction = new QAction(tr("&Preferences"), editMenu);
+    preferencesAction->setEnabled(false);
     editMenu->addAction(preferencesAction);
-    //connect(preferencesAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
 
     /// help menu
     QMenu* helpMenu = addMenu(tr("&Help"));

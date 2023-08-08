@@ -129,6 +129,15 @@ QList<MyPluginItemBase*>& MyInteractor::plugins() {
     return _plugins;
 }
 
+const QStringList MyInteractor::listOfPluginItemNames(const QString type) {
+    QStringList pluginItemNames;
+    QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(plugins(), type);
+    for (MyPluginItemBase* pluginOfType: pluginsOfType)
+        pluginItemNames.push_back(pluginOfType->name());
+
+    return pluginItemNames;
+}
+
 bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
     if (elementStyleInterface) {
         _elementStyleInterface = elementStyleInterface;
@@ -871,6 +880,14 @@ void MyInteractor::clearSelectionArea() {
         askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
         delete _selectionAreaGraphicsItem;
         _selectionAreaGraphicsItem = NULL;
+    }
+}
+
+void MyInteractor::readFromFile(const QString& importToolName) {
+    QList<MyPluginItemBase*> importTools = getPluginsOfType(plugins(), "importtool");
+    for (MyPluginItemBase* importTool : importTools) {
+        if (importTool->name() == importToolName)
+            return readFromFile(importTool);
     }
 }
 

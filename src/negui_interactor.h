@@ -159,11 +159,15 @@ public slots:
     void clearSelectionArea();
 
     void pasteCopiedNetworkElements(const QPointF& position);
+
+    // plugins
+    const QStringList listOfPluginItemNames(const QString type);
     
 private slots:
 
     void saveCurrentNetwork();
 
+    void readFromFile(const QString& importToolName);
     void readFromFile(MyPluginItemBase* importTool);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
