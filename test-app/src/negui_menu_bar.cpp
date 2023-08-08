@@ -32,9 +32,12 @@ void MyMenuBar::setMenus() {
     fileMenu->addAction(saveAction);
     //connect(saveAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
     // save as
-    QAction* saveAsAction = new QAction(tr("&Save As"), fileMenu);
-    fileMenu->addAction(saveAsAction);
-    //connect(saveAsAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    QMenu* saveAsMenu = fileMenu->addMenu(tr("&Save As"));
+    const QStringList exportToolNames = askForListOfPluginItemNames("dataexporttool");
+    for (const QString& exportToolName: exportToolNames) {
+        QAction* saveAsAction = saveAsMenu->addAction(exportToolName);
+        connect(saveAsAction, &QAction::triggered, this, [this, exportToolName] () { askForWriteDataToFile(exportToolName); });
+    }
     fileMenu->addSeparator();
     // export
     QAction* exportAction = new QAction(tr("&Export"), fileMenu);

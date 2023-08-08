@@ -26,6 +26,7 @@ signals:
     void askForSetNewNetworkCanvas();
     const QStringList askForListOfPluginItemNames(const QString&);
     void askForReadFromFile(const QString&);
+    void askForWriteDataToFile(const QString&);
     void askForSelectElements();
 
 private slots:

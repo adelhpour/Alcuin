@@ -21,5 +21,6 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(menuBar, SIGNAL(askForSetNewNetworkCanvas()), centralWidget(), SIGNAL(askForSetNewNetworkCanvas()));
     connect(menuBar, SIGNAL(askForListOfPluginItemNames(const QString&)), centralWidget(), SIGNAL(askForListOfPluginItemNames(const QString&)));
     connect(menuBar, SIGNAL(askForReadFromFile(const QString&)), centralWidget(), SIGNAL(askForReadFromFile(const QString&)));
+    connect(menuBar, SIGNAL(askForWriteDataToFile(const QString&)), centralWidget(), SIGNAL(askForWriteDataToFile(const QString&)));
     connect(menuBar, SIGNAL(askForSelectElements()), centralWidget(), SIGNAL(askForSelectElements()));
 }

@@ -169,6 +169,7 @@ private slots:
 
     void readFromFile(const QString& importToolName);
     void readFromFile(MyPluginItemBase* importTool);
+    void writeDataToFile(const QString& exportToolName);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
     void writeFigureToFile(MyPluginItemBase* exportTool);

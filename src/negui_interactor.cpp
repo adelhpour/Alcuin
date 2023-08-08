@@ -905,6 +905,14 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
     }
 }
 
+void MyInteractor::writeDataToFile(const QString& exportToolName) {
+    QList<MyPluginItemBase*> exportTools = getPluginsOfType(plugins(), "dataexporttool");
+    for (MyPluginItemBase* exportTool : exportTools) {
+        if (exportTool->name() == exportToolName)
+            return writeDataToFile(exportTool);
+    }
+}
+
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory(), ((MyFileManager*)fileManager())->currentFileName());
     if (!fileName.isEmpty())

@@ -64,6 +64,7 @@ void MyNetworkEditorWidget::setInteractions() {
     // open
     connect(this, SIGNAL(askForListOfPluginItemNames(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemNames(const QString&)));
     connect(this, SIGNAL(askForReadFromFile(const QString&)), (MyInteractor*)interactor(), SLOT(readFromFile(const QString&)));
+    connect(this, SIGNAL(askForWriteDataToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeDataToFile(const QString&)));
 
     // select all
     connect(this, &MyNetworkEditorWidget::askForSelectElements, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
