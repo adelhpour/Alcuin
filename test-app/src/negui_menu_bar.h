@@ -17,6 +17,7 @@ signals:
     const QStringList askForListOfPluginItemNames(const QString&);
     void askForSetNewNetworkCanvas();
     void askForReadFromFile(const QString&);
+    void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
     void askForSelectElements();
 };

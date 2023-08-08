@@ -30,7 +30,7 @@ void MyMenuBar::setMenus() {
     // save
     QAction* saveAction = new QAction(tr("&Save"), fileMenu);
     fileMenu->addAction(saveAction);
-    //connect(saveAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(saveAction, &QAction::triggered, this, &MyMenuBar::askForSaveCurrentNetwork);
     // save as
     QMenu* saveAsMenu = fileMenu->addMenu(tr("&Save As"));
     const QStringList exportToolNames = askForListOfPluginItemNames("dataexporttool");
