@@ -13,6 +13,7 @@ public:
 signals:
 
     void askForSetNewNetworkCanvas();
+    void askForSelectAll();
 };
 
 #endif

@@ -14,4 +14,5 @@ void MyMainWindow::setMenuBar() {
     QMenuBar* menuBar = new MyMenuBar();
     QMainWindow::setMenuBar(menuBar);
     connect(menuBar, SIGNAL(askForSetNewNetworkCanvas()), centralWidget(), SIGNAL(askForSetNewNetworkCanvas()));
+    connect(menuBar, SIGNAL(askForSelectAll()), centralWidget(), SIGNAL(askForSelectAll()));
 }
