@@ -27,6 +27,10 @@ public:
     void readSettings();
     void writeSettings();
 
+signals:
+
+    void askForSetNewNetworkCanvas();
+
 private slots:
 
     void displayFeatureMenu(QWidget* featureMenu);

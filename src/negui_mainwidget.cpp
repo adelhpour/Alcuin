@@ -58,6 +58,9 @@ void MyNetworkEditorWidget::setInteractions() {
     // set title
     connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
 
+    // new action
+    connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
+
     /// feature menu
     // display feature menu
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
@@ -115,7 +118,6 @@ void MyNetworkEditorWidget::setInteractions() {
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
-
 
     // remove menu
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
