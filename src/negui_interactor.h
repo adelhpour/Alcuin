@@ -172,6 +172,7 @@ private slots:
     void writeDataToFile(const QString& exportToolName);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
+    void writeFigureToFile(const QString& exportToolName);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);

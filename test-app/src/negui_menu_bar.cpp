@@ -33,16 +33,19 @@ void MyMenuBar::setMenus() {
     connect(saveAction, &QAction::triggered, this, &MyMenuBar::askForSaveCurrentNetwork);
     // save as
     QMenu* saveAsMenu = fileMenu->addMenu(tr("&Save As"));
-    const QStringList exportToolNames = askForListOfPluginItemNames("dataexporttool");
-    for (const QString& exportToolName: exportToolNames) {
-        QAction* saveAsAction = saveAsMenu->addAction(exportToolName);
-        connect(saveAsAction, &QAction::triggered, this, [this, exportToolName] () { askForWriteDataToFile(exportToolName); });
+    const QStringList dataExportToolNames = askForListOfPluginItemNames("dataexporttool");
+    for (const QString& dataExportToolName: dataExportToolNames) {
+        QAction* saveAsAction = saveAsMenu->addAction(dataExportToolName);
+        connect(saveAsAction, &QAction::triggered, this, [this, dataExportToolName] () { askForWriteDataToFile(dataExportToolName); });
     }
     fileMenu->addSeparator();
     // export
-    QAction* exportAction = new QAction(tr("&Export"), fileMenu);
-    fileMenu->addAction(exportAction);
-    //connect(exportAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    QMenu* exportMenu = fileMenu->addMenu(tr("&Export"));
+    const QStringList printExportToolNames = askForListOfPluginItemNames("printexporttool");
+    for (const QString& printExportToolName: printExportToolNames) {
+        QAction* exportAction = exportMenu->addAction(printExportToolName);
+        connect(exportAction, &QAction::triggered, this, [this, printExportToolName] () { askForWriteFigureToFile(printExportToolName); });
+    }
     fileMenu->addSeparator();
     // print
     QAction* printAction = new QAction(tr("&Print"), fileMenu);

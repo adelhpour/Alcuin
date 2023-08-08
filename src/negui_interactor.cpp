@@ -931,6 +931,14 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& 
     ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
 }
 
+void MyInteractor::writeFigureToFile(const QString& exportToolName) {
+    QList<MyPluginItemBase*> exportTools = getPluginsOfType(plugins(), "printexporttool");
+    for (MyPluginItemBase* exportTool : exportTools) {
+        if (exportTool->name() == exportToolName)
+            return writeFigureToFile(exportTool);
+    }
+}
+
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory());
     if (!fileName.isEmpty()) {

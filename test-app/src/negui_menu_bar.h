@@ -19,6 +19,7 @@ signals:
     void askForReadFromFile(const QString&);
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
+    void askForWriteFigureToFile(const QString&);
     void askForSelectElements();
 };
 
