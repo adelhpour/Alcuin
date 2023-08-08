@@ -72,7 +72,7 @@ MyMenuBar::MyMenuBar(QWidget* parent) : QMenuBar(parent) {
     // select all
     QAction* selectAllAction = new QAction(tr("&Select All"), editMenu);
     editMenu->addAction(selectAllAction);
-    connect(selectAllAction, &QAction::triggered, this, &MyMenuBar::askForSelectAll);
+    connect(selectAllAction, &QAction::triggered, this, &MyMenuBar::askForSelectElements);
     // select all nodes
     QAction* selectAllNodesAction = new QAction(tr("&Select All Nodes"), editMenu);
     editMenu->addAction(selectAllNodesAction);

@@ -62,7 +62,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
 
     // select all
-    connect(this, &MyNetworkEditorWidget::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
+    connect(this, &MyNetworkEditorWidget::askForSelectElements, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
 
     /// feature menu
     // display feature menu

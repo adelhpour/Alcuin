@@ -1,7 +1,7 @@
 #ifndef __NEGUI_MAINWIDGET_H
 #define __NEGUI_MAINWIDGET_H
 
-main dddd#include <QObject>
+#include <QObject>
 #include <QWidget>
 #include <QFrame>
 
@@ -24,7 +24,7 @@ public:
 signals:
 
     void askForSetNewNetworkCanvas();
-    void askForSelectAll();
+    void askForSelectElements();
 
 private slots:
 
