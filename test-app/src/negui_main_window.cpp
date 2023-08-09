@@ -30,5 +30,7 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(centralWidget(), SIGNAL(canRedoChanged(const bool&)), menuBar, SIGNAL(canRedoChanged(const bool&)));
     connect(menuBar, SIGNAL(askForCutSelectedNetworkElements()), centralWidget(), SIGNAL(askForCutSelectedNetworkElements()));
     connect(centralWidget(), SIGNAL(elementsCuttableStatusChanged(const bool&)), menuBar, SIGNAL(elementsCuttableStatusChanged(const bool&)));
+    connect(menuBar, SIGNAL(askForCopySelectedNetworkElements()), centralWidget(), SIGNAL(askForCopySelectedNetworkElements()));
+    connect(centralWidget(), SIGNAL(elementsCopyableStatusChanged(const bool&)), menuBar, SIGNAL(elementsCopyableStatusChanged(const bool&)));
     connect(menuBar, SIGNAL(askForSelectElements()), centralWidget(), SIGNAL(askForSelectElements()));
 }

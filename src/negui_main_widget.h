@@ -35,6 +35,8 @@ signals:
     void canRedoChanged(const bool&);
     void askForCutSelectedNetworkElements();
     void elementsCuttableStatusChanged(const bool&);
+    void askForCopySelectedNetworkElements();
+    void elementsCopyableStatusChanged(const bool&);
     void askForSelectElements();
 
 private slots:

@@ -672,12 +672,14 @@ void MyInteractor::selectNodes(const bool& selected) {
     for (MyNetworkElementBase* node : qAsConst(nodes()))
         node->setSelected(selected);
     emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
 void MyInteractor::selectEdges(const bool& selected) {
     for (MyNetworkElementBase* edge : qAsConst(edges()))
         edge->setSelected(selected);
     emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
@@ -688,8 +690,9 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
             element->setSelected(true);
         else
             element->setSelected(false);
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
 }
 
 const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* element) {
@@ -843,6 +846,8 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
 }
 

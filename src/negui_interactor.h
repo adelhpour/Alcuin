@@ -111,6 +111,7 @@ signals:
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
     void elementsCuttableStatusChanged(const bool&);
+    void elementsCopyableStatusChanged(const bool&);
     
     void enterKeyIsPressed();
     
