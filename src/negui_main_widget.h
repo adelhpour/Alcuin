@@ -30,7 +30,9 @@ signals:
     void askForWriteDataToFile(const QString&);
     void askForWriteFigureToFile(const QString&);
     void askForTriggerUndoAction();
+    void undoActionIsEnabled(const bool&);
     void askForTriggerRedoAction();
+    void redoActionIsEnabled(const bool&);
     void askForSelectElements();
 
 private slots:

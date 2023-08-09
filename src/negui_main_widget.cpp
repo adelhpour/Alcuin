@@ -66,7 +66,9 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(this, SIGNAL(askForWriteDataToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeDataToFile(const QString&)));
     connect(this, SIGNAL(askForWriteFigureToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeFigureToFile(const QString&)));
     connect(this, SIGNAL(askForTriggerUndoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(undo()));
+    connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(undoActionIsEnabled(const bool&)));
     connect(this, SIGNAL(askForTriggerRedoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(redo()));
+    connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(redoActionIsEnabled(const bool&)));
 
     // select all
     connect(this, &MyNetworkEditorWidget::askForSelectElements, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });

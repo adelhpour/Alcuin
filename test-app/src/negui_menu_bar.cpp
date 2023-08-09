@@ -65,11 +65,13 @@ void MyMenuBar::setMenus() {
     undoAction->setEnabled(false);
     editMenu->addAction(undoAction);
     connect(undoAction, &QAction::triggered, this, &MyMenuBar::askForTriggerUndoAction);
+    connect(this, &MyMenuBar::undoActionIsEnabled, undoAction, [undoAction] (const bool& enabled) { undoAction->setEnabled(enabled); });
     // redo
     QAction* redoAction = new QAction(tr("&Redo"), editMenu);
     redoAction->setEnabled(false);
     editMenu->addAction(redoAction);
     connect(redoAction, &QAction::triggered, this, &MyMenuBar::askForTriggerRedoAction);
+    connect(this, &MyMenuBar::redoActionIsEnabled, redoAction, [redoAction] (const bool& enabled) { redoAction->setEnabled(enabled); });
     editMenu->addSeparator();
     // cut
     QAction* cutAction = new QAction(tr("&Cut"), editMenu);
