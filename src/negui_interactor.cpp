@@ -671,11 +671,13 @@ void MyInteractor::selectElements(const bool& selected) {
 void MyInteractor::selectNodes(const bool& selected) {
     for (MyNetworkElementBase* node : qAsConst(nodes()))
         node->setSelected(selected);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
 }
 
 void MyInteractor::selectEdges(const bool& selected) {
     for (MyNetworkElementBase* edge : qAsConst(edges()))
         edge->setSelected(selected);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
 }
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
@@ -687,6 +689,7 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
         else
             element->setSelected(false);
     }
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
 }
 
 const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* element) {

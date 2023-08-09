@@ -110,6 +110,7 @@ signals:
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
+    void elementsCuttableStatusChanged(const bool&);
     
     void enterKeyIsPressed();
     

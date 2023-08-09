@@ -21,9 +21,11 @@ signals:
     void askForWriteDataToFile(const QString&);
     void askForWriteFigureToFile(const QString&);
     void askForTriggerUndoAction();
-    void undoActionIsEnabled(const bool&);
+    void canUndoChanged(const bool&);
     void askForTriggerRedoAction();
-    void redoActionIsEnabled(const bool&);
+    void canRedoChanged(const bool&);
+    void askForCutSelectedNetworkElements();
+    void elementsCuttableStatusChanged(const bool&);
     void askForSelectElements();
 };
 
