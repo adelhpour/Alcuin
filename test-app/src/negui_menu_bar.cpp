@@ -62,12 +62,14 @@ void MyMenuBar::setMenus() {
     QMenu* editMenu = addMenu(tr("&Edit"));
     // undo
     QAction* undoAction = new QAction(tr("&Undo"), editMenu);
+    undoAction->setEnabled(false);
     editMenu->addAction(undoAction);
-    //connect(undoAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(undoAction, &QAction::triggered, this, &MyMenuBar::askForTriggerUndoAction);
     // redo
     QAction* redoAction = new QAction(tr("&Redo"), editMenu);
+    redoAction->setEnabled(false);
     editMenu->addAction(redoAction);
-    //connect(redoAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(redoAction, &QAction::triggered, this, &MyMenuBar::askForTriggerRedoAction);
     editMenu->addSeparator();
     // cut
     QAction* cutAction = new QAction(tr("&Cut"), editMenu);

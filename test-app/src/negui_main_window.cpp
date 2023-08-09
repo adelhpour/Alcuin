@@ -24,5 +24,7 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(menuBar, SIGNAL(askForSaveCurrentNetwork()), centralWidget(), SIGNAL(askForSaveCurrentNetwork()));
     connect(menuBar, SIGNAL(askForWriteDataToFile(const QString&)), centralWidget(), SIGNAL(askForWriteDataToFile(const QString&)));
     connect(menuBar, SIGNAL(askForWriteFigureToFile(const QString&)), centralWidget(), SIGNAL(askForWriteFigureToFile(const QString&)));
+    connect(menuBar, SIGNAL(askForTriggerUndoAction()), centralWidget(), SIGNAL(askForTriggerUndoAction()));
+    connect(menuBar, SIGNAL(askForTriggerRedoAction()), centralWidget(), SIGNAL(askForTriggerRedoAction()));
     connect(menuBar, SIGNAL(askForSelectElements()), centralWidget(), SIGNAL(askForSelectElements()));
 }

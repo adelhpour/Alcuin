@@ -29,6 +29,8 @@ signals:
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
     void askForWriteFigureToFile(const QString&);
+    void askForTriggerUndoAction();
+    void askForTriggerRedoAction();
     void askForSelectElements();
 
 private slots:
