@@ -110,8 +110,10 @@ signals:
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
+    QRectF askForItemsBoundingRect();
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
+    void pasteElementsStatusChanged(const bool&);
     
     void enterKeyIsPressed();
     
@@ -160,6 +162,7 @@ public slots:
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 
+    void pasteCopiedNetworkElements();
     void pasteCopiedNetworkElements(const QPointF& position);
 
     // plugins

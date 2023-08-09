@@ -37,6 +37,8 @@ signals:
     void elementsCuttableStatusChanged(const bool&);
     void askForCopySelectedNetworkElements();
     void elementsCopyableStatusChanged(const bool&);
+    void askForPasteCopiedNetworkElements();
+    void pasteElementsStatusChanged(const bool&);
     void askForSelectElements();
 
 private slots:

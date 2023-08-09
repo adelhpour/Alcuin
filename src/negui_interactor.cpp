@@ -580,6 +580,8 @@ void MyInteractor::copySelectedNetworkElements() {
         _copiedNetworkElements.push_back(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
         _copiedNetworkElements.push_back(selectedEdge);
+    if (_copiedNetworkElements.size())
+        emit pasteElementsStatusChanged(true);
 }
 
 void MyInteractor::cutSelectedNetworkElements() {
@@ -588,6 +590,10 @@ void MyInteractor::cutSelectedNetworkElements() {
         removeNode(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
         removeEdge(selectedEdge);
+}
+
+void MyInteractor::pasteCopiedNetworkElements() {
+    pasteCopiedNetworkElements(askForItemsBoundingRect().center());
 }
 
 void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
@@ -607,6 +613,7 @@ QList<MyNetworkElementBase*> MyInteractor::copiedNetworkElements() {
 
 void MyInteractor::resetCopiedNetworkElements() {
     _copiedNetworkElements.clear();
+    emit pasteElementsStatusChanged(false);
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
@@ -761,6 +768,7 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
     resetCopiedNetworkElements();
+    selectElements(false);
     setCopiedNode(NULL);
     setNodeStyle(NULL);
     setCopiedNodeStyle(NULL);

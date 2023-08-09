@@ -85,11 +85,12 @@ void MyMenuBar::setMenus() {
     editMenu->addAction(copyAction);
     connect(copyAction, &QAction::triggered, this, &MyMenuBar::askForCopySelectedNetworkElements);
     connect(this, &MyMenuBar::elementsCopyableStatusChanged, copyAction, [copyAction] (const bool& copyable) { copyAction->setEnabled(copyable); });
-
     // paste
     QAction* pasteAction = new QAction(tr("&Paste"), editMenu);
+    pasteAction->setEnabled(false);
     editMenu->addAction(pasteAction);
-    //connect(pasteAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(pasteAction, &QAction::triggered, this, &MyMenuBar::askForPasteCopiedNetworkElements);
+    connect(this, &MyMenuBar::pasteElementsStatusChanged, pasteAction, [pasteAction] (const bool& areCopied) { pasteAction->setEnabled(areCopied); });
     editMenu->addSeparator();
     // select all
     QAction* selectAllAction = new QAction(tr("&Select All"), editMenu);
