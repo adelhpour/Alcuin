@@ -21,6 +21,7 @@ signals:
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
     void askForWriteFigureToFile(const QString&);
+    void askForCloseTheWidget();
     void askForTriggerUndoAction();
     void canUndoChanged(const bool&);
     void askForTriggerRedoAction();

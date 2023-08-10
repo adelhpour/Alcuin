@@ -76,8 +76,6 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(elementsCopyableStatusChanged(const bool&)), this, SIGNAL(elementsCopyableStatusChanged(const bool&)));
     connect(this, SIGNAL(askForPasteCopiedNetworkElements()), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements()));
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
-
-    // select all
     connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) { ((MyInteractor*)this->interactor())->selectElements(true, category); });
 

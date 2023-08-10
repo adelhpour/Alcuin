@@ -55,7 +55,7 @@ void MyMenuBar::setMenus() {
     // exit
     QAction* exitAction = new QAction(tr("&Exit"), fileMenu);
     fileMenu->addAction(exitAction);
-    //connect(exitAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(exitAction, &QAction::triggered, this, &MyMenuBar::askForCloseTheWidget);
     fileMenu->addSeparator();
 
     /// edit menu
