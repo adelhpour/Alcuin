@@ -20,6 +20,7 @@ void MyMainWindow::setMenuBar() {
 void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(menuBar, SIGNAL(askForSetNewNetworkCanvas()), centralWidget(), SIGNAL(askForSetNewNetworkCanvas()));
     connect(menuBar, SIGNAL(askForListOfPluginItemNames(const QString&)), centralWidget(), SIGNAL(askForListOfPluginItemNames(const QString&)));
+    connect(menuBar, SIGNAL(askForListOfPluginItemCategories(const QString&)), centralWidget(), SIGNAL(askForListOfPluginItemCategories(const QString&)));
     connect(menuBar, SIGNAL(askForReadFromFile(const QString&)), centralWidget(), SIGNAL(askForReadFromFile(const QString&)));
     connect(menuBar, SIGNAL(askForSaveCurrentNetwork()), centralWidget(), SIGNAL(askForSaveCurrentNetwork()));
     connect(menuBar, SIGNAL(askForWriteDataToFile(const QString&)), centralWidget(), SIGNAL(askForWriteDataToFile(const QString&)));
@@ -34,5 +35,6 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(centralWidget(), SIGNAL(elementsCopyableStatusChanged(const bool&)), menuBar, SIGNAL(elementsCopyableStatusChanged(const bool&)));
     connect(menuBar, SIGNAL(askForPasteCopiedNetworkElements()), centralWidget(), SIGNAL(askForPasteCopiedNetworkElements()));
     connect(centralWidget(), SIGNAL(pasteElementsStatusChanged(const bool&)), menuBar, SIGNAL(pasteElementsStatusChanged(const bool&)));
-    connect(menuBar, SIGNAL(askForSelectElements()), centralWidget(), SIGNAL(askForSelectElements()));
+    connect(menuBar, SIGNAL(askForSelectAllElements()), centralWidget(), SIGNAL(askForSelectAllElements()));
+    connect(menuBar, SIGNAL(askForSelectAllElements(const QString&)), centralWidget(), SIGNAL(askForSelectAllElements(const QString&)));
 }

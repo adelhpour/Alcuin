@@ -15,6 +15,7 @@ public:
 signals:
 
     const QStringList askForListOfPluginItemNames(const QString&);
+    const QStringList askForListOfPluginItemCategories(const QString&);
     void askForSetNewNetworkCanvas();
     void askForReadFromFile(const QString&);
     void askForSaveCurrentNetwork();
@@ -30,7 +31,8 @@ signals:
     void elementsCopyableStatusChanged(const bool&);
     void askForPasteCopiedNetworkElements();
     void pasteElementsStatusChanged(const bool&);
-    void askForSelectElements();
+    void askForSelectAllElements();
+    void askForSelectAllElements(const QString&);
 };
 
 #endif

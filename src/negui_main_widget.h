@@ -25,6 +25,7 @@ signals:
 
     void askForSetNewNetworkCanvas();
     const QStringList askForListOfPluginItemNames(const QString&);
+    const QStringList askForListOfPluginItemCategories(const QString&);
     void askForReadFromFile(const QString&);
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
@@ -39,7 +40,8 @@ signals:
     void elementsCopyableStatusChanged(const bool&);
     void askForPasteCopiedNetworkElements();
     void pasteElementsStatusChanged(const bool&);
-    void askForSelectElements();
+    void askForSelectAllElements();
+    void askForSelectAllElements(const QString&);
 
 private slots:
 

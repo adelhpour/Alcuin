@@ -95,15 +95,16 @@ void MyMenuBar::setMenus() {
     // select all
     QAction* selectAllAction = new QAction(tr("&Select All"), editMenu);
     editMenu->addAction(selectAllAction);
-    connect(selectAllAction, &QAction::triggered, this, &MyMenuBar::askForSelectElements);
-    // select all nodes
-    QAction* selectAllNodesAction = new QAction(tr("&Select All Nodes"), editMenu);
-    editMenu->addAction(selectAllNodesAction);
-    //connect(selectAllNodesAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
-    // select all reactions
-    QAction* selectAllReactionsAction = new QAction(tr("&Select All Reactions"), editMenu);
-    editMenu->addAction(selectAllReactionsAction);
-    //connect(selectAllReactionsAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(selectAllAction, &QAction::triggered, this, QOverload<>::of(&MyMenuBar::askForSelectAllElements));
+    // select all by category
+    QMenu* selectMenu = editMenu->addMenu(tr("&Select All by Category"));
+    QStringList elementStyleCategories = askForListOfPluginItemCategories("nodestyle");
+    elementStyleCategories += askForListOfPluginItemCategories("edgestyle");
+    elementStyleCategories.removeDuplicates();
+    for (const QString& elementStyleCategory : elementStyleCategories) {
+        QAction* selectAction = selectMenu->addAction(elementStyleCategory);
+        connect(selectAction, &QAction::triggered, this, [this, elementStyleCategory] () { askForSelectAllElements(elementStyleCategory);  });
+    }
     editMenu->addSeparator();
     // preferences
     QAction* preferencesAction = new QAction(tr("&Preferences"), editMenu);

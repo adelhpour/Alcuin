@@ -138,6 +138,15 @@ const QStringList MyInteractor::listOfPluginItemNames(const QString type) {
     return pluginItemNames;
 }
 
+const QStringList MyInteractor::listOfPluginItemCategories(const QString type) {
+    QStringList pluginItemCategories;
+    QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(plugins(), type);
+    for (MyPluginItemBase* pluginOfType: pluginsOfType)
+        pluginItemCategories.push_back(pluginOfType->category());
+
+    return pluginItemCategories;
+}
+
 bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
     if (elementStyleInterface) {
         _elementStyleInterface = elementStyleInterface;
@@ -673,20 +682,39 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 void MyInteractor::selectElements(const bool& selected) {
     selectNodes(selected);
     selectEdges(selected);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+}
+
+void MyInteractor::selectElements(const bool& selected, const QString& category) {
+    selectNodes(selected, category);
+    selectEdges(selected, category);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
 void MyInteractor::selectNodes(const bool& selected) {
     for (MyNetworkElementBase* node : qAsConst(nodes()))
         node->setSelected(selected);
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+}
+
+void MyInteractor::selectNodes(const bool& selected, const QString& category) {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+        if (node->style()->category() == category)
+            node->setSelected(selected);
+    }
 }
 
 void MyInteractor::selectEdges(const bool& selected) {
     for (MyNetworkElementBase* edge : qAsConst(edges()))
         edge->setSelected(selected);
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+}
+
+void MyInteractor::selectEdges(const bool& selected, const QString& category) {
+    for (MyNetworkElementBase* edge : qAsConst(edges())) {
+        if (edge->style()->category() == category)
+            edge->setSelected(selected);
+    }
 }
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {

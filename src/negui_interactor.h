@@ -139,8 +139,11 @@ public slots:
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
     void selectElements(const bool& selected);
+    void selectElements(const bool& selected, const QString& category);
     void selectNodes(const bool& selected);
+    void selectNodes(const bool& selected, const QString& category);
     void selectEdges(const bool& selected);
+    void selectEdges(const bool& selected, const QString& category);
     void setCopiedNode(MyNetworkElementBase* node);
     void setCutNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
@@ -167,6 +170,7 @@ public slots:
 
     // plugins
     const QStringList listOfPluginItemNames(const QString type);
+    const QStringList listOfPluginItemCategories(const QString type);
     
 private slots:
 

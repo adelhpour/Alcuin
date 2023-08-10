@@ -61,6 +61,7 @@ void MyNetworkEditorWidget::setInteractions() {
     // menubar
     connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
     connect(this, SIGNAL(askForListOfPluginItemNames(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemNames(const QString&)));
+    connect(this, SIGNAL(askForListOfPluginItemCategories(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemCategories(const QString&)));
     connect(this, SIGNAL(askForReadFromFile(const QString&)), (MyInteractor*)interactor(), SLOT(readFromFile(const QString&)));
     connect(this, SIGNAL(askForSaveCurrentNetwork()), (MyInteractor*)interactor(), SLOT(saveCurrentNetwork()));
     connect(this, SIGNAL(askForWriteDataToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeDataToFile(const QString&)));
@@ -77,7 +78,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
 
     // select all
-    connect(this, &MyNetworkEditorWidget::askForSelectElements, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
+    connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
+    connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) { ((MyInteractor*)this->interactor())->selectElements(true, category); });
 
     /// feature menu
     // display feature menu
