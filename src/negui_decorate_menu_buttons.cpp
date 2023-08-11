@@ -9,10 +9,16 @@ void decorateImportButton(QToolButton* button, const QString& iconsDirectory) {
     setIcon(button, iconsDirectory + "/open.png");
 }
 
-void decorateExportButton(QToolButton* button, const QString& iconsDirectory) {
+void decorateDataExportButton(QToolButton* button, const QString& iconsDirectory) {
     button->setText("SaveAs");
     button->setToolTip("SaveAs");
     setIcon(button, iconsDirectory + "/saveAs.png");
+}
+
+void decoratePrintExportButton(QToolButton* button, const QString& iconsDirectory) {
+    button->setText("Export");
+    button->setToolTip("Export");
+    setIcon(button, iconsDirectory + "/export.png");
 }
 
 void decorateSaveButton(QToolButton* button, const QString& iconsDirectory) {

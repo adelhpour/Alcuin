@@ -986,7 +986,7 @@ void MyInteractor::writeFigureToFile(const QString& exportToolName) {
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(((MyFileManager*)fileManager())->workingDirectory());
     if (!fileName.isEmpty()) {
-        emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->outputFormat());
+        emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->fileExtension());
     }
 }
 
@@ -1046,10 +1046,12 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     buttons.push_back(createResetSceneMenuButton());
     if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(createImportMenuButton());
-    if (getPluginsOfType(plugins(), "dataexporttool").size() || getPluginsOfType(plugins(), "printexporttool").size()) {
+    if (getPluginsOfType(plugins(), "dataexporttool").size()) {
         buttons.push_back(createSaveMenuButton());
-        buttons.push_back(createExportMenuButton());
+        buttons.push_back(createDataExportMenuButton());
     }
+    if (getPluginsOfType(plugins(), "printexporttool").size())
+        buttons.push_back(createPrintExportMenuButton());
     if (getPluginsOfType(plugins(), "autolayoutengine").size())
         buttons.push_back(createAutoLayoutMenuButton());
     buttons.push_back(createUndoActionMenuButton());
@@ -1085,34 +1087,29 @@ QToolButton* MyInteractor::createImportMenuButton() {
     return button;
 }
 
-QToolButton* MyInteractor::createExportMenuButton() {
+QToolButton* MyInteractor::createDataExportMenuButton() {
     QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
-    QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
-    
     QToolButton* button = new MyToolButton();
     QMenu* subMenu = new MyToolButtonMenu(button);
-    
-    // data export
-    if (dataExportPlugins.size()) {
-        MyWidgetAction* dataExportWidgetAction = new MyWidgetAction(subMenu);
-        dataExportWidgetAction->setItems((getPluginsOfType(plugins(), "dataexporttool")));
-        connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeDataToFile(MyPluginItemBase*)));
-        subMenu->addAction(dataExportWidgetAction);
-    }
-    
-    if (dataExportPlugins.size() && dataExportPlugins.size())
-        subMenu->addSeparator();
-    
-    // print export
-    if (dataExportPlugins.size()) {
-        MyWidgetAction* printExportWidgetAction = new MyWidgetAction(subMenu);
-        printExportWidgetAction->setItems((getPluginsOfType(plugins(), "printexporttool")));
-        connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeFigureToFile(MyPluginItemBase*)));
-        subMenu->addAction(printExportWidgetAction);
-    }
-
+    MyWidgetAction* dataExportWidgetAction = new MyWidgetAction(subMenu);
+    dataExportWidgetAction->setItems((getPluginsOfType(plugins(), "dataexporttool")));
+    connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeDataToFile(MyPluginItemBase*)));
+    subMenu->addAction(dataExportWidgetAction);
     button->setMenu(subMenu);
-    decorateExportButton(button, iconsDirectory().path());
+    decorateDataExportButton(button, iconsDirectory().path());
+    return button;
+}
+
+QToolButton* MyInteractor::createPrintExportMenuButton() {
+    QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
+    QToolButton* button = new MyToolButton();
+    QMenu* subMenu = new MyToolButtonMenu(button);
+    MyWidgetAction* printExportWidgetAction = new MyWidgetAction(subMenu);
+    printExportWidgetAction->setItems((getPluginsOfType(plugins(), "printexporttool")));
+    connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeFigureToFile(MyPluginItemBase*)));
+    subMenu->addAction(printExportWidgetAction);
+    button->setMenu(subMenu);
+    decoratePrintExportButton(button, iconsDirectory().path());
     return button;
 }
 

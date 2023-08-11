@@ -91,7 +91,7 @@ void MyNetworkEditorWidget::setInteractions() {
 
     /// graphics view
     // export screen scene
-    connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, QPrinter::OutputFormat)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, QPrinter::OutputFormat)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, const QString&)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, const QString&)));
     
     // set tool tip
     connect((MyInteractor*)interactor(), SIGNAL(askForSetToolTip(const QString&)), (MyGraphicsView*)view(), SLOT(setToolTip(const QString&)));

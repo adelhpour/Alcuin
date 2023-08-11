@@ -4,7 +4,6 @@
 #include <QGraphicsView>
 #include <QToolButton>
 #include <QWheelEvent>
-#include <QPrinter>
 #include <QProxyStyle>
 
 class MyGraphicsView : public QGraphicsView {
@@ -38,7 +37,7 @@ public slots:
 private slots:
     
     void setToolTip(const QString& toolTip);
-    void exportFigure(const QString& fileName, QPrinter::OutputFormat outputFormat);
+    void exportFigure(const QString& fileName, const QString& fileExtension);
     void resetScale();
     void scalingTime(qreal x);
     void animFinished();
