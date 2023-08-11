@@ -19,6 +19,10 @@ NEGUI_LIB_EXPORT void setGraphInfoNetworkEditorWidget(QWidget* networkEditorWidg
 
 NEGUI_LIB_EXPORT const char* getGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget);
 
+NEGUI_LIB_EXPORT const char* getName();
+
+NEGUI_LIB_EXPORT const char* getVersionNumber();
+
 }
 
 #endif
