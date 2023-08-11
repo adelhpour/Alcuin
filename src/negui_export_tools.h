@@ -75,11 +75,6 @@ public:
     MyPrintExportTool(const QString& name);
     
     const QString type() const override;
-    
-    QPrinter::OutputFormat outputFormat();
-    
-protected:
-    QPrinter::OutputFormat _outputFormat;
 };
 
 #endif

@@ -4,6 +4,8 @@
 
 #include <QScrollbar>
 #include <QTimeLine>
+#include <QPrinter>
+#include <QSvgGenerator>
 
 // MyGraphicsView
 
@@ -49,19 +51,31 @@ void MyGraphicsView::setToolTip(const QString& toolTip) {
     QWidget::setToolTip(toolTip);
 }
 
-void MyGraphicsView::exportFigure(const QString& fileName, QPrinter::OutputFormat outputFormat) {
+void MyGraphicsView::exportFigure(const QString& fileName, const QString& fileExtension) {
     qreal pageX = scene()->sceneRect().x() + (0.5 / currentScale()) * (currentScale() - 1) * scene()->sceneRect().width();
     qreal pageY = scene()->sceneRect().y() + (0.5 / currentScale()) * (currentScale() - 1) * scene()->sceneRect().height();
     qreal pageWidth = scene()->sceneRect().width() / currentScale();
     qreal pageHeight = scene()->sceneRect().height() / currentScale();
-    
-    QPrinter printer(QPrinter::ScreenResolution);
-    printer.setPageMargins(QMarginsF(0.0, 0.0, 0.0, 0.0));
-    printer.setOutputFormat(outputFormat);
-    printer.setOutputFileName(fileName);
-    printer.setPageSize(QPageSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()), QPageSize::Point));
-    QPainter painter(&printer);
-    scene()->render(&painter, scene()->sceneRect(), QRectF(pageX, pageY, pageWidth, pageHeight));
+
+    if (fileExtension == "pdf") {
+        QPrinter printer(QPrinter::ScreenResolution);
+        printer.setPageMargins(QMarginsF(0.0, 0.0, 0.0, 0.0));
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        printer.setOutputFileName(fileName);
+        printer.setPageSize(QPageSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()), QPageSize::Point));
+        QPainter painter(&printer);
+        scene()->render(&painter, scene()->sceneRect(), QRectF(pageX, pageY, pageWidth, pageHeight));
+    }
+    else if (fileExtension == "svg") {
+        QSvgGenerator svgGenerator;
+        svgGenerator.setFileName(fileName);
+        svgGenerator.setSize(QSize(scene()->sceneRect().width(), scene()->sceneRect().height()));
+        svgGenerator.setViewBox(QRect(pageX, pageY, pageWidth, pageHeight));
+        QPainter painter;
+        painter.begin(&svgGenerator);
+        scene()->render(&painter, scene()->sceneRect(), QRectF(pageX, pageY, pageWidth, pageHeight));
+        painter.end();
+    }
 }
 
 void MyGraphicsView::resetScale() {

@@ -165,7 +165,8 @@ target_link_libraries(NetworkEditorGUI
 		Qt5::Core
 		Qt5::Gui
 		Qt5::Widgets
-		Qt5::PrintSupport)
+		Qt5::PrintSupport
+		Qt5::Svg)
 
 ## set library dist
 install(TARGETS NetworkEditorGUI RUNTIME DESTINATION bin COMPONENT networkeditorgui_lib LIBRARY DESTINATION lib COMPONENT networkeditorgui_lib ARCHIVE DESTINATION lib COMPONENT networkeditorgui_lib)
