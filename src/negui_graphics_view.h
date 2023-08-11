@@ -29,6 +29,11 @@ public:
 signals:
     void enterKeyIsPressed();
     void askForDisplayContextMenu(const QPointF& position);
+
+public slots:
+
+    void zoomIn();
+    void zoomOut();
     
 private slots:
     

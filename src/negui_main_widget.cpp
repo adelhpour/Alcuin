@@ -78,8 +78,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) { ((MyInteractor*)this->interactor())->selectElements(true, category); });
-    connect(this, &MyNetworkEditorWidget::askForZoomIn, (MyGraphicsView*)view(), [this] () { ((MyGraphicsView*)view())->animatedScale(100); });
-    connect(this, &MyNetworkEditorWidget::askForZoomOut, (MyGraphicsView*)view(), [this] () { ((MyGraphicsView*)view())->animatedScale(-100); });
+    connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));
+    connect(this, SIGNAL(askForZoomOut()), (MyGraphicsView*)view(), SLOT(zoomOut()));
 
     /// feature menu
     // display feature menu
