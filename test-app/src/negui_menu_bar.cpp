@@ -56,7 +56,7 @@ void MyMenuBar::setMenus() {
     // exit
     QAction* exitAction = new QAction(tr("&Exit"), fileMenu);
     fileMenu->addAction(exitAction);
-    connect(exitAction, &QAction::triggered, this, &MyMenuBar::askForCloseTheWidget);
+    connect(exitAction, &QAction::triggered, this, &MyMenuBar::askForCloseTheApp);
     fileMenu->addSeparator();
 
     /// edit menu
