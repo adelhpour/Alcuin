@@ -135,9 +135,6 @@ void MyMenuBar::setMenus() {
 
     /// help menu
     QMenu* helpMenu = addMenu(tr("&Help"));
-    // list of shortcuts
-    QAction* listOfShortcutsAction = new QAction(tr("&List of Shortcuts"), helpMenu);
-    helpMenu->addAction(listOfShortcutsAction);
     // about
     QAction* aboutAction = new QAction(tr("&About"), helpMenu);
     aboutAction->setShortcut(QKeySequence::WhatsThis);
