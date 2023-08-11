@@ -38,4 +38,6 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(centralWidget(), SIGNAL(pasteElementsStatusChanged(const bool&)), menuBar, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(menuBar, SIGNAL(askForSelectAllElements()), centralWidget(), SIGNAL(askForSelectAllElements()));
     connect(menuBar, SIGNAL(askForSelectAllElements(const QString&)), centralWidget(), SIGNAL(askForSelectAllElements(const QString&)));
+    connect((MyMenuBar*)menuBar, &MyMenuBar::askForName, this, [this] () { return QString(std::string(getName()).c_str()); });
+    connect((MyMenuBar*)menuBar, &MyMenuBar::askForVersionNumber, this, [this] () { return QString(std::string(getVersionNumber()).c_str()); });
 }
