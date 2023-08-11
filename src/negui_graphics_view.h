@@ -24,6 +24,9 @@ public:
     QToolButton* getZoomOutButton();
     QToolButton* createZoomInMenuButton();
     QToolButton* createZoomOutMenuButton();
+
+    void exportFigureAsPDF(const QString& fileName, const QRectF& pageRect);
+    void exportFigureAsSVG(const QString& fileName ,const QRectF& pageRect);
     
 signals:
     void enterKeyIsPressed();
