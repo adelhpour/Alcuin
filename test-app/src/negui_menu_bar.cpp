@@ -1,4 +1,5 @@
 #include "negui_menu_bar.h"
+#include "negui_about_message_box.h"
 
 #include <QAction>
 #include <QMenu>
@@ -120,5 +121,7 @@ void MyMenuBar::setMenus() {
     // about
     QAction* aboutAction = new QAction(tr("&About"), helpMenu);
     helpMenu->addAction(aboutAction);
-    connect(aboutAction, &QAction::triggered, this, &MyMenuBar::askForSetNewNetworkCanvas);
+    connect(aboutAction, &QAction::triggered, this, [this] () {
+        QMessageBox* infoMessageBox = new MyAboutMessageBox(askForName(), askForVersionNumber());
+        infoMessageBox->exec();} );
 }

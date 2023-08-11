@@ -34,6 +34,8 @@ signals:
     void pasteElementsStatusChanged(const bool&);
     void askForSelectAllElements();
     void askForSelectAllElements(const QString&);
+    QString askForName();
+    QString askForVersionNumber();
 };
 
 #endif
