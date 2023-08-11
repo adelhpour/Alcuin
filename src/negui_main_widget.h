@@ -42,6 +42,8 @@ signals:
     void pasteElementsStatusChanged(const bool&);
     void askForSelectAllElements();
     void askForSelectAllElements(const QString&);
+    void askForZoomIn();
+    void askForZoomOut();
 
 private slots:
 
