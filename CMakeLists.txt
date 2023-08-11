@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(networkeditorgui)
 add_definitions(-DMAKE_NEGUI_LIB=true)
+add_definitions(-DName_Definition="${PROJECT_NAME}")
 
 include(GNUInstallDirs)
 
@@ -33,7 +34,9 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt")
         list(GET VersionString 3 NetworkEditorGUI_VERSION_RELEASE )
     endif()
 
-endif()	
+endif()
+
+add_definitions(-DVersion_Definition="${NetworkEditorGUI_VERSION_MAJOR}.${NetworkEditorGUI_VERSION_MINOR}.${NetworkEditorGUI_VERSION_PATCH}")
 
 if(WIN32)
 	## on windows Ws2_32.lib is needed to be included for the dll
