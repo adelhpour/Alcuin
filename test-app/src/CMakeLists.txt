@@ -2,9 +2,16 @@ set(CMAKE_AUTOMOC ON)
 
 ### build the main gui
 ## set the required sources and headers
-set(source_files negui_main.cpp negui_main_window.cpp negui_menu_bar.cpp negui_about_message_box.cpp)
+set(source_files
+		negui_main.cpp
+		negui_main_window.cpp
+		negui_menu_bar.cpp
+		negui_about_message_box.cpp)
 
-set(header_files negui_main_window.h negui_menu_bar.h negui_about_message_box.h)
+set(header_files
+		negui_main_window.h
+		negui_menu_bar.h
+		negui_about_message_box.h)
 
 ## build the bundle/executable
 add_executable(NetworkEditorGUITestApp WIN32 MACOSX_BUNDLE 
