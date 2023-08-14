@@ -32,7 +32,9 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt")
 
     if(${versionLength} GREATER 3)
         list(GET VersionString 3 NetworkEditorGUI_VERSION_RELEASE )
-    endif()
+	endif()
+
+	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/VERSION.txt" DESTINATION ${CMAKE_INSTALL_DOCDIR} COMPONENT networkeditorgui_lib)
 
 endif()
 
