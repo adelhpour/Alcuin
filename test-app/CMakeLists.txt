@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(networkeditorguitestapp)
-string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_TITLE)
+set(PROJECT_NAME_TITLE "NetworkEditorGuiTestApp")
 
 include(GNUInstallDirs)
 
