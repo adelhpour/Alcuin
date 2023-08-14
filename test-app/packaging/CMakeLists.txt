@@ -4,9 +4,9 @@ set(CPACK_PACKAGE_FILE_NAME "NetworkEditorGUITestApp")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Network Editor Project")
 set(CPACK_PACKAGE_VENDOR "Herbert Sauro's Lab")
 
-set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 0)
-set(CPACK_PACKAGE_VERSION_PATCH 0)
+set(CPACK_PACKAGE_VERSION_MAJOR ${NetworkEditorGUI_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${NetworkEditorGUI_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${NetworkEditorGUI_VERSION_PATCH})
 
 set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN TRUE)
 set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED TRUE)
@@ -43,3 +43,7 @@ cpack_add_component(
 cpack_ifw_configure_component(
         networkeditor_gui_test_app
         DEFAULT TRUE)
+
+if (WIN32)
+    configure_file(inno_setup.iss.in inno_setup.iss)
+endif ()

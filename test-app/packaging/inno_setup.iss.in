@@ -1,6 +1,6 @@
-#define MyAppName "NetworkEditorGUITestApp"
-#define MyAppExeName "NetworkEditorGUITestApp.exe"
-#define MyAppVersion "0.1.2"
+#define MyAppName "${PROJECT_NAME_TITLE}"
+#define MyAppExeName "${PROJECT_NAME_TITLE}.exe"
+#define MyAppVersion "${NetworkEditorGUI_DOTTED_VERSION}"
 #define MyAppPublisher "Herbert Sauro's Sys-Bio Lab"
 #define MyAppURL "https://github.com/adelhpour/NetworkEditorGUI"
 #define MyAppID 00000000-0000-000-0000-000000000000
@@ -38,7 +38,7 @@ Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
 Name: "{userdesktop}\{#MyAppName}"; FileName: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Files]
-Source: "C:\Users\adel\Documents\Projects\Made\5\install_app\bin\*"; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "${CMAKE_INSTALL_PREFIX}\bin\*"; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Run]
 FileName: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent
