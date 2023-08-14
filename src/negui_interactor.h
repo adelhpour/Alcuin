@@ -110,6 +110,10 @@ signals:
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
+    QRectF askForItemsBoundingRect();
+    void elementsCuttableStatusChanged(const bool&);
+    void elementsCopyableStatusChanged(const bool&);
+    void pasteElementsStatusChanged(const bool&);
     
     void enterKeyIsPressed();
     
@@ -135,8 +139,11 @@ public slots:
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
     void selectElements(const bool& selected);
+    void selectElements(const bool& selected, const QString& category);
     void selectNodes(const bool& selected);
+    void selectNodes(const bool& selected, const QString& category);
     void selectEdges(const bool& selected);
+    void selectEdges(const bool& selected, const QString& category);
     void setCopiedNode(MyNetworkElementBase* node);
     void setCutNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
@@ -158,15 +165,23 @@ public slots:
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 
+    void pasteCopiedNetworkElements();
     void pasteCopiedNetworkElements(const QPointF& position);
+
+    // plugins
+    const QStringList listOfPluginItemNames(const QString type);
+    const QStringList listOfPluginItemCategories(const QString type);
     
 private slots:
 
     void saveCurrentNetwork();
 
+    void readFromFile(const QString& importToolName);
     void readFromFile(MyPluginItemBase* importTool);
+    void writeDataToFile(const QString& exportToolName);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
+    void writeFigureToFile(const QString& exportToolName);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);

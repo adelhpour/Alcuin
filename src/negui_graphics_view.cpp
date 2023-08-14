@@ -94,6 +94,14 @@ void MyGraphicsView::animatedScale(const qint32& delta) {
     anim->start();
 }
 
+void MyGraphicsView::zoomIn() {
+    animatedScale(100);
+}
+
+void MyGraphicsView::zoomOut() {
+    animatedScale(-100);
+}
+
 QToolButton* MyGraphicsView::getZoomInButton() {
     return createZoomInMenuButton();
 }
@@ -104,13 +112,13 @@ QToolButton* MyGraphicsView::getZoomOutButton() {
 
 QToolButton* MyGraphicsView::createZoomInMenuButton() {
     MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, [this] () { animatedScale(100); });
+    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomIn);
     return button;
 }
 
 QToolButton* MyGraphicsView::createZoomOutMenuButton() {
     MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, [this] () { animatedScale(-100); });
+    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomOut);
     return button;
 }
 

@@ -1,6 +1,9 @@
 #include "negui_c_api.h"
+#include "negui_main_widget.h"
 #include "negui_interactor.h"
 #include <QJsonDocument>
+
+#define VERSION_NUMBER 0
 
 QWidget* createNetworkEditorWidget(QWidget* parent) {
     return new MyNetworkEditorWidget(parent);
@@ -25,4 +28,12 @@ const char* getGraphInfoNetworkEditorWidget(QWidget* networkEditorWidget) {
     }
     
     return "";
+}
+
+const char* getName() {
+    return Name_Definition;
+}
+
+const char* getVersionNumber() {
+    return Version_Definition;
 }

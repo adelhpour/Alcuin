@@ -129,6 +129,24 @@ QList<MyPluginItemBase*>& MyInteractor::plugins() {
     return _plugins;
 }
 
+const QStringList MyInteractor::listOfPluginItemNames(const QString type) {
+    QStringList pluginItemNames;
+    QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(plugins(), type);
+    for (MyPluginItemBase* pluginOfType: pluginsOfType)
+        pluginItemNames.push_back(pluginOfType->name());
+
+    return pluginItemNames;
+}
+
+const QStringList MyInteractor::listOfPluginItemCategories(const QString type) {
+    QStringList pluginItemCategories;
+    QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(plugins(), type);
+    for (MyPluginItemBase* pluginOfType: pluginsOfType)
+        pluginItemCategories.push_back(pluginOfType->category());
+
+    return pluginItemCategories;
+}
+
 bool MyInteractor::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
     if (elementStyleInterface) {
         _elementStyleInterface = elementStyleInterface;
@@ -571,6 +589,8 @@ void MyInteractor::copySelectedNetworkElements() {
         _copiedNetworkElements.push_back(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
         _copiedNetworkElements.push_back(selectedEdge);
+    if (_copiedNetworkElements.size())
+        emit pasteElementsStatusChanged(true);
 }
 
 void MyInteractor::cutSelectedNetworkElements() {
@@ -579,6 +599,10 @@ void MyInteractor::cutSelectedNetworkElements() {
         removeNode(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
         removeEdge(selectedEdge);
+}
+
+void MyInteractor::pasteCopiedNetworkElements() {
+    pasteCopiedNetworkElements(askForItemsBoundingRect().center());
 }
 
 void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
@@ -598,6 +622,7 @@ QList<MyNetworkElementBase*> MyInteractor::copiedNetworkElements() {
 
 void MyInteractor::resetCopiedNetworkElements() {
     _copiedNetworkElements.clear();
+    emit pasteElementsStatusChanged(false);
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
@@ -657,6 +682,15 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 void MyInteractor::selectElements(const bool& selected) {
     selectNodes(selected);
     selectEdges(selected);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+}
+
+void MyInteractor::selectElements(const bool& selected, const QString& category) {
+    selectNodes(selected, category);
+    selectEdges(selected, category);
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
 void MyInteractor::selectNodes(const bool& selected) {
@@ -664,9 +698,23 @@ void MyInteractor::selectNodes(const bool& selected) {
         node->setSelected(selected);
 }
 
+void MyInteractor::selectNodes(const bool& selected, const QString& category) {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+        if (node->style()->category() == category)
+            node->setSelected(selected);
+    }
+}
+
 void MyInteractor::selectEdges(const bool& selected) {
     for (MyNetworkElementBase* edge : qAsConst(edges()))
         edge->setSelected(selected);
+}
+
+void MyInteractor::selectEdges(const bool& selected, const QString& category) {
+    for (MyNetworkElementBase* edge : qAsConst(edges())) {
+        if (edge->style()->category() == category)
+            edge->setSelected(selected);
+    }
 }
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
@@ -677,6 +725,8 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
             element->setSelected(true);
         else
             element->setSelected(false);
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
 }
 
@@ -746,6 +796,7 @@ const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
     resetCopiedNetworkElements();
+    selectElements(false);
     setCopiedNode(NULL);
     setNodeStyle(NULL);
     setCopiedNodeStyle(NULL);
@@ -831,6 +882,8 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
         createSelectionAreaGraphicsItem(position);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
 }
 
@@ -874,6 +927,14 @@ void MyInteractor::clearSelectionArea() {
     }
 }
 
+void MyInteractor::readFromFile(const QString& importToolName) {
+    QList<MyPluginItemBase*> importTools = getPluginsOfType(plugins(), "importtool");
+    for (MyPluginItemBase* importTool : importTools) {
+        if (importTool->name() == importToolName)
+            return readFromFile(importTool);
+    }
+}
+
 void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
     if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         saveCurrentNetwork();
@@ -885,6 +946,14 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
         ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
         ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
         ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
+    }
+}
+
+void MyInteractor::writeDataToFile(const QString& exportToolName) {
+    QList<MyPluginItemBase*> exportTools = getPluginsOfType(plugins(), "dataexporttool");
+    for (MyPluginItemBase* exportTool : exportTools) {
+        if (exportTool->name() == exportToolName)
+            return writeDataToFile(exportTool);
     }
 }
 
@@ -904,6 +973,14 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& 
     ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
     ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
     ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
+}
+
+void MyInteractor::writeFigureToFile(const QString& exportToolName) {
+    QList<MyPluginItemBase*> exportTools = getPluginsOfType(plugins(), "printexporttool");
+    for (MyPluginItemBase* exportTool : exportTools) {
+        if (exportTool->name() == exportToolName)
+            return writeFigureToFile(exportTool);
+    }
 }
 
 void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
