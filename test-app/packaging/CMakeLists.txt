@@ -1,12 +1,12 @@
 # set CPack variables
-set(CPACK_PACKAGE_NAME "Network Editor GUI Test App")
-set(CPACK_PACKAGE_FILE_NAME "NetworkEditorGUITestApp")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Network Editor Project")
-set(CPACK_PACKAGE_VENDOR "Herbert Sauro's Lab")
-
 set(CPACK_PACKAGE_VERSION_MAJOR ${NetworkEditorGUI_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${NetworkEditorGUI_VERSION_MINOR})
 set(CPACK_PACKAGE_VERSION_PATCH ${NetworkEditorGUI_VERSION_PATCH})
+
+set(CPACK_PACKAGE_NAME "Network Editor GUI Test App")
+set(CPACK_PACKAGE_FILE_NAME "NetworkEditorGuiTestApp${NetworkEditorGUI_VERSION_MAJOR}.${NetworkEditorGUI_VERSION_MINOR}.${NetworkEditorGUI_VERSION_PATCH}Setup")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Network Editor Project")
+set(CPACK_PACKAGE_VENDOR "Herbert Sauro's Sys-Bio Lab")
 
 set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN TRUE)
 set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED TRUE)
@@ -20,10 +20,10 @@ set(CPACK_GENERATOR IFW)
 set(CPACK_IFW_VERBOSE ON)
 
 if (WIN32)
-    set(CPACK_IFW_TARGET_DIRECTORY "C:/Users/$ENV{USERNAME}/Documents/${CPACK_PACKAGE_FILE_NAME}")
+    set(CPACK_IFW_TARGET_DIRECTORY "C:/Program Files/${CPACK_PACKAGE_FILE_NAME}")
     set(CPACK_IFW_PACKAGE_START_MENU_DIRECTORY CPACK_PACKAGE_NAME)
 elseif (APPLE)
-    set(CPACK_IFW_TARGET_DIRECTORY "$ENV{HOME}/Documents/${CPACK_PACKAGE_FILE_NAME}")
+    set(CPACK_IFW_TARGET_DIRECTORY "/usr/bin")
 endif ()
 
 find_program(CPACK_IFW_BINARYCREATOR_EXECUTABLE
