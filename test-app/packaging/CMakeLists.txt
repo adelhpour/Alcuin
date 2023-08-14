@@ -46,5 +46,5 @@ cpack_ifw_configure_component(
 
 if (WIN32)
     configure_file(inno_setup.iss.in inno_setup.iss)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/inno_setup.iss DESTINATION ${CMAKE_INSTALL_PREFIX} COMPONENT networkeditorgui_lib)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/inno_setup.iss DESTINATION ${CMAKE_INSTALL_PREFIX}/packaging COMPONENT networkeditorgui_lib)
 endif ()
