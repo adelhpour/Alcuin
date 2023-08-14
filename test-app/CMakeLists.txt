@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(networkeditorguitestapp)
+string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_TITLE)
 
 include(GNUInstallDirs)
 
@@ -55,6 +56,35 @@ set(CMAKE_BUILD_TYPE "Release" CACHE STRING
   "Choose the type of build to perform. The options are: Debug, Release, RelWithDebInfo, MinSizeRel.")
 if("${CMAKE_BUILD_TYPE}" STREQUAL "")
   set(CMAKE_BUILD_TYPE "Release" FORCE)
+endif()
+
+## Determine the version
+set(NetworkEditorGUI_VERSION_MAJOR 0)
+set(NetworkEditorGUI_VERSION_MINOR 0)
+set(NetworkEditorGUI_VERSION_PATCH 0)
+set(NetworkEditorGUI_VERSION_RELEASE 0)
+set(NetworkEditorGUI_DOTTED_VERSION 0.0.0)
+if(EXISTS "${NETWORKEDITORGUI_PREFIX}/share/doc/networkeditorgui/VERSION.txt")
+
+	file(STRINGS "${NETWORKEDITORGUI_PREFIX}/share/doc/networkeditorgui/VERSION.txt" VersionString NEWLINE_CONSUME)
+
+	string(STRIP "${VersionString}" VersionString)
+
+	set(NetworkEditorGUI_DOTTED_VERSION ${VersionString})
+
+	string(REPLACE "." ";" VersionString "${VersionString}" )
+	string(REPLACE "-" ";" VersionString "${VersionString}" )
+
+	list(LENGTH VersionString versionLength)
+
+	list(GET VersionString 0 NetworkEditorGUI_VERSION_MAJOR)
+	list(GET VersionString 1 NetworkEditorGUI_VERSION_MINOR)
+	list(GET VersionString 2 NetworkEditorGUI_VERSION_PATCH)
+
+	if(${versionLength} GREATER 3)
+		list(GET VersionString 3 NetworkEditorGUI_VERSION_RELEASE )
+	endif()
+
 endif()
 
 add_subdirectory(src)
