@@ -120,17 +120,9 @@ void MyDataExportTool::showMessages() {
 // MyPrintExportTool
 
 MyPrintExportTool::MyPrintExportTool(const QString& name) : MyExportToolBase(name) {
-    _outputFormat = QPrinter::NativeFormat;
-    
-    if (_fileExtension == "pdf")
-        _outputFormat = QPrinter::PdfFormat;
+
 }
 
 const QString MyPrintExportTool::type() const {
     return "printexporttool";
-}
-
-
-QPrinter::OutputFormat MyPrintExportTool::outputFormat() {
-    return _outputFormat;
 }

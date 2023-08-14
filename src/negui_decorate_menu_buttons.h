@@ -6,7 +6,9 @@
 
 void decorateImportButton(QToolButton* button, const QString& iconsDirectory);
 
-void decorateExportButton(QToolButton* button, const QString& iconsDirectory);
+void decorateDataExportButton(QToolButton* button, const QString& iconsDirectory);
+
+void decoratePrintExportButton(QToolButton* button, const QString& iconsDirectory);
 
 void decorateSaveButton(QToolButton* button, const QString& iconsDirectory);
 

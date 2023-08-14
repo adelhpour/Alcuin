@@ -10,7 +10,6 @@
 #include <QPluginLoader>
 #include <QUndoStack>
 #include <QWidgetAction>
-#include <QPrinter>
 #include <QToolButton>
 #include <QPushButton>
 
@@ -98,7 +97,7 @@ public:
     
 signals:
     
-    void askForExportFigure(const QString& fileName, QPrinter::OutputFormat outputFormat);
+    void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
     void askForSetSceneRect(qreal x, qreal y, qreal width, qreal height);
@@ -208,7 +207,8 @@ protected:
     // menu buttons
     QToolButton* createNormalModeMenuButton();
     QToolButton* createImportMenuButton();
-    QToolButton* createExportMenuButton();
+    QToolButton* createDataExportMenuButton();
+    QToolButton* createPrintExportMenuButton();
     QToolButton* createSaveMenuButton();
     QList<QToolButton*> createAddElementMenuButtons();
     void addDefaultNodeStyle();

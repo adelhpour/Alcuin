@@ -27,6 +27,7 @@ target_link_libraries(NetworkEditorGUITestApp
 	Qt5::Gui
 	Qt5::Widgets
 	Qt5::PrintSupport
+	Qt5::Svg
 	${NETWORKEDITORGUI_LIBS})
 
 file(GLOB PY_SCRIPTS ${CMAKE_SOURCE_DIR}/src/plugins/*.py)
@@ -61,6 +62,8 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::DBus>  ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::PrintSupport> ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Svg> ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/platforms
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QCocoaIntegrationPlugin> ${PLUGINS_DIR}/platforms
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/styles
@@ -88,6 +91,7 @@ elseif (UNIX)
 	$<TARGET_FILE:Qt5::Gui> "$<TARGET_FILE_DIR:Qt5::Gui>/libQt5Gui.so.5"
 	$<TARGET_FILE:Qt5::Widgets> "$<TARGET_FILE_DIR:Qt5::Widgets>/libQt5Widgets.so.5"
 	$<TARGET_FILE:Qt5::PrintSupport> "$<TARGET_FILE_DIR:Qt5::PrintSupport>/libQt5PrintSupport.so.5"
+	$<TARGET_FILE:Qt5::Svg> "$<TARGET_FILE_DIR:Qt5::Svg>/libQt5Svg.so.5"
 	DESTINATION lib/dependencies COMPONENT networkeditor_gui_test_app)
 
 	## install the executable
@@ -98,7 +102,7 @@ elseif (WIN32)
 	install(FILES ${NETWORKEDITORGUI_DLLS} DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES ${NETWORKEDITORGUI_PLUGINS_DLLS} DESTINATION bin/plugins COMPONENT networkeditor_gui_test_app)
 	install(FILES ${PY_SCRIPTS} DESTINATION bin/plugins COMPONENT networkeditor_gui_test_app)
-	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui>          $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> DESTINATION bin COMPONENT networkeditor_gui_test_app)
+	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> $<TARGET_FILE:Qt5::Svg> DESTINATION bin COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT networkeditor_gui_test_app)
 	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT networkeditor_gui_test_app)
 	install(DIRECTORY ${NETWORKEDITORGUI_PREFIX}/resources DESTINATION bin COMPONENT networkeditor_gui_test_app)

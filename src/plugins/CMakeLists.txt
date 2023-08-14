@@ -86,6 +86,7 @@ foreach(PLUGIN ${PLUGINS})
 			Qt5::Gui
 			Qt5::Widgets
 			Qt5::PrintSupport
+			Qt5::Svg
 			${Python_LIBRARIES})
 
 	## set library dist

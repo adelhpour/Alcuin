@@ -4,7 +4,6 @@
 #include <QGraphicsView>
 #include <QToolButton>
 #include <QWheelEvent>
-#include <QPrinter>
 #include <QProxyStyle>
 
 class MyGraphicsView : public QGraphicsView {
@@ -25,6 +24,9 @@ public:
     QToolButton* getZoomOutButton();
     QToolButton* createZoomInMenuButton();
     QToolButton* createZoomOutMenuButton();
+
+    void exportFigureAsPDF(const QString& fileName, const QRectF& pageRect);
+    void exportFigureAsSVG(const QString& fileName ,const QRectF& pageRect);
     
 signals:
     void enterKeyIsPressed();
@@ -38,7 +40,7 @@ public slots:
 private slots:
     
     void setToolTip(const QString& toolTip);
-    void exportFigure(const QString& fileName, QPrinter::OutputFormat outputFormat);
+    void exportFigure(const QString& fileName, const QString& fileExtension);
     void resetScale();
     void scalingTime(qreal x);
     void animFinished();
