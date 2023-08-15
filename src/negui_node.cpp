@@ -381,13 +381,13 @@ const bool MyCentroidNode::isCopyable() {
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     MyNodeBase::addEdge(e);
     connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
-    connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setConnectedElementsSelected(const bool&)));
+    connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
     MyNodeBase::removeEdge(e);
     disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
-    disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setConnectedElementsSelected(const bool&)));
+    disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
 void MyCentroidNode::adjustNodePositionToNeighborNodes() {
@@ -425,14 +425,12 @@ void MyCentroidNode::connectNodePositionToNeighborNodes(const bool& connected) {
     _isNodePositionConnectedToNeighborNodes = connected;
 }
 
-void MyCentroidNode::setSelected(const bool& isSelected) {
-    setConnectedElementsSelected(isSelected);
-}
-
-void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {
-    MyNodeBase::setSelected(isSelected);
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
-        edge->setSelected(isSelected);
+void MyCentroidNode::setSelected(const bool& selected) {
+    if (selected != isSelected()) {
+        MyNodeBase::setSelected(selected);
+        for (MyNetworkElementBase *edge : qAsConst(edges()))
+            edge->setSelected(selected);
+    }
 }
 
 const QLineF MyCentroidNode::createBezierAdjustLine() {

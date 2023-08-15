@@ -87,13 +87,6 @@ void MyEdgeSceneGraphicsItemBase::enableSelectEdgeMode() {
     setCursor(Qt::PointingHandCursor);
 }
 
-void MyEdgeSceneGraphicsItemBase::setFocused(const bool& isFocused) {
-    bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
-    MyNetworkElementGraphicsItemBase::setFocused(isFocused);
-    if (isFocused && !focusedGraphicsItemsAlreadyExist)
-        askForSetConnectedElementsFocused(isFocused);
-}
-
 // MyClassicEdgeSceneGraphicsItem
 
 MyClassicEdgeSceneGraphicsItem::MyClassicEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {

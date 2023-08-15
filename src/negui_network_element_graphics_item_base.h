@@ -40,8 +40,8 @@ public:
     void setSelectedWithStroke(const bool& selected);
     
     void setSelectedWithFill(const bool& selected);
-    
-    virtual void setFocused(const bool& isFocused);
+
+    void setFocused(const bool& isFocused);
     
     void setCursor(const QCursor &cursor);
     
