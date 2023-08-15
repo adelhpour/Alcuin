@@ -29,7 +29,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     layout->addWidget(toolBar(), 1, 0, 1, 3);
     layout->addWidget(modeMenu(), 2, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
     layout->addWidget(view(), 2, 1, 1, 1);
-    layout->addWidget(statusBar(), 1, 0, 1, 3);
+    layout->addWidget(statusBar(), 3, 0, 1, 3);
     setLayout(layout);
 
     setReadyToLaunch();
@@ -44,7 +44,7 @@ void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
     _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
-    _toolBar = new MyStatusBar(this);
+    _statusBar = new MyStatusBar(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
@@ -157,6 +157,9 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCutSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(cutSelectedNetworkElements()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteCopiedNetworkElements(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements(const QPointF &)));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForDeleteSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(deleteSelectedNetworkElements()));
+
+    // status bar
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setMousePosition(const QPointF)));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {
