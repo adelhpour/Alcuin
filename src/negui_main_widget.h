@@ -18,6 +18,7 @@ public:
     QWidget* toolBar();
     QWidget* modeMenu();
     QWidget* view();
+    QWidget* statusBar();
     void readSettings();
     void writeSettings();
 
@@ -63,6 +64,7 @@ protected:
     QWidget* _view;
     QWidget* _modeMenu;
     QWidget* _featureMenu;
+    QWidget* _statusBar;
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "negui_mode_menu.h"
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
+#include "negui_status_bar.h"
 
 #include <QGridLayout>
 #include <QSettings>
@@ -28,6 +29,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     layout->addWidget(toolBar(), 1, 0, 1, 3);
     layout->addWidget(modeMenu(), 2, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
     layout->addWidget(view(), 2, 1, 1, 1);
+    layout->addWidget(statusBar(), 1, 0, 1, 3);
     setLayout(layout);
 
     setReadyToLaunch();
@@ -42,6 +44,7 @@ void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
     _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
+    _toolBar = new MyStatusBar(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
@@ -174,6 +177,10 @@ QWidget* MyNetworkEditorWidget::modeMenu() {
 
 QWidget* MyNetworkEditorWidget::view() {
     return _view;
+}
+
+QWidget* MyNetworkEditorWidget::statusBar() {
+    return _statusBar;
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
