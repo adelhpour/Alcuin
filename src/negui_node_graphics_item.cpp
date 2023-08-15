@@ -115,7 +115,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     if (change == ItemPositionChange) {
         deparent();
         moveChildItems(value.toPointF());
-        // emit askForSelectNetworkElement();
+        emit askForUnselectNetworkElement();
         emit askForResetPosition();
     }
 
