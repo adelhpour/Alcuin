@@ -322,7 +322,6 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*)), this, SLOT(areAnyOtherElementsSelected(MyNetworkElementBase*)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
-        connect(n->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
         emit askForAddGraphicsItem(n->graphicsItem());
     }
 }
@@ -455,7 +454,6 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedEdgeStyle()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
-        connect(e->graphicsItem(), SIGNAL(askForClearFocusedGraphicsItems()), this, SLOT(clearElementsFocusedGraphicsItems()));
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
@@ -866,13 +864,6 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
         edge->enableSelectEdgeMode();
     
     emit askForSetToolTip("Select " + edgeCategory + " edges");
-}
-
-void MyInteractor::clearElementsFocusedGraphicsItems() {
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
-        node->graphicsItem()->clearFocusedGraphicsItems();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
-        edge->graphicsItem()->clearFocusedGraphicsItems();
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {

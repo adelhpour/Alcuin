@@ -159,8 +159,7 @@ public slots:
     void enableSelectMode(const QString& elementCategory = "");
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
-    
-    void clearElementsFocusedGraphicsItems();
+
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 

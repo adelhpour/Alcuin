@@ -115,7 +115,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     if (change == ItemPositionChange) {
         deparent();
         moveChildItems(value.toPointF());
-        emit askForSetNetworkElementSelected(false);
+        // emit askForSelectNetworkElement();
         emit askForResetPosition();
     }
 
@@ -189,20 +189,6 @@ void MyClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
     }
 }
 
-void MyClassicNodeSceneGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    MyNetworkElementGraphicsItemBase::mousePressEvent(event);
-    if (event->button() == Qt::LeftButton)
-        _mousePressedPosition = event->scenePos();
-}
-
-void MyClassicNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
-    if (event->button() == Qt::LeftButton) {
-        if (qAbs(_mousePressedPosition.x() - event->scenePos().x()) < 0.01 && qAbs(_mousePressedPosition.y() - event->scenePos().y()) < 0.01)
-            emit askForSetNetworkElementSelected(true);
-    }
-}
-
 // MyCentroidNodeSceneGraphicsItem
 
 MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
@@ -217,34 +203,6 @@ void MyCentroidNodeSceneGraphicsItem::connectContextMenu(QMenu* contextMenu) {
     MyNetworkElementGraphicsItemBase::connectContextMenu(contextMenu);
     connect(contextMenu, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)), this, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)));
     connect(contextMenu, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()), this, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()));
-}
-
-void MyCentroidNodeSceneGraphicsItem::setFocused(const bool& isFocused) {
-    bool focusedGraphicsItemsAlreadyExist = _focusedGraphicsItems.size() ? true : false;
-    if (!focusedGraphicsItemsAlreadyExist || !isFocused)
-        MyNetworkElementGraphicsItemBase::setFocused(isFocused);
-}
-
-void MyCentroidNodeSceneGraphicsItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-    emit askForSetNetworkElementSelected(true);
-    QGraphicsItem::hoverEnterEvent(event);
-}
-
-void MyCentroidNodeSceneGraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-    emit askForSetNetworkElementSelected(false);
-    QGraphicsItem::hoverLeaveEvent(event);
-}
-
-void MyCentroidNodeSceneGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-    emit askForSetNetworkElementSelected(false);
-    MyNodeSceneGraphicsItemBase::mouseMoveEvent(event);
-    emit askForSetNetworkElementSelected(true);
-}
-
-void MyCentroidNodeSceneGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    if (event->button() == Qt::LeftButton)
-        emit askForSetNetworkElementSelected(false);
-    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
 }
 
 // MyNodeIconGraphicsItem

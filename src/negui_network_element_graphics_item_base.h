@@ -55,7 +55,7 @@ signals:
     
     void mouseLeftButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
-    void askForSetNetworkElementSelected(const bool&);
+    void askForSelectNetworkElement();
     const bool askForWhetherNetworkElementIsSelected();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
