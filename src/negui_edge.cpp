@@ -30,7 +30,6 @@ MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
 void MyEdgeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
-    connect(_graphicsItem, SIGNAL(askForSetConnectedElementsFocused(const bool&)), this, SIGNAL(askForSetConnectedElementsSelected(const bool&)));
 }
 
 void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
@@ -82,9 +81,12 @@ const bool MyEdgeBase::isCuttable() {
 }
 
 void MyEdgeBase::setSelected(const bool& selected) {
-    MyNetworkElementBase::setSelected(selected);
-    if (isSetArrowHead())
-        arrowHead()->setSelected(selected);
+    if (selected != isSelected()) {
+        MyNetworkElementBase::setSelected(selected);
+        if (isSetArrowHead())
+            arrowHead()->setSelected(selected);
+        emit askForSetConnectedElementsSelected(selected);
+    }
 }
 
 void MyEdgeBase::setSelectedWithColor(const bool& selected) {

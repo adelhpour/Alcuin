@@ -67,7 +67,6 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     
     bool _reparent;
-    QPointF _mousePressedPosition;
 };
 
 class MyClassicNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
@@ -86,14 +85,6 @@ public:
 public slots:
 
     void updateExtents(const QRectF& extents);
-
-protected:
-
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-
-    QPointF _mousePressedPosition;
 };
 
 class MyCentroidNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
@@ -107,23 +98,11 @@ public:
 
     void connectContextMenu(QMenu* contextMenu) override;
 
-    void setFocused(const bool& isFocused) override;
-
 signals:
 
     void askForConnectNodePositionToNeighborNodes(const bool&);
 
     const bool askForWhetherNodePositionIsConnectedToNeighborNodes();
-
-protected:
-
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *) override;
-
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *) override;
-
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {

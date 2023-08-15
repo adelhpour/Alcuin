@@ -8,8 +8,7 @@
 MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
-    connect(this, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForClearFocusedGraphicsItems()));
-    connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForClearFocusedGraphicsItems()));
+    connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForSelectNetworkElement()));
     connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
 }
 
@@ -129,8 +128,9 @@ void MyNetworkElementGraphicsItemBase::setSelectedWithFill(const bool& selected)
 }
 
 void MyNetworkElementGraphicsItemBase::setFocused(const bool& isFocused) {
-    clearFocusedGraphicsItems();
-    if (isFocused)
+    if (!isFocused)
+        clearFocusedGraphicsItems();
+    else if (!_focusedGraphicsItems.size())
         addFocusedGraphicsItems();
 }
 

@@ -24,9 +24,9 @@ void MyNetworkElementBase::updateGraphicsItem() {
 }
 
 void MyNetworkElementBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { setSelected(false); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit elementObject(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDeleteNetworkElement, this, [this] () { emit askForDeleteNetworkElement(this); });
-    connect(_graphicsItem, SIGNAL(askForSetNetworkElementSelected(const bool&)), this, SLOT(setSelected(const bool&)));
     connect(_graphicsItem, SIGNAL(askForWhetherNetworkElementIsSelected()), this, SLOT(isSelected()));
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElement, this, [this] () { emit askForCopyNetworkElement(this); } );
@@ -62,8 +62,10 @@ bool MyNetworkElementBase::setActive(const bool& active) {
 }
 
 void MyNetworkElementBase::setSelected(const bool& selected) {
-    _isSelected = selected;
-    graphicsItem()->setFocused(selected);
+    if (selected != isSelected()) {
+        _isSelected = selected;
+        graphicsItem()->setFocused(selected);
+    }
 }
 
 const bool MyNetworkElementBase::isSelected() {
@@ -76,7 +78,6 @@ const bool MyNetworkElementBase::areAnyOtherElementsSelected() {
 
 void MyNetworkElementBase::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
-    setSelected(false);
     graphicsItem()->enableNormalMode();
 }
 

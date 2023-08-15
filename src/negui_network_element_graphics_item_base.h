@@ -40,8 +40,8 @@ public:
     void setSelectedWithStroke(const bool& selected);
     
     void setSelectedWithFill(const bool& selected);
-    
-    virtual void setFocused(const bool& isFocused);
+
+    void setFocused(const bool& isFocused);
     
     void setCursor(const QCursor &cursor);
     
@@ -55,7 +55,8 @@ signals:
     
     void mouseLeftButtonIsPressed();
     void mouseLeftButtonIsDoubleClicked();
-    void askForSetNetworkElementSelected(const bool&);
+    void askForUnselectNetworkElement();
+    void askForSelectNetworkElement();
     const bool askForWhetherNetworkElementIsSelected();
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);

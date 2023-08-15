@@ -54,20 +54,6 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
-
-    void setFocused(const bool& isFocused) override;
-
-signals:
-
-    void askForSetConnectedElementsFocused(const bool&);
-    
-protected:
-    
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-    
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
-    
-    QPointF _mousePressedPosition;
 };
 
 class MyClassicEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
