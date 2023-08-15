@@ -194,6 +194,8 @@ private slots:
 
     void connectNodePositionToNeighborNodes(const bool& connected);
 
+    void setSelected(const bool& isSelected) override;
+
     void setConnectedElementsSelected(const bool& isSelected);
 
     const QLineF createBezierAdjustLine();

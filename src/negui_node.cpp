@@ -425,8 +425,12 @@ void MyCentroidNode::connectNodePositionToNeighborNodes(const bool& connected) {
     _isNodePositionConnectedToNeighborNodes = connected;
 }
 
+void MyCentroidNode::setSelected(const bool& isSelected) {
+    setConnectedElementsSelected(isSelected);
+}
+
 void MyCentroidNode::setConnectedElementsSelected(const bool& isSelected) {
-    setSelected(isSelected);
+    MyNodeBase::setSelected(isSelected);
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->setSelected(isSelected);
 }
