@@ -84,7 +84,7 @@ void MyDoubleParameter::updateInputWidget() {
 }
 
 void MyDoubleParameter::connectInputWidget() {
-    connect(_inputWidget, SIGNAL(editingFinished()), this, SIGNAL(isUpdated()));
+    connect(_inputWidget, SIGNAL(valueChanged(double)), this, SIGNAL(isUpdated()));
 }
 
 void MyDoubleParameter::reset() {
@@ -191,7 +191,7 @@ void MyIntegerParameter::updateInputWidget() {
 }
 
 void MyIntegerParameter::connectInputWidget() {
-    connect(_inputWidget, SIGNAL(editingFinished()), this, SIGNAL(isUpdated()));
+    connect(_inputWidget, SIGNAL(valueChanged(int)), this, SIGNAL(isUpdated()));
 }
 
 void MyIntegerParameter::reset() {
