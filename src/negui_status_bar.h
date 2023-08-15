@@ -9,6 +9,10 @@ class MyStatusBar : public QStatusBar {
 public:
 
     MyStatusBar(QWidget* parent = nullptr);
+
+public slots:
+
+    void setMousePosition(const QPointF& mousePosition);
 };
 
 #endif
