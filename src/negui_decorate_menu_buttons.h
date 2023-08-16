@@ -2,6 +2,7 @@
 #define __NEGUI_DECORATE_MENU_BUTTONS_H
 
 #include <QToolButton>
+#include <QPushButton>
 #include <QWidgetAction>
 
 void decorateImportButton(QToolButton* button, const QString& iconsDirectory);
@@ -34,6 +35,8 @@ QMenu* createAddButtonMenu(QList<QToolButton*> buttons);
 
 QWidgetAction* createButtonWidgetAction(QToolButton* button, QWidget* parent);
 
-void setIcon(QToolButton* button, const QString& iconPath);
+void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDirectory);
+
+void setIcon(QAbstractButton* button, const QString& iconPath);
 
 #endif
