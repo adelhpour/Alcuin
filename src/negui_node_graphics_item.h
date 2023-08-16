@@ -23,6 +23,8 @@ signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);
 
+    QString askForElementName();
+
 };
 
 class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {

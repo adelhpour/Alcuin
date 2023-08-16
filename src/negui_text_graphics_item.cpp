@@ -4,7 +4,8 @@
 
 // MyTextGraphicsItem
 
-MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
+MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
+    _elementName = elementName;
 }
 
 void MyTextGraphicsItem::updateStyle() {
@@ -13,7 +14,12 @@ void MyTextGraphicsItem::updateStyle() {
             setTextWidth(((MyTextStyle*)style())->width());
         
         // plain-text
-        setPlainText(((MyTextStyle*)style())->plainText());
+        if (((MyTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
+            ((MyTextStyle*)style())->setPlainText(_elementName);
+            setPlainText(_elementName);
+        }
+        else if (!((MyTextStyle*)style())->plainText().isEmpty())
+            setPlainText(((MyTextStyle*)style())->plainText());
         
         // text-color
         setDefaultTextColor(((MyTextStyle*)style())->defaultTextColor());

@@ -25,6 +25,7 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
+    connect((MyNodeGraphicsItemBase*)_graphicsItem, &MyNodeGraphicsItemBase::askForElementName, this, [this] () { return name(); });
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));

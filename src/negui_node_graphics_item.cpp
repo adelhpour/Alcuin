@@ -25,7 +25,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
         item->setZValue(zValue());
     }
     else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), this);
+        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementName(), this);
         item->setZValue(zValue() + 1);
     }
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE) {

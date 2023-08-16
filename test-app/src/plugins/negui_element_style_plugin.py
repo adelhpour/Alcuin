@@ -1,13 +1,13 @@
 import json
  
 def elementStylesInfo():
-    compartment_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Compartment", 'convertible-parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "mediumaquamarine", 'stroke' : "black", 'stroke-width' : 2, 'x' : -30.0, 'y' : -30.0, 'width' : 60.0, 'height' : 60.0, 'rx' : 12.0, 'ry' : 12.0}]}
+    compartment_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Compartment", 'convertible-parent-category' : "Compartment", 'shapes' : [{'shape' : "rect", 'fill' : "mediumaquamarine", 'stroke' : "black", 'stroke-width' : 2, 'x' : -40.0, 'y' : -40.0, 'width' : 80.0, 'height' : 80.0, 'rx' : 12.0, 'ry' : 12.0}, {'shape': "text", 'color': "black", 'font-family': "monospace", 'font-size': 6, 'set_name_as_default_plain_text': True, 'x': -40.0, 'y': -40.0, 'width': 80.0, 'height': 80.0 }]}
 
-    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'x' : -20.0, 'y' : -20.0, 'width' : 40.0, 'height' : 40.0, 'rx' : 8.0, 'ry' : 8.0}]}
+    species_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'x' : -30.0, 'y' : -20.0, 'width' : 60.0, 'height' : 40.0, 'rx' : 8.0, 'ry' : 6.0}, {'shape': "text", 'color': "black", 'font-family': "monospace", 'font-size': 8, 'set_name_as_default_plain_text': True, 'x': -30.0, 'y': -20.0, 'width': 60.0, 'height': 40.0}]}
     
-    species_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2}]}
+    species_node_style2 = {'name' : "simple_circle", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "ellipse", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2}, {'shape': "text", 'color': "black", 'font-family': "monospace", 'font-size': 6, 'set_name_as_default_plain_text': True }]}
     
-    species_node_style3 = {'name' : "hexagon", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "polygon", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'points' : [{'x' : -10.0, 'y' : -20}, {'x' : 10.0, 'y' : -20.0}, {'x' : 20.0, 'y' : 0.0}, {'x' : 10.0, 'y' : 20.0}, {'x' : -10.0, 'y' : 20.0}, {'x' : -20.0, 'y' : 0.0}]}]}
+    species_node_style3 = {'name' : "hexagon", 'type' : "nodestyle", 'category' : "Species", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "polygon", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, 'points' : [{'x' : -10.0, 'y' : -20}, {'x' : 10.0, 'y' : -20.0}, {'x' : 20.0, 'y' : 0.0}, {'x' : 10.0, 'y' : 20.0}, {'x' : -10.0, 'y' : 20.0}, {'x' : -20.0, 'y' : 0.0}]}, {'shape': "text", 'color': "black", 'font-family': "monospace", 'font-size': 6, 'set_name_as_default_plain_text': True }]}
     
     reaction_node_style1 = {'name' : "simple_rect", 'type' : "nodestyle", 'category' : "Reaction", 'parent-categories' : ["Compartment"], 'shapes' : [{'shape' : "rect", 'fill' : "white", 'stroke' : "black", 'stroke-width' : 2, "x": -12.5, "y": -12.5, "width": 25.0, "height": 25.0}]}
 

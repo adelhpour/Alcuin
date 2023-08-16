@@ -8,7 +8,7 @@
 class MyTextGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsTextItem {
 public:
     
-    MyTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent);
+    MyTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
     
     void updateStyle() override;
     
@@ -26,6 +26,10 @@ public:
     
 public slots:
     void updateExtents(const QRectF& extents) override;
+
+protected:
+
+    QString _elementName;
 };
 
 #endif
