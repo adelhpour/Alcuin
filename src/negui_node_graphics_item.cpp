@@ -172,6 +172,8 @@ void MyClassicNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
 }
 
 void MyClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
+    // TODO leads to an error in the position for newly added shapes.
+    /*
     QPointF extentsCenter = getExtents().center();
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
@@ -179,6 +181,7 @@ void MyClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
             casted_item->adjustOriginalPosition(extentsCenter - (_originalPosition + pos()));
     }
     _originalPosition = extentsCenter - pos();
+     */
 }
 
 void MyClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
