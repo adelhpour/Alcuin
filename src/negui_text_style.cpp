@@ -40,6 +40,8 @@ MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
     // vertical alignment
     addParameter(new MyVTextAnchorParameter());
 
+    _whetherSetNameAsDefaultPlainText = false;
+
     reset();
 }
 
@@ -53,6 +55,16 @@ const QString MyTextStyle::plainText() const {
         return ((MyStringParameter*)parameter)->defaultValue();
     
     return "";
+}
+
+void MyTextStyle::setPlainText(const QString& plainText) const {
+    MyParameterBase* parameter = findParameter("plain-text");
+    if (parameter)
+        ((MyStringParameter *) parameter)->setDefaultValue(plainText);
+}
+
+const bool& MyTextStyle::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
 }
 
 const QColor MyTextStyle::defaultTextColor() const {
@@ -199,10 +211,16 @@ void MyTextStyle::read(const QJsonObject &json) {
     MyParameterBase* parameter = NULL;
     
     // plain-text
+    _whetherSetNameAsDefaultPlainText = false;
     if (json.contains("plain-text") && json["plain-text"].isString()) {
         parameter = findParameter("plain-text");
         if (parameter)
             ((MyStringParameter*)parameter)->setDefaultValue(json["plain-text"].toString());
+    }
+    else {
+        _whetherSetNameAsDefaultPlainText = true;
+        if (json.contains("set_name_as_default_plain_text") && json["set_name_as_default_plain_text"].isBool())
+            _whetherSetNameAsDefaultPlainText = json["set_name_as_default_plain_text"].toBool();
     }
     
     // color
@@ -288,10 +306,14 @@ void MyTextStyle::write(QJsonObject &json) {
     MyParameterBase* parameter = NULL;
     
     // plain-text
-    parameter = findParameter("plain-text");
-    if (parameter)
-        json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
-    
+    if (whetherSetNameAsDefaultPlainText())
+        json["set_name_as_default_plain_text"] = whetherSetNameAsDefaultPlainText();
+    else {
+        parameter = findParameter("plain-text");
+        if (parameter)
+            json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
+    }
+
     // color
     parameter = findParameter("color");
     if (parameter)

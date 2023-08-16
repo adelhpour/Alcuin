@@ -14,6 +14,12 @@ public:
     
     // get the plain text for text
     const QString plainText() const;
+
+    // set the plain text for text
+    void setPlainText(const QString& plainText) const;
+
+    // set the associated name as the default text
+    const bool& whetherSetNameAsDefaultPlainText() const;
     
     // get the default color for text
     const QColor defaultTextColor() const;
@@ -58,6 +64,10 @@ public:
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+
+protected:
+
+    bool _whetherSetNameAsDefaultPlainText;
 };
 
 #endif
