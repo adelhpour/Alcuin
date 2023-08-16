@@ -85,6 +85,8 @@ signals:
 
     const bool askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*);
 
+    const QString askForIconsDirectoryPath();
+
 public slots:
 
     virtual void setSelected(const bool& selected);
