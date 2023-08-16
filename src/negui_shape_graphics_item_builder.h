@@ -16,7 +16,7 @@ MyShapeGraphicsItemBase* createConnectedToStartCentroidShapeLineShape(const QLin
 
 MyShapeGraphicsItemBase* createConnectedToEndCentroidShapeLineShape(const QLineF& line, QGraphicsItem *parent);
 
-MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, QGraphicsItem *parent);
+MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
 
 MyShapeGraphicsItemBase* createCentroidShape(qreal x, qreal y, QGraphicsItem *parent);
 
