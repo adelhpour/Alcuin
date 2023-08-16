@@ -1,12 +1,18 @@
 #include "negui_feature_menu.h"
+#include "negui_decorate_menu_buttons.h"
 
 #include <QGridLayout>
 
 // MyFeatureMenu
 
-MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent) : MyFrame(parent) {
+MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = new QGridLayout(this);
+
+    QPushButton* closeFeatureMenuButton = new QPushButton();
+    decorateCloseFeatureMenuButton(closeFeatureMenuButton, iconsDirectoryPath);
+    connect(closeFeatureMenuButton, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
+    contentLayout->addWidget(closeFeatureMenuButton, contentLayout->rowCount(), 0, 1, 2, Qt::AlignLeft);
 
     // element feature menu
     _elementFeatureMenu = elementFeatureMenu;

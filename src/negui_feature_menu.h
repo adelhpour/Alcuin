@@ -9,7 +9,7 @@ class MyFeatureMenu : public MyFrame {
 
 public:
     
-    MyFeatureMenu(QWidget* elementFeatureMenu, QWidget *parent = nullptr);
+    MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     QList<MyShapeStyleBase*> shapeStyles();
 
@@ -22,6 +22,8 @@ public:
 signals:
     
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
+
+    void askForRemoveFeatureMenu();
 
     void isUpdated(QList<MyShapeStyleBase*>);
     

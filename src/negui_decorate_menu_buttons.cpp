@@ -102,7 +102,19 @@ QWidgetAction* createButtonWidgetAction(QToolButton* button, QWidget* parent) {
     return widgetAction;
 }
 
-void setIcon(QToolButton* button, const QString& iconPath) {
+void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDirectory) {
+    button->setToolTip("Close Window");
+    setIcon(button, iconsDirectory + "/close.png");
+
+#if defined(Q_OS_WIN)
+    button->setIconSize(QSize(20, 20));
+#else
+    button->setIconSize(QSize(15, 15));
+#endif
+    button->setStyleSheet("QPushButton {background-color: transparent; border-width: 0px; border-color: transparent; }");
+}
+
+void setIcon(QAbstractButton* button, const QString& iconPath) {
     QPixmap pixmap;
     pixmap.load(iconPath);
     QIcon buttonIcon(pixmap);

@@ -94,7 +94,7 @@ public:
 
     QDir applicationDirectory();
     QDir iconsDirectory();
-    
+
 signals:
     
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
@@ -151,6 +151,7 @@ public slots:
     const bool areSelectedElementsCuttable();
     const bool areAnyElementsCopied();
     const bool areAnyElementsSelected();
+    const QString iconsDirectoryPath();
     
     // modes
     void enableNormalMode() override;
