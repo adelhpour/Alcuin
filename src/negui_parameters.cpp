@@ -339,7 +339,7 @@ void MyStringParameter::connectInputWidget() {
 }
 
 void MyStringParameter::reset() {
-    _defaultValue = "";
+    _defaultValue = "text";
     _isSetDefaultValue = false;
 }
 
