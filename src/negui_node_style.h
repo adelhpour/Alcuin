@@ -7,7 +7,7 @@ class MyNodeStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {
-        CLASSIC_NODE_STYLE,
+        COMPLEX_NODE_STYLE,
         CENTROID_NODE_STYLE,
     } NODE_STYLE_TYPE;
 
@@ -33,10 +33,10 @@ protected:
     QList<QString> _parentCategories;
 };
 
-class MyClassicNodeStyle : public MyNodeStyleBase {
+class MyComplexNodeStyle : public MyNodeStyleBase {
 public:
 
-    MyClassicNodeStyle(const QString& name);
+    MyComplexNodeStyle(const QString& name);
 
     NODE_STYLE_TYPE nodeStyleType() override;
 

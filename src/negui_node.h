@@ -9,7 +9,7 @@ class MyNodeBase : public MyNetworkElementBase {
 public:
 
     typedef enum {
-        CLASSIC_NODE,
+        COMPLEX_NODE,
         CENTROID_NODE,
     } NODE_TYPE;
     
@@ -106,12 +106,12 @@ protected:
     qreal _endEdgePadding;
 };
 
-class MyClassicNode : public MyNodeBase {
+class MyComplexNode : public MyNodeBase {
     Q_OBJECT
 
 public:
 
-    MyClassicNode(const QString& name, const qreal& x, const qreal& y);
+    MyComplexNode(const QString& name, const qreal& x, const qreal& y);
 
     NODE_TYPE nodeType() override;
 
