@@ -179,13 +179,11 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseDoubleClickEvent(event);
     if (event->button() == Qt::LeftButton) {
-        event->accept();
         emit mouseLeftButtonIsDoubleClicked();
-        return;
+        event->accept();
     }
-    event->ignore();
+    QGraphicsItem::mouseDoubleClickEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::displayContextMenu(const QPoint& position) {

@@ -111,6 +111,12 @@ void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
     setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
+void MyNodeSceneGraphicsItemBase::enableDisplayFeatureMenuMode() {
+    MyNetworkElementGraphicsItemBase::enableDisplayFeatureMenuMode();
+    setCursor(Qt::PointingHandCursor);
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+}
+
 QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, const QVariant &value) {
     if (change == ItemPositionChange) {
         deparent();

@@ -2,6 +2,7 @@
 #include "negui_feature_menu.h"
 
 #include <QGridLayout>
+#include <QTimer>
 
 // MyNetworkElementBase
 
@@ -24,8 +25,8 @@ void MyNetworkElementBase::updateGraphicsItem() {
 }
 
 void MyNetworkElementBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { setSelected(false); });
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { emit askForUnselectNetworkElement(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDeleteNetworkElement, this, [this] () { emit askForDeleteNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForWhetherNetworkElementIsSelected()), this, SLOT(isSelected()));
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
@@ -101,6 +102,11 @@ void MyNetworkElementBase::enableSelectEdgeMode() {
     graphicsItem()->enableSelectEdgeMode();
 }
 
+void MyNetworkElementBase::enableDisplayFeatureMenuMode() {
+    MySceneModeElementBase::enableDisplayFeatureMenuMode();
+    graphicsItem()->enableDisplayFeatureMenuMode();
+}
+
 QWidget* MyNetworkElementBase::getFeatureMenu() {
     MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
@@ -120,13 +126,21 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
 }
 
 void MyNetworkElementBase::createFeatureMenu() {
-    if (getSceneMode() == NORMAL_MODE) {
+    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE) && !askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(name())) {
         MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
+        featureMenu->setObjectName(name());
         featureMenu->setShapeStyles(style()->shapeStyles());
         connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
             updateStyle(shapeStyles);
             updateGraphicsItem();
             emit askForCreateChangeStageCommand(); } );
-        emit askForDisplayFeatureMenu(featureMenu);
+        askForDisplayFeatureMenuWithDelay(featureMenu, 200);
     }
+}
+
+void MyNetworkElementBase::askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime) {
+    QTimer* timer = new QTimer();
+    timer->setSingleShot(true);
+    connect(timer, &QTimer::timeout, this, [this, featureMenu] () { askForDisplayFeatureMenu(featureMenu); } );
+    timer->start(delayTime);
 }

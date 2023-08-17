@@ -57,19 +57,27 @@ public:
     
     void enableSelectEdgeMode() override;
     
+    void enableDisplayFeatureMenuMode() override;
+    
     virtual const QRectF getExtents() = 0;
     
     virtual QWidget* getFeatureMenu();
     
     virtual const qint32 calculateZValue() = 0;
-    
+
+    void askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime);
+
 signals:
     
-    void elementObject(MyNetworkElementBase*);
+    void askForSelectNetworkElement(MyNetworkElementBase*);
+
+    void askForUnselectNetworkElement(MyNetworkElementBase*);
     
     void askForCreateChangeStageCommand();
 
     void askForDisplayFeatureMenu(QWidget*);
+
+    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
 
     void askForCopyNetworkElement(MyNetworkElementBase*);
 

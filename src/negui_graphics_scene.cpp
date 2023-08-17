@@ -93,8 +93,9 @@ void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 }
 
 void MyGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-    emit mouseLeftButtonIsDoubleClicked();
     QGraphicsScene::mouseDoubleClickEvent(event);
+    if (!event->isAccepted())
+        emit mouseLeftButtonIsDoubleClicked();
 }
 
 void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {

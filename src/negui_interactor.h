@@ -105,6 +105,8 @@ signals:
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
     void askForDisplayFeatureMenu(QWidget*);
+    void askForRemoveFeatureMenu();
+    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
@@ -137,6 +139,8 @@ public slots:
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
+    void unselectElement(MyNetworkElementBase* element);
+    void selectElement(const QString& elementName);
     void selectElements(const bool& selected);
     void selectElements(const bool& selected, const QString& category);
     void selectNodes(const bool& selected);
@@ -160,6 +164,7 @@ public slots:
     void enableSelectMode(const QString& elementCategory = "");
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
+    void enableDisplayFeatureMenuMode(const QString& elementName);
 
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();

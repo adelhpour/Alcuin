@@ -33,6 +33,8 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
+    
+    void enableDisplayFeatureMenuMode() override;
 };
 
 class MyArrowHeadIconGraphicsItem : public MyArrowHeadGraphicsItemBase {
