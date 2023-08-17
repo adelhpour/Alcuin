@@ -105,6 +105,7 @@ signals:
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
     void askForDisplayFeatureMenu(QWidget*);
+    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);

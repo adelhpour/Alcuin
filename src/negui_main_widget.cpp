@@ -84,6 +84,7 @@ void MyNetworkEditorWidget::setInteractions() {
     /// feature menu
     // display feature menu
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)), this, SLOT(whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)));
 
     /// mode menu
     // set mode
@@ -189,6 +190,13 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         _featureMenu->deleteLater();
         _featureMenu = NULL;
     }
+}
+
+const bool MyNetworkEditorWidget::whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString& elementName) {
+    if (_featureMenu && _featureMenu->objectName() == elementName)
+        return true;
+
+    return false;
 }
 
 void MyNetworkEditorWidget::setReadyToLaunch() {

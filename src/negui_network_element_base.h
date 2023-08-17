@@ -71,6 +71,8 @@ signals:
 
     void askForDisplayFeatureMenu(QWidget*);
 
+    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
+
     void askForCopyNetworkElement(MyNetworkElementBase*);
 
     void askForCutNetworkElement(MyNetworkElementBase*);
