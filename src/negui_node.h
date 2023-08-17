@@ -106,16 +106,12 @@ protected:
     qreal _endEdgePadding;
 };
 
-class MyComplexClassicNode : public MyNodeBase {
+class MyClassicNodeBase : public MyNodeBase {
     Q_OBJECT
 
 public:
 
-    MyComplexClassicNode(const QString& name, const qreal& x, const qreal& y);
-
-    NODE_TYPE nodeType() override;
-
-    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+    MyClassicNodeBase(const QString& name, const qreal& x, const qreal& y);
 
     const bool isCopyable() override;
 
@@ -143,8 +139,6 @@ public:
     // adjust node extents to fit all its children
     void adjustExtents();
 
-    QWidget* getFeatureMenu() override;
-
 public slots:
 
     // set the position of the node
@@ -153,6 +147,20 @@ public slots:
 protected:
     QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
+};
+
+class MyComplexClassicNode : public MyClassicNodeBase {
+    Q_OBJECT
+
+public:
+
+    MyComplexClassicNode(const QString& name, const qreal& x, const qreal& y);
+
+    NODE_TYPE nodeType() override;
+
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    QWidget* getFeatureMenu() override;
 };
 
 class MyCentroidNode : public MyNodeBase {
