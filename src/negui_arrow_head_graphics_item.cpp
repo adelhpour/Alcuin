@@ -71,6 +71,11 @@ void MyArrowHeadSceneGraphicsItem::enableSelectEdgeMode() {
     setCursor(Qt::ArrowCursor);
 }
 
+void MyArrowHeadSceneGraphicsItem::enableDisplayFeatureMenuMode() {
+    MyNetworkElementGraphicsItemBase::enableDisplayFeatureMenuMode();
+    setCursor(Qt::ArrowCursor);
+}
+
 // MyArrowHeadIconGraphicsItem
 
 MyArrowHeadIconGraphicsItem::MyArrowHeadIconGraphicsItem(const QPointF& position, const qreal& rotation, QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {

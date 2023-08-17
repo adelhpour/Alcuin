@@ -167,6 +167,12 @@ void MyEdgeBase::enableSelectEdgeMode() {
         arrowHead()->enableSelectEdgeMode();
 }
 
+void MyEdgeBase::enableDisplayFeatureMenuMode() {
+    MyNetworkElementBase::enableDisplayFeatureMenuMode();
+    if (isSetArrowHead())
+        arrowHead()->enableDisplayFeatureMenuMode();
+}
+
 const QPointF MyEdgeBase::middlePosition() {
     return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
 }

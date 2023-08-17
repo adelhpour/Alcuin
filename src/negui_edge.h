@@ -64,6 +64,8 @@ public:
     void enableAddEdgeMode() override;
     
     void enableSelectEdgeMode() override;
+    
+    void enableDisplayFeatureMenuMode() override;
 
     const QPointF middlePosition();
     
