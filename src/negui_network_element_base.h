@@ -62,7 +62,9 @@ public:
     virtual QWidget* getFeatureMenu();
     
     virtual const qint32 calculateZValue() = 0;
-    
+
+    void askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime);
+
 signals:
     
     void elementObject(MyNetworkElementBase*);

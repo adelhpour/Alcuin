@@ -2,6 +2,7 @@
 #include "negui_feature_menu.h"
 
 #include <QGridLayout>
+#include <QTimer>
 
 // MyNetworkElementBase
 
@@ -128,6 +129,13 @@ void MyNetworkElementBase::createFeatureMenu() {
             updateStyle(shapeStyles);
             updateGraphicsItem();
             emit askForCreateChangeStageCommand(); } );
-        emit askForDisplayFeatureMenu(featureMenu);
+        askForDisplayFeatureMenuWithDelay(featureMenu, 200);
     }
+}
+
+void MyNetworkElementBase::askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime) {
+    QTimer* timer = new QTimer();
+    timer->setSingleShot(true);
+    connect(timer, &QTimer::timeout, this, [this, featureMenu] () { askForDisplayFeatureMenu(featureMenu); } );
+    timer->start(delayTime);
 }
