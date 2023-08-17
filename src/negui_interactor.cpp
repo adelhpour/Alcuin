@@ -313,8 +313,9 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         n->setActive(true);
         n->updateGraphicsItem();
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
-        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(n, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForUnselectNetworkElement(MyNetworkElementBase*)), this, SLOT(unselectElement(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
@@ -451,7 +452,8 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
     if (e && !edgeExists(((MyEdgeBase*)e)->sourceNode(), ((MyEdgeBase*)e)->targetNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
-        connect(e, SIGNAL(elementObject(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForUnselectNetworkElement(MyNetworkElementBase*)), this, SLOT(unselectElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
@@ -736,6 +738,14 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
     }
 }
 
+void MyInteractor::unselectElement(MyNetworkElementBase* element) {
+    if (getSceneMode() == NORMAL_MODE) {
+        element->setSelected(false);
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+    }
+}
+
 void MyInteractor::selectElement(const QString& elementName) {
     for (MyNetworkElementBase* node : qAsConst(nodes())) {
         if (node->name() == elementName) {
@@ -751,6 +761,8 @@ void MyInteractor::selectElement(const QString& elementName) {
             return;
         }
     }
+    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
 const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* element) {
@@ -894,6 +906,10 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
 void MyInteractor::enableDisplayFeatureMenuMode(const QString& elementName) {
     enableNormalMode();
     MySceneModeElementBase::enableDisplayFeatureMenuMode();
+    for (MyNetworkElementBase *node : qAsConst(nodes()))
+        node->enableDisplayFeatureMenuMode();
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        edge->enableDisplayFeatureMenuMode();
     selectElement(elementName);
 }
 

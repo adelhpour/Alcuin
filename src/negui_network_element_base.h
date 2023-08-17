@@ -57,6 +57,8 @@ public:
     
     void enableSelectEdgeMode() override;
     
+    void enableDisplayFeatureMenuMode() override;
+    
     virtual const QRectF getExtents() = 0;
     
     virtual QWidget* getFeatureMenu();
@@ -67,7 +69,9 @@ public:
 
 signals:
     
-    void elementObject(MyNetworkElementBase*);
+    void askForSelectNetworkElement(MyNetworkElementBase*);
+
+    void askForUnselectNetworkElement(MyNetworkElementBase*);
     
     void askForCreateChangeStageCommand();
 

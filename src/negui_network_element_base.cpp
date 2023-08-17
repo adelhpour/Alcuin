@@ -25,8 +25,8 @@ void MyNetworkElementBase::updateGraphicsItem() {
 }
 
 void MyNetworkElementBase::connectGraphicsItem() {
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { setSelected(false); });
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit elementObject(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { emit askForUnselectNetworkElement(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDeleteNetworkElement, this, [this] () { emit askForDeleteNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForWhetherNetworkElementIsSelected()), this, SLOT(isSelected()));
     connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
@@ -100,6 +100,11 @@ void MyNetworkElementBase::enableAddEdgeMode() {
 void MyNetworkElementBase::enableSelectEdgeMode() {
     MySceneModeElementBase::enableSelectEdgeMode();
     graphicsItem()->enableSelectEdgeMode();
+}
+
+void MyNetworkElementBase::enableDisplayFeatureMenuMode() {
+    MySceneModeElementBase::enableDisplayFeatureMenuMode();
+    graphicsItem()->enableDisplayFeatureMenuMode();
 }
 
 QWidget* MyNetworkElementBase::getFeatureMenu() {
