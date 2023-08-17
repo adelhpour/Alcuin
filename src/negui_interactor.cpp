@@ -1112,6 +1112,7 @@ QList<QToolButton*> MyInteractor::getAddModeButtons() {
 QToolButton* MyInteractor::createNormalModeMenuButton() {
     QToolButton* button = new MyModeToolButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
+    connect(button, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
     return button;
 }
 
