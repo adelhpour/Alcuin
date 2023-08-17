@@ -736,6 +736,23 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
     }
 }
 
+void MyInteractor::selectElement(const QString& elementName) {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+        if (node->name() == elementName) {
+            if (!node->isSelected())
+                node->setSelected(true);
+            return;
+        }
+    }
+    for (MyNetworkElementBase* edge  : qAsConst(edges())) {
+        if (edge->name() == elementName) {
+            if (!edge->isSelected())
+                edge->setSelected(true);
+            return;
+        }
+    }
+}
+
 const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* element) {
     for (MyNetworkElementBase* node : qAsConst(nodes())) {
         if (node->isSelected() && node != element)
@@ -872,6 +889,12 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
         edge->enableSelectEdgeMode();
     
     emit askForSetToolTip("Select " + edgeCategory + " edges");
+}
+
+void MyInteractor::enableDisplayFeatureMenuMode(const QString& elementName) {
+    enableNormalMode();
+    MySceneModeElementBase::enableDisplayFeatureMenuMode();
+    selectElement(elementName);
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
