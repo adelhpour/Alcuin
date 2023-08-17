@@ -7,6 +7,7 @@ class MyNodeStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {
+        SIMPLE_CLASSIC_NODE_STYLE,
         COMPLEX_CLASSIC_NODE_STYLE,
         CENTROID_NODE_STYLE,
     } NODE_STYLE_TYPE;
@@ -33,12 +34,10 @@ protected:
     QList<QString> _parentCategories;
 };
 
-class MyComplexClassicNodeStyle : public MyNodeStyleBase {
+class MyClassicNodeStyleBase : public MyNodeStyleBase {
 public:
 
-    MyComplexClassicNodeStyle(const QString& name);
-
-    NODE_STYLE_TYPE nodeStyleType() override;
+    MyClassicNodeStyleBase(const QString& name);
 
     void addDefaultShapeStyle() override;
 
@@ -50,7 +49,7 @@ public:
 
     void convertToParentCategory();
 
-    QWidget* addRemoveShapeStylesButtons();
+    virtual QWidget* addRemoveShapeStylesButtons() = 0;
 
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
@@ -60,6 +59,26 @@ public:
 
 protected:
     QString _convertibleParentCategory;
+};
+
+class MySimpleClassicNodeStyle : public MyClassicNodeStyleBase {
+public:
+
+    MySimpleClassicNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
+
+    QWidget* addRemoveShapeStylesButtons() override;
+};
+
+class MyComplexClassicNodeStyle : public MyClassicNodeStyleBase {
+public:
+
+    MyComplexClassicNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
+
+    QWidget* addRemoveShapeStylesButtons() override;
 };
 
 class MyCentroidNodeStyle : public MyNodeStyleBase {

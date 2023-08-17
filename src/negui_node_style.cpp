@@ -47,21 +47,17 @@ void MyNodeStyleBase::write(QJsonObject &json) {
     json["parent-categories"] = parentCategoriesArray;
 }
 
-// MyComplexClassicNodeStyle
+// MyClassicNodeStyleBase
 
-MyComplexClassicNodeStyle::MyComplexClassicNodeStyle(const QString& name) : MyNodeStyleBase(name) {
+MyClassicNodeStyleBase::MyClassicNodeStyleBase(const QString& name) : MyNodeStyleBase(name) {
     _convertibleParentCategory = "Node";
 }
 
-MyNodeStyleBase::NODE_STYLE_TYPE MyComplexClassicNodeStyle::nodeStyleType() {
-    return COMPLEX_CLASSIC_NODE_STYLE;
-}
-
-void MyComplexClassicNodeStyle::addDefaultShapeStyle() {
+void MyClassicNodeStyleBase::addDefaultShapeStyle() {
     _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
 }
 
-MyShapeStyleBase* MyComplexClassicNodeStyle::createShapeStyle(const QString& shape) {
+MyShapeStyleBase* MyClassicNodeStyleBase::createShapeStyle(const QString& shape) {
     if (shape == "ellipse")
         return createNodeEllipseStyle(shape);
     else if (shape == "rect")
@@ -74,12 +70,11 @@ MyShapeStyleBase* MyComplexClassicNodeStyle::createShapeStyle(const QString& sha
     return NULL;
 }
 
-
-const QString& MyComplexClassicNodeStyle::convertibleParentCategory() const {
+const QString& MyClassicNodeStyleBase::convertibleParentCategory() const {
     return _convertibleParentCategory;
 }
 
-bool MyComplexClassicNodeStyle::isConvertibleToParentCategory(QList<QString> parentCategories) {
+bool MyClassicNodeStyleBase::isConvertibleToParentCategory(QList<QString> parentCategories) {
     for (QString parentCategory : parentCategories) {
         if (parentCategory == _convertibleParentCategory)
             return true;
@@ -88,26 +83,52 @@ bool MyComplexClassicNodeStyle::isConvertibleToParentCategory(QList<QString> par
     return false;
 }
 
-void MyComplexClassicNodeStyle::convertToParentCategory() {
+void MyClassicNodeStyleBase::convertToParentCategory() {
     _category = convertibleParentCategory();
 }
 
-QWidget* MyComplexClassicNodeStyle::addRemoveShapeStylesButtons() {
-    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
-    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
-    return addRemoveShapeStylesButtons;
-}
-
-void MyComplexClassicNodeStyle::read(const QJsonObject &json) {
+void MyClassicNodeStyleBase::read(const QJsonObject &json) {
     MyNodeStyleBase::read(json);
     _convertibleParentCategory.clear();
     if (json.contains("convertible-parent-category") && json["convertible-parent-category"].isString())
         _convertibleParentCategory = json["convertible-parent-category"].toString();
 }
 
-void MyComplexClassicNodeStyle::write(QJsonObject &json) {
+void MyClassicNodeStyleBase::write(QJsonObject &json) {
     MyNodeStyleBase::write(json);
     json["convertible-parent-category"] = convertibleParentCategory();
+}
+
+// MySimpleClassicNodeStyle
+
+MySimpleClassicNodeStyle::MySimpleClassicNodeStyle(const QString& name) : MyClassicNodeStyleBase(name) {
+
+}
+
+MyNodeStyleBase::NODE_STYLE_TYPE MySimpleClassicNodeStyle::nodeStyleType() {
+    return SIMPLE_CLASSIC_NODE_STYLE;
+}
+
+QWidget* MySimpleClassicNodeStyle::addRemoveShapeStylesButtons() {
+    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
+    return addRemoveShapeStylesButtons;
+}
+
+// MyComplexClassicNodeStyle
+
+MyComplexClassicNodeStyle::MyComplexClassicNodeStyle(const QString& name) : MyClassicNodeStyleBase(name) {
+
+}
+
+MyNodeStyleBase::NODE_STYLE_TYPE MyComplexClassicNodeStyle::nodeStyleType() {
+    return COMPLEX_CLASSIC_NODE_STYLE;
+}
+
+QWidget* MyComplexClassicNodeStyle::addRemoveShapeStylesButtons() {
+    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
+    return addRemoveShapeStylesButtons;
 }
 
 // MyCentroidNodeStyle
