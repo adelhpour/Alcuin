@@ -84,6 +84,7 @@ void MyNetworkEditorWidget::setInteractions() {
     /// feature menu
     // display feature menu
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     connect((MyInteractor*)interactor(), SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)), this, SLOT(whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)));
 
     /// mode menu
@@ -191,7 +192,8 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         _featureMenu->deleteLater();
         _featureMenu = NULL;
     }
-    ((MyInteractor*)interactor())->enableNormalMode();
+    if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
+        ((MyInteractor*)interactor())->enableNormalMode();
 }
 
 const bool MyNetworkEditorWidget::whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString& elementName) {

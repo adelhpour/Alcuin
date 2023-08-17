@@ -849,6 +849,7 @@ void MyInteractor::enableNormalMode() {
 void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddNodeMode();
+    askForRemoveFeatureMenu();
     setNodeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
@@ -861,6 +862,7 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddEdgeMode();
+    askForRemoveFeatureMenu();
     setEdgeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();
