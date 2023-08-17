@@ -126,7 +126,7 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
 }
 
 void MyNetworkElementBase::createFeatureMenu() {
-    if (getSceneMode() == NORMAL_MODE && !askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(name())) {
+    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE) && !askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(name())) {
         MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
         featureMenu->setObjectName(name());
         featureMenu->setShapeStyles(style()->shapeStyles());
