@@ -182,6 +182,7 @@ void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
     ((QGridLayout*)layout())->addWidget(featureMenu, 2, 2, 1, 1, Qt::AlignTop);
     _featureMenu = featureMenu;
+    ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(_featureMenu->objectName());
 }
 
 void MyNetworkEditorWidget::removeFeatureMenu() {
@@ -190,6 +191,7 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         _featureMenu->deleteLater();
         _featureMenu = NULL;
     }
+    ((MyInteractor*)interactor())->enableNormalMode();
 }
 
 const bool MyNetworkEditorWidget::whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString& elementName) {
