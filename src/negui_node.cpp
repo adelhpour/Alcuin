@@ -319,6 +319,27 @@ void MyClassicNodeBase::adjustExtents() {
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
 }
 
+// MySimpleClassicNode
+
+MySimpleClassicNode::MySimpleClassicNode(const QString& name, const qreal& x, const qreal& y) : MyClassicNodeBase(name, x, y) {
+    _graphicsItem = createGraphicsItem(position());
+    connectGraphicsItem();
+}
+
+MyNodeBase::NODE_TYPE MySimpleClassicNode::nodeType() {
+    return SIMPLE_CLASSIC_NODE;
+}
+
+MyNetworkElementGraphicsItemBase* MySimpleClassicNode::createGraphicsItem(const QPointF &position) {
+    return createSimpleClassicNodeSceneGraphicsItem(position);
+}
+
+QWidget* MySimpleClassicNode::getFeatureMenu() {
+    QWidget* featureMenu = MyNodeBase::getFeatureMenu();
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    return featureMenu;
+}
+
 // MyComplexClassicNode
 
 MyComplexClassicNode::MyComplexClassicNode(const QString& name, const qreal& x, const qreal& y) : MyClassicNodeBase(name, x, y) {

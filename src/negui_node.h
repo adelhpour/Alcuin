@@ -9,6 +9,7 @@ class MyNodeBase : public MyNetworkElementBase {
 public:
 
     typedef enum {
+        SIMPLE_CLASSIC_NODE,
         COMPLEX_CLASSIC_NODE,
         CENTROID_NODE,
     } NODE_TYPE;
@@ -147,6 +148,20 @@ public slots:
 protected:
     QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
+};
+
+class MySimpleClassicNode : public MyClassicNodeBase {
+    Q_OBJECT
+
+public:
+
+    MySimpleClassicNode(const QString& name, const qreal& x, const qreal& y);
+
+    NODE_TYPE nodeType() override;
+
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    QWidget* getFeatureMenu() override;
 };
 
 class MyComplexClassicNode : public MyClassicNodeBase {
