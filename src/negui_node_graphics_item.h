@@ -73,12 +73,12 @@ protected:
     bool _reparent;
 };
 
-class MyComplexNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
+class MyComplexClassicNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
     Q_OBJECT
 
 public:
 
-    MyComplexNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+    MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
     void clearFocusedGraphicsItems() override;
 

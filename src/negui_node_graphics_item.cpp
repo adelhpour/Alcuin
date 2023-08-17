@@ -155,13 +155,13 @@ void MyNodeSceneGraphicsItemBase::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-// MyComplexNodeSceneGraphicsItem
+// MyComplexClassicNodeSceneGraphicsItem
 
-MyComplexNodeSceneGraphicsItem::MyComplexNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
+MyComplexClassicNodeSceneGraphicsItem::MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
 
 }
 
-void MyComplexNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
+void MyComplexClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
     if (_focusedGraphicsItems.size()) {
         emit askForResetPosition();
         adjustOriginalPosition();
@@ -170,14 +170,14 @@ void MyComplexNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
     MyNetworkElementGraphicsItemBase::clearFocusedGraphicsItems();
 }
 
-void MyComplexNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
+void MyComplexClassicNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
     if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
         QGraphicsItem::moveBy(dx, dy);
     else
         emit askForResetPosition();
 }
 
-void MyComplexNodeSceneGraphicsItem::adjustOriginalPosition() {
+void MyComplexClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
     // TODO leads to an error in the position for newly added shapes.
     /*
     QPointF extentsCenter = getExtents().center();
@@ -190,7 +190,7 @@ void MyComplexNodeSceneGraphicsItem::adjustOriginalPosition() {
      */
 }
 
-void MyComplexNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
+void MyComplexClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)

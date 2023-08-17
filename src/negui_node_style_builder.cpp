@@ -8,7 +8,7 @@ MyNetworkElementStyleBase* createNodeStyle(const QJsonObject &json) {
         if (isCentroidNodeStyle(json))
             style = new MyCentroidNodeStyle(json["name"].toString());
         else
-            style = new MyComplexNodeStyle(json["name"].toString());
+            style = new MyComplexClassicNodeStyle(json["name"].toString());
         style->read(json);
     }
 
