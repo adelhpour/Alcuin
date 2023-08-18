@@ -24,6 +24,10 @@ void MyNetworkElementBase::updateGraphicsItem() {
     graphicsItem()->update(style()->shapeStyles(), calculateZValue());
 }
 
+void MyNetworkElementBase::updateFocusedGraphicsItems() {
+    graphicsItem()->updateFocusedGraphicsItems();
+}
+
 void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForUnselectNetworkElement, this, [this] () { emit askForUnselectNetworkElement(this); });
@@ -133,6 +137,7 @@ void MyNetworkElementBase::createFeatureMenu() {
         connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
             updateStyle(shapeStyles);
             updateGraphicsItem();
+            updateFocusedGraphicsItems();
             emit askForCreateChangeStageCommand(); } );
         askForDisplayFeatureMenuWithDelay(featureMenu, 200);
     }
