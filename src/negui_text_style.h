@@ -3,10 +3,10 @@
 
 #include "negui_2d_shape_style_base.h"
 
-class MyTextStyle : public My2DShapeStyleBase {
+class MyTextStyleBase : public My2DShapeStyleBase {
 public:
     
-    MyTextStyle(const QString& name);
+    MyTextStyleBase(const QString& name);
     
     SHAPE_STYLE type() override;
     

@@ -1,9 +1,9 @@
 #include "negui_text_style.h"
 #include <QJsonObject>
 
-// MyTextStyle
+// MyTextStyleBase
 
-MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
+MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // plain-text
     addParameter(new MyStringParameter("plain-text"));
     
@@ -45,11 +45,11 @@ MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
     reset();
 }
 
-MyShapeStyleBase::SHAPE_STYLE MyTextStyle::type() {
+MyShapeStyleBase::SHAPE_STYLE MyTextStyleBase::type() {
     return TEXT_SHAPE_STYLE;
 }
 
-const QString MyTextStyle::plainText() const {
+const QString MyTextStyleBase::plainText() const {
     MyParameterBase* parameter = findParameter("plain-text");
     if (parameter)
         return ((MyStringParameter*)parameter)->defaultValue();
@@ -57,17 +57,17 @@ const QString MyTextStyle::plainText() const {
     return "";
 }
 
-void MyTextStyle::setPlainText(const QString& plainText) const {
+void MyTextStyleBase::setPlainText(const QString& plainText) const {
     MyParameterBase* parameter = findParameter("plain-text");
     if (parameter)
         ((MyStringParameter *) parameter)->setDefaultValue(plainText);
 }
 
-const bool& MyTextStyle::whetherSetNameAsDefaultPlainText() const {
+const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
     return _whetherSetNameAsDefaultPlainText;
 }
 
-const QColor MyTextStyle::defaultTextColor() const {
+const QColor MyTextStyleBase::defaultTextColor() const {
     QColor color;
     
     MyParameterBase* parameter = findParameter("color");
@@ -77,7 +77,7 @@ const QColor MyTextStyle::defaultTextColor() const {
     return color;
 }
 
-const QFont MyTextStyle::font() const {
+const QFont MyTextStyleBase::font() const {
     QFont font;
     
     MyParameterBase* parameter = NULL;
@@ -104,7 +104,7 @@ const QFont MyTextStyle::font() const {
     return font;
 }
 
-const QRectF MyTextStyle::getShapeExtents() {
+const QRectF MyTextStyleBase::getShapeExtents() {
     QRectF extents;
     extents.setX(INT_MAX);
     extents.setY(INT_MAX);
@@ -120,13 +120,13 @@ const QRectF MyTextStyle::getShapeExtents() {
     return extents;
 }
 
-void MyTextStyle::setX(const qreal& x) const {
+void MyTextStyleBase::setX(const qreal& x) const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(x);
 }
 
-const qreal MyTextStyle::x() const {
+const qreal MyTextStyleBase::x() const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->defaultValue();
@@ -134,13 +134,13 @@ const qreal MyTextStyle::x() const {
     return 0.000;
 }
 
-void MyTextStyle::setY(const qreal& y) const {
+void MyTextStyleBase::setY(const qreal& y) const {
     MyParameterBase* parameter = findParameter("y");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(y);
 }
 
-const qreal MyTextStyle::y() const {
+const qreal MyTextStyleBase::y() const {
     MyParameterBase* parameter = findParameter("y");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->defaultValue();
@@ -148,13 +148,13 @@ const qreal MyTextStyle::y() const {
     return 0.000;
 }
 
-void MyTextStyle::setWidth(const qreal& width) const {
+void MyTextStyleBase::setWidth(const qreal& width) const {
     MyParameterBase* parameter = findParameter("width");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(width);
 }
 
-const qreal MyTextStyle::width() const {
+const qreal MyTextStyleBase::width() const {
     MyParameterBase* parameter = findParameter("width");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
@@ -162,13 +162,13 @@ const qreal MyTextStyle::width() const {
     return 0.000;
 }
 
-void MyTextStyle::setHeight(const qreal& height) const {
+void MyTextStyleBase::setHeight(const qreal& height) const {
     MyParameterBase* parameter = findParameter("height");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(height);
 }
 
-const qreal MyTextStyle::height() const {
+const qreal MyTextStyleBase::height() const {
     MyParameterBase* parameter = findParameter("height");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
@@ -176,7 +176,7 @@ const qreal MyTextStyle::height() const {
     return 0.000;
 }
 
-const Qt::Alignment MyTextStyle::horizontalAlignment() const {
+const Qt::Alignment MyTextStyleBase::horizontalAlignment() const {
     MyParameterBase* parameter = findParameter("text-anchor");
     if (parameter)
         return ((MyTextAnchorParameter*)parameter)->defaultAlignment();
@@ -184,7 +184,7 @@ const Qt::Alignment MyTextStyle::horizontalAlignment() const {
     return Qt::AlignHCenter;
 }
 
-const Qt::Alignment MyTextStyle::verticalAlignment() const {
+const Qt::Alignment MyTextStyleBase::verticalAlignment() const {
     MyParameterBase* parameter = findParameter("vtext-anchor");
     if (parameter)
         return ((MyVTextAnchorParameter*)parameter)->defaultAlignment();
@@ -192,7 +192,7 @@ const Qt::Alignment MyTextStyle::verticalAlignment() const {
     return Qt::AlignVCenter;
 }
 
-const qreal MyTextStyle::verticalPadding() const {
+const qreal MyTextStyleBase::verticalPadding() const {
     QFontMetrics fontMetrics(font());
     if (height() > fontMetrics.height()) {
         if (verticalAlignment() == Qt::AlignVCenter)
@@ -206,7 +206,7 @@ const qreal MyTextStyle::verticalPadding() const {
     return 0.000;
 }
 
-void MyTextStyle::read(const QJsonObject &json) {
+void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
@@ -301,7 +301,7 @@ void MyTextStyle::read(const QJsonObject &json) {
     }
 }
 
-void MyTextStyle::write(QJsonObject &json) {
+void MyTextStyleBase::write(QJsonObject &json) {
     My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
