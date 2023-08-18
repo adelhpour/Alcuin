@@ -66,6 +66,11 @@ QList<QGraphicsItem*> MyNetworkElementGraphicsItemBase::createFocusedGraphicsIte
     return focusedGraphicsItems;
 }
 
+void MyNetworkElementGraphicsItemBase::updateFocusedGraphicsItems() {
+    clearFocusedGraphicsItems();
+    addFocusedGraphicsItems();
+}
+
 void MyNetworkElementGraphicsItemBase::addFocusedGraphicsItems() {
     _focusedGraphicsItems = createFocusedGraphicsItems();
     for (QGraphicsItem* item : _focusedGraphicsItems)
