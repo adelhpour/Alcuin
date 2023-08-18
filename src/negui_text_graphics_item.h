@@ -32,4 +32,13 @@ protected:
     QString _elementName;
 };
 
+class MyWithPlainTextTextGraphicsItem: public MyTextGraphicsItemBase {
+public:
+
+    MyWithPlainTextTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
+
+    void updateStyle() override;
+};
+
+
 #endif

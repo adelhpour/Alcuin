@@ -13,14 +13,6 @@ void MyTextGraphicsItemBase::updateStyle() {
         if (((MyTextStyleBase*)style())->width() > 0.001)
             setTextWidth(((MyTextStyleBase*)style())->width());
         
-        // plain-text
-        if (((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText()) {
-            ((MyTextStyleBase*)style())->setPlainText(_elementName);
-            setPlainText(_elementName);
-        }
-        else if (!((MyTextStyleBase*)style())->plainText().isEmpty())
-            setPlainText(((MyTextStyleBase*)style())->plainText());
-        
         // text-color
         setDefaultTextColor(((MyTextStyleBase*)style())->defaultTextColor());
         
@@ -82,4 +74,23 @@ QGraphicsItem* MyTextGraphicsItemBase::getFocusedGraphicsItem() {
 
 void MyTextGraphicsItemBase::setZValue(qreal z) {
     QGraphicsItem::setZValue(z);
+}
+
+// MyWithPlainTextTextGraphicsItem
+
+MyWithPlainTextTextGraphicsItem::MyWithPlainTextTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : MyTextGraphicsItemBase(x, y, elementName, parent) {
+
+}
+
+void MyWithPlainTextTextGraphicsItem::updateStyle() {
+    MyTextGraphicsItemBase::updateStyle();
+    if (isSetStyle()) {
+        // plain-text
+        if (((MyWithPlainTextTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
+            ((MyWithPlainTextTextStyle*)style())->setPlainText(_elementName);
+            setPlainText(_elementName);
+        }
+        else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())
+            setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
+    }
 }
