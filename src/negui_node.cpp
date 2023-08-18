@@ -154,7 +154,10 @@ QWidget* MyNodeBase::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
     // parent
-    contentLayout->addWidget(new MyLabel("Parent"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    QString parentLabel = "Parent";
+    if (((MyNodeStyleBase*)style())->parentCategories().size() == 1)
+        parentLabel = ((MyNodeStyleBase*)style())->parentCategories().first();
+    contentLayout->addWidget(new MyLabel(parentLabel), contentLayout->rowCount(), 0, Qt::AlignLeft);
     contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     // spacer
