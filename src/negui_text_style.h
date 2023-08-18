@@ -12,15 +12,6 @@ public:
     
     const QRectF getShapeExtents() override;
     
-    // get the plain text for text
-    const QString plainText() const;
-
-    // set the plain text for text
-    void setPlainText(const QString& plainText) const;
-
-    // set the associated name as the default text
-    const bool& whetherSetNameAsDefaultPlainText() const;
-    
     // get the default color for text
     const QColor defaultTextColor() const;
     
@@ -62,6 +53,27 @@ public:
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
     
+    // write the node style info to the json object
+    void write(QJsonObject &json) override;
+};
+
+class MyWithPlainTextTextStyle : public MyTextStyleBase {
+public:
+
+    MyWithPlainTextTextStyle(const QString& name);
+
+    // get the plain text for text
+    const QString plainText() const;
+
+    // set the plain text for text
+    void setPlainText(const QString& plainText) const;
+
+    // set the associated name as the default text
+    const bool& whetherSetNameAsDefaultPlainText() const;
+
+    // read the node style info from the json object
+    void read(const QJsonObject &json) override;
+
     // write the node style info to the json object
     void write(QJsonObject &json) override;
 

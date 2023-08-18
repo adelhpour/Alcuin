@@ -40,31 +40,11 @@ MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name)
     // vertical alignment
     addParameter(new MyVTextAnchorParameter());
 
-    _whetherSetNameAsDefaultPlainText = false;
-
     reset();
 }
 
 MyShapeStyleBase::SHAPE_STYLE MyTextStyleBase::type() {
     return TEXT_SHAPE_STYLE;
-}
-
-const QString MyTextStyleBase::plainText() const {
-    MyParameterBase* parameter = findParameter("plain-text");
-    if (parameter)
-        return ((MyStringParameter*)parameter)->defaultValue();
-    
-    return "";
-}
-
-void MyTextStyleBase::setPlainText(const QString& plainText) const {
-    MyParameterBase* parameter = findParameter("plain-text");
-    if (parameter)
-        ((MyStringParameter *) parameter)->setDefaultValue(plainText);
-}
-
-const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
-    return _whetherSetNameAsDefaultPlainText;
 }
 
 const QColor MyTextStyleBase::defaultTextColor() const {
@@ -210,19 +190,6 @@ void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
     
-    // plain-text
-    _whetherSetNameAsDefaultPlainText = false;
-    if (json.contains("plain-text") && json["plain-text"].isString()) {
-        parameter = findParameter("plain-text");
-        if (parameter)
-            ((MyStringParameter*)parameter)->setDefaultValue(json["plain-text"].toString());
-    }
-    else {
-        _whetherSetNameAsDefaultPlainText = true;
-        if (json.contains("set_name_as_default_plain_text") && json["set_name_as_default_plain_text"].isBool())
-            _whetherSetNameAsDefaultPlainText = json["set_name_as_default_plain_text"].toBool();
-    }
-    
     // color
     if (json.contains("color") && json["color"].isString()) {
         parameter = findParameter("color");
@@ -304,15 +271,6 @@ void MyTextStyleBase::read(const QJsonObject &json) {
 void MyTextStyleBase::write(QJsonObject &json) {
     My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
-    
-    // plain-text
-    if (whetherSetNameAsDefaultPlainText())
-        json["set_name_as_default_plain_text"] = whetherSetNameAsDefaultPlainText();
-    else {
-        parameter = findParameter("plain-text");
-        if (parameter)
-            json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
-    }
 
     // color
     parameter = findParameter("color");
@@ -368,4 +326,64 @@ void MyTextStyleBase::write(QJsonObject &json) {
     parameter = findParameter("vtext-anchor");
     if (parameter)
         json["vtext-anchor"] = ((MyVTextAnchorParameter*)parameter)->defaultValue();
+}
+
+// MyWithPlainTextTextStyle
+
+MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain-text
+    addParameter(new MyStringParameter("plain-text"));
+
+    _whetherSetNameAsDefaultPlainText = false;
+    reset();
+}
+
+const QString MyWithPlainTextTextStyle::plainText() const {
+    MyParameterBase* parameter = findParameter("plain-text");
+    if (parameter)
+        return ((MyStringParameter*)parameter)->defaultValue();
+
+    return "";
+}
+
+void MyWithPlainTextTextStyle::setPlainText(const QString& plainText) const {
+    MyParameterBase* parameter = findParameter("plain-text");
+    if (parameter)
+        ((MyStringParameter *) parameter)->setDefaultValue(plainText);
+}
+
+const bool& MyWithPlainTextTextStyle::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
+}
+
+void MyWithPlainTextTextStyle::read(const QJsonObject &json) {
+    MyTextStyleBase::read(json);
+    MyParameterBase* parameter = NULL;
+
+    // plain-text
+    _whetherSetNameAsDefaultPlainText = false;
+    if (json.contains("plain-text") && json["plain-text"].isString()) {
+        parameter = findParameter("plain-text");
+        if (parameter)
+            ((MyStringParameter*)parameter)->setDefaultValue(json["plain-text"].toString());
+    }
+    else {
+        _whetherSetNameAsDefaultPlainText = true;
+        if (json.contains("set_name_as_default_plain_text") && json["set_name_as_default_plain_text"].isBool())
+            _whetherSetNameAsDefaultPlainText = json["set_name_as_default_plain_text"].toBool();
+    }
+}
+
+void MyWithPlainTextTextStyle::write(QJsonObject &json) {
+    MyTextStyleBase::write(json);
+    MyParameterBase* parameter = NULL;
+
+    // plain-text
+    if (whetherSetNameAsDefaultPlainText())
+        json["set_name_as_default_plain_text"] = whetherSetNameAsDefaultPlainText();
+    else {
+        parameter = findParameter("plain-text");
+        if (parameter)
+            json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
+    }
 }
