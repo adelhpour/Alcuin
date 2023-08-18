@@ -28,6 +28,8 @@ public:
     virtual void updateGraphicsItem();
 
     virtual void connectGraphicsItem();
+
+    void updateFocusedGraphicsItems();
     
     MyNetworkElementStyleBase* style();
     
