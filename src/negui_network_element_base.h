@@ -97,6 +97,8 @@ signals:
 
     const QString askForIconsDirectoryPath();
 
+    const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
+
 public slots:
 
     virtual void setSelected(const bool& selected);
