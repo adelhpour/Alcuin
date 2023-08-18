@@ -44,8 +44,6 @@ public:
 
     void addDefaultShapeStyle() override;
 
-    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
-
     const QString& convertibleParentCategory() const;
 
     bool isConvertibleToParentCategory(QList<QString> parentCategories);
@@ -71,7 +69,13 @@ public:
 
     NODE_STYLE_TYPE nodeStyleType() override;
 
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+
     QWidget* shapeStylesButtons() override;
+
+    const bool whetherAnotherGeometricShapeAlreadyExists();
+
+    const bool whetherAnotherTextShapeAlreadyExists();
 };
 
 class MyComplexClassicNodeStyle : public MyClassicNodeStyleBase {
@@ -80,6 +84,8 @@ public:
     MyComplexClassicNodeStyle(const QString& name);
 
     NODE_STYLE_TYPE nodeStyleType() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 
     QWidget* shapeStylesButtons() override;
 };

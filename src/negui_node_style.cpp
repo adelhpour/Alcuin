@@ -69,19 +69,6 @@ void MyClassicNodeStyleBase::addDefaultShapeStyle() {
     _shapeStyles.push_back(createNodeEllipseStyle("ellipse"));
 }
 
-MyShapeStyleBase* MyClassicNodeStyleBase::createShapeStyle(const QString& shape) {
-    if (shape == "ellipse")
-        return createNodeEllipseStyle(shape);
-    else if (shape == "rect")
-        return createNodeRectStyle(shape);
-    else if (shape == "polygon")
-        return createNodePolygonStyle(shape);
-    else if (shape == "text")
-        return createTextStyle(shape);
-
-    return NULL;
-}
-
 const QString& MyClassicNodeStyleBase::convertibleParentCategory() const {
     return _convertibleParentCategory;
 }
@@ -121,10 +108,41 @@ MyNodeStyleBase::NODE_STYLE_TYPE MySimpleClassicNodeStyle::nodeStyleType() {
     return SIMPLE_CLASSIC_NODE_STYLE;
 }
 
+MyShapeStyleBase* MySimpleClassicNodeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "ellipse" && !whetherAnotherGeometricShapeAlreadyExists())
+        return createNodeEllipseStyle(shape);
+    else if (shape == "rect" && !whetherAnotherGeometricShapeAlreadyExists())
+        return createNodeRectStyle(shape);
+    else if (shape == "polygon" && !whetherAnotherGeometricShapeAlreadyExists())
+        return createNodePolygonStyle(shape);
+    else if (shape == "text" && !whetherAnotherTextShapeAlreadyExists())
+        return createTextStyle(shape);
+
+    return NULL;
+}
+
 QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
     QWidget* shapeStylesButtons = new MyChangeNodeShapeStylesButton();
     ((MyChangeNodeShapeStylesButton*)shapeStylesButtons)->setMenu();
     return shapeStylesButtons;
+}
+
+const bool MySimpleClassicNodeStyle::whetherAnotherGeometricShapeAlreadyExists() {
+    for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
+        if (shapeStyle->name() != "text")
+            return true;
+    }
+
+    return false;
+}
+
+const bool MySimpleClassicNodeStyle::whetherAnotherTextShapeAlreadyExists() {
+    for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
+        if (shapeStyle->name() == "text")
+        return true;
+    }
+
+    return false;
 }
 
 // MyComplexClassicNodeStyle
@@ -135,6 +153,19 @@ MyComplexClassicNodeStyle::MyComplexClassicNodeStyle(const QString& name) : MyCl
 
 MyNodeStyleBase::NODE_STYLE_TYPE MyComplexClassicNodeStyle::nodeStyleType() {
     return COMPLEX_CLASSIC_NODE_STYLE;
+}
+
+MyShapeStyleBase* MyComplexClassicNodeStyle::createShapeStyle(const QString& shape) {
+    if (shape == "ellipse")
+        return createNodeEllipseStyle(shape);
+    else if (shape == "rect")
+        return createNodeRectStyle(shape);
+    else if (shape == "polygon")
+        return createNodePolygonStyle(shape);
+    else if (shape == "text")
+        return createTextStyle(shape);
+
+    return NULL;
 }
 
 QWidget* MyComplexClassicNodeStyle::shapeStylesButtons() {
