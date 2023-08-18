@@ -29,6 +29,8 @@ public:
 
     void addParameter(MyParameterBase* parameter);
     
+    void addParameterToTheBeginningOfTheList(MyParameterBase* parameter);
+    
     // find a parameter among the list of parameters using its name
     MyParameterBase* findParameter(const QString& name) const;
 

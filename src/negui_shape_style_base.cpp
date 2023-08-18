@@ -23,6 +23,11 @@ void MyShapeStyleBase::addParameter(MyParameterBase* parameter) {
     connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
 }
 
+void MyShapeStyleBase::addParameterToTheBeginningOfTheList(MyParameterBase* parameter) {
+    _parameters.push_front(parameter);
+    connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
+}
+
 MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
     for (MyParameterBase* parameter : qAsConst(parameters())) {
         if (parameter->name() == name) {
