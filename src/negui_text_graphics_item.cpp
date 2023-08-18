@@ -2,14 +2,23 @@
 #include "negui_text_style.h"
 #include "negui_resize_handled_graphics_item.h"
 
-// MyTextGraphicsItemBase
+// MyTextGraphicsItem
 
-MyTextGraphicsItemBase::MyTextGraphicsItemBase(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
+MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
     _elementName = elementName;
 }
 
-void MyTextGraphicsItemBase::updateStyle() {
+void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
+        // plain-text
+        if (((MyWithPlainTextTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
+            ((MyWithPlainTextTextStyle*)style())->setPlainText(_elementName);
+            setPlainText(_elementName);
+        }
+        else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())
+            setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
+        
+        // width
         if (((MyTextStyleBase*)style())->width() > 0.001)
             setTextWidth(((MyTextStyleBase*)style())->width());
         
@@ -28,15 +37,15 @@ void MyTextGraphicsItemBase::updateStyle() {
     }
 }
 
-void MyTextGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
+void MyTextGraphicsItem::setSelectedWithStroke(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyTextGraphicsItemBase::setSelectedWithFill(const bool& selected) {
+void MyTextGraphicsItem::setSelectedWithFill(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyTextGraphicsItemBase::updateExtents(const QRectF& extents) {
+void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
         ((MyTextStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
@@ -54,17 +63,17 @@ void MyTextGraphicsItemBase::updateExtents(const QRectF& extents) {
     updateStyle();
 }
 
-QRectF MyTextGraphicsItemBase::getExtents() {
+QRectF MyTextGraphicsItem::getExtents() {
     return QRectF(((MyTextStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
 }
 
-void MyTextGraphicsItemBase::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
     ((MyTextStyleBase*)style())->setX(((MyTextStyleBase*)style())->x() - originalPositionMovedDistance.x());
     ((MyTextStyleBase*)style())->setY(((MyTextStyleBase*)style())->y() - originalPositionMovedDistance.y());
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyTextGraphicsItemBase::getFocusedGraphicsItem() {
+QGraphicsItem* MyTextGraphicsItem::getFocusedGraphicsItem() {
     QRectF focusedRect = getExtents();
     MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyResizeHandledGraphicsItem(focusedRect, zValue());
     MyShapeGraphicsItemBase::connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
@@ -72,25 +81,7 @@ QGraphicsItem* MyTextGraphicsItemBase::getFocusedGraphicsItem() {
     return focusedGraphicsItem;
 }
 
-void MyTextGraphicsItemBase::setZValue(qreal z) {
+void MyTextGraphicsItem::setZValue(qreal z) {
     QGraphicsItem::setZValue(z);
 }
 
-// MyWithPlainTextTextGraphicsItem
-
-MyWithPlainTextTextGraphicsItem::MyWithPlainTextTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : MyTextGraphicsItemBase(x, y, elementName, parent) {
-
-}
-
-void MyWithPlainTextTextGraphicsItem::updateStyle() {
-    MyTextGraphicsItemBase::updateStyle();
-    if (isSetStyle()) {
-        // plain-text
-        if (((MyWithPlainTextTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
-            ((MyWithPlainTextTextStyle*)style())->setPlainText(_elementName);
-            setPlainText(_elementName);
-        }
-        else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())
-            setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
-    }
-}

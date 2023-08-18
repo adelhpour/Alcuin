@@ -5,10 +5,10 @@
 #include <QTextDocument>
 #include <QPainter>
 
-class MyTextGraphicsItemBase: public My2DShapeGraphicsItemBase, public QGraphicsTextItem {
+class MyTextGraphicsItem: public My2DShapeGraphicsItemBase, public QGraphicsTextItem {
 public:
     
-    MyTextGraphicsItemBase(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
+    MyTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
     
     void updateStyle() override;
     
@@ -30,14 +30,6 @@ public slots:
 protected:
 
     QString _elementName;
-};
-
-class MyWithPlainTextTextGraphicsItem: public MyTextGraphicsItemBase {
-public:
-
-    MyWithPlainTextTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent);
-
-    void updateStyle() override;
 };
 
 
