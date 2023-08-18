@@ -110,10 +110,10 @@ void MyNetworkElementStyleBase::write(QJsonObject &json) {
 MyChangeShapeStylesButtonsBase::MyChangeShapeStylesButtonsBase(QWidget* parent) : QDialogButtonBox(parent) {
     setContentsMargins(0, 0, 0, 0);
     setOrientation(Qt::Horizontal);
-    setFixedSize(75.0, 50.0);
+    setFixedSize(200.0, 50.0);
 
     // add button
-    _changePushButton = addButton(QString("Shape"), QDialogButtonBox::YesRole);
+    _changePushButton = addButton(QString("Select Shape"), QDialogButtonBox::YesRole);
     _menu = new QMenu(_changePushButton);
     _changePushButton->setMenu(_menu);
 }
