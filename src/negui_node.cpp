@@ -338,10 +338,10 @@ QWidget* MySimpleClassicNode::getFeatureMenu() {
     QWidget* featureMenu = MyNodeBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
-    // add remove buttons
+    // change shape style button
     QWidget* shapeStylesButtons = ((MySimpleClassicNodeStyle*)style())->shapeStylesButtons();
     connect(shapeStylesButtons, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)));
-    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 1);
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
 
     return featureMenu;
 }
@@ -365,12 +365,12 @@ QWidget* MyComplexClassicNode::getFeatureMenu() {
     QWidget* featureMenu = MyNodeBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
-    // add remove buttons
+    // add remove shpae style buttons
     QWidget* shapeStylesButtons = ((MyComplexClassicNodeStyle*)style())->shapeStylesButtons();
     connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
     connect(shapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
     connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), shapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 1);
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
 
     return featureMenu;
 }
