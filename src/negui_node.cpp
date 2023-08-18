@@ -155,8 +155,8 @@ QWidget* MyNodeBase::getFeatureMenu() {
 
     // parent
     QString parentLabel = "Parent";
-    if (((MyNodeStyleBase*)style())->parentCategories().size() == 1)
-        parentLabel = ((MyNodeStyleBase*)style())->parentCategories().first();
+    if (!((MyNodeStyleBase*)style())->parentTitle().isEmpty())
+        parentLabel = ((MyNodeStyleBase*)style())->parentTitle();
     contentLayout->addWidget(new MyLabel(parentLabel), contentLayout->rowCount(), 0, Qt::AlignLeft);
     contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 

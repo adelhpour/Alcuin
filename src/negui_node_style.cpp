@@ -23,12 +23,21 @@ const QString MyNodeStyleBase::toolTipText() {
     return "Add " + category();
 }
 
+const QString& MyNodeStyleBase::parentTitle() {
+    return _parentTitle;
+}
+
 QList<QString> MyNodeStyleBase::parentCategories() {
     return _parentCategories;
 }
 
 void MyNodeStyleBase::read(const QJsonObject &json) {
     MyNetworkElementStyleBase::read(json);
+
+    _parentTitle = "";
+    if (json.contains("parent-title") && json["parent-title"].isString())
+        _parentTitle = json["parent-title"].toString();
+
     _parentCategories.clear();
     if (json.contains("parent-categories") && json["parent-categories"].isArray()) {
         QJsonArray parentCategoriesArray = json["parent-categories"].toArray();
@@ -41,6 +50,9 @@ void MyNodeStyleBase::read(const QJsonObject &json) {
 
 void MyNodeStyleBase::write(QJsonObject &json) {
     MyNetworkElementStyleBase::write(json);
+
+    json["parent-title"] = parentTitle();
+
     QJsonArray parentCategoriesArray;
     for (QString parentCategory : parentCategories())
         parentCategoriesArray.append(parentCategory);

@@ -52,8 +52,16 @@ bool MyEdgeStyleBase::isConnectableToTargetNodeCategory(const QString& connected
     return false;
 }
 
+const QString& MyEdgeStyleBase::connectableSourceNodeTitle() {
+    return _connectableSourceNodeTitle;
+}
+
 QList<QString> MyEdgeStyleBase::connectableSourceNodeCategories() {
     return _connectableSourceNodeCategories;
+}
+
+const QString& MyEdgeStyleBase::connectableTargetNodeTitle() {
+    return _connectableTargetNodeTitle;
 }
 
 QList<QString> MyEdgeStyleBase::connectableTargetNodeCategories() {
@@ -103,6 +111,10 @@ const QString MyEdgeStyleBase::targetToolTipText() {
 
 void MyEdgeStyleBase::read(const QJsonObject &json) {
     MyNetworkElementStyleBase::read(json);
+
+    _connectableSourceNodeTitle = "";
+    if (json.contains("connectable-source-node-title") && json["connectable-source-node-title"].isString())
+        _connectableSourceNodeTitle = json["connectable-source-node-title"].toString();
     
     _connectableSourceNodeCategories.clear();
     if (json.contains("connectable-source-node-categories") && json["connectable-source-node-categories"].isArray()) {
@@ -112,6 +124,10 @@ void MyEdgeStyleBase::read(const QJsonObject &json) {
                 _connectableSourceNodeCategories.push_back(connectableSourceNodeCategoriesArray[connectableSourceNodeCategoryIndex].toString());
         }
     }
+
+    _connectableTargetNodeTitle = "";
+    if (json.contains("connectable-target-node-title") && json["connectable-target-node-title"].isString())
+        _connectableTargetNodeTitle = json["connectable-target-node-title"].toString();
     
     _connectableTargetNodeCategories.clear();
     if (json.contains("connectable-target-node-categories") && json["connectable-target-node-categories"].isArray()) {
@@ -128,11 +144,15 @@ void MyEdgeStyleBase::read(const QJsonObject &json) {
 
 void MyEdgeStyleBase::write(QJsonObject &json) {
     MyNetworkElementStyleBase::write(json);
+
+    json["connectable-source-node-title"] = connectableSourceNodeTitle();
     
     QJsonArray connectableSourceNodeCategoriesArray;
     for (QString connectableSourceNodeCategory : connectableSourceNodeCategories())
         connectableSourceNodeCategoriesArray.append(connectableSourceNodeCategory);
     json["connectable-source-node-categories"] = connectableSourceNodeCategoriesArray;
+
+    json["connectable-target-node-title"] = connectableTargetNodeTitle();
     
     QJsonArray connectableTargetNodeCategoriesArray;
     for (QString connectableTargetNodeCategory : connectableTargetNodeCategories())

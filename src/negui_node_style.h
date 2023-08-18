@@ -21,6 +21,8 @@ public:
     QObject* createIconBuilder() override;
 
     const QString toolTipText() override;
+
+    const QString& parentTitle();
     
     QList<QString> parentCategories();
     
@@ -31,6 +33,7 @@ public:
     void write(QJsonObject &json) override;
     
 protected:
+    QString _parentTitle;
     QList<QString> _parentCategories;
 };
 

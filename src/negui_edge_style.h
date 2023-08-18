@@ -23,8 +23,12 @@ public:
     bool isConnectableToSourceNodeCategory(const QString& connectedSourceNodeCategory);
     
     bool isConnectableToTargetNodeCategory(const QString& connectedRTargetNodeCategory);
+
+    const QString& connectableSourceNodeTitle();
     
     QList<QString> connectableSourceNodeCategories();
+
+    const QString& connectableTargetNodeTitle();
     
     QList<QString> connectableTargetNodeCategories();
     
@@ -46,7 +50,9 @@ public:
 
 protected:
     MyNetworkElementStyleBase* _arrowHeadStyle;
+    QString _connectableSourceNodeTitle;
     QList<QString> _connectableSourceNodeCategories;
+    QString _connectableTargetNodeTitle;
     QList<QString> _connectableTargetNodeCategories;
 };
 
