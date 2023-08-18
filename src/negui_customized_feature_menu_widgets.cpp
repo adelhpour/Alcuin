@@ -1105,6 +1105,10 @@ void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsign
     }
 }
 
+void MyShapeStyleTreeView::expandFirstBranch() {
+    expand(treeModel->indexFromItem((treeModel->item(0))));
+}
+
 void MyShapeStyleTreeView::expandLastBranch() {
     expand(treeModel->indexFromItem((treeModel->item(treeModel->rowCount() - 1))));
 }

@@ -109,10 +109,10 @@ MyNodeStyleBase::NODE_STYLE_TYPE MySimpleClassicNodeStyle::nodeStyleType() {
     return SIMPLE_CLASSIC_NODE_STYLE;
 }
 
-QWidget* MySimpleClassicNodeStyle::addRemoveShapeStylesButtons() {
-    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
-    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
-    return addRemoveShapeStylesButtons;
+QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
+    QWidget* shapeStylesButtons = new MyChangeNodeShapeStylesButton();
+    ((MyChangeNodeShapeStylesButton*)shapeStylesButtons)->setMenu();
+    return shapeStylesButtons;
 }
 
 // MyComplexClassicNodeStyle
@@ -125,10 +125,10 @@ MyNodeStyleBase::NODE_STYLE_TYPE MyComplexClassicNodeStyle::nodeStyleType() {
     return COMPLEX_CLASSIC_NODE_STYLE;
 }
 
-QWidget* MyComplexClassicNodeStyle::addRemoveShapeStylesButtons() {
-    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
-    ((MyAddRemoveNodeShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
-    return addRemoveShapeStylesButtons;
+QWidget* MyComplexClassicNodeStyle::shapeStylesButtons() {
+    QWidget* shapeStylesButtons = new MyAddRemoveNodeShapeStylesButtons();
+    ((MyAddRemoveNodeShapeStylesButtons*)shapeStylesButtons)->setAddingMenu();
+    return shapeStylesButtons;
 }
 
 // MyCentroidNodeStyle
@@ -150,6 +150,20 @@ MyShapeStyleBase* MyCentroidNodeStyle::createShapeStyle(const QString& shape) {
         return createNodeCentroidStyle(shape);
 
     return NULL;
+}
+
+// MyChangeNodeShapeStylesButton
+
+MyChangeNodeShapeStylesButton::MyChangeNodeShapeStylesButton(QWidget* parent) : MyChangeShapeStylesButtonsBase(parent) {
+
+}
+
+void MyChangeNodeShapeStylesButton::setMenu() {
+    connect(_menu->addAction("ellipse"), &QAction::triggered, this, [this] () {
+        emit askForChangeShapeStyle(createNodeEllipseStyle("ellipse")); });
+    connect(_menu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createNodeRectStyle("rect")); });
+    connect(_menu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
+        emit askForChangeShapeStyle(polygonShapeStyle); });
 }
 
 // MyAddRemoveNodeShapeStylesButtons

@@ -337,6 +337,12 @@ MyNetworkElementGraphicsItemBase* MySimpleClassicNode::createGraphicsItem(const 
 QWidget* MySimpleClassicNode::getFeatureMenu() {
     QWidget* featureMenu = MyNodeBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+
+    // add remove buttons
+    QWidget* shapeStylesButtons = ((MySimpleClassicNodeStyle*)style())->shapeStylesButtons();
+    connect(shapeStylesButtons, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)));
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 1);
+
     return featureMenu;
 }
 
@@ -360,11 +366,11 @@ QWidget* MyComplexClassicNode::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
     // add remove buttons
-    QWidget* addRemoveShapeStylesButtons = ((MyComplexClassicNodeStyle*)style())->addRemoveShapeStylesButtons();
-    connect(addRemoveShapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(addRemoveShapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), addRemoveShapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(addRemoveShapeStylesButtons, contentLayout->rowCount(), 1);
+    QWidget* shapeStylesButtons = ((MyComplexClassicNodeStyle*)style())->shapeStylesButtons();
+    connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(shapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), shapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 1);
 
     return featureMenu;
 }

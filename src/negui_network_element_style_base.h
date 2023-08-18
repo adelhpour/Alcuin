@@ -45,6 +45,24 @@ protected:
     QList<MyShapeStyleBase*> _shapeStyles;
 };
 
+class MyChangeShapeStylesButtonsBase : public QDialogButtonBox {
+    Q_OBJECT
+
+public:
+
+    MyChangeShapeStylesButtonsBase(QWidget* parent = nullptr);
+
+    virtual void setMenu() = 0;
+
+signals:
+
+    void askForChangeShapeStyle(MyShapeStyleBase* shapeStyle);
+
+protected:
+    QPushButton* _changePushButton;
+    QMenu* _menu;
+};
+
 class MyAddRemoveShapeStylesButtonsBase : public QDialogButtonBox {
     Q_OBJECT
     

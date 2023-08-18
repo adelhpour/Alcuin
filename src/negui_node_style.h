@@ -49,7 +49,7 @@ public:
 
     void convertToParentCategory();
 
-    virtual QWidget* addRemoveShapeStylesButtons() = 0;
+    virtual QWidget* shapeStylesButtons() = 0;
 
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
@@ -68,7 +68,7 @@ public:
 
     NODE_STYLE_TYPE nodeStyleType() override;
 
-    QWidget* addRemoveShapeStylesButtons() override;
+    QWidget* shapeStylesButtons() override;
 };
 
 class MyComplexClassicNodeStyle : public MyClassicNodeStyleBase {
@@ -78,7 +78,7 @@ public:
 
     NODE_STYLE_TYPE nodeStyleType() override;
 
-    QWidget* addRemoveShapeStylesButtons() override;
+    QWidget* shapeStylesButtons() override;
 };
 
 class MyCentroidNodeStyle : public MyNodeStyleBase {
@@ -91,6 +91,16 @@ public:
     void addDefaultShapeStyle() override;
 
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+};
+
+class MyChangeNodeShapeStylesButton : public MyChangeShapeStylesButtonsBase {
+    Q_OBJECT
+
+public:
+
+    MyChangeNodeShapeStylesButton(QWidget* parent = nullptr);
+
+    virtual void setMenu() override;
 };
 
 class MyAddRemoveNodeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

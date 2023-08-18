@@ -25,6 +25,8 @@ signals:
 
     void askForRemoveShapeStyle(MyShapeStyleBase*);
 
+    void askForChangeShapeStyle(MyShapeStyleBase*);
+
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
 
 public:
@@ -115,6 +117,8 @@ public:
     void addBranchWidget(QWidget* branchWidget = NULL, const QString& branchTitle = "", const QString& rootTitle= "");
 
     void removeBranches(const QString& rootTitle= "", const unsigned int& staticbranches = 0);
+
+    void expandFirstBranch();
 
     void expandLastBranch();
 
