@@ -127,10 +127,11 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     if (!style()->nameTitle().isEmpty())
         nameTitle = style()->nameTitle();
     contentLayout->addWidget(new MyLabel(nameTitle), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    if (!style()->isNameEditable())
-        contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
-    else
+    if (style()->isNameEditable())
         contentLayout->addWidget(new MyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    else
+        contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+
 
     return featureMenu;
 }
