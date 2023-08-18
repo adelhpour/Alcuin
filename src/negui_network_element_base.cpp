@@ -123,8 +123,14 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
     
     // name
-    contentLayout->addWidget(new MyLabel("Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    QString nameTitle = "Name";
+    if (!style()->nameTitle().isEmpty())
+        nameTitle = style()->nameTitle();
+    contentLayout->addWidget(new MyLabel(nameTitle), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    if (!style()->isNameEditable())
+        contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    else
+        contentLayout->addWidget(new MyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     return featureMenu;
 }
