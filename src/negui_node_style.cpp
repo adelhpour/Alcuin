@@ -116,7 +116,7 @@ MyShapeStyleBase* MySimpleClassicNodeStyle::createShapeStyle(const QString& shap
     else if (shape == "polygon" && !whetherAnotherGeometricShapeAlreadyExists())
         return createNodePolygonStyle(shape);
     else if (shape == "text" && !whetherAnotherTextShapeAlreadyExists())
-        return createTextStyle(shape);
+        return createSimpleTextStyle(shape);
 
     return NULL;
 }
@@ -163,7 +163,7 @@ MyShapeStyleBase* MyComplexClassicNodeStyle::createShapeStyle(const QString& sha
     else if (shape == "polygon")
         return createNodePolygonStyle(shape);
     else if (shape == "text")
-        return createTextStyle(shape);
+        return createWithPlainTextTextStyle(shape);
 
     return NULL;
 }
@@ -221,5 +221,6 @@ void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
     connect(_addingMenu->addAction("Rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
     connect(_addingMenu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
         emit askForAddShapeStyle(polygonShapeStyle); });
-    connect(_addingMenu->addAction("Text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
+    connect(_addingMenu->addAction("Text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(
+            createWithPlainTextTextStyle("text")); });
 }
