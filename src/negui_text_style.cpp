@@ -4,9 +4,6 @@
 // MyTextStyleBase
 
 MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
-    // plain-text
-    addParameter(new MyStringParameter("plain-text"));
-    
     // stroke
     addParameter(new MyColorParameter("color"));
     
