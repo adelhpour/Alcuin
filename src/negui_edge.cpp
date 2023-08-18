@@ -186,11 +186,17 @@ QWidget* MyEdgeBase::getFeatureMenu() {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
     // source node
-    contentLayout->addWidget(new MyLabel("Source"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    QString sourceLabel = "Source";
+    if (((MyEdgeStyleBase*)style())->connectableSourceNodeCategories().size() == 1)
+        sourceLabel = ((MyEdgeStyleBase*)style())->connectableSourceNodeCategories().first();
+    contentLayout->addWidget(new MyLabel(sourceLabel), contentLayout->rowCount(), 0, Qt::AlignLeft);
     contentLayout->addWidget(new MyReadOnlyLineEdit(sourceNode()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     // target node
-    contentLayout->addWidget(new MyLabel("Target"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    QString targetLabel = "Target";
+    if (((MyEdgeStyleBase*)style())->connectableTargetNodeCategories().size() == 1)
+        targetLabel = ((MyEdgeStyleBase*)style())->connectableTargetNodeCategories().first();
+    contentLayout->addWidget(new MyLabel(targetLabel), contentLayout->rowCount(), 0, Qt::AlignLeft);
     contentLayout->addWidget(new MyReadOnlyLineEdit(targetNode()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 
     return featureMenu;
