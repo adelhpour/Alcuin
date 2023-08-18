@@ -159,10 +159,10 @@ MyChangeNodeShapeStylesButton::MyChangeNodeShapeStylesButton(QWidget* parent) : 
 }
 
 void MyChangeNodeShapeStylesButton::setMenu() {
-    connect(_menu->addAction("ellipse"), &QAction::triggered, this, [this] () {
+    connect(_menu->addAction("Ellipse"), &QAction::triggered, this, [this] () {
         emit askForChangeShapeStyle(createNodeEllipseStyle("ellipse")); });
-    connect(_menu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createNodeRectStyle("rect")); });
-    connect(_menu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
+    connect(_menu->addAction("Rect"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createNodeRectStyle("rect")); });
+    connect(_menu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
         emit askForChangeShapeStyle(polygonShapeStyle); });
 }
 
@@ -173,10 +173,10 @@ MyAddRemoveNodeShapeStylesButtons::MyAddRemoveNodeShapeStylesButtons(QWidget* pa
 }
 
 void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
-    connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
+    connect(_addingMenu->addAction("Ellipse"), &QAction::triggered, this, [this] () {
         emit askForAddShapeStyle(createNodeEllipseStyle("ellipse")); });
-    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
-    connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
+    connect(_addingMenu->addAction("Rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
+    connect(_addingMenu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
         emit askForAddShapeStyle(polygonShapeStyle); });
-    connect(_addingMenu->addAction("text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
+    connect(_addingMenu->addAction("Text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createTextStyle("text")); });
 }
