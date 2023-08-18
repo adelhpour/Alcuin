@@ -37,6 +37,7 @@ MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name)
     // vertical alignment
     addParameter(new MyVTextAnchorParameter());
 
+    _whetherSetNameAsDefaultPlainText = false;
     reset();
 }
 
@@ -183,6 +184,10 @@ const qreal MyTextStyleBase::verticalPadding() const {
     return 0.000;
 }
 
+const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
+}
+
 void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
@@ -325,13 +330,26 @@ void MyTextStyleBase::write(QJsonObject &json) {
         json["vtext-anchor"] = ((MyVTextAnchorParameter*)parameter)->defaultValue();
 }
 
+// MySimpleTextStyle
+
+MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name) {
+    reset();
+    _whetherSetNameAsDefaultPlainText = true;
+}
+
+const QString MySimpleTextStyle::plainText() const {
+    return _plainText;
+}
+
+void MySimpleTextStyle::setPlainText(const QString& plainText) {
+    _plainText = plainText;
+}
+
 // MyWithPlainTextTextStyle
 
 MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
     // plain-text
     addParameter(new MyStringParameter("plain-text"));
-
-    _whetherSetNameAsDefaultPlainText = false;
     reset();
 }
 
@@ -343,14 +361,10 @@ const QString MyWithPlainTextTextStyle::plainText() const {
     return "";
 }
 
-void MyWithPlainTextTextStyle::setPlainText(const QString& plainText) const {
+void MyWithPlainTextTextStyle::setPlainText(const QString& plainText) {
     MyParameterBase* parameter = findParameter("plain-text");
     if (parameter)
         ((MyStringParameter *) parameter)->setDefaultValue(plainText);
-}
-
-const bool& MyWithPlainTextTextStyle::whetherSetNameAsDefaultPlainText() const {
-    return _whetherSetNameAsDefaultPlainText;
 }
 
 void MyWithPlainTextTextStyle::read(const QJsonObject &json) {

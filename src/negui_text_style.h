@@ -9,6 +9,12 @@ public:
     MyTextStyleBase(const QString& name);
     
     SHAPE_STYLE type() override;
+
+    // get the plain text for text
+    virtual const QString plainText() const = 0;
+
+    // set the plain text for text
+    virtual void setPlainText(const QString& plainText) = 0;
     
     const QRectF getShapeExtents() override;
     
@@ -49,12 +55,35 @@ public:
     const Qt::Alignment verticalAlignment() const;
     
     const qreal verticalPadding() const;
+
+    // set the associated name as the default text
+    const bool& whetherSetNameAsDefaultPlainText() const;
     
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+
+protected:
+
+    bool _whetherSetNameAsDefaultPlainText;
+};
+
+class MySimpleTextStyle : public MyTextStyleBase {
+public:
+
+    MySimpleTextStyle(const QString& name);
+
+    // get the plain text for text
+    const QString plainText() const override;
+
+    // set the plain text for text
+    void setPlainText(const QString& plainText) override;
+
+protected:
+
+    QString _plainText;
 };
 
 class MyWithPlainTextTextStyle : public MyTextStyleBase {
@@ -63,23 +92,16 @@ public:
     MyWithPlainTextTextStyle(const QString& name);
 
     // get the plain text for text
-    const QString plainText() const;
+    const QString plainText() const override;
 
     // set the plain text for text
-    void setPlainText(const QString& plainText) const;
-
-    // set the associated name as the default text
-    const bool& whetherSetNameAsDefaultPlainText() const;
+    void setPlainText(const QString& plainText) override;
 
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
 
     // write the node style info to the json object
     void write(QJsonObject &json) override;
-
-protected:
-
-    bool _whetherSetNameAsDefaultPlainText;
 };
 
 #endif
