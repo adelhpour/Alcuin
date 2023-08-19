@@ -2,6 +2,7 @@
 #define __NEGUI_STATUS_BAR_H
 
 #include <QStatusBar>
+#include <QLabel>
 
 class MyStatusBar : public QStatusBar {
     Q_OBJECT
@@ -15,6 +16,10 @@ public slots:
     void resetMessage();
 
     void setMessageToMousePosition(const QPointF& mousePosition);
+
+protected:
+    QLabel* _fileNameLabel;
+    QLabel* _coordinatesLabel;
 };
 
 #endif
