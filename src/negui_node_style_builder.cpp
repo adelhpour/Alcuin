@@ -33,5 +33,22 @@ const bool isCentroidNodeStyle(const QJsonObject &json) {
 }
 
 const bool isSimpleClassicNodeStyle(const QJsonObject &json) {
-    return  true;
+    if (json.contains("shapes") && json["shapes"].isArray()) {
+        QJsonArray shapesArray = json["shapes"].toArray();
+        QJsonObject textShapeObject;
+        QJsonObject geometricShapeObject;
+        if (shapesArray.size() == 2) {
+            for (unsigned int shapeIndex = 0; shapeIndex < shapesArray.size(); shapeIndex++) {
+                QJsonObject shapeObject = shapesArray[shapeIndex].toObject();
+                if (shapeObject.contains("shape") && shapeObject["shape"].isString()) {
+                    if (shapeObject["shape"].toString() == "text") {
+                        if (!shapeObject.contains("plain-text"))
+                            return true;
+                    }
+                }
+            }
+        }
+    }
+
+    return  false;
 }
