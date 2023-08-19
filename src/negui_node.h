@@ -67,9 +67,11 @@ public:
 
     const qreal endEdgePadding();
     
-    QWidget* getFeatureMenu() override;
-    
     const qint32 calculateZValue() override;
+
+    void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
+
+    void addSpacerItemToFeatureMenu(QWidget* featureMenu);
     
     // read the node info from the json object
     void read(const QJsonObject &json) override;
@@ -162,6 +164,10 @@ public:
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     QWidget* getFeatureMenu() override;
+
+    void addDisplayNameToFeatureMenu(QWidget* featureMenu);
+
+    void addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu);
 };
 
 class MyComplexClassicNode : public MyClassicNodeBase {
@@ -176,6 +182,8 @@ public:
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     QWidget* getFeatureMenu() override;
+
+    void addAdddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
 };
 
 class MyCentroidNode : public MyNodeBase {
@@ -202,6 +210,8 @@ public:
     const QPointF getNodeUpdatedPositionUsingConnectedEdges();
 
     const bool connectedBezierCurvesNeedsToBeAdjusted();
+
+    QWidget* getFeatureMenu() override;
 
 signals:
 
