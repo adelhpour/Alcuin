@@ -349,7 +349,7 @@ void MySimpleTextStyle::setPlainText(const QString& plainText) {
 
 MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
     // plain-text
-    addParameterToTheBegnningOfTheList(new MyStringParameter("plain-text"));
+    addParameterToTheBeginningOfTheList(new MyStringParameter("plain-text"));
     reset();
 }
 
