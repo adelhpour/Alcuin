@@ -20,6 +20,7 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDi
     connect(_elementFeatureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), this, SLOT(removeShapeStyle(MyShapeStyleBase*)));
     connect(_elementFeatureMenu, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), this, SLOT(changeShapeStyle(MyShapeStyleBase*)));
     connect(this, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), _elementFeatureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)));
+    connect((MyFeatureMenuItemFrame*)_elementFeatureMenu, &MyFeatureMenuItemFrame::isUpdated, this, [this] () { isUpdated(shapeStyles()); });
     contentLayout->addWidget(_elementFeatureMenu, contentLayout->rowCount(), 0, 1, 2);
 
     // shape style tree view
