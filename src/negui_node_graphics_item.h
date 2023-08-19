@@ -23,7 +23,7 @@ signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);
 
-    QString askForElementName();
+    QString askForElementDisplayName();
 
 };
 
