@@ -25,11 +25,10 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(title(), 0, 0, 1, 3, Qt::AlignCenter);
-    layout->addWidget(toolBar(), 1, 0, 1, 3);
-    layout->addWidget(modeMenu(), 2, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
-    layout->addWidget(view(), 2, 1, 1, 1);
-    layout->addWidget(statusBar(), 3, 0, 1, 3);
+    layout->addWidget(toolBar(), layout->rowCount(), 0, 1, 3);
+    layout->addWidget(modeMenu(), layout->rowCount(), 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
+    layout->addWidget(view(), layout->rowCount() - 1, 1, 1, 1);
+    layout->addWidget(statusBar(), layout->rowCount(), 0, 1, 3);
     setLayout(layout);
 
     setReadyToLaunch();
@@ -40,7 +39,6 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 }
 
 void MyNetworkEditorWidget::setWidgets() {
-    _title = new QLabel(this);
     _toolBar = new MyToolBar(this);
     _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
@@ -58,8 +56,7 @@ void MyNetworkEditorWidget::setWidgets() {
 
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
-    // set title
-    connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
+    //connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
 
     // menubar
     connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
@@ -165,10 +162,6 @@ void MyNetworkEditorWidget::setInteractions() {
 
 QObject* MyNetworkEditorWidget::interactor() {
     return _interactor;
-}
-
-QWidget* MyNetworkEditorWidget::title() {
-    return _title;
 }
 
 QWidget* MyNetworkEditorWidget::toolBar() {

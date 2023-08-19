@@ -14,7 +14,6 @@ public:
     ~MyNetworkEditorWidget();
 
     QObject* interactor();
-    QWidget* title();
     QWidget* toolBar();
     QWidget* modeMenu();
     QWidget* view();
@@ -59,7 +58,6 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
     QObject* _interactor;
-    QWidget* _title;
     QWidget* _toolBar;
     QWidget* _view;
     QWidget* _modeMenu;
