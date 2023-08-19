@@ -15,7 +15,7 @@ public slots:
 
     void resetMessage();
 
-    void setMessageToMousePosition(const QPointF& mousePosition);
+    void setCoordinatesToMousePosition(const QPointF& mousePosition);
 
 protected:
     QLabel* _fileNameLabel;

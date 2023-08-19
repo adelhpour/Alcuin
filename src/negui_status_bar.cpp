@@ -7,7 +7,6 @@ MyStatusBar::MyStatusBar(QWidget* parent) : QStatusBar(parent) {
     setContentsMargins(0, 0, 0, 0);
     _fileNameLabel = new QLabel("file");
     _coordinatesLabel = new QLabel();
-
     addPermanentWidget(_fileNameLabel, 97);
     addPermanentWidget(_coordinatesLabel, 3);
 
@@ -18,6 +17,6 @@ void MyStatusBar::resetMessage() {
     _coordinatesLabel->setText("");
 }
 
-void MyStatusBar::setToMousePosition(const QPointF& mousePosition) {
+void MyStatusBar::setCoordinatesToMousePosition(const QPointF& mousePosition) {
     _coordinatesLabel->setText(QString::number(mousePosition.toPoint().x()) + ", " + QString::number(mousePosition.toPoint().y()));
 }
