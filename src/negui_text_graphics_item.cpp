@@ -11,8 +11,8 @@ MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementN
 void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
         // plain-text
-        if (((MyWithPlainTextTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
-            ((MyWithPlainTextTextStyle*)style())->setPlainText(_elementName);
+        if (!_elementName.isEmpty() && ((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText()) {
+            ((MyTextStyleBase*)style())->setPlainText(_elementName);
             setPlainText(_elementName);
         }
         else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())

@@ -363,8 +363,10 @@ const QString MyWithPlainTextTextStyle::plainText() const {
 
 void MyWithPlainTextTextStyle::setPlainText(const QString& plainText) {
     MyParameterBase* parameter = findParameter("plain-text");
-    if (parameter)
+    if (parameter) {
         ((MyStringParameter *) parameter)->setDefaultValue(plainText);
+        _whetherSetNameAsDefaultPlainText = false;
+    }
 }
 
 void MyWithPlainTextTextStyle::read(const QJsonObject &json) {
