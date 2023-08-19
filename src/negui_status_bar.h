@@ -12,7 +12,9 @@ public:
 
 public slots:
 
-    void setMousePosition(const QPointF& mousePosition);
+    void resetMessage();
+
+    void setMessageToMousePosition(const QPointF& mousePosition);
 };
 
 #endif

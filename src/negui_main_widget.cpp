@@ -159,7 +159,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForDeleteSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(deleteSelectedNetworkElements()));
 
     // status bar
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setMousePosition(const QPointF)));
+    connect(view(), SIGNAL(mouseLeft()), statusBar(), SLOT(resetMessage()));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setMessageToMousePosition(const QPointF&)));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {

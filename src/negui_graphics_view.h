@@ -31,6 +31,7 @@ public:
 signals:
     void enterKeyIsPressed();
     void askForDisplayContextMenu(const QPointF& position);
+    void mouseLeft();
 
 public slots:
 
@@ -52,7 +53,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-    
+    void leaveEvent(QEvent *event) override;
+
     qint32 _numScheduledScalings;
     qreal _minScale;
     qreal _maxScale;
