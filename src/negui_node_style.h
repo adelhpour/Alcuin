@@ -7,7 +7,8 @@ class MyNodeStyleBase : public MyNetworkElementStyleBase {
 public:
 
     typedef enum {
-        CLASSIC_NODE_STYLE,
+        SIMPLE_CLASSIC_NODE_STYLE,
+        COMPLEX_CLASSIC_NODE_STYLE,
         CENTROID_NODE_STYLE,
     } NODE_STYLE_TYPE;
 
@@ -20,6 +21,8 @@ public:
     QObject* createIconBuilder() override;
 
     const QString toolTipText() override;
+
+    const QString& parentTitle();
     
     QList<QString> parentCategories();
     
@@ -30,19 +33,16 @@ public:
     void write(QJsonObject &json) override;
     
 protected:
+    QString _parentTitle;
     QList<QString> _parentCategories;
 };
 
-class MyClassicNodeStyle : public MyNodeStyleBase {
+class MyClassicNodeStyleBase : public MyNodeStyleBase {
 public:
 
-    MyClassicNodeStyle(const QString& name);
-
-    NODE_STYLE_TYPE nodeStyleType() override;
+    MyClassicNodeStyleBase(const QString& name);
 
     void addDefaultShapeStyle() override;
-
-    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 
     const QString& convertibleParentCategory() const;
 
@@ -50,7 +50,7 @@ public:
 
     void convertToParentCategory();
 
-    QWidget* addRemoveShapeStylesButtons();
+    virtual QWidget* shapeStylesButtons() = 0;
 
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
@@ -60,6 +60,34 @@ public:
 
 protected:
     QString _convertibleParentCategory;
+};
+
+class MySimpleClassicNodeStyle : public MyClassicNodeStyleBase {
+public:
+
+    MySimpleClassicNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+
+    QWidget* shapeStylesButtons() override;
+
+    const bool whetherAnotherGeometricShapeAlreadyExists();
+
+    const bool whetherAnotherTextShapeAlreadyExists();
+};
+
+class MyComplexClassicNodeStyle : public MyClassicNodeStyleBase {
+public:
+
+    MyComplexClassicNodeStyle(const QString& name);
+
+    NODE_STYLE_TYPE nodeStyleType() override;
+
+    MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+
+    QWidget* shapeStylesButtons() override;
 };
 
 class MyCentroidNodeStyle : public MyNodeStyleBase {
@@ -72,6 +100,16 @@ public:
     void addDefaultShapeStyle() override;
 
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
+};
+
+class MyChangeNodeShapeStylesButton : public MyChangeShapeStylesButtonsBase {
+    Q_OBJECT
+
+public:
+
+    MyChangeNodeShapeStylesButton(QWidget* parent = nullptr);
+
+    virtual void setMenu() override;
 };
 
 class MyAddRemoveNodeShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

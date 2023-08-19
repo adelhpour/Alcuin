@@ -59,6 +59,10 @@ MyShapeStyleBase* createConnectedToEndCentroidShapeLineStyle(const QString& shap
     return new MyConnectedToEndCentroidShapeLineStyle(shape);
 }
 
-MyShapeStyleBase* createTextStyle(const QString& shape) {
-    return new MyTextStyle(shape);
+MyShapeStyleBase* createSimpleTextStyle(const QString& shape) {
+    return new MySimpleTextStyle(shape);
+}
+
+MyShapeStyleBase* createWithPlainTextTextStyle(const QString& shape) {
+    return new MyWithPlainTextTextStyle(shape);
 }

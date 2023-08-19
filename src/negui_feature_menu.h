@@ -17,6 +17,8 @@ public:
 
     void addShapeStyle(MyShapeStyleBase* shapeStyle);
 
+    void addSingleShapeStyle(MyShapeStyleBase* shapeStyle);
+
     void clearShapeStyles();
 
 signals:
@@ -32,6 +34,8 @@ private slots:
     void addNewShapeStyle(MyShapeStyleBase* shapeStyle);
 
     void removeShapeStyle(MyShapeStyleBase* shapeStyle);
+
+    void changeShapeStyle(MyShapeStyleBase* shapeStyle);
 
     void setExpandableWidgetSize(const QSize& expandableWidgetSize);
     

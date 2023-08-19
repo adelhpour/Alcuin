@@ -10,29 +10,30 @@ MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementN
 
 void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
-        if (((MyTextStyle*)style())->width() > 0.001)
-            setTextWidth(((MyTextStyle*)style())->width());
-        
         // plain-text
-        if (((MyTextStyle*)style())->whetherSetNameAsDefaultPlainText()) {
-            ((MyTextStyle*)style())->setPlainText(_elementName);
+        if (!_elementName.isEmpty() && ((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText()) {
+            ((MyTextStyleBase*)style())->setPlainText(_elementName);
             setPlainText(_elementName);
         }
-        else if (!((MyTextStyle*)style())->plainText().isEmpty())
-            setPlainText(((MyTextStyle*)style())->plainText());
+        else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())
+            setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
+        
+        // width
+        if (((MyTextStyleBase*)style())->width() > 0.001)
+            setTextWidth(((MyTextStyleBase*)style())->width());
         
         // text-color
-        setDefaultTextColor(((MyTextStyle*)style())->defaultTextColor());
+        setDefaultTextColor(((MyTextStyleBase*)style())->defaultTextColor());
         
         // font
-        setFont(((MyTextStyle*)style())->font());
+        setFont(((MyTextStyleBase*)style())->font());
         
         // alignment
         QTextOption option = document()->defaultTextOption();
-        option.setAlignment(((MyTextStyle*)style())->verticalAlignment() | ((MyTextStyle*)style())->horizontalAlignment());
+        option.setAlignment(((MyTextStyleBase*)style())->verticalAlignment() | ((MyTextStyleBase*)style())->horizontalAlignment());
         document()->setDefaultTextOption(option);
         
-        setPos(_originalPosition +  QPointF(((MyTextStyle*)style())->x(), ((MyTextStyle*)style())->y() + ((MyTextStyle*)style())->verticalPadding()));
+        setPos(_originalPosition +  QPointF(((MyTextStyleBase*)style())->x(), ((MyTextStyleBase*)style())->y() + ((MyTextStyleBase*)style())->verticalPadding()));
     }
 }
 
@@ -47,28 +48,28 @@ void MyTextGraphicsItem::setSelectedWithFill(const bool& selected) {
 void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
-        ((MyTextStyle*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
+        ((MyTextStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
         
         // y
-        ((MyTextStyle*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
+        ((MyTextStyleBase*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
         
         // width
-        ((MyTextStyle*)style())->setWidth(extents.width());
+        ((MyTextStyleBase*)style())->setWidth(extents.width());
         
         // height
-        ((MyTextStyle*)style())->setHeight(extents.height());
+        ((MyTextStyleBase*)style())->setHeight(extents.height());
     }
     
     updateStyle();
 }
 
 QRectF MyTextGraphicsItem::getExtents() {
-    return QRectF(((MyTextStyle*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyle*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyle*)style())->width(), ((MyTextStyle*)style())->height());
+    return QRectF(((MyTextStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
 }
 
 void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyTextStyle*)style())->setX(((MyTextStyle*)style())->x() - originalPositionMovedDistance.x());
-    ((MyTextStyle*)style())->setY(((MyTextStyle*)style())->y() - originalPositionMovedDistance.y());
+    ((MyTextStyleBase*)style())->setX(((MyTextStyleBase*)style())->x() - originalPositionMovedDistance.x());
+    ((MyTextStyleBase*)style())->setY(((MyTextStyleBase*)style())->y() - originalPositionMovedDistance.y());
     _originalPosition += originalPositionMovedDistance;
 }
 
@@ -83,3 +84,4 @@ QGraphicsItem* MyTextGraphicsItem::getFocusedGraphicsItem() {
 void MyTextGraphicsItem::setZValue(qreal z) {
     QGraphicsItem::setZValue(z);
 }
+

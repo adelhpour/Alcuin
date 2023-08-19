@@ -9,7 +9,8 @@ class MyNodeBase : public MyNetworkElementBase {
 public:
 
     typedef enum {
-        CLASSIC_NODE,
+        SIMPLE_CLASSIC_NODE,
+        COMPLEX_CLASSIC_NODE,
         CENTROID_NODE,
     } NODE_TYPE;
     
@@ -66,9 +67,11 @@ public:
 
     const qreal endEdgePadding();
     
-    QWidget* getFeatureMenu() override;
-    
     const qint32 calculateZValue() override;
+
+    void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
+
+    void addSpacerItemToFeatureMenu(QWidget* featureMenu);
     
     // read the node info from the json object
     void read(const QJsonObject &json) override;
@@ -106,16 +109,12 @@ protected:
     qreal _endEdgePadding;
 };
 
-class MyClassicNode : public MyNodeBase {
+class MyClassicNodeBase : public MyNodeBase {
     Q_OBJECT
 
 public:
 
-    MyClassicNode(const QString& name, const qreal& x, const qreal& y);
-
-    NODE_TYPE nodeType() override;
-
-    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+    MyClassicNodeBase(const QString& name, const qreal& x, const qreal& y);
 
     const bool isCopyable() override;
 
@@ -143,8 +142,6 @@ public:
     // adjust node extents to fit all its children
     void adjustExtents();
 
-    QWidget* getFeatureMenu() override;
-
 public slots:
 
     // set the position of the node
@@ -153,6 +150,40 @@ public slots:
 protected:
     QList<MyNetworkElementBase*> _childNodes;
     bool _areChildNodesLocked;
+};
+
+class MySimpleClassicNode : public MyClassicNodeBase {
+    Q_OBJECT
+
+public:
+
+    MySimpleClassicNode(const QString& name, const qreal& x, const qreal& y);
+
+    NODE_TYPE nodeType() override;
+
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    QWidget* getFeatureMenu() override;
+
+    void addDisplayNameToFeatureMenu(QWidget* featureMenu);
+
+    void addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu);
+};
+
+class MyComplexClassicNode : public MyClassicNodeBase {
+    Q_OBJECT
+
+public:
+
+    MyComplexClassicNode(const QString& name, const qreal& x, const qreal& y);
+
+    NODE_TYPE nodeType() override;
+
+    MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
+
+    QWidget* getFeatureMenu() override;
+
+    void addAdddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
 };
 
 class MyCentroidNode : public MyNodeBase {
@@ -179,6 +210,8 @@ public:
     const QPointF getNodeUpdatedPositionUsingConnectedEdges();
 
     const bool connectedBezierCurvesNeedsToBeAdjusted();
+
+    QWidget* getFeatureMenu() override;
 
 signals:
 

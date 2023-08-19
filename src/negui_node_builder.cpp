@@ -5,8 +5,10 @@
 
 MyNetworkElementBase* createNode(const QString& name, MyNetworkElementStyleBase* nodeStyle, const qreal& x, const qreal& y) {
     MyNetworkElementBase* node = NULL;
-    if (((MyNodeStyleBase*)nodeStyle)->nodeStyleType() == MyNodeStyleBase::CLASSIC_NODE_STYLE)
-        node = new MyClassicNode(name, x, y);
+    if (((MyNodeStyleBase*)nodeStyle)->nodeStyleType() == MyNodeStyleBase::SIMPLE_CLASSIC_NODE_STYLE)
+        node = new MySimpleClassicNode(name, x, y);
+    else if (((MyNodeStyleBase*)nodeStyle)->nodeStyleType() == MyNodeStyleBase::COMPLEX_CLASSIC_NODE_STYLE)
+        node = new MyComplexClassicNode(name, x, y);
     else if(((MyNodeStyleBase*)nodeStyle)->nodeStyleType() == MyNodeStyleBase::CENTROID_NODE_STYLE)
         node = new MyCentroidNode(name, x, y);
 
@@ -24,7 +26,7 @@ MyNetworkElementBase* createNode(const QJsonObject &json) {
             if (nodeStyle) {
                 node = createNode(json["id"].toString(), nodeStyle, json["position"]["x"].toDouble(), json["position"]["y"].toDouble());
                 if (json.contains("parent") && json["parent"].isString())
-                    ((MyClassicNode*)node)->setParentNodeId(json["parent"].toString());
+                    ((MyClassicNodeBase*)node)->setParentNodeId(json["parent"].toString());
             }
         }
     }

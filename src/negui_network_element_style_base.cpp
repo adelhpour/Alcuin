@@ -6,7 +6,7 @@
 // MyNetworkElementStyleBase
 
 MyNetworkElementStyleBase::MyNetworkElementStyleBase(const QString& name) : MyPluginItemBase(name) {
-    
+    _isNameEditable = false;
 }
 
 void MyNetworkElementStyleBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
@@ -69,8 +69,24 @@ const QIcon MyNetworkElementStyleBase::icon() {
     return ((MyNetworkElementIconBuilderBase*)iconBuilder)->icon();
 }
 
+const QString& MyNetworkElementStyleBase::nameTitle() {
+    return _nameTitle;
+}
+
+const bool MyNetworkElementStyleBase::isNameEditable() {
+    return _isNameEditable;
+}
+
 void MyNetworkElementStyleBase::read(const QJsonObject &json) {
     MyPluginItemBase::read(json);
+    // name title
+    _nameTitle = "";
+    if (json.contains("name-title") && json["name-title"].isString())
+        _nameTitle = json["name-title"].toString();
+    _isNameEditable = false;
+    if (json.contains("is-name-editable") && json["is-name-editable"].isBool())
+        _isNameEditable = json["is-name-editable"].toBool();
+
     // shapes
     clearShapeStyles();
     if (json.contains("shapes") && json["shapes"].isArray()) {
@@ -94,6 +110,10 @@ void MyNetworkElementStyleBase::read(const QJsonObject &json) {
 void MyNetworkElementStyleBase::write(QJsonObject &json) {
     MyPluginItemBase::write(json);
     json["name"] = name();
+
+    // name title
+    json["name-title"] = nameTitle();
+    json["is-name-editable"]  = isNameEditable();
     
     // shapes
     QJsonArray shapeStylesArray;
@@ -103,6 +123,19 @@ void MyNetworkElementStyleBase::write(QJsonObject &json) {
         shapeStylesArray.append(shapeStyleObject);
     }
     json["shapes"] = shapeStylesArray;
+}
+
+// MyChangeShapeStylesButtonsBase
+
+MyChangeShapeStylesButtonsBase::MyChangeShapeStylesButtonsBase(QWidget* parent) : QDialogButtonBox(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    setOrientation(Qt::Horizontal);
+    setFixedSize(200.0, 50.0);
+
+    // add button
+    _changePushButton = addButton(QString("Select Shape"), QDialogButtonBox::YesRole);
+    _menu = new QMenu(_changePushButton);
+    _changePushButton->setMenu(_menu);
 }
 
 // MyAddRemoveShapeStylesButtonsBase

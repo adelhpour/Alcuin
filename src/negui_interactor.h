@@ -200,6 +200,7 @@ private slots:
     const bool areAnyOtherElementsSelected(MyNetworkElementBase* element);
     void copySelectedNetworkElements();
     void cutSelectedNetworkElements();
+    const bool isElementNameAlreadyUsed(const QString& elementName);
     
 protected:
 

@@ -36,6 +36,17 @@ const QSize MyFeatureMenuItemFrame::extents() const {
     return QSize(totalWidth + 10 * contentLayout->columnCount(), totalHeight + 10 *  contentLayout->rowCount() );
 }
 
+// MyRestrictedToNameConventionsLineEdit
+
+MyRestrictedToNameConventionsLineEdit::MyRestrictedToNameConventionsLineEdit(const QString &contents, QWidget* parent) : MyLineEdit(contents, parent) {
+    setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9_]+"), this));
+}
+
+void MyRestrictedToNameConventionsLineEdit::setText(const QString& newText) {
+    if (newText != text())
+        MyLineEdit::setText(newText);
+}
+
 // MyColorPickerButton
 
 MyColorPickerButton::MyColorPickerButton(QWidget *parent) : QToolButton(parent) {
@@ -1103,6 +1114,10 @@ void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsign
             }
         }
     }
+}
+
+void MyShapeStyleTreeView::expandFirstBranch() {
+    expand(treeModel->indexFromItem((treeModel->item(0))));
 }
 
 void MyShapeStyleTreeView::expandLastBranch() {

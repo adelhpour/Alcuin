@@ -25,13 +25,27 @@ signals:
 
     void askForRemoveShapeStyle(MyShapeStyleBase*);
 
+    void askForChangeShapeStyle(MyShapeStyleBase*);
+
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
+
+    void isUpdated();
 
 public:
 
     MyFeatureMenuItemFrame(QWidget* parent = nullptr);
 
     const QSize extents() const;
+};
+
+class MyRestrictedToNameConventionsLineEdit : public MyLineEdit {
+    Q_OBJECT
+
+public:
+
+    MyRestrictedToNameConventionsLineEdit(const QString &contents = "", QWidget* parent = nullptr);
+
+    void setText(const QString& newText);
 };
 
 class MyColorPickerButton : public QToolButton {
@@ -115,6 +129,8 @@ public:
     void addBranchWidget(QWidget* branchWidget = NULL, const QString& branchTitle = "", const QString& rootTitle= "");
 
     void removeBranches(const QString& rootTitle= "", const unsigned int& staticbranches = 0);
+
+    void expandFirstBranch();
 
     void expandLastBranch();
 

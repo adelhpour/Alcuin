@@ -34,7 +34,7 @@ public:
 
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 
-    QWidget* addRemoveShapeStylesButtons();
+    QWidget* shapeStylesButtons();
 };
 
 class MyAddRemoveArrowHeadShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

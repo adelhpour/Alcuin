@@ -10,6 +10,8 @@ public:
     MyBase(const QString& name);
     
     const QString& name() const;
+
+    void setName(const QString& name);
     
     // import/export info
     virtual void read(const QJsonObject &json) = 0;

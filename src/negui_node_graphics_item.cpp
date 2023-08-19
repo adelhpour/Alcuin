@@ -25,7 +25,7 @@ MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShape
         item->setZValue(zValue());
     }
     else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementName(), this);
+        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementDisplayName(), this);
         item->setZValue(zValue() + 1);
     }
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE) {
@@ -155,13 +155,13 @@ void MyNodeSceneGraphicsItemBase::keyReleaseEvent(QKeyEvent *event) {
     }
 }
 
-// MyClassicNodeSceneGraphicsItem
+// MyClassicNodeSceneGraphicsItemBase
 
-MyClassicNodeSceneGraphicsItem::MyClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
+MyClassicNodeSceneGraphicsItemBase::MyClassicNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeSceneGraphicsItemBase(position, parent) {
 
 }
 
-void MyClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
+void MyClassicNodeSceneGraphicsItemBase::clearFocusedGraphicsItems() {
     if (_focusedGraphicsItems.size()) {
         emit askForResetPosition();
         adjustOriginalPosition();
@@ -170,14 +170,14 @@ void MyClassicNodeSceneGraphicsItem::clearFocusedGraphicsItems() {
     MyNetworkElementGraphicsItemBase::clearFocusedGraphicsItems();
 }
 
-void MyClassicNodeSceneGraphicsItem::moveBy(qreal dx, qreal dy) {
+void MyClassicNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {
     if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
         QGraphicsItem::moveBy(dx, dy);
     else
         emit askForResetPosition();
 }
 
-void MyClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
+void MyClassicNodeSceneGraphicsItemBase::adjustOriginalPosition() {
     // TODO leads to an error in the position for newly added shapes.
     /*
     QPointF extentsCenter = getExtents().center();
@@ -190,12 +190,24 @@ void MyClassicNodeSceneGraphicsItem::adjustOriginalPosition() {
      */
 }
 
-void MyClassicNodeSceneGraphicsItem::updateExtents(const QRectF& extents) {
+void MyClassicNodeSceneGraphicsItemBase::updateExtents(const QRectF& extents) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
             casted_item->updateExtents(QRectF(extents.x(), extents.y(), extents.width(), extents.height()));
     }
+}
+
+// MySimpleClassicNodeSceneGraphicsItem
+
+MySimpleClassicNodeSceneGraphicsItem::MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyClassicNodeSceneGraphicsItemBase(position, parent) {
+
+}
+
+// MyComplexClassicNodeSceneGraphicsItem
+
+MyComplexClassicNodeSceneGraphicsItem::MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyClassicNodeSceneGraphicsItemBase(position, parent) {
+
 }
 
 // MyCentroidNodeSceneGraphicsItem

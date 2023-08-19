@@ -1,12 +1,9 @@
 #include "negui_text_style.h"
 #include <QJsonObject>
 
-// MyTextStyle
+// MyTextStyleBase
 
-MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
-    // plain-text
-    addParameter(new MyStringParameter("plain-text"));
-    
+MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // stroke
     addParameter(new MyColorParameter("color"));
     
@@ -41,33 +38,14 @@ MyTextStyle::MyTextStyle(const QString& name) : My2DShapeStyleBase(name) {
     addParameter(new MyVTextAnchorParameter());
 
     _whetherSetNameAsDefaultPlainText = false;
-
     reset();
 }
 
-MyShapeStyleBase::SHAPE_STYLE MyTextStyle::type() {
+MyShapeStyleBase::SHAPE_STYLE MyTextStyleBase::type() {
     return TEXT_SHAPE_STYLE;
 }
 
-const QString MyTextStyle::plainText() const {
-    MyParameterBase* parameter = findParameter("plain-text");
-    if (parameter)
-        return ((MyStringParameter*)parameter)->defaultValue();
-    
-    return "";
-}
-
-void MyTextStyle::setPlainText(const QString& plainText) const {
-    MyParameterBase* parameter = findParameter("plain-text");
-    if (parameter)
-        ((MyStringParameter *) parameter)->setDefaultValue(plainText);
-}
-
-const bool& MyTextStyle::whetherSetNameAsDefaultPlainText() const {
-    return _whetherSetNameAsDefaultPlainText;
-}
-
-const QColor MyTextStyle::defaultTextColor() const {
+const QColor MyTextStyleBase::defaultTextColor() const {
     QColor color;
     
     MyParameterBase* parameter = findParameter("color");
@@ -77,7 +55,7 @@ const QColor MyTextStyle::defaultTextColor() const {
     return color;
 }
 
-const QFont MyTextStyle::font() const {
+const QFont MyTextStyleBase::font() const {
     QFont font;
     
     MyParameterBase* parameter = NULL;
@@ -104,7 +82,7 @@ const QFont MyTextStyle::font() const {
     return font;
 }
 
-const QRectF MyTextStyle::getShapeExtents() {
+const QRectF MyTextStyleBase::getShapeExtents() {
     QRectF extents;
     extents.setX(INT_MAX);
     extents.setY(INT_MAX);
@@ -120,13 +98,13 @@ const QRectF MyTextStyle::getShapeExtents() {
     return extents;
 }
 
-void MyTextStyle::setX(const qreal& x) const {
+void MyTextStyleBase::setX(const qreal& x) const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(x);
 }
 
-const qreal MyTextStyle::x() const {
+const qreal MyTextStyleBase::x() const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->defaultValue();
@@ -134,13 +112,13 @@ const qreal MyTextStyle::x() const {
     return 0.000;
 }
 
-void MyTextStyle::setY(const qreal& y) const {
+void MyTextStyleBase::setY(const qreal& y) const {
     MyParameterBase* parameter = findParameter("y");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(y);
 }
 
-const qreal MyTextStyle::y() const {
+const qreal MyTextStyleBase::y() const {
     MyParameterBase* parameter = findParameter("y");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->defaultValue();
@@ -148,13 +126,13 @@ const qreal MyTextStyle::y() const {
     return 0.000;
 }
 
-void MyTextStyle::setWidth(const qreal& width) const {
+void MyTextStyleBase::setWidth(const qreal& width) const {
     MyParameterBase* parameter = findParameter("width");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(width);
 }
 
-const qreal MyTextStyle::width() const {
+const qreal MyTextStyleBase::width() const {
     MyParameterBase* parameter = findParameter("width");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
@@ -162,13 +140,13 @@ const qreal MyTextStyle::width() const {
     return 0.000;
 }
 
-void MyTextStyle::setHeight(const qreal& height) const {
+void MyTextStyleBase::setHeight(const qreal& height) const {
     MyParameterBase* parameter = findParameter("height");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->setDefaultValue(height);
 }
 
-const qreal MyTextStyle::height() const {
+const qreal MyTextStyleBase::height() const {
     MyParameterBase* parameter = findParameter("height");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
@@ -176,7 +154,7 @@ const qreal MyTextStyle::height() const {
     return 0.000;
 }
 
-const Qt::Alignment MyTextStyle::horizontalAlignment() const {
+const Qt::Alignment MyTextStyleBase::horizontalAlignment() const {
     MyParameterBase* parameter = findParameter("text-anchor");
     if (parameter)
         return ((MyTextAnchorParameter*)parameter)->defaultAlignment();
@@ -184,7 +162,7 @@ const Qt::Alignment MyTextStyle::horizontalAlignment() const {
     return Qt::AlignHCenter;
 }
 
-const Qt::Alignment MyTextStyle::verticalAlignment() const {
+const Qt::Alignment MyTextStyleBase::verticalAlignment() const {
     MyParameterBase* parameter = findParameter("vtext-anchor");
     if (parameter)
         return ((MyVTextAnchorParameter*)parameter)->defaultAlignment();
@@ -192,7 +170,7 @@ const Qt::Alignment MyTextStyle::verticalAlignment() const {
     return Qt::AlignVCenter;
 }
 
-const qreal MyTextStyle::verticalPadding() const {
+const qreal MyTextStyleBase::verticalPadding() const {
     QFontMetrics fontMetrics(font());
     if (height() > fontMetrics.height()) {
         if (verticalAlignment() == Qt::AlignVCenter)
@@ -206,22 +184,13 @@ const qreal MyTextStyle::verticalPadding() const {
     return 0.000;
 }
 
-void MyTextStyle::read(const QJsonObject &json) {
+const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
+}
+
+void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
-    
-    // plain-text
-    _whetherSetNameAsDefaultPlainText = false;
-    if (json.contains("plain-text") && json["plain-text"].isString()) {
-        parameter = findParameter("plain-text");
-        if (parameter)
-            ((MyStringParameter*)parameter)->setDefaultValue(json["plain-text"].toString());
-    }
-    else {
-        _whetherSetNameAsDefaultPlainText = true;
-        if (json.contains("set_name_as_default_plain_text") && json["set_name_as_default_plain_text"].isBool())
-            _whetherSetNameAsDefaultPlainText = json["set_name_as_default_plain_text"].toBool();
-    }
     
     // color
     if (json.contains("color") && json["color"].isString()) {
@@ -301,18 +270,9 @@ void MyTextStyle::read(const QJsonObject &json) {
     }
 }
 
-void MyTextStyle::write(QJsonObject &json) {
+void MyTextStyleBase::write(QJsonObject &json) {
     My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
-    
-    // plain-text
-    if (whetherSetNameAsDefaultPlainText())
-        json["set_name_as_default_plain_text"] = whetherSetNameAsDefaultPlainText();
-    else {
-        parameter = findParameter("plain-text");
-        if (parameter)
-            json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
-    }
 
     // color
     parameter = findParameter("color");
@@ -368,4 +328,75 @@ void MyTextStyle::write(QJsonObject &json) {
     parameter = findParameter("vtext-anchor");
     if (parameter)
         json["vtext-anchor"] = ((MyVTextAnchorParameter*)parameter)->defaultValue();
+}
+
+// MySimpleTextStyle
+
+MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name) {
+    reset();
+    _whetherSetNameAsDefaultPlainText = true;
+}
+
+const QString MySimpleTextStyle::plainText() const {
+    return _plainText;
+}
+
+void MySimpleTextStyle::setPlainText(const QString& plainText) {
+    _plainText = plainText;
+}
+
+// MyWithPlainTextTextStyle
+
+MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain-text
+    addParameterToTheBeginningOfTheList(new MyStringParameter("plain-text"));
+    reset();
+}
+
+const QString MyWithPlainTextTextStyle::plainText() const {
+    MyParameterBase* parameter = findParameter("plain-text");
+    if (parameter)
+        return ((MyStringParameter*)parameter)->defaultValue();
+
+    return "";
+}
+
+void MyWithPlainTextTextStyle::setPlainText(const QString& plainText) {
+    MyParameterBase* parameter = findParameter("plain-text");
+    if (parameter) {
+        ((MyStringParameter *) parameter)->setDefaultValue(plainText);
+        _whetherSetNameAsDefaultPlainText = false;
+    }
+}
+
+void MyWithPlainTextTextStyle::read(const QJsonObject &json) {
+    MyTextStyleBase::read(json);
+    MyParameterBase* parameter = NULL;
+
+    // plain-text
+    _whetherSetNameAsDefaultPlainText = false;
+    if (json.contains("plain-text") && json["plain-text"].isString()) {
+        parameter = findParameter("plain-text");
+        if (parameter)
+            ((MyStringParameter*)parameter)->setDefaultValue(json["plain-text"].toString());
+    }
+    else {
+        _whetherSetNameAsDefaultPlainText = true;
+        if (json.contains("set_name_as_default_plain_text") && json["set_name_as_default_plain_text"].isBool())
+            _whetherSetNameAsDefaultPlainText = json["set_name_as_default_plain_text"].toBool();
+    }
+}
+
+void MyWithPlainTextTextStyle::write(QJsonObject &json) {
+    MyTextStyleBase::write(json);
+    MyParameterBase* parameter = NULL;
+
+    // plain-text
+    if (whetherSetNameAsDefaultPlainText())
+        json["set_name_as_default_plain_text"] = whetherSetNameAsDefaultPlainText();
+    else {
+        parameter = findParameter("plain-text");
+        if (parameter)
+            json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
+    }
 }

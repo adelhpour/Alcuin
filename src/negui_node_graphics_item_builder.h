@@ -3,7 +3,9 @@
 
 #include "negui_network_element_graphics_item_base.h"
 
-MyNetworkElementGraphicsItemBase* createClassicNodeSceneGraphicsItem(const QPointF &position);
+MyNetworkElementGraphicsItemBase* createSimpleClassicNodeSceneGraphicsItem(const QPointF &position);
+
+MyNetworkElementGraphicsItemBase* createComplexClassicNodeSceneGraphicsItem(const QPointF &position);
 
 MyNetworkElementGraphicsItemBase* createCentroidNodeSceneGraphicsItem(const QPointF &position);
 

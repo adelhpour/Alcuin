@@ -10,10 +10,23 @@ MyNetworkElementBase::MyNetworkElementBase(const QString& name) : MyBase(name) {
     _style = NULL;
     _isActive = false;
     _isSelected = false;
+    _displayName = name;
 }
 
 MyNetworkElementBase::~MyNetworkElementBase() {
     delete _graphicsItem;
+}
+
+void MyNetworkElementBase::setName(const QString& name) {
+    _name = name;
+}
+
+const QString& MyNetworkElementBase::displayName() {
+    return _displayName;
+}
+
+void MyNetworkElementBase::setDisplayName(const QString& displayName) {
+    _displayName = displayName;
 }
 
 MyNetworkElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
@@ -22,6 +35,10 @@ MyNetworkElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
 
 void MyNetworkElementBase::updateGraphicsItem() {
     graphicsItem()->update(style()->shapeStyles(), calculateZValue());
+}
+
+void MyNetworkElementBase::updateFocusedGraphicsItems() {
+    graphicsItem()->updateFocusedGraphicsItems();
 }
 
 void MyNetworkElementBase::connectGraphicsItem() {
@@ -119,8 +136,22 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
     
     // name
-    contentLayout->addWidget(new MyLabel("Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    QString nameTitle = "Name";
+    if (!style()->nameTitle().isEmpty())
+        nameTitle = style()->nameTitle();
+    contentLayout->addWidget(new MyLabel(nameTitle), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    if (style()->isNameEditable()) {
+        QLineEdit* nameLineEdit = new MyRestrictedToNameConventionsLineEdit(name());
+        connect(nameLineEdit, &QLineEdit::editingFinished, this, [this, nameLineEdit] () {
+            if (!askForCheckWhetherNetworkElementNameIsAlreadyUsed(nameLineEdit->text()))
+                setName(nameLineEdit->text());
+            nameLineEdit->setText(name());
+        } );
+        contentLayout->addWidget(nameLineEdit, contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    }
+    else
+        contentLayout->addWidget(new MyReadOnlyLineEdit(name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+
 
     return featureMenu;
 }
@@ -133,9 +164,21 @@ void MyNetworkElementBase::createFeatureMenu() {
         connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
             updateStyle(shapeStyles);
             updateGraphicsItem();
+            updateFocusedGraphicsItems();
             emit askForCreateChangeStageCommand(); } );
         askForDisplayFeatureMenuWithDelay(featureMenu, 200);
     }
+}
+
+void MyNetworkElementBase::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QLineEdit* displayNameLineEdit = new MyLineEdit(displayName());
+    connect(displayNameLineEdit, &QLineEdit::textChanged, this, [this, featureMenu] (const QString& text) {
+        setDisplayName(text);
+        ((MyFeatureMenuItemFrame*)featureMenu)->isUpdated();
+    } );
+    contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(displayNameLineEdit, contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
 }
 
 void MyNetworkElementBase::askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime) {

@@ -74,6 +74,8 @@ signals:
 public slots:
 
     void displayContextMenu(const QPoint& position);
+
+    void updateFocusedGraphicsItems();
     
 protected:
     

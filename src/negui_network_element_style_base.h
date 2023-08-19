@@ -26,6 +26,10 @@ public:
     virtual const QRectF getShapesExtents(QRectF defaultExtents = QRectF(0.0, 0.0, 0.0, 0.0));
     
     const QIcon icon() override;
+
+    const QString& nameTitle();
+
+    const bool isNameEditable();
     
     virtual QObject* createIconBuilder() = 0;
     
@@ -43,6 +47,26 @@ public slots:
     
 protected:
     QList<MyShapeStyleBase*> _shapeStyles;
+    QString _nameTitle;
+    bool _isNameEditable;
+};
+
+class MyChangeShapeStylesButtonsBase : public QDialogButtonBox {
+    Q_OBJECT
+
+public:
+
+    MyChangeShapeStylesButtonsBase(QWidget* parent = nullptr);
+
+    virtual void setMenu() = 0;
+
+signals:
+
+    void askForChangeShapeStyle(MyShapeStyleBase* shapeStyle);
+
+protected:
+    QPushButton* _changePushButton;
+    QMenu* _menu;
 };
 
 class MyAddRemoveShapeStylesButtonsBase : public QDialogButtonBox {

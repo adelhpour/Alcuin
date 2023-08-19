@@ -7,8 +7,10 @@ MyNetworkElementStyleBase* createNodeStyle(const QJsonObject &json) {
     if (json.contains("name") && json["name"].isString()) {
         if (isCentroidNodeStyle(json))
             style = new MyCentroidNodeStyle(json["name"].toString());
+        else if (isSimpleClassicNodeStyle(json))
+            style = new MySimpleClassicNodeStyle(json["name"].toString());
         else
-            style = new MyClassicNodeStyle(json["name"].toString());
+            style = new MyComplexClassicNodeStyle(json["name"].toString());
         style->read(json);
     }
 
@@ -23,6 +25,27 @@ const bool isCentroidNodeStyle(const QJsonObject &json) {
             if (shapeObject.contains("shape") && shapeObject["shape"].isString()) {
                 if (shapeObject["shape"].toString() == "centroid")
                     return  true;
+            }
+        }
+    }
+
+    return  false;
+}
+
+const bool isSimpleClassicNodeStyle(const QJsonObject &json) {
+    if (json.contains("shapes") && json["shapes"].isArray()) {
+        QJsonArray shapesArray = json["shapes"].toArray();
+        QJsonObject textShapeObject;
+        QJsonObject geometricShapeObject;
+        if (shapesArray.size() == 2) {
+            for (unsigned int shapeIndex = 0; shapeIndex < shapesArray.size(); shapeIndex++) {
+                QJsonObject shapeObject = shapesArray[shapeIndex].toObject();
+                if (shapeObject.contains("shape") && shapeObject["shape"].isString()) {
+                    if (shapeObject["shape"].toString() == "text") {
+                        if (!shapeObject.contains("plain-text"))
+                            return true;
+                    }
+                }
             }
         }
     }

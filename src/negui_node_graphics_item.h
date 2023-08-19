@@ -23,7 +23,7 @@ signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);
 
-    QString askForElementName();
+    QString askForElementDisplayName();
 
 };
 
@@ -73,12 +73,12 @@ protected:
     bool _reparent;
 };
 
-class MyClassicNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {
+class MyClassicNodeSceneGraphicsItemBase : public MyNodeSceneGraphicsItemBase {
     Q_OBJECT
 
 public:
 
-    MyClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+    MyClassicNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
 
     void clearFocusedGraphicsItems() override;
 
@@ -89,6 +89,24 @@ public:
 public slots:
 
     void updateExtents(const QRectF& extents);
+};
+
+class MySimpleClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);;
+
+};
+
+class MyComplexClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsItemBase {
+    Q_OBJECT
+
+public:
+
+    MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);;
+
 };
 
 class MyCentroidNodeSceneGraphicsItem : public MyNodeSceneGraphicsItemBase {

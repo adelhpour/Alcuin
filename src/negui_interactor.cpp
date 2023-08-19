@@ -320,6 +320,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)), this, SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)));
+        connect(n, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCutNetworkElement(MyNetworkElementBase*)), this, SLOT(setCutNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
@@ -457,6 +458,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(e, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedEdgeStyle(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedEdgeStyle()));
@@ -1278,6 +1280,19 @@ QToolButton* MyInteractor::createResetSceneMenuButton() {
     connect(button, SIGNAL(clicked()), this, SLOT(setNewNetworkCanvas()));
     decorateResetSceneButton(button, iconsDirectoryPath());
     return button;
+}
+
+const bool MyInteractor::isElementNameAlreadyUsed(const QString& elementName) {
+    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+        if (node->name() == elementName)
+            return true;
+    }
+    for (MyNetworkElementBase* edge : qAsConst(edges())) {
+        if (edge->name() == elementName)
+            return true;
+    }
+
+    return false;
 }
 
 QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {

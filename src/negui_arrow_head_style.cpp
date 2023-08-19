@@ -61,10 +61,10 @@ MyShapeStyleBase* MyClassicArrowHeadStyle::createShapeStyle(const QString& shape
     return NULL;
 }
 
-QWidget* MyClassicArrowHeadStyle::addRemoveShapeStylesButtons() {
-    QWidget* addRemoveShapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
-    ((MyAddRemoveArrowHeadShapeStylesButtons*)addRemoveShapeStylesButtons)->setAddingMenu();
-    return addRemoveShapeStylesButtons;
+QWidget* MyClassicArrowHeadStyle::shapeStylesButtons() {
+    QWidget* shapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
+    ((MyAddRemoveArrowHeadShapeStylesButtons*)shapeStylesButtons)->setAddingMenu();
+    return shapeStylesButtons;
 }
 
 // MyAddRemoveArrowHeadShapeStylesButtons

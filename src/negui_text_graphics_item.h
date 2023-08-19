@@ -32,4 +32,5 @@ protected:
     QString _elementName;
 };
 
+
 #endif

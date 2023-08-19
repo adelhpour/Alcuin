@@ -22,12 +22,20 @@ public:
     ~MyNetworkElementBase();
     
     virtual ELEMENT_TYPE type() = 0;
+
+    void setName(const QString& name);
+
+    const QString& displayName();
+
+    void setDisplayName(const QString& displayName);
     
     MyNetworkElementGraphicsItemBase* graphicsItem();
     
     virtual void updateGraphicsItem();
 
     virtual void connectGraphicsItem();
+
+    void updateFocusedGraphicsItems();
     
     MyNetworkElementStyleBase* style();
     
@@ -62,12 +70,14 @@ public:
     virtual const QRectF getExtents() = 0;
     
     virtual QWidget* getFeatureMenu();
+
+    void addDisplayNameToFeatureMenu(QWidget* featureMenu);
     
     virtual const qint32 calculateZValue() = 0;
 
     void askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime);
 
-signals:
+    signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
 
@@ -95,6 +105,8 @@ signals:
 
     const QString askForIconsDirectoryPath();
 
+    const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
+
 public slots:
 
     virtual void setSelected(const bool& selected);
@@ -113,6 +125,7 @@ protected:
     MyNetworkElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;
+    QString _displayName;
 };
 
 #endif

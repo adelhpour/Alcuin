@@ -7,4 +7,6 @@ MyNetworkElementStyleBase* createNodeStyle(const QJsonObject &json);
 
 const bool isCentroidNodeStyle(const QJsonObject &json);
 
+const bool isSimpleClassicNodeStyle(const QJsonObject &json);
+
 #endif
