@@ -78,21 +78,6 @@ void MyLineEdit::setText(const QString &contents) {
     setCursorPosition(0);
 }
 
-// MyRestrictedToNameConventionsLineEdit
-
-MyRestrictedToNameConventionsLineEdit::MyRestrictedToNameConventionsLineEdit(const QString &contents, QWidget* parent) : MyLineEdit(contents, parent) {
-    setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9_]+"), this));
-    _previousText = text();
-    connect(this, &QLineEdit::editingFinished, this, [this] () { nameIsAlreadyUsed(askForCheckWhetherNameIsAlreadyUsed(text())); });
-}
-
-void MyRestrictedToNameConventionsLineEdit::nameIsAlreadyUsed(const bool& used) {
-    if (used && _previousText != text())
-        setText(_previousText);
-    else
-        _previousText = text();
-}
-
 // MyReadOnlyLineEdit
 
 MyReadOnlyLineEdit::MyReadOnlyLineEdit(const QString &contents, QWidget* parent) : MyLineEdit(contents, parent) {

@@ -56,24 +56,6 @@ public:
     void setText(const QString &contents);
 };
 
-class MyRestrictedToNameConventionsLineEdit : public MyLineEdit {
-    Q_OBJECT
-
-public:
-
-    MyRestrictedToNameConventionsLineEdit(const QString &contents = "", QWidget* parent = nullptr);
-
-    void nameIsAlreadyUsed(const bool& used);
-
-signals:
-
-    const bool askForCheckWhetherNameIsAlreadyUsed(const QString&);
-
-protected:
-
-    QString _previousText;
-};
-
 class MyReadOnlyLineEdit : public MyLineEdit {
 
 public:
