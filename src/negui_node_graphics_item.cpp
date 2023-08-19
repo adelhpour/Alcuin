@@ -1,5 +1,4 @@
 #include "negui_node_graphics_item.h"
-#include "negui_shape_graphics_item_builder.h"
 #include "negui_context_menu.h"
 
 #include <QtMath>
@@ -8,34 +7,6 @@
 
 MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyNetworkElementGraphicsItemBase(parent) {
     enableNormalMode();
-}
-
-MyShapeGraphicsItemBase* MyNodeGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
-    MyShapeGraphicsItemBase* item = NULL;
-    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE) {
-        item = createEllipseShape(_originalPosition.x(), _originalPosition.y(), this);
-        item->setZValue(zValue());
-    }
-    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE) {
-        item = createRectShape(_originalPosition.x(), _originalPosition.y(), this);
-        item->setZValue(zValue());
-    }
-    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE) {
-        item = createPolygonShape(_originalPosition.x(), _originalPosition.y(), this);
-        item->setZValue(zValue());
-    }
-    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementDisplayName(), this);
-        item->setZValue(zValue() + 1);
-    }
-    else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE) {
-        item = createCentroidShape(_originalPosition.x(), _originalPosition.y(), this);
-        item->setZValue(zValue());
-        connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
-        connect(item, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
-    }
-
-    return item;
 }
 
 QMenu* MyNodeGraphicsItemBase::createContextMenu() {
@@ -161,6 +132,22 @@ MyClassicNodeSceneGraphicsItemBase::MyClassicNodeSceneGraphicsItemBase(const QPo
 
 }
 
+const bool MyClassicNodeSceneGraphicsItemBase::canAddEllipseShape() {
+    return true;
+}
+
+const bool MyClassicNodeSceneGraphicsItemBase::canAddRectShape() {
+    return true;
+}
+
+const bool MyClassicNodeSceneGraphicsItemBase::canAddPolygonShape() {
+    return true;
+}
+
+const bool MyClassicNodeSceneGraphicsItemBase::canAddTextShape() {
+    return true;
+}
+
 void MyClassicNodeSceneGraphicsItemBase::clearFocusedGraphicsItems() {
     if (_focusedGraphicsItems.size()) {
         emit askForResetPosition();
@@ -216,6 +203,16 @@ MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &
     setAcceptHoverEvents(true);
 }
 
+void MyCentroidNodeSceneGraphicsItem::connectShapeGraphicsItem(MyShapeGraphicsItemBase *item) {
+    connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
+    connect(item, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
+
+}
+
+const bool MyCentroidNodeSceneGraphicsItem::canAddCentroidShape() {
+    return true;
+}
+
 QMenu* MyCentroidNodeSceneGraphicsItem::createContextMenuObject() {
     return new MyCentroidNodeGraphicsItemContextMenu();
 }
@@ -230,6 +227,22 @@ void MyCentroidNodeSceneGraphicsItem::connectContextMenu(QMenu* contextMenu) {
 
 MyNodeIconGraphicsItem::MyNodeIconGraphicsItem(const QPointF& position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
     _originalPosition = position;
+}
+
+const bool MyNodeIconGraphicsItem::canAddEllipseShape() {
+    return true;
+}
+
+const bool MyNodeIconGraphicsItem::canAddRectShape() {
+    return true;
+}
+
+const bool MyNodeIconGraphicsItem::canAddPolygonShape() {
+    return true;
+}
+
+const bool MyNodeIconGraphicsItem::canAddTextShape() {
+    return true;
 }
 
 void MyNodeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {

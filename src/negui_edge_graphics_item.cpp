@@ -26,6 +26,10 @@ void MyEdgeGraphicsItemBase::connectShapeGraphicsItem(MyShapeGraphicsItemBase* i
     connect(this, SIGNAL(askForAdjustEndPointToControlBezierLine(const QLineF&)), item, SLOT(adjustLineControlPoint2ToControlBezierLine(const QLineF&)));
 }
 
+const bool MyEdgeGraphicsItemBase::canAddLineShape() {
+    return true;
+}
+
 QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
     QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
     connectContextMenu(contextMenu);
