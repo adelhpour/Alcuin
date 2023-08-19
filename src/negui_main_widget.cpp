@@ -56,8 +56,6 @@ void MyNetworkEditorWidget::setWidgets() {
 
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
-    //connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
-
     // menubar
     connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
     connect(this, SIGNAL(askForListOfPluginItemNames(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemNames(const QString&)));
@@ -157,6 +155,7 @@ void MyNetworkEditorWidget::setInteractions() {
 
     // status bar
     connect(view(), SIGNAL(mouseLeft()), statusBar(), SLOT(resetMessage()));
+    connect(interactor(), SIGNAL(currentFileNameIsUpdated(const QString&)), statusBar(), SLOT(setFileName(const QString&)));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setCoordinatesToMousePosition(const QPointF&)));
 }
 

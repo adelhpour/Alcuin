@@ -15,6 +15,8 @@ public slots:
 
     void resetMessage();
 
+    void setFileName(const QString& fileName);
+
     void setCoordinatesToMousePosition(const QPointF& mousePosition);
 
 protected:
