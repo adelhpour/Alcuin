@@ -29,11 +29,23 @@ signals:
 
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
 
+    void isUpdated();
+
 public:
 
     MyFeatureMenuItemFrame(QWidget* parent = nullptr);
 
     const QSize extents() const;
+};
+
+class MyRestrictedToNameConventionsLineEdit : public MyLineEdit {
+    Q_OBJECT
+
+public:
+
+    MyRestrictedToNameConventionsLineEdit(const QString &contents = "", QWidget* parent = nullptr);
+
+    void setText(const QString& newText);
 };
 
 class MyColorPickerButton : public QToolButton {
