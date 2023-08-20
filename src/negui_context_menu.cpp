@@ -26,7 +26,19 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
-    connect(addAction("Align"), SIGNAL(triggered()), this, SIGNAL(askForAlignSelectedNetworkElements()));
+    QMenu* alignMenu = addMenu("Align");
+    connect(alignMenu->addAction("Align Top"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Top"); });
+    connect(alignMenu->addAction("Align Middle"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Middle"); });
+    connect(alignMenu->addAction("Align Bottom"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Bottom"); });
+    alignMenu->addSeparator();
+    connect(alignMenu->addAction("Align Left"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Left"); });
+    connect(alignMenu->addAction("Align Center"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Center"); });
+    connect(alignMenu->addAction("Align Right"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Right"); });
+    alignMenu->addSeparator();
+    connect(alignMenu->addAction("Align on Grid"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Grid"); });
+    alignMenu->addSeparator();
+    connect(alignMenu->addAction("Distribute Horizontally"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Distribute Horizontally"); });
+    connect(alignMenu->addAction("Distribute Vertically"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Distribute Vertically"); });
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {

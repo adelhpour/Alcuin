@@ -39,7 +39,7 @@ signals:
     void askForCutSelectedNetworkElements();
     void askForPasteCopiedNetworkElements(const QPointF&);
     void askForDeleteSelectedNetworkElements();
-    void askForAlignSelectedNetworkElements();
+    void askForAlignSelectedNetworkElements(const QString&);
 
 public slots:
     

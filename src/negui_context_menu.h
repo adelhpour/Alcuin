@@ -44,7 +44,7 @@ signals:
 
     void askForDeleteSelectedNetworkElements();
 
-    void askForAlignSelectedNetworkElements();
+    void askForAlignSelectedNetworkElements(const QString&);
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {

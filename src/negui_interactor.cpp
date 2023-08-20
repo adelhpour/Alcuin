@@ -780,7 +780,7 @@ void MyInteractor::deleteSelectedNetworkElements() {
     createChangeStageCommand();
 }
 
-void MyInteractor::alignSelectedNetworkElements() {
+void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
 
 }
 

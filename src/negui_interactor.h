@@ -134,7 +134,7 @@ public slots:
     void deleteNode(MyNetworkElementBase* node);
     void deleteEdge(MyNetworkElementBase* edge);
     void deleteSelectedNetworkElements();
-    void alignSelectedNetworkElements();
+    void alignSelectedNetworkElements(const QString& alignType);
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
