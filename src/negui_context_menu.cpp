@@ -26,6 +26,7 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
+    connect(addAction("Align"), SIGNAL(triggered()), this, SIGNAL(askForAlignSelectedNetworkElements()));
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
@@ -38,6 +39,8 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
         setActionEnabled("Paste", false);
     if (!askForWhetherAnyElementsAreSelected())
         setActionEnabled("Delete", false);
+    if (!askForWhetherAnyElementsAreAlignable())
+        setActionEnabled("Align", false);
 }
 
 // MyGraphicsItemContextMenuBase

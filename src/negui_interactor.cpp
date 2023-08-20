@@ -569,6 +569,13 @@ const bool MyInteractor::areSelectedElementsCuttable() {
     return false;
 }
 
+const bool MyInteractor::areSelectedElementsAlignable() {
+    if (selectedNodes().size() > 1)
+        return true;
+
+    return false;
+}
+
 const bool MyInteractor::areAnyElementsCopied() {
     if (copiedNetworkElements().size())
         return true;
@@ -771,6 +778,10 @@ void MyInteractor::deleteSelectedNetworkElements() {
         }
     }
     createChangeStageCommand();
+}
+
+void MyInteractor::alignSelectedNetworkElements() {
+
 }
 
 const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {

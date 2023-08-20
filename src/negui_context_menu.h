@@ -30,6 +30,8 @@ signals:
 
     const bool askForWhetherSelectedElementsAreCuttable();
 
+    const bool askForWhetherAnyElementsAreAlignable();
+
     const bool askForWhetherAnyElementsAreCopied();
 
     const bool askForWhetherAnyElementsAreSelected();
@@ -41,6 +43,8 @@ signals:
     void askForPasteCopiedNetworkElements();
 
     void askForDeleteSelectedNetworkElements();
+
+    void askForAlignSelectedNetworkElements();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {
