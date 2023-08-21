@@ -1,39 +1,39 @@
 #ifndef __NEGUI_DECORATE_MENU_BUTTONS_H
 #define __NEGUI_DECORATE_MENU_BUTTONS_H
 
-#include <QToolButton>
+#include <QAbstractButton>
 #include <QPushButton>
 #include <QWidgetAction>
 
-void decorateImportButton(QToolButton* button, const QString& iconsDirectory);
+void decorateImportButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateDataExportButton(QToolButton* button, const QString& iconsDirectory);
+void decorateDataExportButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decoratePrintExportButton(QToolButton* button, const QString& iconsDirectory);
+void decoratePrintExportButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateSaveButton(QToolButton* button, const QString& iconsDirectory);
+void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateAutoLayoutButton(QToolButton* button, const QString& iconsDirectory);
+void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateUndoActionButton(QToolButton* button, const QString& iconsDirectory);
+void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateRedoActionButton(QToolButton* button, const QString& iconsDirectory);
+void decorateRedoActionButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateResetSceneButton(QToolButton* button, const QString& iconsDirectory);
+void decorateResetSceneButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateNormalModeButton(QToolButton* button, const QString& iconsDirectory);
+void decorateNormalModeButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateZoomInButton(QToolButton* button, const QString& iconsDirectory);
+void decorateZoomInButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateZoomOutButton(QToolButton* button, const QString& iconsDirectory);
+void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirectory);
 
-QToolButton* decorateAddModeButton(QList<QToolButton*> buttons, const QString& iconsDirectory);
+QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QString& iconsDirectory);
 
-void decorateAddModeButton(QToolButton* button, const QString& iconsDirectory);
+void decorateAddModeButton(QAbstractButton* button, const QString& iconsDirectory);
 
-QMenu* createAddButtonMenu(QList<QToolButton*> buttons);
+QMenu* createAddButtonMenu(QList<QAbstractButton*> buttons);
 
-QWidgetAction* createButtonWidgetAction(QToolButton* button, QWidget* parent);
+QWidgetAction* createButtonWidgetAction(QAbstractButton* button, QWidget* parent);
 
 void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDirectory);
 

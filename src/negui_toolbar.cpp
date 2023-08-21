@@ -10,7 +10,7 @@ MyToolBar::MyToolBar(QWidget* parent) : QToolBar(parent) {
 #endif
 };
 
-void MyToolBar::setButtons(QList<QToolButton*> buttons) {
-    for (QToolButton* button : qAsConst(buttons))
+void MyToolBar::setButtons(QList<QAbstractButton*> buttons) {
+    for (QAbstractButton* button : qAsConst(buttons))
         addWidget(button);
 }
