@@ -15,6 +15,8 @@
 #include "negui_export_tools.h"
 #include "negui_customized_interactor_widgets.h"
 #include "negui_decorate_menu_buttons.h"
+#include "negui_element_aligner.h"
+#include "negui_element_aligner_builder.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -781,7 +783,12 @@ void MyInteractor::deleteSelectedNetworkElements() {
 }
 
 void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
-
+    MyElementAlignerBase* elementAligner = createElementAligner(selectedNodes(), selectedEdges(), alignType);
+    if (elementAligner) {
+        elementAligner->align();
+        elementAligner->deleteLater();
+        createChangeStageCommand();
+    }
 }
 
 const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
