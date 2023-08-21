@@ -112,7 +112,7 @@ MyNodeDistributeAlignerBase::MyNodeDistributeAlignerBase(QList<MyNetworkElementB
 QList<MyNetworkElementBase*> MyNodeDistributeAlignerBase::getClassicNodes() {
     QList<MyNetworkElementBase*> classicNodes;
     for (MyNetworkElementBase* node : _elements) {
-        if (((MyNodeBase*)node)->nodeType() == MyNodeBase::CLASSIC_NODE)
+        if (((MyNodeBase*)node)->nodeType() != MyNodeBase::CENTROID_NODE)
             classicNodes.push_back(node);
     }
 
