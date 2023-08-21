@@ -242,7 +242,7 @@ const bool MyNodeIconGraphicsItem::canAddPolygonShape() {
 }
 
 const bool MyNodeIconGraphicsItem::canAddTextShape() {
-    return true;
+    return false;
 }
 
 void MyNodeIconGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
