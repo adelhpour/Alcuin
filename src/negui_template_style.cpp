@@ -9,7 +9,7 @@
 
 MyTemplateStyle::MyTemplateStyle(const QString& name) : MyNetworkElementStyleBase(name) {
     _intermediaryNodeStyle = NULL;
-    _iconSize = QSize(125, 65);
+    _iconSize = QSize(35, 35);
 }
 
 const QString MyTemplateStyle::type() const {
@@ -87,8 +87,6 @@ const QString MyTemplateStyle::toolTipText() {
     return "Select Node";
 }
 
-#include <iostream>
-#include <QJsonDocument>
 void MyTemplateStyle::read(const QJsonObject &json) {
     MyPluginItemBase::read(json);
     
