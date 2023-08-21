@@ -136,6 +136,7 @@ public slots:
     void deleteNode(MyNetworkElementBase* node);
     void deleteEdge(MyNetworkElementBase* edge);
     void deleteSelectedNetworkElements();
+    void alignSelectedNetworkElements(const QString& alignType);
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
@@ -153,6 +154,7 @@ public slots:
     void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     const bool areSelectedElementsCopyable();
     const bool areSelectedElementsCuttable();
+    const bool areSelectedElementsAlignable();
     const bool areAnyElementsCopied();
     const bool areAnyElementsSelected();
     const QString iconsDirectoryPath();
