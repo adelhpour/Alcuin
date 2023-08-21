@@ -89,13 +89,13 @@ QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
 MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent) : QPushButton(parent) {
     setCheckable(true);
     setToolTip(item->name());
+    setStyleSheet("QPushButton { border: 0px; border-radius: 5px; background-color: transparent;} QPushButton:hover { background-color: lightgray}");
 
     if (item->icon().isNull()) {
-        setStyleSheet("QPushButton { border : no-border; text-align : left} QPushButton:hover { color: darkgray}");
+        setStyleSheet("QPushButton { border: 0px; border-radius: 5px; background-color: transparent; text-align : left} QPushButton:hover { background-color: lightgray}");
         setText(item->name());
     }
     else {
-        setStyleSheet("QPushButton { border : no-border;} QPushButton:hover { background-color: darkgray}");
         setIcon(item->icon());
         setIconSize(item->iconSize());
     }
