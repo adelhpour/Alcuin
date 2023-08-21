@@ -26,10 +26,11 @@ void MyModeMenu::setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const
 }
 
 void MyModeMenu::setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) {
-    QGridLayout* contentLayout = (QGridLayout*)layout();
-    QAbstractButton* button = decorateAddModeButton(buttons, iconsDirectoryPath);
-    contentLayout->addWidget(button, contentLayout->rowCount(), 0);
-    _buttons.push_back(button);
+    //QGridLayout* contentLayout = (QGridLayout*)layout();
+    //QAbstractButton* button = decorateAddModeButton(buttons, iconsDirectoryPath);
+    //contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+    //_buttons.push_back(button);
+    //TODO for now, non-frequently-used elments styles are not shown
 }
 
 void MyModeMenu::setZoomInButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
