@@ -48,6 +48,7 @@ void MyNetworkEditorWidget::setWidgets() {
     QString iconsDirectoryPath = ((MyInteractor*)interactor())->iconsDirectory().path();
     ((MyToolBar*)toolBar())->setButtons(((MyInteractor*)interactor())->getToolBarMenuButtons());
     ((MyModeMenu*)modeMenu())->setNormalModeButton(((MyInteractor*)interactor())->getNormalModeButton(), iconsDirectoryPath);
+    ((MyModeMenu*)modeMenu())->setFrequentlyUsedButtons(((MyInteractor*)interactor())->getFrequentlyUsedButtons(), iconsDirectoryPath);
     ((MyModeMenu*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons(), iconsDirectoryPath);
     ((MyModeMenu*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton(), iconsDirectoryPath);
     ((MyModeMenu*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton(), iconsDirectoryPath);
