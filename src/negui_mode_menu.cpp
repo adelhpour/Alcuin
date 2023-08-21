@@ -10,28 +10,36 @@ MyModeMenu::MyModeMenu(QWidget *parent) : MyFrame(parent) {
     setLayout(contentLayout);
 }
 
-void MyModeMenu::setNormalModeButton(QToolButton* button, const QString& iconsDirectoryPath) {
+void MyModeMenu::setNormalModeButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     decorateNormalModeButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
 }
 
-void MyModeMenu::setAddModeButtons(QList<QToolButton*> buttons, const QString& iconsDirectoryPath) {
+void MyModeMenu::setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    QToolButton* button = decorateAddModeButton(buttons, iconsDirectoryPath);
+    for (QAbstractButton* button : buttons) {
+        contentLayout->addWidget(button, contentLayout->rowCount(), 0);
+        _buttons.push_back(button);
+    }
+}
+
+void MyModeMenu::setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) {
+    QGridLayout* contentLayout = (QGridLayout*)layout();
+    QAbstractButton* button = decorateAddModeButton(buttons, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
 }
 
-void MyModeMenu::setZoomInButton(QToolButton* button, const QString& iconsDirectoryPath) {
+void MyModeMenu::setZoomInButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
     QGridLayout* contentLayout = (QGridLayout*)layout();
     decorateZoomInButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
 }
 
-void MyModeMenu::setZoomOutButton(QToolButton* button, const QString& iconsDirectoryPath) {
+void MyModeMenu::setZoomOutButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
     QGridLayout *contentLayout = (QGridLayout *) layout();
     decorateZoomOutButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
@@ -41,7 +49,7 @@ void MyModeMenu::setZoomOutButton(QToolButton* button, const QString& iconsDirec
 
 void MyModeMenu::setMode(const QString& mode) {
     deactivateButtons();
-    for (QToolButton* button : getButtons()) {
+    for (QAbstractButton* button : getButtons()) {
         if (isModeToolButton(button)) {
             if (isButtonOfTheMode((MyModeToolButton*)button, mode.split("_").at(0))) {
                 ((MyModeToolButton*)button)->setActive(true);
@@ -51,18 +59,18 @@ void MyModeMenu::setMode(const QString& mode) {
     }
 }
 
-QList<QToolButton*> MyModeMenu::getButtons() {
+QList<QAbstractButton*> MyModeMenu::getButtons() {
     return _buttons;
 }
 
 void MyModeMenu::deactivateButtons() {
-    for (QToolButton* button : getButtons()) {
+    for (QAbstractButton* button : getButtons()) {
         if (isModeToolButton(button))
             ((MyModeToolButton*)button)->setActive(false);
     }
 }
 
-const bool isModeToolButton(QToolButton* button) {
+const bool isModeToolButton(QAbstractButton* button) {
     if (dynamic_cast<MyModeToolButton*>(button))
         return true;
 

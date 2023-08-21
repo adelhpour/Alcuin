@@ -10,15 +10,17 @@ public:
 
     MyModeMenu(QWidget *parent = nullptr);
 
-    void setNormalModeButton(QToolButton* button, const QString& iconsDirectoryPath);
+    void setNormalModeButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
-    void setAddModeButtons(QList<QToolButton*> buttons, const QString& iconsDirectoryPath);
+    void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setZoomInButton(QToolButton* button, const QString& iconsDirectoryPath);
+    void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setZoomOutButton(QToolButton* button, const QString& iconsDirectoryPath);
+    void setZoomInButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
-    QList<QToolButton*> getButtons();
+    void setZoomOutButton(QAbstractButton* button, const QString& iconsDirectoryPath);
+
+    QList<QAbstractButton*> getButtons();
 
 public slots:
 
@@ -27,10 +29,10 @@ public slots:
     void deactivateButtons();
 
 protected:
-    QList<QToolButton*> _buttons;
+    QList<QAbstractButton*> _buttons;
 };
 
-const bool isModeToolButton(QToolButton* button);
+const bool isModeToolButton(QAbstractButton* button);
 
 const bool isButtonOfTheMode(MyModeToolButton* button, const QString& mode);
 
