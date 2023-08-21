@@ -1083,8 +1083,8 @@ void MyInteractor::setFileManager() {
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
 }
 
-QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
-    QList<QToolButton*> buttons;
+QList<QAbstractButton*> MyInteractor::getToolBarMenuButtons() {
+    QList<QAbstractButton*> buttons;
     buttons.push_back(createResetSceneMenuButton());
     if (getPluginsOfType(plugins(), "importtool").size())
         buttons.push_back(createImportMenuButton());
@@ -1103,74 +1103,110 @@ QList<QToolButton*> MyInteractor::getToolBarMenuButtons() {
     return buttons;
 }
 
-QToolButton* MyInteractor::getNormalModeButton() {
+QAbstractButton* MyInteractor::getNormalModeButton() {
     return createNormalModeMenuButton();
 }
 
-QList<QToolButton*> MyInteractor::getAddModeButtons() {
+QList<QAbstractButton*> MyInteractor::getFrequentlyUsedButtons() {
+    return createFrequentlyUsedMenuButtons();
+}
+
+QList<QAbstractButton*> MyInteractor::getAddModeButtons() {
     return createAddElementMenuButtons();
 }
 
-QToolButton* MyInteractor::createNormalModeMenuButton() {
-    QToolButton* button = new MyModeToolButton("Normal");
+QAbstractButton* MyInteractor::createNormalModeMenuButton() {
+    QAbstractButton* button = new MyModeToolButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
     return button;
 }
 
-QToolButton* MyInteractor::createImportMenuButton() {
-    QToolButton* button = new MyToolButton();
+QAbstractButton* MyInteractor::createImportMenuButton() {
+    QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* importWidgetAction = new MyWidgetAction(subMenu);
     importWidgetAction->setItems(getPluginsOfType(plugins(), "importtool"));
     connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(readFromFile(MyPluginItemBase*)));
     subMenu->addAction(importWidgetAction);
-    button->setMenu(subMenu);
+    ((QToolButton*)button)->setMenu(subMenu);
     decorateImportButton(button, iconsDirectoryPath());
     return button;
 }
 
-QToolButton* MyInteractor::createDataExportMenuButton() {
+QAbstractButton* MyInteractor::createDataExportMenuButton() {
     QList<MyPluginItemBase*> dataExportPlugins = getPluginsOfType(plugins(), "dataexporttool");
-    QToolButton* button = new MyToolButton();
+    QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* dataExportWidgetAction = new MyWidgetAction(subMenu);
     dataExportWidgetAction->setItems((getPluginsOfType(plugins(), "dataexporttool")));
     connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeDataToFile(MyPluginItemBase*)));
     subMenu->addAction(dataExportWidgetAction);
-    button->setMenu(subMenu);
+    ((QToolButton*)button)->setMenu(subMenu);
     decorateDataExportButton(button, iconsDirectoryPath());
     return button;
 }
 
-QToolButton* MyInteractor::createPrintExportMenuButton() {
+QAbstractButton* MyInteractor::createPrintExportMenuButton() {
     QList<MyPluginItemBase*> printExportPlugins = getPluginsOfType(plugins(), "printexporttool");
-    QToolButton* button = new MyToolButton();
+    QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* printExportWidgetAction = new MyWidgetAction(subMenu);
     printExportWidgetAction->setItems((getPluginsOfType(plugins(), "printexporttool")));
     connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(writeFigureToFile(MyPluginItemBase*)));
     subMenu->addAction(printExportWidgetAction);
-    button->setMenu(subMenu);
+    ((QToolButton*)button)->setMenu(subMenu);
     decoratePrintExportButton(button, iconsDirectoryPath());
     return button;
 }
 
-QToolButton* MyInteractor::createSaveMenuButton() {
-    QToolButton* button = new MyToolButton();
+QAbstractButton* MyInteractor::createSaveMenuButton() {
+    QAbstractButton* button = new MyToolButton();
     connect(button, SIGNAL(clicked()), this, SLOT(saveCurrentNetwork()));
     decorateSaveButton(button, iconsDirectoryPath());
     return button;
 }
 
-QList<QToolButton*> MyInteractor::createAddElementMenuButtons() {
+QList<QAbstractButton*> MyInteractor::createFrequentlyUsedMenuButtons() {
+    return createFrequentlyUsedNodeStyleMenuButtons() + createFrequentlyUsedEdgeAndTemplateStyleMenuButtons();
+}
+
+QList<QAbstractButton*> MyInteractor::createFrequentlyUsedNodeStyleMenuButtons() {
+    QList<QAbstractButton*> frequentlyUsedNodeStyleMenuButtons;
+    QList<MyPluginItemBase*> nodeStyles = getPluginsOfType(plugins(), "nodestyle");
+    for (MyPluginItemBase* nodeStyle : nodeStyles) {
+        if (nodeStyle->isFrequentlyUsed()) {
+            QAbstractButton* frequentlyUsedNodeStyleButton = new MyItemPreviewButton(nodeStyle);
+            connect(frequentlyUsedNodeStyleButton, &QAbstractButton::clicked, this, [this, nodeStyle] () { enableAddNodeMode(nodeStyle); });
+            frequentlyUsedNodeStyleMenuButtons.push_back(frequentlyUsedNodeStyleButton);
+        }
+    }
+
+    return frequentlyUsedNodeStyleMenuButtons;
+}
+
+QList<QAbstractButton*> MyInteractor::createFrequentlyUsedEdgeAndTemplateStyleMenuButtons() {
+    QList<QAbstractButton*> frequentlyUsedEdgeAndTemplateStyleMenuButtons;
+    QList<MyPluginItemBase*> edgeAndTemplateStyles = getPluginsOfType(plugins(), "edgestyle") + getPluginsOfType(plugins(), "templatestyle");
+    for (MyPluginItemBase* edgeAndTemplateStyle : edgeAndTemplateStyles) {
+        if (edgeAndTemplateStyle->isFrequentlyUsed()) {
+            QAbstractButton* frequentlyUsedEdgeAndTemplateStyleButton = new MyItemPreviewButton(edgeAndTemplateStyle);
+            connect(frequentlyUsedEdgeAndTemplateStyleButton, &QAbstractButton::clicked, this, [this, edgeAndTemplateStyle] () { enableAddEdgeMode(edgeAndTemplateStyle); });
+            frequentlyUsedEdgeAndTemplateStyleMenuButtons.push_back(frequentlyUsedEdgeAndTemplateStyleButton);
+        }
+    }
+
+    return frequentlyUsedEdgeAndTemplateStyleMenuButtons;
+}
+
+QList<QAbstractButton*> MyInteractor::createAddElementMenuButtons() {
     addDefaultNodeStyle();
     addDefaultEdgeStyle();
     return createElementStyleButtons();
 }
 
-QList<QToolButton*> MyInteractor::createElementStyleButtons() {
-    QList<QToolButton*> elementStyleButtons;
+QList<QAbstractButton*> MyInteractor::createElementStyleButtons() {
+    QList<QAbstractButton*> elementStyleButtons;
     for (QString category : getPluginsCategories(plugins()))
         elementStyleButtons.push_back(createPluginItemToolButton(createCategoryMenu(getPluginsOfCategory(getPluginsOfType(plugins(), "nodestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins(), "edgestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins(), "templatestyle"), category)), category));
 
@@ -1224,11 +1260,11 @@ void MyInteractor::addDefaultEdgeStyle() {
     }
 }
 
-QToolButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QString& text) {
-    QToolButton* button = new MyToolButton();
+QAbstractButton* MyInteractor::createPluginItemToolButton(QMenu* subMenu, const QString& text) {
+    QAbstractButton* button = new MyToolButton();
     button->setText(text);
     button->setToolTip("Add " + text + " to the network");
-    button->setMenu(subMenu);
+    ((QToolButton*)button)->setMenu(subMenu);
     connect(subMenu, SIGNAL(menuItemIsChosen()), button, SIGNAL(menuItemIsChosen()));
     return button;
 }
@@ -1239,23 +1275,23 @@ QWidgetAction* MyInteractor::createElementStyleWidgetAction(QList<MyPluginItemBa
     return widgetAction;
 }
 
-QToolButton* MyInteractor::createAutoLayoutMenuButton() {
-    QToolButton* button = new MyToolButton();
+QAbstractButton* MyInteractor::createAutoLayoutMenuButton() {
+    QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyToolButtonMenu(button);
     MyWidgetAction* autoLayoutWidgetAction = new MyWidgetAction(subMenu);
     autoLayoutWidgetAction->setItems((getPluginsOfType(plugins(), "autolayoutengine")));
     connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), this, SLOT(autoLayout(MyPluginItemBase*)));
     subMenu->addAction(autoLayoutWidgetAction);
-    button->setMenu(subMenu);
+    ((QToolButton*)button)->setMenu(subMenu);
     decorateAutoLayoutButton(button, iconsDirectoryPath());
     return button;
 }
 
-QToolButton* MyInteractor::createUndoActionMenuButton() {
+QAbstractButton* MyInteractor::createUndoActionMenuButton() {
     QAction* action = undoStack()->createUndoAction(this, tr("Undo"));
-    
-    QToolButton* button = new MyToolButton();
-    button->setDefaultAction(action);
+
+    QAbstractButton* button = new MyToolButton();
+    ((QToolButton*)button)->setDefaultAction(action);
     decorateUndoActionButton(button, iconsDirectoryPath());
     connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateUndoActionButton(button, iconsDirectoryPath()); });
     connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateUndoActionButton(button, iconsDirectoryPath()); });
@@ -1263,11 +1299,11 @@ QToolButton* MyInteractor::createUndoActionMenuButton() {
     return button;
 }
 
-QToolButton* MyInteractor::createRedoActionMenuButton() {
+QAbstractButton* MyInteractor::createRedoActionMenuButton() {
     QAction* action = undoStack()->createRedoAction(this, tr("Redo"));
-    
-    QToolButton* button = new MyToolButton();
-    button->setDefaultAction(action);
+
+    QAbstractButton* button = new MyToolButton();
+    ((QToolButton*)button)->setDefaultAction(action);
     decorateRedoActionButton(button, iconsDirectoryPath());
     connect(undoStack(), &MyUndoStack::indexChanged, this, [this, button] () { decorateRedoActionButton(button, iconsDirectoryPath()); });
     connect(undoStack(), &MyUndoStack::canUndoChanged, this, [this, button] () { decorateRedoActionButton(button, iconsDirectoryPath()); });
@@ -1275,8 +1311,8 @@ QToolButton* MyInteractor::createRedoActionMenuButton() {
     return button;
 }
 
-QToolButton* MyInteractor::createResetSceneMenuButton() {
-    QToolButton* button = new MyToolButton();
+QAbstractButton* MyInteractor::createResetSceneMenuButton() {
+    QAbstractButton* button = new MyToolButton();
     connect(button, SIGNAL(clicked()), this, SLOT(setNewNetworkCanvas()));
     decorateResetSceneButton(button, iconsDirectoryPath());
     return button;
