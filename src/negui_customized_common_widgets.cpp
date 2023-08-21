@@ -129,7 +129,7 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
 
 MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
     setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton {border: 0px; background-color : white; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgray} QToolButton:hover:!pressed { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
 }
 
 // MyModeToolButton
@@ -146,11 +146,11 @@ void MyModeToolButton::setActive(const bool& active) {
 }
 
 void MyModeToolButton::setStyleToActiveForm() {
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton:hover { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
 }
 
 void MyModeToolButton::setStyleToInactiveForm() {
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : white; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : white; border-radius : 5px} QToolButton:hover { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
 }
 
 const QString& MyModeToolButton::mode() {
