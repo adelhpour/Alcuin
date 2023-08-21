@@ -119,9 +119,5 @@ void setIcon(QAbstractButton* button, const QString& iconPath) {
     pixmap.load(iconPath);
     QIcon buttonIcon(pixmap);
     button->setIcon(buttonIcon);
-#if defined(Q_OS_WIN)
-    button->setIconSize(QSize(60, 60));
-#else
-    button->setIconSize(pixmap.rect().size());
-#endif
+    button->setIconSize(QSize(35, 35));
 }
