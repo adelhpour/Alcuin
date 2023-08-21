@@ -826,6 +826,7 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
         elementAligner->deleteLater();
         createChangeStageCommand();
     }
+    selectElements(false); //TODO maybe all of the aligned ones needs to be selected
 }
 
 const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
