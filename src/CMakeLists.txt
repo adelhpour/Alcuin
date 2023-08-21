@@ -7,6 +7,7 @@ set(source_files
 		negui_toolbar.cpp
 		negui_graphics_view.cpp
 		negui_graphics_scene.cpp
+		negui_status_bar.cpp
 		negui_scene_mode_element_base.cpp
 		negui_interactor.cpp
 		negui_file_manager.cpp
@@ -84,6 +85,7 @@ set(header_files
 		negui_toolbar.h
 		negui_graphics_view.h
 		negui_graphics_scene.h
+		negui_status_bar.h
 		negui_scene_mode_element_base.h
 		negui_interactor.h
 		negui_file_manager.h

@@ -21,9 +21,10 @@ public:
     void connectContextMenu(QMenu* contextMenu);
     
 signals:
-    
-    void mouseLeftButtonIsPressed(const QPointF& position);
-    void mousePressedLeftButtonIsMoved(const QPointF& position);
+
+    void mousePositionIsChanged(const QPointF&);
+    void mouseLeftButtonIsPressed(const QPointF&);
+    void mousePressedLeftButtonIsMoved(const QPointF&);
     void mouseLeftButtonIsReleased();
     void mouseLeftButtonIsDoubleClicked();
     void escapeKeyIsPressed();
@@ -35,7 +36,7 @@ signals:
     const bool askForWhetherAnyElementsAreSelected();
     void askForCopySelectedNetworkElements();
     void askForCutSelectedNetworkElements();
-    void askForPasteCopiedNetworkElements(const QPointF& position);
+    void askForPasteCopiedNetworkElements(const QPointF&);
     void askForDeleteSelectedNetworkElements();
 
 public slots:

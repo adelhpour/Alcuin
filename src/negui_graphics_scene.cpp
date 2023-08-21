@@ -76,6 +76,7 @@ void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     if (_isLeftButtonPressed)
         emit mousePressedLeftButtonIsMoved(event->scenePos());
+    emit mousePositionIsChanged(event->scenePos());
     QGraphicsScene::mouseMoveEvent(event);
     _cursorPosition = event->scenePos();
 }

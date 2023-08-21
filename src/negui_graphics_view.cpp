@@ -13,6 +13,7 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setStyleSheet("QGraphicsView {background-color : white; border-radius: 10px;}");
     setContentsMargins(0, 0, 0, 0);
     setStyle(new MyProxyStyle(style()));
+    setMouseTracking(true);
     
     _minScale = 1.0 / 10.0;
     _maxScale = 10.0;
@@ -187,6 +188,11 @@ void MyGraphicsView::keyPressEvent(QKeyEvent *event) {
             event->accept();
         }
     }
+}
+
+void MyGraphicsView::leaveEvent(QEvent *event) {
+    emit mouseLeft();
+    QGraphicsView::leaveEvent(event);
 }
 
 // MyProxyStyle

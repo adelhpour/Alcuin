@@ -4,6 +4,7 @@
 #include "negui_mode_menu.h"
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
+#include "negui_status_bar.h"
 
 #include <QGridLayout>
 #include <QSettings>
@@ -24,10 +25,10 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(title(), 0, 0, 1, 3, Qt::AlignCenter);
-    layout->addWidget(toolBar(), 1, 0, 1, 3);
-    layout->addWidget(modeMenu(), 2, 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
-    layout->addWidget(view(), 2, 1, 1, 1);
+    layout->addWidget(toolBar(), layout->rowCount(), 0, 1, 3);
+    layout->addWidget(modeMenu(), layout->rowCount(), 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
+    layout->addWidget(view(), layout->rowCount() - 1, 1, 1, 1);
+    layout->addWidget(statusBar(), layout->rowCount(), 0, 1, 3);
     setLayout(layout);
 
     setReadyToLaunch();
@@ -38,10 +39,10 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 }
 
 void MyNetworkEditorWidget::setWidgets() {
-    _title = new QLabel(this);
     _toolBar = new MyToolBar(this);
     _modeMenu = new MyModeMenu(this);
     _view = new MyGraphicsView(this);
+    _statusBar = new MyStatusBar(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
@@ -55,9 +56,6 @@ void MyNetworkEditorWidget::setWidgets() {
 
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
-    // set title
-    connect((MyInteractor*)interactor(), &MyInteractor::currentFileNameIsUpdated, this, [this] (const QString& titleText) { ((QLabel*)title())->setText(titleText); });
-
     // menubar
     connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
     connect(this, SIGNAL(askForListOfPluginItemNames(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemNames(const QString&)));
@@ -156,14 +154,15 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCutSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(cutSelectedNetworkElements()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteCopiedNetworkElements(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements(const QPointF &)));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForDeleteSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(deleteSelectedNetworkElements()));
+
+    // status bar
+    connect(view(), SIGNAL(mouseLeft()), statusBar(), SLOT(resetMessage()));
+    connect(interactor(), SIGNAL(currentFileNameIsUpdated(const QString&)), statusBar(), SLOT(setFileName(const QString&)));
+    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setCoordinatesToMousePosition(const QPointF&)));
 }
 
 QObject* MyNetworkEditorWidget::interactor() {
     return _interactor;
-}
-
-QWidget* MyNetworkEditorWidget::title() {
-    return _title;
 }
 
 QWidget* MyNetworkEditorWidget::toolBar() {
@@ -176,6 +175,10 @@ QWidget* MyNetworkEditorWidget::modeMenu() {
 
 QWidget* MyNetworkEditorWidget::view() {
     return _view;
+}
+
+QWidget* MyNetworkEditorWidget::statusBar() {
+    return _statusBar;
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
