@@ -10,6 +10,7 @@ public:
     
     MyPluginItemBase(const QString& name);
     virtual const QString type() const = 0;
+    const bool isFrequentlyUsed();
     const QString& category() const;
     const QString& subCategory() const;
     virtual const QIcon icon() = 0;
@@ -18,6 +19,7 @@ public:
     virtual void write(QJsonObject &json) override;
     
 protected:
+    bool _isFrequentlyUsed;
     QString _category;
     QString _subCategory;
     QSize _iconSize;
