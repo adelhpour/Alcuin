@@ -90,23 +90,32 @@ class MyToolButton : public QToolButton {
 public:
 
     MyToolButton(QWidget* parent = nullptr);
-
+    
 signals:
-        void menuItemIsChosen();
+
+    void menuItemIsChosen();
 };
 
-class MyModeToolButton : public MyToolButton {
+class MyModeMenuToolButton : public MyToolButton {
     Q_OBJECT
 
 public:
 
-    MyModeToolButton(const QString& mode = "", QWidget* parent = nullptr);
+    MyModeMenuToolButton(QWidget* parent = nullptr);
 
     void setActive(const bool& active);
 
     void setStyleToActiveForm();
 
     void setStyleToInactiveForm();
+};
+
+class MyModeMenuModeButton : public MyModeMenuToolButton {
+    Q_OBJECT
+
+public:
+
+    MyModeMenuModeButton(const QString& mode = "", QWidget* parent = nullptr);
 
     const QString& mode();
 
