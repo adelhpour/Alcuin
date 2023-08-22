@@ -70,7 +70,7 @@ void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirector
 }
 
 QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QString& iconsDirectory) {
-    QAbstractButton* button = new MyModeToolButton("Add");
+    QAbstractButton* button = new MyModeMenuModeButton("Add");
     button->setText("Add");
     button->setToolTip("Add an item to the network");
     ((QToolButton*)button)->setMenu(createAddButtonMenu(buttons));
@@ -89,7 +89,7 @@ QMenu* createAddButtonMenu(QList<QAbstractButton*> buttons) {
     QMenu* addButtonMenu = new QMenu();
     for (QAbstractButton* button : qAsConst(buttons)) {
         addButtonMenu->addAction(createButtonWidgetAction(button, addButtonMenu));
-        QObject::connect((MyToolButton*)button, &MyToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
+        QObject::connect((MyModeMenuToolButton*)button, &MyModeMenuToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
     }
 
     return addButtonMenu;
