@@ -844,7 +844,7 @@ void MyInteractor::enableNormalMode() {
         node->enableNormalMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         edge->enableNormalMode();
-    
+
     emit askForSetToolTip("");
 }
 
@@ -859,6 +859,7 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
         edge->enableAddNodeMode();
     
     emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
+    emit addElementModeIsEnabled(style->name());
 }
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
@@ -872,6 +873,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
         edge->enableAddEdgeMode();
 
     emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
+    emit addElementModeIsEnabled(style->name());
 }
 
 void MyInteractor::enableSelectMode(const QString& elementCategory) {
@@ -1116,7 +1118,7 @@ QList<QAbstractButton*> MyInteractor::getAddModeButtons() {
 }
 
 QAbstractButton* MyInteractor::createNormalModeMenuButton() {
-    QAbstractButton* button = new MyModeToolButton("Normal");
+    QAbstractButton* button = new MyModeMenuModeButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
     return button;

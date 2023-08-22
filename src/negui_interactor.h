@@ -55,7 +55,7 @@ public:
     
     // modes
     void setSceneMode(SceneMode sceneMode) override;
-    
+
     // network
     void resetNetworkCanvas();
     void resetCanvas();
@@ -95,7 +95,8 @@ public:
     QDir iconsDirectory();
 
 signals:
-    
+
+    void addElementModeIsEnabled(const QString&);
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
