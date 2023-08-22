@@ -3,18 +3,18 @@
 
 #include "negui_customized_common_widgets.h"
 
-class MyModeMenu : public MyFrame {
+class MyModeMenuBase : public MyFrame {
     Q_OBJECT
 
 public:
 
-    MyModeMenu(QWidget *parent = nullptr);
+    MyModeMenuBase(QWidget *parent = nullptr);
 
     void setNormalModeButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
-    void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
+    virtual void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
+    virtual void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
     void setZoomInButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
@@ -28,13 +28,35 @@ public slots:
 
     void deactivateButtons();
 
+    void activateAddElementButton(const QString& elementStyleName);
+
 protected:
     QList<QAbstractButton*> _buttons;
 };
 
+class MyFrequentlyUsedButtonsModeMenu : public MyModeMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyFrequentlyUsedButtonsModeMenu(QWidget *parent = nullptr);
+
+    void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) override;
+};
+
+class MyAddModeButtonsModeMenu : public MyModeMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyAddModeButtonsModeMenu(QWidget *parent = nullptr);
+
+    void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) override;
+};
+
 const bool isModeToolButton(QAbstractButton* button);
 
-const bool isButtonOfTheMode(MyModeToolButton* button, const QString& mode);
+const bool isButtonOfTheMode(MyModeMenuModeButton* button, const QString& mode);
 
 #endif
 
