@@ -12,7 +12,7 @@ public:
 
     const bool canAddEllipseShape() override;
 
-    const bool canAddRectShape() override;
+    const bool canAddRectangleShape() override;
 
     const bool canAddPolygonShape() override;
 

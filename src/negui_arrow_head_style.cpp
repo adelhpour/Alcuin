@@ -53,8 +53,8 @@ void MyClassicArrowHeadStyle::addDefaultShapeStyle() {
 MyShapeStyleBase* MyClassicArrowHeadStyle::createShapeStyle(const QString& shape) {
     if (shape == "ellipse")
         return createArrowHeadEllipseStyle(shape);
-    else if (shape == "rect")
-        return createArrowHeadRectStyle(shape);
+    else if (shape == "rectangle")
+        return createArrowHeadRectangleStyle(shape);
     else if (shape == "polygon")
         return createArrowHeadPolygonStyle(shape);
 
@@ -76,7 +76,7 @@ MyAddRemoveArrowHeadShapeStylesButtons::MyAddRemoveArrowHeadShapeStylesButtons(Q
 void MyAddRemoveArrowHeadShapeStylesButtons::setAddingMenu() {
     connect(_addingMenu->addAction("ellipse"), &QAction::triggered, this, [this] () {
         emit askForAddShapeStyle(createArrowHeadEllipseStyle("ellipse")); });
-    connect(_addingMenu->addAction("rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createArrowHeadRectStyle("rect")); });
+    connect(_addingMenu->addAction("rectangle"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createArrowHeadRectangleStyle("rectangle")); });
     connect(_addingMenu->addAction("polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createArrowHeadDefaultPolygonStyle("polygon");
         emit askForAddShapeStyle(polygonShapeStyle); });
 }

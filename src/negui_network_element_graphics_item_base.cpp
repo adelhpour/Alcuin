@@ -44,8 +44,8 @@ MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsIt
         item = createEllipseShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
-    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE && canAddRectShape()) {
-        item = createRectShape(_originalPosition.x(), _originalPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::RECTANGLE_SHAPE_STYLE && canAddRectangleShape()) {
+        item = createRectangleShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
     else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE && canAddPolygonShape()) {
@@ -73,7 +73,7 @@ const bool MyNetworkElementGraphicsItemBase::canAddEllipseShape() {
     return false;
 }
 
-const bool MyNetworkElementGraphicsItemBase::canAddRectShape() {
+const bool MyNetworkElementGraphicsItemBase::canAddRectangleShape() {
     return false;
 }
 

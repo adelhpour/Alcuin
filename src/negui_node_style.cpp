@@ -111,8 +111,8 @@ MyNodeStyleBase::NODE_STYLE_TYPE MySimpleClassicNodeStyle::nodeStyleType() {
 MyShapeStyleBase* MySimpleClassicNodeStyle::createShapeStyle(const QString& shape) {
     if (shape == "ellipse" && !whetherAnotherGeometricShapeAlreadyExists())
         return createNodeEllipseStyle(shape);
-    else if (shape == "rect" && !whetherAnotherGeometricShapeAlreadyExists())
-        return createNodeRectStyle(shape);
+    else if (shape == "rectangle" && !whetherAnotherGeometricShapeAlreadyExists())
+        return createNodeRectangleStyle(shape);
     else if (shape == "polygon" && !whetherAnotherGeometricShapeAlreadyExists())
         return createNodePolygonStyle(shape);
     else if (shape == "text" && !whetherAnotherTextShapeAlreadyExists())
@@ -158,8 +158,8 @@ MyNodeStyleBase::NODE_STYLE_TYPE MyComplexClassicNodeStyle::nodeStyleType() {
 MyShapeStyleBase* MyComplexClassicNodeStyle::createShapeStyle(const QString& shape) {
     if (shape == "ellipse")
         return createNodeEllipseStyle(shape);
-    else if (shape == "rect")
-        return createNodeRectStyle(shape);
+    else if (shape == "rectangle")
+        return createNodeRectangleStyle(shape);
     else if (shape == "polygon")
         return createNodePolygonStyle(shape);
     else if (shape == "text")
@@ -204,7 +204,7 @@ MyChangeNodeShapeStylesButton::MyChangeNodeShapeStylesButton(QWidget* parent) : 
 void MyChangeNodeShapeStylesButton::setMenu() {
     connect(_menu->addAction("Ellipse"), &QAction::triggered, this, [this] () {
         emit askForChangeShapeStyle(createNodeEllipseStyle("ellipse")); });
-    connect(_menu->addAction("Rect"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createNodeRectStyle("rect")); });
+    connect(_menu->addAction("Rectangle"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createNodeRectangleStyle("rectangle")); });
     connect(_menu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
         emit askForChangeShapeStyle(polygonShapeStyle); });
 }
@@ -218,7 +218,7 @@ MyAddRemoveNodeShapeStylesButtons::MyAddRemoveNodeShapeStylesButtons(QWidget* pa
 void MyAddRemoveNodeShapeStylesButtons::setAddingMenu() {
     connect(_addingMenu->addAction("Ellipse"), &QAction::triggered, this, [this] () {
         emit askForAddShapeStyle(createNodeEllipseStyle("ellipse")); });
-    connect(_addingMenu->addAction("Rect"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectStyle("rect")); });
+    connect(_addingMenu->addAction("Rectangle"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(createNodeRectangleStyle("rectangle")); });
     connect(_addingMenu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createNodeDefaultPolygonStyle("polygon");
         emit askForAddShapeStyle(polygonShapeStyle); });
     connect(_addingMenu->addAction("Text"), &QAction::triggered, this, [this] () { emit askForAddShapeStyle(

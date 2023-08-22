@@ -5,7 +5,7 @@
 
 MyShapeStyleBase* createNodeEllipseStyle(const QString& shape);
 
-MyShapeStyleBase* createNodeRectStyle(const QString& shape);
+MyShapeStyleBase* createNodeRectangleStyle(const QString& shape);
 
 MyShapeStyleBase* createNodePolygonStyle(const QString& shape);
 
@@ -15,7 +15,7 @@ MyShapeStyleBase* createNodeCentroidStyle(const QString& shape);
 
 MyShapeStyleBase* createArrowHeadEllipseStyle(const QString& shape);
 
-MyShapeStyleBase* createArrowHeadRectStyle(const QString& shape);
+MyShapeStyleBase* createArrowHeadRectangleStyle(const QString& shape);
 
 MyShapeStyleBase* createArrowHeadPolygonStyle(const QString& shape);
 

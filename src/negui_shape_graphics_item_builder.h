@@ -6,7 +6,7 @@
 
 MyShapeGraphicsItemBase* createEllipseShape(qreal x, qreal y, QGraphicsItem *parent);
 
-MyShapeGraphicsItemBase* createRectShape(qreal x, qreal y, QGraphicsItem *parent);
+MyShapeGraphicsItemBase* createRectangleShape(qreal x, qreal y, QGraphicsItem *parent);
 
 MyShapeGraphicsItemBase* createPolygonShape(qreal x, qreal y, QGraphicsItem *parent);
 

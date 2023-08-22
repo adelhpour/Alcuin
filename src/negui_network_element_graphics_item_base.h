@@ -27,7 +27,7 @@ public:
 
     virtual const bool canAddEllipseShape();
 
-    virtual const bool canAddRectShape();
+    virtual const bool canAddRectangleShape();
 
     virtual const bool canAddPolygonShape();
 
