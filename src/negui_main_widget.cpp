@@ -40,7 +40,7 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 
 void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
-    _modeMenu = new MyModeMenu(this);
+    _modeMenu = new MyFrequentlyUsedButtonsModeMenu(this);
     _view = new MyGraphicsView(this);
     _statusBar = new MyStatusBar(this);
     _interactor = new MyInteractor(this);
@@ -48,10 +48,11 @@ void MyNetworkEditorWidget::setWidgets() {
 
     QString iconsDirectoryPath = ((MyInteractor*)interactor())->iconsDirectory().path();
     ((MyToolBar*)toolBar())->setButtons(((MyInteractor*)interactor())->getToolBarMenuButtons());
-    ((MyModeMenu*)modeMenu())->setNormalModeButton(((MyInteractor*)interactor())->getNormalModeButton(), iconsDirectoryPath);
-    ((MyModeMenu*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons(), iconsDirectoryPath);
-    ((MyModeMenu*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton(), iconsDirectoryPath);
-    ((MyModeMenu*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton(), iconsDirectoryPath);
+    ((MyModeMenuBase*)modeMenu())->setNormalModeButton(((MyInteractor*)interactor())->getNormalModeButton(), iconsDirectoryPath);
+    ((MyModeMenuBase*)modeMenu())->setFrequentlyUsedButtons(((MyInteractor*)interactor())->getFrequentlyUsedButtons(), iconsDirectoryPath);
+    ((MyModeMenuBase*)modeMenu())->setAddModeButtons(((MyInteractor*)interactor())->getAddModeButtons(), iconsDirectoryPath);
+    ((MyModeMenuBase*)modeMenu())->setZoomInButton(((MyGraphicsView*)view())->getZoomInButton(), iconsDirectoryPath);
+    ((MyModeMenuBase*)modeMenu())->setZoomOutButton(((MyGraphicsView*)view())->getZoomOutButton(), iconsDirectoryPath);
 }
 
 void MyNetworkEditorWidget::setInteractions() {
@@ -88,6 +89,7 @@ void MyNetworkEditorWidget::setInteractions() {
     /// mode menu
     // set mode
     connect((MyInteractor*)interactor(), SIGNAL(modeIsSet(const QString&)), modeMenu(), SLOT(setMode(const QString&)));
+    connect((MyInteractor*)interactor(), SIGNAL(addElementModeIsEnabled(const QString &)), modeMenu(), SLOT(activateAddElementButton(const QString&)));
 
     /// graphics view
     // export screen scene

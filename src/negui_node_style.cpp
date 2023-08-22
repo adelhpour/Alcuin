@@ -8,7 +8,7 @@
 MyNodeStyleBase::MyNodeStyleBase(const QString& name) : MyNetworkElementStyleBase(name) {
     _category = "Node";
     _parentCategories.push_back("Node");
-    _iconSize = QSize(40, 40);
+    _iconSize = QSize(35, 35);
 }
 
 const QString MyNodeStyleBase::type() const {

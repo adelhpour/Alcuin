@@ -1,4 +1,5 @@
 #include "negui_network_element_graphics_item_base.h"
+#include "negui_shape_graphics_item_builder.h"
 
 #include <QGraphicsSceneMouseEvent>
 
@@ -35,6 +36,61 @@ void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
         if (casted_item)
             addToGroup(casted_item);
     }
+}
+
+MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsItem(MyShapeStyleBase* style) {
+    MyShapeGraphicsItemBase* item = NULL;
+    if (style->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE && canAddEllipseShape()) {
+        item = createEllipseShape(_originalPosition.x(), _originalPosition.y(), this);
+        item->setZValue(zValue());
+    }
+    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE && canAddRectShape()) {
+        item = createRectShape(_originalPosition.x(), _originalPosition.y(), this);
+        item->setZValue(zValue());
+    }
+    else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE && canAddPolygonShape()) {
+        item = createPolygonShape(_originalPosition.x(), _originalPosition.y(), this);
+        item->setZValue(zValue());
+    }
+    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE && canAddTextShape()) {
+        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementDisplayName(), this);
+        item->setZValue(zValue() + 1);
+    }
+    else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE && canAddCentroidShape()) {
+        item = createCentroidShape(_originalPosition.x(), _originalPosition.y(), this);
+        item->setZValue(zValue());
+        connectShapeGraphicsItem(item);
+    }
+
+    return item;
+}
+
+void MyNetworkElementGraphicsItemBase::connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) {
+
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddEllipseShape() {
+    return false;
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddRectShape() {
+    return false;
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddPolygonShape() {
+    return false;
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddTextShape() {
+    return false;
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddCentroidShape() {
+    return false;
+}
+
+const bool MyNetworkElementGraphicsItemBase::canAddLineShape() {
+    return false;
 }
 
 void MyNetworkElementGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {

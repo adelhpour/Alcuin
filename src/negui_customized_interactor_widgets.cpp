@@ -51,7 +51,7 @@ void MyWidgetAction::setItems(QList<MyPluginItemBase*> items) {
 QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items) {
     QWidget* itemWidget = new QWidget();
     QVBoxLayout* itemWidgetLayoutContent = new QVBoxLayout();
-    QPushButton* itemPreviewButton = NULL;
+    QToolButton* itemPreviewButton = NULL;
 
     QList<QString> itemsSubCategories = getPluginsSubCategories(items);
     if (itemsSubCategories.size()) {
@@ -74,9 +74,9 @@ QWidget* MyWidgetAction::createItemPreviewWidget(QList<MyPluginItemBase*> items)
     return itemWidget;
 }
 
-QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
-    QPushButton* itemPreviewButton = new MyItemPreviewButton(item);
-    connect(itemPreviewButton, &QPushButton::clicked, this, [this, item, itemPreviewButton] () {
+QToolButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
+    QToolButton* itemPreviewButton = new MyItemPreviewButton(item);
+    connect(itemPreviewButton, &QToolButton::clicked, this, [this, item, itemPreviewButton] () {
         ((MyItemPreviewButton*)itemPreviewButton)->hoverOut();
         emit itemIsChosen(item);
     });
@@ -86,21 +86,19 @@ QPushButton* MyWidgetAction::createItemPreviewButton(MyPluginItemBase* item) {
 
 // MyItemPreviewButton
 
-MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent) : QPushButton(parent) {
+MyItemPreviewButton::MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent) : MyModeMenuToolButton(parent) {
     setCheckable(true);
     setToolTip(item->name());
-
-    if (item->icon().isNull()) {
-        setStyleSheet("QPushButton { border : no-border; text-align : left} QPushButton:hover { color: darkgray}");
+    if (item->icon().isNull())
         setText(item->name());
-    }
     else {
-        setStyleSheet("QPushButton { border : no-border;} QPushButton:hover { background-color: darkgray}");
         setIcon(item->icon());
         setIconSize(item->iconSize());
     }
+
+    setStyleToInactiveForm();
 }
 
 void MyItemPreviewButton::hoverOut() {
-    setStyleSheet("QPushButton { background-color: transparent}");
+    //setStyleSheet("QToolButton { background-color: transparent}");
 }

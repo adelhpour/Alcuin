@@ -11,8 +11,6 @@ public:
     
     MyNodeGraphicsItemBase(QGraphicsItem *parent = nullptr);
 
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
-
     QMenu* createContextMenu() override;
 
     virtual QMenu* createContextMenuObject();
@@ -22,8 +20,6 @@ signals:
     const QLineF askForGetBezierAdjustLine();
 
     void bezierAdjustLineIsUpdated(const QLineF&);
-
-    QString askForElementDisplayName();
 
 };
 
@@ -80,6 +76,14 @@ public:
 
     MyClassicNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    const bool canAddEllipseShape() override;
+
+    const bool canAddRectShape() override;
+
+    const bool canAddPolygonShape() override;
+
+    const bool canAddTextShape() override;
+
     void clearFocusedGraphicsItems() override;
 
     void moveBy(qreal dx, qreal dy);
@@ -116,6 +120,10 @@ public:
 
     MyCentroidNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    void connectShapeGraphicsItem(MyShapeGraphicsItemBase *item) override;
+
+    const bool canAddCentroidShape() override;
+
     QMenu* createContextMenuObject() override;
 
     void connectContextMenu(QMenu* contextMenu) override;
@@ -133,6 +141,14 @@ class MyNodeIconGraphicsItem : public MyNodeGraphicsItemBase {
 public:
     
     MyNodeIconGraphicsItem(const QPointF& position, QGraphicsItem *parent = nullptr);
+
+    const bool canAddEllipseShape() override;
+
+    const bool canAddRectShape() override;
+
+    const bool canAddPolygonShape() override;
+
+    const bool canAddTextShape() override;
     
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
 };

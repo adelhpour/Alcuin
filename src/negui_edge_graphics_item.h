@@ -14,7 +14,9 @@ public:
 
     virtual MyShapeGraphicsItemBase* createLineShapeGraphicsItem() = 0;
 
-    virtual void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item);
+    void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) override;
+
+    const bool canAddLineShape() override;
 
     QMenu* createContextMenu() override;
     

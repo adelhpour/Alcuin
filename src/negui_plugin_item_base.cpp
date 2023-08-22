@@ -2,6 +2,15 @@
 
 // MyPluginItemBase
 
+MyPluginItemBase::MyPluginItemBase(const QString& name) : MyBase(name) {
+    _isFrequentlyUsed = false;
+    _iconSize = QSize(0, 0);
+}
+
+const bool MyPluginItemBase::isFrequentlyUsed() {
+    return _isFrequentlyUsed;
+}
+
 const QString& MyPluginItemBase::category() const {
     return _category;
 }
@@ -10,17 +19,17 @@ const QString& MyPluginItemBase::subCategory() const {
     return _subCategory;
 }
 
-MyPluginItemBase::MyPluginItemBase(const QString& name) : MyBase(name) {
-    _iconSize = QSize(0, 0);
-}
-
 const QSize& MyPluginItemBase::iconSize() const {
     return _iconSize;
 }
 
+#include "iostream"
 void MyPluginItemBase::read(const QJsonObject &json) {
     if (name() != "Default")
         _category.clear();
+    _isFrequentlyUsed = false;
+    if (json.contains("is-frequently-used") && json["is-frequently-used"].isBool())
+        _isFrequentlyUsed = json["is-frequently-used"].toBool();
     if (json.contains("category") && json["category"].isString())
         _category = json["category"].toString();
     if (json.contains("sub-category") && json["sub-category"].isString())
@@ -28,6 +37,7 @@ void MyPluginItemBase::read(const QJsonObject &json) {
 }
 
 void MyPluginItemBase::write(QJsonObject &json) {
+    json["is-frequently-used"]  = isFrequentlyUsed();
     json["category"] = category();
     json["sub-category"] = subCategory();
 }

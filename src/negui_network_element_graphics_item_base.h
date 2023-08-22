@@ -21,7 +21,21 @@ public:
     
     void addShapeItem(MyShapeStyleBase* style);
     
-    virtual MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) = 0;
+    virtual MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style);
+
+    virtual void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item);
+
+    virtual const bool canAddEllipseShape();
+
+    virtual const bool canAddRectShape();
+
+    virtual const bool canAddPolygonShape();
+
+    virtual const bool canAddTextShape();
+
+    virtual const bool canAddCentroidShape();
+
+    virtual const bool canAddLineShape();
 
     virtual QMenu* createContextMenu() = 0;
 
@@ -70,6 +84,7 @@ signals:
     void askForDeleteNetworkElement();
     const bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
+    QString askForElementDisplayName();
 
 public slots:
 

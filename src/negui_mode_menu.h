@@ -3,22 +3,24 @@
 
 #include "negui_customized_common_widgets.h"
 
-class MyModeMenu : public MyFrame {
+class MyModeMenuBase : public MyFrame {
     Q_OBJECT
 
 public:
 
-    MyModeMenu(QWidget *parent = nullptr);
+    MyModeMenuBase(QWidget *parent = nullptr);
 
-    void setNormalModeButton(QToolButton* button, const QString& iconsDirectoryPath);
+    void setNormalModeButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
-    void setAddModeButtons(QList<QToolButton*> buttons, const QString& iconsDirectoryPath);
+    virtual void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setZoomInButton(QToolButton* button, const QString& iconsDirectoryPath);
+    virtual void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath);
 
-    void setZoomOutButton(QToolButton* button, const QString& iconsDirectoryPath);
+    void setZoomInButton(QAbstractButton* button, const QString& iconsDirectoryPath);
 
-    QList<QToolButton*> getButtons();
+    void setZoomOutButton(QAbstractButton* button, const QString& iconsDirectoryPath);
+
+    QList<QAbstractButton*> getButtons();
 
 public slots:
 
@@ -26,13 +28,35 @@ public slots:
 
     void deactivateButtons();
 
+    void activateAddElementButton(const QString& elementStyleName);
+
 protected:
-    QList<QToolButton*> _buttons;
+    QList<QAbstractButton*> _buttons;
 };
 
-const bool isModeToolButton(QToolButton* button);
+class MyFrequentlyUsedButtonsModeMenu : public MyModeMenuBase {
+    Q_OBJECT
 
-const bool isButtonOfTheMode(MyModeToolButton* button, const QString& mode);
+public:
+
+    MyFrequentlyUsedButtonsModeMenu(QWidget *parent = nullptr);
+
+    void setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) override;
+};
+
+class MyAddModeButtonsModeMenu : public MyModeMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyAddModeButtonsModeMenu(QWidget *parent = nullptr);
+
+    void setAddModeButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) override;
+};
+
+const bool isModeToolButton(QAbstractButton* button);
+
+const bool isButtonOfTheMode(MyModeMenuModeButton* button, const QString& mode);
 
 #endif
 

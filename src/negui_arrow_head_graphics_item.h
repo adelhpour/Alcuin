@@ -9,8 +9,12 @@ class MyArrowHeadGraphicsItemBase : public MyNetworkElementGraphicsItemBase {
 public:
     
     MyArrowHeadGraphicsItemBase(QGraphicsItem *parent = nullptr);
-    
-    MyShapeGraphicsItemBase* createShapeGraphicsItem(MyShapeStyleBase* style) override;
+
+    const bool canAddEllipseShape() override;
+
+    const bool canAddRectShape() override;
+
+    const bool canAddPolygonShape() override;
 
     QMenu* createContextMenu() override;
 };

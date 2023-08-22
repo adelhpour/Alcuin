@@ -2,7 +2,7 @@
 #define __NEGUI_TOOLBAR_H
 
 #include <QToolBar>
-#include <QToolButton>
+#include <QAbstractButton>
 
 class MyToolBar : public QToolBar {
     Q_OBJECT
@@ -13,7 +13,7 @@ public:
     
 public slots:
     
-    void setButtons(QList<QToolButton*> buttons);
+    void setButtons(QList<QAbstractButton*> buttons);
 };
 
 #endif

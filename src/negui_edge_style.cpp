@@ -14,7 +14,7 @@ MyEdgeStyleBase::MyEdgeStyleBase(const QString& name) : MyNetworkElementStyleBas
     QJsonObject arrowHeadStyleObject;
     arrowHeadStyleObject["name"] = name + "_ArrowHead";
     _arrowHeadStyle = createArrowHeadStyle(arrowHeadStyleObject);
-    _iconSize = QSize(75, 45);
+    _iconSize = QSize(35, 35);
 }
 
 const QString MyEdgeStyleBase::type() const {

@@ -10,8 +10,7 @@
 #include <QPluginLoader>
 #include <QUndoStack>
 #include <QWidgetAction>
-#include <QToolButton>
-#include <QPushButton>
+#include <QAbstractButton>
 
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
@@ -56,7 +55,7 @@ public:
     
     // modes
     void setSceneMode(SceneMode sceneMode) override;
-    
+
     // network
     void resetNetworkCanvas();
     void resetCanvas();
@@ -96,7 +95,8 @@ public:
     QDir iconsDirectory();
 
 signals:
-    
+
+    void addElementModeIsEnabled(const QString&);
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
@@ -121,9 +121,10 @@ signals:
 public slots:
     
     // menus
-    QList<QToolButton*> getToolBarMenuButtons();
-    QToolButton* getNormalModeButton();
-    QList<QToolButton*> getAddModeButtons();
+    QList<QAbstractButton*> getToolBarMenuButtons();
+    QAbstractButton* getNormalModeButton();
+    QList<QAbstractButton*> getFrequentlyUsedButtons();
+    QList<QAbstractButton*> getAddModeButtons();
     
     // network
     void setNewNetworkCanvas();
@@ -213,23 +214,26 @@ protected:
     void setFileManager();
     
     // menu buttons
-    QToolButton* createNormalModeMenuButton();
-    QToolButton* createImportMenuButton();
-    QToolButton* createDataExportMenuButton();
-    QToolButton* createPrintExportMenuButton();
-    QToolButton* createSaveMenuButton();
-    QList<QToolButton*> createAddElementMenuButtons();
+    QAbstractButton* createNormalModeMenuButton();
+    QAbstractButton* createImportMenuButton();
+    QAbstractButton* createDataExportMenuButton();
+    QAbstractButton* createPrintExportMenuButton();
+    QAbstractButton* createSaveMenuButton();
+    QList<QAbstractButton*> createFrequentlyUsedMenuButtons();
+    QList<QAbstractButton*> createFrequentlyUsedNodeStyleMenuButtons();
+    QList<QAbstractButton*> createFrequentlyUsedEdgeAndTemplateStyleMenuButtons();
+    QList<QAbstractButton*> createAddElementMenuButtons();
     void addDefaultNodeStyle();
     void addDefaultEdgeStyle();
-    QList<QToolButton*> createElementStyleButtons();
+    QList<QAbstractButton*> createElementStyleButtons();
     QMenu* createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory);
-    QToolButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
-    QToolButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
+    QAbstractButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
+    QAbstractButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
     QWidgetAction* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
-    QToolButton* createAutoLayoutMenuButton();
-    QToolButton* createUndoActionMenuButton();
-    QToolButton* createRedoActionMenuButton();
-    QToolButton* createResetSceneMenuButton();
+    QAbstractButton* createAutoLayoutMenuButton();
+    QAbstractButton* createUndoActionMenuButton();
+    QAbstractButton* createRedoActionMenuButton();
+    QAbstractButton* createResetSceneMenuButton();
     
     // import interface
     ImportInterface* _importInterface;

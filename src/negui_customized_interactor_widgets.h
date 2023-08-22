@@ -6,7 +6,7 @@
 
 #include <QUndoStack>
 #include <QWidgetAction>
-#include <QPushButton>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 class MyUndoStack : public QUndoStack {
@@ -56,10 +56,10 @@ signals:
 
 protected:
     QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
-    QPushButton* createItemPreviewButton(MyPluginItemBase* item);
+    QToolButton* createItemPreviewButton(MyPluginItemBase* item);
 };
 
-class MyItemPreviewButton : public QPushButton {
+class MyItemPreviewButton : public MyModeMenuToolButton {
 
 public:
 
