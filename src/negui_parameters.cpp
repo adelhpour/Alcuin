@@ -898,11 +898,11 @@ void MyFontFamilyParameter::reset() {
 // MyFontSizeParameter
 
 MyFontSizeParameter::MyFontSizeParameter() : MyNominalParameter("font-size") {
-    int i = 5;
+    int i = 3;
     while (i <= 72) {
         _items.push_back(QString::number(i));
 
-        if (i < 12)
+        if (i < 10)
             ++i;
         else if (i < 28)
             i += 2;
