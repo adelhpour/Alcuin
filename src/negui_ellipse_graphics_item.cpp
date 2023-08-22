@@ -20,7 +20,7 @@ void MyEllipseGraphicsItem::updateStyle() {
     }
 }
 
-void MyEllipseGraphicsItem::setSelectedWithStroke(const bool& selected) {
+void MyEllipseGraphicsItem::setSelectedWithBorderColor(const bool& selected) {
     if (selected)
         setPen(((MyEllipseStyleBase*)style())->selectedPen());
     else
@@ -28,7 +28,7 @@ void MyEllipseGraphicsItem::setSelectedWithStroke(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyEllipseGraphicsItem::setSelectedWithFill(const bool& selected) {
+void MyEllipseGraphicsItem::setSelectedWithFillColor(const bool& selected) {
     if (selected)
         setBrush(((MyEllipseStyleBase*)style())->selectedBrush());
     else

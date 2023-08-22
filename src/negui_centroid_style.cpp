@@ -57,14 +57,14 @@ MyNodeCentroidStyle::MyNodeCentroidStyle(const QString& name) : MyCentroidStyleB
     // radius
     addParameter(new MyNodeCentroidRadiusParameter("radius"));
 
-    // stroke-width
-    addParameter(new MyCentroidStrokeWidthParameter());
+    // border-width
+    addParameter(new MyCentroidBorderWidthParameter());
 
-    // stroke
-    addParameter(new MyCentroidStrokeParameter());
+    // border-color
+    addParameter(new MyCentroidBorderColorParameter());
 
     // fill
-    addParameter(new MyCentroidFillParameter());
+    addParameter(new MyCentroidFillColorParameter());
 
     reset();
 }

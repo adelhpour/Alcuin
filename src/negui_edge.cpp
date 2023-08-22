@@ -90,9 +90,9 @@ void MyEdgeBase::setSelected(const bool& selected) {
 }
 
 void MyEdgeBase::setSelectedWithColor(const bool& selected) {
-    graphicsItem()->setSelectedWithStroke(selected);
+    graphicsItem()->setSelectedWithBorderColor(selected);
     if (!selected)
-        graphicsItem()->setSelectedWithFill(selected);
+        graphicsItem()->setSelectedWithFillColor(selected);
 
     if (isSetArrowHead())
         arrowHead()->setSelectedWithColor(selected);

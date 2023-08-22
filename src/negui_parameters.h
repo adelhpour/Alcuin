@@ -423,19 +423,19 @@ protected:
     bool _isSetDefaultValue;
 };
 
-class MyStrokeWidthParameter : public MyIntegerParameter {
+class MyBorderWidthParameter : public MyIntegerParameter {
 public:
 
-    MyStrokeWidthParameter();
+    MyBorderWidthParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidStrokeWidthParameter : public MyStrokeWidthParameter {
+class MyCentroidBorderWidthParameter : public MyBorderWidthParameter {
 public:
 
-    MyCentroidStrokeWidthParameter();
+    MyCentroidBorderWidthParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -594,19 +594,19 @@ public:
     void reset() override;
 };
 
-class MyStrokeParameter : public MyColorParameter {
+class MyBorderColorParameter : public MyColorParameter {
 public:
 
-    MyStrokeParameter();
+    MyBorderColorParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidStrokeParameter : public MyStrokeParameter {
+class MyCentroidBorderColorParameter : public MyBorderColorParameter {
 public:
 
-    MyCentroidStrokeParameter();
+    MyCentroidBorderColorParameter();
 
     // reset the values of the parameter
     void reset() override;

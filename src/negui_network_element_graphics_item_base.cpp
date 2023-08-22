@@ -170,11 +170,11 @@ const QRectF MyNetworkElementGraphicsItemBase::getExtents() const {
     return QRectF(_originalPosition.x() + x(), _originalPosition.y() + y(), 0.0, 0.0);
 }
 
-void MyNetworkElementGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
+void MyNetworkElementGraphicsItemBase::setSelectedWithBorderColor(const bool& selected) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->setSelectedWithStroke(selected);
+            casted_item->setSelectedWithBorderColor(selected);
     }
     QGraphicsItem::setSelected(selected);
 }

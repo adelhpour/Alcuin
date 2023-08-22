@@ -622,26 +622,26 @@ void MyColorParameter::write(QJsonObject &json) {
     }
 }
 
-// MyStrokeWidthParameter
+// MyBorderWidthParameter
 
-MyStrokeWidthParameter::MyStrokeWidthParameter() : MyIntegerParameter("stroke-width") {
+MyBorderWidthParameter::MyBorderWidthParameter() : MyIntegerParameter("border-width") {
     reset();
 }
 
-void MyStrokeWidthParameter::reset() {
+void MyBorderWidthParameter::reset() {
     setDefaultValue(2);
     setMin(1);
     setMax(20);
     setStep(1);
 }
 
-// MyCentroidStrokeWidthParameter
+// MyCentroidBorderWidthParameter
 
-MyCentroidStrokeWidthParameter::MyCentroidStrokeWidthParameter() : MyStrokeWidthParameter() {
+MyCentroidBorderWidthParameter::MyCentroidBorderWidthParameter() : MyBorderWidthParameter() {
     reset();
 }
 
-void MyCentroidStrokeWidthParameter::reset() {
+void MyCentroidBorderWidthParameter::reset() {
     setDefaultValue(2);
     setMin(1);
     setMax(20);
@@ -845,23 +845,23 @@ void MyNodeCentroidRadiusParameter::reset() {
     setStep(0.010);
 }
 
-// MyStrokeParameter
+// MyBorderColorParameter
 
-MyStrokeParameter::MyStrokeParameter() : MyColorParameter("stroke") {
+MyBorderColorParameter::MyBorderColorParameter() : MyColorParameter("border-color") {
     reset();
 }
 
-void MyStrokeParameter::reset() {
+void MyBorderColorParameter::reset() {
     setDefaultValue("black");
 }
 
-// MyCentroidStrokeParameter
+// MyCentroidBorderColorParameter
 
-MyCentroidStrokeParameter::MyCentroidStrokeParameter() : MyStrokeParameter() {
+MyCentroidBorderColorParameter::MyCentroidBorderColorParameter() : MyBorderColorParameter() {
     reset();
 }
 
-void MyCentroidStrokeParameter::reset() {
+void MyCentroidBorderColorParameter::reset() {
     setDefaultValue("transparent");
 }
 

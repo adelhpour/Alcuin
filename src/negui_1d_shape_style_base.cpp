@@ -15,15 +15,15 @@ const QPen My1DShapeStyleBase::pen() const {
     QPen pen;
 
     MyParameterBase* parameter = NULL;
-    // stroke-width
-    parameter = findParameter("stroke-width");
+    // border-width
+    parameter = findParameter("border-width");
     if (parameter)
-        pen.setWidth(((MyStrokeWidthParameter*)parameter)->defaultValue());
+        pen.setWidth(((MyBorderWidthParameter*)parameter)->defaultValue());
 
-    // stroke
-    parameter = findParameter("stroke");
+    // border-color
+    parameter = findParameter("border-color");
     if (parameter)
-        pen.setColor(QColor(((MyStrokeParameter*)parameter)->defaultValue()));
+        pen.setColor(QColor(((MyBorderColorParameter*)parameter)->defaultValue()));
 
     return pen;
 }
@@ -32,12 +32,12 @@ const QPen My1DShapeStyleBase::selectedPen() const {
     QPen pen;
 
     MyParameterBase* parameter = NULL;
-    // stroke-width
-    parameter = findParameter("stroke-width");
+    // border-width
+    parameter = findParameter("border-width");
     if (parameter)
-        pen.setWidth(((MyStrokeWidthParameter*)parameter)->defaultValue());
+        pen.setWidth(((MyBorderWidthParameter*)parameter)->defaultValue());
 
-    // stroke
+    // border-color
     pen.setColor(QColor("#0000CD"));
 
     return pen;
@@ -47,18 +47,18 @@ void My1DShapeStyleBase::read(const QJsonObject &json) {
     MyShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
 
-    // stroke-width
-    if (json.contains("stroke-width") && json["stroke-width"].isDouble()) {
-        parameter = findParameter("stroke-width");
+    // border-width
+    if (json.contains("border-width") && json["border-width"].isDouble()) {
+        parameter = findParameter("border-width");
         if (parameter)
-            ((MyStrokeWidthParameter*)parameter)->setDefaultValue(json["stroke-width"].toInt());
+            ((MyBorderWidthParameter*)parameter)->setDefaultValue(json["border-width"].toInt());
     }
 
-    // stroke
-    if (json.contains("stroke") && json["stroke"].isString()) {
-        parameter = findParameter("stroke");
+    // border-color
+    if (json.contains("border-color") && json["border-color"].isString()) {
+        parameter = findParameter("border-color");
         if (parameter)
-            ((MyStrokeParameter*)parameter)->setDefaultValue(json["stroke"].toString());
+            ((MyBorderColorParameter*)parameter)->setDefaultValue(json["border-color"].toString());
     }
 }
 
@@ -66,13 +66,13 @@ void My1DShapeStyleBase::write(QJsonObject &json) {
     MyShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
 
-    // stroke-width
-    parameter = findParameter("stroke-width");
+    // border-width
+    parameter = findParameter("border-width");
     if (parameter)
-        json["stroke-width"] = ((MyStrokeWidthParameter*)parameter)->defaultValue();
+        json["border-width"] = ((MyBorderWidthParameter*)parameter)->defaultValue();
 
-    // stroke
-    parameter = findParameter("stroke");
+    // border-color
+    parameter = findParameter("border-color");
     if (parameter)
-        json["stroke"] = ((MyStrokeParameter*)parameter)->defaultValue();
+        json["border-color"] = ((MyBorderColorParameter*)parameter)->defaultValue();
 }

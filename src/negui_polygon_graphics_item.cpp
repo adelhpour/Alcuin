@@ -26,7 +26,7 @@ void MyPolygonGraphicsItem::updateStyle() {
     }
 }
 
-void MyPolygonGraphicsItem::setSelectedWithStroke(const bool& selected) {
+void MyPolygonGraphicsItem::setSelectedWithBorderColor(const bool& selected) {
     if (selected)
         setPen(((MyPolygonStyleBase*)style())->selectedPen());
     else
@@ -34,7 +34,7 @@ void MyPolygonGraphicsItem::setSelectedWithStroke(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyPolygonGraphicsItem::setSelectedWithFill(const bool& selected) {
+void MyPolygonGraphicsItem::setSelectedWithFillColor(const bool& selected) {
     if (selected)
         setBrush(((MyPolygonStyleBase*)style())->selectedBrush());
     else

@@ -21,7 +21,7 @@ void MyCentroidGraphicsItem::updateStyle() {
     }
 }
 
-void MyCentroidGraphicsItem::setSelectedWithStroke(const bool& selected) {
+void MyCentroidGraphicsItem::setSelectedWithBorderColor(const bool& selected) {
     if (selected)
         setPen(((MyCentroidStyleBase*)style())->selectedPen());
     else
@@ -29,7 +29,7 @@ void MyCentroidGraphicsItem::setSelectedWithStroke(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyCentroidGraphicsItem::setSelectedWithFill(const bool& selected) {
+void MyCentroidGraphicsItem::setSelectedWithFillColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 

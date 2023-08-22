@@ -23,9 +23,9 @@ public:
     
     virtual void updateStyle() = 0;
     
-    virtual void setSelectedWithStroke(const bool& selected) = 0;
+    virtual void setSelectedWithBorderColor(const bool& selected) = 0;
     
-    virtual void setSelectedWithFill(const bool& selected) = 0;
+    virtual void setSelectedWithFillColor(const bool& selected) = 0;
     
     virtual QRectF getExtents() = 0;
     

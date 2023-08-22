@@ -4,7 +4,7 @@
 // MyTextStyleBase
 
 MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
-    // stroke
+    // color
     addParameter(new MyColorParameter("color"));
     
     // font-family
