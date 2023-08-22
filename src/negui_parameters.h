@@ -612,19 +612,19 @@ public:
     void reset() override;
 };
 
-class MyFillParameter : public MyColorParameter {
+class MyFillColorParameter : public MyColorParameter {
 public:
 
-    MyFillParameter();
+    MyFillColorParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidFillParameter : public MyFillParameter {
+class MyCentroidFillColorParameter : public MyFillColorParameter {
 public:
 
-    MyCentroidFillParameter();
+    MyCentroidFillColorParameter();
 
     // reset the values of the parameter
     void reset() override;

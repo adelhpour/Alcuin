@@ -63,7 +63,7 @@ MyNodeCentroidStyle::MyNodeCentroidStyle(const QString& name) : MyCentroidStyleB
     // border-color
     addParameter(new MyCentroidBorderColorParameter());
 
-    // fill
+    // fill-color
     addParameter(new MyCentroidFillColorParameter());
 
     reset();

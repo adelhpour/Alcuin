@@ -179,11 +179,11 @@ void MyNetworkElementGraphicsItemBase::setSelectedWithBorderColor(const bool& se
     QGraphicsItem::setSelected(selected);
 }
 
-void MyNetworkElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
+void MyNetworkElementGraphicsItemBase::setSelectedWithFillColor(const bool& selected) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->setSelectedWithFill(selected);
+            casted_item->setSelectedWithFillColor(selected);
     }
     QGraphicsItem::setSelected(selected);
 }

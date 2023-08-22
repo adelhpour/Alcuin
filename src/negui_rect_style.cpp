@@ -11,7 +11,7 @@ MyRectStyleBase::MyRectStyleBase(const QString& name) : My2DShapeStyleBase(name)
     addParameter(new MyBorderColorParameter());
     
     // fill-color
-    addParameter(new MyFillParameter());
+    addParameter(new MyFillColorParameter());
     
     // rx
     addParameter(new MyCornerCurvatureParameter("rx"));

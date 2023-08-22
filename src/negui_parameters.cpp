@@ -865,23 +865,23 @@ void MyCentroidBorderColorParameter::reset() {
     setDefaultValue("transparent");
 }
 
-// MyFillParameter
+// MyFillColorParameter
 
-MyFillParameter::MyFillParameter() : MyColorParameter("fill") {
+MyFillColorParameter::MyFillColorParameter() : MyColorParameter("fill-color") {
     reset();
 }
 
-void MyFillParameter::reset() {
+void MyFillColorParameter::reset() {
     setDefaultValue("transparent");
 }
 
-// MyCentroidFillParameter
+// MyCentroidFillColorParameter
 
-MyCentroidFillParameter::MyCentroidFillParameter() : MyFillParameter() {
+MyCentroidFillColorParameter::MyCentroidFillColorParameter() : MyFillColorParameter() {
     reset();
 }
 
-void MyCentroidFillParameter::reset() {
+void MyCentroidFillColorParameter::reset() {
     setDefaultValue("white");
 }
 

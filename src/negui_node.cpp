@@ -53,7 +53,7 @@ void MyNodeBase::updateGraphicsItem() {
 
 void MyNodeBase::setSelectedWithColor(const bool& selected) {
     if (selected)
-        graphicsItem()->setSelectedWithFill(selected);
+        graphicsItem()->setSelectedWithFillColor(selected);
     else {
         graphicsItem()->setSelectedWithBorderColor(selected);
         graphicsItem()->setSelectedWithFillColor(selected);

@@ -10,8 +10,8 @@ MyEllipseStyleBase::MyEllipseStyleBase(const QString& name) : My2DShapeStyleBase
     // border-color
     addParameter(new MyBorderColorParameter());
     
-    // fill
-    addParameter(new MyFillParameter());
+    // fill-color
+    addParameter(new MyFillColorParameter());
 
     reset();
 }
