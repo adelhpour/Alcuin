@@ -34,7 +34,7 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDi
 
 QList<MyShapeStyleBase*> MyFeatureMenu::shapeStyles() {
     for (MyShapeStyleBase* shapeStyle : qAsConst(_shapeStyles)) {
-        for (MyParameterBase* parameter : qAsConst(shapeStyle->parameters()))
+        for (MyParameterBase* parameter : shapeStyle->parameters() + shapeStyle->outsourcingParameters())
             parameter->setDefaultValue();
     }
 
