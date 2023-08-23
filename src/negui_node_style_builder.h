@@ -9,4 +9,6 @@ const bool isCentroidNodeStyle(const QJsonObject &json);
 
 const bool isSimpleClassicNodeStyle(const QJsonObject &json);
 
+const bool whetherHaveTwoShapesWithOneOfThemATextShape(const QJsonArray& shapesArray);
+
 #endif
