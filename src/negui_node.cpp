@@ -361,14 +361,12 @@ QWidget* MySimpleClassicNode::getFeatureMenu() {
 }
 
 void MySimpleClassicNode::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
-    //QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    //QLineEdit* displayNameLineEdit = new MyLineEdit(displayName());
-    //connect(displayNameLineEdit, &QLineEdit::textChanged, this, [this, featureMenu] (const QString& text) {
-        //setDisplayName(text);
-        //((MyFeatureMenuItemFrame*)featureMenu)->isUpdated();
-    //} );
-    //contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    //contentLayout->addWidget(displayNameLineEdit, contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    MyParameterBase* plainTextParameter = style()->getParameter(MyShapeStyleBase::TEXT_SHAPE_STYLE, "plain-text");
+    if (plainTextParameter) {
+        contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+        contentLayout->addWidget(plainTextParameter->inputWidget(), contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
+    }
 }
 
 void MySimpleClassicNode::addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu) {
