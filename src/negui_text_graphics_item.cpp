@@ -11,13 +11,10 @@ MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementN
 void MyTextGraphicsItem::updateStyle() {
     if (isSetStyle()) {
         // plain-text
-        if (!_elementName.isEmpty() && ((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText()) {
+        if (((MyWithPlainTextTextStyle*)style())->plainText() == "text" && ((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText())
             ((MyTextStyleBase*)style())->setPlainText(_elementName);
-            setPlainText(_elementName);
-        }
-        else if (!((MyWithPlainTextTextStyle*)style())->plainText().isEmpty())
-            setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
-        
+        setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
+
         // width
         if (((MyTextStyleBase*)style())->width() > 0.001)
             setTextWidth(((MyTextStyleBase*)style())->width());
