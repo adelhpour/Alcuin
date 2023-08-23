@@ -100,8 +100,7 @@ class MySimpleClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsIt
 
 public:
 
-    MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);;
-
+    MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 };
 
 class MyComplexClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsItemBase {
@@ -109,7 +108,7 @@ class MyComplexClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsI
 
 public:
 
-    MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);;
+    MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
 };
 
