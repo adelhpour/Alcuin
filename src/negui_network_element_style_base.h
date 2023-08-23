@@ -22,6 +22,8 @@ public:
     virtual MyShapeStyleBase* createShapeStyle(const QString& shape) = 0;
     
     virtual void clearShapeStyles();
+
+    MyParameterBase* getParameter(MyShapeStyleBase::SHAPE_STYLE shape, const QString& parameterName);
     
     virtual const QRectF getShapesExtents(QRectF defaultExtents = QRectF(0.0, 0.0, 0.0, 0.0));
     

@@ -40,6 +40,15 @@ void MyNetworkElementStyleBase::clearShapeStyles() {
         delete _shapeStyles.takeLast();
 }
 
+MyParameterBase* MyNetworkElementStyleBase::getParameter(MyShapeStyleBase::SHAPE_STYLE shape, const QString& parameterName) {
+    for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
+        if (shapeStyle->type() == shape)
+            return shapeStyle->findParameter(parameterName);
+    }
+
+    return NULL;
+}
+
 const QRectF MyNetworkElementStyleBase::getShapesExtents(QRectF defaultExtents) {
     qreal extentsX = defaultExtents.x();
     qreal extentsY = defaultExtents.y();
