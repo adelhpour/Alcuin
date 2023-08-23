@@ -25,7 +25,6 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
-    connect((MyNodeGraphicsItemBase*)_graphicsItem, &MyNodeGraphicsItemBase::askForElementDisplayName, this, [this] () { return displayName(); });
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
@@ -323,8 +322,14 @@ void MyClassicNodeBase::adjustExtents() {
 // MySimpleClassicNode
 
 MySimpleClassicNode::MySimpleClassicNode(const QString& name, const qreal& x, const qreal& y) : MyClassicNodeBase(name, x, y) {
+    _displayName = name;
     _graphicsItem = createGraphicsItem(position());
     connectGraphicsItem();
+}
+
+void MySimpleClassicNode::connectGraphicsItem() {
+    MyNodeBase::connectGraphicsItem();
+    connect((MyNetworkElementGraphicsItemBase*)_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDisplayName, this, [this] () { return displayName(); });
 }
 
 MyNodeBase::NODE_TYPE MySimpleClassicNode::nodeType() {
@@ -335,16 +340,35 @@ MyNetworkElementGraphicsItemBase* MySimpleClassicNode::createGraphicsItem(const 
     return createSimpleClassicNodeSceneGraphicsItem(position);
 }
 
+const QString& MySimpleClassicNode::displayName() {
+    return _displayName;
+}
+
+void MySimpleClassicNode::setDisplayName(const QString& displayName) {
+    _displayName = displayName;
+}
+
 QWidget* MySimpleClassicNode::getFeatureMenu() {
     QWidget* featureMenu = MyNetworkElementBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
-    MyNetworkElementBase::addDisplayNameToFeatureMenu(featureMenu);
+    addDisplayNameToFeatureMenu(featureMenu);
     addParentFeaturesToFeatureMenu(featureMenu);
     addSpacerItemToFeatureMenu(featureMenu);
     addChangeShapeStyleButtonToFeatureMenu(featureMenu);
 
     return featureMenu;
+}
+
+void MySimpleClassicNode::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
+    //QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    //QLineEdit* displayNameLineEdit = new MyLineEdit(displayName());
+    //connect(displayNameLineEdit, &QLineEdit::textChanged, this, [this, featureMenu] (const QString& text) {
+        //setDisplayName(text);
+        //((MyFeatureMenuItemFrame*)featureMenu)->isUpdated();
+    //} );
+    //contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    //contentLayout->addWidget(displayNameLineEdit, contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
 }
 
 void MySimpleClassicNode::addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu) {
@@ -375,12 +399,12 @@ QWidget* MyComplexClassicNode::getFeatureMenu() {
 
     addParentFeaturesToFeatureMenu(featureMenu);
     addSpacerItemToFeatureMenu(featureMenu);
-    addAdddRemoveShapeStyleButtonsToFeatureMenu(featureMenu);
+    addAddRemoveShapeStyleButtonsToFeatureMenu(featureMenu);
 
     return featureMenu;
 }
 
-void MyComplexClassicNode::addAdddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu) {
+void MyComplexClassicNode::addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu) {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     QWidget* shapeStylesButtons = ((MyComplexClassicNodeStyle*)style())->shapeStylesButtons();
     connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));

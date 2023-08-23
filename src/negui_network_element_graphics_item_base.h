@@ -84,7 +84,7 @@ signals:
     void askForDeleteNetworkElement();
     const bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
-    QString askForElementDisplayName();
+    QString askForDisplayName();
 
 public slots:
 

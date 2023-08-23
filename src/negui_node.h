@@ -163,11 +163,21 @@ public:
 
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
+    void connectGraphicsItem() override;
+
+    const QString& displayName();
+
+    void setDisplayName(const QString& displayName);
+
     QWidget* getFeatureMenu() override;
 
     void addDisplayNameToFeatureMenu(QWidget* featureMenu);
 
     void addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu);
+
+protected:
+
+    QString _displayName;
 };
 
 class MyComplexClassicNode : public MyClassicNodeBase {
@@ -183,7 +193,7 @@ public:
 
     QWidget* getFeatureMenu() override;
 
-    void addAdddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
+    void addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
 };
 
 class MyCentroidNode : public MyNodeBase {
