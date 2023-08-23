@@ -18,6 +18,10 @@ const QList<MyParameterBase*>& MyShapeStyleBase::parameters() const {
     return _parameters;
 }
 
+const QList<MyParameterBase*>& MyShapeStyleBase::outsourcingParameters() const {
+    return _outsourcingParameters;
+}
+
 void MyShapeStyleBase::addParameter(MyParameterBase* parameter) {
     _parameters.push_back(parameter);
     connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
@@ -28,8 +32,13 @@ void MyShapeStyleBase::addParameterToTheBeginningOfTheList(MyParameterBase* para
     connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
 }
 
+void MyShapeStyleBase::addOutsourcingParameter(MyParameterBase* parameter) {
+    _outsourcingParameters.push_back(parameter);
+    connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
+}
+
 MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
-    for (MyParameterBase* parameter : qAsConst(parameters())) {
+    for (MyParameterBase* parameter : parameters() + outsourcingParameters()) {
         if (parameter->name() == name) {
             return parameter;
         }

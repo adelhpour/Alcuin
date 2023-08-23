@@ -339,7 +339,7 @@ void MyStringParameter::connectInputWidget() {
 }
 
 void MyStringParameter::reset() {
-    _defaultValue = "text";
+    _defaultValue = "";
     _isSetDefaultValue = false;
 }
 
@@ -883,6 +883,22 @@ MyCentroidFillParameter::MyCentroidFillParameter() : MyFillParameter() {
 
 void MyCentroidFillParameter::reset() {
     setDefaultValue("white");
+}
+
+// MyTextPlainTextParameter
+
+MyTextPlainTextParameter::MyTextPlainTextParameter() : MyStringParameter("plain-text") {
+    reset();
+}
+
+void MyTextPlainTextParameter::connectInputWidget() {
+    connect(_inputWidget, SIGNAL(textChanged(const QString&)), this, SIGNAL(isUpdated()));
+}
+
+
+void MyTextPlainTextParameter::reset() {
+    MyStringParameter::reset();
+    _defaultValue = "text";
 }
 
 // MyFontFamilyParameter

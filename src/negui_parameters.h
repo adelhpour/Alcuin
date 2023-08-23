@@ -630,6 +630,18 @@ public:
     void reset() override;
 };
 
+class MyTextPlainTextParameter : public MyStringParameter {
+
+public:
+
+    MyTextPlainTextParameter();
+
+    void connectInputWidget() override;
+
+    // reset the values of the parameter
+    void reset() override;
+};
+
 class MyFontFamilyParameter : public MyStringParameter {
 public:
 

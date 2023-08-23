@@ -24,10 +24,6 @@ public:
     virtual ELEMENT_TYPE type() = 0;
 
     void setName(const QString& name);
-
-    const QString& displayName();
-
-    void setDisplayName(const QString& displayName);
     
     MyNetworkElementGraphicsItemBase* graphicsItem();
     
@@ -70,8 +66,6 @@ public:
     virtual const QRectF getExtents() = 0;
     
     virtual QWidget* getFeatureMenu();
-
-    void addDisplayNameToFeatureMenu(QWidget* featureMenu);
     
     virtual const qint32 calculateZValue() = 0;
 
@@ -125,7 +119,6 @@ protected:
     MyNetworkElementStyleBase* _style;
     bool _isActive;
     bool _isSelected;
-    QString _displayName;
 };
 
 #endif

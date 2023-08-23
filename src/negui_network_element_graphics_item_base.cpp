@@ -53,7 +53,7 @@ MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsIt
         item->setZValue(zValue());
     }
     else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE && canAddTextShape()) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForElementDisplayName(), this);
+        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForDisplayName(), this);
         item->setZValue(zValue() + 1);
     }
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE && canAddCentroidShape()) {

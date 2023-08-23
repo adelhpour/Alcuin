@@ -27,9 +27,13 @@ public:
     // get parameters
     const QList<MyParameterBase*>& parameters() const;
 
+    const QList<MyParameterBase*>& outsourcingParameters() const;
+
     void addParameter(MyParameterBase* parameter);
     
     void addParameterToTheBeginningOfTheList(MyParameterBase* parameter);
+
+    void addOutsourcingParameter(MyParameterBase* parameter);
     
     // find a parameter among the list of parameters using its name
     MyParameterBase* findParameter(const QString& name) const;
@@ -57,6 +61,8 @@ signals:
 
 protected:
     QList<MyParameterBase*> _parameters;
+
+    QList<MyParameterBase*> _outsourcingParameters;
 };
 
 #endif

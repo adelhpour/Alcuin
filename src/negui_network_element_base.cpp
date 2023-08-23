@@ -10,7 +10,6 @@ MyNetworkElementBase::MyNetworkElementBase(const QString& name) : MyBase(name) {
     _style = NULL;
     _isActive = false;
     _isSelected = false;
-    _displayName = name;
 }
 
 MyNetworkElementBase::~MyNetworkElementBase() {
@@ -19,14 +18,6 @@ MyNetworkElementBase::~MyNetworkElementBase() {
 
 void MyNetworkElementBase::setName(const QString& name) {
     _name = name;
-}
-
-const QString& MyNetworkElementBase::displayName() {
-    return _displayName;
-}
-
-void MyNetworkElementBase::setDisplayName(const QString& displayName) {
-    _displayName = displayName;
 }
 
 MyNetworkElementGraphicsItemBase* MyNetworkElementBase::graphicsItem() {
@@ -168,17 +159,6 @@ void MyNetworkElementBase::createFeatureMenu() {
             emit askForCreateChangeStageCommand(); } );
         askForDisplayFeatureMenuWithDelay(featureMenu, 200);
     }
-}
-
-void MyNetworkElementBase::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
-    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    QLineEdit* displayNameLineEdit = new MyLineEdit(displayName());
-    connect(displayNameLineEdit, &QLineEdit::textChanged, this, [this, featureMenu] (const QString& text) {
-        setDisplayName(text);
-        ((MyFeatureMenuItemFrame*)featureMenu)->isUpdated();
-    } );
-    contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    contentLayout->addWidget(displayNameLineEdit, contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
 }
 
 void MyNetworkElementBase::askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime) {
