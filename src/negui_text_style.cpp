@@ -358,7 +358,7 @@ void MyTextStyleBase::write(QJsonObject &json) {
 // MySimpleTextStyle
 
 MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name) {
-    addOutsourcingParameter(new MyStringParameter("plain-text"));
+    addOutsourcingParameter(new MyTextPlainTextParameter());
     reset();
     _whetherSetNameAsDefaultPlainText = true;
 }
@@ -378,6 +378,6 @@ void MySimpleTextStyle::write(QJsonObject &json) {
 // MyWithPlainTextTextStyle
 
 MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
-    addParameterToTheBeginningOfTheList(new MyStringParameter("plain-text"));
+    addParameterToTheBeginningOfTheList(new MyTextPlainTextParameter());
     reset();
 }
