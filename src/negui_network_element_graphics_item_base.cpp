@@ -44,8 +44,8 @@ MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsIt
         item = createEllipseShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
-    else if (style->type() == MyShapeStyleBase::RECT_SHAPE_STYLE && canAddRectShape()) {
-        item = createRectShape(_originalPosition.x(), _originalPosition.y(), this);
+    else if (style->type() == MyShapeStyleBase::RECTANGLE_SHAPE_STYLE && canAddRectangleShape()) {
+        item = createRectangleShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
     else if (style->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE && canAddPolygonShape()) {
@@ -73,7 +73,7 @@ const bool MyNetworkElementGraphicsItemBase::canAddEllipseShape() {
     return false;
 }
 
-const bool MyNetworkElementGraphicsItemBase::canAddRectShape() {
+const bool MyNetworkElementGraphicsItemBase::canAddRectangleShape() {
     return false;
 }
 
@@ -170,20 +170,20 @@ const QRectF MyNetworkElementGraphicsItemBase::getExtents() const {
     return QRectF(_originalPosition.x() + x(), _originalPosition.y() + y(), 0.0, 0.0);
 }
 
-void MyNetworkElementGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
+void MyNetworkElementGraphicsItemBase::setSelectedWithBorderColor(const bool& selected) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->setSelectedWithStroke(selected);
+            casted_item->setSelectedWithBorderColor(selected);
     }
     QGraphicsItem::setSelected(selected);
 }
 
-void MyNetworkElementGraphicsItemBase::setSelectedWithFill(const bool& selected) {
+void MyNetworkElementGraphicsItemBase::setSelectedWithFillColor(const bool& selected) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->setSelectedWithFill(selected);
+            casted_item->setSelectedWithFillColor(selected);
     }
     QGraphicsItem::setSelected(selected);
 }

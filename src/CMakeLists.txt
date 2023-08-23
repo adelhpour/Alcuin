@@ -47,7 +47,7 @@ set(source_files
 		negui_1d_shape_style_base.cpp
 		negui_2d_shape_style_base.cpp
 		negui_ellipse_style.cpp
-		negui_rect_style.cpp
+		negui_rectangle_style.cpp
 		negui_polygon_style.cpp
 		negui_line_style.cpp
 		negui_text_style.cpp
@@ -57,7 +57,7 @@ set(source_files
 		negui_1d_shape_graphics_item_base.cpp
 		negui_2d_shape_graphics_item_base.cpp
 		negui_ellipse_graphics_item.cpp
-		negui_rect_graphics_item.cpp
+		negui_rectangle_graphics_item.cpp
 		negui_polygon_graphics_item.cpp
 		negui_line_graphics_item.cpp
 		negui_text_graphics_item.cpp
@@ -127,7 +127,7 @@ set(header_files
 		negui_1d_shape_style_base.h
 		negui_2d_shape_style_base.h
 		negui_ellipse_style.h
-		negui_rect_style.h
+		negui_rectangle_style.h
 		negui_polygon_style.h
 		negui_line_style.h
 		negui_text_style.h
@@ -137,7 +137,7 @@ set(header_files
 		negui_1d_shape_graphics_item_base.h
 		negui_2d_shape_graphics_item_base.h
 		negui_ellipse_graphics_item.h
-		negui_rect_graphics_item.h
+		negui_rectangle_graphics_item.h
 		negui_polygon_graphics_item.h
 		negui_line_graphics_item.h
 		negui_text_graphics_item.h

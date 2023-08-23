@@ -12,9 +12,9 @@ public:
     
     void updateStyle() override;
     
-    void setSelectedWithStroke(const bool& selected) override;
+    void setSelectedWithBorderColor(const bool& selected) override;
     
-    void setSelectedWithFill(const bool& selected) override;
+    void setSelectedWithFillColor(const bool& selected) override;
     
     QRectF getExtents() override;
     

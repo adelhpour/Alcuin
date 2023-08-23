@@ -4,11 +4,11 @@
 // MyLineStyleBase
 
 MyLineStyleBase::MyLineStyleBase(const QString& name) : My1DShapeStyleBase(name) {
-    // stroke-width
-    addParameter(new MyStrokeWidthParameter());
+    // border-width
+    addParameter(new MyBorderWidthParameter());
     
-    // stroke
-    addParameter(new MyStrokeParameter());
+    // border-color
+    addParameter(new MyBorderColorParameter());
     
     // control point 1
     addParameter(new MyBasePointParameter("ControlPoint1"));

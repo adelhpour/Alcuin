@@ -34,11 +34,11 @@ void MyTextGraphicsItem::updateStyle() {
     }
 }
 
-void MyTextGraphicsItem::setSelectedWithStroke(const bool& selected) {
+void MyTextGraphicsItem::setSelectedWithBorderColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyTextGraphicsItem::setSelectedWithFill(const bool& selected) {
+void MyTextGraphicsItem::setSelectedWithFillColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 

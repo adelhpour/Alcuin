@@ -622,26 +622,26 @@ void MyColorParameter::write(QJsonObject &json) {
     }
 }
 
-// MyStrokeWidthParameter
+// MyBorderWidthParameter
 
-MyStrokeWidthParameter::MyStrokeWidthParameter() : MyIntegerParameter("stroke-width") {
+MyBorderWidthParameter::MyBorderWidthParameter() : MyIntegerParameter("border-width") {
     reset();
 }
 
-void MyStrokeWidthParameter::reset() {
+void MyBorderWidthParameter::reset() {
     setDefaultValue(2);
     setMin(1);
     setMax(20);
     setStep(1);
 }
 
-// MyCentroidStrokeWidthParameter
+// MyCentroidBorderWidthParameter
 
-MyCentroidStrokeWidthParameter::MyCentroidStrokeWidthParameter() : MyStrokeWidthParameter() {
+MyCentroidBorderWidthParameter::MyCentroidBorderWidthParameter() : MyBorderWidthParameter() {
     reset();
 }
 
-void MyCentroidStrokeWidthParameter::reset() {
+void MyCentroidBorderWidthParameter::reset() {
     setDefaultValue(2);
     setMin(1);
     setMax(20);
@@ -661,13 +661,13 @@ void MyPositionalParameter::reset() {
     setStep(1.0);
 }
 
-// MyNodeRectPositionalParameter
+// MyNodeRectanglePositionalParameter
 
-MyNodeRectPositionalParameter::MyNodeRectPositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyNodeRectanglePositionalParameter::MyNodeRectanglePositionalParameter(const QString& name) : MyPositionalParameter(name) {
     reset();
 }
 
-void MyNodeRectPositionalParameter::reset() {
+void MyNodeRectanglePositionalParameter::reset() {
     MyPositionalParameter::reset();
     setDefaultValue(-20.0);
 }
@@ -694,24 +694,24 @@ void MyNodeTextPositionalParameter::reset() {
     setDefaultValue(-20.0);
 }
 
-// MyArrowHeadRectXParameter
+// MyArrowHeadRectangleXParameter
 
-MyArrowHeadRectXParameter::MyArrowHeadRectXParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadRectangleXParameter::MyArrowHeadRectangleXParameter(const QString& name) : MyPositionalParameter(name) {
     reset();
 }
 
-void MyArrowHeadRectXParameter::reset() {
+void MyArrowHeadRectangleXParameter::reset() {
     MyPositionalParameter::reset();
     setDefaultValue(-7.5);
 }
 
-// MyArrowHeadRectYParameter
+// MyArrowHeadRectangleYParameter
 
-MyArrowHeadRectYParameter::MyArrowHeadRectYParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadRectangleYParameter::MyArrowHeadRectangleYParameter(const QString& name) : MyPositionalParameter(name) {
     reset();
 }
 
-void MyArrowHeadRectYParameter::reset() {
+void MyArrowHeadRectangleYParameter::reset() {
     MyPositionalParameter::reset();
     setDefaultValue(-3.725);
 }
@@ -764,13 +764,13 @@ void MyDimensionalParameter::reset() {
     setStep(1.0);
 }
 
-// MyNodeRectDimensionalParameter
+// MyNodeRectangleDimensionalParameter
 
-MyNodeRectDimensionalParameter::MyNodeRectDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeRectangleDimensionalParameter::MyNodeRectangleDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
     reset();
 }
 
-void MyNodeRectDimensionalParameter::reset() {
+void MyNodeRectangleDimensionalParameter::reset() {
     MyDimensionalParameter::reset();
     setDefaultValue(40.0);
 }
@@ -797,13 +797,13 @@ void MyNodeTextDimensionalParameter::reset() {
     setDefaultValue(40.0);
 }
 
-// MyArrowHeadRectDimensionalParameter
+// MyArrowHeadRectangleDimensionalParameter
 
-MyArrowHeadRectDimensionalParameter::MyArrowHeadRectDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyArrowHeadRectangleDimensionalParameter::MyArrowHeadRectangleDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
     reset();
 }
 
-void MyArrowHeadRectDimensionalParameter::reset() {
+void MyArrowHeadRectangleDimensionalParameter::reset() {
     MyDimensionalParameter::reset();
     setDefaultValue(7.5);
 }
@@ -845,43 +845,43 @@ void MyNodeCentroidRadiusParameter::reset() {
     setStep(0.010);
 }
 
-// MyStrokeParameter
+// MyBorderColorParameter
 
-MyStrokeParameter::MyStrokeParameter() : MyColorParameter("stroke") {
+MyBorderColorParameter::MyBorderColorParameter() : MyColorParameter("border-color") {
     reset();
 }
 
-void MyStrokeParameter::reset() {
+void MyBorderColorParameter::reset() {
     setDefaultValue("black");
 }
 
-// MyCentroidStrokeParameter
+// MyCentroidBorderColorParameter
 
-MyCentroidStrokeParameter::MyCentroidStrokeParameter() : MyStrokeParameter() {
+MyCentroidBorderColorParameter::MyCentroidBorderColorParameter() : MyBorderColorParameter() {
     reset();
 }
 
-void MyCentroidStrokeParameter::reset() {
+void MyCentroidBorderColorParameter::reset() {
     setDefaultValue("transparent");
 }
 
-// MyFillParameter
+// MyFillColorParameter
 
-MyFillParameter::MyFillParameter() : MyColorParameter("fill") {
+MyFillColorParameter::MyFillColorParameter() : MyColorParameter("fill-color") {
     reset();
 }
 
-void MyFillParameter::reset() {
+void MyFillColorParameter::reset() {
     setDefaultValue("transparent");
 }
 
-// MyCentroidFillParameter
+// MyCentroidFillColorParameter
 
-MyCentroidFillParameter::MyCentroidFillParameter() : MyFillParameter() {
+MyCentroidFillColorParameter::MyCentroidFillColorParameter() : MyFillColorParameter() {
     reset();
 }
 
-void MyCentroidFillParameter::reset() {
+void MyCentroidFillColorParameter::reset() {
     setDefaultValue("white");
 }
 

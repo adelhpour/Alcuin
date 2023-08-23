@@ -19,7 +19,7 @@ void MyLineGraphicsItemBase::updateStyle() {
     }
 }
 
-void MyLineGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
+void MyLineGraphicsItemBase::setSelectedWithBorderColor(const bool& selected) {
     if (selected)
         setPen(((MyLineStyleBase*)style())->selectedPen());
     else
@@ -27,7 +27,7 @@ void MyLineGraphicsItemBase::setSelectedWithStroke(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyLineGraphicsItemBase::setSelectedWithFill(const bool& selected) {
+void MyLineGraphicsItemBase::setSelectedWithFillColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 

@@ -11,7 +11,7 @@ public:
     
     typedef enum {
         ELLIPSE_SHAPE_STYLE,
-        RECT_SHAPE_STYLE,
+        RECTANGLE_SHAPE_STYLE,
         POLYGON_SHAPE_STYLE,
         LINE_SHAPE_STYLE,
         TEXT_SHAPE_STYLE,

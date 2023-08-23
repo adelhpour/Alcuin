@@ -27,7 +27,7 @@ public:
 
     virtual const bool canAddEllipseShape();
 
-    virtual const bool canAddRectShape();
+    virtual const bool canAddRectangleShape();
 
     virtual const bool canAddPolygonShape();
 
@@ -51,9 +51,9 @@ public:
     
     const QRectF getExtents() const;
     
-    void setSelectedWithStroke(const bool& selected);
+    void setSelectedWithBorderColor(const bool& selected);
     
-    void setSelectedWithFill(const bool& selected);
+    void setSelectedWithFillColor(const bool& selected);
 
     void setFocused(const bool& isFocused);
     

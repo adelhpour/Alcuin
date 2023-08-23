@@ -14,7 +14,7 @@ const bool MyArrowHeadGraphicsItemBase::canAddEllipseShape() {
     return true;
 }
 
-const bool MyArrowHeadGraphicsItemBase::canAddRectShape() {
+const bool MyArrowHeadGraphicsItemBase::canAddRectangleShape() {
     return true;
 }
 

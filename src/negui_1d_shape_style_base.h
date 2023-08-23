@@ -15,7 +15,7 @@ public:
     // get the pen for the border line
     const QPen pen() const;
 
-    // get the pen with selected stroke color
+    // get the pen with selected border color
     const QPen selectedPen() const;
 
     // read the node style info from the json object

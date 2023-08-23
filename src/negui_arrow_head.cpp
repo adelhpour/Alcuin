@@ -56,10 +56,10 @@ const bool MyArrowHeadBase::isCuttable() {
 }
 
 void MyArrowHeadBase::setSelectedWithColor(const bool& selected) {
-    graphicsItem()->setSelectedWithStroke(selected);
+    graphicsItem()->setSelectedWithBorderColor(selected);
     
     if (!selected)
-        graphicsItem()->setSelectedWithFill(selected);
+        graphicsItem()->setSelectedWithFillColor(selected);
 }
 
 const QRectF MyArrowHeadBase::getExtents() {

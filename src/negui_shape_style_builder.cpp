@@ -1,6 +1,6 @@
 #include "negui_shape_style_builder.h"
 #include "negui_ellipse_style.h"
-#include "negui_rect_style.h"
+#include "negui_rectangle_style.h"
 #include "negui_polygon_style.h"
 #include "negui_centroid_style.h"
 #include "negui_line_style.h"
@@ -10,8 +10,8 @@ MyShapeStyleBase* createNodeEllipseStyle(const QString& shape) {
     return new MyNodeEllipseStyle(shape);
 }
 
-MyShapeStyleBase* createNodeRectStyle(const QString& shape) {
-    return new MyNodeRectStyle(shape);
+MyShapeStyleBase* createNodeRectangleStyle(const QString& shape) {
+    return new MyNodeRectangleStyle(shape);
 }
 
 MyShapeStyleBase* createNodePolygonStyle(const QString& shape) {
@@ -32,8 +32,8 @@ MyShapeStyleBase* createArrowHeadEllipseStyle(const QString& shape) {
     return new MyArrowHeadEllipseStyle(shape);
 }
 
-MyShapeStyleBase* createArrowHeadRectStyle(const QString& shape) {
-    return new MyArrowHeadRectStyle(shape);
+MyShapeStyleBase* createArrowHeadRectangleStyle(const QString& shape) {
+    return new MyArrowHeadRectangleStyle(shape);
 }
 
 MyShapeStyleBase* createArrowHeadPolygonStyle(const QString& shape) {

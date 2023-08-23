@@ -423,19 +423,19 @@ protected:
     bool _isSetDefaultValue;
 };
 
-class MyStrokeWidthParameter : public MyIntegerParameter {
+class MyBorderWidthParameter : public MyIntegerParameter {
 public:
 
-    MyStrokeWidthParameter();
+    MyBorderWidthParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidStrokeWidthParameter : public MyStrokeWidthParameter {
+class MyCentroidBorderWidthParameter : public MyBorderWidthParameter {
 public:
 
-    MyCentroidStrokeWidthParameter();
+    MyCentroidBorderWidthParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -450,10 +450,10 @@ public:
     void reset() override;
 };
 
-class MyNodeRectPositionalParameter : public MyPositionalParameter {
+class MyNodeRectanglePositionalParameter : public MyPositionalParameter {
 public:
 
-    MyNodeRectPositionalParameter(const QString& name);
+    MyNodeRectanglePositionalParameter(const QString& name);
 
     // reset the values of the parameter
     void reset() override;
@@ -477,19 +477,19 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadRectXParameter : public MyPositionalParameter {
+class MyArrowHeadRectangleXParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadRectXParameter(const QString& name = "x");
+    MyArrowHeadRectangleXParameter(const QString& name = "x");
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyArrowHeadRectYParameter : public MyPositionalParameter {
+class MyArrowHeadRectangleYParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadRectYParameter(const QString& name = "y");
+    MyArrowHeadRectangleYParameter(const QString& name = "y");
 
     // reset the values of the parameter
     void reset() override;
@@ -531,10 +531,10 @@ public:
     void reset() override;
 };
 
-class MyNodeRectDimensionalParameter : public MyDimensionalParameter {
+class MyNodeRectangleDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyNodeRectDimensionalParameter(const QString& name);
+    MyNodeRectangleDimensionalParameter(const QString& name);
 
     // reset the values of the parameter
     void reset() override;
@@ -558,10 +558,10 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadRectDimensionalParameter : public MyDimensionalParameter {
+class MyArrowHeadRectangleDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyArrowHeadRectDimensionalParameter(const QString& name);
+    MyArrowHeadRectangleDimensionalParameter(const QString& name);
 
     // reset the values of the parameter
     void reset() override;
@@ -594,37 +594,37 @@ public:
     void reset() override;
 };
 
-class MyStrokeParameter : public MyColorParameter {
+class MyBorderColorParameter : public MyColorParameter {
 public:
 
-    MyStrokeParameter();
+    MyBorderColorParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidStrokeParameter : public MyStrokeParameter {
+class MyCentroidBorderColorParameter : public MyBorderColorParameter {
 public:
 
-    MyCentroidStrokeParameter();
+    MyCentroidBorderColorParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyFillParameter : public MyColorParameter {
+class MyFillColorParameter : public MyColorParameter {
 public:
 
-    MyFillParameter();
+    MyFillColorParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyCentroidFillParameter : public MyFillParameter {
+class MyCentroidFillColorParameter : public MyFillColorParameter {
 public:
 
-    MyCentroidFillParameter();
+    MyCentroidFillColorParameter();
 
     // reset the values of the parameter
     void reset() override;

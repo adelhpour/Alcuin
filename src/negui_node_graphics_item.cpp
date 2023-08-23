@@ -136,7 +136,7 @@ const bool MyClassicNodeSceneGraphicsItemBase::canAddEllipseShape() {
     return true;
 }
 
-const bool MyClassicNodeSceneGraphicsItemBase::canAddRectShape() {
+const bool MyClassicNodeSceneGraphicsItemBase::canAddRectangleShape() {
     return true;
 }
 
@@ -233,7 +233,7 @@ const bool MyNodeIconGraphicsItem::canAddEllipseShape() {
     return true;
 }
 
-const bool MyNodeIconGraphicsItem::canAddRectShape() {
+const bool MyNodeIconGraphicsItem::canAddRectangleShape() {
     return true;
 }
 

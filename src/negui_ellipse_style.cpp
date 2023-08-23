@@ -4,14 +4,14 @@
 // MyEllipseStyleBase
 
 MyEllipseStyleBase::MyEllipseStyleBase(const QString& name) : My2DShapeStyleBase(name) {
-    // stroke-width
-    addParameter(new MyStrokeWidthParameter());
+    // border-width
+    addParameter(new MyBorderWidthParameter());
     
-    // stroke
-    addParameter(new MyStrokeParameter());
+    // border-color
+    addParameter(new MyBorderColorParameter());
     
-    // fill
-    addParameter(new MyFillParameter());
+    // fill-color
+    addParameter(new MyFillColorParameter());
 
     reset();
 }
