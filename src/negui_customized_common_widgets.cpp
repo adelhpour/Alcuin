@@ -33,11 +33,7 @@ MyLabel::MyLabel(const QString& text, QWidget* parent) : QLabel(parent) {
     if (!text.isEmpty())
         setText(text);
 
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 // MyTitleLabel
@@ -51,11 +47,7 @@ MyTitleLabel::MyTitleLabel(const QString& text, QWidget* parent) : MyLabel(text,
 #endif
     setFont(_font);
     setAlignment(Qt::AlignCenter);
-#if defined(Q_OS_WIN)
-    setFixedSize(300, 75);
-#else
     setFixedSize(160, 25);
-#endif
 }
 
 // MyLineEdit
@@ -65,11 +57,7 @@ MyLineEdit::MyLineEdit(const QString &contents, QWidget* parent) : QLineEdit(par
     setStyleSheet("QLineEdit {border: 1px solid LightSlateGray; border-radius: 10px; padding: 0 8px; background: GhostWhite; selection-background-color: LightGray;} QLineEdit::read-only {color: gray}");
     setText(contents);
     setAttribute(Qt::WA_MacShowFocusRect, 0);
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 void MyLineEdit::setText(const QString &contents) {
@@ -91,11 +79,7 @@ MySpinBox::MySpinBox(QWidget* parent) : QSpinBox(parent) {
     setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
     setStyleSheet("QSpinBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; margin-right: 15px }" "QSpinBox::up-button { background-color: transparent; }" "QSpinBox::down-button { background-color: transparent;}" "QSpinBox::up-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-bottom: 5px solid black; width: 0px; height: 0px; }" "QSpinBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; }");
     setAttribute(Qt::WA_MacShowFocusRect, 0);
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 // MyDoubleSpinBox
@@ -105,11 +89,7 @@ MyDoubleSpinBox::MyDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent) {
     setStepType(QAbstractSpinBox::AdaptiveDecimalStepType);
     setStyleSheet("QDoubleSpinBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; margin-right: 15px }" "QDoubleSpinBox::up-button { background-color: transparent; }" "QDoubleSpinBox::down-button { background-color: transparent;}" "QDoubleSpinBox::up-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-bottom: 5px solid black; width: 0px; height: 0px; }" "QDoubleSpinBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; }");
     setAttribute(Qt::WA_MacShowFocusRect, 0);
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 // MyComboBox
@@ -118,11 +98,7 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
     setContentsMargins(0, 0, 0, 0);
     setStyleSheet("QComboBox { border: 1px solid LightSlateGray; border-radius: 5px; background-color: GhostWhite; color: black; padding: 1px 18px 1px 3px; }" "QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; border-left-width: 1px; border-left-color: LightSlateGray;border-left-style: solid; border-top-right-radius: 5px; border-bottom-right-radius: 5px; }" "QComboBox::down-arrow { border-left: 4px solid none;" "border-right: 4px solid none; border-top: 5px solid black; width: 0px; height: 0px; } QComboBox::disabled { color: gray;} QComboBox QAbstractItemView { border: 1px solid LightSlateGray; background-color: white; min-width: 100px; }");
     setAttribute(Qt::WA_MacShowFocusRect, 0);
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 // MyToolButton
@@ -173,11 +149,7 @@ MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
 // MyToolButtonCategoryMenu
 
 MyToolButtonCategoryMenu::MyToolButtonCategoryMenu(QWidget* parent) : MyToolButtonMenu(parent) {
-#if defined(Q_OS_WIN)
-    _horizontalPadding = 180;
-#else
     _horizontalPadding = 80;
-#endif
 }
 
 bool MyToolButtonCategoryMenu::event(QEvent *event) {
