@@ -58,11 +58,7 @@ MyColorPickerButton::MyColorPickerButton(QWidget *parent) : QToolButton(parent) 
     setToolButtonStyle(Qt::ToolButtonIconOnly);
     setStyleSheet("QToolButton { border: 1px solid LightSlateGray; border-radius: 6px; background-color: white} QToolButton::menu-indicator { image: none; }" );
     connect(this, SIGNAL(clicked()), this, SLOT(showMenu()));
-#if defined(Q_OS_WIN)
-    setFixedSize(180, 25);
-#else
     setFixedSize(120, 20);
-#endif
 }
 
 void MyColorPickerButton::setBackgroundColor(const QString& color)  {
@@ -950,11 +946,7 @@ MyColorTileButton::MyColorTileButton(const QString& color, const QString& value,
     setContentsMargins(0, 0, 0, 0);
     setStyleSheet(" QPushButton {background-color: " + _color + "; border-radius: 1px;} QToolTip { background-color: white;}");
     setToolTip(_color);
-#if defined(Q_OS_WIN)
-    setFixedSize(18, 18);
-#else
     setFixedSize(12, 12);
-#endif
 }
 
 const QString& MyColorTileButton::color() const {
