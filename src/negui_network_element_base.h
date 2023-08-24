@@ -74,8 +74,6 @@ public:
     signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
-
-    void askForUnselectNetworkElement(MyNetworkElementBase*);
     
     void askForCreateChangeStageCommand();
 

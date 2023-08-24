@@ -316,7 +316,6 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         n->updateGraphicsItem();
         connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(n, SIGNAL(askForUnselectNetworkElement(MyNetworkElementBase*)), this, SLOT(unselectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
@@ -456,7 +455,6 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         _edges.push_back(e);
         e->updateGraphicsItem();
         connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
-        connect(e, SIGNAL(askForUnselectNetworkElement(MyNetworkElementBase*)), this, SLOT(unselectElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
@@ -826,7 +824,6 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
         elementAligner->deleteLater();
         createChangeStageCommand();
     }
-    selectElements(false); //TODO maybe all of the aligned ones needs to be selected
 }
 
 const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
