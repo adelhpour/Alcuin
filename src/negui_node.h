@@ -139,6 +139,8 @@ public:
     // get node extents based on its children extents
     const QRectF getExtents() override;
 
+    const QRectF createParentNodeExtentsRectangle(qreal extentsX, qreal extentsY, qreal extentsWidth, qreal extentsHeight);
+
     // adjust node extents to fit all its children
     void adjustExtents();
 
