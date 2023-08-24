@@ -305,10 +305,27 @@ const QRectF MyClassicNodeBase::getExtents() {
             if (extentsY + extentsHeight < childExtents.y() + childExtents.height())
                 extentsHeight +=  childExtents.y() + childExtents.height() - extentsY - extentsHeight;
         }
-        return QRectF(extentsX - 10.0, extentsY - 10.0, extentsWidth + 20.0, extentsHeight + 20.0);
+        return createParentNodeExtentsRectangle(extentsX, extentsY, extentsWidth, extentsHeight);
     }
 
     return MyNodeBase::getExtents();
+}
+
+const QRectF MyClassicNodeBase::createParentNodeExtentsRectangle(qreal extentsX, qreal extentsY, qreal extentsWidth, qreal extentsHeight) {
+    qreal minimumWidth = 400.0;
+    qreal minimumHeight = 300.0;
+    if (childNodes().size() == 1) {
+        if (extentsWidth < minimumWidth) {
+            extentsX -= 0.5 * (minimumWidth - extentsWidth);
+            extentsWidth = minimumWidth;
+        }
+        if (extentsHeight < minimumHeight) {
+            extentsY -= 0.5 * (minimumHeight - extentsHeight);
+            extentsHeight = minimumHeight;
+        }
+    }
+
+    return QRectF(extentsX - 10.0, extentsY - 10.0, extentsWidth + 20.0, extentsHeight + 20.0);
 }
 
 void MyClassicNodeBase::adjustExtents() {
