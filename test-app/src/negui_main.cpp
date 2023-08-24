@@ -2,13 +2,11 @@
 
 #include <QApplication>
 
-int main()
+int main(int argc, char *argv[])
 {
-    int argc = 3;
-    char*argv[] = {(char*)"Appname", (char*)"--platform", (char*)"windows:dpiawareness=0"};
-    QApplication a(argc, argv);
+    QApplication application(argc, argv);
     QMainWindow* mainWindow = new MyMainWindow();
     mainWindow->show();
-    return a.exec();
+    return application.exec();
 }
 
