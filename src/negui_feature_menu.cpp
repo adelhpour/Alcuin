@@ -8,6 +8,7 @@
 MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = new QGridLayout(this);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     QPushButton* closeFeatureMenuButton = new QPushButton();
     decorateCloseFeatureMenuButton(closeFeatureMenuButton, iconsDirectoryPath);
