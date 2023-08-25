@@ -18,6 +18,7 @@ public:
     QWidget* modeMenu();
     QWidget* view();
     QWidget* statusBar();
+    QWidget* featureMenu();
     void readSettings();
     void writeSettings();
 
@@ -55,6 +56,8 @@ protected:
     
     void setWidgets();
     void setInteractions();
+    void arrangeWidgetLayers();
+    const qreal& layoutMenuRow();
     void setReadyToLaunch();
     void closeEvent(QCloseEvent *event) override;
 
@@ -64,6 +67,7 @@ protected:
     QWidget* _modeMenu;
     QWidget* _featureMenu;
     QWidget* _statusBar;
+    qreal _layoutMenuRow;
 };
 
 #endif
