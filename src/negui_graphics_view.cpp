@@ -26,6 +26,7 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setScene(new MyGraphicsScene(this));
     connect(this, SIGNAL(askForDisplayContextMenu(const QPointF&)), scene(), SLOT(displayContextMenu(const QPointF&)));
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
+    setFixedSize(1200, 900);
 };
 
 const qreal MyGraphicsView::currentScale() const {
