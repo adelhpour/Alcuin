@@ -5,6 +5,8 @@
 MyStatusBar::MyStatusBar(QWidget* parent) : QStatusBar(parent) {
     setStyleSheet("QStatusBar {background-color : white; border: 1px solid lightgray;  border-radius: 5px;}");
     setContentsMargins(0, 0, 0, 0);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    setFixedHeight(25);
     _fileNameLabel = new QLabel();
     _coordinatesLabel = new QLabel();
     addPermanentWidget(_fileNameLabel, 97);
