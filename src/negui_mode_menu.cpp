@@ -8,6 +8,8 @@
 MyModeMenuBase::MyModeMenuBase(QWidget *parent) : MyFrame(parent) {
     QGridLayout* contentLayout = new QGridLayout(this);
     setLayout(contentLayout);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
+    setMinimumSize(QSize(0, 0));
 }
 
 void MyModeMenuBase::setNormalModeButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
@@ -15,6 +17,8 @@ void MyModeMenuBase::setNormalModeButton(QAbstractButton* button, const QString&
     decorateNormalModeButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
+    button->setFixedSize(QSize(buttonSize(), buttonSize()));
+    setMinimumSize(QSize(qMax(minimumWidth(), button->width() + buttonPadding()), minimumHeight() + button->height() + buttonPadding()));
 }
 
 void MyModeMenuBase::setFrequentlyUsedButtons(QList<QAbstractButton*> buttons, const QString& iconsDirectoryPath) {
@@ -30,6 +34,8 @@ void MyModeMenuBase::setZoomInButton(QAbstractButton* button, const QString& ico
     decorateZoomInButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
+    button->setFixedSize(QSize(buttonSize(), buttonSize()));
+    setMinimumSize(QSize(qMax(minimumWidth(), button->width() + buttonPadding()), minimumHeight() + button->height() + buttonPadding()));
 }
 
 void MyModeMenuBase::setZoomOutButton(QAbstractButton* button, const QString& iconsDirectoryPath) {
@@ -37,7 +43,8 @@ void MyModeMenuBase::setZoomOutButton(QAbstractButton* button, const QString& ic
     decorateZoomOutButton(button, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
-
+    button->setFixedSize(QSize(buttonSize(), buttonSize()));
+    setMinimumSize(QSize(qMax(minimumWidth(), button->width() + buttonPadding()), minimumHeight() + button->height() + buttonPadding()));
 }
 
 void MyModeMenuBase::setMode(const QString& mode) {
@@ -71,6 +78,14 @@ void MyModeMenuBase::deactivateButtons() {
     }
 }
 
+qint32 MyModeMenuBase::buttonSize() {
+    return 45.0;
+}
+
+qint32 MyModeMenuBase::buttonPadding() {
+    return buttonSize() / 3;
+}
+
 // MyFrequentlyUsedButtonsModeMenu
 
 MyFrequentlyUsedButtonsModeMenu::MyFrequentlyUsedButtonsModeMenu(QWidget *parent) : MyModeMenuBase(parent) {
@@ -82,6 +97,8 @@ void MyFrequentlyUsedButtonsModeMenu::setFrequentlyUsedButtons(QList<QAbstractBu
     for (QAbstractButton* button : buttons) {
         contentLayout->addWidget(button, contentLayout->rowCount(), 0);
         _buttons.push_back(button);
+        button->setFixedSize(QSize(buttonSize(), buttonSize()));
+        setMinimumSize(QSize(qMax(minimumWidth(), button->width() + buttonPadding()), minimumHeight() + button->height() + buttonPadding()));
     }
 }
 
@@ -96,6 +113,7 @@ void MyAddModeButtonsModeMenu::setAddModeButtons(QList<QAbstractButton*> buttons
     QAbstractButton* button = decorateAddModeButton(buttons, iconsDirectoryPath);
     contentLayout->addWidget(button, contentLayout->rowCount(), 0);
     _buttons.push_back(button);
+    setMinimumSize(QSize(qMax(minimumWidth(), button->width() + buttonPadding()), minimumHeight() + button->height() + buttonPadding()));
 }
 
 const bool isModeToolButton(QAbstractButton* button) {

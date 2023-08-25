@@ -22,6 +22,10 @@ public:
 
     QList<QAbstractButton*> getButtons();
 
+    qint32 buttonSize();
+
+    qint32 buttonPadding();
+
 public slots:
 
     void setMode(const QString& mode);
