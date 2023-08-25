@@ -112,6 +112,7 @@ void MyGraphicsView::animatedScale(const qint32& delta) {
     connect(anim, SIGNAL(valueChanged(qreal)), SLOT(scalingTime(qreal)));
     connect(anim, SIGNAL(finished()), this, SLOT(animFinished()));
     anim->start();
+    emit scaleChanged(currentScale());
 }
 
 void MyGraphicsView::zoomIn() {
