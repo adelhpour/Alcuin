@@ -93,17 +93,13 @@ void MyFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
 
 void MyFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
-    qint32 menuHeight = 0;
-    
     QSize elementFeatureMenuSize = ((MyFeatureMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)
         menuWidth = elementFeatureMenuSize.width();
-    menuHeight += elementFeatureMenuSize.height();
     
     if (_expandableWidgetSize.width() > menuWidth)
         menuWidth = _expandableWidgetSize.width();
-    menuHeight += _expandableWidgetSize.height();
-    setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
+    setFixedWidth(qMax(menuWidth, 300));
 }
 
 
