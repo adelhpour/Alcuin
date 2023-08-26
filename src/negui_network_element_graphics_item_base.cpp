@@ -30,6 +30,7 @@ void MyNetworkElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> sh
 void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = createShapeGraphicsItem(style);
     if (item) {
+
         item->setStyle(style);
         item->updateStyle();
         QGraphicsItem* casted_item = dynamic_cast<QGraphicsItem*>(item);
@@ -52,8 +53,12 @@ MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsIt
         item = createPolygonShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
-    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE && canAddTextShape()) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForDisplayName(), this);
+    else if (style->type() == MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE && canAddTextShape()) {
+        item = createSimpleTextShape(_originalPosition.x(), _originalPosition.y(), askForDisplayName(), this);
+        item->setZValue(zValue() + 1);
+    }
+    else if (style->type() == MyShapeStyleBase::WITH_PLAIN_TEXT_TEXT_SHAPE_STYLE && canAddTextShape()) {
+        item = createWithPlainTextTextShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue() + 1);
     }
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE && canAddCentroidShape()) {
