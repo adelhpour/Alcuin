@@ -2,17 +2,15 @@
 #include "negui_text_style.h"
 #include "negui_resize_handled_graphics_item.h"
 
-// MyTextGraphicsItem
+// MyTextGraphicsItemBase
 
-MyTextGraphicsItem::MyTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
-    _elementName = elementName;
+MyTextGraphicsItemBase::MyTextGraphicsItemBase(qreal x, qreal y, QGraphicsItem *parent) : My2DShapeGraphicsItemBase(x, y), QGraphicsTextItem(parent) {
+
 }
 
-void MyTextGraphicsItem::updateStyle() {
+void MyTextGraphicsItemBase::updateStyle() {
     if (isSetStyle()) {
         // plain-text
-        if (((MyWithPlainTextTextStyle*)style())->plainText() == "text" && ((MyTextStyleBase*)style())->whetherSetNameAsDefaultPlainText())
-            ((MyTextStyleBase*)style())->setPlainText(_elementName);
         setPlainText(((MyWithPlainTextTextStyle*)style())->plainText());
 
         // width
@@ -34,15 +32,15 @@ void MyTextGraphicsItem::updateStyle() {
     }
 }
 
-void MyTextGraphicsItem::setSelectedWithBorderColor(const bool& selected) {
+void MyTextGraphicsItemBase::setSelectedWithBorderColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyTextGraphicsItem::setSelectedWithFillColor(const bool& selected) {
+void MyTextGraphicsItemBase::setSelectedWithFillColor(const bool& selected) {
     QGraphicsItem::setSelected(selected);
 }
 
-void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
+void MyTextGraphicsItemBase::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
         ((MyTextStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
@@ -56,29 +54,54 @@ void MyTextGraphicsItem::updateExtents(const QRectF& extents) {
         // height
         ((MyTextStyleBase*)style())->setHeight(extents.height());
     }
-    
+
     updateStyle();
 }
 
-QRectF MyTextGraphicsItem::getExtents() {
+QRectF MyTextGraphicsItemBase::getExtents() {
     return QRectF(((MyTextStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
 }
 
-void MyTextGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
+void MyTextGraphicsItemBase::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
     ((MyTextStyleBase*)style())->setX(((MyTextStyleBase*)style())->x() - originalPositionMovedDistance.x());
     ((MyTextStyleBase*)style())->setY(((MyTextStyleBase*)style())->y() - originalPositionMovedDistance.y());
     _originalPosition += originalPositionMovedDistance;
 }
 
-QGraphicsItem* MyTextGraphicsItem::getFocusedGraphicsItem() {
+void MyTextGraphicsItemBase::setZValue(qreal z) {
+    QGraphicsItem::setZValue(z);
+}
+
+// MySimpleTextGraphicsItem
+
+MySimpleTextGraphicsItem::MySimpleTextGraphicsItem(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) : MyTextGraphicsItemBase(x, y, parent)  {
+    _elementName = elementName;
+}
+
+void MySimpleTextGraphicsItem::updateStyle() {
+    if (isSetStyle()) {
+        if (((MyTextStyleBase *) style())->plainText() == "text" &&
+            ((MySimpleTextStyle *) style())->whetherSetNameAsDefaultPlainText())
+            ((MyTextStyleBase *) style())->setPlainText(_elementName);
+    }
+    MyTextGraphicsItemBase::updateStyle();
+}
+
+QGraphicsItem* MySimpleTextGraphicsItem::getFocusedGraphicsItem() {
+    return NULL;
+}
+
+// MyWithPlainTextTextGraphicsItem
+
+MyWithPlainTextTextGraphicsItem::MyWithPlainTextTextGraphicsItem(qreal x, qreal y, QGraphicsItem *parent) : MyTextGraphicsItemBase(x, y, parent)  {
+
+}
+
+QGraphicsItem* MyWithPlainTextTextGraphicsItem::getFocusedGraphicsItem() {
     QRectF focusedRect = getExtents();
     MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyResizeHandledGraphicsItem(focusedRect, zValue());
     MyShapeGraphicsItemBase::connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), (MyShapeGraphicsItemBase*)this, SLOT(updateExtents(const QRectF&)));
 
     return focusedGraphicsItem;
-}
-
-void MyTextGraphicsItem::setZValue(qreal z) {
-    QGraphicsItem::setZValue(z);
 }
 
