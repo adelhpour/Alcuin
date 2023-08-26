@@ -220,23 +220,25 @@ void MyNetworkElementGraphicsItemBase::enableNormalMode() {
 }
 
 void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = true;
         emit mouseLeftButtonIsPressed();
         event->accept();
     }
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = false;
         event->accept();
         emit askForCreateChangeStageCommand();
     }
-    else if (event->button() == Qt::RightButton)
+    else if (event->button() == Qt::RightButton) {
         displayContextMenu(event->screenPos());
+        event->accept();
+    }
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
