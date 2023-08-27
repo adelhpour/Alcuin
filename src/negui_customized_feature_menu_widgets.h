@@ -94,6 +94,27 @@ protected:
     QString _value;
 };
 
+class MyFontPickerButton : public QPushButton {
+    Q_OBJECT
+
+public:
+
+    MyFontPickerButton(QWidget *parent = nullptr);
+
+    void setCurrentFont(const QFont& font);
+
+    void setCurrentFont();
+
+    const QFont& currentFont() const;
+
+signals:
+
+    void fontIsChanged();
+
+protected:
+    QFont _currentFont;
+};
+
 class MyStandardItem : public QStandardItem {
 
 public:
