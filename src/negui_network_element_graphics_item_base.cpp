@@ -234,6 +234,7 @@ void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent 
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = false;
         event->accept();
@@ -243,7 +244,6 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         displayContextMenu(event->screenPos());
         event->accept();
     }
-    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
