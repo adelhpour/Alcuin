@@ -7,8 +7,6 @@ class MyTextStyleBase : public My2DShapeStyleBase {
 public:
     
     MyTextStyleBase(const QString& name);
-    
-    SHAPE_STYLE type() override;
 
     // get the plain text for text
     const QString plainText() const;
@@ -56,11 +54,25 @@ public:
     
     const qreal verticalPadding() const;
 
+    // read the node style info from the json object
+    void read(const QJsonObject &json) override;
+    
+    // write the node style info to the json object
+    void write(QJsonObject &json) override;
+};
+
+class MySimpleTextStyle : public MyTextStyleBase {
+public:
+
+    MySimpleTextStyle(const QString& name);
+
+    SHAPE_STYLE type() override;
+
     const bool& whetherSetNameAsDefaultPlainText() const;
 
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
-    
+
     // write the node style info to the json object
     void write(QJsonObject &json) override;
 
@@ -69,22 +81,12 @@ protected:
     bool _whetherSetNameAsDefaultPlainText;
 };
 
-class MySimpleTextStyle : public MyTextStyleBase {
-public:
-
-    MySimpleTextStyle(const QString& name);
-
-    // read the node style info from the json object
-    void read(const QJsonObject &json) override;
-
-    // write the node style info to the json object
-    void write(QJsonObject &json) override;
-};
-
 class MyWithPlainTextTextStyle : public MyTextStyleBase {
 public:
 
     MyWithPlainTextTextStyle(const QString& name);
+
+    SHAPE_STYLE type() override;
 };
 
 #endif

@@ -14,7 +14,8 @@ public:
         RECTANGLE_SHAPE_STYLE,
         POLYGON_SHAPE_STYLE,
         LINE_SHAPE_STYLE,
-        TEXT_SHAPE_STYLE,
+        SIMPLE_TEXT_SHAPE_STYLE,
+        WITH_PLAIN_TEXT_TEXT_SHAPE_STYLE,
         CENTROID_SHAPE_STYLE,
     } SHAPE_STYLE;
     
@@ -29,11 +30,15 @@ public:
 
     const QList<MyParameterBase*>& outsourcingParameters() const;
 
+    const QList<MyParameterBase*>& hiddenParameters() const;
+
     void addParameter(MyParameterBase* parameter);
     
     void addParameterToTheBeginningOfTheList(MyParameterBase* parameter);
 
     void addOutsourcingParameter(MyParameterBase* parameter);
+
+    void addHiddenParameter(MyParameterBase* parameter);
     
     // find a parameter among the list of parameters using its name
     MyParameterBase* findParameter(const QString& name) const;
@@ -61,8 +66,8 @@ signals:
 
 protected:
     QList<MyParameterBase*> _parameters;
-
     QList<MyParameterBase*> _outsourcingParameters;
+    QList<MyParameterBase*> _hiddenParameters;
 };
 
 #endif

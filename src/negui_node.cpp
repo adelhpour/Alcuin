@@ -379,7 +379,7 @@ QWidget* MySimpleClassicNode::getFeatureMenu() {
 
 void MySimpleClassicNode::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    MyParameterBase* plainTextParameter = style()->getParameter(MyShapeStyleBase::TEXT_SHAPE_STYLE, "plain-text");
+    MyParameterBase* plainTextParameter = style()->getParameter(MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE, "plain-text");
     if (plainTextParameter) {
         contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
         contentLayout->addWidget(plainTextParameter->inputWidget(), contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);

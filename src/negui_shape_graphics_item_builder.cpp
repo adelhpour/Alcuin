@@ -30,8 +30,12 @@ MyShapeGraphicsItemBase* createConnectedToEndCentroidShapeLineShape(const QLineF
     return new MyConnectedToEndCentroidShapeLineGraphicsItem(line, parent);
 }
 
-MyShapeGraphicsItemBase* createTextShape(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) {
-    return new MyTextGraphicsItem(x, y, elementName, parent);
+MyShapeGraphicsItemBase* createSimpleTextShape(qreal x, qreal y, const QString& elementName, QGraphicsItem *parent) {
+    return new MySimpleTextGraphicsItem(x, y, elementName, parent);
+}
+
+MyShapeGraphicsItemBase* createWithPlainTextTextShape(qreal x, qreal y, QGraphicsItem *parent) {
+    return new MyWithPlainTextTextGraphicsItem(x, y, parent);
 }
 
 MyShapeGraphicsItemBase* createCentroidShape(qreal x, qreal y, QGraphicsItem *parent) {

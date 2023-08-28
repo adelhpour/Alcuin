@@ -22,6 +22,10 @@ const QList<MyParameterBase*>& MyShapeStyleBase::outsourcingParameters() const {
     return _outsourcingParameters;
 }
 
+const QList<MyParameterBase*>& MyShapeStyleBase::hiddenParameters() const {
+    return _hiddenParameters;
+}
+
 void MyShapeStyleBase::addParameter(MyParameterBase* parameter) {
     _parameters.push_back(parameter);
     connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
@@ -37,8 +41,13 @@ void MyShapeStyleBase::addOutsourcingParameter(MyParameterBase* parameter) {
     connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
 }
 
+void MyShapeStyleBase::addHiddenParameter(MyParameterBase* parameter) {
+    _hiddenParameters.push_back(parameter);
+    connect(parameter, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
+}
+
 MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
-    for (MyParameterBase* parameter : parameters() + outsourcingParameters()) {
+    for (MyParameterBase* parameter : parameters() + outsourcingParameters() + hiddenParameters()) {
         if (parameter->name() == name) {
             return parameter;
         }

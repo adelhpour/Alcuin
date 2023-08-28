@@ -172,9 +172,11 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
 
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
-    if (event->button() == Qt::RightButton) {
-        if (!_isPanned)
-            emit askForDisplayContextMenu(event->globalPos());
+    if (!((MyGraphicsScene*)scene())->whetherMouseReleaseEventIsAccepted()) {
+        if (event->button() == Qt::RightButton) {
+            if (!_isPanned)
+                emit askForDisplayContextMenu(event->globalPos());
+        }
     }
     _isPanned = false;
     _panMode = false;

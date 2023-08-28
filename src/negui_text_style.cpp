@@ -9,18 +9,6 @@ MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name)
 
     // font
     addParameter(new MyFontParameter());
-
-    // x
-    addParameter(new MyNodeTextPositionalParameter("x"));
-
-    // y
-    addParameter(new MyNodeTextPositionalParameter("y"));
-
-    // width
-    addParameter(new MyNodeTextDimensionalParameter("width"));
-
-    // height
-    addParameter(new MyNodeTextDimensionalParameter("height"));
     
     // horizontal alignment
     addParameter(new MyTextAnchorParameter());
@@ -28,12 +16,7 @@ MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name)
     // vertical alignment
     addParameter(new MyVTextAnchorParameter());
 
-    _whetherSetNameAsDefaultPlainText = false;
     reset();
-}
-
-MyShapeStyleBase::SHAPE_STYLE MyTextStyleBase::type() {
-    return TEXT_SHAPE_STYLE;
 }
 
 const QString MyTextStyleBase::plainText() const {
@@ -172,10 +155,6 @@ const qreal MyTextStyleBase::verticalPadding() const {
     return 0.000;
 }
 
-const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
-    return _whetherSetNameAsDefaultPlainText;
-}
-
 void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
@@ -249,7 +228,7 @@ void MyTextStyleBase::read(const QJsonObject &json) {
         if (parameter)
             ((MyDimensionalParameter*)parameter)->setDefaultValue(json["height"].toDouble());
     }
-    
+
     // horizontal alignment
     if (json.contains("text-anchor") && json["text-anchor"].isString()) {
         parameter = findParameter("text-anchor");
@@ -306,7 +285,7 @@ void MyTextStyleBase::write(QJsonObject &json) {
     parameter = findParameter("height");
     if (parameter)
         json["height"] = ((MyDimensionalParameter*)parameter)->defaultValue();
-    
+
     // horizontal alignment
     parameter = findParameter("text-anchor");
     if (parameter)
@@ -321,9 +300,31 @@ void MyTextStyleBase::write(QJsonObject &json) {
 // MySimpleTextStyle
 
 MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain-text
     addOutsourcingParameter(new MyTextPlainTextParameter());
-    reset();
+
+    // x
+    addHiddenParameter(new MyNodeTextPositionalParameter("x"));
+
+    // y
+    addHiddenParameter(new MyNodeTextPositionalParameter("y"));
+
+    // width
+    addHiddenParameter(new MyNodeTextDimensionalParameter("width"));
+
+    // height
+    addHiddenParameter(new MyNodeTextDimensionalParameter("height"));
+
     _whetherSetNameAsDefaultPlainText = true;
+    reset();
+}
+
+MyShapeStyleBase::SHAPE_STYLE MySimpleTextStyle::type() {
+    return SIMPLE_TEXT_SHAPE_STYLE;
+}
+
+const bool& MySimpleTextStyle::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
 }
 
 void MySimpleTextStyle::read(const QJsonObject &json) {
@@ -341,6 +342,24 @@ void MySimpleTextStyle::write(QJsonObject &json) {
 // MyWithPlainTextTextStyle
 
 MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain text
     addParameterToTheBeginningOfTheList(new MyTextPlainTextParameter());
+
+    // x
+    addParameter(new MyNodeTextPositionalParameter("x"));
+
+    // y
+    addParameter(new MyNodeTextPositionalParameter("y"));
+
+    // width
+    addParameter(new MyNodeTextDimensionalParameter("width"));
+
+    // height
+    addParameter(new MyNodeTextDimensionalParameter("height"));
+
     reset();
+}
+
+MyShapeStyleBase::SHAPE_STYLE MyWithPlainTextTextStyle::type() {
+    return WITH_PLAIN_TEXT_TEXT_SHAPE_STYLE;
 }

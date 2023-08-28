@@ -30,6 +30,7 @@ void MyNetworkElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> sh
 void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = createShapeGraphicsItem(style);
     if (item) {
+
         item->setStyle(style);
         item->updateStyle();
         QGraphicsItem* casted_item = dynamic_cast<QGraphicsItem*>(item);
@@ -52,8 +53,12 @@ MyShapeGraphicsItemBase* MyNetworkElementGraphicsItemBase::createShapeGraphicsIt
         item = createPolygonShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue());
     }
-    else if (style->type() == MyShapeStyleBase::TEXT_SHAPE_STYLE && canAddTextShape()) {
-        item = createTextShape(_originalPosition.x(), _originalPosition.y(), askForDisplayName(), this);
+    else if (style->type() == MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE && canAddTextShape()) {
+        item = createSimpleTextShape(_originalPosition.x(), _originalPosition.y(), askForDisplayName(), this);
+        item->setZValue(zValue() + 1);
+    }
+    else if (style->type() == MyShapeStyleBase::WITH_PLAIN_TEXT_TEXT_SHAPE_STYLE && canAddTextShape()) {
+        item = createWithPlainTextTextShape(_originalPosition.x(), _originalPosition.y(), this);
         item->setZValue(zValue() + 1);
     }
     else if (style->type() == MyShapeStyleBase::CENTROID_SHAPE_STYLE && canAddCentroidShape()) {
@@ -220,23 +225,25 @@ void MyNetworkElementGraphicsItemBase::enableNormalMode() {
 }
 
 void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = true;
         emit mouseLeftButtonIsPressed();
         event->accept();
     }
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = false;
         event->accept();
         emit askForCreateChangeStageCommand();
     }
-    else if (event->button() == Qt::RightButton)
+    else if (event->button() == Qt::RightButton) {
         displayContextMenu(event->screenPos());
+        event->accept();
+    }
+    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
