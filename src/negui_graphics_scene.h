@@ -50,6 +50,7 @@ public slots:
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
     const bool isShiftModifierPressed();
     void displayContextMenu(const QPointF& position);
+    const bool whetherMouseReleaseEventIsAccepted();
     
 protected:
     
@@ -62,6 +63,7 @@ protected:
 
     bool _isLeftButtonPressed;
     bool _isShiftModifierPressed;
+    bool _whetherMouseReleaseEventIsAccepted;
     QPointF _cursorPosition;
 };
 

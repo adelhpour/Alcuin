@@ -25,7 +25,9 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     connect(addAction("Copy"), SIGNAL(triggered()), this, SIGNAL(askForCopySelectedNetworkElements()));
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutSelectedNetworkElements()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteCopiedNetworkElements()));
+    addSeparator();
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
+    addSeparator();
     QMenu* alignMenu = addMenu("Align");
     connect(alignMenu->addAction("Align Top"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Align Top"); });
     connect(alignMenu->addAction("Align Middle"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Align Middle"); });
@@ -57,6 +59,7 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
 
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
     connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
+    addSeparator();
 }
 
 void MyGraphicsItemContextMenuBase::initializeActionsStatus() {
@@ -72,6 +75,7 @@ MyNodeGraphicsItemContextMenuBase::MyNodeGraphicsItemContextMenuBase(QWidget *pa
     connect(addAction("Cut"), SIGNAL(triggered()), this, SIGNAL(askForCutNetworkElement()));
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    addSeparator();
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
 }
 
@@ -96,6 +100,7 @@ void MyCentroidNodeGraphicsItemContextMenu::initializeActionsStatus() {
 MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
     connect(addAction("Copy Style"), SIGNAL(triggered()), this, SIGNAL(askForCopyNetworkElementStyle()));
     connect(addAction("Paste"), SIGNAL(triggered()), this, SIGNAL(askForPasteNetworkElementStyle()));
+    addSeparator();
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
 }
 
