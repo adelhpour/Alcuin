@@ -2,6 +2,7 @@
 
 #include <QGridLayout>
 #include <QWidgetAction>
+#include <QFontDialog>
 
 // MyFeatureMenuItemFrame
 
@@ -955,6 +956,33 @@ const QString& MyColorTileButton::color() const {
 
 const QString& MyColorTileButton::value() const {
     return _value;
+}
+
+// MyFontPickerButton
+
+MyFontPickerButton::MyFontPickerButton(QWidget *parent) : QPushButton(parent) {
+    setStyleSheet("QPushButton { border: 1px solid LightSlateGray; border-radius: 6px; background-color:  gainsboro}"
+                  "QPushButton:pressed { border: 1px solid LightSlateGray; border-radius: 6px; background-color: darkgray}" );
+    setText("Font Features");
+    connect(this, &QPushButton::clicked, this, [this] () { setCurrentFont(); } );
+    setFixedSize(120, 20);
+}
+
+void MyFontPickerButton::setCurrentFont(const QFont& font) {
+    _currentFont = font;
+}
+
+void MyFontPickerButton::setCurrentFont() {
+    bool ok;
+    QFont font = QFontDialog::getFont(&ok, _currentFont, this, "Select Font Features", QFontDialog::DontUseNativeDialog);
+    if (ok) {
+        _currentFont = font;
+        emit fontIsChanged();
+    }
+}
+
+const QFont& MyFontPickerButton::currentFont() const {
+    return _currentFont;
 }
 
 // MyStandardItem

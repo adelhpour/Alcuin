@@ -20,6 +20,7 @@ public:
         NOMINAL_PARAMETER_TYPE,
         POINT_PARAMETER_TYPE,
         COLOR_PARAMETER_TYPE,
+        FONT_PARAMETER_TYPE,
     } PARAMETER_TYPE;
     
     virtual ~MyParameterBase() {
@@ -29,7 +30,7 @@ public:
     // get type of parameter
     virtual PARAMETER_TYPE type() = 0;
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     virtual void setDefaultValue() = 0;
 
     // get the user input widget
@@ -66,7 +67,7 @@ public:
     // get default value
     const qreal& defaultValue() const;
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // show whether the default value is set
@@ -136,7 +137,7 @@ public:
     // set default value
     void setDefaultValue(const qint32& value);
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // get default value
@@ -209,7 +210,7 @@ public:
     // set default value
     void setDefaultValue(const bool& value);
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // get default value
@@ -249,7 +250,7 @@ public:
     // set default value
     void setDefaultValue(const QString& value);
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // get default value
@@ -289,7 +290,7 @@ public:
     // set default value
     void setDefaultValue(const QString& value);
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // get default value
@@ -342,7 +343,7 @@ public:
     // get the default value of y
     const qreal& defaultValueY() const;
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     QWidget* createInputWidget() override;
@@ -394,7 +395,7 @@ public:
     // set default value
     void setDefaultValue(const QString& value);
 
-    // set the dafault value using the input widget value
+    // set the default value using the input widget value
     void setDefaultValue() override;
 
     // get default value
@@ -642,49 +643,68 @@ public:
     void reset() override;
 };
 
-class MyFontFamilyParameter : public MyStringParameter {
+class MyFontParameter : public MyParameterBase {
 public:
 
-    MyFontFamilyParameter();
+    MyFontParameter();
+
+    // get type of parameter
+    PARAMETER_TYPE type() override;
+
+    // set default value
+    void setDefaultValue(const QFont& value);
+
+    // set default value
+    void setDefaultFontFamilyValue(const QString& fontFamily);
+
+    // set default value
+    void setDefaultFontSizeValue(const qreal& fontSize);
+
+    // set default value
+    void setDefaultFontWeightValue(const QString& fontWeight);
+
+    // set default value
+    void setDefaultFontStyleValue(const QString& fontStyle);
+
+    // set the default value using the input widget value
+    void setDefaultValue() override;
+
+    // get default value
+    const QFont& defaultValue() const;
+
+    // get default value
+    const QString defaultFontFamilyValue() const;
+
+    // get default value
+    const qreal defaultFontSizeValue() const;
+
+    // get default value
+    const QString defaultFontWeightValue() const;
+
+    // get default value
+    const QString defaultFontStyleValue() const;
+
+    // show whether the default value is set
+    const bool isSetDefaultValue() const { return _isSetDefaultValue; }
+
+    QWidget* createInputWidget() override;
+
+    void updateInputWidget() override;
+
+    void connectInputWidget() override;
 
     // reset the values of the parameter
     void reset() override;
-};
 
-class MyFontSizeParameter : public MyNominalParameter {
-public:
+    // read the parameter info from the json object
+    void read(const QJsonObject &json) override;
 
-    MyFontSizeParameter();
+    // write the parameter info to the json object
+    void write(QJsonObject &json) override;
 
-    // get the value of default size
-    const qint32 defaultSize() const;
-
-    // reset the values of the parameter
-    void reset() override;
-};
-
-class MyFontWeightParameter : public MyNominalParameter {
-public:
-
-    MyFontWeightParameter();
-
-    // get the value of default weight
-    const bool defaultWeight() const;
-
-    // reset the values of the parameter
-    void reset() override;
-};
-
-class MyFontStyleParameter : public MyNominalParameter {
-public:
-
-    MyFontStyleParameter();
-
-    // get the value of default style
-    const bool defaultStyle() const;
-
-    // reset the values of the parameter
-    void reset() override;
+protected:
+    QFont _defaultValue;
+    bool _isSetDefaultValue;
 };
 
 class MyTextAnchorParameter : public MyNominalParameter {

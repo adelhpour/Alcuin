@@ -510,24 +510,11 @@ void MyPointParameterBase::reset() {
 }
 
 void MyPointParameterBase::read(const QJsonObject &json) {
-    /*
-    if (json.contains("parameter") && json["parameter"].isString() && json["parameter"].toString() == name()) {
-        reset();
 
-        // default value
-        if (json.contains("default") && json["default"].isString())
-            setDefaultValue(json["default"].toString());
-    }
-     */
 }
 
 void MyPointParameterBase::write(QJsonObject &json) {
-    /*
-    if (_inputWidget) {
-        json["parameter"] = name();
-        json["value"] = ((MyColorPickerButton*)inputWidget())->currentColor();
-    }
-     */
+
 }
 
 // MyAbsolutePointParameter
@@ -894,80 +881,93 @@ void MyTextPlainTextParameter::reset() {
     _defaultValue = "text";
 }
 
-// MyFontFamilyParameter
+// MyFontParameter
 
-MyFontFamilyParameter::MyFontFamilyParameter() : MyStringParameter("font-family") {
-    reset();
+MyFontParameter::MyFontParameter() : MyParameterBase("font") {
+
 }
 
-void MyFontFamilyParameter::reset() {
-    setDefaultValue("monospace");
+MyParameterBase::PARAMETER_TYPE MyFontParameter::type() {
+    return FONT_PARAMETER_TYPE;
 }
 
-// MyFontSizeParameter
-
-MyFontSizeParameter::MyFontSizeParameter() : MyNominalParameter("font-size") {
-    int i = 3;
-    while (i <= 72) {
-        _items.push_back(QString::number(i));
-
-        if (i < 10)
-            ++i;
-        else if (i < 28)
-            i += 2;
-        else if (i < 36)
-            i += 8;
-        else if (i < 48)
-            i += 12;
-        else
-            i += 24;
-    }
+void MyFontParameter::setDefaultValue(const QFont& font) {
+    _defaultValue = font;
 }
 
-void MyFontSizeParameter::reset() {
-    setDefaultValue("10");
+void MyFontParameter::setDefaultFontFamilyValue(const QString& fontFamily) {
+    _defaultValue.setFamily(fontFamily);
 }
 
-const qint32 MyFontSizeParameter::defaultSize() const {
-    return defaultValue().toDouble();
+void MyFontParameter::setDefaultFontSizeValue(const qreal& fontSize) {
+    _defaultValue.setPointSize(fontSize);
 }
 
-// MyFontWeightParameter
-
-MyFontWeightParameter::MyFontWeightParameter() : MyNominalParameter("font-weight") {
-    _items.push_back("normal");
-    _items.push_back("bold");
-    reset();
+void MyFontParameter::setDefaultFontWeightValue(const QString& fontWeight) {
+    if (fontWeight == "bold")
+        _defaultValue.setBold(true);
+    else
+        _defaultValue.setBold(false);
+}
+void MyFontParameter::setDefaultFontStyleValue(const QString& fontStyle) {
+    if (fontStyle == "italic")
+        _defaultValue.setItalic(true);
+    else
+        _defaultValue.setItalic(false);
 }
 
-const bool MyFontWeightParameter::defaultWeight() const {
-    if (defaultValue() == "bold")
-        return true;
-
-    return false;
+void MyFontParameter::setDefaultValue() {
+    setDefaultValue(((MyFontPickerButton*)_inputWidget)->currentFont());
 }
 
-void MyFontWeightParameter::reset() {
-    setDefaultValue("normal");
+const QFont& MyFontParameter::defaultValue() const {
+    return _defaultValue;
 }
 
-// MyFontStyleParameter
-
-MyFontStyleParameter::MyFontStyleParameter() : MyNominalParameter("font-style") {
-    _items.push_back("normal");
-    _items.push_back("italic");
-    reset();
+const QString MyFontParameter::defaultFontFamilyValue() const {
+    return _defaultValue.family();
 }
 
-const bool MyFontStyleParameter::defaultStyle() const {
-    if (defaultValue() == "italic")
-        return true;
-
-    return false;
+const qreal MyFontParameter::defaultFontSizeValue() const {
+    return _defaultValue.pointSizeF();
 }
 
-void MyFontStyleParameter::reset() {
-    setDefaultValue("normal");
+const QString MyFontParameter::defaultFontWeightValue() const {
+    if (_defaultValue.bold())
+        return "bold";
+    else
+        return "normal";
+}
+
+const QString MyFontParameter::defaultFontStyleValue() const {
+    if (_defaultValue.italic())
+        return "italic";
+    else
+        return "normal";
+}
+
+QWidget* MyFontParameter::createInputWidget() {
+    return new MyFontPickerButton();
+}
+
+void MyFontParameter::updateInputWidget() {
+    ((MyFontPickerButton*)_inputWidget)->setCurrentFont(defaultValue());
+}
+
+void MyFontParameter::connectInputWidget() {
+    connect(_inputWidget, SIGNAL(fontIsChanged()), this, SIGNAL(isUpdated()));
+}
+
+void MyFontParameter::reset() {
+    setDefaultValue(QFont("Arial", 8));
+}
+
+void MyFontParameter::read(const QJsonObject &json) {
+
+}
+
+void MyFontParameter::write(QJsonObject &json) {
+
 }
 
 // MyTextAnchorParameter
