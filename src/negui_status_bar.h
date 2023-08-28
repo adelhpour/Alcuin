@@ -17,10 +17,13 @@ public slots:
 
     void setFileName(const QString& fileName);
 
+    void setMagnificationFactor(const qreal magnificationFactor);
+
     void setCoordinatesToMousePosition(const QPointF& mousePosition);
 
 protected:
     QLabel* _fileNameLabel;
+    QLabel* _magnificationLabel;
     QLabel* _coordinatesLabel;
 };
 

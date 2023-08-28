@@ -32,6 +32,7 @@ signals:
     void enterKeyIsPressed();
     void askForDisplayContextMenu(const QPointF& position);
     void mouseLeft();
+    void scaleChanged(const qreal);
 
 public slots:
 
