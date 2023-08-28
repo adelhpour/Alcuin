@@ -319,7 +319,8 @@ void MyStringParameter::setDefaultValue(const QString& value) {
 }
 
 void MyStringParameter::setDefaultValue() {
-    setDefaultValue(((MyLineEdit*)_inputWidget)->text());
+    if (_inputWidget)
+        setDefaultValue(((MyLineEdit*)_inputWidget)->text());
 }
 
 const QString& MyStringParameter::defaultValue() const {
