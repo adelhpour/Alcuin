@@ -13,6 +13,10 @@ public:
     void setMenuBar();
 
     void connectToCentralWidget(QWidget* menuBar);
+
+private:
+
+    void closeEvent(QCloseEvent *event) override;
 };
 
 #endif
