@@ -22,11 +22,11 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     _isPanned = false;
     
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setGeometry(75, 50, 900, 600);
     setScene(new MyGraphicsScene(this));
+    setSceneRect(scene()->sceneRect().x(), scene()->sceneRect().y(), scene()->sceneRect().width(), scene()->sceneRect().height());
     connect(this, SIGNAL(askForDisplayContextMenu(const QPointF&)), scene(), SLOT(displayContextMenu(const QPointF&)));
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
-    setFixedSize(1200, 900);
+    resetScale();
 };
 
 const qreal MyGraphicsView::currentScale() const {
@@ -87,13 +87,13 @@ void MyGraphicsView::exportFigureAsSVG(const QString& fileName, const QRectF& pa
 
 void MyGraphicsView::resetScale() {
     resetTransform();
+    centerOn(sceneRect().center());
 }
 
 void MyGraphicsView::scalingTime(qreal x) {
     qreal factor = 1.0 + qreal(_numScheduledScalings) / 10000.0;
-    if ((factor  > 1.00000 && (currentScale() < _maxScale)) || (factor  < 1.00000 && (currentScale() > _minScale))) {
+    if ((factor  > 1.00000 && (currentScale() < _maxScale)) || (factor  < 1.00000 && (currentScale() > _minScale)))
         scale(factor, factor);
-    }
 }
 
 void MyGraphicsView::animFinished() {
