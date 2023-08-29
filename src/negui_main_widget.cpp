@@ -14,10 +14,8 @@
 MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) {
     setObjectName("main_widget");
     setStyleSheet("QFrame {background-color : white}");
-    
-    setMinimumSize(120, 80);
-    resize(1050, 700);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setMinimumSize(QSize(950, 600));
     readSettings();
 
     setWidgets();
@@ -26,10 +24,12 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     QGridLayout* layout = new QGridLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(toolBar(), layout->rowCount(), 0, 1, 3);
-    layout->addWidget(modeMenu(), layout->rowCount(), 0, 1, 1, Qt::AlignTop | Qt::AlignLeft);
-    layout->addWidget(view(), layout->rowCount() - 1, 1, 1, 1);
+    _layoutMenuRow = layout->rowCount();
+    layout->addWidget(modeMenu(), layout->rowCount(), 0, Qt::AlignTop | Qt::AlignLeft);
+    layout->addWidget(view(), layout->rowCount() - 1, 1);
     layout->addWidget(statusBar(), layout->rowCount(), 0, 1, 3);
     setLayout(layout);
+    arrangeWidgetLayers();
 
     setReadyToLaunch();
 }
@@ -40,9 +40,9 @@ MyNetworkEditorWidget::~MyNetworkEditorWidget() {
 
 void MyNetworkEditorWidget::setWidgets() {
     _toolBar = new MyToolBar(this);
+    _statusBar = new MyStatusBar(this);
     _modeMenu = new MyFrequentlyUsedButtonsModeMenu(this);
     _view = new MyGraphicsView(this);
-    _statusBar = new MyStatusBar(this);
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
@@ -166,6 +166,19 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(mousePositionIsChanged(const QPointF&)), statusBar(), SLOT(setCoordinatesToMousePosition(const QPointF&)));
 }
 
+void MyNetworkEditorWidget::arrangeWidgetLayers() {
+    modeMenu()->stackUnder(toolBar());
+    modeMenu()->stackUnder(statusBar());
+    if (featureMenu()) {
+        featureMenu()->stackUnder(toolBar());
+        featureMenu()->stackUnder(statusBar());
+        view()->stackUnder(featureMenu());
+    }
+    view()->stackUnder(toolBar());
+    view()->stackUnder(statusBar());
+    view()->stackUnder(modeMenu());
+}
+
 QObject* MyNetworkEditorWidget::interactor() {
     return _interactor;
 }
@@ -186,18 +199,28 @@ QWidget* MyNetworkEditorWidget::statusBar() {
     return _statusBar;
 }
 
+QWidget* MyNetworkEditorWidget::featureMenu() {
+    return _featureMenu;
+}
+
+const qreal& MyNetworkEditorWidget::layoutMenuRow() {
+    return _layoutMenuRow;
+}
+
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     connect(featureMenu, SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     removeFeatureMenu();
-    ((QGridLayout*)layout())->addWidget(featureMenu, 2, 2, 1, 1, Qt::AlignTop);
+    ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
+    featureMenu->setFixedHeight(height());
     _featureMenu = featureMenu;
     ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(_featureMenu->objectName());
+    arrangeWidgetLayers();
 }
 
 void MyNetworkEditorWidget::removeFeatureMenu() {
-    if (_featureMenu) {
-        layout()->removeWidget(_featureMenu);
-        _featureMenu->deleteLater();
+    if (featureMenu()) {
+        layout()->removeWidget(featureMenu());
+        featureMenu()->deleteLater();
         _featureMenu = NULL;
     }
     if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
@@ -205,7 +228,7 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
 }
 
 const bool MyNetworkEditorWidget::whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString& elementName) {
-    if (_featureMenu && _featureMenu->objectName() == elementName)
+    if (featureMenu() && featureMenu()->objectName() == elementName)
         return true;
 
     return false;

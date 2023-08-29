@@ -8,6 +8,7 @@
 MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = new QGridLayout(this);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
     QPushButton* closeFeatureMenuButton = new QPushButton();
     decorateCloseFeatureMenuButton(closeFeatureMenuButton, iconsDirectoryPath);
@@ -92,17 +93,13 @@ void MyFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
 
 void MyFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
-    qint32 menuHeight = 0;
-    
     QSize elementFeatureMenuSize = ((MyFeatureMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)
         menuWidth = elementFeatureMenuSize.width();
-    menuHeight += elementFeatureMenuSize.height();
     
     if (_expandableWidgetSize.width() > menuWidth)
         menuWidth = _expandableWidgetSize.width();
-    menuHeight += _expandableWidgetSize.height();
-    setFixedSize(qMax(menuWidth, 300), qMax(menuHeight, 350));
+    setFixedWidth(qMax(menuWidth, 300));
 }
 
 
