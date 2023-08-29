@@ -23,8 +23,8 @@ set(source_files
 		negui_arrow_head_builder.cpp
 		negui_copied_network_elements_paster.cpp
 		negui_new_edge_builder.cpp
-		negui_element_aligner.cpp
-		negui_element_aligner_builder.cpp
+		negui_network_element_aligner.cpp
+		negui_network_element_aligner_builder.cpp
 		negui_selection_area_graphics_item.cpp
 		negui_network_element_style_base.cpp
 		negui_template_style.cpp
@@ -103,8 +103,8 @@ set(header_files
 		negui_arrow_head_builder.h
         negui_copied_network_elements_paster.h
 		negui_new_edge_builder.h
-		negui_element_aligner.h
-		negui_element_aligner_builder.h
+		negui_network_element_aligner.h
+		negui_network_element_aligner_builder.h
 		negui_selection_area_graphics_item.h
 		negui_network_element_style_base.h
 		negui_template_style.h

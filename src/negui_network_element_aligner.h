@@ -1,32 +1,32 @@
-#ifndef __NEGUI_ELEMENT_ALIGNER_H
-#define __NEGUI_ELEMENT_ALIGNER_H
+#ifndef __NEGUI_NETWORK_ELEMENT_ALIGNER_H
+#define __NEGUI_NETWORK_ELEMENT_ALIGNER_H
 
 #include "negui_network_element_base.h"
 
-class MyElementAlignerBase : public QObject {
+class MyNetworkElementAlignerBase : public QObject {
     Q_OBJECT
 
 public:
 
-    MyElementAlignerBase(QList<MyNetworkElementBase*> elements);
+    MyNetworkElementAlignerBase(QList<MyNetworkElementBase*> networkElements);
 
     virtual void align() = 0;
 
 protected:
 
-    QList<MyNetworkElementBase*> _elements;
+    QList<MyNetworkElementBase*> _networkElements;
     qreal _minX;
     qreal _minY;
     qreal _maxX;
     qreal _maxY;
 };
 
-class MyNodeAlignerBase : public MyElementAlignerBase {
+class MyNodeAlignerBase : public MyNetworkElementAlignerBase {
     Q_OBJECT
 
 public:
 
-    MyNodeAlignerBase(QList<MyNetworkElementBase*> elements);
+    MyNodeAlignerBase(QList<MyNetworkElementBase*> networkElements);
 
     void align() override;
 
@@ -40,7 +40,7 @@ class MyNodeTopAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeTopAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeTopAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -51,7 +51,7 @@ class MyNodeMiddleAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeMiddleAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeMiddleAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -62,7 +62,7 @@ class MyNodeBottomAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeBottomAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeBottomAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -72,7 +72,7 @@ class MyNodeLeftAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeLeftAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeLeftAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -82,7 +82,7 @@ class MyNodeCenterAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeCenterAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeCenterAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -92,7 +92,7 @@ class MyNodeRightAligner : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeRightAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeRightAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -102,7 +102,7 @@ class MyNodeDistributeAlignerBase : public MyNodeAlignerBase {
 
 public:
 
-    MyNodeDistributeAlignerBase(QList<MyNetworkElementBase*> elements);
+    MyNodeDistributeAlignerBase(QList<MyNetworkElementBase*> networkElements);
 
     QList<MyNetworkElementBase*> getClassicNodes();
 };
@@ -112,7 +112,7 @@ class MyNodeHorizontallyDistributeAligner : public MyNodeDistributeAlignerBase {
 
 public:
 
-    MyNodeHorizontallyDistributeAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeHorizontallyDistributeAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };
@@ -122,7 +122,7 @@ class MyNodeVerticallyDistributeAligner : public MyNodeDistributeAlignerBase {
 
 public:
 
-    MyNodeVerticallyDistributeAligner(QList<MyNetworkElementBase*> elements);
+    MyNodeVerticallyDistributeAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
 };

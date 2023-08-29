@@ -15,8 +15,8 @@
 #include "negui_export_tools.h"
 #include "negui_customized_interactor_widgets.h"
 #include "negui_decorate_menu_buttons.h"
-#include "negui_element_aligner.h"
-#include "negui_element_aligner_builder.h"
+#include "negui_network_element_aligner.h"
+#include "negui_network_element_aligner_builder.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -632,7 +632,6 @@ bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2
     return false;
 }
 
-#include "iostream"
 QJsonObject MyInteractor::exportNetworkInfo() {
     QJsonObject json;
 
@@ -792,10 +791,10 @@ void MyInteractor::deleteSelectedNetworkElements() {
 }
 
 void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
-    MyElementAlignerBase* elementAligner = createElementAligner(selectedNodes(), selectedEdges(), alignType);
-    if (elementAligner) {
-        elementAligner->align();
-        elementAligner->deleteLater();
+    MyNetworkElementAlignerBase* networkElementAligner = createNetworkElementAligner(selectedNodes(), selectedEdges(), alignType);
+    if (networkElementAligner) {
+        networkElementAligner->align();
+        networkElementAligner->deleteLater();
         createChangeStageCommand();
     }
 }
