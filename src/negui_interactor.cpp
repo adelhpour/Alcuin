@@ -261,7 +261,7 @@ void MyInteractor::resetNetwork() {
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
-    setNetworkExtents(30.0, 20.0, 840.0, 560.0);
+    setNetworkExtents(0.0, 0.0, 0.0, 0.0);
 }
 
 void MyInteractor::setNetworkExtents(const QJsonObject& json) {
@@ -270,20 +270,7 @@ void MyInteractor::setNetworkExtents(const QJsonObject& json) {
 }
 
 void MyInteractor::setNetworkExtents(qreal x, qreal y, qreal width, qreal height) {
-    qreal minWidth = 840.0;
-    qreal minHeight = 560.0;
-    if (width < minWidth) {
-        x -= 0.5 * (minWidth - width);
-        width = minWidth;
-    }
-    
-    if (height < minHeight) {
-        y -= 0.5 * (minHeight - height);
-        height = minHeight;
-    }
-    
     _networkExtents = QRectF(x, y, width, height);
-    emit askForSetSceneRect(x, y, width, height);
 }
 
 const QRectF& MyInteractor::networkExtents() {
