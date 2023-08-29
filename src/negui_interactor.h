@@ -100,7 +100,6 @@ signals:
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
-    void askForSetSceneRect(qreal x, qreal y, qreal width, qreal height);
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
