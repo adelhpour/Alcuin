@@ -60,6 +60,10 @@ void MyGraphicsScene::displayContextMenu(const QPointF& position) {
     }
 }
 
+const bool MyGraphicsScene::whetherMouseReleaseEventIsAccepted() {
+    return _whetherMouseReleaseEventIsAccepted;
+}
+
 void MyGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mousePressEvent(event);
     if (!event->isAccepted()) {
@@ -85,14 +89,19 @@ void MyGraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 
 void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsScene::mouseReleaseEvent(event);
-    if (event->button() == Qt::LeftButton) {
-        _isLeftButtonPressed = false;
-        emit mouseLeftButtonIsReleased();
+    _whetherMouseReleaseEventIsAccepted = false;
+    if (!event->isAccepted()) {
+        if (event->button() == Qt::LeftButton) {
+            _isLeftButtonPressed = false;
+            emit mouseLeftButtonIsReleased();
+        }
+        else if (event->button() == Qt::RightButton) {
+            if (getSceneMode() != NORMAL_MODE)
+                emit askForEnableNormalMode();
+        }
     }
-    else if (event->button() == Qt::RightButton) {
-        if (getSceneMode() != NORMAL_MODE)
-            emit askForEnableNormalMode();
-    }
+    else
+        _whetherMouseReleaseEventIsAccepted = true;
 }
 
 void MyGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {

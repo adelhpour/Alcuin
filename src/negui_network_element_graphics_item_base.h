@@ -43,7 +43,7 @@ public:
     
     QList<MyShapeStyleBase*> getShapeStyles();
     
-    QList<QGraphicsItem*> createFocusedGraphicsItems();
+    virtual QList<QGraphicsItem*> createFocusedGraphicsItems();
     
     void addFocusedGraphicsItems();
     

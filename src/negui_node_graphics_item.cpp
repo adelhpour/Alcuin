@@ -191,6 +191,48 @@ MySimpleClassicNodeSceneGraphicsItem::MySimpleClassicNodeSceneGraphicsItem(const
 
 }
 
+QList<QGraphicsItem*> MySimpleClassicNodeSceneGraphicsItem::createFocusedGraphicsItems() {
+    if (whetherShapesAreOneSimpleTextShapeAndAnotherShape()) {
+        QList<QGraphicsItem*> focusedGraphicsItems;
+        QGraphicsItem* focusedGraphicsItem = NULL;
+        QGraphicsItem* shapeFocusedGraphicsItem = NULL;
+        MyShapeGraphicsItemBase* textGraphicsItem = NULL;
+        for (QGraphicsItem* item : childItems()) {
+            MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+            if (casted_item) {
+                focusedGraphicsItem = casted_item->getFocusedGraphicsItem();
+                if (focusedGraphicsItem) {
+                    focusedGraphicsItems.push_back(focusedGraphicsItem);
+                    shapeFocusedGraphicsItem = focusedGraphicsItem;
+                }
+                else if (casted_item->style()->type() == MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE)
+                    textGraphicsItem = casted_item;
+            }
+        }
+
+        connect(dynamic_cast<QObject*>(shapeFocusedGraphicsItem), SIGNAL(rectIsUpdated(const QRectF&)), textGraphicsItem, SLOT(updateExtents(const QRectF&)));
+        return focusedGraphicsItems;
+    }
+
+    return MyNetworkElementGraphicsItemBase::createFocusedGraphicsItems();
+}
+
+const bool MySimpleClassicNodeSceneGraphicsItem::whetherShapesAreOneSimpleTextShapeAndAnotherShape() {
+    bool oneSimpleTextShapeExists = false;
+    bool oneOtherShapeExists = false;
+    if (childItems().size() == 2) {
+        for (QGraphicsItem* item : childItems()) {
+            MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+            if (casted_item->style()->type() == MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE)
+                oneSimpleTextShapeExists = true;
+            else
+                oneOtherShapeExists = true;
+        }
+    }
+
+    return oneSimpleTextShapeExists && oneOtherShapeExists;
+}
+
 // MyComplexClassicNodeSceneGraphicsItem
 
 MyComplexClassicNodeSceneGraphicsItem::MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyClassicNodeSceneGraphicsItemBase(position, parent) {

@@ -6,30 +6,9 @@
 MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // color
     addParameter(new MyColorParameter("color"));
-    
-    // font-family
-    addParameter(new MyFontFamilyParameter());
-    
-    // font-size
-    addParameter(new MyFontSizeParameter());
-    
-    // font-weight
-    addParameter(new MyFontWeightParameter());
-    
-    // font-style
-    addParameter(new MyFontStyleParameter());
-    
-    // x
-    addParameter(new MyNodeTextPositionalParameter("x"));
-    
-    // y
-    addParameter(new MyNodeTextPositionalParameter("y"));
-    
-    // width
-    addParameter(new MyNodeTextDimensionalParameter("width"));
-    
-    // height
-    addParameter(new MyNodeTextDimensionalParameter("height"));
+
+    // font
+    addParameter(new MyFontParameter());
     
     // horizontal alignment
     addParameter(new MyTextAnchorParameter());
@@ -37,12 +16,7 @@ MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name)
     // vertical alignment
     addParameter(new MyVTextAnchorParameter());
 
-    _whetherSetNameAsDefaultPlainText = false;
     reset();
-}
-
-MyShapeStyleBase::SHAPE_STYLE MyTextStyleBase::type() {
-    return TEXT_SHAPE_STYLE;
 }
 
 const QString MyTextStyleBase::plainText() const {
@@ -71,28 +45,11 @@ const QColor MyTextStyleBase::defaultTextColor() const {
 
 const QFont MyTextStyleBase::font() const {
     QFont font;
-    
-    MyParameterBase* parameter = NULL;
-    // font-family
-    parameter = findParameter("font-family");
+
+    MyParameterBase* parameter = findParameter("font");
     if (parameter)
-        font.setFamily(((MyFontFamilyParameter*)parameter)->defaultValue());
-    
-    // font-size
-    parameter = findParameter("font-size");
-    if (parameter)
-        font.setPointSize(((MyFontSizeParameter*)parameter)->defaultSize());
-    
-    // font-weight
-    parameter = findParameter("font-weight");
-    if (parameter)
-        font.setBold(((MyFontWeightParameter*)parameter)->defaultWeight());
-    
-    // font-style
-    parameter = findParameter("font-style");
-    if (parameter)
-        font.setItalic(((MyFontStyleParameter*)parameter)->defaultStyle());
-    
+        font = ((MyFontParameter*)parameter)->defaultValue();
+
     return font;
 }
 
@@ -198,10 +155,6 @@ const qreal MyTextStyleBase::verticalPadding() const {
     return 0.000;
 }
 
-const bool& MyTextStyleBase::whetherSetNameAsDefaultPlainText() const {
-    return _whetherSetNameAsDefaultPlainText;
-}
-
 void MyTextStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
@@ -222,30 +175,30 @@ void MyTextStyleBase::read(const QJsonObject &json) {
     
     // font-family
     if (json.contains("font-family") && json["font-family"].isString()) {
-        parameter = findParameter("font-family");
+        parameter = findParameter("font");
         if (parameter)
-            ((MyFontFamilyParameter*)parameter)->setDefaultValue(json["font-family"].toString());
+            ((MyFontParameter*)parameter)->setDefaultFontFamilyValue(json["font-family"].toString());
     }
     
     // font-size
     if (json.contains("font-size") && json["font-size"].isDouble()) {
-        parameter = findParameter("font-size");
+        parameter = findParameter("font");
         if (parameter)
-            ((MyFontSizeParameter*)parameter)->setDefaultValue(QString::number(json["font-size"].toDouble()));
+            ((MyFontParameter*)parameter)->setDefaultFontSizeValue(json["font-size"].toDouble());
     }
     
     // font-weight
     if (json.contains("font-weight") && json["font-weight"].isString()) {
-        parameter = findParameter("font-weight");
+        parameter = findParameter("font");
         if (parameter)
-            ((MyFontWeightParameter*)parameter)->setDefaultValue(json["font-weight"].toString());
+            ((MyFontParameter*)parameter)->setDefaultFontWeightValue(json["font-weight"].toString());
     }
         
     // font-style
     if (json.contains("font-style") && json["font-style"].isString()) {
-        parameter = findParameter("font-style");
+        parameter = findParameter("font");
         if (parameter)
-            ((MyFontStyleParameter*)parameter)->setDefaultValue(json["font-style"].toString());
+            ((MyFontParameter*)parameter)->setDefaultFontStyleValue(json["font-style"].toString());
     }
     
     // x
@@ -275,7 +228,7 @@ void MyTextStyleBase::read(const QJsonObject &json) {
         if (parameter)
             ((MyDimensionalParameter*)parameter)->setDefaultValue(json["height"].toDouble());
     }
-    
+
     // horizontal alignment
     if (json.contains("text-anchor") && json["text-anchor"].isString()) {
         parameter = findParameter("text-anchor");
@@ -305,24 +258,13 @@ void MyTextStyleBase::write(QJsonObject &json) {
         json["color"] = ((MyColorParameter*)parameter)->defaultValue();
     
     // font-family
-    parameter = findParameter("font-family");
-    if (parameter)
-        json["font-family"] = ((MyFontFamilyParameter*)parameter)->defaultValue();
-    
-    // font-size
-    parameter = findParameter("font-size");
-    if (parameter)
-        json["font-size"] = ((MyFontSizeParameter*)parameter)->defaultValue().toDouble();
-    
-    // font-weight
-    parameter = findParameter("font-weight");
-    if (parameter)
-        json["font-weight"] = ((MyFontWeightParameter*)parameter)->defaultValue();
-    
-    // font-style
-    parameter = findParameter("font-style");
-    if (parameter)
-        json["font-style"] = ((MyFontStyleParameter*)parameter)->defaultValue();
+    parameter = findParameter("font");
+    if (parameter) {
+        json["font-family"] = ((MyFontParameter*)parameter)->defaultFontFamilyValue();
+        json["font-size"] = ((MyFontParameter*)parameter)->defaultFontSizeValue();
+        json["font-weight"] = ((MyFontParameter*)parameter)->defaultFontWeightValue();
+        json["font-style"] = ((MyFontParameter*)parameter)->defaultFontStyleValue();
+    }
     
     // x
     parameter = findParameter("x");
@@ -343,7 +285,7 @@ void MyTextStyleBase::write(QJsonObject &json) {
     parameter = findParameter("height");
     if (parameter)
         json["height"] = ((MyDimensionalParameter*)parameter)->defaultValue();
-    
+
     // horizontal alignment
     parameter = findParameter("text-anchor");
     if (parameter)
@@ -358,9 +300,31 @@ void MyTextStyleBase::write(QJsonObject &json) {
 // MySimpleTextStyle
 
 MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain-text
     addOutsourcingParameter(new MyTextPlainTextParameter());
-    reset();
+
+    // x
+    addHiddenParameter(new MyNodeTextPositionalParameter("x"));
+
+    // y
+    addHiddenParameter(new MyNodeTextPositionalParameter("y"));
+
+    // width
+    addHiddenParameter(new MyNodeTextDimensionalParameter("width"));
+
+    // height
+    addHiddenParameter(new MyNodeTextDimensionalParameter("height"));
+
     _whetherSetNameAsDefaultPlainText = true;
+    reset();
+}
+
+MyShapeStyleBase::SHAPE_STYLE MySimpleTextStyle::type() {
+    return SIMPLE_TEXT_SHAPE_STYLE;
+}
+
+const bool& MySimpleTextStyle::whetherSetNameAsDefaultPlainText() const {
+    return _whetherSetNameAsDefaultPlainText;
 }
 
 void MySimpleTextStyle::read(const QJsonObject &json) {
@@ -378,6 +342,24 @@ void MySimpleTextStyle::write(QJsonObject &json) {
 // MyWithPlainTextTextStyle
 
 MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyTextStyleBase(name) {
+    // plain text
     addParameterToTheBeginningOfTheList(new MyTextPlainTextParameter());
+
+    // x
+    addParameter(new MyNodeTextPositionalParameter("x"));
+
+    // y
+    addParameter(new MyNodeTextPositionalParameter("y"));
+
+    // width
+    addParameter(new MyNodeTextDimensionalParameter("width"));
+
+    // height
+    addParameter(new MyNodeTextDimensionalParameter("height"));
+
     reset();
+}
+
+MyShapeStyleBase::SHAPE_STYLE MyWithPlainTextTextStyle::type() {
+    return WITH_PLAIN_TEXT_TEXT_SHAPE_STYLE;
 }

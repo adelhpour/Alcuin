@@ -101,6 +101,10 @@ class MySimpleClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsIt
 public:
 
     MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
+
+    QList<QGraphicsItem*> createFocusedGraphicsItems() override;
+
+    const bool whetherShapesAreOneSimpleTextShapeAndAnotherShape();
 };
 
 class MyComplexClassicNodeSceneGraphicsItem : public MyClassicNodeSceneGraphicsItemBase {

@@ -113,6 +113,7 @@ void MyGraphicsView::animatedScale(const qint32& delta) {
     connect(anim, SIGNAL(valueChanged(qreal)), SLOT(scalingTime(qreal)));
     connect(anim, SIGNAL(finished()), this, SLOT(animFinished()));
     anim->start();
+    emit scaleChanged(currentScale());
 }
 
 void MyGraphicsView::zoomIn() {
@@ -173,9 +174,11 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
 
 void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     QGraphicsView::mouseReleaseEvent(event);
-    if (event->button() == Qt::RightButton) {
-        if (!_isPanned)
-            emit askForDisplayContextMenu(event->globalPos());
+    if (!((MyGraphicsScene*)scene())->whetherMouseReleaseEventIsAccepted()) {
+        if (event->button() == Qt::RightButton) {
+            if (!_isPanned)
+                emit askForDisplayContextMenu(event->globalPos());
+        }
     }
     _isPanned = false;
     _panMode = false;
