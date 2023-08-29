@@ -15,7 +15,6 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setObjectName("main_widget");
     setStyleSheet("QFrame {background-color : white}");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setMinimumSize(QSize(950, 600));
     readSettings();
 
     setWidgets();
@@ -107,16 +106,16 @@ void MyNetworkEditorWidget::setInteractions() {
     /// graphics scene
     // set scene mode
     connect((MyInteractor*)interactor(), &MyInteractor::modeIsSet, ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), [this] (const QString& mode) { ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->setSceneMode(mode); });
-
-    // set scene rect
-    connect((MyInteractor*)interactor(), SIGNAL(askForSetSceneRect(qreal, qreal, qreal, qreal)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setSceneRect(qreal, qreal, qreal, qreal)));
     
     // add graphics item
     connect((MyInteractor*)interactor(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(addGraphicsItem(QGraphicsItem*)));
     
     // remove graphics item
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(removeGraphicsItem(QGraphicsItem*)));
-    
+
+    // network extents
+    connect((MyInteractor*)interactor(), SIGNAL(askForNetworkExtents()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(networkExtents()));
+
     // reset scene
     connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(clearScene()));
     

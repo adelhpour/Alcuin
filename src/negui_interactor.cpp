@@ -227,7 +227,6 @@ void MyInteractor::setSceneMode(SceneMode sceneMode) {
 
 void MyInteractor::createNetwork(const QJsonObject& json) {
     resetNetwork();
-    setNetworkExtents(json);
     addNodes(json);
     addEdges(json);
 }
@@ -261,33 +260,6 @@ void MyInteractor::resetNetwork() {
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
-    setNetworkExtents(30.0, 20.0, 840.0, 560.0);
-}
-
-void MyInteractor::setNetworkExtents(const QJsonObject& json) {
-    if (json.contains("position") && json["position"].isObject() && json["position"].toObject().contains("x") && json["position"]["x"].isDouble() && json["position"].toObject().contains("y") && json["position"]["y"].isDouble() && json.contains("dimensions") && json["dimensions"].isObject() && json["dimensions"].toObject().contains("width") && json["dimensions"]["width"].isDouble() && json["dimensions"].toObject().contains("height") && json["dimensions"]["height"].isDouble())
-        setNetworkExtents(json["position"]["x"].toDouble() - 0.5 * json["dimensions"]["width"].toDouble(), json["position"]["y"].toDouble() - 0.5 * json["dimensions"]["height"].toDouble(), json["dimensions"]["width"].toDouble(), json["dimensions"]["height"].toDouble());
-}
-
-void MyInteractor::setNetworkExtents(qreal x, qreal y, qreal width, qreal height) {
-    qreal minWidth = 840.0;
-    qreal minHeight = 560.0;
-    if (width < minWidth) {
-        x -= 0.5 * (minWidth - width);
-        width = minWidth;
-    }
-    
-    if (height < minHeight) {
-        y -= 0.5 * (minHeight - height);
-        height = minHeight;
-    }
-    
-    _networkExtents = QRectF(x, y, width, height);
-    emit askForSetSceneRect(x, y, width, height);
-}
-
-const QRectF& MyInteractor::networkExtents() {
-    return _networkExtents;
 }
 
 QList<MyNetworkElementBase*>& MyInteractor::nodes() {
@@ -660,19 +632,21 @@ bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2
     return false;
 }
 
+#include "iostream"
 QJsonObject MyInteractor::exportNetworkInfo() {
     QJsonObject json;
-    
+
+    QRectF networkExtents = askForNetworkExtents();
     // position
     QJsonObject positionObject;
-    positionObject["x"] = networkExtents().x() + 0.5 * networkExtents().width();
-    positionObject["y"] = networkExtents().y() + 0.5 * networkExtents().height();
+    positionObject["x"] = networkExtents.x() + 0.5 * networkExtents.width();
+    positionObject["y"] = networkExtents.y() + 0.5 * networkExtents.height();
     json["position"] = positionObject;
     
     // dimensions
     QJsonObject dimensionsObject;
-    dimensionsObject["width"] = networkExtents().width();
-    dimensionsObject["height"] = networkExtents().height();
+    dimensionsObject["width"] = networkExtents.width();
+    dimensionsObject["height"] = networkExtents.height();
     json["dimensions"] = dimensionsObject;
     
     // nodes

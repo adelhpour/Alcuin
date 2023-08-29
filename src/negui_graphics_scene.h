@@ -46,6 +46,7 @@ public slots:
     void setSceneRect(qreal x, qreal y, qreal width, qreal height);
     void addGraphicsItem(QGraphicsItem* item);
     void removeGraphicsItem(QGraphicsItem* item);
+    const QRectF networkExtents();
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
     const bool isShiftModifierPressed();

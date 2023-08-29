@@ -4,7 +4,7 @@
 // MyGraphicsScene
 
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
-    setSceneRect(30.0, 20.0, 840.0, 560.0);
+    setSceneRect(-10000, -10000, 20000, 20000);
     _isLeftButtonPressed = false;
     _isShiftModifierPressed = false;
 }
@@ -19,6 +19,10 @@ void MyGraphicsScene::addGraphicsItem(QGraphicsItem* item) {
 
 void MyGraphicsScene::removeGraphicsItem(QGraphicsItem* item) {
     removeItem(item);
+}
+
+const QRectF MyGraphicsScene::networkExtents() {
+    return itemsBoundingRect();
 }
 
 void MyGraphicsScene::clearScene() {

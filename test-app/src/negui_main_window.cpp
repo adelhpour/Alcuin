@@ -43,3 +43,8 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect((MyMenuBar*)menuBar, &MyMenuBar::askForName, this, [this] () { return QString(std::string(getName()).c_str()); });
     connect((MyMenuBar*)menuBar, &MyMenuBar::askForVersionNumber, this, [this] () { return QString(std::string(getVersionNumber()).c_str()); });
 }
+
+void MyMainWindow::closeEvent(QCloseEvent *event) {
+    centralWidget()->close();
+    QWidget::closeEvent(event);
+}
