@@ -21,6 +21,10 @@ void MyGraphicsScene::removeGraphicsItem(QGraphicsItem* item) {
     removeItem(item);
 }
 
+const QRectF MyGraphicsScene::networkExtents() {
+    return itemsBoundingRect();
+}
+
 void MyGraphicsScene::clearScene() {
     clear();
 }

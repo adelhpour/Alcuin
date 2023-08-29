@@ -60,9 +60,6 @@ public:
     void resetNetworkCanvas();
     void resetCanvas();
     void resetNetwork();
-    void setNetworkExtents(const QJsonObject& json);
-    void setNetworkExtents(qreal x, qreal y, qreal width, qreal height);
-    const QRectF& networkExtents();
     
     // nodes
     QList<MyNetworkElementBase*>& nodes();
@@ -100,6 +97,7 @@ signals:
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
+    const QRectF askForNetworkExtents();
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
@@ -285,7 +283,6 @@ protected:
     QGraphicsItem* _selectionAreaGraphicsItem;
     
     // network
-    QRectF _networkExtents;
     QJsonObject _stageInfo;
 
     // file
