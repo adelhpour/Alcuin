@@ -45,7 +45,7 @@ public:
     
 public slots:
     
-    void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles);
+    virtual void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles);
     
 protected:
     QList<MyShapeStyleBase*> _shapeStyles;
