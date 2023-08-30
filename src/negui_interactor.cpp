@@ -724,13 +724,11 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
         emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
         emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
-}
-
-void MyInteractor::unselectElement(MyNetworkElementBase* element) {
-    if (getSceneMode() == NORMAL_MODE) {
-        element->setSelected(false);
-        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+    else if (getSceneMode() == DISPLAY_FEATURE_MENU_MODE) {
+        if (!element->isSelected()) {
+            selectElements(false);
+            element->setSelected(true);
+        }
     }
 }
 

@@ -11,6 +11,10 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
     _originalPosition = QPointF(0.0, 0.0);
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForSelectNetworkElement()));
     connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(this, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () {
+        if (getSceneMode() == DISPLAY_FEATURE_MENU_MODE)
+            askForCreateFeatureMenu();
+    });
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
