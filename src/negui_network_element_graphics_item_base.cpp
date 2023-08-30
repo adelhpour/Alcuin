@@ -219,11 +219,6 @@ void MyNetworkElementGraphicsItemBase::setZValue(qreal z) {
     QGraphicsItemGroup::setZValue(z);
 }
 
-void MyNetworkElementGraphicsItemBase::enableNormalMode() {
-    MySceneModeElementBase::enableNormalMode();
-    clearFocusedGraphicsItems();
-}
-
 void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
         _isChosen = true;

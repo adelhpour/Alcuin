@@ -55,15 +55,13 @@ public:
     
     void setSelectedWithFillColor(const bool& selected);
 
-    void setFocused(const bool& isFocused);
+    virtual void setFocused(const bool& isFocused);
     
     void setCursor(const QCursor &cursor);
     
     void clear();
     
     void setZValue(qreal z);
-    
-    void enableNormalMode() override;
     
 signals:
     
