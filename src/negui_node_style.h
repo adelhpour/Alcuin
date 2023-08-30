@@ -63,6 +63,8 @@ protected:
 };
 
 class MySimpleClassicNodeStyle : public MyClassicNodeStyleBase {
+    Q_OBJECT
+
 public:
 
     MySimpleClassicNodeStyle(const QString& name);
@@ -71,11 +73,17 @@ public:
 
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 
+    void updateSimpleTextStyleExtentsWithOtherShapeStyleExtents();
+
     QWidget* shapeStylesButtons() override;
 
     const bool whetherAnotherGeometricShapeAlreadyExists();
 
     const bool whetherAnotherTextShapeAlreadyExists();
+
+public slots:
+
+    void setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) override;
 };
 
 class MyComplexClassicNodeStyle : public MyClassicNodeStyleBase {

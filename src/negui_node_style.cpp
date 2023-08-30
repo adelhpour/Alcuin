@@ -121,6 +121,26 @@ MyShapeStyleBase* MySimpleClassicNodeStyle::createShapeStyle(const QString& shap
     return NULL;
 }
 
+void MySimpleClassicNodeStyle::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
+    MyNetworkElementStyleBase::setShapeStyles(shapeStyles);
+    updateSimpleTextStyleExtentsWithOtherShapeStyleExtents();
+}
+
+void MySimpleClassicNodeStyle::updateSimpleTextStyleExtentsWithOtherShapeStyleExtents() {
+    if (shapeStyles().size() == 2) {
+        MyShapeStyleBase* simpleTextStyle = NULL;
+        MyShapeStyleBase* otherShapeStyle = NULL;
+        for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
+            if (shapeStyle->type() == MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE)
+                simpleTextStyle = shapeStyle;
+            else
+                otherShapeStyle = shapeStyle;
+        }
+        if (simpleTextStyle && otherShapeStyle)
+            simpleTextStyle->updateShapeExtents(otherShapeStyle->getShapeExtents());
+    }
+}
+
 QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
     QWidget* shapeStylesButtons = new MyChangeNodeShapeStylesButton();
     ((MyChangeNodeShapeStylesButton*)shapeStylesButtons)->setMenu();
