@@ -33,6 +33,8 @@ public:
     void extractExtents();
 
     virtual void adjustNodePositions() = 0;
+
+    void updateNodeFocusedGraphicsItems();
 };
 
 class MyNodeTopAligner : public MyNodeAlignerBase {

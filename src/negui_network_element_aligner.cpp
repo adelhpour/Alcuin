@@ -16,6 +16,7 @@ MyNodeAlignerBase::MyNodeAlignerBase(QList<MyNetworkElementBase*> networkElement
 void MyNodeAlignerBase::align() {
     extractExtents();
     adjustNodePositions();
+    updateNodeFocusedGraphicsItems();
 }
 
 void MyNodeAlignerBase::extractExtents() {
@@ -35,6 +36,11 @@ void MyNodeAlignerBase::extractExtents() {
             if (_maxY < position.y())
                 _maxY = position.y();
     }
+}
+
+void MyNodeAlignerBase::updateNodeFocusedGraphicsItems() {
+    for (MyNetworkElementBase* node : _networkElements)
+        ((MyNodeBase*)node)->graphicsItem()->updateFocusedGraphicsItems();
 }
 
 // MyNodeTopAligner
