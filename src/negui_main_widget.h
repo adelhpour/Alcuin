@@ -50,10 +50,9 @@ private slots:
 
     void displayFeatureMenu(QWidget* featureMenu);
     void removeFeatureMenu();
-    const bool whetherNetworkElementFeatureMenuIsBeingDisplayed(const QString& elementName);
 
 protected:
-    
+
     void setWidgets();
     void setInteractions();
     void arrangeWidgetLayers();

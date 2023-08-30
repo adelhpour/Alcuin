@@ -77,7 +77,7 @@ public:
 
     void askForDisplayFeatureMenu(QWidget*);
 
-    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
+    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
 
     void askForCopyNetworkElement(MyNetworkElementBase*);
 
