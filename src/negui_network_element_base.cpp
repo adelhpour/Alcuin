@@ -2,7 +2,6 @@
 #include "negui_feature_menu.h"
 
 #include <QGridLayout>
-#include <QTimer>
 
 // MyNetworkElementBase
 
@@ -61,7 +60,7 @@ void MyNetworkElementBase::updateStyle(QList<MyShapeStyleBase*> shapeStyles) {
 const QString MyNetworkElementBase::styleCategory() {
     if (!style()->category().isEmpty())
         return style()->category();
-    
+
     return "N/A";
 }
 
@@ -117,14 +116,14 @@ void MyNetworkElementBase::enableDisplayFeatureMenuMode() {
 QWidget* MyNetworkElementBase::getFeatureMenu() {
     MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    
+
     // title
     contentLayout->addWidget(new MyTitleLabel(styleCategory()), contentLayout->rowCount(), 0, 1, 2, Qt::AlignCenter);
-    
+
     // spacer
     QLayoutItem* spacerItem = new MySpacerItem(0, 10);
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
-    
+
     // name
     QString nameTitle = "Name";
     if (!style()->nameTitle().isEmpty())
@@ -156,13 +155,6 @@ void MyNetworkElementBase::createFeatureMenu() {
             updateGraphicsItem();
             updateFocusedGraphicsItems();
             emit askForCreateChangeStageCommand(); } );
-        askForDisplayFeatureMenuWithDelay(featureMenu, 200);
+        askForDisplayFeatureMenu(featureMenu);
     }
-}
-
-void MyNetworkElementBase::askForDisplayFeatureMenuWithDelay(QWidget* featureMenu, const qint32 delayTime) {
-    QTimer* timer = new QTimer();
-    timer->setSingleShot(true);
-    connect(timer, &QTimer::timeout, this, [this, featureMenu] () { askForDisplayFeatureMenu(featureMenu); } );
-    timer->start(delayTime);
 }

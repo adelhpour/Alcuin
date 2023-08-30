@@ -207,13 +207,13 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
-    connect(featureMenu, SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     removeFeatureMenu();
-    ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
+    ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(featureMenu->objectName());
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
-    _featureMenu = featureMenu;
-    ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(_featureMenu->objectName());
+    ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
+    _featureMenu = featureMenu;
+    connect(_featureMenu, SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
 }
 
 void MyNetworkEditorWidget::removeFeatureMenu() {

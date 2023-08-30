@@ -138,7 +138,6 @@ public slots:
     const QList<MyNetworkElementBase*> selectedNodes();
     const QList<MyNetworkElementBase*> selectedEdges();
     void selectElement(MyNetworkElementBase* element);
-    void unselectElement(MyNetworkElementBase* element);
     void selectElement(const QString& elementName);
     void selectElements(const bool& selected);
     void selectElements(const bool& selected, const QString& category);
