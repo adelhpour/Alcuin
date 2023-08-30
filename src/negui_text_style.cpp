@@ -69,6 +69,13 @@ const QRectF MyTextStyleBase::getShapeExtents() {
     return extents;
 }
 
+void MyTextStyleBase::updateShapeExtents(const QRectF& extents) {
+    setX(extents.x());
+    setY(extents.y());
+    setWidth(extents.width());
+    setHeight(extents.height());
+}
+
 void MyTextStyleBase::setX(const qreal& x) const {
     MyParameterBase* parameter = findParameter("x");
     if (parameter)

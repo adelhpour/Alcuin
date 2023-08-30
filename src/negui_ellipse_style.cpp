@@ -36,6 +36,13 @@ const QRectF MyEllipseStyleBase::getShapeExtents() {
     return extents;
 }
 
+void MyEllipseStyleBase::updateShapeExtents(const QRectF& extents) {
+    setCx(extents.center().x());
+    setCy(extents.center().y());
+    setRx(0.5 * extents.width());
+    setRy(0.5 * extents.height());
+}
+
 void MyEllipseStyleBase::setCx(const qreal& cx) const {
     MyParameterBase* parameter = findParameter("cx");
     if (parameter)

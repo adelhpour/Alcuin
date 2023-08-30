@@ -64,6 +64,10 @@ signals:
 
     void isUpdated();
 
+public slots:
+
+    virtual void updateShapeExtents(const QRectF& extents) = 0;
+
 protected:
     QList<MyParameterBase*> _parameters;
     QList<MyParameterBase*> _outsourcingParameters;

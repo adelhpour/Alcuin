@@ -27,6 +27,10 @@ const QRectF MyLineStyleBase::getShapeExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }
 
+void MyLineStyleBase::updateShapeExtents(const QRectF& extents) {
+
+}
+
 void MyLineStyleBase::setRelativeP1(const QPointF& relativeP1) const {
     QPoint point;
     MyParameterBase* parameter = findParameter("ControlPoint1");
