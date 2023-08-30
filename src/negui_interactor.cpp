@@ -1034,7 +1034,7 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*)autoLayoutEngine)->takeParameters()) {
         QJsonObject autoLayoutInfoObject;
         autoLayoutEngine->write(autoLayoutInfoObject);
-        QJsonObject graphInfoObject = getNetworkElementsInfo();
+        QJsonObject graphInfoObject = exportNetworkInfo();
         autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
         createNetwork(graphInfoObject);
         createChangeStageCommand();
