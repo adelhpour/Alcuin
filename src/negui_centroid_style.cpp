@@ -15,6 +15,10 @@ const QRectF MyCentroidStyleBase::getShapeExtents() {
     return QRectF(0.0, 0.0, 2 * radius(), 2 * radius());
 }
 
+void MyCentroidStyleBase::updateShapeExtents(const QRectF& extents) {
+    setRadius(0.5 * (extents.width() + extents.height()));
+}
+
 void MyCentroidStyleBase::setRadius(const qreal& radius) const {
     MyParameterBase* parameter = findParameter("radius");
     if (parameter)

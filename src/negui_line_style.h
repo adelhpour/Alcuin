@@ -4,6 +4,8 @@
 #include "negui_1d_shape_style_base.h"
 
 class MyLineStyleBase : public My1DShapeStyleBase {
+    Q_OBJECT
+
 public:
 
     typedef enum {
@@ -37,6 +39,10 @@ public:
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+
+public slots:
+
+    void updateShapeExtents(const QRectF& extents) override;
 };
 
 class MyClassicLineStyle : public MyLineStyleBase {

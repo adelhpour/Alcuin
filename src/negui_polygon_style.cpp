@@ -60,6 +60,10 @@ const QRectF MyPolygonStyleBase::getShapeExtents() {
     return extents;
 }
 
+void MyPolygonStyleBase::updateShapeExtents(const QRectF& extents) {
+    scaleToExtents(extents);
+}
+
 void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
     QRectF polygonBoundingRect = getShapeExtents();
     qreal xScaleFactor = extents.width() / polygonBoundingRect.width();

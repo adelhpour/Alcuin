@@ -4,6 +4,8 @@
 #include "negui_2d_shape_style_base.h"
 
 class MyCentroidStyleBase : public My2DShapeStyleBase {
+    Q_OBJECT
+
 public:
     
     MyCentroidStyleBase(const QString& name);
@@ -23,6 +25,10 @@ public:
     
     // write the node style info to the json object
     void write(QJsonObject &json) override;
+
+public slots:
+
+    void updateShapeExtents(const QRectF& extents) override;
 };
 
 class MyNodeCentroidStyle : public MyCentroidStyleBase {
