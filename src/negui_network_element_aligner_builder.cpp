@@ -1,7 +1,7 @@
-#include "negui_element_aligner_builder.h"
-#include "negui_element_aligner.h"
+#include "negui_network_element_aligner_builder.h"
+#include "negui_network_element_aligner.h"
 
-MyElementAlignerBase* createElementAligner(QList<MyNetworkElementBase*> nodes, QList<MyNetworkElementBase*> edges, const QString& alignType) {
+MyNetworkElementAlignerBase* createNetworkElementAligner(QList<MyNetworkElementBase*> nodes, QList<MyNetworkElementBase*> edges, const QString& alignType) {
     if (alignType == "Align Top")
         return new MyNodeTopAligner(nodes);
     else if (alignType == "Align Middle")

@@ -35,6 +35,7 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     setFlag(QGraphicsItem::ItemIsFocusable, true);
     
     _reparent = false;
+    connect(this, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(updateFocusedGraphicsItems()));
     
     setZValue(2);
 }
@@ -93,7 +94,6 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
         deparent();
         moveChildItems(value.toPointF());
         emit askForResetPosition();
-        updateFocusedGraphicsItems();
     }
 
     return QGraphicsItem::itemChange(change, value);
@@ -148,13 +148,13 @@ const bool MyClassicNodeSceneGraphicsItemBase::canAddTextShape() {
     return true;
 }
 
-void MyClassicNodeSceneGraphicsItemBase::clearFocusedGraphicsItems() {
-    if (_focusedGraphicsItems.size()) {
+void MyClassicNodeSceneGraphicsItemBase::setFocused(const bool& isFocused) {
+    if (!isFocused && _focusedGraphicsItems.size()) {
         emit askForResetPosition();
         adjustOriginalPosition();
         emit askForCreateChangeStageCommand();
     }
-    MyNetworkElementGraphicsItemBase::clearFocusedGraphicsItems();
+    MyNetworkElementGraphicsItemBase::setFocused(isFocused);
 }
 
 void MyClassicNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {

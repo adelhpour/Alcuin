@@ -156,6 +156,7 @@ public slots:
     const bool areAnyElementsCopied();
     const bool areAnyElementsSelected();
     const QString iconsDirectoryPath();
+    QJsonObject getNetworkElementsInfo();
     
     // modes
     void enableNormalMode() override;

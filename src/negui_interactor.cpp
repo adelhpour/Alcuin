@@ -15,8 +15,8 @@
 #include "negui_export_tools.h"
 #include "negui_customized_interactor_widgets.h"
 #include "negui_decorate_menu_buttons.h"
-#include "negui_element_aligner.h"
-#include "negui_element_aligner_builder.h"
+#include "negui_network_element_aligner.h"
+#include "negui_network_element_aligner_builder.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -63,7 +63,7 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
     // network
     resetNetwork();
-    _stageInfo = exportNetworkInfo();
+    _stageInfo = getNetworkElementsInfo();
 };
 
 void MyInteractor::readPluginItemsInfo(const QJsonObject &json) {
@@ -206,7 +206,7 @@ QObject* MyInteractor::fileManager() {
 }
 
 void MyInteractor::createChangeStageCommand() {
-    QJsonObject currentStageInfo = exportNetworkInfo();
+    QJsonObject currentStageInfo = getNetworkElementsInfo();
     if (undoStack()->count() > undoStack()->index()) {
         const QUndoCommand* indexCommand = undoStack()->command(undoStack()->index());
         _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
@@ -632,23 +632,9 @@ bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2
     return false;
 }
 
-#include "iostream"
-QJsonObject MyInteractor::exportNetworkInfo() {
+QJsonObject MyInteractor::getNetworkElementsInfo() {
     QJsonObject json;
 
-    QRectF networkExtents = askForNetworkExtents();
-    // position
-    QJsonObject positionObject;
-    positionObject["x"] = networkExtents.x() + 0.5 * networkExtents.width();
-    positionObject["y"] = networkExtents.y() + 0.5 * networkExtents.height();
-    json["position"] = positionObject;
-    
-    // dimensions
-    QJsonObject dimensionsObject;
-    dimensionsObject["width"] = networkExtents.width();
-    dimensionsObject["height"] = networkExtents.height();
-    json["dimensions"] = dimensionsObject;
-    
     // nodes
     QJsonArray nodesArray;
     for (MyNetworkElementBase *node : qAsConst(nodes())) {
@@ -657,7 +643,7 @@ QJsonObject MyInteractor::exportNetworkInfo() {
         nodesArray.append(nodeObject);
     }
     json["nodes"] = nodesArray;
-    
+
     // edges
     QJsonArray edgesArray;
     for (MyNetworkElementBase *edge : qAsConst(edges())) {
@@ -666,7 +652,26 @@ QJsonObject MyInteractor::exportNetworkInfo() {
         edgesArray.append(edgeObject);
     }
     json["edges"] = edgesArray;
-    
+
+    return json;
+}
+
+QJsonObject MyInteractor::exportNetworkInfo() {
+    QJsonObject json = getNetworkElementsInfo();
+
+    QRectF networkExtents = askForNetworkExtents();
+    // position
+    QJsonObject positionObject;
+    positionObject["x"] = networkExtents.x() + 0.5 * networkExtents.width();
+    positionObject["y"] = networkExtents.y() + 0.5 * networkExtents.height();
+    json["position"] = positionObject;
+
+    // dimensions
+    QJsonObject dimensionsObject;
+    dimensionsObject["width"] = networkExtents.width();
+    dimensionsObject["height"] = networkExtents.height();
+    json["dimensions"] = dimensionsObject;
+
     return json;
 }
 
@@ -792,10 +797,10 @@ void MyInteractor::deleteSelectedNetworkElements() {
 }
 
 void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
-    MyElementAlignerBase* elementAligner = createElementAligner(selectedNodes(), selectedEdges(), alignType);
-    if (elementAligner) {
-        elementAligner->align();
-        elementAligner->deleteLater();
+    MyNetworkElementAlignerBase* networkElementAligner = createNetworkElementAligner(selectedNodes(), selectedEdges(), alignType);
+    if (networkElementAligner) {
+        networkElementAligner->align();
+        networkElementAligner->deleteLater();
         createChangeStageCommand();
     }
 }
@@ -975,6 +980,7 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(((MyFileManager*)fileManager())->workingDirectory());
     if (!fileName.isEmpty()) {
         createNetwork(importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
+        createChangeStageCommand();
         resetCanvas();
         ((MyFileManager*)fileManager())->setCurrentExportToolCompatibleWithImportTool(importTool);
         ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
@@ -1028,7 +1034,7 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*)autoLayoutEngine)->takeParameters()) {
         QJsonObject autoLayoutInfoObject;
         autoLayoutEngine->write(autoLayoutInfoObject);
-        QJsonObject graphInfoObject = exportNetworkInfo();
+        QJsonObject graphInfoObject = getNetworkElementsInfo();
         autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
         createNetwork(graphInfoObject);
         createChangeStageCommand();

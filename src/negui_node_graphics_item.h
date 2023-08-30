@@ -84,7 +84,7 @@ public:
 
     const bool canAddTextShape() override;
 
-    void clearFocusedGraphicsItems() override;
+    void setFocused(const bool& isFocused) override;
 
     void moveBy(qreal dx, qreal dy);
 

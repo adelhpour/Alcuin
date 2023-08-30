@@ -1,21 +1,22 @@
-#include "negui_element_aligner.h"
+#include "negui_network_element_aligner.h"
 #include "negui_node.h"
 
-// MyElementAlignerBase
+// MyNetworkElementAlignerBase
 
-MyElementAlignerBase::MyElementAlignerBase(QList<MyNetworkElementBase*> elements) {
-    _elements = elements;
+MyNetworkElementAlignerBase::MyNetworkElementAlignerBase(QList<MyNetworkElementBase*> networkElements) {
+    _networkElements = networkElements;
 }
 
 // MyNodeAligner
 
-MyNodeAlignerBase::MyNodeAlignerBase(QList<MyNetworkElementBase*> elements) : MyElementAlignerBase(elements)  {
+MyNodeAlignerBase::MyNodeAlignerBase(QList<MyNetworkElementBase*> networkElements) : MyNetworkElementAlignerBase(networkElements)  {
 
 }
 
 void MyNodeAlignerBase::align() {
     extractExtents();
     adjustNodePositions();
+    updateNodeFocusedGraphicsItems();
 }
 
 void MyNodeAlignerBase::extractExtents() {
@@ -24,7 +25,7 @@ void MyNodeAlignerBase::extractExtents() {
     _maxX = INT_MIN;
     _maxY = INT_MIN;
     QPointF position;
-    for (MyNetworkElementBase* node : _elements) {
+    for (MyNetworkElementBase* node : _networkElements) {
             position = ((MyNodeBase*)node)->position();
             if (_minX > position.x())
                 _minX = position.x();
@@ -37,81 +38,86 @@ void MyNodeAlignerBase::extractExtents() {
     }
 }
 
+void MyNodeAlignerBase::updateNodeFocusedGraphicsItems() {
+    for (MyNetworkElementBase* node : _networkElements)
+        ((MyNodeBase*)node)->graphicsItem()->updateFocusedGraphicsItems();
+}
+
 // MyNodeTopAligner
 
-MyNodeTopAligner::MyNodeTopAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeTopAligner::MyNodeTopAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeTopAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(0, _minY - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeMiddleAligner
 
-MyNodeMiddleAligner::MyNodeMiddleAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeMiddleAligner::MyNodeMiddleAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeMiddleAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(0, 0.5 * (_minY + _maxY) - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeBottomAligner
 
-MyNodeBottomAligner::MyNodeBottomAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeBottomAligner::MyNodeBottomAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeBottomAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(0, _maxY - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeLeftAligner
 
-MyNodeLeftAligner::MyNodeLeftAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeLeftAligner::MyNodeLeftAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeLeftAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(_minX - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeCenterAligner
 
-MyNodeCenterAligner::MyNodeCenterAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeCenterAligner::MyNodeCenterAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeCenterAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(0.5 * (_minX + _maxX) - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeRightAligner
 
-MyNodeRightAligner::MyNodeRightAligner(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeRightAligner::MyNodeRightAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 void MyNodeRightAligner::adjustNodePositions() {
-    for (MyNetworkElementBase* node : _elements)
+    for (MyNetworkElementBase* node : _networkElements)
         ((MyNodeBase*)node)->graphicsItem()->moveBy(_maxX - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeDistributeAlignerBase
 
-MyNodeDistributeAlignerBase::MyNodeDistributeAlignerBase(QList<MyNetworkElementBase*> elements) : MyNodeAlignerBase(elements) {
+MyNodeDistributeAlignerBase::MyNodeDistributeAlignerBase(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
 
 }
 
 QList<MyNetworkElementBase*> MyNodeDistributeAlignerBase::getClassicNodes() {
     QList<MyNetworkElementBase*> classicNodes;
-    for (MyNetworkElementBase* node : _elements) {
+    for (MyNetworkElementBase* node : _networkElements) {
         if (((MyNodeBase*)node)->nodeType() != MyNodeBase::CENTROID_NODE)
             classicNodes.push_back(node);
     }
@@ -121,7 +127,7 @@ QList<MyNetworkElementBase*> MyNodeDistributeAlignerBase::getClassicNodes() {
 
 // MyNodeHorizontallyDistributeAligner
 
-MyNodeHorizontallyDistributeAligner::MyNodeHorizontallyDistributeAligner(QList<MyNetworkElementBase*> elements) : MyNodeDistributeAlignerBase(elements) {
+MyNodeHorizontallyDistributeAligner::MyNodeHorizontallyDistributeAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeDistributeAlignerBase(networkElements) {
 
 }
 
@@ -134,7 +140,7 @@ void MyNodeHorizontallyDistributeAligner::adjustNodePositions() {
 
 // MyNodeVerticallyDistributeAligner
 
-MyNodeVerticallyDistributeAligner::MyNodeVerticallyDistributeAligner(QList<MyNetworkElementBase*> elements) : MyNodeDistributeAlignerBase(elements) {
+MyNodeVerticallyDistributeAligner::MyNodeVerticallyDistributeAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeDistributeAlignerBase(networkElements) {
 
 }
 
