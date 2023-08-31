@@ -1006,16 +1006,13 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
     setHeaderHidden(true);
     setStyleSheet("QTreeView { background-color: white; border: no-border;}" "QTreeView::item:selected { background-color: white; border: no-border;}" "QTreeView::item:hover { background-color: white; border: no-border;}");
     setContentsMargins(0, 0, 0, 0);
-    //setAnimated(true);
-
-    treeModel = new QStandardItemModel(this);
-    setModel(treeModel);
+    setModel(new QStandardItemModel(this));
 
     connect(this, QOverload<const QModelIndex&>::of(&QTreeView::expanded), this, [this] (const QModelIndex& index) {
         std::vector<QStandardItem*> familyItems;
         std::list<QStandardItem*> items;
-        QStandardItem* root = treeModel->invisibleRootItem();;
-        QStandardItem* item = treeModel->itemFromIndex(index);
+        QStandardItem* root = ((QStandardItemModel*)model())->invisibleRootItem();;
+        QStandardItem* item = ((QStandardItemModel*)model())->itemFromIndex(index);
         int n = 0;
         int m = 0;
 
@@ -1042,7 +1039,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
                     }
 
                     if (m == familyItems.size())
-                        this->collapse(treeModel->indexFromItem(item));
+                        this->collapse(((QStandardItemModel*)model())->indexFromItem(item));
 
                     //if (!item->hasChildren())
                     //break;
@@ -1055,7 +1052,7 @@ MyShapeStyleTreeView::MyShapeStyleTreeView(QWidget* parent) : QTreeView(parent) 
             }
         }
 
-        QWidget* branchWidget = indexWidget(treeModel->itemFromIndex(index)->child(0)->index());
+        QWidget* branchWidget = indexWidget(((QStandardItemModel*)model())->itemFromIndex(index)->child(0)->index());
         if (branchWidget)
             emit extentsAreUpdated(((MyFeatureMenuItemFrame*)branchWidget)->extents() + collapsedSize());
         this->scrollTo(index, QAbstractItemView::PositionAtTop);
@@ -1082,10 +1079,10 @@ void MyShapeStyleTreeView::addBranchWidget(QWidget* branchWidget, const QString&
     fontSize = 8.0;
 #endif
     MyStandardItem* branch = new MyStandardItem(branchTitle, fontSize, true);
-    if (treeModel->findItems(rootTitle).empty())
-        treeModel->invisibleRootItem()->appendRow(branch);
+    if (((QStandardItemModel*)model())->findItems(rootTitle).empty())
+        ((QStandardItemModel*)model())->invisibleRootItem()->appendRow(branch);
     else
-        treeModel->findItems(rootTitle).first()->appendRow(branch);
+        ((QStandardItemModel*)model())->findItems(rootTitle).first()->appendRow(branch);
 
     if (branchWidget) {
         MyStandardItem* branchContent = new MyStandardItem();
@@ -1106,15 +1103,15 @@ void MyShapeStyleTreeView::clearModel() {
         delete (*bIt).first;
     }
     _branches.clear();
-    treeModel->clear();
+    ((QStandardItemModel*)model())->clear();
 }
 
 void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsigned int& staticbranches) {
     QList<QStandardItem *> roots;
     if (!rootTitle.isEmpty())
-        roots = treeModel->findItems(rootTitle);
+        roots = ((QStandardItemModel*)model())->findItems(rootTitle);
     else
-        roots.push_back(treeModel->invisibleRootItem());
+        roots.push_back(((QStandardItemModel*)model())->invisibleRootItem());
     for (int i = 0; i < roots.size(); ++i) {
         while (roots.at(i)->rowCount() > staticbranches) {
             for (constBranchIt bIt = BranchesBegin(); bIt != BranchesEnd(); ++bIt) {
@@ -1136,14 +1133,36 @@ void MyShapeStyleTreeView::removeBranches(const QString& rootTitle, const unsign
     }
 }
 
+void MyShapeStyleTreeView::expandBranch(MyShapeStyleBase* shapeStyle) {
+    for (constBranchIt bIt = BranchesBegin(); bIt != BranchesEnd(); ++bIt) {
+        if (shapeStyle->name() == (*bIt).first->text()) {
+            expandBranch(bIt - BranchesBegin());
+            return;
+        }
+    }
+}
+
+void MyShapeStyleTreeView::expandBranch(const qint32& branchIndex) {
+    expand(((QStandardItemModel*)model())->indexFromItem(((QStandardItemModel*)model())->item(branchIndex)));
+}
+
 void MyShapeStyleTreeView::expandFirstBranch() {
-    expand(treeModel->indexFromItem((treeModel->item(0))));
+    expand(((QStandardItemModel*)model())->indexFromItem(((QStandardItemModel*)model())->item(0)));
 }
 
 void MyShapeStyleTreeView::expandLastBranch() {
-    expand(treeModel->indexFromItem((treeModel->item(treeModel->rowCount() - 1))));
+    expand(((QStandardItemModel*)model())->indexFromItem(((QStandardItemModel*)model())->item(model()->rowCount() - 1)));
 }
 
 const QSize MyShapeStyleTreeView::collapsedSize() const {
     return QSize(100, 100 + 20 * model()->rowCount());
+}
+
+const QString MyShapeStyleTreeView::getExpandedBranchTitle() {
+    for (unsigned int i = 0; i < model()->rowCount(); i++) {
+        if (isExpanded(((QStandardItemModel*)model())->indexFromItem(((QStandardItemModel*)model())->item(i))))
+            return ((QStandardItemModel*)model())->item(i)->text();
+    }
+
+    return "";
 }

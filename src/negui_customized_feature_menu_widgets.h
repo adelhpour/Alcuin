@@ -151,11 +151,17 @@ public:
 
     void removeBranches(const QString& rootTitle= "", const unsigned int& staticbranches = 0);
 
+    void expandBranch(MyShapeStyleBase* shapeStyle);
+
+    void expandBranch(const qint32& branchIndex);
+
     void expandFirstBranch();
 
     void expandLastBranch();
 
     const QSize collapsedSize() const;
+
+    const QString getExpandedBranchTitle();
 
 signals:
 
@@ -163,7 +169,6 @@ signals:
 
 protected:
 
-    QStandardItemModel* treeModel;
     branchVec _branches;
 };
 
