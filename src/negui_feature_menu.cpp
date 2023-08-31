@@ -81,6 +81,21 @@ void MyFeatureMenu::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
     emit isUpdated(shapeStyles());
 }
 
+MyShapeStyleBase* MyFeatureMenu::beingModifiedShapeStyle() {
+    QString expandedBranchTitle = ((MyShapeStyleTreeView*)_shapeStylesTreeView)->getExpandedBranchTitle();
+    for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
+        if (shapeStyle->name() == expandedBranchTitle)
+            return shapeStyle;
+    }
+
+    return NULL;
+}
+
+void MyFeatureMenu::setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle) {
+    if (shapeStyle)
+        ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandBranch(shapeStyle);
+}
+
 void MyFeatureMenu::clearShapeStyles() {
     while(shapeStyles().size())
         delete shapeStyles().takeLast();

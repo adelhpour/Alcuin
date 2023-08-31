@@ -69,6 +69,8 @@ public:
     
     virtual const qint32 calculateZValue() = 0;
 
+    QWidget* createAndConnectFeatureMenuObject();
+
     signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
