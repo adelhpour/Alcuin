@@ -28,7 +28,8 @@ void MyNodeBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
-    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedEdges()));
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedEdges()));
+    connect((MyNodeSceneGraphicsItemBase*)_graphicsItem, &MyNodeSceneGraphicsItemBase::positionChangedByMouseMoveEvent, this, [this] (const QPointF& movedDistance) { positionChangedByMouseMoveEvent(this, movedDistance); });
 }
 
 void MyNodeBase::addEdge(MyNetworkElementBase* e) {
@@ -444,7 +445,7 @@ void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
     connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
-    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedBezierCurves()));
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedBezierCurves()));
     connect(_graphicsItem, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)), this, SLOT(connectNodePositionToNeighborNodes(const bool&)));
     connect(_graphicsItem, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()), this, SLOT(isNodePositionConnectedToNeighborNodes()));
 }

@@ -82,6 +82,8 @@ public:
 signals:
     
     MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
+
+    void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
     
 public slots:
     
