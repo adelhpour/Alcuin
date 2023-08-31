@@ -146,15 +146,27 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
 }
 
 void MyNetworkElementBase::createFeatureMenu() {
-    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE) && !askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(name())) {
-        MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
-        featureMenu->setObjectName(name());
-        featureMenu->setShapeStyles(style()->shapeStyles());
-        connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
-            updateStyle(shapeStyles);
-            updateGraphicsItem();
-            updateFocusedGraphicsItems();
-            emit askForCreateChangeStageCommand(); } );
-        askForDisplayFeatureMenu(featureMenu);
+    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE)) {
+        QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+        if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
+            QWidget* featureMenu = createAndConnectFeatureMenuObject();
+            if (currentFeatureMenu)
+                ((MyFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
+            askForDisplayFeatureMenu(featureMenu);
+        }
     }
+}
+
+QWidget* MyNetworkElementBase::createAndConnectFeatureMenuObject() {
+    MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
+    featureMenu->setObjectName(name());
+    featureMenu->setShapeStyles(style()->shapeStyles());
+    connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+        updateStyle(shapeStyles);
+        updateGraphicsItem();
+        updateFocusedGraphicsItems();
+        emit askForCreateChangeStageCommand(); } );
+
+    return featureMenu;
+
 }

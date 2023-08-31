@@ -292,7 +292,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
-        connect(n, SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)), this, SIGNAL(askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&)));
+        connect(n, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
         connect(n, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCutNetworkElement(MyNetworkElementBase*)), this, SLOT(setCutNode(MyNetworkElementBase*)));
@@ -430,6 +430,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(e, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
         connect(e, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedEdgeStyle(MyNetworkElementBase*)));

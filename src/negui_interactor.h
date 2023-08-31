@@ -103,7 +103,7 @@ signals:
     void askForSetToolTip(const QString& toolTip);
     void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
-    const bool askForWhetherNetworkElementFeatureMenuIsBeingDisplayed(const QString&);
+    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);

@@ -19,6 +19,10 @@ public:
 
     void addSingleShapeStyle(MyShapeStyleBase* shapeStyle);
 
+    MyShapeStyleBase* beingModifiedShapeStyle();
+
+    void setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle);
+
     void clearShapeStyles();
 
 signals:
