@@ -12,12 +12,6 @@ MyRectangleStyleBase::MyRectangleStyleBase(const QString& name) : My2DShapeStyle
     
     // fill-color
     addParameter(new MyFillColorParameter());
-    
-    // rx
-    addParameter(new MyCornerCurvatureParameter("rx"));
-    
-    // ry
-    addParameter(new MyCornerCurvatureParameter("ry"));
 
     reset();
 }
@@ -219,16 +213,22 @@ void MyRectangleStyleBase::write(QJsonObject &json) {
 
 MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleStyleBase(name) {
     // x
-    addParameter(new MyNodeRectanglePositionalParameter("x"));
+    addParameter(new MyNodeRectanglePositionalParameter("x", "Relative \"X\" value of rectangle bounding box"));
     
     // y
-    addParameter(new MyNodeRectanglePositionalParameter("y"));
+    addParameter(new MyNodeRectanglePositionalParameter("y", "Relative \"Y\" value of rectangle bounding box"));
     
     // width
-    addParameter(new MyNodeRectangleDimensionalParameter("width"));
+    addParameter(new MyNodeRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
     
     // height
-    addParameter(new MyNodeRectangleDimensionalParameter("height"));
+    addParameter(new MyNodeRectangleDimensionalParameter("height", "\"Height\" value of rectangle bounding box"));
+
+    // rx
+    addParameter(new MyCornerCurvatureParameter("rx", "Radius of rectangle corner curvature along x-axis"));
+
+    // ry
+    addParameter(new MyCornerCurvatureParameter("ry", "Radius of rectangle corner curvature along y-axis"));
     
     reset();
 }
@@ -243,10 +243,16 @@ MyArrowHeadRectangleStyle::MyArrowHeadRectangleStyle(const QString& name) : MyRe
     addParameter(new MyArrowHeadRectangleYParameter());
     
     // width
-    addParameter(new MyArrowHeadRectangleDimensionalParameter("width"));
+    addParameter(new MyArrowHeadRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
     
     // height
-    addParameter(new MyArrowHeadRectangleDimensionalParameter("height"));
+    addParameter(new MyArrowHeadRectangleDimensionalParameter("height", "\"Height\" value of rectangle bounding box"));
+
+    // rx
+    addParameter(new MyCornerCurvatureParameter("rx", "Radius of rectangle corner curvature along x-axis"));
+
+    // ry
+    addParameter(new MyCornerCurvatureParameter("ry", "Radius of rectangle corner curvature along y-axis"));
     
     reset();
 }
