@@ -18,6 +18,8 @@ MyNetworkElementAlignerBase* createNetworkElementAligner(QList<MyNetworkElementB
         return new MyNodeHorizontallyDistributeAligner(nodes);
     else if (alignType == "Distribute Vertically")
         return new MyNodeVerticallyDistributeAligner(nodes);
+    else if (alignType == "Distribute on Grid")
+        return new MyNodeGridDistributeAligner(nodes);
 
     return NULL;
 }
