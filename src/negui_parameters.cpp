@@ -1025,3 +1025,17 @@ const Qt::Alignment MyVerticalAlignmentParameter::defaultAlignment() const {
 void MyVerticalAlignmentParameter::reset() {
     setDefaultValue("middle");
 }
+
+MyNodeDistributionNumberOfGridColumnsParameter::MyNodeDistributionNumberOfGridColumnsParameter(const qint32 numberOfSelectedNodes) : MyIntegerParameter("Number of Grid Columns") {
+    _numberOfSelectedNodes = numberOfSelectedNodes;
+    reset();
+}
+
+void MyNodeDistributionNumberOfGridColumnsParameter::reset() {
+    setMin(1);
+    setMax(_numberOfSelectedNodes);
+    setStep(1);
+    setDefaultValue(1);
+    if (_numberOfSelectedNodes >= 2)
+        setDefaultValue(qint32(0.5 * _numberOfSelectedNodes));
+}

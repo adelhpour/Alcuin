@@ -734,4 +734,16 @@ public:
     void reset() override;
 };
 
+class MyNodeDistributionNumberOfGridColumnsParameter : public MyIntegerParameter {
+public:
+
+    MyNodeDistributionNumberOfGridColumnsParameter(const qint32 numberOfSelectedNodes);
+
+    // reset the values of the parameter
+    void reset() override;
+
+protected:
+    qint32 _numberOfSelectedNodes;
+};
+
 #endif
