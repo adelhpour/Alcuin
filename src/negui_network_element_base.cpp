@@ -128,7 +128,7 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     QString nameTitle = "Name";
     if (!style()->nameTitle().isEmpty())
         nameTitle = style()->nameTitle();
-    contentLayout->addWidget(new MyLabel(nameTitle), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyLabel(nameTitle, "Unique " + nameTitle + " of " + styleCategory()), contentLayout->rowCount(), 0, Qt::AlignLeft);
     if (style()->isNameEditable()) {
         QLineEdit* nameLineEdit = new MyRestrictedToNameConventionsLineEdit(name());
         connect(nameLineEdit, &QLineEdit::editingFinished, this, [this, nameLineEdit] () {

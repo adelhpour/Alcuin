@@ -161,16 +161,16 @@ void MyEllipseStyleBase::write(QJsonObject &json) {
 
 MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
     // cx
-    addParameter(new MyNodeEllipsePositionalParameter("cx"));
+    addParameter(new MyNodeEllipsePositionalParameter("cx", "Relative center of ellipse along x-axis"));
     
     // cy
-    addParameter(new MyNodeEllipsePositionalParameter("cy"));
+    addParameter(new MyNodeEllipsePositionalParameter("cy", "Relative center of ellipse along y-axis"));
     
     // rx
-    addParameter(new MyNodeEllipseDimensionalParameter("rx"));
+    addParameter(new MyNodeEllipseDimensionalParameter("rx", "Radius of ellipse along x-axis"));
     
     // ry
-    addParameter(new MyNodeEllipseDimensionalParameter("ry"));
+    addParameter(new MyNodeEllipseDimensionalParameter("ry", "Radius of ellipse along y-axis"));
     
     reset();
 }
@@ -185,10 +185,10 @@ MyArrowHeadEllipseStyle::MyArrowHeadEllipseStyle(const QString& name) : MyEllips
     addParameter(new MyArrowHeadEllipseCyParameter());
     
     // rx
-    addParameter(new MyArrowHeadEllipseDimensionalParameter("rx"));
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("rx", "Radius of ellipse along x-axis"));
     
     // ry
-    addParameter(new MyArrowHeadEllipseDimensionalParameter("ry"));
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("ry", "Radius of ellipse along y-axis"));
     
     reset();
 }

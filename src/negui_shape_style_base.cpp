@@ -57,7 +57,7 @@ MyParameterBase* MyShapeStyleBase::findParameter(const QString& name) const {
 
 void MyShapeStyleBase::populateFeaturesMenu(QLayout* featureMenuLayout) {
     for (MyParameterBase* parameter : qAsConst(parameters())) {
-        ((QGridLayout*)featureMenuLayout)->addWidget(new MyLabel(parameter->name()), ((QGridLayout*)featureMenuLayout)->rowCount(), 0, Qt::AlignLeft);
+        ((QGridLayout*)featureMenuLayout)->addWidget(new MyLabel(parameter->name(), parameter->hint()), ((QGridLayout*)featureMenuLayout)->rowCount(), 0, Qt::AlignLeft);
         ((QGridLayout*)featureMenuLayout)->addWidget(parameter->inputWidget(), ((QGridLayout*)featureMenuLayout)->rowCount() - 1, 1, Qt::AlignRight);
     }
 }

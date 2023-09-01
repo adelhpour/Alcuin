@@ -5,16 +5,16 @@
 
 MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
     // color
-    addParameter(new MyColorParameter("color"));
+    addParameter(new MyColorParameter("color", "Text \"Color\""));
 
     // font
     addParameter(new MyFontParameter());
     
     // horizontal alignment
-    addParameter(new MyTextAnchorParameter());
+    addParameter(new MyHorizontalAlignmentParameter());
     
     // vertical alignment
-    addParameter(new MyVTextAnchorParameter());
+    addParameter(new MyVerticalAlignmentParameter());
 
     reset();
 }
@@ -133,17 +133,17 @@ const qreal MyTextStyleBase::height() const {
 }
 
 const Qt::Alignment MyTextStyleBase::horizontalAlignment() const {
-    MyParameterBase* parameter = findParameter("text-anchor");
+    MyParameterBase* parameter = findParameter("horizontal-alignment");
     if (parameter)
-        return ((MyTextAnchorParameter*)parameter)->defaultAlignment();
+        return ((MyHorizontalAlignmentParameter*)parameter)->defaultAlignment();
     
     return Qt::AlignHCenter;
 }
 
 const Qt::Alignment MyTextStyleBase::verticalAlignment() const {
-    MyParameterBase* parameter = findParameter("vtext-anchor");
+    MyParameterBase* parameter = findParameter("vertical-alignment");
     if (parameter)
-        return ((MyVTextAnchorParameter*)parameter)->defaultAlignment();
+        return ((MyVerticalAlignmentParameter*)parameter)->defaultAlignment();
     
     return Qt::AlignVCenter;
 }
@@ -237,17 +237,17 @@ void MyTextStyleBase::read(const QJsonObject &json) {
     }
 
     // horizontal alignment
-    if (json.contains("text-anchor") && json["text-anchor"].isString()) {
-        parameter = findParameter("text-anchor");
+    if (json.contains("horizontal-alignment") && json["horizontal-alignment"].isString()) {
+        parameter = findParameter("horizontal-alignment");
         if (parameter)
-            ((MyTextAnchorParameter*)parameter)->setDefaultValue(json["text-anchor"].toString());
+            ((MyHorizontalAlignmentParameter*)parameter)->setDefaultValue(json["horizontal-alignment"].toString());
     }
     
     // vertical alignment
-    if (json.contains("vtext-anchor") && json["vtext-anchor"].isString()) {
-        parameter = findParameter("vtext-anchor");
+    if (json.contains("vertical-alignment") && json["vertical-alignment"].isString()) {
+        parameter = findParameter("vertical-alignment");
         if (parameter)
-            ((MyVTextAnchorParameter*)parameter)->setDefaultValue(json["vtext-anchor"].toString());
+            ((MyVerticalAlignmentParameter*)parameter)->setDefaultValue(json["vertical-alignment"].toString());
     }
 }
 
@@ -294,14 +294,14 @@ void MyTextStyleBase::write(QJsonObject &json) {
         json["height"] = ((MyDimensionalParameter*)parameter)->defaultValue();
 
     // horizontal alignment
-    parameter = findParameter("text-anchor");
+    parameter = findParameter("horizontal-alignment");
     if (parameter)
-        json["text-anchor"] = ((MyTextAnchorParameter*)parameter)->defaultValue();
+        json["horizontal-alignment"] = ((MyHorizontalAlignmentParameter*)parameter)->defaultValue();
     
     // vertical alignment
-    parameter = findParameter("vtext-anchor");
+    parameter = findParameter("vertical-alignment");
     if (parameter)
-        json["vtext-anchor"] = ((MyVTextAnchorParameter*)parameter)->defaultValue();
+        json["vertical-alignment"] = ((MyVerticalAlignmentParameter*)parameter)->defaultValue();
 }
 
 // MySimpleTextStyle
@@ -311,16 +311,16 @@ MySimpleTextStyle::MySimpleTextStyle(const QString& name) : MyTextStyleBase(name
     addOutsourcingParameter(new MyTextPlainTextParameter());
 
     // x
-    addHiddenParameter(new MyNodeTextPositionalParameter("x"));
+    addHiddenParameter(new MyNodeTextPositionalParameter("x", "Relative \"X\" value of text bounding box"));
 
     // y
-    addHiddenParameter(new MyNodeTextPositionalParameter("y"));
+    addHiddenParameter(new MyNodeTextPositionalParameter("y", "Relative \"Y\" value of text bounding box"));
 
     // width
-    addHiddenParameter(new MyNodeTextDimensionalParameter("width"));
+    addHiddenParameter(new MyNodeTextDimensionalParameter("width", "\"Width\" value of text bounding box"));
 
     // height
-    addHiddenParameter(new MyNodeTextDimensionalParameter("height"));
+    addHiddenParameter(new MyNodeTextDimensionalParameter("height", "\"Height\" value of text bounding box"));
 
     _whetherSetNameAsDefaultPlainText = true;
     reset();
@@ -353,16 +353,16 @@ MyWithPlainTextTextStyle::MyWithPlainTextTextStyle(const QString& name) : MyText
     addParameterToTheBeginningOfTheList(new MyTextPlainTextParameter());
 
     // x
-    addParameter(new MyNodeTextPositionalParameter("x"));
+    addParameter(new MyNodeTextPositionalParameter("x", "Relative \"X\" value of text bounding box"));
 
     // y
-    addParameter(new MyNodeTextPositionalParameter("y"));
+    addParameter(new MyNodeTextPositionalParameter("y", "Relative \"Y\" value of text bounding box"));
 
     // width
-    addParameter(new MyNodeTextDimensionalParameter("width"));
+    addParameter(new MyNodeTextDimensionalParameter("width", "\"Width\" value of text bounding box"));
 
     // height
-    addParameter(new MyNodeTextDimensionalParameter("height"));
+    addParameter(new MyNodeTextDimensionalParameter("height", "\"Height\" value of text bounding box"));
 
     reset();
 }

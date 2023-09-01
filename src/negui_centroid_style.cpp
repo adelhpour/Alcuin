@@ -59,7 +59,7 @@ void MyCentroidStyleBase::write(QJsonObject &json) {
 
 MyNodeCentroidStyle::MyNodeCentroidStyle(const QString& name) : MyCentroidStyleBase(name) {
     // radius
-    addParameter(new MyNodeCentroidRadiusParameter("radius"));
+    addParameter(new MyNodeCentroidRadiusParameter());
 
     // border-width
     addParameter(new MyCentroidBorderWidthParameter());

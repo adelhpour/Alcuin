@@ -11,10 +11,10 @@ MyLineStyleBase::MyLineStyleBase(const QString& name) : My1DShapeStyleBase(name)
     addParameter(new MyBorderColorParameter());
     
     // control point 1
-    addParameter(new MyBasePointParameter("ControlPoint1"));
+    addParameter(new MyControlPointParameter("ControlPoint1", "First Control Point"));
     
     // control point 2
-    addParameter(new MyBasePointParameter("ControlPoint2"));
+    addParameter(new MyControlPointParameter("ControlPoint2", "Second Control Point"));
 
     reset();
 }

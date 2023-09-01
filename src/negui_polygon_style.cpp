@@ -103,7 +103,7 @@ void MyPolygonStyleBase::read(const QJsonObject &json) {
         for (int pointIndex = 0; pointIndex < pointsArray.size(); ++pointIndex) {
             if (pointsArray[pointIndex].isObject()) {
                 QJsonObject pointObject = pointsArray[pointIndex].toObject();
-                point = new MyAbsolutePointParameter("point" + QString::number(pointIndex));
+                point = new MyAbsolutePointParameter("point" + QString::number(pointIndex), "Relative coordinates of polygon vertex " + QString::number(pointIndex));
                 // x
                 if (pointObject.contains("x") && pointObject["x"].isDouble())
                     point->setDefaultValueX(pointObject["x"].toDouble());
@@ -144,22 +144,22 @@ MyNodePolygonStyle::MyNodePolygonStyle(const QString& name) : MyPolygonStyleBase
 
 void MyNodePolygonStyle::addDefaultPoints() {
     MyAbsolutePointParameter* point = NULL;
-    point = new MyAbsolutePointParameter("point1");
+    point = new MyAbsolutePointParameter("point1", "Relative coordinates of polygon vertex 1");
     point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point2");
+    point = new MyAbsolutePointParameter("point2", "Relative coordinates of polygon vertex 2");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(25.0);
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point3");
+    point = new MyAbsolutePointParameter("point3", "Relative coordinates of polygon vertex 3");
     point->setDefaultValueX(25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point4");
+    point = new MyAbsolutePointParameter("point4", "Relative coordinates of polygon vertex 4");
     point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
     point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
     addParameter(point);
@@ -173,22 +173,22 @@ MyArrowHeadPolygonStyle::MyArrowHeadPolygonStyle(const QString& name) : MyPolygo
 
 void MyArrowHeadPolygonStyle::addDefaultPoints() {
     MyAbsolutePointParameter* point = NULL;
-    point = new MyAbsolutePointParameter("point1");
+    point = new MyAbsolutePointParameter("point1", "Relative coordinates of polygon vertex 1");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point2");
+    point = new MyAbsolutePointParameter("point2", "Relative coordinates of polygon vertex 2");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(0.0);
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point3");
+    point = new MyAbsolutePointParameter("point3", "Relative coordinates of polygon vertex 3");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(5.0);
     addParameter(point);
     
-    point = new MyAbsolutePointParameter("point4");
+    point = new MyAbsolutePointParameter("point4", "Relative coordinates of polygon vertex 4");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
     addParameter(point);

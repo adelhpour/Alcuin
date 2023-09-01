@@ -37,14 +37,14 @@ class MyLabel : public QLabel {
 
 public:
 
-    MyLabel(const QString& text = "", QWidget* parent = nullptr);
+    MyLabel(const QString& text = "", const QString& toolTip = "", QWidget* parent = nullptr);
 };
 
 class MyTitleLabel : public MyLabel {
 
 public:
 
-    MyTitleLabel(const QString& text = "", QWidget* parent = nullptr);
+    MyTitleLabel(const QString& text = "", const QString& toolTip = "", QWidget* parent = nullptr);
 };
 
 class MyLineEdit : public QLineEdit {
