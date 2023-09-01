@@ -2,6 +2,7 @@
 #define __NEGUI_NETWORK_ELEMENT_ALIGNER_H
 
 #include "negui_network_element_base.h"
+#include "negui_customized_common_widgets.h"
 
 class MyNetworkElementAlignerBase : public QObject {
     Q_OBJECT
@@ -127,6 +128,28 @@ public:
     MyNodeVerticallyDistributeAligner(QList<MyNetworkElementBase*> networkElements);
 
     void adjustNodePositions() override;
+};
+
+class MyNodeGridDistributeAligner : public MyNodeDistributeAlignerBase {
+    Q_OBJECT
+
+public:
+
+    MyNodeGridDistributeAligner(QList<MyNetworkElementBase*> networkElements);
+
+    void adjustNodePositions() override;
+
+    qint32 getNumberOfGridColumns(QList<MyNetworkElementBase*> classicNodes);
+
+    void adjustClassicNodesPositionsInGrid(QList<MyNetworkElementBase*> classicNodes, const qint32& numberOfGridColumns);
+};
+
+class MyGetNumberOfGridColumnsDialog : public MyDialog {
+    Q_OBJECT
+
+public:
+
+    MyGetNumberOfGridColumnsDialog(MyParameterBase* parameter, QWidget *parent = nullptr);
 };
 
 

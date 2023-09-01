@@ -1,5 +1,8 @@
 #include "negui_network_element_aligner.h"
 #include "negui_node.h"
+#include "negui_parameters.h"
+
+#include <QGridLayout>
 
 // MyNetworkElementAlignerBase
 
@@ -149,4 +152,53 @@ void MyNodeVerticallyDistributeAligner::adjustNodePositions() {
     qreal distributionDistance = (_maxY - _minY) / (classicNodes.size() - 1);
     for (unsigned  int i = 0; i < classicNodes.size(); i++)
         ((MyNodeBase*)classicNodes.at(i))->graphicsItem()->moveBy(0, _minY - ((MyNodeBase*)classicNodes.at(i))->position().y() + i * distributionDistance);
+}
+
+// MyNodeGridDistributeAligner
+
+MyNodeGridDistributeAligner::MyNodeGridDistributeAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeDistributeAlignerBase(networkElements) {
+
+}
+
+void MyNodeGridDistributeAligner::adjustNodePositions() {
+    QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
+    qint32 numberOfGridColumns = getNumberOfGridColumns(classicNodes);
+    if (numberOfGridColumns)
+        adjustClassicNodesPositionsInGrid(classicNodes, numberOfGridColumns);
+}
+
+qint32 MyNodeGridDistributeAligner::getNumberOfGridColumns(QList<MyNetworkElementBase*> classicNodes) {
+    MyParameterBase* numberOfGridColumnsParameter = new MyNodeDistributionNumberOfGridColumnsParameter(classicNodes.size());
+    MyDialog* getNumberOfGridColumnsDialog = new MyGetNumberOfGridColumnsDialog(numberOfGridColumnsParameter);
+    getNumberOfGridColumnsDialog->setWindowTitle("Select Number of Grid Columns");
+    getNumberOfGridColumnsDialog->setButtons();
+    if (getNumberOfGridColumnsDialog->exec() == QDialog::Accepted) {
+        numberOfGridColumnsParameter->setDefaultValue();
+        return ((MyNodeDistributionNumberOfGridColumnsParameter*)numberOfGridColumnsParameter)->defaultValue();
+    }
+
+    return 0;
+}
+
+void MyNodeGridDistributeAligner::adjustClassicNodesPositionsInGrid(QList<MyNetworkElementBase*> classicNodes, const qint32& numberOfGridColumns) {
+    qreal distributionDistance = (_maxX - _minX) / (numberOfGridColumns);
+    qint32 row = 0;
+    while (row <= classicNodes.size() / numberOfGridColumns) {
+        for (unsigned int column = 0; column < numberOfGridColumns && row * numberOfGridColumns + column < classicNodes.size()  ; column++) {
+            ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->graphicsItem()->moveBy(
+                    _minX - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().x() +
+                    column * distributionDistance, _minY - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().y() + row * distributionDistance);
+        }
+        row++;
+    }
+}
+
+// MyGetNumberOfGridColumnsDialog
+
+MyGetNumberOfGridColumnsDialog::MyGetNumberOfGridColumnsDialog(MyParameterBase* parameter, QWidget *parent) : MyDialog(parent) {
+    QGridLayout *contentLayout = (QGridLayout *) layout();
+    contentLayout->addWidget(new QLabel(parameter->name()), contentLayout->rowCount(), 0);
+    QWidget* widget = parameter->inputWidget();
+    widget->setFocusPolicy(Qt::NoFocus);
+    contentLayout->addWidget(widget, contentLayout->rowCount() - 1, 1);
 }
