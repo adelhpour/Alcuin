@@ -153,7 +153,7 @@ void MyNodeBase::addParentFeaturesToFeatureMenu(QWidget* featureMenu) {
     QString parentLabel = "Parent";
     if (!((MyNodeStyleBase*)style())->parentTitle().isEmpty())
         parentLabel = ((MyNodeStyleBase*)style())->parentTitle();
-    contentLayout->addWidget(new MyLabel(parentLabel), contentLayout->rowCount(), 0, Qt::AlignLeft);
+    contentLayout->addWidget(new MyLabel(parentLabel, parentLabel + " that encloses " + styleCategory()), contentLayout->rowCount(), 0, Qt::AlignLeft);
     contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 }
 
@@ -381,7 +381,7 @@ void MySimpleClassicNode::addDisplayNameToFeatureMenu(QWidget* featureMenu) {
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
     MyParameterBase* plainTextParameter = style()->getParameter(MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE, "plain-text");
     if (plainTextParameter) {
-        contentLayout->addWidget(new MyLabel("Display Name"), contentLayout->rowCount(), 0, Qt::AlignLeft);
+        contentLayout->addWidget(new MyLabel("Display Name", "Name displayed as the representing text of " + styleCategory()), contentLayout->rowCount(), 0, Qt::AlignLeft);
         contentLayout->addWidget(plainTextParameter->inputWidget(), contentLayout->rowCount() - 1, 0, 1, 2, Qt::AlignRight);
     }
 }
