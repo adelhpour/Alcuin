@@ -18,27 +18,31 @@ MySpacerItem::MySpacerItem(int w, int h) : QSpacerItem(w, h, QSizePolicy::Fixed,
 
 // MyLabel
 
-MyLabel::MyLabel(const QString& text, QWidget* parent) : QLabel(parent) {
+MyLabel::MyLabel(const QString& text, const QString& toolTip, QWidget* parent) : QLabel(parent) {
     setContentsMargins(0, 0, 0, 0);
     QFont _font;
     _font.setBold(true);
     _font.setCapitalization(QFont::Capitalize);
+    qreal fontSize;
 #if defined(Q_OS_WIN)
-    _font.setPointSize(8);
+    fontSize = 8;
 #else
-    _font.setPointSize(12);
+    fontSize = 12;
 #endif
+    _font.setPointSize(fontSize/ qMax(QFontMetrics(font()).width(text) / 110.0, 1.000));
     setFont(_font);
 
     if (!text.isEmpty())
         setText(text);
+    if (!toolTip.isEmpty())
+        setToolTip(toolTip);
 
     setFixedSize(120, 20);
 }
 
 // MyTitleLabel
 
-MyTitleLabel::MyTitleLabel(const QString& text, QWidget* parent) : MyLabel(text, parent) {
+MyTitleLabel::MyTitleLabel(const QString& text, const QString& toolTip, QWidget* parent) : MyLabel(text, toolTip, parent) {
     QFont _font = font();
 #if defined(Q_OS_WIN)
     _font.setPointSize(12);
