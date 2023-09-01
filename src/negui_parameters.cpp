@@ -6,8 +6,13 @@
 
 // MyParameterBase
 
-MyParameterBase::MyParameterBase(const QString& name) : MyBase(name) {
+MyParameterBase::MyParameterBase(const QString& name, const QString& hint) : MyBase(name) {
     _inputWidget = NULL;
+    _hint = hint;
+}
+
+const QString MyParameterBase::hint() {
+    return _hint;
 }
 
 QWidget* MyParameterBase::inputWidget() {
@@ -19,7 +24,7 @@ QWidget* MyParameterBase::inputWidget() {
 
 // MyDoubleParameter
 
-MyDoubleParameter::MyDoubleParameter(const QString& name) : MyParameterBase(name) {
+MyDoubleParameter::MyDoubleParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -129,7 +134,7 @@ void MyDoubleParameter::write(QJsonObject &json) {
 
 // MyIntegerParameter
 
-MyIntegerParameter::MyIntegerParameter(const QString& name) : MyParameterBase(name) {
+MyIntegerParameter::MyIntegerParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -236,7 +241,7 @@ void MyIntegerParameter::write(QJsonObject &json) {
 
 // MyBooleanParameter
 
-MyBooleanParameter::MyBooleanParameter(const QString& name) : MyParameterBase(name) {
+MyBooleanParameter::MyBooleanParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -305,7 +310,7 @@ void MyBooleanParameter::write(QJsonObject &json) {
 
 // MyStringParameter
 
-MyStringParameter::MyStringParameter(const QString& name) : MyParameterBase(name) {
+MyStringParameter::MyStringParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -363,7 +368,7 @@ void MyStringParameter::write(QJsonObject &json) {
 
 // MyNominalParameter
 
-MyNominalParameter::MyNominalParameter(const QString& name) : MyParameterBase(name) {
+MyNominalParameter::MyNominalParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -439,7 +444,7 @@ void MyNominalParameter::write(QJsonObject &json) {
 
 // MyPointParameterBase
 
-MyPointParameterBase::MyPointParameterBase(const QString& name) : MyParameterBase(name) {
+MyPointParameterBase::MyPointParameterBase(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
 
 }
 
@@ -519,7 +524,7 @@ void MyPointParameterBase::write(QJsonObject &json) {
 
 // MyAbsolutePointParameter
 
-MyAbsolutePointParameter::MyAbsolutePointParameter(const QString& name) : MyPointParameterBase(name) {
+MyAbsolutePointParameter::MyAbsolutePointParameter(const QString& name, const QString& hint) : MyPointParameterBase(name, hint) {
     _x = new MyPositionalParameter("x");
     connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyPositionalParameter("y");
@@ -529,7 +534,7 @@ MyAbsolutePointParameter::MyAbsolutePointParameter(const QString& name) : MyPoin
 
 // MyRelativePointParameter
 
-MyRelativePointParameter::MyRelativePointParameter(const QString& name) : MyPointParameterBase(name) {
+MyRelativePointParameter::MyRelativePointParameter(const QString& name, const QString& hint) : MyPointParameterBase(name, hint) {
     _x = new MyRelativePositionalParameter("x (%)");
     connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyRelativePositionalParameter("y (%)");
@@ -537,9 +542,9 @@ MyRelativePointParameter::MyRelativePointParameter(const QString& name) : MyPoin
     reset();
 }
 
-// MyBasePointParameter
+// MyControlPointParameter
 
-MyBasePointParameter::MyBasePointParameter(const QString& name) : MyPointParameterBase(name) {
+MyControlPointParameter::MyControlPointParameter(const QString& name, const QString& hint) : MyPointParameterBase(name, hint) {
     _x = new MyPositionalParameter("x (%)");
     connect(_x, SIGNAL(isUpdated()), this, SIGNAL(isUpdated()));
     _y = new MyPositionalParameter("y (%)");
@@ -549,7 +554,7 @@ MyBasePointParameter::MyBasePointParameter(const QString& name) : MyPointParamet
 
 // MyColorParameter
 
-MyColorParameter::MyColorParameter(const QString& name) : MyParameterBase(name) {
+MyColorParameter::MyColorParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
@@ -604,7 +609,7 @@ void MyColorParameter::write(QJsonObject &json) {
 
 // MyBorderWidthParameter
 
-MyBorderWidthParameter::MyBorderWidthParameter() : MyIntegerParameter("border-width") {
+MyBorderWidthParameter::MyBorderWidthParameter() : MyIntegerParameter("border-width", "Width of element borders") {
     reset();
 }
 
@@ -630,7 +635,7 @@ void MyCentroidBorderWidthParameter::reset() {
 
 // MyPositionalParameter
 
-MyPositionalParameter::MyPositionalParameter(const QString& name) : MyDoubleParameter(name) {
+MyPositionalParameter::MyPositionalParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
     reset();
 }
 
@@ -643,7 +648,7 @@ void MyPositionalParameter::reset() {
 
 // MyNodeRectanglePositionalParameter
 
-MyNodeRectanglePositionalParameter::MyNodeRectanglePositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyNodeRectanglePositionalParameter::MyNodeRectanglePositionalParameter(const QString& name, const QString& hint) : MyPositionalParameter(name, hint) {
     reset();
 }
 
@@ -654,7 +659,7 @@ void MyNodeRectanglePositionalParameter::reset() {
 
 // MyNodeEllipsePositionalParameter
 
-MyNodeEllipsePositionalParameter::MyNodeEllipsePositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyNodeEllipsePositionalParameter::MyNodeEllipsePositionalParameter(const QString& name, const QString& hint) : MyPositionalParameter(name, hint) {
     reset();
 }
 
@@ -665,7 +670,7 @@ void MyNodeEllipsePositionalParameter::reset() {
 
 // MyNodeTextPositionalParameter
 
-MyNodeTextPositionalParameter::MyNodeTextPositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyNodeTextPositionalParameter::MyNodeTextPositionalParameter(const QString& name, const QString& hint) : MyPositionalParameter(name, hint) {
     reset();
 }
 
@@ -676,7 +681,7 @@ void MyNodeTextPositionalParameter::reset() {
 
 // MyArrowHeadRectangleXParameter
 
-MyArrowHeadRectangleXParameter::MyArrowHeadRectangleXParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadRectangleXParameter::MyArrowHeadRectangleXParameter() : MyPositionalParameter("x", "Relative \"X\" value of rectangle bounding box") {
     reset();
 }
 
@@ -687,7 +692,7 @@ void MyArrowHeadRectangleXParameter::reset() {
 
 // MyArrowHeadRectangleYParameter
 
-MyArrowHeadRectangleYParameter::MyArrowHeadRectangleYParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadRectangleYParameter::MyArrowHeadRectangleYParameter() : MyPositionalParameter("y", "Relative \"Y\" value of rectangle bounding box") {
     reset();
 }
 
@@ -698,7 +703,7 @@ void MyArrowHeadRectangleYParameter::reset() {
 
 // MyArrowHeadEllipseCxParameter
 
-MyArrowHeadEllipseCxParameter::MyArrowHeadEllipseCxParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadEllipseCxParameter::MyArrowHeadEllipseCxParameter() : MyPositionalParameter("cx", "Relative center of ellipse along x-axis") {
     reset();
 }
 
@@ -709,7 +714,7 @@ void MyArrowHeadEllipseCxParameter::reset() {
 
 // MyArrowHeadEllipseCyParameter
 
-MyArrowHeadEllipseCyParameter::MyArrowHeadEllipseCyParameter(const QString& name) : MyPositionalParameter(name) {
+MyArrowHeadEllipseCyParameter::MyArrowHeadEllipseCyParameter() : MyPositionalParameter("cy", "Relative center of ellipse along y-axis") {
     reset();
 }
 
@@ -720,7 +725,7 @@ void MyArrowHeadEllipseCyParameter::reset() {
 
 // MyRelativePositionalParameter
 
-MyRelativePositionalParameter::MyRelativePositionalParameter(const QString& name) : MyPositionalParameter(name) {
+MyRelativePositionalParameter::MyRelativePositionalParameter(const QString& name, const QString& hint) : MyPositionalParameter(name, hint) {
     reset();
 }
 
@@ -733,7 +738,7 @@ void MyRelativePositionalParameter::reset() {
 
 // MyDimensionalParameter
 
-MyDimensionalParameter::MyDimensionalParameter(const QString& name) : MyDoubleParameter(name) {
+MyDimensionalParameter::MyDimensionalParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
     reset();
 }
 
@@ -746,7 +751,7 @@ void MyDimensionalParameter::reset() {
 
 // MyNodeRectangleDimensionalParameter
 
-MyNodeRectangleDimensionalParameter::MyNodeRectangleDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeRectangleDimensionalParameter::MyNodeRectangleDimensionalParameter(const QString& name, const QString& hint) : MyDimensionalParameter(name, hint) {
     reset();
 }
 
@@ -757,7 +762,7 @@ void MyNodeRectangleDimensionalParameter::reset() {
 
 // MyNodeEllipseDimensionalParameter
 
-MyNodeEllipseDimensionalParameter::MyNodeEllipseDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeEllipseDimensionalParameter::MyNodeEllipseDimensionalParameter(const QString& name, const QString& hint) : MyDimensionalParameter(name, hint) {
     reset();
 }
 
@@ -768,7 +773,7 @@ void MyNodeEllipseDimensionalParameter::reset() {
 
 // MyNodeTextDimensionalParameter
 
-MyNodeTextDimensionalParameter::MyNodeTextDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeTextDimensionalParameter::MyNodeTextDimensionalParameter(const QString& name, const QString& hint) : MyDimensionalParameter(name, hint) {
     reset();
 }
 
@@ -779,7 +784,7 @@ void MyNodeTextDimensionalParameter::reset() {
 
 // MyArrowHeadRectangleDimensionalParameter
 
-MyArrowHeadRectangleDimensionalParameter::MyArrowHeadRectangleDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyArrowHeadRectangleDimensionalParameter::MyArrowHeadRectangleDimensionalParameter(const QString& name, const QString& hint) : MyDimensionalParameter(name, hint) {
     reset();
 }
 
@@ -790,7 +795,7 @@ void MyArrowHeadRectangleDimensionalParameter::reset() {
 
 // MyArrowHeadEllipseDimensionalParameter
 
-MyArrowHeadEllipseDimensionalParameter::MyArrowHeadEllipseDimensionalParameter(const QString& name) : MyDimensionalParameter(name) {
+MyArrowHeadEllipseDimensionalParameter::MyArrowHeadEllipseDimensionalParameter(const QString& name, const QString& hint) : MyDimensionalParameter(name, hint) {
     reset();
 }
 
@@ -801,7 +806,7 @@ void MyArrowHeadEllipseDimensionalParameter::reset() {
 
 // MyCornerCurvatureParameter
 
-MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name) : MyDoubleParameter(name) {
+MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
     reset();
 }
 
@@ -814,7 +819,7 @@ void MyCornerCurvatureParameter::reset() {
 
 // MyNodeCentroidRadiusParameter
 
-MyNodeCentroidRadiusParameter::MyNodeCentroidRadiusParameter(const QString& name) : MyDimensionalParameter(name) {
+MyNodeCentroidRadiusParameter::MyNodeCentroidRadiusParameter() : MyDimensionalParameter("radius", "\"Radius\" value of centroid shape") {
     reset();
 }
 
@@ -827,7 +832,7 @@ void MyNodeCentroidRadiusParameter::reset() {
 
 // MyBorderColorParameter
 
-MyBorderColorParameter::MyBorderColorParameter() : MyColorParameter("border-color") {
+MyBorderColorParameter::MyBorderColorParameter() : MyColorParameter("border-color", "Color of element borders") {
     reset();
 }
 
@@ -847,7 +852,7 @@ void MyCentroidBorderColorParameter::reset() {
 
 // MyFillColorParameter
 
-MyFillColorParameter::MyFillColorParameter() : MyColorParameter("fill-color") {
+MyFillColorParameter::MyFillColorParameter() : MyColorParameter("fill-color", "Fill color of element") {
     reset();
 }
 
@@ -867,7 +872,7 @@ void MyCentroidFillColorParameter::reset() {
 
 // MyTextPlainTextParameter
 
-MyTextPlainTextParameter::MyTextPlainTextParameter() : MyStringParameter("plain-text") {
+MyTextPlainTextParameter::MyTextPlainTextParameter() : MyStringParameter("plain-text", "Text being displayed on element") {
     reset();
 }
 
@@ -883,7 +888,7 @@ void MyTextPlainTextParameter::reset() {
 
 // MyFontParameter
 
-MyFontParameter::MyFontParameter() : MyParameterBase("font") {
+MyFontParameter::MyFontParameter() : MyParameterBase("font", "Text \"Font\"") {
 
 }
 
@@ -970,16 +975,16 @@ void MyFontParameter::write(QJsonObject &json) {
 
 }
 
-// MyTextAnchorParameter
+// MyHorizontalAlignmentParameter
 
-MyTextAnchorParameter::MyTextAnchorParameter() : MyNominalParameter("text-anchor") {
+MyHorizontalAlignmentParameter::MyHorizontalAlignmentParameter() : MyNominalParameter("horizontal-alignment", "Text \"Horizontal Alignment\"") {
     _items.push_back("start");
     _items.push_back("middle");
     _items.push_back("end");
     reset();
 }
 
-const Qt::Alignment MyTextAnchorParameter::defaultAlignment() const {
+const Qt::Alignment MyHorizontalAlignmentParameter::defaultAlignment() const {
     if (defaultValue() == "start")
         return Qt::AlignLeft;
     else if (defaultValue() == "middle")
@@ -990,13 +995,13 @@ const Qt::Alignment MyTextAnchorParameter::defaultAlignment() const {
     return Qt::AlignHCenter;
 }
 
-void MyTextAnchorParameter::reset() {
+void MyHorizontalAlignmentParameter::reset() {
     setDefaultValue("middle");
 }
 
-// MyVTextAnchorParameter
+// MyVerticalAlignmentParameter
 
-MyVTextAnchorParameter::MyVTextAnchorParameter() : MyNominalParameter("vtext-anchor") {
+MyVerticalAlignmentParameter::MyVerticalAlignmentParameter() : MyNominalParameter("vertical-alignment", "Text \"Vertical Alignment\"") {
     _items.push_back("top");
     _items.push_back("middle");
     _items.push_back("baseline");
@@ -1004,7 +1009,7 @@ MyVTextAnchorParameter::MyVTextAnchorParameter() : MyNominalParameter("vtext-anc
     reset();
 }
 
-const Qt::Alignment MyVTextAnchorParameter::defaultAlignment() const {
+const Qt::Alignment MyVerticalAlignmentParameter::defaultAlignment() const {
     if (defaultValue() == "top")
         return Qt::AlignTop;
     else if (defaultValue() == "middle")
@@ -1017,6 +1022,6 @@ const Qt::Alignment MyVTextAnchorParameter::defaultAlignment() const {
     return Qt::AlignVCenter;
 }
 
-void MyVTextAnchorParameter::reset() {
+void MyVerticalAlignmentParameter::reset() {
     setDefaultValue("middle");
 }

@@ -10,7 +10,7 @@ class MyParameterBase : public QObject, public MyBase {
 
 public:
 
-    MyParameterBase(const QString& name);
+    MyParameterBase(const QString& name, const QString& hint);
 
     typedef enum {
         DOUBLE_PARAMETER_TYPE,
@@ -29,6 +29,8 @@ public:
     
     // get type of parameter
     virtual PARAMETER_TYPE type() = 0;
+
+    virtual const QString hint();
 
     // set the default value using the input widget value
     virtual void setDefaultValue() = 0;
@@ -51,12 +53,13 @@ signals:
 
 protected:
     QWidget* _inputWidget;
+    QString _hint;
 };
 
 class MyDoubleParameter : public MyParameterBase {
 public:
 
-    MyDoubleParameter(const QString& name);
+    MyDoubleParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -129,7 +132,7 @@ protected:
 class MyIntegerParameter : public MyParameterBase {
 public:
 
-    MyIntegerParameter(const QString& name);
+    MyIntegerParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -202,7 +205,7 @@ protected:
 class MyBooleanParameter : public MyParameterBase {
 public:
 
-    MyBooleanParameter(const QString& name);
+    MyBooleanParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -242,7 +245,7 @@ protected:
 class MyStringParameter : public MyParameterBase {
 public:
 
-    MyStringParameter(const QString& name);
+    MyStringParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -282,7 +285,7 @@ protected:
 class MyNominalParameter : public MyParameterBase {
 public:
 
-    MyNominalParameter(const QString& name);
+    MyNominalParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -326,7 +329,7 @@ protected:
 class MyPointParameterBase : public MyParameterBase {
 public:
 
-    MyPointParameterBase(const QString& name);
+    MyPointParameterBase(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -369,25 +372,25 @@ protected:
 class MyAbsolutePointParameter : public MyPointParameterBase {
 public:
 
-    MyAbsolutePointParameter(const QString& name);
+    MyAbsolutePointParameter(const QString& name, const QString& hint = "");
 };
 
 class MyRelativePointParameter : public MyPointParameterBase {
 public:
 
-    MyRelativePointParameter(const QString& name);
+    MyRelativePointParameter(const QString& name, const QString& hint = "");
 };
 
-class MyBasePointParameter : public MyPointParameterBase {
+class MyControlPointParameter : public MyPointParameterBase {
 public:
 
-    MyBasePointParameter(const QString& name);
+    MyControlPointParameter(const QString& name, const QString& hint = "");
 };
 
 class MyColorParameter : public MyParameterBase {
 public:
 
-    MyColorParameter(const QString& name);
+    MyColorParameter(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
@@ -445,7 +448,7 @@ public:
 class MyPositionalParameter : public MyDoubleParameter {
 public:
 
-    MyPositionalParameter(const QString& name);
+    MyPositionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -454,7 +457,7 @@ public:
 class MyNodeRectanglePositionalParameter : public MyPositionalParameter {
 public:
 
-    MyNodeRectanglePositionalParameter(const QString& name);
+    MyNodeRectanglePositionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -463,7 +466,7 @@ public:
 class MyNodeEllipsePositionalParameter : public MyPositionalParameter {
 public:
 
-    MyNodeEllipsePositionalParameter(const QString& name);
+    MyNodeEllipsePositionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -472,7 +475,7 @@ public:
 class MyNodeTextPositionalParameter : public MyPositionalParameter {
 public:
 
-    MyNodeTextPositionalParameter(const QString& name);
+    MyNodeTextPositionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -481,7 +484,7 @@ public:
 class MyArrowHeadRectangleXParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadRectangleXParameter(const QString& name = "x");
+    MyArrowHeadRectangleXParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -490,7 +493,7 @@ public:
 class MyArrowHeadRectangleYParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadRectangleYParameter(const QString& name = "y");
+    MyArrowHeadRectangleYParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -499,7 +502,7 @@ public:
 class MyArrowHeadEllipseCxParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCxParameter(const QString& name = "cx");
+    MyArrowHeadEllipseCxParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -508,7 +511,7 @@ public:
 class MyArrowHeadEllipseCyParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCyParameter(const QString& name = "cy");
+    MyArrowHeadEllipseCyParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -517,7 +520,7 @@ public:
 class MyRelativePositionalParameter : public MyPositionalParameter {
 public:
 
-    MyRelativePositionalParameter(const QString& name);
+    MyRelativePositionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -526,7 +529,7 @@ public:
 class MyDimensionalParameter : public MyDoubleParameter {
 public:
 
-    MyDimensionalParameter(const QString& name);
+    MyDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -535,7 +538,7 @@ public:
 class MyNodeRectangleDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyNodeRectangleDimensionalParameter(const QString& name);
+    MyNodeRectangleDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -544,7 +547,7 @@ public:
 class MyNodeEllipseDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyNodeEllipseDimensionalParameter(const QString& name);
+    MyNodeEllipseDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -553,7 +556,7 @@ public:
 class MyNodeTextDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyNodeTextDimensionalParameter(const QString& name);
+    MyNodeTextDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -562,7 +565,7 @@ public:
 class MyArrowHeadRectangleDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyArrowHeadRectangleDimensionalParameter(const QString& name);
+    MyArrowHeadRectangleDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -571,7 +574,7 @@ public:
 class MyArrowHeadEllipseDimensionalParameter : public MyDimensionalParameter {
 public:
 
-    MyArrowHeadEllipseDimensionalParameter(const QString& name);
+    MyArrowHeadEllipseDimensionalParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -580,7 +583,7 @@ public:
 class MyCornerCurvatureParameter : public MyDoubleParameter {
 public:
 
-    MyCornerCurvatureParameter(const QString& name);
+    MyCornerCurvatureParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;
@@ -589,7 +592,7 @@ public:
 class MyNodeCentroidRadiusParameter : public  MyDimensionalParameter {
 public:
 
-    MyNodeCentroidRadiusParameter(const QString& name);
+    MyNodeCentroidRadiusParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -707,10 +710,10 @@ protected:
     bool _isSetDefaultValue;
 };
 
-class MyTextAnchorParameter : public MyNominalParameter {
+class MyHorizontalAlignmentParameter : public MyNominalParameter {
 public:
 
-    MyTextAnchorParameter();
+    MyHorizontalAlignmentParameter();
 
     // get the value of default alignment
     const Qt::Alignment defaultAlignment() const;
@@ -719,10 +722,10 @@ public:
     void reset() override;
 };
 
-class MyVTextAnchorParameter : public MyNominalParameter {
+class MyVerticalAlignmentParameter : public MyNominalParameter {
 public:
 
-    MyVTextAnchorParameter();
+    MyVerticalAlignmentParameter();
 
     // get the value of default alignment
     const Qt::Alignment defaultAlignment() const;
