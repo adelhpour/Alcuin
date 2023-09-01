@@ -141,6 +141,12 @@ const QPointF MyNodeBase::position() const {
     return _position;
 }
 
+void MyNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        graphicsItem()->moveBy(dx, dy);
+    updateFocusedGraphicsItems();
+}
+
 const QRectF MyNodeBase::getExtents() {
     return ((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents();
 }
@@ -282,6 +288,17 @@ void MyClassicNodeBase::setPosition(const QPointF& position) {
         lockChildNodes(false);
 
     MyNodeBase::setPosition(position);
+}
+
+const bool MyClassicNodeBase::canBeMovedExternally() {
+    if (childNodes().size()) {
+        for (MyNetworkElementBase* childNode : qAsConst(childNodes())) {
+            if (childNode->isSelected())
+                return false;
+        }
+    }
+
+    return true;
 }
 
 const QRectF MyClassicNodeBase::getExtents() {
@@ -518,6 +535,10 @@ void MyCentroidNode::setSelected(const bool& selected) {
         for (MyNetworkElementBase *edge : qAsConst(edges()))
             edge->setSelected(selected);
     }
+}
+
+const bool MyCentroidNode::canBeMovedExternally() {
+    return true;
 }
 
 QWidget* MyCentroidNode::getFeatureMenu() {

@@ -177,6 +177,15 @@ const QPointF MyEdgeBase::middlePosition() {
     return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
 }
 
+const bool MyEdgeBase::canBeMovedExternally() {
+    return false;
+}
+
+void MyEdgeBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        return;
+}
+
 const QRectF MyEdgeBase::getExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }

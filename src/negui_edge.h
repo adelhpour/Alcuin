@@ -43,7 +43,9 @@ public:
     void setSelectedWithColor(const bool& selected) override;
     
     MyNetworkElementBase* arrowHead();
+
     void setArrowHead();
+
     const bool isSetArrowHead() const { return _isSetArrowHead; }
     
     // determine whether the edge is visible on the scene
@@ -68,6 +70,10 @@ public:
     void enableDisplayFeatureMenuMode() override;
 
     const QPointF middlePosition();
+
+    const bool canBeMovedExternally() override;
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
     
     const QRectF getExtents() override;
     

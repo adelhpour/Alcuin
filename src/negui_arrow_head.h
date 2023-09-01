@@ -32,6 +32,10 @@ public:
 
     void setSelectedWithColor(const bool& selected) override;
 
+    const bool canBeMovedExternally() override;
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
+
     const QRectF getExtents() override;
 
     QWidget* getFeatureMenu() override;

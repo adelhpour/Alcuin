@@ -64,6 +64,10 @@ public:
     void enableDisplayFeatureMenuMode() override;
     
     virtual const QRectF getExtents() = 0;
+
+    virtual const bool canBeMovedExternally() = 0;
+
+    virtual void moveExternally(const qreal& dx, const qreal& dy) = 0;
     
     virtual QWidget* getFeatureMenu();
     
@@ -71,7 +75,7 @@ public:
 
     QWidget* createAndConnectFeatureMenuObject();
 
-    signals:
+signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
     
