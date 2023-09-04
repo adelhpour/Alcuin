@@ -279,6 +279,7 @@ MyConnectedToCentroidNodeEdgeBase::MyConnectedToCentroidNodeEdgeBase(const QStri
 
 void MyConnectedToCentroidNodeEdgeBase::connectGraphicsItem() {
     MyEdgeBase::connectGraphicsItem();
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(this, SIGNAL(askForConnectedToCentroidNodeControlPoint()), _graphicsItem, SIGNAL(askForConnectedToCentroidNodeControlPoint()));
 }
 
