@@ -226,12 +226,12 @@ void MyNetworkElementGraphicsItemBase::setZValue(qreal z) {
 }
 
 void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+    QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = true;
         emit mouseLeftButtonIsPressed();
         event->accept();
     }
-    QGraphicsItem::mousePressEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
