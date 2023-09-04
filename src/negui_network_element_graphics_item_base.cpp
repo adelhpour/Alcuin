@@ -132,8 +132,10 @@ QList<QGraphicsItem*> MyNetworkElementGraphicsItemBase::createFocusedGraphicsIte
 }
 
 void MyNetworkElementGraphicsItemBase::updateFocusedGraphicsItems() {
+    bool isSelected = _focusedGraphicsItems.size() ? true : false;
     clearFocusedGraphicsItems();
-    addFocusedGraphicsItems();
+    if (isSelected)
+        addFocusedGraphicsItems();
 }
 
 void MyNetworkElementGraphicsItemBase::addFocusedGraphicsItems() {
@@ -233,7 +235,6 @@ void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent 
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsItem::mouseReleaseEvent(event);
     if (event->button() == Qt::LeftButton) {
         _isChosen = false;
         event->accept();
@@ -243,6 +244,7 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         displayContextMenu(event->screenPos());
         event->accept();
     }
+    QGraphicsItem::mouseReleaseEvent(event);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
