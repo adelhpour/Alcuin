@@ -32,7 +32,13 @@ public:
 
     void extractExtents();
 
+    QList<MyNetworkElementBase*> getClassicNodes();
+
+    QList<MyNetworkElementBase*> getCentroidNodes();
+
     virtual void adjustNodePositions() = 0;
+
+    void adjustCentroidNodePositions();
 };
 
 class MyNodeTopAligner : public MyNodeAlignerBase {
@@ -103,8 +109,6 @@ class MyNodeDistributeAlignerBase : public MyNodeAlignerBase {
 public:
 
     MyNodeDistributeAlignerBase(QList<MyNetworkElementBase*> networkElements);
-
-    QList<MyNetworkElementBase*> getClassicNodes();
 };
 
 class MyNodeHorizontallyDistributeAligner : public MyNodeDistributeAlignerBase {
