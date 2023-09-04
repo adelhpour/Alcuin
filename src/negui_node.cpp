@@ -521,8 +521,8 @@ const bool MyCentroidNode::connectedBezierCurvesNeedsToBeAdjusted() {
 const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     QPointF position = QPointF(0.0, 0.0);
     for (MyNetworkElementBase *edge : qAsConst(edges()))
-        position += ((MyEdgeBase*)edge)->middlePosition();
-    return position /= edges().size();
+        position += ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodePosition();
+    return position / edges().size();
 }
 
 const bool MyCentroidNode::isNodePositionConnectedToNeighborNodes() {

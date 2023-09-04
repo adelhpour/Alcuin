@@ -174,10 +174,6 @@ void MyEdgeBase::enableDisplayFeatureMenuMode() {
         arrowHead()->enableDisplayFeatureMenuMode();
 }
 
-const QPointF MyEdgeBase::middlePosition() {
-    return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
-}
-
 const bool MyEdgeBase::canBeMovedExternally() {
     return false;
 }
@@ -297,6 +293,10 @@ MyEdgeBase::EDGE_TYPE MyConnectedToSourceCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_SOURCE_CENTROID_NODE_EDGE;
 }
 
+const QPointF MyConnectedToSourceCentroidNodeEdge::nonCentroidNodePosition() {
+    return ((MyNodeBase*)sourceNode())->getExtents().center();
+}
+
 // MyConnectedToTargetCentroidNodeEdge
 
 MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyConnectedToCentroidNodeEdgeBase(name) {
@@ -308,6 +308,10 @@ MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const Q
 
 MyEdgeBase::EDGE_TYPE MyConnectedToTargetCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_TARGET_CENTROID_NODE_EDGE;
+}
+
+const QPointF MyConnectedToTargetCentroidNodeEdge::nonCentroidNodePosition() {
+    return ((MyNodeBase*)targetNode())->getExtents().center();
 }
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {

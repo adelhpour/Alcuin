@@ -239,9 +239,11 @@ signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);
 
-private slots:
+public slots:
 
     void adjustNodePositionToNeighborNodes();
+
+private slots:
 
     void adjustConnectedBezierCurves();
 
