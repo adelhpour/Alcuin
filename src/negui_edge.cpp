@@ -129,6 +129,7 @@ void MyEdgeBase::updatePoints() {
     QPointF targetPosition = getEndOfTheLinePosition(targetNode(), sourceNode());
     ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
+    updateFocusedGraphicsItems();
     emit updateArrowHeadPlacement();
 }
 
@@ -173,8 +174,13 @@ void MyEdgeBase::enableDisplayFeatureMenuMode() {
         arrowHead()->enableDisplayFeatureMenuMode();
 }
 
-const QPointF MyEdgeBase::middlePosition() {
-    return 0.5 * (((MyNodeBase*)sourceNode())->getExtents().center() + ((MyNodeBase*)targetNode())->getExtents().center());
+const bool MyEdgeBase::canBeMovedExternally() {
+    return false;
+}
+
+void MyEdgeBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        return;
 }
 
 const QRectF MyEdgeBase::getExtents() {
@@ -270,6 +276,7 @@ MyConnectedToCentroidNodeEdgeBase::MyConnectedToCentroidNodeEdgeBase(const QStri
 
 void MyConnectedToCentroidNodeEdgeBase::connectGraphicsItem() {
     MyEdgeBase::connectGraphicsItem();
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(this, SIGNAL(askForConnectedToCentroidNodeControlPoint()), _graphicsItem, SIGNAL(askForConnectedToCentroidNodeControlPoint()));
 }
 
@@ -286,6 +293,10 @@ MyEdgeBase::EDGE_TYPE MyConnectedToSourceCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_SOURCE_CENTROID_NODE_EDGE;
 }
 
+const QPointF MyConnectedToSourceCentroidNodeEdge::nonCentroidNodePosition() {
+    return ((MyNodeBase*)sourceNode())->getExtents().center();
+}
+
 // MyConnectedToTargetCentroidNodeEdge
 
 MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyConnectedToCentroidNodeEdgeBase(name) {
@@ -297,6 +308,10 @@ MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const Q
 
 MyEdgeBase::EDGE_TYPE MyConnectedToTargetCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_TARGET_CENTROID_NODE_EDGE;
+}
+
+const QPointF MyConnectedToTargetCentroidNodeEdge::nonCentroidNodePosition() {
+    return ((MyNodeBase*)targetNode())->getExtents().center();
 }
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {

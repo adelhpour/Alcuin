@@ -25,10 +25,12 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
-    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedEdges()));
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedEdges()));
+    connect((MyNodeSceneGraphicsItemBase*)_graphicsItem, &MyNodeSceneGraphicsItemBase::positionChangedByMouseMoveEvent, this, [this] (const QPointF& movedDistance) { positionChangedByMouseMoveEvent(this, movedDistance); });
 }
 
 void MyNodeBase::addEdge(MyNetworkElementBase* e) {
@@ -283,6 +285,25 @@ void MyClassicNodeBase::setPosition(const QPointF& position) {
     MyNodeBase::setPosition(position);
 }
 
+void MyClassicNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally()) {
+        graphicsItem()->moveBy(dx, dy);
+        adjustConnectedEdges();
+    }
+    updateFocusedGraphicsItems();
+}
+
+const bool MyClassicNodeBase::canBeMovedExternally() {
+    if (childNodes().size()) {
+        for (MyNetworkElementBase* childNode : qAsConst(childNodes())) {
+            if (childNode->isSelected())
+                return false;
+        }
+    }
+
+    return true;
+}
+
 const QRectF MyClassicNodeBase::getExtents() {
     if (childNodes().size()) {
         QRectF childExtents = ((MyNodeBase*)childNodes().at(0))->getExtents();
@@ -444,7 +465,7 @@ void MyCentroidNode::connectGraphicsItem() {
     MyNodeBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForGetBezierAdjustLine()), this, SLOT(createBezierAdjustLine()));
     connect(_graphicsItem, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
-    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(adjustConnectedBezierCurves()));
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedBezierCurves()));
     connect(_graphicsItem, SIGNAL(askForConnectNodePositionToNeighborNodes(const bool&)), this, SLOT(connectNodePositionToNeighborNodes(const bool&)));
     connect(_graphicsItem, SIGNAL(askForWhetherNodePositionIsConnectedToNeighborNodes()), this, SLOT(isNodePositionConnectedToNeighborNodes()));
 }
@@ -480,6 +501,7 @@ void MyCentroidNode::adjustNodePositionToNeighborNodes() {
     if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
         QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
         ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
+        updateFocusedGraphicsItems();
         adjustConnectedBezierCurves();
     }
 }
@@ -499,8 +521,8 @@ const bool MyCentroidNode::connectedBezierCurvesNeedsToBeAdjusted() {
 const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     QPointF position = QPointF(0.0, 0.0);
     for (MyNetworkElementBase *edge : qAsConst(edges()))
-        position += ((MyEdgeBase*)edge)->middlePosition();
-    return position /= edges().size();
+        position += ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodePosition();
+    return position / edges().size();
 }
 
 const bool MyCentroidNode::isNodePositionConnectedToNeighborNodes() {
@@ -517,6 +539,15 @@ void MyCentroidNode::setSelected(const bool& selected) {
         for (MyNetworkElementBase *edge : qAsConst(edges()))
             edge->setSelected(selected);
     }
+}
+
+void MyCentroidNode::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        return;
+}
+
+const bool MyCentroidNode::canBeMovedExternally() {
+    return false;
 }
 
 QWidget* MyCentroidNode::getFeatureMenu() {

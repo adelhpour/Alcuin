@@ -82,6 +82,8 @@ public:
 signals:
     
     MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
+
+    void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
     
 public slots:
     
@@ -135,6 +137,10 @@ public:
 
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
+
+    const bool canBeMovedExternally() override;
 
     // get node extents based on its children extents
     const QRectF getExtents() override;
@@ -223,15 +229,21 @@ public:
 
     const bool connectedBezierCurvesNeedsToBeAdjusted();
 
+    void moveExternally(const qreal& dx, const qreal& dy) override;
+
+    const bool canBeMovedExternally() override;
+
     QWidget* getFeatureMenu() override;
 
 signals:
 
     void bezierAdjustLineIsUpdated(const QLineF&);
 
-private slots:
+public slots:
 
     void adjustNodePositionToNeighborNodes();
+
+private slots:
 
     void adjustConnectedBezierCurves();
 

@@ -43,7 +43,9 @@ public:
     void setSelectedWithColor(const bool& selected) override;
     
     MyNetworkElementBase* arrowHead();
+
     void setArrowHead();
+
     const bool isSetArrowHead() const { return _isSetArrowHead; }
     
     // determine whether the edge is visible on the scene
@@ -67,7 +69,9 @@ public:
     
     void enableDisplayFeatureMenuMode() override;
 
-    const QPointF middlePosition();
+    const bool canBeMovedExternally() override;
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
     
     const QRectF getExtents() override;
     
@@ -121,6 +125,8 @@ public:
 
     void connectGraphicsItem() override;
 
+    virtual const QPointF nonCentroidNodePosition() = 0;
+
 signals:
 
     const QPointF askForConnectedToCentroidNodeControlPoint();
@@ -134,6 +140,8 @@ public:
     MyConnectedToSourceCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
+
+    const QPointF nonCentroidNodePosition() override;
 };
 
 class MyConnectedToTargetCentroidNodeEdge : public MyConnectedToCentroidNodeEdgeBase {
@@ -144,6 +152,8 @@ public:
     MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
+
+    const QPointF nonCentroidNodePosition() override;
 };
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode);

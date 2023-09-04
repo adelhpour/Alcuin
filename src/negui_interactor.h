@@ -112,7 +112,7 @@ signals:
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
-    
+
     void enterKeyIsPressed();
     
 public slots:
@@ -156,6 +156,7 @@ public slots:
     const bool areAnyElementsSelected();
     const QString iconsDirectoryPath();
     QJsonObject getNetworkElementsInfo();
+    void moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance);
     
     // modes
     void enableNormalMode() override;

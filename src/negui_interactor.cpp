@@ -17,6 +17,7 @@
 #include "negui_decorate_menu_buttons.h"
 #include "negui_network_element_aligner.h"
 #include "negui_network_element_aligner_builder.h"
+#include "negui_network_element_mover.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -301,6 +302,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
         connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*)), this, SLOT(areAnyOtherElementsSelected(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
+        connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         emit askForAddGraphicsItem(n->graphicsItem());
@@ -615,6 +617,12 @@ void MyInteractor::resetCopiedNetworkElements() {
     emit pasteElementsStatusChanged(false);
 }
 
+void MyInteractor::moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance) {
+    MyNetworkElementMoverBase* nodeMover = new MyNodeMover(selectedNodes(), movedNode);
+    nodeMover->move(movedDistance.x(), movedDistance.y());
+    nodeMover->deleteLater();
+}
+
 void MyInteractor::deleteNewEdgeBuilder() {
     for (MyNetworkElementBase* selectedNode : selectedNodes())
         selectedNode->setSelected(false);
@@ -716,12 +724,17 @@ void MyInteractor::selectEdges(const bool& selected, const QString& category) {
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
     if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
-        if (!element->isSelected())
+        if (askForWhetherShiftModifierIsPressed()) {
+            if (!element->isSelected())
+                element->setSelected(true);
+            else
+                element->setSelected(false);
+        }
+        else {
+            if (!(element->isSelected() && areAnyOtherElementsSelected(element)))
+                selectElements(false);
             element->setSelected(true);
-        else
-            element->setSelected(false);
+        }
         emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
         emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }

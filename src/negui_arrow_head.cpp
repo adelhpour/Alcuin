@@ -62,6 +62,15 @@ void MyArrowHeadBase::setSelectedWithColor(const bool& selected) {
         graphicsItem()->setSelectedWithFillColor(selected);
 }
 
+const bool MyArrowHeadBase::canBeMovedExternally() {
+    return false;
+}
+
+void MyArrowHeadBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        return;
+}
+
 const QRectF MyArrowHeadBase::getExtents() {
     return QRectF(0.0, 0.0, 0.0, 0.0);
 }

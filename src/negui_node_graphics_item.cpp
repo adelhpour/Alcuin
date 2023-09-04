@@ -35,7 +35,7 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     setFlag(QGraphicsItem::ItemIsFocusable, true);
     
     _reparent = false;
-    connect(this, SIGNAL(positionChangedByMouseMoveEvent()), this, SLOT(updateFocusedGraphicsItems()));
+    connect(this, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(updateFocusedGraphicsItems()));
     
     setZValue(2);
 }
@@ -100,7 +100,7 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
 
 void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseMoveEvent(event);
-    emit positionChangedByMouseMoveEvent();
+    emit positionChangedByMouseMoveEvent(event->scenePos() - event->lastScenePos());
 }
 
 void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {

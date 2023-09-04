@@ -54,7 +54,7 @@ signals:
     
     void askForResetPosition();
 
-    void positionChangedByMouseMoveEvent();
+    void positionChangedByMouseMoveEvent(const QPointF&);
     
 protected:
 
