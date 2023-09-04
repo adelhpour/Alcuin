@@ -724,12 +724,17 @@ void MyInteractor::selectEdges(const bool& selected, const QString& category) {
 
 void MyInteractor::selectElement(MyNetworkElementBase* element) {
     if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
-        if (!element->isSelected())
+        if (askForWhetherShiftModifierIsPressed()) {
+            if (!element->isSelected())
+                element->setSelected(true);
+            else
+                element->setSelected(false);
+        }
+        else {
+            if (!(element->isSelected() && areAnyOtherElementsSelected(element)))
+                selectElements(false);
             element->setSelected(true);
-        else
-            element->setSelected(false);
+        }
         emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
         emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
