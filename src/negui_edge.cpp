@@ -129,6 +129,7 @@ void MyEdgeBase::updatePoints() {
     QPointF targetPosition = getEndOfTheLinePosition(targetNode(), sourceNode());
     ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->setLine(QLineF(sourcePosition.x(), sourcePosition.y(), targetPosition.x(), targetPosition.y()));
     graphicsItem()->setZValue(calculateZValue());
+    updateFocusedGraphicsItems();
     emit updateArrowHeadPlacement();
 }
 
