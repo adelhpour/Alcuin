@@ -25,6 +25,9 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () {
+        if (!isSelected() || !askForWhetherAnyOtherElementsAreSelected(this))
+            emit askForSelectNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
     connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
@@ -139,12 +142,6 @@ void MyNodeBase::resetPosition() {
 
 const QPointF MyNodeBase::position() const {
     return _position;
-}
-
-void MyNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
-    if (canBeMovedExternally())
-        graphicsItem()->moveBy(dx, dy);
-    updateFocusedGraphicsItems();
 }
 
 const QRectF MyNodeBase::getExtents() {
@@ -288,6 +285,14 @@ void MyClassicNodeBase::setPosition(const QPointF& position) {
         lockChildNodes(false);
 
     MyNodeBase::setPosition(position);
+}
+
+void MyClassicNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally()) {
+        graphicsItem()->moveBy(dx, dy);
+        adjustConnectedEdges();
+    }
+    updateFocusedGraphicsItems();
 }
 
 const bool MyClassicNodeBase::canBeMovedExternally() {
@@ -537,8 +542,13 @@ void MyCentroidNode::setSelected(const bool& selected) {
     }
 }
 
+void MyCentroidNode::moveExternally(const qreal& dx, const qreal& dy) {
+    if (canBeMovedExternally())
+        return;
+}
+
 const bool MyCentroidNode::canBeMovedExternally() {
-    return true;
+    return false;
 }
 
 QWidget* MyCentroidNode::getFeatureMenu() {

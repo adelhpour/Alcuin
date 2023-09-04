@@ -63,8 +63,6 @@ public:
     // return true if the child nodes of the node are locked
     const bool isParentNodeLocked() const { return _isParentNodeLocked; }
 
-    void moveExternally(const qreal& dx, const qreal& dy) override;
-
     const QRectF getExtents() override;
 
     const qreal endEdgePadding();
@@ -139,6 +137,8 @@ public:
 
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
 
     const bool canBeMovedExternally() override;
 
@@ -228,6 +228,8 @@ public:
     const QPointF getNodeUpdatedPositionUsingConnectedEdges();
 
     const bool connectedBezierCurvesNeedsToBeAdjusted();
+
+    void moveExternally(const qreal& dx, const qreal& dy) override;
 
     const bool canBeMovedExternally() override;
 
