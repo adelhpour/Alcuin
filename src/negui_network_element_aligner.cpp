@@ -16,7 +16,6 @@ MyNodeAlignerBase::MyNodeAlignerBase(QList<MyNetworkElementBase*> networkElement
 void MyNodeAlignerBase::align() {
     extractExtents();
     adjustNodePositions();
-    updateNodeFocusedGraphicsItems();
 }
 
 void MyNodeAlignerBase::extractExtents() {
@@ -38,11 +37,6 @@ void MyNodeAlignerBase::extractExtents() {
     }
 }
 
-void MyNodeAlignerBase::updateNodeFocusedGraphicsItems() {
-    for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->updateFocusedGraphicsItems();
-}
-
 // MyNodeTopAligner
 
 MyNodeTopAligner::MyNodeTopAligner(QList<MyNetworkElementBase*> networkElements) : MyNodeAlignerBase(networkElements) {
@@ -51,7 +45,7 @@ MyNodeTopAligner::MyNodeTopAligner(QList<MyNetworkElementBase*> networkElements)
 
 void MyNodeTopAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(0, _minY - ((MyNodeBase*)node)->position().y());
+        ((MyNodeBase*)node)->moveExternally(0, _minY - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeMiddleAligner
@@ -62,7 +56,7 @@ MyNodeMiddleAligner::MyNodeMiddleAligner(QList<MyNetworkElementBase*> networkEle
 
 void MyNodeMiddleAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(0, 0.5 * (_minY + _maxY) - ((MyNodeBase*)node)->position().y());
+        ((MyNodeBase*)node)->moveExternally(0, 0.5 * (_minY + _maxY) - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeBottomAligner
@@ -73,7 +67,7 @@ MyNodeBottomAligner::MyNodeBottomAligner(QList<MyNetworkElementBase*> networkEle
 
 void MyNodeBottomAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(0, _maxY - ((MyNodeBase*)node)->position().y());
+        ((MyNodeBase*)node)->moveExternally(0, _maxY - ((MyNodeBase*)node)->position().y());
 }
 
 // MyNodeLeftAligner
@@ -84,7 +78,7 @@ MyNodeLeftAligner::MyNodeLeftAligner(QList<MyNetworkElementBase*> networkElement
 
 void MyNodeLeftAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(_minX - ((MyNodeBase*)node)->position().x(), 0);
+        ((MyNodeBase*)node)->moveExternally(_minX - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeCenterAligner
@@ -95,7 +89,7 @@ MyNodeCenterAligner::MyNodeCenterAligner(QList<MyNetworkElementBase*> networkEle
 
 void MyNodeCenterAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(0.5 * (_minX + _maxX) - ((MyNodeBase*)node)->position().x(), 0);
+        ((MyNodeBase*)node)->moveExternally(0.5 * (_minX + _maxX) - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeRightAligner
@@ -106,7 +100,7 @@ MyNodeRightAligner::MyNodeRightAligner(QList<MyNetworkElementBase*> networkEleme
 
 void MyNodeRightAligner::adjustNodePositions() {
     for (MyNetworkElementBase* node : _networkElements)
-        ((MyNodeBase*)node)->graphicsItem()->moveBy(_maxX - ((MyNodeBase*)node)->position().x(), 0);
+        ((MyNodeBase*)node)->moveExternally(_maxX - ((MyNodeBase*)node)->position().x(), 0);
 }
 
 // MyNodeDistributeAlignerBase
@@ -135,7 +129,7 @@ void MyNodeHorizontallyDistributeAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     qreal distributionDistance = (_maxX - _minX) / (classicNodes.size() - 1);
     for (unsigned  int i = 0; i < classicNodes.size(); i++)
-        ((MyNodeBase*)classicNodes.at(i))->graphicsItem()->moveBy(_minX - ((MyNodeBase*)classicNodes.at(i))->position().x() + i * distributionDistance, 0);
+        ((MyNodeBase*)classicNodes.at(i))->moveExternally(_minX - ((MyNodeBase*)classicNodes.at(i))->position().x() + i * distributionDistance, 0);
 }
 
 // MyNodeVerticallyDistributeAligner
@@ -148,5 +142,5 @@ void MyNodeVerticallyDistributeAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     qreal distributionDistance = (_maxY - _minY) / (classicNodes.size() - 1);
     for (unsigned  int i = 0; i < classicNodes.size(); i++)
-        ((MyNodeBase*)classicNodes.at(i))->graphicsItem()->moveBy(0, _minY - ((MyNodeBase*)classicNodes.at(i))->position().y() + i * distributionDistance);
+        ((MyNodeBase*)classicNodes.at(i))->moveExternally(0, _minY - ((MyNodeBase*)classicNodes.at(i))->position().y() + i * distributionDistance);
 }
