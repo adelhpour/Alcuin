@@ -621,7 +621,6 @@ void MyInteractor::moveSelectedNetworkElements(MyNetworkElementBase* movedNode, 
     MyNetworkElementMoverBase* nodeMover = new MyNodeMover(selectedNodes(), movedNode);
     nodeMover->move(movedDistance.x(), movedDistance.y());
     nodeMover->deleteLater();
-    createChangeStageCommand();
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
