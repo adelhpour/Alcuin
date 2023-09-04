@@ -60,8 +60,6 @@ protected:
 
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
-
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     
     void keyPressEvent(QKeyEvent *event) override;
@@ -69,7 +67,6 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     
     bool _reparent;
-    QPointF _mousePressedPosition;
 };
 
 class MyClassicNodeSceneGraphicsItemBase : public MyNodeSceneGraphicsItemBase {

@@ -98,14 +98,9 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     return QGraphicsItem::itemChange(change, value);
 }
 
-void MyNodeSceneGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-    MyNetworkElementGraphicsItemBase::mousePressEvent(event);
-    _mousePressedPosition = event->pos();
-}
-
 void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseMoveEvent(event);
-    emit positionChangedByMouseMoveEvent(event->pos() - _mousePressedPosition);
+    emit positionChangedByMouseMoveEvent(event->scenePos() - event->lastScenePos());
 }
 
 void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
