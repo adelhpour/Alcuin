@@ -60,7 +60,5 @@ public:
 
 const bool isModeToolButton(QAbstractButton* button);
 
-const bool isButtonOfTheMode(MyModeMenuModeButton* button, const QString& mode);
-
 #endif
 

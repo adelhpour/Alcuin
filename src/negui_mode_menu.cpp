@@ -1,5 +1,6 @@
 #include "negui_mode_menu.h"
 #include "negui_decorate_menu_buttons.h"
+#include "negui_customized_mode_menu_widgets.h"
 
 #include <QGridLayout>
 
@@ -51,7 +52,7 @@ void MyModeMenuBase::setMode(const QString& mode) {
     deactivateButtons();
     for (QAbstractButton* button : getButtons()) {
         if (isModeToolButton(button)) {
-            if (isButtonOfTheMode((MyModeMenuModeButton*)button, mode.split("_").at(0))) {
+            if (((MyModeMenuModeButton*)button)->getSceneModeAsString() == mode || ((MyModeMenuModeButton*)button)->getAlternativeSimilarSceneModeAsString() == mode) {
                 ((MyModeMenuModeButton*)button)->setActive(true);
                 return;
             }
@@ -118,13 +119,6 @@ void MyAddModeButtonsModeMenu::setAddModeButtons(QList<QAbstractButton*> buttons
 
 const bool isModeToolButton(QAbstractButton* button) {
     if (dynamic_cast<MyModeMenuModeButton*>(button))
-        return true;
-
-    return false;
-}
-
-const bool isButtonOfTheMode(MyModeMenuModeButton* button, const QString& mode) {
-    if (button->mode() == mode)
         return true;
 
     return false;
