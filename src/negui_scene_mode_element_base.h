@@ -15,17 +15,26 @@ public:
         SELECT_NODE_MODE,
         SELECT_EDGE_MODE,
         DISPLAY_FEATURE_MENU_MODE,
+        NONE_MODE,
     } SceneMode;
 
     MySceneModeElementBase();
 
-    virtual void setSceneMode(SceneMode mode);
+    virtual void setSceneMode(const SceneMode& sceneMode);
 
-    virtual void setSceneMode(const QString& mode);
+    virtual void setSceneMode(const QString& sceneMode);
+
+    virtual void setAlternativeSimilarSceneMode(const SceneMode& alternativeSimilarSceneMode);
+
+    virtual void setAlternativeSimilarSceneMode(const QString& alternativeSimilarSceneMode);
 
     SceneMode getSceneMode();
 
     const QString getSceneModeAsString();
+
+    SceneMode getAlternativeSimilarSceneMode();
+
+    const QString getAlternativeSimilarSceneModeAsString();
 
     virtual void enableNormalMode();
 
@@ -41,8 +50,13 @@ public:
 
     virtual void enableDisplayFeatureMenuMode();
 
+    const SceneMode getModeAsSceneModeFromString(const QString& mode);
+
+    const QString getModeAsStringFromSceneMode(const SceneMode& mode);
+
 protected:
     SceneMode _sceneMode;
+    SceneMode _alternativeSimilarSceneMode;
 };
 
 #endif
