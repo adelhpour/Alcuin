@@ -100,7 +100,7 @@ void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             emit mouseLeftButtonIsReleased();
         }
         else if (event->button() == Qt::RightButton) {
-            if (getSceneMode() != NORMAL_MODE)
+            if (getSceneMode() != NORMAL_MODE && getSceneMode() != DISPLAY_FEATURE_MENU_MODE)
                 emit askForEnableNormalMode();
         }
     }
@@ -121,20 +121,22 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
             emit escapeKeyIsPressed();
             event->accept();
         }
-        else if (event->modifiers() == Qt::ShiftModifier) {
-            _isShiftModifierPressed = true;
-            event->accept();
+        else if (getSceneMode() == NORMAL_MODE) {
+            if (event->modifiers() == Qt::ShiftModifier) {
+                _isShiftModifierPressed = true;
+                event->accept();
+            }
+            else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A)
+                emit askForSelectAll();
+            else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C)
+                emit askForCopySelectedNetworkElements();
+            else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_X)
+                emit askForCutSelectedNetworkElements();
+            else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
+                emit askForPasteCopiedNetworkElements(_cursorPosition);
+            else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
+                emit askForDeleteSelectedNetworkElements();
         }
-        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_A)
-            emit askForSelectAll();
-        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_C)
-            emit askForCopySelectedNetworkElements();
-        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_X)
-            emit askForCutSelectedNetworkElements();
-        else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
-            emit askForPasteCopiedNetworkElements(_cursorPosition);
-        else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
-            emit askForDeleteSelectedNetworkElements();
     }
 }
 
