@@ -54,7 +54,7 @@ public:
     QObject* fileManager();
     
     // modes
-    void setSceneMode(SceneMode sceneMode) override;
+    void setSceneMode(const SceneMode& sceneMode) override;
 
     // network
     void resetNetworkCanvas();
