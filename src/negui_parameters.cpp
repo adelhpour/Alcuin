@@ -552,45 +552,45 @@ MyControlPointParameter::MyControlPointParameter(const QString& name, const QStr
     reset();
 }
 
-// MyColorParameter
+// MyColorParameterBase
 
-MyColorParameter::MyColorParameter(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
+MyColorParameterBase::MyColorParameterBase(const QString& name, const QString& hint) : MyParameterBase(name, hint) {
     reset();
 }
 
-MyParameterBase::PARAMETER_TYPE MyColorParameter::type() {
+MyParameterBase::PARAMETER_TYPE MyColorParameterBase::type() {
     return COLOR_PARAMETER_TYPE;
 }
 
-void MyColorParameter::setDefaultValue(const QString& value) {
+void MyColorParameterBase::setDefaultValue(const QString& value) {
     _defaultValue = value;
 }
 
-void MyColorParameter::setDefaultValue() {
+void MyColorParameterBase::setDefaultValue() {
     setDefaultValue(((MyColorPickerButton*)_inputWidget)->currentColor());
 }
 
-const QString& MyColorParameter::defaultValue() const {
+const QString& MyColorParameterBase::defaultValue() const {
     return _defaultValue;
 }
 
-QWidget* MyColorParameter::createInputWidget() {
-    return new MyColorPickerButton();
+QWidget* MyColorParameterBase::createInputWidget() {
+    return new MyColorPickerButton(colorName());
 }
 
-void MyColorParameter::updateInputWidget() {
+void MyColorParameterBase::updateInputWidget() {
     ((MyColorPickerButton*)_inputWidget)->setCurrentColor(defaultValue());
 }
 
-void MyColorParameter::connectInputWidget() {
-    connect(((MyColorPickerMenu*)((MyColorPickerButton*)_inputWidget)->menu()), &MyColorPickerMenu::colorChosen, this, [this] (const QString& color) {emit isUpdated(); });
+void MyColorParameterBase::connectInputWidget() {
+    connect(_inputWidget, SIGNAL(colorIsChanged()), this, SIGNAL(isUpdated()));
 }
 
-void MyColorParameter::reset() {
+void MyColorParameterBase::reset() {
     setDefaultValue("black");
 }
 
-void MyColorParameter::read(const QJsonObject &json) {
+void MyColorParameterBase::read(const QJsonObject &json) {
     if (json.contains("parameter") && json["parameter"].isString() && json["parameter"].toString() == name()) {
         reset();
 
@@ -600,7 +600,7 @@ void MyColorParameter::read(const QJsonObject &json) {
     }
 }
 
-void MyColorParameter::write(QJsonObject &json) {
+void MyColorParameterBase::write(QJsonObject &json) {
     if (_inputWidget) {
         json["parameter"] = name();
         json["value"] = ((MyColorPickerButton*)inputWidget())->currentColor();
@@ -832,8 +832,12 @@ void MyNodeCentroidRadiusParameter::reset() {
 
 // MyBorderColorParameter
 
-MyBorderColorParameter::MyBorderColorParameter() : MyColorParameter("border-color", "Color of element borders") {
+MyBorderColorParameter::MyBorderColorParameter() : MyColorParameterBase("border-color", "Color of element borders") {
     reset();
+}
+
+const QString MyBorderColorParameter::colorName() {
+    return "Border Color";
 }
 
 void MyBorderColorParameter::reset() {
@@ -852,8 +856,12 @@ void MyCentroidBorderColorParameter::reset() {
 
 // MyFillColorParameter
 
-MyFillColorParameter::MyFillColorParameter() : MyColorParameter("fill-color", "Fill color of element") {
+MyFillColorParameter::MyFillColorParameter() : MyColorParameterBase("fill-color", "Fill color of element") {
     reset();
+}
+
+const QString MyFillColorParameter::colorName() {
+    return "Fill Color";
 }
 
 void MyFillColorParameter::reset() {
@@ -884,6 +892,20 @@ void MyTextPlainTextParameter::connectInputWidget() {
 void MyTextPlainTextParameter::reset() {
     MyStringParameter::reset();
     _defaultValue = "text";
+}
+
+// MyTextColorParameter
+
+MyTextColorParameter::MyTextColorParameter() : MyColorParameterBase("color", "Text \"Color\"") {
+    reset();
+}
+
+const QString MyTextColorParameter::colorName() {
+    return "Text Color";
+}
+
+void MyTextColorParameter::reset() {
+    setDefaultValue("black");
 }
 
 // MyFontParameter
