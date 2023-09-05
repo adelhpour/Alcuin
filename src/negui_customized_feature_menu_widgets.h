@@ -52,46 +52,24 @@ class MyColorPickerButton : public QToolButton {
     Q_OBJECT
 
 public:
-    MyColorPickerButton(QWidget *parent = nullptr);
+    MyColorPickerButton(const QString& colorName = "", QWidget *parent = nullptr);
 
     const QString& currentColor() const;
 
     void setBackgroundColor(const QString& color);
 
+signals:
+
+    void colorIsChanged();
+
 public slots:
 
-            void setCurrentColor(const QString& color);
+    void setCurrentColor(const QString& color);
+
 
 protected:
     QMenu* _colorPickerMenu;
     QString _currentColor;
-};
-
-class MyColorPickerMenu : public QMenu {
-    Q_OBJECT
-
-public:
-    MyColorPickerMenu();
-
-    signals:
-            void colorChosen(const QString&);
-
-private slots:
-            void colorTileButtonPicked(QPushButton* colorTileButton);
-};
-
-class MyColorTileButton : public QPushButton {
-
-public:
-    MyColorTileButton(const QString& color, const QString& value, QWidget* parent = 0);
-
-    const QString& color() const;
-
-    const QString& value() const;
-
-protected:
-    QString _color;
-    QString _value;
 };
 
 class MyFontPickerButton : public QPushButton {
