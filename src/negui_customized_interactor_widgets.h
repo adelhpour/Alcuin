@@ -2,6 +2,7 @@
 #define __NEGUI_CUSTOMIZED_INTERACTOR_WIDGETS_H
 
 #include "negui_customized_common_widgets.h"
+#include "negui_customized_mode_menu_widgets.h"
 #include "negui_plugin_item_base.h"
 
 #include <QUndoStack>

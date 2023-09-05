@@ -221,7 +221,7 @@ void MyInteractor::createChangeStageCommand() {
     }
 }
 
-void MyInteractor::setSceneMode(SceneMode sceneMode) {
+void MyInteractor::setSceneMode(const SceneMode& sceneMode) {
     MySceneModeElementBase::setSceneMode(sceneMode);
     emit modeIsSet(getSceneModeAsString());
 }
@@ -1126,7 +1126,7 @@ QList<QAbstractButton*> MyInteractor::getAddModeButtons() {
 }
 
 QAbstractButton* MyInteractor::createNormalModeMenuButton() {
-    QAbstractButton* button = new MyModeMenuModeButton("Normal");
+    QAbstractButton* button = new MyModeMenuModeButton("Normal", "Display_Feature_Menu");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
     return button;
