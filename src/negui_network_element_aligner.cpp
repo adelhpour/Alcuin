@@ -189,6 +189,7 @@ void MyNodeGridDistributeAligner::adjustNodePositions() {
     qint32 numberOfGridColumns = getNumberOfGridColumns(classicNodes);
     if (numberOfGridColumns)
         adjustClassicNodesPositionsInGrid(classicNodes, numberOfGridColumns);
+    adjustCentroidNodePositions();
 }
 
 qint32 MyNodeGridDistributeAligner::getNumberOfGridColumns(QList<MyNetworkElementBase*> classicNodes) {
@@ -209,7 +210,7 @@ void MyNodeGridDistributeAligner::adjustClassicNodesPositionsInGrid(QList<MyNetw
     qint32 row = 0;
     while (row <= classicNodes.size() / numberOfGridColumns) {
         for (unsigned int column = 0; column < numberOfGridColumns && row * numberOfGridColumns + column < classicNodes.size()  ; column++) {
-            ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->graphicsItem()->moveBy(
+            ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->moveExternally(
                     _minX - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().x() +
                     column * distributionDistance, _minY - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().y() + row * distributionDistance);
         }
