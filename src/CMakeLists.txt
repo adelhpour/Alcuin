@@ -70,8 +70,9 @@ set(source_files
 		negui_centroid_adjust_handled_graphics_item.cpp
 		negui_parameters.cpp
 		negui_customized_common_widgets.cpp
-        negui_customized_contex_menu_widgets.cpp
+        negui_customized_context_menu_widgets.cpp
 		negui_customized_feature_menu_widgets.cpp
+		negui_customized_mode_menu_widgets.cpp
 		negui_customized_interactor_widgets.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu.cpp
@@ -153,6 +154,7 @@ set(header_files
 		negui_customized_common_widgets.h
 		negui_customized_context_menu_widgets.h
         negui_customized_feature_menu_widgets.h
+		negui_customized_mode_menu_widgets.h
 		negui_customized_interactor_widgets.h
 		negui_mode_menu.h
 		negui_feature_menu.h

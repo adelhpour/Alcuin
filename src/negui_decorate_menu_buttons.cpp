@@ -1,5 +1,6 @@
 #include "negui_decorate_menu_buttons.h"
 #include "negui_customized_common_widgets.h"
+#include "negui_customized_mode_menu_widgets.h"
 
 #include <QShortcut>
 
