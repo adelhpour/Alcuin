@@ -1,10 +1,13 @@
 #include "negui_graphics_scene.h"
 #include "negui_context_menu.h"
 
+#include <QColorDialog>
+
 // MyGraphicsScene
 
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
     setSceneRect(-10000, -10000, 20000, 20000);
+    setBackgroundColor("white");
     _isLeftButtonPressed = false;
     _isShiftModifierPressed = false;
 }
@@ -23,6 +26,20 @@ void MyGraphicsScene::removeGraphicsItem(QGraphicsItem* item) {
 
 const QRectF MyGraphicsScene::networkExtents() {
     return itemsBoundingRect();
+}
+
+const QString MyGraphicsScene::backgroundColor() {
+    QColor backgroundColor = backgroundBrush().color();
+    if (backgroundColor.isValid())
+        return  backgroundColor.name();
+
+    return "white";
+}
+
+void MyGraphicsScene::setBackgroundColor(const QString &backgroundColor) {
+    QColor color(backgroundColor);
+    if (color.isValid())
+        setBackgroundBrush(color);
 }
 
 void MyGraphicsScene::clearScene() {
@@ -55,6 +72,13 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreAlignable()), this, SIGNAL(askForWhetherAnyElementsAreAlignable()));
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForSetBackgroundColor, this, [this] () {
+        QColor backgroundColor = QColorDialog::getColor(backgroundBrush().color(), nullptr, "Select Background Color", QColorDialog::DontUseNativeDialog);
+        if (backgroundColor.isValid()) {
+            setBackgroundColor(backgroundColor.name());
+            askForCreateChangeStageCommand();
+        }
+    });
 }
 
 void MyGraphicsScene::displayContextMenu(const QPointF& position) {

@@ -22,6 +22,7 @@ public:
     
 signals:
 
+    void askForCreateChangeStageCommand();
     void mousePositionIsChanged(const QPointF&);
     void mouseLeftButtonIsPressed(const QPointF&);
     void mousePressedLeftButtonIsMoved(const QPointF&);
@@ -47,6 +48,8 @@ public slots:
     void addGraphicsItem(QGraphicsItem* item);
     void removeGraphicsItem(QGraphicsItem* item);
     const QRectF networkExtents();
+    const QString backgroundColor();
+    void setBackgroundColor(const QString& backgroundColor);
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
     const bool isShiftModifierPressed();
