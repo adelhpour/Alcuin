@@ -7,9 +7,9 @@
 
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
     setSceneRect(-10000, -10000, 20000, 20000);
-    setBackgroundColor("white");
     _isLeftButtonPressed = false;
     _isShiftModifierPressed = false;
+    clearScene();
 }
 
 void MyGraphicsScene::setSceneRect(qreal x, qreal y, qreal width, qreal height) {
@@ -44,6 +44,7 @@ void MyGraphicsScene::setBackgroundColor(const QString &backgroundColor) {
 
 void MyGraphicsScene::clearScene() {
     clear();
+    setBackgroundColor("white");
 }
 
 QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position) {
