@@ -64,7 +64,7 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
     // network
     resetNetwork();
-    _stageInfo = getNetworkElementsInfo();
+    _stageInfo = getNetworkElementsAndColorInfo();
 };
 
 void MyInteractor::readPluginItemsInfo(const QJsonObject &json) {
@@ -207,7 +207,7 @@ QObject* MyInteractor::fileManager() {
 }
 
 void MyInteractor::createChangeStageCommand() {
-    QJsonObject currentStageInfo = getNetworkElementsInfo();
+    QJsonObject currentStageInfo = getNetworkElementsAndColorInfo();
     if (undoStack()->count() > undoStack()->index()) {
         const QUndoCommand* indexCommand = undoStack()->command(undoStack()->index());
         _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
@@ -228,6 +228,7 @@ void MyInteractor::setSceneMode(const SceneMode& sceneMode) {
 
 void MyInteractor::createNetwork(const QJsonObject& json) {
     resetNetwork();
+    setBackground(json);
     addNodes(json);
     addEdges(json);
 }
@@ -261,6 +262,11 @@ void MyInteractor::resetNetwork() {
     clearNodesInfo();
     clearEdgesInfo();
     emit askForClearScene();
+}
+
+void MyInteractor::setBackground(const QJsonObject &json) {
+    if (json.contains("background-color") && json["background-color"].isString())
+        askForSetNetworkBackgroundColor(json["background-color"].toString());
 }
 
 QList<MyNetworkElementBase*>& MyInteractor::nodes() {
@@ -641,8 +647,11 @@ bool MyInteractor::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2
     return false;
 }
 
-QJsonObject MyInteractor::getNetworkElementsInfo() {
+QJsonObject MyInteractor::getNetworkElementsAndColorInfo() {
     QJsonObject json;
+
+    // background color
+    json["background-color"] = askForNetworkBackgroundColor();
 
     // nodes
     QJsonArray nodesArray;
@@ -666,7 +675,7 @@ QJsonObject MyInteractor::getNetworkElementsInfo() {
 }
 
 QJsonObject MyInteractor::exportNetworkInfo() {
-    QJsonObject json = getNetworkElementsInfo();
+    QJsonObject json = getNetworkElementsAndColorInfo();
 
     QRectF networkExtents = askForNetworkExtents();
     // position

@@ -387,13 +387,15 @@ public:
     MyControlPointParameter(const QString& name, const QString& hint = "");
 };
 
-class MyColorParameter : public MyParameterBase {
+class MyColorParameterBase : public MyParameterBase {
 public:
 
-    MyColorParameter(const QString& name, const QString& hint = "");
+    MyColorParameterBase(const QString& name, const QString& hint = "");
 
     // get type of parameter
     PARAMETER_TYPE type() override;
+
+    virtual const QString colorName() = 0;
 
     // set default value
     void setDefaultValue(const QString& value);
@@ -598,10 +600,12 @@ public:
     void reset() override;
 };
 
-class MyBorderColorParameter : public MyColorParameter {
+class MyBorderColorParameter : public MyColorParameterBase {
 public:
 
     MyBorderColorParameter();
+
+    const QString colorName() override;
 
     // reset the values of the parameter
     void reset() override;
@@ -616,10 +620,12 @@ public:
     void reset() override;
 };
 
-class MyFillColorParameter : public MyColorParameter {
+class MyFillColorParameter : public MyColorParameterBase {
 public:
 
     MyFillColorParameter();
+
+    const QString colorName() override;
 
     // reset the values of the parameter
     void reset() override;
@@ -641,6 +647,17 @@ public:
     MyTextPlainTextParameter();
 
     void connectInputWidget() override;
+
+    // reset the values of the parameter
+    void reset() override;
+};
+
+class MyTextColorParameter : public MyColorParameterBase {
+public:
+
+    MyTextColorParameter();
+
+    const QString colorName() override;
 
     // reset the values of the parameter
     void reset() override;

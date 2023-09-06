@@ -104,6 +104,9 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyGraphicsView*)view(), SIGNAL(enterKeyIsPressed()), (MyInteractor*)interactor(), SIGNAL(enterKeyIsPressed()));
 
     /// graphics scene
+    // change stage command
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(askForCreateChangeStageCommand()), (MyInteractor*)interactor(), SLOT(createChangeStageCommand()));
+
     // set scene mode
     connect((MyInteractor*)interactor(), &MyInteractor::modeIsSet, ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), [this] (const QString& mode) { ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->setSceneMode(mode); });
     
@@ -112,6 +115,10 @@ void MyNetworkEditorWidget::setInteractions() {
     
     // remove graphics item
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(removeGraphicsItem(QGraphicsItem*)));
+
+    // network background color
+    connect((MyInteractor*)interactor(), SIGNAL(askForNetworkBackgroundColor()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(backgroundColor()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForSetNetworkBackgroundColor(const QString&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setBackgroundColor(const QString&)));
 
     // network extents
     connect((MyInteractor*)interactor(), SIGNAL(askForNetworkExtents()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(networkExtents()));

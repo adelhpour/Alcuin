@@ -60,6 +60,7 @@ public:
     void resetNetworkCanvas();
     void resetCanvas();
     void resetNetwork();
+    void setBackground(const QJsonObject &json);
     
     // nodes
     QList<MyNetworkElementBase*>& nodes();
@@ -98,6 +99,8 @@ signals:
     void askForAddGraphicsItem(QGraphicsItem* item);
     void askForRemoveGraphicsItem(QGraphicsItem* item);
     const QRectF askForNetworkExtents();
+    const QString askForNetworkBackgroundColor();
+    void askForSetNetworkBackgroundColor(const QString&);
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
@@ -155,7 +158,7 @@ public slots:
     const bool areAnyElementsCopied();
     const bool areAnyElementsSelected();
     const QString iconsDirectoryPath();
-    QJsonObject getNetworkElementsInfo();
+    QJsonObject getNetworkElementsAndColorInfo();
     void moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance);
     
     // modes
