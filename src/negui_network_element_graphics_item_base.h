@@ -82,6 +82,7 @@ signals:
     const bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
     QString askForDisplayName();
+    void askForDisplaySceneContextMenu(const QPointF&);
 
 public slots:
 

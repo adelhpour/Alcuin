@@ -115,6 +115,7 @@ signals:
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
+    void askForDisplaySceneContextMenu(const QPointF&);
 
     void enterKeyIsPressed();
     

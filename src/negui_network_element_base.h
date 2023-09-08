@@ -103,6 +103,8 @@ signals:
 
     const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
 
+    void askForDisplaySceneContextMenu(const QPointF&);
+
 public slots:
 
     virtual void setSelected(const bool& selected);
