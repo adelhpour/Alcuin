@@ -309,6 +309,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*)), this, SLOT(areAnyOtherElementsSelected(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
+        connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         emit askForAddGraphicsItem(n->graphicsItem());

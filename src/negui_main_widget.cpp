@@ -164,6 +164,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteCopiedNetworkElements(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements(const QPointF &)));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForDeleteSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(deleteSelectedNetworkElements()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForAlignSelectedNetworkElements(const QString&)), (MyInteractor*)interactor(), SLOT(alignSelectedNetworkElements(const QString&)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), ((MyGraphicsView*)view())->scene(), SLOT(displayContextMenu(const QPointF&)));
 
     // status bar
     connect(view(), SIGNAL(mouseLeft()), statusBar(), SLOT(resetMessage()));
