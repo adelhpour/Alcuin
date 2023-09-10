@@ -55,7 +55,8 @@ const QString& MyFileManager::workingDirectory() {
 void MyFileManager::resetCurrentExportTool() {
     if (_exportTools.size())
         setCurrentExportTool(_exportTools.at(0));
-    setCurrentExportTool(NULL);
+    else
+        setCurrentExportTool(NULL);
 }
 
 void MyFileManager::setCurrentExportTool(MyPluginItemBase* exportTool) {
