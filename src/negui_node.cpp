@@ -165,16 +165,19 @@ void MyNodeBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
 }
 
-
 const qint32 MyNodeBase::calculateZValue() {
-    qint32 incrementZValue = 2;
+    return calculateNodeZValue() + calculateParentZValue();
+}
+
+const qint32 MyNodeBase::calculateParentZValue() {
+    qint32 parentZValue = 0;
     MyNetworkElementBase* parent = this;
     while (parent && ((MyNodeBase*)parent)->parentNodeId() != "N/A") {
-        incrementZValue += 4;
+        parentZValue += 7;
         parent = ((MyNodeBase*)parent)->parentNode();
     }
 
-    return incrementZValue;
+    return parentZValue;
 }
 
 void MyNodeBase::adjustConnectedEdges() {
@@ -355,6 +358,10 @@ void MyClassicNodeBase::adjustExtents() {
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+}
+
+const qint32 MyClassicNodeBase::calculateNodeZValue() {
+    return ((MyClassicNodeStyleBase*)style())->convertibleParentCategory().isEmpty() ? 5 : 0;
 }
 
 // MySimpleClassicNode
@@ -592,4 +599,8 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
     }
 
     return QLineF(startPoint, endPoint);
+}
+
+const qint32 MyCentroidNode::calculateNodeZValue() {
+    return 4;
 }
