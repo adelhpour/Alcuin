@@ -10,7 +10,7 @@ public:
     int initialize(const QString &appPath, const QString &pluginsPath) override;
     const QJsonObject loadItemsInfo() override;
     void writeGraphInfoToFile(const QJsonObject& graphInfoObject, const QString& fileName, const QString& fileType) override;
-    const QJsonObject checkForGraphInfoCompatibiliy(const QJsonObject& graphInfoObject, const QString& fileType) override;
+    const QJsonObject checkForGraphInfoCompatibility(const QJsonObject& graphInfoObject, const QString& fileType) override;
     
 protected:
     CPyInstance* _pyInstance;

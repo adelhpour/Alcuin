@@ -36,7 +36,7 @@ void DataExportPlugin::writeGraphInfoToFile(const QJsonObject& graphInfoObject, 
     }
 }
 
-const QJsonObject DataExportPlugin::checkForGraphInfoCompatibiliy(const QJsonObject& graphInfoObject, const QString& fileType) {
+const QJsonObject DataExportPlugin::checkForGraphInfoCompatibility(const QJsonObject& graphInfoObject, const QString& fileType) {
     QJsonObject object;
     if (_pyInstance && _script) {
         CPyObject checkForGraphInfoCompatibiliyFunc = PyObject_GetAttrString(_script.getObject(), (char*)"checkForGraphInfoCompatibiliy");

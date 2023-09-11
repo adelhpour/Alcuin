@@ -1027,7 +1027,7 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
 
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QJsonObject graphInfoObject = exportNetworkInfo();
-    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibiliy(graphInfoObject, exportTool->name()));
+    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibility(graphInfoObject, exportTool->name()));
     if (((MyDataExportTool*)exportTool)->isInfoCompatible())
         dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
     ((MyDataExportTool*)exportTool)->showMessages();
