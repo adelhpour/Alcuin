@@ -18,7 +18,6 @@ public:
     void setMaxScale(const qreal& maxScale);
     const qreal minScale() const;
     const qreal maxScale() const;
-    void animatedScale(const qint32& delta);
 
     QToolButton* getZoomInButton();
     QToolButton* getZoomOutButton();
@@ -44,8 +43,7 @@ private slots:
     void setToolTip(const QString& toolTip);
     void exportFigure(const QString& fileName, const QString& fileExtension);
     void resetScale();
-    void scalingTime(qreal x);
-    void animFinished();
+    void zoom(const qreal factor);
     
 protected:
     

@@ -3,7 +3,6 @@
 #include "negui_customized_common_widgets.h"
 
 #include <QScrollbar>
-#include <QTimeLine>
 #include <QPrinter>
 #include <QSvgGenerator>
 
@@ -88,40 +87,15 @@ void MyGraphicsView::exportFigureAsSVG(const QString& fileName, const QRectF& pa
 void MyGraphicsView::resetScale() {
     resetTransform();
     centerOn(sceneRect().center());
-}
-
-void MyGraphicsView::scalingTime(qreal x) {
-    qreal factor = 1.0 + qreal(_numScheduledScalings) / 10000.0;
-    if ((factor  > 1.00000 && (currentScale() < _maxScale)) || (factor  < 1.00000 && (currentScale() > _minScale)))
-        scale(factor, factor);
-}
-
-void MyGraphicsView::animFinished() {
-    if (_numScheduledScalings > 0)
-        _numScheduledScalings--;
-    else
-        _numScheduledScalings++;
-    sender()->~QObject();
-}
-
-void MyGraphicsView::animatedScale(const qint32& delta) {
-    _numScheduledScalings = delta;
-
-    QTimeLine* anim = new QTimeLine(10, this);
-    anim->setUpdateInterval(1);
-
-    connect(anim, SIGNAL(valueChanged(qreal)), SLOT(scalingTime(qreal)));
-    connect(anim, SIGNAL(finished()), this, SLOT(animFinished()));
-    anim->start();
-    emit scaleChanged(currentScale());
+    scaleChanged(currentScale());
 }
 
 void MyGraphicsView::zoomIn() {
-    animatedScale(100);
+    zoom(0.1);
 }
 
 void MyGraphicsView::zoomOut() {
-    animatedScale(-100);
+    zoom(-0.1);
 }
 
 QToolButton* MyGraphicsView::getZoomInButton() {
@@ -144,8 +118,23 @@ QToolButton* MyGraphicsView::createZoomOutMenuButton() {
     return button;
 }
 
+void MyGraphicsView::zoom(const qreal factor) {
+    QTransform transformMatrix = transform();
+    transformMatrix.setMatrix(qMin(qMax(transform().m11() + factor, minScale()), maxScale()), transform().m12(), transform().m13(),
+                              transform().m21(), qMin(qMax(transform().m22() + factor, minScale()), maxScale()), transform().m23(),
+                              transform().m31(), transform().m32(), transform().m33());
+    setTransform(transformMatrix);
+    emit scaleChanged(currentScale());
+}
+
 void MyGraphicsView::wheelEvent(QWheelEvent * event) {
-    animatedScale(event->delta());
+    qint32 zoomSpeedFactor = 1;
+    if (currentScale() > 1.000)
+        zoomSpeedFactor = qMin(qMax(qAbs(event->delta()) / 100, 1), 10);
+    if (event->delta() > 0.0001)
+        zoom(zoomSpeedFactor * 0.01);
+    else if (event->delta() < -0.0001)
+        zoom(zoomSpeedFactor * -0.01);
 }
 
 void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
