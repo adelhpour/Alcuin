@@ -86,6 +86,8 @@ void MyGraphicsView::exportFigureAsSVG(const QString& fileName, const QRectF& pa
 
 void MyGraphicsView::resetScale() {
     resetTransform();
+    centerOn(sceneRect().center());
+    scaleChanged(currentScale());
 }
 
 void MyGraphicsView::zoomIn() {
