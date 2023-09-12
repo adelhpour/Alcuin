@@ -93,7 +93,7 @@ public slots:
 
 signals:
 
-    void askForAdjustNodePositionToNeighborNodes();
+    void askForAdjustNodePositionToNeighborNodes(const bool&);
 
     void askForSetNodeParentUsingNeighborNodesParent();
 

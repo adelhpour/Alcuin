@@ -182,9 +182,9 @@ const qint32 MyNodeBase::calculateParentZValue() {
     return parentZValue;
 }
 
-void MyNodeBase::adjustConnectedEdges() {
+void MyNodeBase::adjustConnectedEdges(const bool& movedByParentNodeMove) {
     for (MyNetworkElementBase *edge : qAsConst(edges()))
-        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
+        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes(movedByParentNodeMove);
 }
 
 void MyNodeBase::setConnectedNodesParents() {
@@ -287,6 +287,7 @@ void MyClassicNodeBase::setPosition(const QPointF& position) {
         for (MyNetworkElementBase* node : qAsConst(childNodes())) {
             ((MyNodeBase*)node)->lockParentNode(true);
             ((MyComplexClassicNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
+            ((MyNodeBase*)node)->adjustConnectedEdges(true);
         }
     }
     else
@@ -501,24 +502,27 @@ const bool MyCentroidNode::isCopyable() {
 
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     MyNodeBase::addEdge(e);
-    connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes(const bool&)), this, SLOT(adjustNodePositionToNeighborNodes(const bool&)));
     connect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
     MyNodeBase::removeEdge(e);
-    disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes(const bool&)), this, SLOT(adjustNodePositionToNeighborNodes(const bool&)));
     disconnect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
-void MyCentroidNode::adjustNodePositionToNeighborNodes() {
-    if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
-        QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
-        ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
-        updateFocusedGraphicsItems();
-        adjustConnectedBezierCurves();
+void MyCentroidNode::adjustNodePositionToNeighborNodes(const bool& movedByParentNodeMove) {
+    if (!movedByParentNodeMove || !parentNode()) {
+        if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
+            QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
+            ((MyCentroidNodeSceneGraphicsItem *) graphicsItem())->moveBy((updatedPosition - _position).x(),
+                                                                         (updatedPosition - _position).y());
+            updateFocusedGraphicsItems();
+            adjustConnectedBezierCurves();
+        }
     }
 }
 
@@ -547,7 +551,7 @@ void MyCentroidNode::setNodeParentUsingNeighborNodesParent() {
             return;
     }
 
-    setParentNode(parent);
+    setParentNode(parenNode);
 }
 
 

@@ -103,7 +103,7 @@ public slots:
     // set the position of the node
     virtual void setPosition(const QPointF& position);
 
-    void adjustConnectedEdges();
+    void adjustConnectedEdges(const bool& movedByParentNodeMove = false);
 
     void setConnectedNodesParents();
 
@@ -249,7 +249,7 @@ signals:
 
 public slots:
 
-    void adjustNodePositionToNeighborNodes();
+    void adjustNodePositionToNeighborNodes(const bool& movedByParentNodeMove = false);
 
 private slots:
 
