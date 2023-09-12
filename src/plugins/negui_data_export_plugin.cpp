@@ -39,7 +39,7 @@ void DataExportPlugin::writeGraphInfoToFile(const QJsonObject& graphInfoObject, 
 const QJsonObject DataExportPlugin::checkForGraphInfoCompatibility(const QJsonObject& graphInfoObject, const QString& fileType) {
     QJsonObject object;
     if (_pyInstance && _script) {
-        CPyObject checkForGraphInfoCompatibiliyFunc = PyObject_GetAttrString(_script.getObject(), (char*)"checkForGraphInfoCompatibiliy");
+        CPyObject checkForGraphInfoCompatibiliyFunc = PyObject_GetAttrString(_script.getObject(), (char*)"checkForGraphInfoCompatibility");
         if (checkForGraphInfoCompatibiliyFunc) {
             CPyObject graphInfoCompatibiliyResults = PyObject_CallObject(checkForGraphInfoCompatibiliyFunc.getObject(), PyTuple_Pack(2, PyUnicode_FromString((char*)QJsonDocument(graphInfoObject).toJson(QJsonDocument::Compact).toStdString().c_str()), PyUnicode_FromString((char*)fileType.toStdString().c_str())));
             if (graphInfoCompatibiliyResults) {
