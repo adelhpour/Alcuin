@@ -80,6 +80,7 @@ void MyNodeBase::deparent() {
     _parentNode = NULL;
     _isSetParentNode = false;
     _parentNodeId = "N/A";
+    setConnectedNodesParents();
 }
 
 void MyNodeBase::reparent() {
@@ -90,6 +91,7 @@ void MyNodeBase::reparent() {
         setParentNode((MyNodeBase*)parentNode);
         ((MyComplexClassicNode*)parentNode)->adjustExtents();
         resetPosition();
+        setConnectedNodesParents();
     }
 }
 
@@ -183,6 +185,11 @@ const qint32 MyNodeBase::calculateParentZValue() {
 void MyNodeBase::adjustConnectedEdges() {
     for (MyNetworkElementBase *edge : qAsConst(edges()))
         ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
+}
+
+void MyNodeBase::setConnectedNodesParents() {
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        ((MyEdgeBase *) edge)->askForSetNodeParentUsingNeighborNodesParent();
 }
 
 void MyNodeBase::read(const QJsonObject &json) {
@@ -495,12 +502,14 @@ const bool MyCentroidNode::isCopyable() {
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     MyNodeBase::addEdge(e);
     connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    connect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
     MyNodeBase::removeEdge(e);
     disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    disconnect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
@@ -524,6 +533,23 @@ const bool MyCentroidNode::connectedBezierCurvesNeedsToBeAdjusted() {
 
     return false;
 }
+
+void MyCentroidNode::setNodeParentUsingNeighborNodesParent() {
+    MyNetworkElementBase* parenNode = NULL;
+    for (MyNetworkElementBase *edge : qAsConst(edges())) {
+        if (((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent()) {
+            if (!parenNode)
+                parenNode = ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent();
+            else if (parenNode != ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent())
+                return;
+        }
+        else
+            return;
+    }
+
+    setParentNode(parent);
+}
+
 
 const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     QPointF position = QPointF(0.0, 0.0);

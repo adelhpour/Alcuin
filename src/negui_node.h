@@ -105,6 +105,8 @@ public slots:
 
     void adjustConnectedEdges();
 
+    void setConnectedNodesParents();
+
 protected:
     QString _parentNodeId;
     MyNetworkElementBase* _parentNode;
@@ -256,6 +258,8 @@ private slots:
     const bool isNodePositionConnectedToNeighborNodes();
 
     void connectNodePositionToNeighborNodes(const bool& connected);
+
+    void setNodeParentUsingNeighborNodesParent();
 
     void setSelected(const bool& selected) override;
 

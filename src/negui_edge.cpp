@@ -297,6 +297,10 @@ const QPointF MyConnectedToSourceCentroidNodeEdge::nonCentroidNodePosition() {
     return ((MyNodeBase*)sourceNode())->getExtents().center();
 }
 
+MyNetworkElementBase* MyConnectedToSourceCentroidNodeEdge::nonCentroidNodeParent() {
+    return ((MyNodeBase*)sourceNode())->parentNode();
+}
+
 // MyConnectedToTargetCentroidNodeEdge
 
 MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode) : MyConnectedToCentroidNodeEdgeBase(name) {
@@ -312,6 +316,10 @@ MyEdgeBase::EDGE_TYPE MyConnectedToTargetCentroidNodeEdge::edgeType() {
 
 const QPointF MyConnectedToTargetCentroidNodeEdge::nonCentroidNodePosition() {
     return ((MyNodeBase*)targetNode())->getExtents().center();
+}
+
+MyNetworkElementBase* MyConnectedToTargetCentroidNodeEdge::nonCentroidNodeParent() {
+    return ((MyNodeBase*)targetNode())->parentNode();
 }
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode) {

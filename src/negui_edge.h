@@ -95,7 +95,7 @@ signals:
 
     void askForAdjustNodePositionToNeighborNodes();
 
-    void askForDisconnectNodePositionFromNeighborNodes();
+    void askForSetNodeParentUsingNeighborNodesParent();
 
     void askForSetConnectedElementsSelected(const bool& isSelected);
 
@@ -127,6 +127,8 @@ public:
 
     virtual const QPointF nonCentroidNodePosition() = 0;
 
+    virtual MyNetworkElementBase* nonCentroidNodeParent() = 0;
+
 signals:
 
     const QPointF askForConnectedToCentroidNodeControlPoint();
@@ -142,6 +144,8 @@ public:
     EDGE_TYPE edgeType() override;
 
     const QPointF nonCentroidNodePosition() override;
+
+    MyNetworkElementBase* nonCentroidNodeParent() override;
 };
 
 class MyConnectedToTargetCentroidNodeEdge : public MyConnectedToCentroidNodeEdgeBase {
@@ -154,6 +158,8 @@ public:
     EDGE_TYPE edgeType() override;
 
     const QPointF nonCentroidNodePosition() override;
+
+    MyNetworkElementBase* nonCentroidNodeParent() override;
 };
 
 const QPointF getEndOfTheLinePosition(MyNetworkElementBase* mainNode, MyNetworkElementBase* connectedNode);
