@@ -42,20 +42,6 @@ def checkForSBMLCompatibility(graphInfoString):
     is_info_compatible = all_species_have_parents
     return json.dumps({'isInfoCompatible': is_info_compatible, 'messages': messages})
 
-
-def annotateSBMLCompartments(graphInfo):
-    parentIds = []
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'parent' in list(graphInfo['nodes'][n_index].keys()) and graphInfo['nodes'][n_index]['parent'] != "N/A" and graphInfo['nodes'][n_index]['parent'] not in parentIds:
-                parentIds.append(graphInfo['nodes'][n_index]['parent'])
-
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'id' in list(graphInfo['nodes'][n_index].keys()) and graphInfo['nodes'][n_index]['id'] in parentIds:
-                graphInfo['nodes'][n_index]['type'] = "Compartment"
-
-
 def writeGraphInfoToFile(graphInfoString, filename, filetype):
     graphInfo = json.loads(graphInfoString)
 
@@ -64,7 +50,6 @@ def writeGraphInfoToFile(graphInfoString, filename, filetype):
         writeJSON(graphInfo, filename)
     # sbml
     elif filetype == "as SBML":
-        annotateSBMLCompartments(graphInfo)
         writeSBML(graphInfo, filename)
 
 
