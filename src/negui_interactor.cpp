@@ -1028,13 +1028,14 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
 void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QJsonObject graphInfoObject = exportNetworkInfo();
     ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibility(graphInfoObject, exportTool->name()));
-    if (((MyDataExportTool*)exportTool)->isInfoCompatible())
+    if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
         dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
+        ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
+        ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
+        ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
+        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
+    }
     ((MyDataExportTool*)exportTool)->showMessages();
-    ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
-    ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
-    ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-    ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
 }
 
 void MyInteractor::writeFigureToFile(const QString& exportToolName) {
