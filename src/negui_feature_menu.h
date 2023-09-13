@@ -9,7 +9,24 @@ class MyFeatureMenuBase : public MyFrame {
 
 public:
 
-    MyFeatureMenuBase(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
+    typedef enum {
+        NULL_FEATURE_MENU,
+        ELEMENT_FEATURE_MENU,
+    } FEATURE_MENU_TYPE;
+
+    MyFeatureMenuBase(QWidget *parent = nullptr);
+
+    virtual FEATURE_MENU_TYPE type() = 0;
+};
+
+class MyElementFeatureMenu : public MyFeatureMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
+
+    FEATURE_MENU_TYPE type() override;
 
     QList<MyShapeStyleBase*> shapeStyles();
 
@@ -26,13 +43,13 @@ public:
     void clearShapeStyles();
 
 signals:
-    
+
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
 
     void askForRemoveFeatureMenu();
 
     void isUpdated(QList<MyShapeStyleBase*>);
-    
+
 private slots:
 
     void addNewShapeStyle(MyShapeStyleBase* shapeStyle);
@@ -42,11 +59,11 @@ private slots:
     void changeShapeStyle(MyShapeStyleBase* shapeStyle);
 
     void setExpandableWidgetSize(const QSize& expandableWidgetSize);
-    
+
 protected:
-    
+
     void updateExtents();
-    
+
     QWidget* _elementFeatureMenu;
     QTreeView* _shapeStylesTreeView;
     QList<MyShapeStyleBase*> _shapeStyles;
