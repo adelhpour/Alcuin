@@ -209,7 +209,7 @@ QWidget* MyEdgeBase::getFeatureMenu() {
 }
 
 const qint32 MyEdgeBase::calculateZValue() {
-    return qMax(sourceNode()->calculateZValue(), targetNode()->calculateZValue()) - 2;
+    return qMax(((MyNodeBase*)sourceNode())->calculateConnectedEdgeZValue(), ((MyNodeBase*)targetNode())->calculateConnectedEdgeZValue());
 }
 
 void MyEdgeBase::read(const QJsonObject &json) {

@@ -180,7 +180,7 @@ const qint32 MyNodeBase::calculateParentZValue() {
     qint32 parentZValue = 0;
     MyNetworkElementBase* parent = this;
     while (parent && ((MyNodeBase*)parent)->parentNodeId() != "N/A") {
-        parentZValue += 7;
+        parentZValue += 10;
         parent = ((MyNodeBase*)parent)->parentNode();
     }
 
@@ -374,7 +374,11 @@ void MyClassicNodeBase::adjustExtents() {
 }
 
 const qint32 MyClassicNodeBase::calculateNodeZValue() {
-    return ((MyClassicNodeStyleBase*)style())->convertibleParentCategory().isEmpty() ? 5 : 0;
+    return ((MyClassicNodeStyleBase*)style())->convertibleParentCategory().isEmpty() ? 7 : 0;
+}
+
+const qint32 MyClassicNodeBase::calculateConnectedEdgeZValue() {
+    return calculateZValue() - 4;
 }
 
 // MySimpleClassicNode
@@ -641,5 +645,9 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
 }
 
 const qint32 MyCentroidNode::calculateNodeZValue() {
-    return 4;
+    return 5;
+}
+
+const qint32 MyCentroidNode::calculateConnectedEdgeZValue() {
+    return calculateZValue() - 2;
 }

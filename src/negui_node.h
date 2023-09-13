@@ -76,6 +76,8 @@ public:
 
     virtual const qint32 calculateNodeZValue() = 0;
 
+    virtual const qint32 calculateConnectedEdgeZValue() = 0;
+
     void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
 
     void addSpacerItemToFeatureMenu(QWidget* featureMenu);
@@ -160,6 +162,8 @@ public:
     void adjustExtents();
 
     const qint32 calculateNodeZValue() override;
+
+    const qint32 calculateConnectedEdgeZValue() override;
 
 public slots:
 
@@ -269,6 +273,8 @@ private slots:
     const QLineF createBezierAdjustLine();
 
     const qint32 calculateNodeZValue() override;
+
+    const qint32 calculateConnectedEdgeZValue() override;
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;
