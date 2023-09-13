@@ -151,17 +151,17 @@ void MyNetworkElementBase::createFeatureMenu() {
         if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
             QWidget* featureMenu = createAndConnectFeatureMenuObject();
             if (currentFeatureMenu)
-                ((MyFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
+                ((MyFeatureMenuBase*)featureMenu)->setBeingModifiedShapeStyle(((MyFeatureMenuBase*)currentFeatureMenu)->beingModifiedShapeStyle());
             askForDisplayFeatureMenu(featureMenu);
         }
     }
 }
 
 QWidget* MyNetworkElementBase::createAndConnectFeatureMenuObject() {
-    MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
+    MyFeatureMenuBase* featureMenu =  new MyFeatureMenuBase(getFeatureMenu(), askForIconsDirectoryPath());
     featureMenu->setObjectName(name());
     featureMenu->setShapeStyles(style()->shapeStyles());
-    connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+    connect(featureMenu, &MyFeatureMenuBase::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
         updateStyle(shapeStyles);
         updateGraphicsItem();
         updateFocusedGraphicsItems();

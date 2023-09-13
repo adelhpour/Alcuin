@@ -4,12 +4,12 @@
 #include "negui_shape_style_base.h"
 #include "negui_customized_feature_menu_widgets.h"
 
-class MyFeatureMenu : public MyFrame {
+class MyFeatureMenuBase : public MyFrame {
     Q_OBJECT
 
 public:
-    
-    MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
+
+    MyFeatureMenuBase(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     QList<MyShapeStyleBase*> shapeStyles();
 

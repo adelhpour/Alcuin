@@ -3,9 +3,9 @@
 
 #include <QGridLayout>
 
-// MyFeatureMenu
+// MyFeatureMenuBase
 
-MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
+MyFeatureMenuBase::MyFeatureMenuBase(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = new QGridLayout(this);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -33,7 +33,7 @@ MyFeatureMenu::MyFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDi
     updateExtents();
 }
 
-QList<MyShapeStyleBase*> MyFeatureMenu::shapeStyles() {
+QList<MyShapeStyleBase*> MyFeatureMenuBase::shapeStyles() {
     for (MyShapeStyleBase* shapeStyle : qAsConst(_shapeStyles)) {
         for (MyParameterBase* parameter : shapeStyle->parameters() + shapeStyle->outsourcingParameters())
             parameter->setDefaultValue();
@@ -42,46 +42,46 @@ QList<MyShapeStyleBase*> MyFeatureMenu::shapeStyles() {
     return _shapeStyles;
 }
 
-void MyFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
+void MyFeatureMenuBase::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
     clearShapeStyles();
     for (MyShapeStyleBase* shapeStyle : shapeStyles)
         addShapeStyle(shapeStyle);
 }
 
-void MyFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::addShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.push_back(shapeStyle);
     connect(shapeStyle, &MyShapeStyleBase::isUpdated, this, [this] () { emit isUpdated(this->shapeStyles()); });
     emit askForSetRemovingMenu(_shapeStyles);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
 }
 
-void MyFeatureMenu::addSingleShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::addSingleShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.push_front(shapeStyle);
     connect(shapeStyle, &MyShapeStyleBase::isUpdated, this, [this] () { emit isUpdated(this->shapeStyles()); });
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
 }
 
-void MyFeatureMenu::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
     addShapeStyle(shapeStyle);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandLastBranch();
     emit isUpdated(shapeStyles());
 }
 
-void MyFeatureMenu::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.removeOne(shapeStyle);
     emit askForSetRemovingMenu(_shapeStyles);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
     emit isUpdated(shapeStyles());
 }
 
-void MyFeatureMenu::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.removeFirst();
     addSingleShapeStyle(shapeStyle);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandFirstBranch();
     emit isUpdated(shapeStyles());
 }
 
-MyShapeStyleBase* MyFeatureMenu::beingModifiedShapeStyle() {
+MyShapeStyleBase* MyFeatureMenuBase::beingModifiedShapeStyle() {
     QString expandedBranchTitle = ((MyShapeStyleTreeView*)_shapeStylesTreeView)->getExpandedBranchTitle();
     for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
         if (shapeStyle->name() == expandedBranchTitle)
@@ -91,22 +91,22 @@ MyShapeStyleBase* MyFeatureMenu::beingModifiedShapeStyle() {
     return NULL;
 }
 
-void MyFeatureMenu::setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MyFeatureMenuBase::setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle) {
     if (shapeStyle)
         ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandBranch(shapeStyle);
 }
 
-void MyFeatureMenu::clearShapeStyles() {
+void MyFeatureMenuBase::clearShapeStyles() {
     while(shapeStyles().size())
         delete shapeStyles().takeLast();
 }
 
-void MyFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
+void MyFeatureMenuBase::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
     _expandableWidgetSize = expandableWidgetSize;
     updateExtents();
 }
 
-void MyFeatureMenu::updateExtents() {
+void MyFeatureMenuBase::updateExtents() {
     qint32 menuWidth = 0;
     QSize elementFeatureMenuSize = ((MyFeatureMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)
