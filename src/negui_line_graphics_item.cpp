@@ -158,15 +158,15 @@ MyConnectedToStartCentroidShapeLineGraphicsItem::MyConnectedToStartCentroidShape
 }
 
 QGraphicsItem* MyConnectedToStartCentroidShapeLineGraphicsItem::getFocusedGraphicsItem() {
-    MySinglePointBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MySinglePointBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), zValue());
-    connect(focusedGraphicsItems, SIGNAL(controlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint1(const QPointF&)));
-    connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint1());  });
+    MySinglePointBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MySinglePointBezierAdjustHandledGraphicsItems(getEndPoint(), getControlPoint2(), zValue());
+    connect(focusedGraphicsItems, SIGNAL(controlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint2(const QPointF&)));
+    connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint2());  });
 
     return focusedGraphicsItems;
 }
 
 const QPointF MyConnectedToStartCentroidShapeLineGraphicsItem::connectedToCentroidNodeControlPoint() {
-    return getControlPoint2();
+    return getControlPoint1();
 }
 
 // MyConnectedToEndCentroidShapeLineGraphicsItem
@@ -176,9 +176,9 @@ MyConnectedToEndCentroidShapeLineGraphicsItem::MyConnectedToEndCentroidShapeLine
 }
 
 QGraphicsItem* MyConnectedToEndCentroidShapeLineGraphicsItem::getFocusedGraphicsItem() {
-    MySinglePointBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MySinglePointBezierAdjustHandledGraphicsItems(getEndPoint(), getControlPoint2(), zValue());
-    connect(focusedGraphicsItems, SIGNAL(controlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint2(const QPointF&)));
-    connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint2());  });
+    MySinglePointBezierAdjustHandledGraphicsItems* focusedGraphicsItems = new MySinglePointBezierAdjustHandledGraphicsItems(getStartPoint(), getControlPoint1(), zValue());
+    connect(focusedGraphicsItems, SIGNAL(controlPointIsUpdated(const QPointF&)), this, SLOT(setControlPoint1(const QPointF&)));
+    connect(this, &MyShapeGraphicsItemBase::askForAdjustFocusedGraphicsItems, focusedGraphicsItems, [this, focusedGraphicsItems] () { focusedGraphicsItems->adjust(getControlPoint1());  });
 
     return focusedGraphicsItems;
 }
