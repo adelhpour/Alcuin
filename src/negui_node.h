@@ -54,6 +54,9 @@ public:
     // set the parent node of the node
     void setParentNode(MyNetworkElementBase* parentNode);
 
+    // unset the parent node of the node
+    void unsetParentNode();
+
     // return true if the parent node of the node is set
     const bool isSetParentNode() const { return _isSetParentNode; }
 
@@ -68,6 +71,12 @@ public:
     const qreal endEdgePadding();
     
     const qint32 calculateZValue() override;
+
+    const qint32 calculateParentZValue();
+
+    virtual const qint32 calculateNodeZValue() = 0;
+
+    virtual const qint32 calculateConnectedEdgeZValue() = 0;
 
     void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
 
@@ -99,7 +108,9 @@ public slots:
     // set the position of the node
     virtual void setPosition(const QPointF& position);
 
-    void adjustConnectedEdges();
+    void adjustConnectedEdges(const bool& movedByParentNodeMove = false);
+
+    void setConnectedNodesParents();
 
 protected:
     QString _parentNodeId;
@@ -149,6 +160,10 @@ public:
 
     // adjust node extents to fit all its children
     void adjustExtents();
+
+    const qint32 calculateNodeZValue() override;
+
+    const qint32 calculateConnectedEdgeZValue() override;
 
 public slots:
 
@@ -241,7 +256,7 @@ signals:
 
 public slots:
 
-    void adjustNodePositionToNeighborNodes();
+    void adjustNodePositionToNeighborNodes(const bool& movedByParentNodeMove = false);
 
 private slots:
 
@@ -251,9 +266,15 @@ private slots:
 
     void connectNodePositionToNeighborNodes(const bool& connected);
 
+    void setNodeParentUsingNeighborNodesParent();
+
     void setSelected(const bool& selected) override;
 
     const QLineF createBezierAdjustLine();
+
+    const qint32 calculateNodeZValue() override;
+
+    const qint32 calculateConnectedEdgeZValue() override;
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;

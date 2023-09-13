@@ -1,15 +1,15 @@
 import json
 import sbmlplot
-    
+
 def dataExportInfo():
     # json
     json_format = {'name' : "as JSON", 'type': "dataexporttool", 'file-extension' : "json", 'default-save-file-name' : "network", 'element-types': {'node': ["Reaction", "Compartment"], 'edge': ["Reactant", "Product", "Modifier"]}}
 
     # sbml
     sbml_format = {'name' : "as SBML", 'type': "dataexporttool", 'file-extension' : "xml", 'default-save-file-name' : "model", 'element-types': {'node': ["Reaction"], 'edge': ["Reactant", "Product", "Modifier"]}}
-    
+
     return json.dumps({'items': [json_format, sbml_format]})
-    
+
 
 def checkForGraphInfoCompatibility(graphInfoString, filetype):
     # json
@@ -18,7 +18,7 @@ def checkForGraphInfoCompatibility(graphInfoString, filetype):
     # sbml
     elif filetype == "as SBML":
         return checkForSBMLCompatibility(graphInfoString)
-        
+
     return json.dumps({'isInfoCompatible': False, 'messages': [{'message': "export format is not supported"}]})
 
 def checkForJSONCompatibility(graphInfoString):
@@ -41,30 +41,15 @@ def checkForSBMLCompatibility(graphInfoString):
 
     is_info_compatible = all_species_have_parents
     return json.dumps({'isInfoCompatible': is_info_compatible, 'messages': messages})
-    
-    
-def annotateSBMLCompartments(graphInfo):
-    parentIds = []
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'parent' in list(graphInfo['nodes'][n_index].keys()) and graphInfo['nodes'][n_index]['parent'] != "N/A" and graphInfo['nodes'][n_index]['parent'] not in parentIds:
-                parentIds.append(graphInfo['nodes'][n_index]['parent'])
-       
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'id' in list(graphInfo['nodes'][n_index].keys()) and graphInfo['nodes'][n_index]['id'] in parentIds:
-                graphInfo['nodes'][n_index]['type'] = "Compartment"
-            
 
 def writeGraphInfoToFile(graphInfoString, filename, filetype):
     graphInfo = json.loads(graphInfoString)
-    
+
     # json
     if filetype == "as JSON":
         writeJSON(graphInfo, filename)
     # sbml
     elif filetype == "as SBML":
-        annotateSBMLCompartments(graphInfo)
         writeSBML(graphInfo, filename)
 
 

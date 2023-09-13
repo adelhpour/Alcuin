@@ -26,7 +26,7 @@ Q_DECLARE_INTERFACE(ImportInterface, ImportInterface_iid)
 class DataExportInterface : public InterfaceBase {
 public:
     virtual void writeGraphInfoToFile(const QJsonObject& graphInfoObject, const QString& fileName, const QString& fileType) = 0;
-    virtual const QJsonObject checkForGraphInfoCompatibiliy(const QJsonObject& graphInfoObject, const QString& fileType) = 0;
+    virtual const QJsonObject checkForGraphInfoCompatibility(const QJsonObject& graphInfoObject, const QString& fileType) = 0;
 };
 
 #define DataExportInterface_iid "org.sys-bio.networkeditorgui.dataexportinterface/1.0"

@@ -73,13 +73,8 @@ const bool MyNodeBase::isCuttable() {
 }
 
 void MyNodeBase::deparent() {
-    if (_parentNode) {
-        ((MyComplexClassicNode*)_parentNode)->removeChildNode(this);
-        ((MyComplexClassicNode*)_parentNode)->adjustExtents();
-    }
-    _parentNode = NULL;
-    _isSetParentNode = false;
-    _parentNodeId = "N/A";
+    unsetParentNode();
+    setConnectedNodesParents();
 }
 
 void MyNodeBase::reparent() {
@@ -90,6 +85,7 @@ void MyNodeBase::reparent() {
         setParentNode((MyNodeBase*)parentNode);
         ((MyComplexClassicNode*)parentNode)->adjustExtents();
         resetPosition();
+        setConnectedNodesParents();
     }
 }
 
@@ -130,6 +126,17 @@ void MyNodeBase::setParentNode(MyNetworkElementBase* parentNode) {
     graphicsItem()->setZValue(calculateZValue());
 }
 
+void MyNodeBase::unsetParentNode() {
+    if (_parentNode) {
+        ((MyComplexClassicNode*)_parentNode)->removeChildNode(this);
+        ((MyComplexClassicNode*)_parentNode)->adjustExtents();
+    }
+    _parentNode = NULL;
+    _isSetParentNode = false;
+    _parentNodeId = "N/A";
+    graphicsItem()->setZValue(calculateZValue());
+}
+
 void MyNodeBase::lockParentNode(const bool& locked) {
     _isParentNodeLocked = locked;
 }
@@ -165,21 +172,29 @@ void MyNodeBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
 }
 
-
 const qint32 MyNodeBase::calculateZValue() {
-    qint32 incrementZValue = 2;
+    return calculateNodeZValue() + calculateParentZValue();
+}
+
+const qint32 MyNodeBase::calculateParentZValue() {
+    qint32 parentZValue = 0;
     MyNetworkElementBase* parent = this;
     while (parent && ((MyNodeBase*)parent)->parentNodeId() != "N/A") {
-        incrementZValue += 4;
+        parentZValue += 10;
         parent = ((MyNodeBase*)parent)->parentNode();
     }
 
-    return incrementZValue;
+    return parentZValue;
 }
 
-void MyNodeBase::adjustConnectedEdges() {
+void MyNodeBase::adjustConnectedEdges(const bool& movedByParentNodeMove) {
     for (MyNetworkElementBase *edge : qAsConst(edges()))
-        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes();
+        ((MyEdgeBase *) edge)->askForAdjustNodePositionToNeighborNodes(movedByParentNodeMove);
+}
+
+void MyNodeBase::setConnectedNodesParents() {
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        ((MyEdgeBase *) edge)->askForSetNodeParentUsingNeighborNodesParent();
 }
 
 void MyNodeBase::read(const QJsonObject &json) {
@@ -277,6 +292,7 @@ void MyClassicNodeBase::setPosition(const QPointF& position) {
         for (MyNetworkElementBase* node : qAsConst(childNodes())) {
             ((MyNodeBase*)node)->lockParentNode(true);
             ((MyComplexClassicNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
+            ((MyNodeBase*)node)->adjustConnectedEdges(true);
         }
     }
     else
@@ -355,6 +371,14 @@ void MyClassicNodeBase::adjustExtents() {
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
     ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+}
+
+const qint32 MyClassicNodeBase::calculateNodeZValue() {
+    return ((MyClassicNodeStyleBase*)style())->convertibleParentCategory().isEmpty() ? 7 : 0;
+}
+
+const qint32 MyClassicNodeBase::calculateConnectedEdgeZValue() {
+    return calculateZValue() - 4;
 }
 
 // MySimpleClassicNode
@@ -487,22 +511,27 @@ const bool MyCentroidNode::isCopyable() {
 
 void MyCentroidNode::addEdge(MyNetworkElementBase* e) {
     MyNodeBase::addEdge(e);
-    connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    connect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes(const bool&)), this, SLOT(adjustNodePositionToNeighborNodes(const bool&)));
+    connect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     connect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
 void MyCentroidNode::removeEdge(MyNetworkElementBase* e) {
     MyNodeBase::removeEdge(e);
-    disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes()), this, SLOT(adjustNodePositionToNeighborNodes()));
+    disconnect(e, SIGNAL(askForAdjustNodePositionToNeighborNodes(const bool&)), this, SLOT(adjustNodePositionToNeighborNodes(const bool&)));
+    disconnect(e, SIGNAL(askForSetNodeParentUsingNeighborNodesParent()), this, SLOT(setNodeParentUsingNeighborNodesParent()));
     disconnect(e, SIGNAL(askForSetConnectedElementsSelected(const bool&)), this, SLOT(setSelected(const bool&)));
 }
 
-void MyCentroidNode::adjustNodePositionToNeighborNodes() {
-    if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
-        QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
-        ((MyCentroidNodeSceneGraphicsItem*)graphicsItem())->moveBy((updatedPosition - _position).x(), (updatedPosition - _position).y());
-        updateFocusedGraphicsItems();
-        adjustConnectedBezierCurves();
+void MyCentroidNode::adjustNodePositionToNeighborNodes(const bool& movedByParentNodeMove) {
+    if (!movedByParentNodeMove || !parentNode()) {
+        if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
+            QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
+            ((MyCentroidNodeSceneGraphicsItem *) graphicsItem())->moveBy((updatedPosition - _position).x(),
+                                                                         (updatedPosition - _position).y());
+            updateFocusedGraphicsItems();
+            adjustConnectedBezierCurves();
+        }
     }
 }
 
@@ -517,6 +546,27 @@ const bool MyCentroidNode::connectedBezierCurvesNeedsToBeAdjusted() {
 
     return false;
 }
+
+void MyCentroidNode::setNodeParentUsingNeighborNodesParent() {
+    MyNetworkElementBase* parenNode = NULL;
+    for (MyNetworkElementBase *edge : qAsConst(edges())) {
+        if (((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent()) {
+            if (!parenNode)
+                parenNode = ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent();
+            else if (parenNode != ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent()) {
+                unsetParentNode();
+                return;
+            }
+        }
+        else {
+            unsetParentNode();
+            return;
+        }
+    }
+
+    setParentNode(parenNode);
+}
+
 
 const QPointF MyCentroidNode::getNodeUpdatedPositionUsingConnectedEdges() {
     QPointF position = QPointF(0.0, 0.0);
@@ -592,4 +642,12 @@ const QLineF MyCentroidNode::createBezierAdjustLine() {
     }
 
     return QLineF(startPoint, endPoint);
+}
+
+const qint32 MyCentroidNode::calculateNodeZValue() {
+    return 5;
+}
+
+const qint32 MyCentroidNode::calculateConnectedEdgeZValue() {
+    return calculateZValue() - 2;
 }
