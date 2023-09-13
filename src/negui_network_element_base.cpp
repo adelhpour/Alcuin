@@ -1,5 +1,5 @@
 #include "negui_network_element_base.h"
-#include "negui_feature_menu.h"
+#include "negui_network_element_feature_menu.h"
 
 #include <QGridLayout>
 
