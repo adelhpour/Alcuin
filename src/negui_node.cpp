@@ -73,13 +73,7 @@ const bool MyNodeBase::isCuttable() {
 }
 
 void MyNodeBase::deparent() {
-    if (_parentNode) {
-        ((MyComplexClassicNode*)_parentNode)->removeChildNode(this);
-        ((MyComplexClassicNode*)_parentNode)->adjustExtents();
-    }
-    _parentNode = NULL;
-    _isSetParentNode = false;
-    _parentNodeId = "N/A";
+    unsetParentNode();
     setConnectedNodesParents();
 }
 
@@ -129,6 +123,17 @@ void MyNodeBase::setParentNode(MyNetworkElementBase* parentNode) {
     _isSetParentNode = true;
     _parentNodeId = parentNode->name();
     ((MyComplexClassicNode*)_parentNode)->addChildNode(this);
+    graphicsItem()->setZValue(calculateZValue());
+}
+
+void MyNodeBase::unsetParentNode() {
+    if (_parentNode) {
+        ((MyComplexClassicNode*)_parentNode)->removeChildNode(this);
+        ((MyComplexClassicNode*)_parentNode)->adjustExtents();
+    }
+    _parentNode = NULL;
+    _isSetParentNode = false;
+    _parentNodeId = "N/A";
     graphicsItem()->setZValue(calculateZValue());
 }
 
@@ -544,11 +549,15 @@ void MyCentroidNode::setNodeParentUsingNeighborNodesParent() {
         if (((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent()) {
             if (!parenNode)
                 parenNode = ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent();
-            else if (parenNode != ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent())
+            else if (parenNode != ((MyConnectedToCentroidNodeEdgeBase*)edge)->nonCentroidNodeParent()) {
+                unsetParentNode();
                 return;
+            }
         }
-        else
+        else {
+            unsetParentNode();
             return;
+        }
     }
 
     setParentNode(parenNode);

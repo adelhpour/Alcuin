@@ -54,6 +54,9 @@ public:
     // set the parent node of the node
     void setParentNode(MyNetworkElementBase* parentNode);
 
+    // unset the parent node of the node
+    void unsetParentNode();
+
     // return true if the parent node of the node is set
     const bool isSetParentNode() const { return _isSetParentNode; }
 
