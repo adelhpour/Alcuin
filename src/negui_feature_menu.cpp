@@ -5,13 +5,19 @@
 
 // MyFeatureMenuBase
 
-MyFeatureMenuBase::MyFeatureMenuBase(QWidget *parent) : MyFrame(parent) {
+MyFeatureMenuBase::MyFeatureMenuBase(const QString& iconsDirectoryPath, QWidget *parent) : MyFrame(parent) {
+    QGridLayout* contentLayout = new QGridLayout(this);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
 
+    QPushButton* closeFeatureMenuButton = new QPushButton();
+    decorateCloseFeatureMenuButton(closeFeatureMenuButton, iconsDirectoryPath);
+    connect(closeFeatureMenuButton, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
+    contentLayout->addWidget(closeFeatureMenuButton, contentLayout->rowCount(), 0, 1, 2, Qt::AlignLeft);
 }
 
 // MyNullFeatureMenu
 
-MyNullFeatureMenu::MyNullFeatureMenu(QWidget *parent) : MyFeatureMenuBase(parent) {
+MyNullFeatureMenu::MyNullFeatureMenu(const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(iconsDirectoryPath, parent) {
 
 }
 
@@ -21,15 +27,9 @@ MyFeatureMenuBase::FEATURE_MENU_TYPE MyNullFeatureMenu::type() {
 
 // MyElementFeatureMenu
 
-MyElementFeatureMenu::MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(parent) {
+MyElementFeatureMenu::MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(iconsDirectoryPath, parent) {
     _expandableWidgetSize = QSize(0, 0);
-    QGridLayout* contentLayout = new QGridLayout(this);
-    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-    QPushButton* closeFeatureMenuButton = new QPushButton();
-    decorateCloseFeatureMenuButton(closeFeatureMenuButton, iconsDirectoryPath);
-    connect(closeFeatureMenuButton, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
-    contentLayout->addWidget(closeFeatureMenuButton, contentLayout->rowCount(), 0, 1, 2, Qt::AlignLeft);
+    QGridLayout* contentLayout = (QGridLayout*)layout();
 
     // element feature menu
     _elementFeatureMenu = elementFeatureMenu;

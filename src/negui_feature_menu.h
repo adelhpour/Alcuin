@@ -14,9 +14,13 @@ public:
         ELEMENT_FEATURE_MENU,
     } FEATURE_MENU_TYPE;
 
-    MyFeatureMenuBase(QWidget *parent = nullptr);
+    MyFeatureMenuBase(const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     virtual FEATURE_MENU_TYPE type() = 0;
+
+signals:
+
+    void askForRemoveFeatureMenu();
 };
 
 class MyNullFeatureMenu : public MyFeatureMenuBase {
@@ -24,7 +28,7 @@ class MyNullFeatureMenu : public MyFeatureMenuBase {
 
 public:
 
-    MyNullFeatureMenu(QWidget *parent = nullptr);
+    MyNullFeatureMenu(const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     FEATURE_MENU_TYPE type() override;
 };
@@ -55,8 +59,6 @@ public:
 signals:
 
     void askForSetRemovingMenu(QList<MyShapeStyleBase*>);
-
-    void askForRemoveFeatureMenu();
 
     void isUpdated(QList<MyShapeStyleBase*>);
 
