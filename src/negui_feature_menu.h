@@ -19,6 +19,16 @@ public:
     virtual FEATURE_MENU_TYPE type() = 0;
 };
 
+class MyNullFeatureMenu : public MyFeatureMenuBase {
+    Q_OBJECT
+
+public:
+
+    MyNullFeatureMenu(QWidget *parent = nullptr);
+
+    FEATURE_MENU_TYPE type() override;
+};
+
 class MyElementFeatureMenu : public MyFeatureMenuBase {
     Q_OBJECT
 

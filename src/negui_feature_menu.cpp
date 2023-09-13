@@ -6,7 +6,17 @@
 // MyFeatureMenuBase
 
 MyFeatureMenuBase::MyFeatureMenuBase(QWidget *parent) : MyFrame(parent) {
-    
+
+}
+
+// MyNullFeatureMenu
+
+MyNullFeatureMenu::MyNullFeatureMenu(QWidget *parent) : MyFeatureMenuBase(parent) {
+
+}
+
+MyFeatureMenuBase::FEATURE_MENU_TYPE MyNullFeatureMenu::type() {
+    return NULL_FEATURE_MENU;
 }
 
 // MyElementFeatureMenu
