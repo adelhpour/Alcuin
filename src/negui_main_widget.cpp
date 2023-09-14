@@ -5,6 +5,7 @@
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
 #include "negui_status_bar.h"
+#include "negui_null_feature_menu.h"
 
 #include <QGridLayout>
 #include <QSettings>
@@ -146,6 +147,10 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mousePressedLeftButtonIsMoved(const QPointF&)), (MyInteractor*)interactor(), SLOT(displaySelectionArea(const QPointF&)));
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsReleased()), (MyInteractor*)interactor(), SLOT(clearSelectionArea()));
 
+    // display null feature menu
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), this, SLOT(displayFeatureMenu()));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayFeatureMenu()));
+
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
@@ -212,6 +217,11 @@ QWidget* MyNetworkEditorWidget::featureMenu() {
 
 const qreal& MyNetworkEditorWidget::layoutMenuRow() {
     return _layoutMenuRow;
+}
+
+void MyNetworkEditorWidget::displayFeatureMenu() {
+    if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
+        displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
