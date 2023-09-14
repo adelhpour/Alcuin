@@ -62,9 +62,23 @@ MyShapeStyleBase* MyClassicArrowHeadStyle::createShapeStyle(const QString& shape
 }
 
 QWidget* MyClassicArrowHeadStyle::shapeStylesButtons() {
-    QWidget* shapeStylesButtons = new MyAddRemoveArrowHeadShapeStylesButtons();
-    ((MyAddRemoveArrowHeadShapeStylesButtons*)shapeStylesButtons)->setAddingMenu();
+    QWidget* shapeStylesButtons = new MyChangeArrowHeadShapeStylesButton();
+    ((MyChangeArrowHeadShapeStylesButton*)shapeStylesButtons)->setMenu();
     return shapeStylesButtons;
+}
+
+// MyChangeArrowHeadShapeStylesButton
+
+MyChangeArrowHeadShapeStylesButton::MyChangeArrowHeadShapeStylesButton(QWidget* parent) : MyChangeShapeStylesButtonsBase(parent) {
+
+}
+
+void MyChangeArrowHeadShapeStylesButton::setMenu() {
+    connect(_menu->addAction("Ellipse"), &QAction::triggered, this, [this] () {
+        emit askForChangeShapeStyle(createArrowHeadEllipseStyle("ellipse")); });
+    connect(_menu->addAction("Rectangle"), &QAction::triggered, this, [this] () { emit askForChangeShapeStyle(createArrowHeadRectangleStyle("rectangle")); });
+    connect(_menu->addAction("Polygon"), &QAction::triggered, this, [this] () { MyShapeStyleBase* polygonShapeStyle = createArrowHeadDefaultPolygonStyle("polygon");
+        emit askForChangeShapeStyle(polygonShapeStyle); });
 }
 
 // MyAddRemoveArrowHeadShapeStylesButtons

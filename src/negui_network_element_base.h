@@ -71,6 +71,10 @@ public:
 
     void addSpacerItemToFeatureMenu(QWidget* featureMenu);
 
+    void addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu);
+
+    void addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
+
     virtual const qint32 calculateZValue() = 0;
 
     QWidget* createAndConnectFeatureMenuObject();

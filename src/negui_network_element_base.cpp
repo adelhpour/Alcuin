@@ -146,6 +146,24 @@ void MyNetworkElementBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
     contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
 }
 
+void MyNetworkElementBase::addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QWidget* shapeStylesButtons = style()->shapeStylesButtons();
+    if (shapeStylesButtons) {
+        connect(shapeStylesButtons, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)));
+        contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
+    }
+}
+
+void MyNetworkElementBase::addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QWidget* shapeStylesButtons = style()->shapeStylesButtons();
+    connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(shapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), shapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
+}
+
 void MyNetworkElementBase::createFeatureMenu() {
     if (getSceneMode() == NORMAL_MODE) {
         QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();

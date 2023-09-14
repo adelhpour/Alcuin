@@ -116,12 +116,8 @@ QWidget* MyClassicArrowHead::getFeatureMenu() {
     QWidget* featureMenu = MyArrowHeadBase::getFeatureMenu();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
 
-    // add remove buttons
-    QWidget* shapeStylesButtons = ((MyClassicArrowHeadStyle*)style())->shapeStylesButtons();
-    connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
-    connect(shapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
-    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), shapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
-    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 1);
+    // add change shape button
+    addChangeShapeStyleButtonToFeatureMenu(featureMenu);
 
     return featureMenu;
 }
