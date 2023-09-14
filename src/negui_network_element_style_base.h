@@ -23,6 +23,8 @@ public:
     
     virtual void clearShapeStyles();
 
+    virtual QWidget* shapeStylesButtons();
+
     MyParameterBase* getParameter(MyShapeStyleBase::SHAPE_STYLE shape, const QString& parameterName);
     
     virtual const QRectF getShapesExtents(QRectF defaultExtents = QRectF(0.0, 0.0, 0.0, 0.0));

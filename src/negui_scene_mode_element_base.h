@@ -14,7 +14,6 @@ public:
         SELECT_MODE,
         SELECT_NODE_MODE,
         SELECT_EDGE_MODE,
-        DISPLAY_FEATURE_MENU_MODE,
         NONE_MODE,
     } SceneMode;
 
@@ -47,8 +46,6 @@ public:
     virtual void enableSelectNodeMode();
 
     virtual void enableSelectEdgeMode();
-
-    virtual void enableDisplayFeatureMenuMode();
 
     const SceneMode getModeAsSceneModeFromString(const QString& mode);
 

@@ -34,7 +34,17 @@ public:
 
     MyShapeStyleBase* createShapeStyle(const QString& shape) override;
 
-    QWidget* shapeStylesButtons();
+    QWidget* shapeStylesButtons() override;
+};
+
+class MyChangeArrowHeadShapeStylesButton : public MyChangeShapeStylesButtonsBase {
+    Q_OBJECT
+
+public:
+
+    MyChangeArrowHeadShapeStylesButton(QWidget* parent = nullptr);
+
+    virtual void setMenu() override;
 };
 
 class MyAddRemoveArrowHeadShapeStylesButtons : public MyAddRemoveShapeStylesButtonsBase {

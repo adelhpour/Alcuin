@@ -748,12 +748,6 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
         emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
         emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
     }
-    else if (getSceneMode() == DISPLAY_FEATURE_MENU_MODE) {
-        if (!element->isSelected()) {
-            selectElements(false);
-            element->setSelected(true);
-        }
-    }
 }
 
 void MyInteractor::selectElement(const QString& elementName) {
@@ -924,16 +918,6 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
         edge->enableSelectEdgeMode();
     
     emit askForSetToolTip("Select " + edgeCategory + " edges");
-}
-
-void MyInteractor::enableDisplayFeatureMenuMode(const QString& elementName) {
-    enableNormalMode();
-    MySceneModeElementBase::enableDisplayFeatureMenuMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
-        node->enableDisplayFeatureMenuMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
-        edge->enableDisplayFeatureMenuMode();
-    selectElement(elementName);
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
@@ -1137,7 +1121,7 @@ QList<QAbstractButton*> MyInteractor::getAddModeButtons() {
 }
 
 QAbstractButton* MyInteractor::createNormalModeMenuButton() {
-    QAbstractButton* button = new MyModeMenuModeButton("Normal", "Display_Feature_Menu");
+    QAbstractButton* button = new MyModeMenuModeButton("Normal");
     connect(button, SIGNAL(clicked()), this, SLOT(enableNormalMode()));
     connect(button, SIGNAL(clicked()), this, SIGNAL(askForRemoveFeatureMenu()));
     return button;

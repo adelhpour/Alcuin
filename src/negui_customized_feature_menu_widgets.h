@@ -150,4 +150,11 @@ protected:
     branchVec _branches;
 };
 
+class MyNoSelectedElementTitle : public QLabel {
+
+public:
+
+    MyNoSelectedElementTitle(QWidget* parent = nullptr);
+};
+
 #endif

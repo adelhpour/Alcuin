@@ -79,8 +79,6 @@ public:
     virtual const qint32 calculateConnectedEdgeZValue() = 0;
 
     void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
-
-    void addSpacerItemToFeatureMenu(QWidget* featureMenu);
     
     // read the node info from the json object
     void read(const QJsonObject &json) override;
@@ -196,8 +194,6 @@ public:
 
     void addDisplayNameToFeatureMenu(QWidget* featureMenu);
 
-    void addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu);
-
 protected:
 
     QString _displayName;
@@ -215,8 +211,6 @@ public:
     MyNetworkElementGraphicsItemBase* createGraphicsItem(const QPointF &position) override;
 
     QWidget* getFeatureMenu() override;
-
-    void addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu);
 };
 
 class MyCentroidNode : public MyNodeBase {

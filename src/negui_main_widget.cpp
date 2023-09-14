@@ -5,6 +5,7 @@
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
 #include "negui_status_bar.h"
+#include "negui_null_feature_menu.h"
 
 #include <QGridLayout>
 #include <QSettings>
@@ -146,12 +147,13 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mousePressedLeftButtonIsMoved(const QPointF&)), (MyInteractor*)interactor(), SLOT(displaySelectionArea(const QPointF&)));
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsReleased()), (MyInteractor*)interactor(), SLOT(clearSelectionArea()));
 
+    // display null feature menu
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), this, SLOT(displayFeatureMenu()));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayFeatureMenu()));
+
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
-
-    // remove menu
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
 
     // context menu
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCopyable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCopyable()));
@@ -214,9 +216,15 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
     return _layoutMenuRow;
 }
 
+void MyNetworkEditorWidget::displayFeatureMenu() {
+    if (featureMenu())
+        displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
+}
+
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(featureMenu->objectName());
+    ((MyInteractor*)interactor())->selectElements(false);
+    ((MyInteractor*)interactor())->selectElement(featureMenu->objectName());
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
     ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
@@ -230,8 +238,6 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         featureMenu()->deleteLater();
         _featureMenu = NULL;
     }
-    if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
-        ((MyInteractor*)interactor())->enableNormalMode();
 }
 
 void MyNetworkEditorWidget::setReadyToLaunch() {

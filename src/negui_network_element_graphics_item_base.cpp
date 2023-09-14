@@ -12,7 +12,7 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForSelectNetworkElement()));
     connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
     connect(this, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () {
-        if (getSceneMode() == DISPLAY_FEATURE_MENU_MODE)
+        if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu())
             askForCreateFeatureMenu();
     });
 }

@@ -75,7 +75,9 @@ set(source_files
 		negui_customized_mode_menu_widgets.cpp
 		negui_customized_interactor_widgets.cpp
 		negui_mode_menu.cpp
-		negui_feature_menu.cpp
+		negui_feature_menu_base.cpp
+		negui_network_element_feature_menu.cpp
+		negui_null_feature_menu.cpp
 		negui_context_menu.cpp
 		negui_decorate_menu_buttons.cpp
 		negui_import_tools.cpp
@@ -157,7 +159,9 @@ set(header_files
 		negui_customized_mode_menu_widgets.h
 		negui_customized_interactor_widgets.h
 		negui_mode_menu.h
-		negui_feature_menu.h
+		negui_feature_menu_base.h
+		negui_network_element_feature_menu.h
+		negui_null_feature_menu.h
 		negui_context_menu.h
 		negui_interfaces.h
 		negui_decorate_menu_buttons.h

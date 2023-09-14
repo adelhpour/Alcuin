@@ -50,8 +50,6 @@ public:
 
     void convertToParentCategory();
 
-    virtual QWidget* shapeStylesButtons() = 0;
-
     // read the element style info from the json object
     void read(const QJsonObject &json) override;
 

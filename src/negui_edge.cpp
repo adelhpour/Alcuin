@@ -111,6 +111,7 @@ void MyEdgeBase::setArrowHead() {
     if (((MyEdgeStyleBase*)style())->arrowHeadStyle() && ((MyEdgeStyleBase*)style())->arrowHeadStyle()->shapeStyles().size()) {
         _arrowHead = createArrowHead(name() + "_ArrowHead", ((MyEdgeStyleBase*)style())->arrowHeadStyle(), this);
         connect(_arrowHead, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(_arrowHead, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
         _isSetArrowHead = true;
     }
 }
@@ -166,12 +167,6 @@ void MyEdgeBase::enableSelectEdgeMode() {
     MyNetworkElementBase::enableSelectEdgeMode();
     if (isSetArrowHead())
         arrowHead()->enableSelectEdgeMode();
-}
-
-void MyEdgeBase::enableDisplayFeatureMenuMode() {
-    MyNetworkElementBase::enableDisplayFeatureMenuMode();
-    if (isSetArrowHead())
-        arrowHead()->enableDisplayFeatureMenuMode();
 }
 
 const bool MyEdgeBase::canBeMovedExternally() {

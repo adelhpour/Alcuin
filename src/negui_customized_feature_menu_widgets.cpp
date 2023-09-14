@@ -285,3 +285,20 @@ const QString MyShapeStyleTreeView::getExpandedBranchTitle() {
 
     return "";
 }
+
+// MyNoSelectedElementTitle
+
+MyNoSelectedElementTitle::MyNoSelectedElementTitle(QWidget* parent) : QLabel(parent) {
+    setContentsMargins(0, 0, 0, 0);
+    QFont _font;
+    _font.setItalic(true);
+    qreal fontSize;
+#if defined(Q_OS_WIN)
+    fontSize = 8;
+#else
+    fontSize = 12;
+#endif
+    _font.setPointSize(fontSize);
+    setFont(_font);
+    setText("Select one single element to see its properties");
+}

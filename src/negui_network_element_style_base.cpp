@@ -40,6 +40,10 @@ void MyNetworkElementStyleBase::clearShapeStyles() {
         delete _shapeStyles.takeLast();
 }
 
+QWidget* MyNetworkElementStyleBase::shapeStylesButtons() {
+    return NULL;
+}
+
 MyParameterBase* MyNetworkElementStyleBase::getParameter(MyShapeStyleBase::SHAPE_STYLE shape, const QString& parameterName) {
     for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
         if (shapeStyle->type() == shape)

@@ -56,8 +56,6 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
-    
-    void enableDisplayFeatureMenuMode() override;
 };
 
 class MyClassicEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {

@@ -1,5 +1,5 @@
 #include "negui_network_element_base.h"
-#include "negui_feature_menu.h"
+#include "negui_network_element_feature_menu.h"
 
 #include <QGridLayout>
 
@@ -43,6 +43,7 @@ void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     connect(_graphicsItem, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
 }
 
 MyNetworkElementStyleBase* MyNetworkElementBase::style() {
@@ -108,11 +109,6 @@ void MyNetworkElementBase::enableSelectEdgeMode() {
     graphicsItem()->enableSelectEdgeMode();
 }
 
-void MyNetworkElementBase::enableDisplayFeatureMenuMode() {
-    MySceneModeElementBase::enableDisplayFeatureMenuMode();
-    graphicsItem()->enableDisplayFeatureMenuMode();
-}
-
 QWidget* MyNetworkElementBase::getFeatureMenu() {
     MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
@@ -121,8 +117,7 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     contentLayout->addWidget(new MyTitleLabel(styleCategory()), contentLayout->rowCount(), 0, 1, 2, Qt::AlignCenter);
 
     // spacer
-    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
-    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+    addSpacerItemToFeatureMenu(featureMenu);
 
     // name
     QString nameTitle = "Name";
@@ -145,23 +140,47 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     return featureMenu;
 }
 
+void MyNetworkElementBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
+    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+}
+
+void MyNetworkElementBase::addChangeShapeStyleButtonToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QWidget* shapeStylesButtons = style()->shapeStylesButtons();
+    if (shapeStylesButtons) {
+        connect(shapeStylesButtons, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)));
+        contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
+    }
+}
+
+void MyNetworkElementBase::addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QWidget* shapeStylesButtons = style()->shapeStylesButtons();
+    connect(shapeStylesButtons, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForAddShapeStyle(MyShapeStyleBase*)));
+    connect(shapeStylesButtons, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)), featureMenu, SIGNAL(askForRemoveShapeStyle(MyShapeStyleBase*)));
+    connect(featureMenu, SIGNAL(askForSetRemovingMenu(QList<MyShapeStyleBase*>)), shapeStylesButtons, SLOT(setRemovingMenu(QList<MyShapeStyleBase*>)));
+    contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
+}
+
 void MyNetworkElementBase::createFeatureMenu() {
-    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE)) {
+    if (getSceneMode() == NORMAL_MODE) {
         QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
         if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
             QWidget* featureMenu = createAndConnectFeatureMenuObject();
-            if (currentFeatureMenu)
-                ((MyFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
+            if (currentFeatureMenu && ((MyFeatureMenuBase*)currentFeatureMenu)->type() == MyFeatureMenuBase::ELEMENT_FEATURE_MENU)
+                ((MyElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyElementFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
             askForDisplayFeatureMenu(featureMenu);
         }
     }
 }
 
 QWidget* MyNetworkElementBase::createAndConnectFeatureMenuObject() {
-    MyFeatureMenu* featureMenu =  new MyFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
+    MyFeatureMenuBase* featureMenu =  new MyElementFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
     featureMenu->setObjectName(name());
-    featureMenu->setShapeStyles(style()->shapeStyles());
-    connect(featureMenu, &MyFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+    ((MyElementFeatureMenu*)featureMenu)->setShapeStyles(style()->shapeStyles());
+    connect((MyElementFeatureMenu*)featureMenu, &MyElementFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
         updateStyle(shapeStyles);
         updateGraphicsItem();
         updateFocusedGraphicsItems();
