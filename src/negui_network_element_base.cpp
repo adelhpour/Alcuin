@@ -117,8 +117,7 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
     contentLayout->addWidget(new MyTitleLabel(styleCategory()), contentLayout->rowCount(), 0, 1, 2, Qt::AlignCenter);
 
     // spacer
-    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
-    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+    addSpacerItemToFeatureMenu(featureMenu);
 
     // name
     QString nameTitle = "Name";
@@ -139,6 +138,12 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
 
 
     return featureMenu;
+}
+
+void MyNetworkElementBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
+    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
+    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
+    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
 }
 
 void MyNetworkElementBase::createFeatureMenu() {

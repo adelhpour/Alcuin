@@ -68,7 +68,9 @@ public:
     virtual void moveExternally(const qreal& dx, const qreal& dy) = 0;
     
     virtual QWidget* getFeatureMenu();
-    
+
+    void addSpacerItemToFeatureMenu(QWidget* featureMenu);
+
     virtual const qint32 calculateZValue() = 0;
 
     QWidget* createAndConnectFeatureMenuObject();

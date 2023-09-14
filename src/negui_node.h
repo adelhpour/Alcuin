@@ -79,8 +79,6 @@ public:
     virtual const qint32 calculateConnectedEdgeZValue() = 0;
 
     void addParentFeaturesToFeatureMenu(QWidget* featureMenu);
-
-    void addSpacerItemToFeatureMenu(QWidget* featureMenu);
     
     // read the node info from the json object
     void read(const QJsonObject &json) override;

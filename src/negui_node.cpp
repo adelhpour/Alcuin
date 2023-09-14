@@ -166,12 +166,6 @@ void MyNodeBase::addParentFeaturesToFeatureMenu(QWidget* featureMenu) {
     contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 }
 
-void MyNodeBase::addSpacerItemToFeatureMenu(QWidget* featureMenu) {
-    QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
-    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
-    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
-}
-
 const qint32 MyNodeBase::calculateZValue() {
     return calculateNodeZValue() + calculateParentZValue();
 }

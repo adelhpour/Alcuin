@@ -84,8 +84,7 @@ QWidget* MyArrowHeadBase::getFeatureMenu() {
     contentLayout->addWidget(new MyReadOnlyLineEdit(edge()->name()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
     
     // spacer
-    QLayoutItem* spacerItem = new MySpacerItem(0, 10);
-    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+    addSpacerItemToFeatureMenu(featureMenu);
 
     return featureMenu;
 }
