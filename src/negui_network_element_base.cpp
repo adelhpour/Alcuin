@@ -43,6 +43,7 @@ void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     connect(_graphicsItem, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
+    connect(_graphicsItem, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
 }
 
 MyNetworkElementStyleBase* MyNetworkElementBase::style() {
@@ -108,11 +109,6 @@ void MyNetworkElementBase::enableSelectEdgeMode() {
     graphicsItem()->enableSelectEdgeMode();
 }
 
-void MyNetworkElementBase::enableDisplayFeatureMenuMode() {
-    MySceneModeElementBase::enableDisplayFeatureMenuMode();
-    graphicsItem()->enableDisplayFeatureMenuMode();
-}
-
 QWidget* MyNetworkElementBase::getFeatureMenu() {
     MyFeatureMenuItemFrame* featureMenu = new MyFeatureMenuItemFrame();
     QGridLayout* contentLayout = (QGridLayout*)featureMenu->layout();
@@ -146,7 +142,7 @@ QWidget* MyNetworkElementBase::getFeatureMenu() {
 }
 
 void MyNetworkElementBase::createFeatureMenu() {
-    if ((getSceneMode() == NORMAL_MODE || getSceneMode() == DISPLAY_FEATURE_MENU_MODE)) {
+    if (getSceneMode() == NORMAL_MODE) {
         QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
         if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
             QWidget* featureMenu = createAndConnectFeatureMenuObject();

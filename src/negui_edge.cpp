@@ -168,12 +168,6 @@ void MyEdgeBase::enableSelectEdgeMode() {
         arrowHead()->enableSelectEdgeMode();
 }
 
-void MyEdgeBase::enableDisplayFeatureMenuMode() {
-    MyNetworkElementBase::enableDisplayFeatureMenuMode();
-    if (isSetArrowHead())
-        arrowHead()->enableDisplayFeatureMenuMode();
-}
-
 const bool MyEdgeBase::canBeMovedExternally() {
     return false;
 }

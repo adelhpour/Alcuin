@@ -125,18 +125,12 @@ void MyGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
             emit mouseLeftButtonIsReleased();
         }
         else if (event->button() == Qt::RightButton) {
-            if (getSceneMode() != NORMAL_MODE && getSceneMode() != DISPLAY_FEATURE_MENU_MODE)
+            if (getSceneMode() != NORMAL_MODE)
                 emit askForEnableNormalMode();
         }
     }
     else
         _whetherMouseReleaseEventIsAccepted = true;
-}
-
-void MyGraphicsScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-    QGraphicsScene::mouseDoubleClickEvent(event);
-    if (!event->isAccepted())
-        emit mouseLeftButtonIsDoubleClicked();
 }
 
 void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {

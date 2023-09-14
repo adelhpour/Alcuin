@@ -61,8 +61,6 @@ public:
     
     void enableSelectEdgeMode() override;
     
-    void enableDisplayFeatureMenuMode() override;
-    
     virtual const QRectF getExtents() = 0;
 
     virtual const bool canBeMovedExternally() = 0;

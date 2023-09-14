@@ -155,9 +155,6 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
 
-    // remove menu
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SLOT(removeFeatureMenu()));
-
     // context menu
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCopyable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCopyable()));
     connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCuttable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCuttable()));
@@ -220,13 +217,14 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu() {
-    if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
+    if (featureMenu())
         displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((MyInteractor*)interactor())->enableDisplayFeatureMenuMode(featureMenu->objectName());
+    ((MyInteractor*)interactor())->selectElements(false);
+    ((MyInteractor*)interactor())->selectElement(featureMenu->objectName());
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
     ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
@@ -240,8 +238,6 @@ void MyNetworkEditorWidget::removeFeatureMenu() {
         featureMenu()->deleteLater();
         _featureMenu = NULL;
     }
-    if (((MyInteractor*)interactor())->getSceneMode() == MySceneModeElementBase::DISPLAY_FEATURE_MENU_MODE)
-        ((MyInteractor*)interactor())->enableNormalMode();
 }
 
 void MyNetworkEditorWidget::setReadyToLaunch() {

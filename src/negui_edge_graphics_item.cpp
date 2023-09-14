@@ -91,11 +91,6 @@ void MyEdgeSceneGraphicsItemBase::enableSelectEdgeMode() {
     setCursor(Qt::PointingHandCursor);
 }
 
-void MyEdgeSceneGraphicsItemBase::enableDisplayFeatureMenuMode() {
-    MyNetworkElementGraphicsItemBase::enableDisplayFeatureMenuMode();
-    setCursor(Qt::ArrowCursor);
-}
-
 // MyClassicEdgeSceneGraphicsItem
 
 MyClassicEdgeSceneGraphicsItem::MyClassicEdgeSceneGraphicsItem(QGraphicsItem *parent) : MyEdgeSceneGraphicsItemBase(parent) {

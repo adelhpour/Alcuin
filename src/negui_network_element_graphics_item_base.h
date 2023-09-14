@@ -83,6 +83,7 @@ signals:
     const bool askForWhetherAnyOtherElementsAreSelected();
     QString askForDisplayName();
     void askForDisplaySceneContextMenu(const QPointF&);
+    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
 
 public slots:
 

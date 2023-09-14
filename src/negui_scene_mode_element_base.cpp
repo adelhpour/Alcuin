@@ -62,10 +62,6 @@ void MySceneModeElementBase::enableSelectEdgeMode() {
     setSceneMode(SELECT_EDGE_MODE);
 }
 
-void MySceneModeElementBase::enableDisplayFeatureMenuMode() {
-    setSceneMode(DISPLAY_FEATURE_MENU_MODE);
-}
-
 const MySceneModeElementBase::SceneMode MySceneModeElementBase::getModeAsSceneModeFromString(const QString& mode) {
     if (mode == "Normal")
         return NORMAL_MODE;
@@ -79,8 +75,6 @@ const MySceneModeElementBase::SceneMode MySceneModeElementBase::getModeAsSceneMo
         return SELECT_NODE_MODE;
     else if (mode == "Select_Edge")
         return SELECT_EDGE_MODE;
-    else if (mode == "Display_Feature_Menu")
-        return DISPLAY_FEATURE_MENU_MODE;
 
     return NONE_MODE;
 }
@@ -98,8 +92,6 @@ const QString MySceneModeElementBase::getModeAsStringFromSceneMode(const SceneMo
         return "Select_Node";
     else if (mode == SELECT_EDGE_MODE)
         return "Select_Edge";
-    else if (mode == DISPLAY_FEATURE_MENU_MODE)
-        return "Display_Feature_Menu";
 
     return "";
 }

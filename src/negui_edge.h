@@ -66,8 +66,6 @@ public:
     void enableAddEdgeMode() override;
     
     void enableSelectEdgeMode() override;
-    
-    void enableDisplayFeatureMenuMode() override;
 
     const bool canBeMovedExternally() override;
 
