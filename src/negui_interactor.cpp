@@ -1086,6 +1086,8 @@ void MyInteractor::loadPlugins() {
 void MyInteractor::setFileManager() {
     _fileManager = new MyFileManager(getPluginsOfType(plugins(), "importtool"), getPluginsOfType(plugins(), "dataexporttool"));
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
+    connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectory(); });
+    connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(workingDirectoryPath).absolutePath()); });
 }
 
 QList<QAbstractButton*> MyInteractor::getToolBarMenuButtons() {
