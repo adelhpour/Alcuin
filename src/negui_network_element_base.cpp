@@ -150,7 +150,7 @@ void MyNetworkElementBase::createFeatureMenu() {
         QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
         if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
             QWidget* featureMenu = createAndConnectFeatureMenuObject();
-            if (currentFeatureMenu)
+            if (currentFeatureMenu && ((MyFeatureMenuBase*)currentFeatureMenu)->type() == MyFeatureMenuBase::ELEMENT_FEATURE_MENU)
                 ((MyElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyElementFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
             askForDisplayFeatureMenu(featureMenu);
         }
