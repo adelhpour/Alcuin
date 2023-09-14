@@ -300,5 +300,5 @@ MyNoSelectedElementTitle::MyNoSelectedElementTitle(QWidget* parent) : QLabel(par
 #endif
     _font.setPointSize(fontSize);
     setFont(_font);
-    setText("There are no elements selected");
+    setText("Select one single element to see its properties");
 }
