@@ -152,11 +152,9 @@ const qreal MyTextStyleBase::verticalPadding() const {
     QFontMetrics fontMetrics(font());
     if (height() > fontMetrics.height()) {
         if (verticalAlignment() == Qt::AlignVCenter)
-            return 0.5 * height() - 0.75 * fontMetrics.height();
-        else if (verticalAlignment() == Qt::AlignBaseline)
-            return 0.5 * height() - 0.5 * fontMetrics.height();
+            return 0.5 * height() - fontMetrics.height();
         else if (verticalAlignment() == Qt::AlignBottom)
-            return height() - 1.5 * fontMetrics.height();
+            return height() - 2 * fontMetrics.height();
     }
     
     return 0.000;
