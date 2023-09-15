@@ -259,7 +259,7 @@ void MyNetworkEditorWidget::readSettings() {
     // working directory
     const auto workingDirectory = settings.value("working directory", QByteArray()).toByteArray();
     if (workingDirectory.isEmpty())
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     else
         ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(workingDirectory);
 
