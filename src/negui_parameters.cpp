@@ -1026,7 +1026,6 @@ void MyHorizontalAlignmentParameter::reset() {
 MyVerticalAlignmentParameter::MyVerticalAlignmentParameter() : MyNominalParameter("vertical-alignment", "Text \"Vertical Alignment\"") {
     _items.push_back("top");
     _items.push_back("middle");
-    _items.push_back("baseline");
     _items.push_back("bottom");
     reset();
 }
@@ -1036,8 +1035,6 @@ const Qt::Alignment MyVerticalAlignmentParameter::defaultAlignment() const {
         return Qt::AlignTop;
     else if (defaultValue() == "middle")
         return Qt::AlignVCenter;
-    else if (defaultValue() == "baseline")
-        return Qt::AlignBaseline;
     else if (defaultValue() == "bottom")
         return Qt::AlignBottom;
 

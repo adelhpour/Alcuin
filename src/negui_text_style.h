@@ -56,6 +56,8 @@ public:
 
     const qreal verticalPadding() const;
 
+    const qreal calculateTopPaddingRatioToFontHeight(const qreal& pointSize) const ;
+
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
 

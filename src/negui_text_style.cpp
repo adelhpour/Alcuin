@@ -1,6 +1,8 @@
 #include "negui_text_style.h"
 #include <QJsonObject>
 
+#include "math.h"
+
 // MyTextStyleBase
 
 MyTextStyleBase::MyTextStyleBase(const QString& name) : My2DShapeStyleBase(name) {
@@ -151,15 +153,34 @@ const Qt::Alignment MyTextStyleBase::verticalAlignment() const {
 const qreal MyTextStyleBase::verticalPadding() const {
     QFontMetrics fontMetrics(font());
     if (height() > fontMetrics.height()) {
-        if (verticalAlignment() == Qt::AlignVCenter)
-            return 0.5 * height() - 0.75 * fontMetrics.height();
-        else if (verticalAlignment() == Qt::AlignBaseline)
-            return 0.5 * height() - 0.5 * fontMetrics.height();
-        else if (verticalAlignment() == Qt::AlignBottom)
+        if (verticalAlignment() == Qt::AlignVCenter) {
+#if defined(Q_OS_WIN)
+            return 0.5 * height() - 0.375 * fontMetrics.height() - calculateTopPaddingRatioToFontHeight(font().pointSize()) * fontMetrics.height();
+#elif defined(Q_OS_MAC)
+            return 0.5 * height() - 0.5 * fontMetrics.height() - calculateTopPaddingRatioToFontHeight(font().pointSize()) * fontMetrics.height();
+#endif
+        }
+        else if (verticalAlignment() == Qt::AlignBottom) {
+#if defined(Q_OS_WIN)
             return height() - 1.5 * fontMetrics.height();
+#elif defined(Q_OS_MAC)
+            return height() - 2 * fontMetrics.height();
+#endif
+        }
     }
-    
+
     return 0.000;
+}
+
+const qreal MyTextStyleBase::calculateTopPaddingRatioToFontHeight(const qreal& pointSize) const {
+    qreal topPaddingRatioToFontHeight = 1;
+    if (pointSize > 3) {
+        qreal numberOfStepsBaseFontSizeIsDoubled = log2(pointSize / 3.0);
+        for (int i = 0; i < numberOfStepsBaseFontSizeIsDoubled; i++)
+            topPaddingRatioToFontHeight -= 0.4 / pow(2, i);
+    }
+
+    return topPaddingRatioToFontHeight;
 }
 
 void MyTextStyleBase::read(const QJsonObject &json) {
