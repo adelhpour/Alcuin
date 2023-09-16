@@ -991,7 +991,7 @@ void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
         ((MyFileManager*)fileManager())->setCurrentExportToolCompatibleWithImportTool(importTool);
         ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
         ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
+        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath() + "/");
     }
 }
 
@@ -1017,7 +1017,7 @@ void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool, const QString& 
         ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
         ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
         ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath());
+        ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(fileName).absolutePath() + "/");
     }
     ((MyDataExportTool*)exportTool)->showMessages();
 }
@@ -1086,6 +1086,8 @@ void MyInteractor::loadPlugins() {
 void MyInteractor::setFileManager() {
     _fileManager = new MyFileManager(getPluginsOfType(plugins(), "importtool"), getPluginsOfType(plugins(), "dataexporttool"));
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
+    connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectory(); });
+    connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(workingDirectoryPath).absolutePath() + "/"); });
 }
 
 QList<QAbstractButton*> MyInteractor::getToolBarMenuButtons() {

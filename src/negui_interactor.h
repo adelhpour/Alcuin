@@ -116,6 +116,8 @@ signals:
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
     void askForDisplaySceneContextMenu(const QPointF&);
+    QString askForWorkingDirectoryPath();
+    void askForSettingWorkingDirectoryPath(const QString&);
 
     void enterKeyIsPressed();
     

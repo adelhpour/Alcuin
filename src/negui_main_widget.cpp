@@ -9,6 +9,7 @@
 
 #include <QGridLayout>
 #include <QSettings>
+#include <QStandardPaths>
 
 // MyNetworkEditorWidget
 
@@ -16,7 +17,6 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setObjectName("main_widget");
     setStyleSheet("QFrame {background-color : white}");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    readSettings();
 
     setWidgets();
     setInteractions();
@@ -31,6 +31,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setLayout(layout);
     arrangeWidgetLayers();
 
+    readSettings();
     setReadyToLaunch();
 }
 
@@ -247,21 +248,37 @@ void MyNetworkEditorWidget::setReadyToLaunch() {
 void MyNetworkEditorWidget::readSettings() {
     QSettings settings("MyCompany", "NetworkEditorGUI");
     settings.beginGroup("NetworkEditorWidget");
-    const auto geometry1 = settings.value("geometry", QByteArray()).toByteArray();
-    if (geometry1.isEmpty())
+
+    // window size
+    const auto geometry = settings.value("geometry", QByteArray()).toByteArray();
+    if (geometry.isEmpty())
         setGeometry(200, 200, 1050, 700);
     else
-        restoreGeometry(geometry1);
+        restoreGeometry(geometry);
+
+    // working directory
+    const auto workingDirectory = settings.value("working directory", QByteArray()).toByteArray();
+    if (workingDirectory.isEmpty())
+        ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Documents");
+    else
+        ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(workingDirectory);
+
     settings.endGroup();
 }
 
 void MyNetworkEditorWidget::writeSettings() {
     QSettings settings("MyCompany", "NetworkEditorGUI");
     settings.beginGroup("NetworkEditorWidget");
+
+    // window size
     if (dynamic_cast<QWidget*>(parent()))
         settings.setValue("geometry", ((QWidget*)parent())->saveGeometry());
     else
         settings.setValue("geometry", saveGeometry());
+
+    // working directory
+    settings.setValue("working directory", ((MyInteractor*)interactor())->askForWorkingDirectoryPath());
+
     settings.endGroup();
 }
 
