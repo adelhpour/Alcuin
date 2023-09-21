@@ -49,7 +49,7 @@ public:
     
     virtual void clearFocusedGraphicsItems();
     
-    const QRectF getExtents() const;
+    virtual const QRectF getExtents() const;
     
     void setSelectedWithBorderColor(const bool& selected);
     

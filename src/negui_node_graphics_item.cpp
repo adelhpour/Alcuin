@@ -227,6 +227,37 @@ const bool MySimpleClassicNodeSceneGraphicsItem::whetherShapesAreOneSimpleTextSh
     return oneSimpleTextShapeExists && oneOtherShapeExists;
 }
 
+const QRectF MySimpleClassicNodeSceneGraphicsItem::getExtents() const {
+    if (childItems().size()) {
+        QRectF childExtents = dynamic_cast<MyShapeGraphicsItemBase*>(childItems().at(0))->getExtents();
+        qreal extentsX = childExtents.x();
+        qreal extentsY = childExtents.y();
+        qreal extentsWidth = childExtents.width();
+        qreal extentsHeight = childExtents.height();
+        for (QGraphicsItem* childItem : childItems()) {
+            MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(childItem);
+            if (casted_item->style()->type() != MyShapeStyleBase::SIMPLE_TEXT_SHAPE_STYLE) {
+                childExtents = casted_item->getExtents();
+                if (childExtents.x() < extentsX) {
+                    extentsWidth += extentsX - childExtents.x();
+                    extentsX = childExtents.x();
+                }
+                if (childExtents.y() < extentsY) {
+                    extentsHeight += extentsY - childExtents.y();
+                    extentsY = childExtents.y();
+                }
+                if (extentsX + extentsWidth < childExtents.x() + childExtents.width())
+                    extentsWidth += childExtents.x() + childExtents.width() - extentsX - extentsWidth;
+                if (extentsY + extentsHeight < childExtents.y() + childExtents.height())
+                    extentsHeight += childExtents.y() + childExtents.height() - extentsY - extentsHeight;
+            }
+        }
+        return QRectF(extentsX, extentsY, extentsWidth, extentsHeight);
+    }
+
+    return QRectF(_originalPosition.x() + x(), _originalPosition.y() + y(), 0.0, 0.0);
+}
+
 // MyComplexClassicNodeSceneGraphicsItem
 
 MyComplexClassicNodeSceneGraphicsItem::MyComplexClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent) : MyClassicNodeSceneGraphicsItemBase(position, parent) {
