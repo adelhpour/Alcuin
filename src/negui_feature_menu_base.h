@@ -11,6 +11,7 @@ public:
     typedef enum {
         NULL_FEATURE_MENU,
         ELEMENT_FEATURE_MENU,
+        MULTI_NETWORK_ELEMENT_FEATURE_MENU,
     } FEATURE_MENU_TYPE;
 
     MyFeatureMenuBase(const QString& iconsDirectoryPath, QWidget *parent = nullptr);
