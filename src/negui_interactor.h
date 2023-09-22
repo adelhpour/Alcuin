@@ -118,6 +118,8 @@ signals:
     void askForDisplaySceneContextMenu(const QPointF&);
     QString askForWorkingDirectoryPath();
     void askForSettingWorkingDirectoryPath(const QString&);
+    void askForAdjustConnectedEdgesOfNodes();
+    void askForAdjustExtentsOfNodes();
 
     void enterKeyIsPressed();
     

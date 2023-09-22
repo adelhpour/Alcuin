@@ -312,6 +312,8 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
+        connect(this, SIGNAL(askForAdjustConnectedEdgesOfNodes()), n, SLOT(adjustConnectedEdges()));
+        connect(this, SIGNAL(askForAdjustExtentsOfNodes()), n, SLOT(adjustExtents()));
         emit askForAddGraphicsItem(n->graphicsItem());
     }
 }
@@ -1044,6 +1046,8 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
         QJsonObject graphInfoObject = exportNetworkInfo();
         autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
         createNetwork(graphInfoObject);
+        emit askForAdjustExtentsOfNodes();
+        emit askForAdjustConnectedEdgesOfNodes();
         createChangeStageCommand();
         enableNormalMode();
     }
