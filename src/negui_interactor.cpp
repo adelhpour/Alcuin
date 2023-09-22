@@ -360,7 +360,7 @@ MyNetworkElementBase* MyInteractor::parentNodeAtPosition(MyNetworkElementBase* c
             }
         }
     }
-    
+
     return parentNode;
 }
 
@@ -1123,7 +1123,6 @@ QList<QAbstractButton*> MyInteractor::getToolBarMenuButtons() {
     buttons.push_back(createUndoActionMenuButton());
     buttons.push_back(createRedoActionMenuButton());
 
-    
     return buttons;
 }
 
