@@ -189,3 +189,45 @@ QWidget* MyNetworkElementBase::createAndConnectFeatureMenuObject() {
     return featureMenu;
 
 }
+
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
+    QString name;
+    qreal k = 0;
+    bool isSimilarNameFound = true;
+    while(isSimilarNameFound) {
+        name = defaultNameSection + "_" + QString::number(k);
+        isSimilarNameFound = false;
+        for (MyNetworkElementBase *element : qAsConst(elements)) {
+            if (element->name() == name) {
+                isSimilarNameFound = true;
+                break;
+            }
+        }
+        ++k;
+    }
+
+    return name;
+}
+
+MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name) {
+    for (MyNetworkElementBase *element : qAsConst(elements)) {
+        if (element->name() == name)
+            return element;
+    }
+
+    return NULL;
+}
+
+MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("source") && json["source"].isObject() && json["source"].toObject().contains("node") && json["source"]["node"].isString())
+        return findElement(nodes, json["source"]["node"].toString());
+
+    return NULL;
+}
+
+MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
+    if (json.contains("target") && json["target"].isObject() && json["target"].toObject().contains("node") && json["target"]["node"].isString())
+        return findElement(nodes, json["target"]["node"].toString());
+
+    return NULL;
+}

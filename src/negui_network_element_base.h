@@ -129,4 +129,12 @@ protected:
     bool _isSelected;
 };
 
+QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
+
+MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
+
+MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+
+MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+
 #endif
