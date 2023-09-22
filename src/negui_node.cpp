@@ -513,6 +513,10 @@ void MyCentroidNode::adjustNodePositionToNeighborNodes(const bool& movedByParent
     }
 }
 
+void MyCentroidNode::adjustExtents() {
+
+}
+
 void MyCentroidNode::adjustConnectedBezierCurves() {
     if (connectedBezierCurvesNeedsToBeAdjusted())
         emit bezierAdjustLineIsUpdated(createBezierAdjustLine());

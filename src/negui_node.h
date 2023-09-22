@@ -110,6 +110,8 @@ public slots:
 
     void setConnectedNodesParents();
 
+    virtual void adjustExtents() = 0;
+
 protected:
     QString _parentNodeId;
     MyNetworkElementBase* _parentNode;
@@ -156,9 +158,6 @@ public:
 
     const QRectF createParentNodeExtentsRectangle(qreal extentsX, qreal extentsY, qreal extentsWidth, qreal extentsHeight);
 
-    // adjust node extents to fit all its children
-    void adjustExtents();
-
     const qint32 calculateNodeZValue() override;
 
     const qint32 calculateConnectedEdgeZValue() override;
@@ -167,6 +166,8 @@ public slots:
 
     // set the position of the node
     void setPosition(const QPointF& position) override;
+
+    void adjustExtents() override;
 
 protected:
     QList<MyNetworkElementBase*> _childNodes;
@@ -251,6 +252,8 @@ signals:
 public slots:
 
     void adjustNodePositionToNeighborNodes(const bool& movedByParentNodeMove = false);
+
+    void adjustExtents() override;
 
 private slots:
 
