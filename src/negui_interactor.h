@@ -104,6 +104,7 @@ signals:
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
+    void askForDisplayFeatureMenu();
     void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
     QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
@@ -173,6 +174,8 @@ public slots:
     void enableSelectMode(const QString& elementCategory = "");
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
+
+    void displayFeatureMenu(QWidget* featureMenu);
 
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
@@ -296,12 +299,5 @@ protected:
     // file
     QObject* _fileManager;
 };
-
-QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultIdSection);
-MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name);
-MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
-MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
-MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* style);
-MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle);
 
 #endif

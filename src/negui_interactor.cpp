@@ -298,7 +298,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-        connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
         connect(n, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(n, SIGNAL(askForCopyNetworkElement(MyNetworkElementBase*)), this, SLOT(setCopiedNode(MyNetworkElementBase*)));
@@ -440,7 +440,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-        connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
+        connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
         connect(e, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
         connect(e, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
@@ -922,6 +922,19 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     emit askForSetToolTip("Select " + edgeCategory + " edges");
 }
 
+void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
+    QString elementName = featureMenu->objectName();
+    if (!askForWhetherShiftModifierIsPressed() || (selectedNodes().size() == 1 && !selectedEdges().size()) || (selectedNodes().size() == 0 && selectedEdges().size() == 1)) {
+        selectElements(false);
+        askForDisplayFeatureMenu(featureMenu);
+    }
+    else {
+        featureMenu->deleteLater();
+        askForDisplayFeatureMenu();
+    }
+    selectElement(elementName);
+}
+
 void MyInteractor::displaySelectionArea(const QPointF& position) {
     if (getSceneMode() == NORMAL_MODE) {
         if (!askForWhetherShiftModifierIsPressed())
@@ -1340,60 +1353,4 @@ const bool MyInteractor::isElementNameAlreadyUsed(const QString& elementName) {
     }
 
     return false;
-}
-
-QString getElementUniqueName(QList<MyNetworkElementBase*> elements, const QString& defaultNameSection) {
-    QString name;
-    qreal k = 0;
-    bool isSimilarNameFound = true;
-    while(isSimilarNameFound) {
-        name = defaultNameSection + "_" + QString::number(k);
-        isSimilarNameFound = false;
-        for (MyNetworkElementBase *element : qAsConst(elements)) {
-            if (element->name() == name) {
-                isSimilarNameFound = true;
-                break;
-            }
-        }
-        ++k;
-    }
-
-    return name;
-}
-
-MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const QString& name) {
-    for (MyNetworkElementBase *element : qAsConst(elements)) {
-        if (element->name() == name)
-            return element;
-    }
-    
-    return NULL;
-}
-
-MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
-    if (json.contains("source") && json["source"].isObject() && json["source"].toObject().contains("node") && json["source"]["node"].isString())
-        return findElement(nodes, json["source"]["node"].toString());
-    
-    return NULL;
-}
-
-MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json) {
-    if (json.contains("target") && json["target"].isObject() && json["target"].toObject().contains("node") && json["target"]["node"].isString())
-        return findElement(nodes, json["target"]["node"].toString());
-    
-    return NULL;
-}
-
-MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* nodeStyle) {
-    QJsonObject styleObject;
-    nodeStyle->write(styleObject);
-    styleObject["name"] = name;
-    return createNodeStyle(styleObject);
-}
-
-MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle) {
-    QJsonObject styleObject;
-    edgeStyle->write(styleObject);
-    styleObject["name"] = name;
-    return createEdgeStyle(styleObject);
 }
