@@ -83,6 +83,7 @@ void MyNetworkEditorWidget::setInteractions() {
 
     /// feature menu
     // display feature menu
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu()), this, SLOT(displayFeatureMenu()));
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedNetworkElementFeatureMenu, this, [this] () { return featureMenu(); } );
@@ -224,8 +225,6 @@ void MyNetworkEditorWidget::displayFeatureMenu() {
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
     removeFeatureMenu();
-    ((MyInteractor*)interactor())->selectElements(false);
-    ((MyInteractor*)interactor())->selectElement(featureMenu->objectName());
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
     ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
