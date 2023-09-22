@@ -8,28 +8,28 @@ MyMultiNetworkElementFeatureMenu::MyMultiNetworkElementFeatureMenu(QList<MyNetwo
     _networkElements = networkElements;
     QGridLayout* contentLayout = (QGridLayout*)layout();
     contentLayout->addWidget(new MyTitleLabel("Menu"), contentLayout->rowCount(), 0, 1, 2, Qt::AlignHCenter | Qt::AlignTop);
-    MyParameterBase* parameter = NULL;
-    MyParameterBase* representativeBorderWidthParameter = createRepresentativeBorderWidthParameter();
-    if (representativeBorderWidthParameter) {
-        contentLayout->addWidget(new MyLabel((representativeBorderWidthParameter->name()), representativeBorderWidthParameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
-        contentLayout->addWidget(representativeBorderWidthParameter->inputWidget(), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
-    }
-    MyParameterBase* representativeBorderColorParameter = createRepresentativeBorderColorParameter();
-    if (representativeBorderColorParameter) {
-        contentLayout->addWidget(new MyLabel((representativeBorderColorParameter->name()), representativeBorderColorParameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
-        contentLayout->addWidget(representativeBorderColorParameter->inputWidget(), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
-    }
-    MyParameterBase* representativeFillColorParameter = createRepresentativeFillColorParameter();
-    if (representativeFillColorParameter) {
-        contentLayout->addWidget(new MyLabel((representativeFillColorParameter->name()), representativeFillColorParameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
-        contentLayout->addWidget(representativeFillColorParameter->inputWidget(), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
-    }
+    addParameters();
     contentLayout->setAlignment(Qt::AlignTop);
     setFixedWidth(340);
 }
 
 MyMultiNetworkElementFeatureMenu::FEATURE_MENU_TYPE MyMultiNetworkElementFeatureMenu::type() {
     return MULTI_NETWORK_ELEMENT_FEATURE_MENU;
+}
+
+void MyMultiNetworkElementFeatureMenu::addParameters() {
+    MyParameterBase* parameter = NULL;
+    addParameter(createRepresentativeBorderWidthParameter());
+    addParameter(createRepresentativeBorderColorParameter());
+    addParameter(createRepresentativeFillColorParameter());
+}
+
+void MyMultiNetworkElementFeatureMenu::addParameter(MyParameterBase* parameter) {
+    if (parameter) {
+        QGridLayout* contentLayout = (QGridLayout*)layout();
+        contentLayout->addWidget(new MyLabel((parameter->name()), parameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
+        contentLayout->addWidget(parameter->inputWidget(), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    }
 }
 
 MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderWidthParameter() {

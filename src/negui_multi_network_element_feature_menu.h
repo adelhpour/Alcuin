@@ -13,6 +13,10 @@ public:
 
     FEATURE_MENU_TYPE type() override;
 
+    void addParameters();
+
+    void addParameter(MyParameterBase* parameter);
+
     MyParameterBase* createRepresentativeBorderWidthParameter();
 
     void updateBorderWidthParameters(const qint32& borderWidth);
