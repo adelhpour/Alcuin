@@ -1,6 +1,6 @@
 import networkx as nx
 import json
-    
+
 def autoLayoutInfo():
     # circular
     circular = {'name' : "Circular", 'type': "autolayoutengine"}
@@ -10,10 +10,10 @@ def autoLayoutInfo():
     kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine"}
     # spiral
     spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
-    
+
     return json.dumps({'items': [circular, planar, kamad_kawai, spiral]})
-        
-    
+
+
 def autoLayout(graphInfoString, autoLayoutInfoString):
     # read graph info
     graphInfo = json.loads(graphInfoString)
@@ -21,9 +21,9 @@ def autoLayout(graphInfoString, autoLayoutInfoString):
     graph = nx.Graph()
     if 'nodes' in list(graphInfo.keys()):
         for n_index in range(len(graphInfo['nodes'])):
-            if 'id' in list(graphInfo['nodes'][n_index].keys()) and 'position' in list(graphInfo['nodes'][n_index].keys()) and ('parent' not in list(graphInfo['nodes'][n_index].keys()) or ('parent' in list(graphInfo['nodes'][n_index].keys()) and graphInfo['nodes'][n_index]['parent'] != "N/A")):
+            if 'id' in list(graphInfo['nodes'][n_index].keys()) and 'position' in list(graphInfo['nodes'][n_index].keys()) and not is_parent(graphInfo['nodes'][n_index]) and not is_centroid_node(graphInfo['nodes'][n_index]):
                 graph.add_node(graphInfo['nodes'][n_index]['id'], pos = '{},{}'.format(graphInfo['nodes'][n_index]['position']['x'],     graphInfo['nodes'][n_index]['position']['y']))
-    
+
     if 'edges' in list(graphInfo.keys()):
         for e_index in range(len(graphInfo['edges'])):
             if 'id' in list(graphInfo['edges'][e_index].keys()) and 'start' in list(graphInfo['edges'][e_index].keys()) and 'end' in list(graphInfo['edges'][e_index].keys()):
@@ -35,7 +35,7 @@ def autoLayout(graphInfoString, autoLayoutInfoString):
         dim_scale = 0.5 * min(graphInfo['dimensions']['width'], graphInfo['dimensions']['height'])
         if 'position' in list(graphInfo.keys()) and 'x' in list(graphInfo['position'].keys()) and 'y' in list(graphInfo['position'].keys()):
             pos_center = [graphInfo['position']['x'], graphInfo['position']['y']]
-    
+
     # apply autolayout algorithm
     node_pos = {}
     if 'name' in list(autoLayoutInfo.keys()):
@@ -58,7 +58,7 @@ def autoLayout(graphInfoString, autoLayoutInfoString):
             node_pos = nx.spiral_layout(graph, center = pos_center, scale = dim_scale, resolution = _resolution, equidistant = _equidistant)
         else:
             node_pos = nx.circular_layout(graph, center = pos_center, scale = dim_scale)
-    
+
     # write graph info
     if 'nodes' in list(graphInfo.keys()):
         for n_index in range(len(graphInfo['nodes'])):
@@ -66,5 +66,19 @@ def autoLayout(graphInfoString, autoLayoutInfoString):
                 if graphInfo['nodes'][n_index]['id'] in list(node_pos.keys()):
                     graphInfo['nodes'][n_index]['position']['x'] = node_pos[graphInfo['nodes'][n_index]['id']][0]
                     graphInfo['nodes'][n_index]['position']['y'] = node_pos[graphInfo['nodes'][n_index]['id']][1]
-    
+
     return json.dumps(graphInfo)
+
+def is_parent(node):
+    if "style" in list(node.keys()) and "convertible-parent-category" in list(node['style'].keys()) and node['style']['convertible-parent-category']:
+        return True
+
+    return False
+
+def is_centroid_node(node):
+    if 'style' in list(node.keys()) and 'shapes' in list(node['style']):
+        for shape in node['style']['shapes']:
+            if 'shape' in list(shape.keys()) and shape['shape'] == "centroid":
+                return True
+
+    return False
