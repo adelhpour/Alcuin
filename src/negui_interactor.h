@@ -175,6 +175,8 @@ public slots:
     void enableSelectNodeMode(const QString& nodeCategory = "");
     void enableSelectEdgeMode(const QString& edgeCategory = "");
 
+    void displayFeatureMenu(QWidget* featureMenu);
+
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
 
