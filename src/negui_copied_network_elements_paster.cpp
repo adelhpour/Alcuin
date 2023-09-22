@@ -4,6 +4,8 @@
 #include "negui_edge.h"
 #include "negui_node_builder.h"
 #include "negui_edge_builder.h"
+#include "negui_node_style_builder.h"
+#include "negui_edge_style_builder.h"
 
 // MyCopiedNetworkElementsPaster
 
@@ -69,4 +71,18 @@ MyNetworkElementBase* MyCopiedNetworkElementsPaster::findPastedNode(const QStrin
             return pastedNode;
 
     return NULL;
+}
+
+MyNetworkElementStyleBase* getCopyEdgeStyle(const QString& name, MyNetworkElementStyleBase* edgeStyle) {
+    QJsonObject styleObject;
+    edgeStyle->write(styleObject);
+    styleObject["name"] = name;
+    return createEdgeStyle(styleObject);
+}
+
+MyNetworkElementStyleBase* getCopyNodeStyle(const QString& name, MyNetworkElementStyleBase* nodeStyle) {
+    QJsonObject styleObject;
+    nodeStyle->write(styleObject);
+    styleObject["name"] = name;
+    return createNodeStyle(styleObject);
 }
