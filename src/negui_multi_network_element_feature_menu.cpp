@@ -9,6 +9,11 @@ MyMultiNetworkElementFeatureMenu::MyMultiNetworkElementFeatureMenu(QList<MyNetwo
     QGridLayout* contentLayout = (QGridLayout*)layout();
     contentLayout->addWidget(new MyTitleLabel("Menu"), contentLayout->rowCount(), 0, 1, 2, Qt::AlignHCenter | Qt::AlignTop);
     MyParameterBase* parameter = NULL;
+    MyParameterBase* representativeBorderWidthParameter = createRepresentativeBorderWidthParameter();
+    if (representativeBorderWidthParameter) {
+        contentLayout->addWidget(new MyLabel((representativeBorderWidthParameter->name()), representativeBorderWidthParameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
+        contentLayout->addWidget(representativeBorderWidthParameter->inputWidget(), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    }
     MyParameterBase* representativeBorderColorParameter = createRepresentativeBorderColorParameter();
     if (representativeBorderColorParameter) {
         contentLayout->addWidget(new MyLabel((representativeBorderColorParameter->name()), representativeBorderColorParameter->hint()), contentLayout->rowCount(), 0, Qt::AlignLeft);
@@ -25,6 +30,26 @@ MyMultiNetworkElementFeatureMenu::MyMultiNetworkElementFeatureMenu(QList<MyNetwo
 
 MyMultiNetworkElementFeatureMenu::FEATURE_MENU_TYPE MyMultiNetworkElementFeatureMenu::type() {
     return MULTI_NETWORK_ELEMENT_FEATURE_MENU;
+}
+
+MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderWidthParameter() {
+    MyParameterBase* representativeBorderWidthParameter = NULL;
+    if (getNetworkElementParameters("border-width").size()) {
+        representativeBorderWidthParameter = new MyBorderWidthParameter();
+        connect(representativeBorderWidthParameter, &MyParameterBase::isUpdated, this, [this, representativeBorderWidthParameter] () {
+            representativeBorderWidthParameter->setDefaultValue();
+            updateBorderWidthParameters(((MyBorderWidthParameter*)representativeBorderWidthParameter)->defaultValue());
+            updateNetworkElements();
+        });
+    }
+
+    return representativeBorderWidthParameter;
+}
+
+void MyMultiNetworkElementFeatureMenu::updateBorderWidthParameters(const qint32& borderWidth) {
+    QList<MyParameterBase*> borderWidthParameters = getNetworkElementParameters("border-width");
+    for (MyParameterBase* borderWidthParameter : borderWidthParameters)
+        ((MyBorderWidthParameter*)borderWidthParameter)->setDefaultValue(borderWidth);
 }
 
 MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderColorParameter() {
