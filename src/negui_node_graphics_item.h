@@ -100,6 +100,8 @@ public:
 
     MySimpleClassicNodeSceneGraphicsItem(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    const QRectF getExtents() const override;
+
     QList<QGraphicsItem*> createFocusedGraphicsItems() override;
 
     const bool whetherShapesAreOneSimpleTextShapeAndAnotherShape();

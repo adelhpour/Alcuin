@@ -34,21 +34,21 @@ const bool isCentroidNodeStyle(const QJsonObject &json) {
 
 const bool isSimpleClassicNodeStyle(const QJsonObject &json) {
     if (json.contains("shapes") && json["shapes"].isArray())
-        return whetherHaveTwoShapesWithOneOfThemATextShape(json["shapes"].toArray());
+        return whetherHaveTwoShapesWithOneOfThemATextShapeOrOneShape(json["shapes"].toArray());
 
     return  false;
 }
 
-const bool whetherHaveTwoShapesWithOneOfThemATextShape(const QJsonArray& shapesArray) {
-    if (shapesArray.size() == 2) {
-        for (unsigned int shapeIndex = 0; shapeIndex < shapesArray.size(); shapeIndex++) {
-            QJsonObject shapeObject = shapesArray[shapeIndex].toObject();
-            if (shapeObject.contains("shape") && shapeObject["shape"].isString()) {
-                if (shapeObject["shape"].toString() == "text")
-                    return true;
-            }
-        }
+const bool whetherHaveTwoShapesWithOneOfThemATextShapeOrOneShape(const QJsonArray& shapesArray) {
+    QStringList shapes;
+    for (unsigned int shapeIndex = 0; shapeIndex < shapesArray.size(); shapeIndex++) {
+        QJsonObject shapeObject = shapesArray[shapeIndex].toObject();
+        if (shapeObject.contains("shape") && shapeObject["shape"].isString())
+            shapes.push_back(shapeObject["shape"].toString());
     }
 
-    return false;
+    if (shapes.size() > 2 || (shapes.size() == 2 && shapes.at(0) != "text" && shapes.at(1) != "text"))
+        return false;
+
+    return true;
 }
