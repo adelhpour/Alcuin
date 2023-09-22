@@ -18,6 +18,7 @@
 #include "negui_network_element_aligner.h"
 #include "negui_network_element_aligner_builder.h"
 #include "negui_network_element_mover.h"
+#include "negui_multi_network_element_feature_menu.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -930,7 +931,9 @@ void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
     }
     else {
         featureMenu->deleteLater();
-        askForDisplayFeatureMenu();
+        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
+        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
+        askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
     }
     selectElement(elementName);
 }
