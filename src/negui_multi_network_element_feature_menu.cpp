@@ -7,8 +7,10 @@
 MyMultiNetworkElementFeatureMenu::MyMultiNetworkElementFeatureMenu(QList<MyNetworkElementBase*> networkElements, const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(iconsDirectoryPath, parent) {
     _networkElements = networkElements;
     QGridLayout* contentLayout = (QGridLayout*)layout();
-    contentLayout->addWidget(new MyTitleLabel("Menu"), contentLayout->rowCount(), 0, 1, 2, Qt::AlignHCenter | Qt::AlignTop);
-    addParameters();
+    contentLayout->addWidget(new MyTitleLabel("Selected Elements"), contentLayout->rowCount(), 0, 1, 2, Qt::AlignHCenter | Qt::AlignTop);
+    QLayoutItem* spacerItem = new MySpacerItem(0, 30);
+    contentLayout->addItem(spacerItem, contentLayout->rowCount(), 0, 1, 2);
+    addItems();
     contentLayout->setAlignment(Qt::AlignTop);
     setFixedWidth(340);
 }
@@ -17,11 +19,15 @@ MyMultiNetworkElementFeatureMenu::FEATURE_MENU_TYPE MyMultiNetworkElementFeature
     return MULTI_NETWORK_ELEMENT_FEATURE_MENU;
 }
 
-void MyMultiNetworkElementFeatureMenu::addParameters() {
+void MyMultiNetworkElementFeatureMenu::addItems() {
+    // parameters
     MyParameterBase* parameter = NULL;
     addParameter(createRepresentativeBorderWidthParameter());
     addParameter(createRepresentativeBorderColorParameter());
     addParameter(createRepresentativeFillColorParameter());
+
+    // shape style buttons
+    addShapeStyleButtons();
 }
 
 void MyMultiNetworkElementFeatureMenu::addParameter(MyParameterBase* parameter) {
@@ -36,6 +42,7 @@ MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderWid
     MyParameterBase* representativeBorderWidthParameter = NULL;
     if (getNetworkElementParameters("border-width").size()) {
         representativeBorderWidthParameter = new MyBorderWidthParameter();
+        ((MyBorderWidthParameter*)representativeBorderWidthParameter)->setDefaultValue(getRepresentativeBorderWidthParameterDefaultValue());
         connect(representativeBorderWidthParameter, &MyParameterBase::isUpdated, this, [this, representativeBorderWidthParameter] () {
             representativeBorderWidthParameter->setDefaultValue();
             updateBorderWidthParameters(((MyBorderWidthParameter*)representativeBorderWidthParameter)->defaultValue());
@@ -52,10 +59,35 @@ void MyMultiNetworkElementFeatureMenu::updateBorderWidthParameters(const qint32&
         ((MyBorderWidthParameter*)borderWidthParameter)->setDefaultValue(borderWidth);
 }
 
+const qint32 MyMultiNetworkElementFeatureMenu::getRepresentativeBorderWidthParameterDefaultValue() {
+    qint32 borderWidthParameterDefaultValue;
+    QList<MyParameterBase*> borderWidthParameters = getNetworkElementParameters("border-width");
+    for (MyParameterBase* borderWidthParameter : borderWidthParameters) {
+        if (((MyBorderWidthParameter*)borderWidthParameter)->defaultValue() != borderWidthParameterDefaultValue)
+            borderWidthParameterDefaultValue = ((MyBorderWidthParameter*)borderWidthParameter)->defaultValue();
+    }
+
+    return borderWidthParameterDefaultValue;
+}
+
+const qint32 MyMultiNetworkElementFeatureMenu::getCommonBorderWidthParameterValueDefaultValue() {
+    qint32 commonBorderWidthParameterDefaultValue = 0;
+    QList<MyParameterBase*> borderWidthParameters = getNetworkElementParameters("border-width");
+    for (MyParameterBase* borderWidthParameter : borderWidthParameters) {
+        if (commonBorderWidthParameterDefaultValue == 0)
+            commonBorderWidthParameterDefaultValue = ((MyBorderWidthParameter*)borderWidthParameter)->defaultValue();
+        else if (((MyBorderWidthParameter*)borderWidthParameter)->defaultValue() != commonBorderWidthParameterDefaultValue)
+            return 0;
+    }
+
+    return commonBorderWidthParameterDefaultValue;
+}
+
 MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderColorParameter() {
     MyParameterBase* representativeBorderColorParameter = NULL;
     if (getNetworkElementParameters("border-color").size()) {
         representativeBorderColorParameter = new MyBorderColorParameter();
+        ((MyBorderColorParameter*)representativeBorderColorParameter)->setDefaultValue(getRepresentativeBorderColorParameterDefaultValue());
         connect(representativeBorderColorParameter, &MyParameterBase::isUpdated, this, [this, representativeBorderColorParameter] () {
             representativeBorderColorParameter->setDefaultValue();
             updateBorderColorParameters(((MyBorderColorParameter*)representativeBorderColorParameter)->defaultValue());
@@ -64,6 +96,30 @@ MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeBorderCol
     }
 
     return representativeBorderColorParameter;
+}
+
+const QString MyMultiNetworkElementFeatureMenu::getRepresentativeBorderColorParameterDefaultValue() {
+    QString borderColorParameterDefaultValue;
+    QList<MyParameterBase*> borderColorParameters = getNetworkElementParameters("border-color");
+    for (MyParameterBase* borderColorParameter : borderColorParameters) {
+        if (((MyBorderColorParameter*)borderColorParameter)->defaultValue() != borderColorParameterDefaultValue)
+            borderColorParameterDefaultValue = ((MyBorderColorParameter*)borderColorParameter)->defaultValue();
+    }
+
+    return borderColorParameterDefaultValue;
+}
+
+const QString MyMultiNetworkElementFeatureMenu::getCommonBorderColorParameterValueDefaultValue() {
+    QString commonBorderColorParameterDefaultValue;
+    QList<MyParameterBase*> borderColorParameters = getNetworkElementParameters("border-color");
+    for (MyParameterBase* borderColorParameter : borderColorParameters) {
+        if (commonBorderColorParameterDefaultValue.isEmpty())
+            commonBorderColorParameterDefaultValue = ((MyBorderColorParameter*)borderColorParameter)->defaultValue();
+        else if (((MyBorderColorParameter*)borderColorParameter)->defaultValue() != commonBorderColorParameterDefaultValue)
+            return "";
+    }
+
+    return commonBorderColorParameterDefaultValue;
 }
 
 void MyMultiNetworkElementFeatureMenu::updateBorderColorParameters(const QString& borderColor) {
@@ -76,6 +132,7 @@ MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeFillColor
     MyParameterBase* representativeFillColorParameter = NULL;
     if (getNetworkElementParameters("fill-color").size()) {
         representativeFillColorParameter = new MyFillColorParameter();
+        ((MyFillColorParameter*)representativeFillColorParameter)->setDefaultValue(getRepresentativeFillColorParameterDefaultValue());
         connect(representativeFillColorParameter, &MyParameterBase::isUpdated, this, [this, representativeFillColorParameter] () {
             representativeFillColorParameter->setDefaultValue();
             updateFillColorParameters(((MyFillColorParameter*)representativeFillColorParameter)->defaultValue());
@@ -86,10 +143,73 @@ MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeFillColor
     return representativeFillColorParameter;
 }
 
+const QString MyMultiNetworkElementFeatureMenu::getRepresentativeFillColorParameterDefaultValue() {
+    QString fillColorParameterDefaultValue;
+    QList<MyParameterBase*> fillColorParameters = getNetworkElementParameters("fill-color");
+    for (MyParameterBase* fillColorParameter : fillColorParameters) {
+        if (((MyFillColorParameter*)fillColorParameter)->defaultValue() != fillColorParameterDefaultValue)
+            fillColorParameterDefaultValue = ((MyFillColorParameter*)fillColorParameter)->defaultValue();
+    }
+
+    return fillColorParameterDefaultValue;
+}
+
+const QString MyMultiNetworkElementFeatureMenu::getCommonFillColorParameterValueDefaultValue() {
+    QString commonFillColorParameterValueDefaultValue;
+    QList<MyParameterBase*> fillColorParameters = getNetworkElementParameters("fill-color");
+    for (MyParameterBase* fillColorParameter : fillColorParameters) {
+        if (commonFillColorParameterValueDefaultValue.isEmpty())
+            commonFillColorParameterValueDefaultValue = ((MyFillColorParameter*)fillColorParameter)->defaultValue();
+        else if (((MyFillColorParameter*)fillColorParameter)->defaultValue() != commonFillColorParameterValueDefaultValue)
+            return "";
+    }
+
+    return commonFillColorParameterValueDefaultValue;
+}
+
 void MyMultiNetworkElementFeatureMenu::updateFillColorParameters(const QString& fillColor) {
     QList<MyParameterBase*> fillColorParameters = getNetworkElementParameters("fill-color");
     for (MyParameterBase* fillColorParameter : fillColorParameters)
         ((MyFillColorParameter*)fillColorParameter)->setDefaultValue(fillColor);
+}
+
+void MyMultiNetworkElementFeatureMenu::addShapeStyleButtons() {
+    QList<QWidget*> listOfShapeStyleButtons;
+    QWidget* shapeStyleButtons = NULL;
+    for (MyNetworkElementBase* networkElement : _networkElements) {
+        shapeStyleButtons = networkElement->style()->shapeStylesButtons();
+        if (shapeStyleButtons)
+            listOfShapeStyleButtons.push_back(shapeStyleButtons);
+    }
+
+    if (listOfShapeStyleButtons.size()) {
+        shapeStyleButtons = listOfShapeStyleButtons.at(0);
+        QGridLayout* contentLayout = (QGridLayout*)layout();
+        connect(shapeStyleButtons, SIGNAL(askForChangeShapeStyle(MyShapeStyleBase*)), this, SLOT(updateShapeStyles(MyShapeStyleBase*)));
+        contentLayout->addWidget(shapeStyleButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
+    }
+}
+
+void MyMultiNetworkElementFeatureMenu::updateShapeStyles(MyShapeStyleBase* shapeStyle) {
+    if (shapeStyle) {
+        qint32 borderWidthDefaultValue = getCommonBorderWidthParameterValueDefaultValue();
+        QString borderColorDefaultValue = getCommonBorderColorParameterValueDefaultValue();
+        QString fillColorDefaultValue = getCommonFillColorParameterValueDefaultValue();
+
+        for (MyNetworkElementBase* networkElement : _networkElements) {
+            networkElement->style()->shapeStyles().removeFirst();
+            networkElement->style()->shapeStyles().push_front(shapeStyle);
+        }
+
+        if (borderWidthDefaultValue != 0)
+            updateBorderWidthParameters(borderWidthDefaultValue);
+        if (!borderColorDefaultValue.isEmpty())
+            updateBorderColorParameters(borderColorDefaultValue);
+        if (!fillColorDefaultValue.isEmpty())
+            updateFillColorParameters(fillColorDefaultValue);
+
+        updateNetworkElements();
+    }
 }
 
 void MyMultiNetworkElementFeatureMenu::updateNetworkElements() {

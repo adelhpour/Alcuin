@@ -13,19 +13,33 @@ public:
 
     FEATURE_MENU_TYPE type() override;
 
-    void addParameters();
+    void addItems();
+
+    void addShapeStyleButtons();
 
     void addParameter(MyParameterBase* parameter);
 
     MyParameterBase* createRepresentativeBorderWidthParameter();
 
+    const qint32 getRepresentativeBorderWidthParameterDefaultValue();
+
+    const qint32 getCommonBorderWidthParameterValueDefaultValue();
+
     void updateBorderWidthParameters(const qint32& borderWidth);
 
     MyParameterBase* createRepresentativeBorderColorParameter();
 
+    const QString getRepresentativeBorderColorParameterDefaultValue();
+
+    const QString getCommonBorderColorParameterValueDefaultValue();
+
     void updateBorderColorParameters(const QString& borderColor);
 
     MyParameterBase* createRepresentativeFillColorParameter();
+
+    const QString getRepresentativeFillColorParameterDefaultValue();
+
+    const QString getCommonFillColorParameterValueDefaultValue();
 
     void updateFillColorParameters(const QString& fillColor);
 
@@ -36,6 +50,10 @@ public:
 signals:
 
     void askForCreateChangeStageCommand();
+
+private slots:
+
+    void updateShapeStyles(MyShapeStyleBase* shapeStyle);
 
 protected:
     QList<MyNetworkElementBase*> _networkElements;
