@@ -51,6 +51,10 @@ public:
 
     void updateTextColorParameters(const QString& textColor);
 
+    MyParameterBase* createRepresentativeFontParameter();
+
+    void updateFontParameters(const QFont& font);
+
     void updateNetworkElements();
 
     QList<MyParameterBase*> getNetworkElementParameters(const QString& parameterName);

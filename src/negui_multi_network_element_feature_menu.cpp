@@ -1,4 +1,5 @@
 #include "negui_multi_network_element_feature_menu.h"
+#include "negui_shape_style_builder.h"
 
 #include <QGridLayout>
 
@@ -26,6 +27,7 @@ void MyMultiNetworkElementFeatureMenu::addItems() {
     addParameter(createRepresentativeBorderColorParameter());
     addParameter(createRepresentativeFillColorParameter());
     addParameter(createRepresentativeTextColorParameter());
+    addParameter(createRepresentativeFontParameter());
 
     // shape style buttons
     addShapeStyleButtons();
@@ -207,16 +209,36 @@ const QString MyMultiNetworkElementFeatureMenu::getRepresentativeTextColorParame
 }
 
 const QString MyMultiNetworkElementFeatureMenu::getCommonTextColorParameterValueDefaultValue() {
-    QString commonTextColorParameterDefaultValue = 0;
+    QString commonTextColorParameterDefaultValue;
     QList<MyParameterBase*> textColorParameters = getNetworkElementParameters("color");
     for (MyParameterBase* textColorParameter : textColorParameters) {
-        if (commonTextColorParameterDefaultValue == 0)
+        if (commonTextColorParameterDefaultValue.isEmpty())
             commonTextColorParameterDefaultValue = ((MyTextColorParameter*)textColorParameter)->defaultValue();
         else if (((MyTextColorParameter*)textColorParameter)->defaultValue() != commonTextColorParameterDefaultValue)
-            return 0;
+            return "";
     }
 
     return commonTextColorParameterDefaultValue;
+}
+
+MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeFontParameter() {
+    MyParameterBase* representativeFontParameter = NULL;
+    if (getNetworkElementParameters("font").size()) {
+        representativeFontParameter = new MyFontParameter();
+        connect(representativeFontParameter, &MyParameterBase::isUpdated, this, [this, representativeFontParameter] () {
+            representativeFontParameter->setDefaultValue();
+            updateFontParameters(((MyFontParameter*)representativeFontParameter)->defaultValue());
+            updateNetworkElements();
+        });
+    }
+
+    return representativeFontParameter;
+}
+
+void MyMultiNetworkElementFeatureMenu::updateFontParameters(const QFont& font) {
+    QList<MyParameterBase*> fontParameters = getNetworkElementParameters("font");
+    for (MyParameterBase* fontParameter : fontParameters)
+        ((MyFontParameter*)fontParameter)->setDefaultValue(font);
 }
 
 void MyMultiNetworkElementFeatureMenu::addShapeStyleButtons() {
@@ -244,7 +266,8 @@ void MyMultiNetworkElementFeatureMenu::updateShapeStyles(MyShapeStyleBase* shape
         QString textColorDefaultValue = getCommonTextColorParameterValueDefaultValue();
 
         for (MyNetworkElementBase* networkElement : _networkElements)
-            networkElement->style()->replaceShapeStyle(shapeStyle);
+            networkElement->style()->replaceShapeStyle(getCopyNodeShapeStyle(shapeStyle));
+        shapeStyle->deleteLater();
 
         if (borderWidthDefaultValue != 0)
             updateBorderWidthParameters(borderWidthDefaultValue);

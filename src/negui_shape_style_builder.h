@@ -31,4 +31,6 @@ MyShapeStyleBase* createSimpleTextStyle(const QString& shape);
 
 MyShapeStyleBase* createWithPlainTextTextStyle(const QString& shape);
 
+MyShapeStyleBase* getCopyNodeShapeStyle(MyShapeStyleBase* shapeStyle);
+
 #endif
