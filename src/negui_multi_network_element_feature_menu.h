@@ -43,6 +43,14 @@ public:
 
     void updateFillColorParameters(const QString& fillColor);
 
+    MyParameterBase* createRepresentativeTextColorParameter();
+
+    const QString getRepresentativeTextColorParameterDefaultValue();
+
+    const QString getCommonTextColorParameterValueDefaultValue();
+
+    void updateTextColorParameters(const QString& textColor);
+
     void updateNetworkElements();
 
     QList<MyParameterBase*> getNetworkElementParameters(const QString& parameterName);

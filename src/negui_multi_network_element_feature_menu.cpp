@@ -25,6 +25,7 @@ void MyMultiNetworkElementFeatureMenu::addItems() {
     addParameter(createRepresentativeBorderWidthParameter());
     addParameter(createRepresentativeBorderColorParameter());
     addParameter(createRepresentativeFillColorParameter());
+    addParameter(createRepresentativeTextColorParameter());
 
     // shape style buttons
     addShapeStyleButtons();
@@ -173,6 +174,51 @@ void MyMultiNetworkElementFeatureMenu::updateFillColorParameters(const QString& 
         ((MyFillColorParameter*)fillColorParameter)->setDefaultValue(fillColor);
 }
 
+MyParameterBase* MyMultiNetworkElementFeatureMenu::createRepresentativeTextColorParameter() {
+    MyParameterBase* representativeTextColorParameter = NULL;
+    if (getNetworkElementParameters("text-color").size()) {
+        representativeTextColorParameter = new MyTextColorParameter();
+        ((MyTextColorParameter*)representativeTextColorParameter)->setDefaultValue(getRepresentativeTextColorParameterDefaultValue());
+        connect(representativeTextColorParameter, &MyParameterBase::isUpdated, this, [this, representativeTextColorParameter] () {
+            representativeTextColorParameter->setDefaultValue();
+            updateTextColorParameters(((MyTextColorParameter*)representativeTextColorParameter)->defaultValue());
+            updateNetworkElements();
+        });
+    }
+
+    return representativeTextColorParameter;
+}
+
+void MyMultiNetworkElementFeatureMenu::updateTextColorParameters(const QString& textColor) {
+    QList<MyParameterBase*> textColorParameters = getNetworkElementParameters("text-color");
+    for (MyParameterBase* textColorParameter : textColorParameters)
+        ((MyTextColorParameter*)textColorParameter)->setDefaultValue(textColor);
+}
+
+const QString MyMultiNetworkElementFeatureMenu::getRepresentativeTextColorParameterDefaultValue() {
+    QString textColorParameterDefaultValue;
+    QList<MyParameterBase*> textColorParameters = getNetworkElementParameters("text-color");
+    for (MyParameterBase* textColorParameter : textColorParameters) {
+        if (((MyTextColorParameter*)textColorParameter)->defaultValue() != textColorParameterDefaultValue)
+            textColorParameterDefaultValue = ((MyTextColorParameter*)textColorParameter)->defaultValue();
+    }
+
+    return textColorParameterDefaultValue;
+}
+
+const QString MyMultiNetworkElementFeatureMenu::getCommonTextColorParameterValueDefaultValue() {
+    QString commonTextColorParameterDefaultValue = 0;
+    QList<MyParameterBase*> textColorParameters = getNetworkElementParameters("color");
+    for (MyParameterBase* textColorParameter : textColorParameters) {
+        if (commonTextColorParameterDefaultValue == 0)
+            commonTextColorParameterDefaultValue = ((MyTextColorParameter*)textColorParameter)->defaultValue();
+        else if (((MyTextColorParameter*)textColorParameter)->defaultValue() != commonTextColorParameterDefaultValue)
+            return 0;
+    }
+
+    return commonTextColorParameterDefaultValue;
+}
+
 void MyMultiNetworkElementFeatureMenu::addShapeStyleButtons() {
     QList<QWidget*> listOfShapeStyleButtons;
     QWidget* shapeStyleButtons = NULL;
@@ -195,6 +241,7 @@ void MyMultiNetworkElementFeatureMenu::updateShapeStyles(MyShapeStyleBase* shape
         qint32 borderWidthDefaultValue = getCommonBorderWidthParameterValueDefaultValue();
         QString borderColorDefaultValue = getCommonBorderColorParameterValueDefaultValue();
         QString fillColorDefaultValue = getCommonFillColorParameterValueDefaultValue();
+        QString textColorDefaultValue = getCommonTextColorParameterValueDefaultValue();
 
         for (MyNetworkElementBase* networkElement : _networkElements)
             networkElement->style()->replaceShapeStyle(shapeStyle);
@@ -205,6 +252,8 @@ void MyMultiNetworkElementFeatureMenu::updateShapeStyles(MyShapeStyleBase* shape
             updateBorderColorParameters(borderColorDefaultValue);
         if (!fillColorDefaultValue.isEmpty())
             updateFillColorParameters(fillColorDefaultValue);
+        if (!textColorDefaultValue.isEmpty())
+            updateTextColorParameters(fillColorDefaultValue);
 
         updateNetworkElements();
     }
