@@ -38,7 +38,7 @@ void MyTextStyleBase::setPlainText(const QString& plainText) {
 const QColor MyTextStyleBase::defaultTextColor() const {
     QColor color;
     
-    MyParameterBase* parameter = findParameter("color");
+    MyParameterBase* parameter = findParameter("text-color");
     if (parameter)
         color.setNamedColor(((MyColorParameterBase*)parameter)->defaultValue());
     
@@ -195,10 +195,10 @@ void MyTextStyleBase::read(const QJsonObject &json) {
     }
     
     // color
-    if (json.contains("color") && json["color"].isString()) {
-        parameter = findParameter("color");
+    if (json.contains("text-color") && json["text-color"].isString()) {
+        parameter = findParameter("text-color");
         if (parameter)
-            ((MyColorParameterBase*)parameter)->setDefaultValue(json["color"].toString());
+            ((MyColorParameterBase*)parameter)->setDefaultValue(json["text-color"].toString());
     }
     
     // font-family
@@ -281,9 +281,9 @@ void MyTextStyleBase::write(QJsonObject &json) {
         json["plain-text"] = ((MyStringParameter*)parameter)->defaultValue();
 
     // color
-    parameter = findParameter("color");
+    parameter = findParameter("text-color");
     if (parameter)
-        json["color"] = ((MyColorParameterBase*)parameter)->defaultValue();
+        json["text-color"] = ((MyColorParameterBase*)parameter)->defaultValue();
 
     // font-family
     parameter = findParameter("font");

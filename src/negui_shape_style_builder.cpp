@@ -66,3 +66,14 @@ MyShapeStyleBase* createSimpleTextStyle(const QString& shape) {
 MyShapeStyleBase* createWithPlainTextTextStyle(const QString& shape) {
     return new MyWithPlainTextTextStyle(shape);
 }
+
+MyShapeStyleBase* getCopyNodeShapeStyle(MyShapeStyleBase* shapeStyle) {
+    if (shapeStyle->type() == MyShapeStyleBase::ELLIPSE_SHAPE_STYLE)
+        return createNodeEllipseStyle("ellipse");
+    else if (shapeStyle->type() == MyShapeStyleBase::RECTANGLE_SHAPE_STYLE)
+        return createNodeRectangleStyle("rectangle");
+    else if (shapeStyle->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
+        return createNodeRectangleStyle("polygon");
+
+    return NULL;
+}

@@ -44,6 +44,10 @@ QWidget* MyNetworkElementStyleBase::shapeStylesButtons() {
     return NULL;
 }
 
+void MyNetworkElementStyleBase::replaceShapeStyle(MyShapeStyleBase* shapeStyle) {
+
+}
+
 MyParameterBase* MyNetworkElementStyleBase::getParameter(MyShapeStyleBase::SHAPE_STYLE shape, const QString& parameterName) {
     for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
         if (shapeStyle->type() == shape)

@@ -75,6 +75,8 @@ public:
 
     QWidget* shapeStylesButtons() override;
 
+    void replaceShapeStyle(MyShapeStyleBase* shapeStyle) override;
+
     const bool whetherAnotherGeometricShapeAlreadyExists();
 
     const bool whetherAnotherTextShapeAlreadyExists();

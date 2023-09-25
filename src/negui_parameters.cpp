@@ -896,7 +896,7 @@ void MyTextPlainTextParameter::reset() {
 
 // MyTextColorParameter
 
-MyTextColorParameter::MyTextColorParameter() : MyColorParameterBase("color", "Text \"Color\"") {
+MyTextColorParameter::MyTextColorParameter() : MyColorParameterBase("text-color", "Text \"Color\"") {
     reset();
 }
 

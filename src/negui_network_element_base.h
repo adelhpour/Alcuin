@@ -114,10 +114,10 @@ public slots:
     virtual void setSelected(const bool& selected);
 
     const bool isSelected();
+
+    void createFeatureMenu();
     
 protected slots:
-    
-    void createFeatureMenu();
 
     const bool areAnyOtherElementsSelected();
     

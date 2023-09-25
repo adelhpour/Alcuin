@@ -147,6 +147,11 @@ QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
     return shapeStylesButtons;
 }
 
+void MySimpleClassicNodeStyle::replaceShapeStyle(MyShapeStyleBase* shapeStyle) {
+    _shapeStyles.removeFirst();
+    _shapeStyles.push_front(shapeStyle);
+}
+
 const bool MySimpleClassicNodeStyle::whetherAnotherGeometricShapeAlreadyExists() {
     for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
         if (shapeStyle->name() != "text")
