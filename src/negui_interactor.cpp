@@ -237,6 +237,7 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
 void MyInteractor::setNewNetworkCanvas() {
     if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         saveCurrentNetwork();
+    askForRemoveFeatureMenu();
     resetNetworkCanvas();
     ((MyFileManager*)fileManager())->reset();
 }
@@ -923,6 +924,22 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     emit askForSetToolTip("Select " + edgeCategory + " edges");
 }
 
+void MyInteractor::displayFeatureMenu() {
+    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
+        if (selectedNodes().size() == 1 && selectedEdges().size() == 0)
+            selectedNodes().at(0)->createFeatureMenu();
+        else if (selectedNodes().size() == 0 && selectedEdges().size() == 1)
+            selectedEdges().at(0)->createFeatureMenu();
+        else if (selectedNodes().size() || selectedEdges().size()) {
+            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
+            connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
+            askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        }
+        else
+            askForDisplayFeatureMenu();
+    }
+}
+
 void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
     QString elementName = featureMenu->objectName();
     if (!askForWhetherShiftModifierIsPressed() || (selectedNodes().size() == 1 && !selectedEdges().size()) || (selectedNodes().size() == 0 && selectedEdges().size() == 1)) {
@@ -988,19 +1005,7 @@ void MyInteractor::clearSelectionArea() {
         delete _selectionAreaGraphicsItem;
         _selectionAreaGraphicsItem = NULL;
     }
-    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
-        if (selectedNodes().size() == 1 && selectedEdges().size() == 0)
-            selectedNodes().at(0)->createFeatureMenu();
-        else if (selectedNodes().size() == 0 && selectedEdges().size() == 1)
-            selectedEdges().at(0)->createFeatureMenu();
-        else if (selectedNodes().size() || selectedEdges().size()) {
-            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
-            connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-            askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
-        }
-        else
-            askForDisplayFeatureMenu();
-    }
+    displayFeatureMenu();
 }
 
 void MyInteractor::readFromFile(const QString& importToolName) {
