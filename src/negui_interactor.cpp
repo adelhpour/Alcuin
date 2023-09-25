@@ -988,6 +988,19 @@ void MyInteractor::clearSelectionArea() {
         delete _selectionAreaGraphicsItem;
         _selectionAreaGraphicsItem = NULL;
     }
+    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
+        if (selectedNodes().size() == 1 && selectedEdges().size() == 0)
+            selectedNodes().at(0)->createFeatureMenu();
+        else if (selectedNodes().size() == 0 && selectedEdges().size() == 1)
+            selectedEdges().at(0)->createFeatureMenu();
+        else if (selectedNodes().size() || selectedEdges().size()) {
+            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
+            connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
+            askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        }
+        else
+            askForDisplayFeatureMenu();
+    }
 }
 
 void MyInteractor::readFromFile(const QString& importToolName) {

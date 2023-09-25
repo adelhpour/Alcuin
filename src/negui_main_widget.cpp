@@ -150,7 +150,6 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsReleased()), (MyInteractor*)interactor(), SLOT(clearSelectionArea()));
 
     // display null feature menu
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), this, SLOT(displayFeatureMenu()));
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayFeatureMenu()));
 
     // change mode
