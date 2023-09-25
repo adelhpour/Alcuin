@@ -196,10 +196,8 @@ void MyMultiNetworkElementFeatureMenu::updateShapeStyles(MyShapeStyleBase* shape
         QString borderColorDefaultValue = getCommonBorderColorParameterValueDefaultValue();
         QString fillColorDefaultValue = getCommonFillColorParameterValueDefaultValue();
 
-        for (MyNetworkElementBase* networkElement : _networkElements) {
-            networkElement->style()->shapeStyles().removeFirst();
-            networkElement->style()->shapeStyles().push_front(shapeStyle);
-        }
+        for (MyNetworkElementBase* networkElement : _networkElements)
+            networkElement->style()->replaceShapeStyle(shapeStyle);
 
         if (borderWidthDefaultValue != 0)
             updateBorderWidthParameters(borderWidthDefaultValue);
