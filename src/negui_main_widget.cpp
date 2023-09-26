@@ -3,11 +3,13 @@
 #include "negui_toolbar.h"
 #include "negui_mode_menu.h"
 #include "negui_graphics_view.h"
+#include "negui_secondary_graphics_view.h"
 #include "negui_graphics_scene.h"
 #include "negui_status_bar.h"
 #include "negui_null_feature_menu.h"
 
 #include <QGridLayout>
+#include <QStackedLayout>
 #include <QSettings>
 #include <QStandardPaths>
 
@@ -26,7 +28,11 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     layout->addWidget(toolBar(), layout->rowCount(), 0, 1, 3);
     _layoutMenuRow = layout->rowCount();
     layout->addWidget(modeMenu(), layout->rowCount(), 0, Qt::AlignTop | Qt::AlignLeft);
-    layout->addWidget(view(), layout->rowCount() - 1, 1);
+    QStackedLayout* stackedLayout = new QStackedLayout();
+    stackedLayout->setStackingMode(QStackedLayout::StackAll);
+    stackedLayout->addWidget(view());
+    stackedLayout->addWidget(secondaryView());
+    layout->addLayout(stackedLayout, layout->rowCount() - 1, 1);
     layout->addWidget(statusBar(), layout->rowCount(), 0, 1, 3);
     setLayout(layout);
     arrangeWidgetLayers();
@@ -44,6 +50,7 @@ void MyNetworkEditorWidget::setWidgets() {
     _statusBar = new MyStatusBar(this);
     _modeMenu = new MyFrequentlyUsedButtonsModeMenu(this);
     _view = new MyGraphicsView(this);
+    _secondaryView = new MySecondaryGraphicsView(((MyGraphicsView*)view())->scene());
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
@@ -134,6 +141,7 @@ void MyNetworkEditorWidget::setInteractions() {
 
     // reset scene
     connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(clearScene()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), this, SLOT(removeFeatureMenu()));
     
     // items at position
     connect((MyInteractor*)interactor(), SIGNAL(askForItemsAtPosition(const QPointF&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(itemsAtPosition(const QPointF&)));
@@ -209,6 +217,10 @@ QWidget* MyNetworkEditorWidget::modeMenu() {
 
 QWidget* MyNetworkEditorWidget::view() {
     return _view;
+}
+
+QWidget* MyNetworkEditorWidget::secondaryView() {
+    return _secondaryView;
 }
 
 QWidget* MyNetworkEditorWidget::statusBar() {
