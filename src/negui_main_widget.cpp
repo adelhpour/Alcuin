@@ -9,7 +9,6 @@
 #include "negui_null_feature_menu.h"
 
 #include <QGridLayout>
-#include <QStackedLayout>
 #include <QSettings>
 #include <QStandardPaths>
 
@@ -28,11 +27,8 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     layout->addWidget(toolBar(), layout->rowCount(), 0, 1, 3);
     _layoutMenuRow = layout->rowCount();
     layout->addWidget(modeMenu(), layout->rowCount(), 0, Qt::AlignTop | Qt::AlignLeft);
-    QStackedLayout* stackedLayout = new QStackedLayout();
-    stackedLayout->setStackingMode(QStackedLayout::StackAll);
-    stackedLayout->addWidget(view());
-    stackedLayout->addWidget(secondaryView());
-    layout->addLayout(stackedLayout, layout->rowCount() - 1, 1);
+    layout->addWidget(view(), layout->rowCount() - 1, 1);
+    layout->addWidget(secondaryView(), layout->rowCount() - 1, 1, Qt::AlignBottom | Qt::AlignRight);
     layout->addWidget(statusBar(), layout->rowCount(), 0, 1, 3);
     setLayout(layout);
     arrangeWidgetLayers();
