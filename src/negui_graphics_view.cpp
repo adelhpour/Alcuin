@@ -14,7 +14,7 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setStyle(new MyProxyStyle(style()));
     setMouseTracking(true);
     
-    _minScale = 1.0 / 10.0;
+    _minScale = 1.5 / 10.0;
     _maxScale = 10.0;
     _numScheduledScalings = 0;
     _panMode = false;
@@ -24,6 +24,9 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setScene(new MyGraphicsScene(this));
     setSceneRect(scene()->sceneRect().x(), scene()->sceneRect().y(), scene()->sceneRect().width(), scene()->sceneRect().height());
     connect(this, SIGNAL(askForDisplayContextMenu(const QPointF&)), scene(), SLOT(displayContextMenu(const QPointF&)));
+    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
+    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
+
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     resetScale();
 };
@@ -125,6 +128,15 @@ void MyGraphicsView::zoom(const qreal factor) {
                               transform().m31(), transform().m32(), transform().m33());
     setTransform(transformMatrix);
     emit scaleChanged(currentScale());
+    updateFrame();
+}
+
+void MyGraphicsView::updateFrame() {
+    ((MyGraphicsScene*)scene())->updateViewFrame(mapToScene(viewport()->geometry()).boundingRect());
+}
+
+void MyGraphicsView::updateFrame(const QRectF& frameRect) {
+    ((MyGraphicsScene*)scene())->updateViewFrame(frameRect);
 }
 
 void MyGraphicsView::wheelEvent(QWheelEvent * event) {
@@ -186,6 +198,11 @@ void MyGraphicsView::keyPressEvent(QKeyEvent *event) {
 void MyGraphicsView::leaveEvent(QEvent *event) {
     emit mouseLeft();
     QGraphicsView::leaveEvent(event);
+}
+
+void MyGraphicsView::resizeEvent(QResizeEvent *event) {
+    QGraphicsView::resizeEvent(event);
+    updateFrame();
 }
 
 // MyProxyStyle
