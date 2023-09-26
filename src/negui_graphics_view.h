@@ -28,6 +28,7 @@ public:
     void exportFigureAsSVG(const QString& fileName ,const QRectF& pageRect);
     
 signals:
+
     void enterKeyIsPressed();
     void askForDisplayContextMenu(const QPointF& position);
     void mouseLeft();
@@ -37,6 +38,8 @@ public slots:
 
     void zoomIn();
     void zoomOut();
+    void updateFrame();
+    void updateFrame(const QRectF& frameRect);
     
 private slots:
     
@@ -53,6 +56,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void leaveEvent(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
     qint32 _numScheduledScalings;
     qreal _minScale;

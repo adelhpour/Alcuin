@@ -17,6 +17,7 @@ public:
     QWidget* toolBar();
     QWidget* modeMenu();
     QWidget* view();
+    QWidget* secondaryView();
     QWidget* statusBar();
     QWidget* featureMenu();
     void readSettings();
@@ -64,6 +65,7 @@ protected:
     QObject* _interactor;
     QWidget* _toolBar;
     QWidget* _view;
+    QWidget* _secondaryView;
     QWidget* _modeMenu;
     QWidget* _featureMenu;
     QWidget* _statusBar;
