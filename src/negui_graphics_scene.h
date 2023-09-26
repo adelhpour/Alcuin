@@ -19,6 +19,8 @@ public:
     QMenu* createContextMenu();
 
     void connectContextMenu(QMenu* contextMenu);
+
+    void updateViewFrame(const QRectF& viewRect);
     
 signals:
 
@@ -67,6 +69,7 @@ protected:
     bool _isShiftModifierPressed;
     bool _whetherMouseReleaseEventIsAccepted;
     QPointF _cursorPosition;
+    QGraphicsItem* _viewFrameGraphicsItem;
 };
 
 #endif

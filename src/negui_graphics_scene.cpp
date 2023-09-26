@@ -2,13 +2,15 @@
 #include "negui_context_menu.h"
 
 #include <QColorDialog>
+#include <QGraphicsRectItem>
 
 // MyGraphicsScene
 
 MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
-    setSceneRect(-10000, -10000, 20000, 20000);
+    setSceneRect(-7500, -7500, 15000, 15000);
     _isLeftButtonPressed = false;
     _isShiftModifierPressed = false;
+    _viewFrameGraphicsItem = NULL;
     clearScene();
 }
 
@@ -45,6 +47,19 @@ void MyGraphicsScene::setBackgroundColor(const QString &backgroundColor) {
 void MyGraphicsScene::clearScene() {
     clear();
     setBackgroundColor("white");
+    _viewFrameGraphicsItem = NULL;
+}
+
+void MyGraphicsScene::updateViewFrame(const QRectF& viewRect) {
+    if (_viewFrameGraphicsItem)
+        ((QGraphicsRectItem*)_viewFrameGraphicsItem)->setRect(viewRect.x() - 25, viewRect.y() - 25, viewRect.width() + 50, viewRect.height() + 50);
+    else {
+        _viewFrameGraphicsItem = new QGraphicsRectItem(viewRect.x() - 25, viewRect.y() - 25, viewRect.width() + 50, viewRect.height() + 50);
+        QPen pen(Qt::black);
+        pen.setWidth(50);
+        ((QGraphicsRectItem*)_viewFrameGraphicsItem)->setPen(pen);
+        addItem(_viewFrameGraphicsItem);
+    }
 }
 
 QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position) {

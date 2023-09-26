@@ -250,8 +250,8 @@ void MyInteractor::saveCurrentNetwork() {
 }
 
 void MyInteractor::resetNetworkCanvas() {
-    resetCanvas();
     resetNetwork();
+    resetCanvas();
 }
 
 void MyInteractor::resetCanvas() {
