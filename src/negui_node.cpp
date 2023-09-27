@@ -592,6 +592,14 @@ QWidget* MyCentroidNode::getFeatureMenu() {
     return featureMenu;
 }
 
+const bool MyCentroidNode::areAnyOtherElementsSelected() {
+    QList<MyNetworkElementBase*> networkElements;
+    networkElements.push_back(this);
+    for (MyNetworkElementBase* edge : edges())
+        networkElements.push_back(edge);
+    return askForWhetherAnyOtherElementsAreSelected(networkElements);
+}
+
 const QLineF MyCentroidNode::createBezierAdjustLine() {
     QPointF startPoint = position();
     QPointF endPoint = position();

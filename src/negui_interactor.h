@@ -209,7 +209,7 @@ private slots:
     void pasteCopiedNodeStyle(MyNetworkElementBase* element);
     const bool isSetCopiedEdgeStyle();
     void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
-    const bool areAnyOtherElementsSelected(MyNetworkElementBase* element);
+    const bool areAnyOtherElementsSelected(QList<MyNetworkElementBase*> networkElements);
     void copySelectedNetworkElements();
     void cutSelectedNetworkElements();
     const bool isElementNameAlreadyUsed(const QString& elementName);

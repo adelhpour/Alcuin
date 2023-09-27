@@ -255,6 +255,10 @@ public slots:
 
     void adjustExtents() override;
 
+protected slots:
+
+    const bool areAnyOtherElementsSelected() override;
+
 private slots:
 
     void adjustConnectedBezierCurves();

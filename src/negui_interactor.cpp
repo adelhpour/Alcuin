@@ -308,7 +308,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedNodeStyle(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
-        connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*)), this, SLOT(areAnyOtherElementsSelected(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>)), this, SLOT(areAnyOtherElementsSelected(QList<MyNetworkElementBase*>)));
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
@@ -447,6 +447,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedEdgeStyle(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>)), this, SLOT(areAnyOtherElementsSelected(QList<MyNetworkElementBase*>)));
         connect(e, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedEdgeStyle()));
         connect(e, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -745,7 +746,9 @@ void MyInteractor::selectElement(MyNetworkElementBase* element) {
                 element->setSelected(false);
         }
         else {
-            if (!(element->isSelected() && areAnyOtherElementsSelected(element)))
+            QList<MyNetworkElementBase*> elements;
+            elements.push_back(element);
+            if (!(element->isSelected() && areAnyOtherElementsSelected(elements)))
                 selectElements(false);
             element->setSelected(true);
         }
@@ -773,14 +776,18 @@ void MyInteractor::selectElement(const QString& elementName) {
     emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
 }
 
-const bool MyInteractor::areAnyOtherElementsSelected(MyNetworkElementBase* element) {
+const bool MyInteractor::areAnyOtherElementsSelected(QList<MyNetworkElementBase*> elements) {
     for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        if (node->isSelected() && node != element)
-            return true;
+        if (node->isSelected()) {
+            if (!whetherNetworkElementExistsInTheListOfNetworkElements(node, elements))
+                return true;
+        }
     }
     for (MyNetworkElementBase* edge : qAsConst(edges())) {
-        if (edge->isSelected() && edge != element)
-            return true;
+        if (edge->isSelected()) {
+            if (!whetherNetworkElementExistsInTheListOfNetworkElements(edge, elements))
+                return true;
+        }
     }
 
     return false;
