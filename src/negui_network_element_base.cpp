@@ -81,7 +81,9 @@ const bool MyNetworkElementBase::isSelected() {
 }
 
 const bool MyNetworkElementBase::areAnyOtherElementsSelected() {
-    return askForWhetherAnyOtherElementsAreSelected(this);
+    QList<MyNetworkElementBase*> networkElements;
+    networkElements.push_back(this);
+    return askForWhetherAnyOtherElementsAreSelected(networkElements);
 }
 
 void MyNetworkElementBase::enableNormalMode() {
@@ -230,4 +232,13 @@ MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const Q
         return findElement(nodes, json["target"]["node"].toString());
 
     return NULL;
+}
+
+const bool whetherNetworkElementExistsInTheListOfNetworkElements(MyNetworkElementBase* networkElement, QList<MyNetworkElementBase*> networkElements) {
+    for (MyNetworkElementBase* element : networkElements) {
+        if (networkElement == element)
+            return true;
+    }
+
+    return false;
 }

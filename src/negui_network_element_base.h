@@ -101,7 +101,7 @@ signals:
 
     const bool askForWhetherElementStyleIsCopied();
 
-    const bool askForWhetherAnyOtherElementsAreSelected(MyNetworkElementBase*);
+    const bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
 
     const QString askForIconsDirectoryPath();
 
@@ -119,8 +119,8 @@ public slots:
     
 protected slots:
 
-    const bool areAnyOtherElementsSelected();
-    
+    virtual const bool areAnyOtherElementsSelected();
+
 protected:
     
     MyNetworkElementGraphicsItemBase* _graphicsItem;
@@ -136,5 +136,7 @@ MyNetworkElementBase* findElement(QList<MyNetworkElementBase*> elements, const Q
 MyNetworkElementBase* findSourceNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
 
 MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const QJsonObject &json);
+
+const bool whetherNetworkElementExistsInTheListOfNetworkElements(MyNetworkElementBase* networkElement, QList<MyNetworkElementBase*> networkElements);
 
 #endif
