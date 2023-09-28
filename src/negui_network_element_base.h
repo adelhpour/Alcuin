@@ -82,6 +82,10 @@ public:
 signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
+
+    QList<MyNetworkElementBase*> askForListOfElements();
+
+    QList<QGraphicsItem*> askForItemsAtPosition(const QPointF&);
     
     void askForCreateChangeStageCommand();
 

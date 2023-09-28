@@ -200,7 +200,6 @@ private slots:
     void writeFigureToFile(const QString& exportToolName);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
-    MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
     void createChangeStageCommand();
     void createSelectionAreaGraphicsItem(const QPointF& position);
     void selectSelectionAreaCoveredNodes();

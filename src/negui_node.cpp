@@ -78,7 +78,7 @@ void MyNodeBase::deparent() {
 }
 
 void MyNodeBase::reparent() {
-    MyNetworkElementBase* parentNode = askForParentNodeAtPosition(this, position());
+    MyNetworkElementBase* parentNode = getParentNodeAtPosition(position());
     deparent();
     if (parentNode && ((MyComplexClassicNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyleBase*)style())->parentCategories())) {
         ((MyComplexClassicNodeStyle*)parentNode->style())->convertToParentCategory();
@@ -87,6 +87,29 @@ void MyNodeBase::reparent() {
         resetPosition();
         setConnectedNodesParents();
     }
+}
+
+MyNetworkElementBase* MyNodeBase::getParentNodeAtPosition(const QPointF& position) {
+    QList<QGraphicsItem *> items = askForItemsAtPosition(position);
+    MyNetworkElementBase* parentNode = NULL;
+    qint32 parentNodeZValue = INT_MIN;
+    for (QGraphicsItem* item : qAsConst(items)) {
+        if (item->parentItem()) {
+            QList<MyNetworkElementBase*> elements = askForListOfElements();
+            for (MyNetworkElementBase* element : elements) {
+                if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
+                    if (element->graphicsItem() == item->parentItem() && element != this) {
+                        if (item->parentItem()->zValue() > parentNodeZValue) {
+                            parentNode = element;
+                            parentNodeZValue = item->parentItem()->zValue();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return parentNode;
 }
 
 void MyNodeBase::setPosition(const QPointF& position) {

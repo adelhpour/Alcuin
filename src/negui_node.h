@@ -87,8 +87,6 @@ public:
     void write(QJsonObject &json) override;
     
 signals:
-    
-    MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
 
     void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
     
@@ -99,6 +97,8 @@ public slots:
     
     // set a new parent to the node
     void reparent();
+
+    MyNetworkElementBase* getParentNodeAtPosition(const QPointF& position);
     
     // set the position of the node using its current position
     void resetPosition();
