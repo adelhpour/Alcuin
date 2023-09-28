@@ -29,8 +29,6 @@ class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {
 public:
 
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
-    
-    void deparent();
 
     void moveChildItems(const QPointF& movedDistance);
     

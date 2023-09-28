@@ -40,11 +40,6 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItemBase::deparent() {
-    if (_reparent)
-        emit askForDeparent();
-}
-
 void MyNodeSceneGraphicsItemBase::moveChildItems(const QPointF& movedDistance) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
@@ -85,7 +80,8 @@ void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
 
 QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, const QVariant &value) {
     if (change == ItemPositionChange) {
-        deparent();
+        if (_reparent)
+            emit askForDeparent();
         moveChildItems(value.toPointF());
         emit askForResetPosition();
     }
