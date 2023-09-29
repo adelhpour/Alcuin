@@ -10,6 +10,7 @@ MyGraphicsScene::MyGraphicsScene(QWidget* parent) : QGraphicsScene(parent) {
     setSceneRect(-7500, -7500, 15000, 15000);
     _isLeftButtonPressed = false;
     _isShiftModifierPressed = false;
+    _isControlModifierPressed = false;
     _viewFrameGraphicsItem = NULL;
     clearScene();
 }
@@ -68,6 +69,10 @@ QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position)
 
 const bool MyGraphicsScene::isShiftModifierPressed() {
     return _isShiftModifierPressed;
+}
+
+const bool MyGraphicsScene::isControlModifierPressed() {
+    return _isControlModifierPressed;
 }
 
 QMenu* MyGraphicsScene::createContextMenu() {
@@ -170,6 +175,8 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
                 emit askForPasteCopiedNetworkElements(_cursorPosition);
             else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
                 emit askForDeleteSelectedNetworkElements();
+            else if (event->modifiers() == Qt::ControlModifier)
+                _isControlModifierPressed = true;
         }
     }
 }
@@ -179,6 +186,10 @@ void MyGraphicsScene::keyReleaseEvent(QKeyEvent *event) {
     if (!event->isAccepted()) {
         if (event->key() == Qt::Key_Shift) {
             _isShiftModifierPressed = false;
+            event->accept();
+        }
+        else if (event->key() == Qt::Key_Control) {
+            _isControlModifierPressed = false;
             event->accept();
         }
     }

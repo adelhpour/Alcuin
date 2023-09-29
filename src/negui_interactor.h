@@ -112,6 +112,7 @@ signals:
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
+    const bool askForWhetherControlModifierIsPressed();
     QRectF askForItemsBoundingRect();
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
