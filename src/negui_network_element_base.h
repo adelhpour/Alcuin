@@ -113,6 +113,8 @@ signals:
 
     void askForDisplaySceneContextMenu(const QPointF&);
 
+    const bool askForWhetherControlModifierIsPressed();
+
 public slots:
 
     virtual void setSelected(const bool& selected);
