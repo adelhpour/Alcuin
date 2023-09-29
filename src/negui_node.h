@@ -93,6 +93,8 @@ signals:
     void parentNodeIsUpdated();
     
 public slots:
+
+    void updateSelectedNodesParentNode();
     
     // update the parent node of the node
     void updateParentNode();

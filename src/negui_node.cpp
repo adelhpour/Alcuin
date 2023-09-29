@@ -26,7 +26,7 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
-    connect(_graphicsItem, SIGNAL(askForUpdateParentNode()), this,  SLOT(updateParentNode()));
+    connect(_graphicsItem, SIGNAL(askForUpdateParentNode()), this,  SLOT(updateSelectedNodesParentNode()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedEdges()));
     connect((MyNodeSceneGraphicsItemBase*)_graphicsItem, &MyNodeSceneGraphicsItemBase::positionChangedByMouseMoveEvent, this, [this] (const QPointF& movedDistance) { positionChangedByMouseMoveEvent(this, movedDistance); });
@@ -69,6 +69,14 @@ const bool MyNodeBase::isCuttable() {
     }
 
     return true;
+}
+
+void MyNodeBase::updateSelectedNodesParentNode() {
+    QList<MyNetworkElementBase*> elements = askForListOfElements();
+    for (MyNetworkElementBase* element : elements) {
+        if (element->type() == MyNetworkElementBase::NODE_ELEMENT && element->isSelected())
+            ((MyNodeBase*)element)->updateParentNode();
+    }
 }
 
 void MyNodeBase::updateParentNode() {
