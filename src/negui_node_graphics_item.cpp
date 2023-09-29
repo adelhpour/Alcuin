@@ -33,8 +33,7 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     
     // make it focusable
     setFlag(QGraphicsItem::ItemIsFocusable, true);
-    
-    _reparent = false;
+
     connect(this, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(updateFocusedGraphicsItems()));
     
     setZValue(2);
@@ -80,8 +79,6 @@ void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
 
 QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, const QVariant &value) {
     if (change == ItemPositionChange) {
-        if (_reparent)
-            emit askForDeparent();
         moveChildItems(value.toPointF());
         emit askForResetPosition();
     }
@@ -89,31 +86,19 @@ QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, cons
     return QGraphicsItem::itemChange(change, value);
 }
 
+void MyNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {
+    QGraphicsItem::moveBy(dx, dy);
+}
+
 void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     MyNetworkElementGraphicsItemBase::mouseMoveEvent(event);
     emit positionChangedByMouseMoveEvent(event->scenePos() - event->lastScenePos());
 }
 
-void MyNodeSceneGraphicsItemBase::keyPressEvent(QKeyEvent *event) {
-    QGraphicsItem::keyPressEvent(event);
-    if (!event->isAccepted()) {
-        if (event->key() == Qt::Key_Control) {
-            if (_isChosen)
-                _reparent = true;
-            event->accept();
-        }
-    }
-}
-
-void MyNodeSceneGraphicsItemBase::keyReleaseEvent(QKeyEvent *event) {
-    QGraphicsItem::keyReleaseEvent(event);
-    if (!event->isAccepted()) {
-        if (event->key() == Qt::Key_Control) {
-            emit askForReparent();
-            _reparent = false;
-            event->accept();
-        }
-    }
+void MyNodeSceneGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+    if (event->button() == Qt::LeftButton)
+        emit askForUpdateParentNode();
+    MyNetworkElementGraphicsItemBase::mouseReleaseEvent(event);
 }
 
 // MyClassicNodeSceneGraphicsItemBase
