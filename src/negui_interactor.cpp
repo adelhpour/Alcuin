@@ -295,10 +295,11 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         _nodes.push_back(n);
         n->setActive(true);
         n->updateGraphicsItem();
-        connect(n, SIGNAL(askForParentNodeAtPosition(MyNetworkElementBase*, const QPointF&)), this, SLOT(parentNodeAtPosition(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
+        connect(n, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
+        connect(n, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
         connect(n, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
@@ -312,6 +313,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
+        connect(n, SIGNAL(askForWhetherControlModifierIsPressed()), this, SIGNAL(askForWhetherControlModifierIsPressed()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(n->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         connect(this, SIGNAL(askForAdjustConnectedEdgesOfNodes()), n, SLOT(adjustConnectedEdges()));
@@ -344,26 +346,6 @@ void MyInteractor::updateNodeParents() {
         if (parentNode)
             ((MyNodeBase*)node)->setParentNode((MyNodeBase*)parentNode);
     }
-}
-
-MyNetworkElementBase* MyInteractor::parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position) {
-    QList<QGraphicsItem *> items = askForItemsAtPosition(position);
-    MyNetworkElementBase* parentNode = NULL;
-    qint32 parentNodeZValue = INT_MIN;
-    for (QGraphicsItem* item : qAsConst(items)) {
-        if (item->parentItem()) {
-            for (MyNetworkElementBase* node : qAsConst(nodes())) {
-                if (node->graphicsItem() == item->parentItem() && node != currentNode) {
-                    if (item->parentItem()->zValue() > parentNodeZValue) {
-                        parentNode = node;
-                        parentNodeZValue = item->parentItem()->zValue();
-                    }
-                }
-            }
-        }
-    }
-
-    return parentNode;
 }
 
 void MyInteractor::clearNodesInfo() {
@@ -441,6 +423,8 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         e->updateGraphicsItem();
         connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
+        connect(e, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
+        connect(e, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
         connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
         connect(e, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));

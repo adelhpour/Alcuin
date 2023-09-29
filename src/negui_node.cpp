@@ -26,8 +26,7 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
-    connect(_graphicsItem, SIGNAL(askForDeparent()), this,  SLOT(deparent()));
-    connect(_graphicsItem, SIGNAL(askForReparent()), this, SLOT(reparent()));
+    connect(_graphicsItem, SIGNAL(askForUpdateParentNode()), this,  SLOT(updateSelectedNodesParentNode()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedEdges()));
     connect((MyNodeSceneGraphicsItemBase*)_graphicsItem, &MyNodeSceneGraphicsItemBase::positionChangedByMouseMoveEvent, this, [this] (const QPointF& movedDistance) { positionChangedByMouseMoveEvent(this, movedDistance); });
@@ -72,38 +71,54 @@ const bool MyNodeBase::isCuttable() {
     return true;
 }
 
-void MyNodeBase::deparent() {
-    unsetParentNode();
-    setConnectedNodesParents();
+void MyNodeBase::updateSelectedNodesParentNode() {
+    QList<MyNetworkElementBase*> elements = askForListOfElements();
+    for (MyNetworkElementBase* element : elements) {
+        if (element->type() == MyNetworkElementBase::NODE_ELEMENT && element->isSelected())
+            ((MyNodeBase*)element)->updateParentNode();
+    }
 }
 
-void MyNodeBase::reparent() {
-    MyNetworkElementBase* parentNode = askForParentNodeAtPosition(this, position());
-    deparent();
-    if (parentNode && ((MyComplexClassicNodeStyle*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyleBase*)style())->parentCategories())) {
-        ((MyComplexClassicNodeStyle*)parentNode->style())->convertToParentCategory();
+void MyNodeBase::updateParentNode() {
+    MyNetworkElementBase* parentNode = getParentNodeAtPosition(position());
+    if (!parentNode || parentNode != _parentNode) {
+        unsetParentNode();
+        setConnectedNodesParents();
+        emit parentNodeIsUpdated();
+    }
+
+    if (parentNode && !_parentNode && ((MyClassicNodeStyleBase*)parentNode->style())->isConvertibleToParentCategory(((MyNodeStyleBase*)style())->parentCategories())) {
+        ((MyClassicNodeStyleBase*)parentNode->style())->convertToParentCategory();
         setParentNode((MyNodeBase*)parentNode);
-        ((MyComplexClassicNode*)parentNode)->adjustExtents();
+        if (askForWhetherControlModifierIsPressed())
+            ((MyClassicNodeBase*)parentNode)->adjustExtents();
         resetPosition();
         setConnectedNodesParents();
+        emit parentNodeIsUpdated();
     }
 }
 
-void MyNodeBase::setPosition(const QPointF& position) {
-    // position
-    _position = position;
-
-    // adjust parent extents
-    if (!isParentNodeLocked()) {
-        if (parentNode())
-            ((MyComplexClassicNode*)parentNode())->adjustExtents();
+MyNetworkElementBase* MyNodeBase::getParentNodeAtPosition(const QPointF& position) {
+    QList<QGraphicsItem *> items = askForItemsAtPosition(position);
+    MyNetworkElementBase* parentNode = NULL;
+    qint32 parentNodeZValue = INT_MIN;
+    for (QGraphicsItem* item : qAsConst(items)) {
+        if (item->parentItem()) {
+            QList<MyNetworkElementBase*> elements = askForListOfElements();
+            for (MyNetworkElementBase* element : elements) {
+                if (element->type() == MyNetworkElementBase::NODE_ELEMENT) {
+                    if (element->graphicsItem() == item->parentItem() && element != this) {
+                        if (item->parentItem()->zValue() > parentNodeZValue) {
+                            parentNode = element;
+                            parentNodeZValue = item->parentItem()->zValue();
+                        }
+                    }
+                }
+            }
+        }
     }
-    else
-        lockParentNode(false);
 
-    // edges
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
-        ((MyEdgeBase*)edge)->updatePoints();
+    return parentNode;
 }
 
 const QString& MyNodeBase::parentNodeId() const {
@@ -122,14 +137,15 @@ void MyNodeBase::setParentNode(MyNetworkElementBase* parentNode) {
     _parentNode = parentNode;
     _isSetParentNode = true;
     _parentNodeId = parentNode->name();
-    ((MyComplexClassicNode*)_parentNode)->addChildNode(this);
+    ((MyClassicNodeBase*)_parentNode)->addChildNode(this);
     graphicsItem()->setZValue(calculateZValue());
 }
 
 void MyNodeBase::unsetParentNode() {
     if (_parentNode) {
-        ((MyComplexClassicNode*)_parentNode)->removeChildNode(this);
-        ((MyComplexClassicNode*)_parentNode)->adjustExtents();
+        ((MyClassicNodeBase*)_parentNode)->removeChildNode(this);
+        if (askForWhetherControlModifierIsPressed())
+            ((MyClassicNodeBase*)_parentNode)->adjustExtents();
     }
     _parentNode = NULL;
     _isSetParentNode = false;
@@ -141,12 +157,32 @@ void MyNodeBase::lockParentNode(const bool& locked) {
     _isParentNodeLocked = locked;
 }
 
-void MyNodeBase::resetPosition() {
-    setPosition(((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents().center());
-}
-
 const QPointF MyNodeBase::position() const {
     return _position;
+}
+
+void MyNodeBase::setPosition(const QPointF& position) {
+    // position
+    _position = position;
+
+    // adjust parent extents
+    if (!isParentNodeLocked()) {
+        if (parentNode()) {
+            ((MyClassicNodeBase*)parentNode())->lockChildNodes(true);
+            if (askForWhetherControlModifierIsPressed())
+                ((MyClassicNodeBase*)parentNode())->adjustExtents();
+        }
+    }
+    else
+        lockParentNode(false);
+
+    // edges
+    for (MyNetworkElementBase *edge : qAsConst(edges()))
+        ((MyEdgeBase*)edge)->updatePoints();
+}
+
+void MyNodeBase::resetPosition() {
+    setPosition(((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents().center());
 }
 
 const QRectF MyNodeBase::getExtents() {
@@ -163,7 +199,9 @@ void MyNodeBase::addParentFeaturesToFeatureMenu(QWidget* featureMenu) {
     if (!((MyNodeStyleBase*)style())->parentTitle().isEmpty())
         parentLabel = ((MyNodeStyleBase*)style())->parentTitle();
     contentLayout->addWidget(new MyLabel(parentLabel, parentLabel + " that encloses " + styleCategory()), contentLayout->rowCount(), 0, Qt::AlignLeft);
-    contentLayout->addWidget(new MyReadOnlyLineEdit(parentNodeId()), contentLayout->rowCount() - 1, 1, Qt::AlignRight);
+    QWidget* parentNodeLineEdit = new MyReadOnlyLineEdit(parentNodeId());
+    connect(this, &MyNodeBase::parentNodeIsUpdated, parentNodeLineEdit, [this, parentNodeLineEdit] () { ((MyReadOnlyLineEdit*)parentNodeLineEdit)->setText(parentNodeId()); });
+    contentLayout->addWidget(parentNodeLineEdit, contentLayout->rowCount() - 1, 1, Qt::AlignRight);
 }
 
 const qint32 MyNodeBase::calculateZValue() {
@@ -250,19 +288,14 @@ const bool MyClassicNodeBase::isCopyable() {
 }
 
 void MyClassicNodeBase::addChildNode(MyNetworkElementBase* n) {
-    if (n) {
+    if (n)
         _childNodes.push_back(n);
-        updateChildNodesMobility();
-    }
 }
 
 void MyClassicNodeBase::removeChildNode(MyNetworkElementBase* n) {
-    if (n) {
+    if (n)
         _childNodes.removeOne(n);
-        updateChildNodesMobility();
-    }
 }
-
 QList<MyNetworkElementBase*>& MyClassicNodeBase::childNodes() {
     return _childNodes;
 }
@@ -271,21 +304,12 @@ void MyClassicNodeBase::lockChildNodes(const bool& locked) {
     _areChildNodesLocked = locked;
 }
 
-void MyClassicNodeBase::updateChildNodesMobility() {
-    if (childNodes().size() > 1) {
-        for (MyNetworkElementBase* node : qAsConst(childNodes()))
-            node->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, true);
-    }
-    else if (childNodes().size() == 1)
-        childNodes().first()->graphicsItem()->setFlag(QGraphicsItem::ItemIsMovable, false);
-}
-
 void MyClassicNodeBase::setPosition(const QPointF& position) {
     // move child nodes
     if (!areChildNodesLocked()) {
         for (MyNetworkElementBase* node : qAsConst(childNodes())) {
             ((MyNodeBase*)node)->lockParentNode(true);
-            ((MyComplexClassicNodeSceneGraphicsItem*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
+            ((MyNodeSceneGraphicsItemBase*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
             ((MyNodeBase*)node)->adjustConnectedEdges(true);
         }
     }
@@ -343,8 +367,8 @@ const QRectF MyClassicNodeBase::getExtents() {
 }
 
 const QRectF MyClassicNodeBase::createParentNodeExtentsRectangle(qreal extentsX, qreal extentsY, qreal extentsWidth, qreal extentsHeight) {
-    qreal minimumWidth = 400.0;
-    qreal minimumHeight = 300.0;
+    qreal minimumWidth = 150.0;
+    qreal minimumHeight = 120.0;
     if (childNodes().size() == 1) {
         if (extentsWidth < minimumWidth) {
             extentsX -= 0.5 * (minimumWidth - extentsWidth);
@@ -361,10 +385,9 @@ const QRectF MyClassicNodeBase::createParentNodeExtentsRectangle(qreal extentsX,
 
 void MyClassicNodeBase::adjustExtents() {
     QRectF extents = getExtents();
-    lockChildNodes(true);
-    ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
-    ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->updateExtents(extents);
-    ((MyComplexClassicNodeSceneGraphicsItem*)graphicsItem())->adjustOriginalPosition();
+    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->moveBy(extents.x() - (position().x() - 0.5 * extents.width()), extents.y() - (position().y() - 0.5 * extents.height()));
+    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->updateExtents(extents);
+    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->adjustOriginalPosition();
 }
 
 const qint32 MyClassicNodeBase::calculateNodeZValue() {

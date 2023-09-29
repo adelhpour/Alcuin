@@ -82,6 +82,10 @@ public:
 signals:
     
     void askForSelectNetworkElement(MyNetworkElementBase*);
+
+    QList<MyNetworkElementBase*> askForListOfElements();
+
+    QList<QGraphicsItem*> askForItemsAtPosition(const QPointF&);
     
     void askForCreateChangeStageCommand();
 
@@ -108,6 +112,8 @@ signals:
     const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
 
     void askForDisplaySceneContextMenu(const QPointF&);
+
+    const bool askForWhetherControlModifierIsPressed();
 
 public slots:
 

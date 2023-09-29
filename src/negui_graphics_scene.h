@@ -54,6 +54,7 @@ public slots:
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
     const bool isShiftModifierPressed();
+    const bool isControlModifierPressed();
     void displayContextMenu(const QPointF& position);
     const bool whetherMouseReleaseEventIsAccepted();
     
@@ -67,6 +68,7 @@ protected:
 
     bool _isLeftButtonPressed;
     bool _isShiftModifierPressed;
+    bool _isControlModifierPressed;
     bool _whetherMouseReleaseEventIsAccepted;
     QPointF _cursorPosition;
     QGraphicsItem* _viewFrameGraphicsItem;

@@ -112,6 +112,7 @@ signals:
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     const bool askForWhetherShiftModifierIsPressed();
+    const bool askForWhetherControlModifierIsPressed();
     QRectF askForItemsBoundingRect();
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
@@ -200,7 +201,6 @@ private slots:
     void writeFigureToFile(const QString& exportToolName);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
-    MyNetworkElementBase* parentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
     void createChangeStageCommand();
     void createSelectionAreaGraphicsItem(const QPointF& position);
     void selectSelectionAreaCoveredNodes();

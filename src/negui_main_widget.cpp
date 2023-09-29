@@ -145,7 +145,10 @@ void MyNetworkEditorWidget::setInteractions() {
     // activated shift modifier
     connect((MyInteractor*)interactor(), SIGNAL(askForWhetherShiftModifierIsPressed()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(isShiftModifierPressed()));
 
-    // activated shift modifier
+    // activated control modifier
+    connect((MyInteractor*)interactor(), SIGNAL(askForWhetherControlModifierIsPressed()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(isControlModifierPressed()));
+
+    // items bounding rect
     connect((MyInteractor*)interactor(), &MyInteractor::askForItemsBoundingRect, ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), [this] () { return ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->itemsBoundingRect(); });
 
     // select all

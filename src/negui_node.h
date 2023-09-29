@@ -87,18 +87,19 @@ public:
     void write(QJsonObject &json) override;
     
 signals:
-    
-    MyNetworkElementBase* askForParentNodeAtPosition(MyNetworkElementBase* currentNode, const QPointF& position);
 
     void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
+
+    void parentNodeIsUpdated();
     
 public slots:
+
+    void updateSelectedNodesParentNode();
     
-    // unset the parent of the node
-    void deparent();
-    
-    // set a new parent to the node
-    void reparent();
+    // update the parent node of the node
+    void updateParentNode();
+
+    MyNetworkElementBase* getParentNodeAtPosition(const QPointF& position);
     
     // set the position of the node using its current position
     void resetPosition();
@@ -142,9 +143,6 @@ public:
 
     // lock the position of the child nodes
     void lockChildNodes(const bool& locked);
-
-    // set whether the child nodes are movable or not
-    void updateChildNodesMobility();
 
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }

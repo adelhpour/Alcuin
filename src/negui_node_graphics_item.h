@@ -29,8 +29,6 @@ class MyNodeSceneGraphicsItemBase : public MyNodeGraphicsItemBase {
 public:
 
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
-    
-    void deparent();
 
     void moveChildItems(const QPointF& movedDistance);
     
@@ -43,12 +41,12 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
+
+    virtual void moveBy(qreal dx, qreal dy);
     
 signals:
     
-    void askForDeparent();
-    
-    void askForReparent();
+    void askForUpdateParentNode();
     
     void askForResetPosition();
 
@@ -59,12 +57,8 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
-    
-    void keyPressEvent(QKeyEvent *event) override;
-    
-    void keyReleaseEvent(QKeyEvent *event) override;
-    
-    bool _reparent;
+
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 class MyClassicNodeSceneGraphicsItemBase : public MyNodeSceneGraphicsItemBase {
@@ -84,7 +78,7 @@ public:
 
     void setFocused(const bool& isFocused) override;
 
-    void moveBy(qreal dx, qreal dy);
+    void moveBy(qreal dx, qreal dy) override;
 
     void adjustOriginalPosition();
 
