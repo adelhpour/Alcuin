@@ -21,6 +21,8 @@ public:
 
     void pasteEdges();
 
+    void updatePastedNodesParents();
+
     const QPointF calculateElementsCenter();
 
     MyNetworkElementBase* findPastedNode(const QString& name);
