@@ -30,6 +30,7 @@ void MyCopiedNetworkElementsPaster::pasteNodes() {
             askForAddNode(pastedNode);
         }
     }
+    updatePastedNodesParents();
 }
 
 MyNetworkElementBase* MyCopiedNetworkElementsPaster::createPastedNode(MyNetworkElementBase* node, const QPointF& movedCenter) {
@@ -50,6 +51,20 @@ void MyCopiedNetworkElementsPaster::pasteEdges() {
 MyNetworkElementBase* MyCopiedNetworkElementsPaster::createPastedEdge(MyNetworkElementBase* edge) {
     QString pastedEdgeName = askForEdgeUniqueName(edge->style());
     return createEdge(pastedEdgeName, getCopyEdgeStyle(pastedEdgeName, edge->style()), findPastedNode(((MyEdgeBase*)edge)->sourceNode()->name()), findPastedNode(((MyEdgeBase*)edge)->targetNode()->name()));
+}
+
+void MyCopiedNetworkElementsPaster::updatePastedNodesParents() {
+    MyNetworkElementBase* pastedNode = NULL;
+    MyNetworkElementBase* pastedParentNode = NULL;
+    for (MyNetworkElementBase* copiedElement: _copiedNetworkElements) {
+        if (copiedElement->type() == MyNodeBase::NODE_ELEMENT) {
+            pastedParentNode = findPastedNode(((MyNodeBase*)copiedElement)->parentNodeId());
+            if (pastedParentNode) {
+                pastedNode = findPastedNode(copiedElement->name());
+                ((MyNodeBase*)pastedNode)->setParentNode(pastedParentNode);
+            }
+        }
+    }
 }
 
 const QPointF MyCopiedNetworkElementsPaster::calculateElementsCenter() {
