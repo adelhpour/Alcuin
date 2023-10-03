@@ -87,6 +87,7 @@ void MyGraphicsView::resetScale() {
     resetTransform();
     centerOn(sceneRect().center());
     scaleChanged(currentScale());
+    updateFrame();
 }
 
 void MyGraphicsView::zoomIn() {
