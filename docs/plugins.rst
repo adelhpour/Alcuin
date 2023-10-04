@@ -5,7 +5,7 @@ Plugins
 Introduction
 ############
 
-NetworkEditorGUI allows the developers to extend and costumize its features through plugins written in Python. Through this capability, with minimum effort, a developer can turn NetworkEditorGUI, providing the basic requirements for a network editor tool, into their desired network editor software tool.
+Alcuin allows the developers to extend and costumize its features through plugins written in Python. Through this capability, with minimum effort, a developer can turn Alcuin, providing the basic requirements for a network editor tool, into their desired network editor software tool.
 
 How to write a plugin
 #####################
@@ -15,12 +15,12 @@ How to write a plugin
 Default Plugins
 ###############
 
-NetworkEditorGUI is shipped with some default plugins which are considered to be applicable to many network editor software tools. Here is a list of the default plugins shipped alongside NetworkEditorGUI:
+Alcuin is shipped with some default plugins which are considered to be applicable to many network editor software tools. Here is a list of the default plugins shipped alongside Alcuin:
 
 Import Plugin
 =============
 
-The Import Plugin is used to import an already exisiting network into NetworkEditorGUI. A developer can define a new import file format through a Python script. In addition to the information like file-format and file-extension, the developer's code must include functions converting the network information from its original format into the JSON fromat, readable by NetworkEditorGUI.
+The Import Plugin is used to import an already exisiting network into Alcuin. A developer can define a new import file format through a Python script. In addition to the information like file-format and file-extension, the developer's code must include functions converting the network information from its original format into the JSON fromat, readable by Alcuin.
     Here is an example of a Python script defining a new import format:
 
     .. code-block:: Python
@@ -41,7 +41,7 @@ The Import Plugin is used to import an already exisiting network into NetworkEdi
 Data Export Plugin
 ==================
 
-The Data Export Plugin is used to export the information of the network displayed on the scene into a file with a specific file format. A developer can define a new data export file format through a Python script. In addition to the information like file-format and file-extension, default-save-file-name, and element-types, the developer's code must include functions converting the network information from the JSON fromat, readable by NetworkEditorGUI, into the format in which they want it to be stored. Here is an example of a Python script defining a new data export format:
+The Data Export Plugin is used to export the information of the network displayed on the scene into a file with a specific file format. A developer can define a new data export file format through a Python script. In addition to the information like file-format and file-extension, default-save-file-name, and element-types, the developer's code must include functions converting the network information from the JSON fromat, readable by Alcuin, into the format in which they want it to be stored. Here is an example of a Python script defining a new data export format:
 
     .. code-block:: Python
 

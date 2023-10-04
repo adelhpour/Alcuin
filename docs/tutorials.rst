@@ -5,7 +5,7 @@ Tutorials
 Introduction
 ############
 
-NetworkEditorGUI is both the viewer and editor of graphical networks with nodes, edges, and arrowheads. The network can be either created on a blank canvas or imported and edited there. The user interface of the NetworkEditorGUI consists of a Toolbar and a GraphicsView with a GraphicsScene. Additionaly, a pop-up FeatureMenu exists for each network element shown on the GraphicsScene.
+Alcuin is both the viewer and editor of graphical networks with nodes, edges, and arrowheads. The network can be either created on a blank canvas or imported and edited there. The user interface of the Alcuin consists of a Toolbar and a GraphicsView with a GraphicsScene. Additionaly, a pop-up FeatureMenu exists for each network element shown on the GraphicsScene.
 
 Items
 #####
@@ -13,7 +13,7 @@ Items
 Toolbar
 =======
 
-The toolbar of the user interface is at the top of the NetworkEditorGUI window. All the actions required to view or edit the network are incoporated into the toolbar. In its simplest form and when no plugin is loaded, the toolbar contain the following actions:
+The toolbar of the user interface is at the top of the Alcuin window. All the actions required to view or edit the network are incoporated into the toolbar. In its simplest form and when no plugin is loaded, the toolbar contain the following actions:
 
     * The Node action to choose the default node style,
     * The Edge action to add the default edge style,
@@ -28,7 +28,7 @@ The toolbar of the user interface is at the top of the NetworkEditorGUI window. 
 
     Screenshot of the toolbar with no plugin
     
-By loading plugins into NetworkEditorGUI, it is possible to add actions associated with those plugins into the toolbar. Currently, the following actions related to the plugins are added:
+By loading plugins into Alcuin, it is possible to add actions associated with those plugins into the toolbar. Currently, the following actions related to the plugins are added:
 
     * The Import action to load an existing network,
     * The Export action to save the network data or figure into a file,
@@ -76,7 +76,7 @@ A FeatureMenu is created and popped-up for each network element once the user do
 Actions
 #######
 
-In the following, some simple examples of how a user can use NetworkEditorGUI to view and edit their network are shown.
+In the following, some simple examples of how a user can use Alcuin to view and edit their network are shown.
 
 Add Node
 ========
@@ -153,7 +153,7 @@ To navigate the scene in detail, a user can scroll the mouse wheel down to zoom 
 Drag and Drop
 =============
 
-NetworkEditorGUI has an interactive scene which allows the user to change the position of the network elements at their will. To do so, a user can click on a node, drag it to another location, and drop it there. Accordingly, the position of the node and all its connected edges and arrowheads will be updated.
+Alcuin has an interactive scene which allows the user to change the position of the network elements at their will. To do so, a user can click on a node, drag it to another location, and drop it there. Accordingly, the position of the node and all its connected edges and arrowheads will be updated.
 
 .. figure:: images/drag_drop.gif
     :width: 500
@@ -165,7 +165,7 @@ NetworkEditorGUI has an interactive scene which allows the user to change the po
 Nest Node
 =========
 
-NetworkEditorGUI allows the users to nest the nodes into other nodes. To do so, a user must follow the following steps:
+Alcuin allows the users to nest the nodes into other nodes. To do so, a user must follow the following steps:
 
     * Drag the node which is going to be nested,
     * Press the Shift key,
@@ -182,7 +182,7 @@ NetworkEditorGUI allows the users to nest the nodes into other nodes. To do so, 
 Element Feautres
 ================
 
-NetworkEditorGUI allows the users to change the features of each element of hte network at their will. To do so, a user can double-click on each network element. Once done, a feature menu pops up and give the user the access to the features of that element.
+Alcuin allows the users to change the features of each element of hte network at their will. To do so, a user can double-click on each network element. Once done, a feature menu pops up and give the user the access to the features of that element.
 
 .. figure:: images/feature_menu.gif
     :width: 700
@@ -207,7 +207,7 @@ The AutoLayout plugin can be used to automatically set the position of the netwo
 Import
 ======
 
-The Import plugin allows the users to import an existing network to NetworkEditorGUI. To do so, a user must first choose the Import action from the toolbar and select their desired import file format. A file dialog menu will be shown to the user to select the network file they want to import. Once the file is chosen, NetworkEditorGUI imports its data and displays its network on the scene.
+The Import plugin allows the users to import an existing network to Alcuin. To do so, a user must first choose the Import action from the toolbar and select their desired import file format. A file dialog menu will be shown to the user to select the network file they want to import. Once the file is chosen, Alcuin imports its data and displays its network on the scene.
 
 .. figure:: images/import.gif
     :width: 600
@@ -219,7 +219,7 @@ The Import plugin allows the users to import an existing network to NetworkEdito
 Export
 ======
 
-The Export plugin allows the users to export a created network with NetworkEditorGUI to a file. To do so, a user must first choose the Export action from the toolbar and select their desired export file format. Depending on the format chosen, the user may be asked to visually provide some extra information about the type of nodes or edges in the network. Once that information is provided, a file dialog menu will be shown to the user to select directroy in which they want to save the exported file. Once this directory is chosen, NetworkEditorGUI exports the network data to the file and save it in that directory.
+The Export plugin allows the users to export a created network with Alcuin to a file. To do so, a user must first choose the Export action from the toolbar and select their desired export file format. Depending on the format chosen, the user may be asked to visually provide some extra information about the type of nodes or edges in the network. Once that information is provided, a file dialog menu will be shown to the user to select directroy in which they want to save the exported file. Once this directory is chosen, Alcuin exports the network data to the file and save it in that directory.
 
 .. figure:: images/export.gif
     :width: 600

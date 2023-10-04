@@ -3,7 +3,7 @@
 
 class ImportPlugin : public QObject, ImportInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.importinterface/1.0")
+    Q_PLUGIN_METADATA(IID "org.sys-bio.alcuin.importinterface/1.0")
     Q_INTERFACES(ImportInterface)
 
 public:

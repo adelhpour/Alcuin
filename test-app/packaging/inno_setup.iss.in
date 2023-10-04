@@ -1,8 +1,8 @@
 #define MyAppName "${PROJECT_NAME_TITLE}"
 #define MyAppExeName "${PROJECT_NAME_TITLE}.exe"
-#define MyAppVersion "${NetworkEditorGUI_DOTTED_VERSION}"
+#define MyAppVersion "${Alcuin_DOTTED_VERSION}"
 #define MyAppPublisher "Herbert Sauro's Sys-Bio Lab"
-#define MyAppURL "https://github.com/adelhpour/NetworkEditorGUI"
+#define MyAppURL "https://github.com/adelhpour/Alcuin"
 #define MyAppID 00000000-0000-000-0000-000000000000
 
 [Setup]

@@ -90,12 +90,12 @@ foreach(PLUGIN ${PLUGINS})
 			${Python_LIBRARIES})
 
 	## set library dist
-	install(TARGETS ${PLUGIN_NAME} RUNTIME DESTINATION bin/plugins COMPONENT networkeditorgui_lib LIBRARY DESTINATION lib/plugins COMPONENT networkeditorgui_lib ARCHIVE DESTINATION lib/plugins COMPONENT networkeditorgui_lib)
+	install(TARGETS ${PLUGIN_NAME} RUNTIME DESTINATION bin/plugins COMPONENT alcuin_lib LIBRARY DESTINATION lib/plugins COMPONENT alcuin_lib ARCHIVE DESTINATION lib/plugins COMPONENT alcuin_lib)
 endforeach()
 
 ## install headers
 file(GLOB plugin_headers ${CMAKE_SOURCE_DIR}/src/plugins/*.h ${CMAKE_SOURCE_DIR}/plugins/src/*.hpp)
-install(FILES ${plugin_headers} DESTINATION include/plugins COMPONENT networkeditorgui_lib)
+install(FILES ${plugin_headers} DESTINATION include/plugins COMPONENT alcuin_lib)
 
 ## install embeddable python
 if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})

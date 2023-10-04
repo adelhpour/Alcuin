@@ -18,7 +18,7 @@ public:
     virtual const QJsonObject readGraphInfoFromFile(const QString& fileName, const QString& fileType) = 0;
 };
 
-#define ImportInterface_iid "org.sys-bio.networkeditorgui.importinterface/1.0"
+#define ImportInterface_iid "org.sys-bio.alcuin.importinterface/1.0"
 
 Q_DECLARE_INTERFACE(ImportInterface, ImportInterface_iid)
 
@@ -29,7 +29,7 @@ public:
     virtual const QJsonObject checkForGraphInfoCompatibility(const QJsonObject& graphInfoObject, const QString& fileType) = 0;
 };
 
-#define DataExportInterface_iid "org.sys-bio.networkeditorgui.dataexportinterface/1.0"
+#define DataExportInterface_iid "org.sys-bio.alcuin.dataexportinterface/1.0"
 
 Q_DECLARE_INTERFACE(DataExportInterface, DataExportInterface_iid)
 
@@ -38,7 +38,7 @@ class PrintExportInterface : public InterfaceBase {
     
 };
 
-#define PrintExportInterface_iid "org.sys-bio.networkeditorgui.printexportinterface/1.0"
+#define PrintExportInterface_iid "org.sys-bio.alcuin.printexportinterface/1.0"
 
 Q_DECLARE_INTERFACE(PrintExportInterface, PrintExportInterface_iid)
 
@@ -47,7 +47,7 @@ class ElementStyleInterface : public InterfaceBase {
     
 };
 
-#define ElementStyleInterface_iid "org.sys-bio.networkeditorgui.elementstyleinterface/1.0"
+#define ElementStyleInterface_iid "org.sys-bio.alcuin.elementstyleinterface/1.0"
 
 Q_DECLARE_INTERFACE(ElementStyleInterface, ElementStyleInterface_iid)
 
@@ -57,7 +57,7 @@ public:
     virtual void autoLayout(QJsonObject &graphInfo, QJsonObject &autoLayoutInfo) = 0;
 };
 
-#define AutoLayoutInterface_iid "org.sys-bio.networkeditorgui.autolayoutinterface/1.0"
+#define AutoLayoutInterface_iid "org.sys-bio.alcuin.autolayoutinterface/1.0"
 
 Q_DECLARE_INTERFACE(AutoLayoutInterface, AutoLayoutInterface_iid)
 

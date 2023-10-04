@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'NetworkEditorGUI'
+project = 'Alcuin'
 copyright = '2022, Adel Heydarabadipour'
 author = 'Adel Heydarabadipour'
 
@@ -36,7 +36,7 @@ extensions = [ "breathe", "sphinx.ext.autosectionlabel"]
 autosectionlabel_prefix_document = True
 
 # Breathe Configuration
-breathe_default_project = "NetworkEditorGUI"
+breathe_default_project = "Alcuin"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

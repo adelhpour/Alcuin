@@ -1,16 +1,16 @@
 # set CPack variables
-set(CPACK_PACKAGE_VERSION_MAJOR ${NetworkEditorGUI_VERSION_MAJOR})
-set(CPACK_PACKAGE_VERSION_MINOR ${NetworkEditorGUI_VERSION_MINOR})
-set(CPACK_PACKAGE_VERSION_PATCH ${NetworkEditorGUI_VERSION_PATCH})
+set(CPACK_PACKAGE_VERSION_MAJOR ${Alcuin_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${Alcuin_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${Alcuin_VERSION_PATCH})
 
-set(CPACK_PACKAGE_NAME "Network Editor GUI Test App")
-set(CPACK_PACKAGE_FILE_NAME "NetworkEditorGuiTestApp${NetworkEditorGUI_VERSION_MAJOR}.${NetworkEditorGUI_VERSION_MINOR}.${NetworkEditorGUI_VERSION_PATCH}Setup")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Network Editor Project")
+set(CPACK_PACKAGE_NAME "Alcuin Test App")
+set(CPACK_PACKAGE_FILE_NAME "AlcuinTestApp${Alcuin_VERSION_MAJOR}.${Alcuin_VERSION_MINOR}.${Alcuin_VERSION_PATCH}Setup")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A Test Application for the Graphical User Interface of the Alcuin Project")
 set(CPACK_PACKAGE_VENDOR "Herbert Sauro's Sys-Bio Lab")
 
 set(CPACK_COMPONENT_UNSPECIFIED_HIDDEN TRUE)
 set(CPACK_COMPONENT_UNSPECIFIED_REQUIRED TRUE)
-set(CPACK_COMPONENTS_ALL networkeditor_gui_test_app)
+set(CPACK_COMPONENTS_ALL alcuin_test_app)
 set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 set(CPACK_VERBATIM_VARIABLES TRUE)
 #set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
@@ -35,16 +35,16 @@ include(CPack REQUIRED)
 include(CPackIFW REQUIRED)
 
 cpack_add_component(
-        networkeditor_gui_test_app
+        alcuin_test_app
         DISPLAY_NAME "Application"
-        DESCRIPTION "A Test Application for the Graphical User Interface of the Network Editor Project"
+        DESCRIPTION "A Test Application for the Graphical User Interface of the Alcuin Project"
 )
 
 cpack_ifw_configure_component(
-        networkeditor_gui_test_app
+        alcuin_test_app
         DEFAULT TRUE)
 
 if (WIN32)
     configure_file(inno_setup.iss.in inno_setup.iss)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/inno_setup.iss DESTINATION ${CMAKE_INSTALL_PREFIX}/packaging COMPONENT networkeditorgui_lib)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/inno_setup.iss DESTINATION ${CMAKE_INSTALL_PREFIX}/packaging COMPONENT alcuin_lib)
 endif ()
