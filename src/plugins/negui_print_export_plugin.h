@@ -3,7 +3,7 @@
 
 class PrintExportPlugin : public QObject, PrintExportInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.printexportinterface/1.0")
+    Q_PLUGIN_METADATA(IID "org.sys-bio.alcuin.printexportinterface/1.0")
     Q_INTERFACES(PrintExportInterface)
 
 public:

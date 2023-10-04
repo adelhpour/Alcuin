@@ -2,7 +2,7 @@
 Software
 ********
 
-NetworkEditorGUI is an open-source portable GUI library that provides developers with an embeddable Qt widget.
+Alcuin is an open-source portable GUI library that provides developers with an embeddable Qt widget.
 
 How to use
 ##########
@@ -10,27 +10,27 @@ How to use
 To the Developers
 =================
 
-To use NetworkEditorGUI portable library, a developer should follow the following steps:
+To use Alcuin portable library, a developer should follow the following steps:
 
-    * Either :ref:`build <download:Build from source>` NetworkEditorGUI portable library from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers,
-    * Link their code against NetworkEditorGUI library, located in the ``lib`` or ``bin`` folder (depending on the operating system) under install directory,
-    * include NetworkEditorGUI header files, located in the ``include`` folder under install directory, in their project,
+    * Either :ref:`build <download:Build from source>` Alcuin portable library from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers,
+    * Link their code against Alcuin library, located in the ``lib`` or ``bin`` folder (depending on the operating system) under install directory,
+    * include Alcuin header files, located in the ``include`` folder under install directory, in their project,
     * create an object of ``MyNetworkEditorWidget`` in their code.
     
 To the Users
 ============
 
-To use NetworkEditorGUI application, a user/ developer should :ref:`build <download:Build from source>` the application from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers.
+To use Alcuin application, a user/ developer should :ref:`build <download:Build from source>` the application from source or :ref:`install <download:Download binary installers>` it by downloading the binary installers.
 
 Architecture
 ############
 
-We have tried to write NetworkEditorGUI code in the simplest form possible. In its design, MyNetworkEditorWidget, a customized QFrame class, holds all the other objects and is composed of two main parts, the front-end and the back-end.
+We have tried to write Alcuin code in the simplest form possible. In its design, MyNetworkEditorWidget, a customized QFrame class, holds all the other objects and is composed of two main parts, the front-end and the back-end.
 
 Front-end
 =========
 
-On the front-end, NetworkEditorGUI consists of the following items:
+On the front-end, Alcuin consists of the following items:
     
     * An object of MyToolbar, a customized QToolbar class, contating the action buttons,
     * An object of MyGraphicsView, a customized QGraphicsView class, holding the scene,
@@ -39,7 +39,7 @@ On the front-end, NetworkEditorGUI consists of the following items:
 Back-end
 ========
     
-On the back-end, NetworkEditorGUI consists of the following items:
+On the back-end, Alcuin consists of the following items:
     
     * MyInteractor class, a class to control all the use cases,
     
@@ -58,7 +58,7 @@ On the back-end, NetworkEditorGUI consists of the following items:
 Communication between front-end and back-end
 ============================================
 
-In NetworkEditorGUI, all the request and responses are passed on to and from the front-end and back-end through Qt Signals and Slots.
+In Alcuin, all the request and responses are passed on to and from the front-end and back-end through Qt Signals and Slots.
 
 
 Here, you can see the design elaborating the architecture of the project.
@@ -66,7 +66,7 @@ Here, you can see the design elaborating the architecture of the project.
     
 .. figure:: images/design.pdf
     :width: 700
-    :alt: NetworkEditorGUI design
+    :alt: Alcuin design
     :align: center
 
-    NetworkEditorGUI design
+    Alcuin design

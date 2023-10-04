@@ -2,12 +2,12 @@
 Features
 ********
 
-NetworkEditorGUI is shipped with some basic featurs which are considred to be common among all the network editor or viewer tools and some extended features that can be added to it through its plugin interface. Here, a list of such features is provided:
+Alcuin is shipped with some basic featurs which are considred to be common among all the network editor or viewer tools and some extended features that can be added to it through its plugin interface. Here, a list of such features is provided:
 
 Basic features
 ##############
 
-NetworkEditorGUI basic features are:
+Alcuin basic features are:
 
 * Adding or removing Nodes to its scene,
 * Adding or removing Edges between nodes on its scene,
@@ -20,7 +20,7 @@ NetworkEditorGUI basic features are:
 Extended features
 #################
 
-NetworkEditorGUI features that are currently supported by its plugin interface are:
+Alcuin features that are currently supported by its plugin interface are:
 
 * Importing the network data from a file,
 * Exporting the network data to a file,

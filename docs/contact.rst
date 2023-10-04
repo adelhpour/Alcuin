@@ -5,4 +5,4 @@ Contact
 Contact
 #######
 
-* For questions about NetworkEditorGUI, please contact ad.heydarabadi@gmail.com
+* For questions about Alcuin, please contact ad.heydarabadi@gmail.com

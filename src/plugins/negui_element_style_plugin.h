@@ -3,7 +3,7 @@
 
 class ElementStylePlugin : public QObject, ElementStyleInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.elementstyleinterface/1.0")
+    Q_PLUGIN_METADATA(IID "org.sys-bio.alcuin.elementstyleinterface/1.0")
     Q_INTERFACES(ElementStyleInterface)
 
 public:

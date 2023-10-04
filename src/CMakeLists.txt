@@ -176,10 +176,10 @@ set(header_files
 		)
 
 ## build
-add_library(NetworkEditorGUI SHARED ${source_files} ${header_files})
+add_library(Alcuin SHARED ${source_files} ${header_files})
 
 ## link libraries
-target_link_libraries(NetworkEditorGUI
+target_link_libraries(Alcuin
 		Qt5::Core
 		Qt5::Gui
 		Qt5::Widgets
@@ -187,11 +187,11 @@ target_link_libraries(NetworkEditorGUI
 		Qt5::Svg)
 
 ## set library dist
-install(TARGETS NetworkEditorGUI RUNTIME DESTINATION bin COMPONENT networkeditorgui_lib LIBRARY DESTINATION lib COMPONENT networkeditorgui_lib ARCHIVE DESTINATION lib COMPONENT networkeditorgui_lib)
+install(TARGETS Alcuin RUNTIME DESTINATION bin COMPONENT alcuin_lib LIBRARY DESTINATION lib COMPONENT alcuin_lib ARCHIVE DESTINATION lib COMPONENT alcuin_lib)
 
 ## install headers
 file(GLOB headers ${CMAKE_SOURCE_DIR}/src/*.h)
-install(FILES ${headers} DESTINATION include COMPONENT networkeditorgui_lib)
+install(FILES ${headers} DESTINATION include COMPONENT alcuin_lib)
 
 ## install resources
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_INSTALL_PREFIX})

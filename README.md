@@ -1,6 +1,6 @@
-# NetworkEditorGUI
+# Alcuin
 
-NetworkEditorGUI is a portable GUI library, based on Qt/C++, that provides developers with the basic features required for a reaction network editor software tool. These features are:
+Alcuin is a portable GUI library, based on Qt/C++, that provides developers with the basic features required for a reaction network editor software tool. These features are:
 
 * Add/Remove Nodes to the scene,
 * Add/Remove Edges between two nodes on the scene,
@@ -11,8 +11,8 @@ NetworkEditorGUI is a portable GUI library, based on Qt/C++, that provides devel
 
 ## How to Use
 
-The steps to build NetworkEditorGUI from its source code are as follows:
-* Create a directory for your entire NetworkEditorGUI project. This directory has to be placed in somewhere not admin-blocked and is recommended to have the following file structure:
+The steps to build Alcuin from its source code are as follows:
+* Create a directory for your entire Alcuin project. This directory has to be placed in somewhere not admin-blocked and is recommended to have the following file structure:
 
 ```
 <root directory>
@@ -20,11 +20,11 @@ The steps to build NetworkEditorGUI from its source code are as follows:
 ├── install
 ```
 
-* Clone or download <a href="https://github.com/adelhpour/NetworkEditorGUI/">NetworkEditorGUI source</a> to the `<root directory>`.
+* Clone or download <a href="https://github.com/adelhpour/Alcuin/">Alcuin source</a> to the `<root directory>`.
 
 * <a href="https://cmake.org/download/">Download</a> and Install CMake and then open CMake-gui.
 
-    + Select `<root directory>/NetworkEditorGUI-main` (where the top-level `CMakeLists.txt` is located) as the source directory.
+    + Select `<root directory>/Alcuin-main` (where the top-level `CMakeLists.txt` is located) as the source directory.
     
     + Select `<root directory>/build` as the build (binary) directory.
     
@@ -34,7 +34,7 @@ The steps to build NetworkEditorGUI from its source code are as follows:
     
     + At this stage, CMake requires you to set the value of `Qt5_DIR` to the directory where `Qt5Config.cmake` and other Qt dependencies are located.
     
-        - ******NOTE******: To build NetworkEditorGUI, Qt5 development tools are needed to be already installed on your machine.
+        - ******NOTE******: To build Alcuin, Qt5 development tools are needed to be already installed on your machine.
         
     + Click "Configure" button time and again until all red variable rows turn into white.
 
@@ -47,13 +47,13 @@ The steps to build NetworkEditorGUI from its source code are as follows:
     + On Linux and macOS, simply go to `<root directory>/build` and  run `make` and then `make install` on terminal.
 
 ## How to Use
-To use NetworkEditorGUI, you first need to:
+To use Alcuin, you first need to:
 
-* [Build](#how-to-build) NetworkEditorGUI.
+* [Build](#how-to-build) Alcuin.
 
-* Add NetworkEditorGUI include directory (`<root directory>/install/include/src`) to the "include directory" of your project.
+* Add Alcuin include directory (`<root directory>/install/include/src`) to the "include directory" of your project.
 
-* Add NetworkEditorGUI library (in `<root directory>/install/lib` ) to the "dependencies" of your project.
+* Add Alcuin library (in `<root directory>/install/lib` ) to the "dependencies" of your project.
 
 Then, include the following header in your script:
 ```
@@ -61,12 +61,12 @@ Then, include the following header in your script:
 ```
 
 ### A Simple Example
-A simple example of using NetworkEditorGUI to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building NetworkEditorGUI](#how-to-build) except that you need to set `NETWORKEDITORGUI_PREFIX` to directory where NetworkEditorGUI is installed (`<root directory>/install`).
+A simple example of using Alcuin to create a GUI is in /example directory of the project. The steps to build it are all the same as the ones for [building Alcuin](#how-to-build) except that you need to set `Alcuin_PREFIX` to directory where Alcuin is installed (`<root directory>/install`).
 
 Here is a preview that shows how the example GUI can be used to create a network:
 
-<img src="https://github.com/adelhpour/NetworkEditorGUI/blob/develop-widget/docs/images/GUIpreview.gif" width="642" height="440">
+<img src="https://github.com/adelhpour/Alcuin/blob/develop-widget/docs/images/GUIpreview.gif" width="642" height="440">
  
 
 ## License
-NetworkEditorGUI is licensed under <a href="https://github.com/adelhpour/NetworkEditorGUI/blob/develop-widget/LICENSE">The MIT License</a>.
+Alcuin is licensed under <a href="https://github.com/adelhpour/Alcuin/blob/develop-widget/LICENSE">The MIT License</a>.

@@ -8,9 +8,9 @@ Build from Source
 Portable Library
 ================
 
-NetworkEditorGUI can be built from its source code using the following steps:
+Alcuin can be built from its source code using the following steps:
 
-* Create a directory for your entire NetworkEditorGUI project. This directory should be placed in somewhere not admin-blocked and is recommended to have the following file structure:
+* Create a directory for your entire Alcuin project. This directory should be placed in somewhere not admin-blocked and is recommended to have the following file structure:
 
     .. code-block::
 
@@ -19,11 +19,11 @@ NetworkEditorGUI can be built from its source code using the following steps:
         ├── install
         ├── source
         
-*  Clone or download `NetworkEditorGUI source <https://github.com/adelhpour/NetworkEditorGUI>`_ to `<root directory>/source`.
+*  Clone or download `Alcuin source <https://github.com/adelhpour/Alcuin>`_ to `<root directory>/source`.
 
 *  `Download <https://cmake.org/download/>`_ and Install CMake and then open CMake-gui.
 
-    *  Select ``<root directory>/source/networkeditorgui`` (where the top-level ``CMakeLists.txt`` is located) as the source directory.
+    *  Select ``<root directory>/source/alcuin`` (where the top-level ``CMakeLists.txt`` is located) as the source directory.
 
     *  Select ``<root directory>/build`` as the build (binary) directory.
     
@@ -35,7 +35,7 @@ NetworkEditorGUI can be built from its source code using the following steps:
     
         .. note::
 
-            To build NetworkEditorGUI from source, Qt development tools are needed to be already installed on your machine.
+            To build Alcuin from source, Qt development tools are needed to be already installed on your machine.
     
     *  Click "Configure" button time and again until no red variable row remains.
     
@@ -50,16 +50,16 @@ NetworkEditorGUI can be built from its source code using the following steps:
 Application
 ===========
 
-An application consisting of a window of NetworkEditorGUI widget can be built from its source code. To build it, a developer should follow similar steps described above for building the portable library except that ``<root directory>/source/networkeditorgui/test-app`` must be selected as the source directory in CMake-gui.
+An application consisting of a window of Alcuin widget can be built from its source code. To build it, a developer should follow similar steps described above for building the portable library except that ``<root directory>/source/alcuin/test-app`` must be selected as the source directory in CMake-gui.
 
 
 Download Binary Installers
 ##########################
 
-NetworkEditorGUI runs on:
+Alcuin runs on:
 
 * Microsoft Windows,
 * macOS,
 * Linux.
 
-Installation with precompiled binaries is provided for users who intend to use NetworkEditorGUI without changing its source code. Using Qt Installer Framework, we have created installers for Microsoft Windows (.exe), macOS (.dmg), and Linux (.run) platforms, which are available in the `Releases page <https://github.com/adelhpour/NetworkEditorGUI/releases>`_ of the repository on GitHub.
+Installation with precompiled binaries is provided for users who intend to use Alcuin without changing its source code. Using Qt Installer Framework, we have created installers for Microsoft Windows (.exe), macOS (.dmg), and Linux (.run) platforms, which are available in the `Releases page <https://github.com/adelhpour/Alcuin/releases>`_ of the repository on GitHub.

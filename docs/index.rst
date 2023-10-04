@@ -1,5 +1,5 @@
 *******************************
-NetworkEditorGUI documentation!
+Alcuin documentation!
 *******************************
 
 .. toctree::

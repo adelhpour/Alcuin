@@ -3,7 +3,7 @@
 
 class DataExportPlugin : public QObject, DataExportInterface {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sys-bio.networkeditorgui.dataexportinterface/1.0")
+    Q_PLUGIN_METADATA(IID "org.sys-bio.alcuin.dataexportinterface/1.0")
     Q_INTERFACES(DataExportInterface)
 
 public:
