@@ -45,7 +45,7 @@ void decorateRedoActionButton(QAbstractButton* button, const QString& iconsDirec
     setIcon(button, iconsDirectory + "/redo.png");
 }
 
-void decorateResetSceneButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateNewNetworkCanvasButton(QAbstractButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
     button->setText("New");
     button->setToolTip("New");
@@ -103,7 +103,7 @@ QWidgetAction* createButtonWidgetAction(QAbstractButton* button, QWidget* parent
     return widgetAction;
 }
 
-void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDirectory) {
+void decorateCloseFeatureMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setToolTip("Close Window");
     setIcon(button, iconsDirectory + "/close.png");
 
