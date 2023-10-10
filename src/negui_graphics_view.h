@@ -19,10 +19,7 @@ public:
     const qreal minScale() const;
     const qreal maxScale() const;
 
-    QToolButton* getZoomInButton();
-    QToolButton* getZoomOutButton();
-    QToolButton* createZoomInMenuButton();
-    QToolButton* createZoomOutMenuButton();
+    QList<QAbstractButton*> getToolbarMenuButtons(const QString& iconsDirectoryPath);
 
     void exportFigureAsPDF(const QString& fileName, const QRectF& pageRect);
     void exportFigureAsSVG(const QString& fileName ,const QRectF& pageRect);

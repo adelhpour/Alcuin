@@ -102,20 +102,8 @@ QToolButton* MyGraphicsView::getZoomInButton() {
     return createZoomInMenuButton();
 }
 
-QToolButton* MyGraphicsView::getZoomOutButton() {
-    return createZoomOutMenuButton();
-}
-
-QToolButton* MyGraphicsView::createZoomInMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomIn);
-    return button;
-}
-
-QToolButton* MyGraphicsView::createZoomOutMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomOut);
-    return button;
+QList<QAbstractButton*> MyGraphicsView::getToolbarMenuButtons(const QString& iconsDirectoryPath) {
+    return createToolbarMenuButtons(this, iconsDirectoryPath);
 }
 
 void MyGraphicsView::zoom(const qreal factor) {
