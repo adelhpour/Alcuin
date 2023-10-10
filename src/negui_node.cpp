@@ -624,37 +624,26 @@ const bool MyCentroidNode::areAnyOtherElementsSelected() {
 }
 
 const QLineF MyCentroidNode::createBezierAdjustLine() {
-    QPointF startPoint = position();
-    QPointF endPoint = position();
+    qreal minX = position().x();
+    qreal maxX = position().x();
     qreal dx = 0;
-    qreal dy = 0;
 
     for (MyNetworkElementBase* edge : edges()) {
         QPointF controlPoint = ((MyConnectedToCentroidNodeEdgeBase*)edge)->askForConnectedToCentroidNodeControlPoint();
         qreal maximumAllowedLengthChange = 40.0;
-        if (controlPoint.x() < startPoint.x()) {
-            dx = qMin(startPoint.x() - controlPoint.x(), maximumAllowedLengthChange);
-            startPoint.setX(startPoint.x() - dx);
-            endPoint.setX(endPoint.x() + dx);
+        if (controlPoint.x() < minX) {
+            dx = qMin(minX - controlPoint.x(), maximumAllowedLengthChange);
+            minX -= dx;
+            maxX += dx;
         }
-        if (controlPoint.y() < startPoint.y()) {
-            dy = qMin(startPoint.y() - controlPoint.y(), maximumAllowedLengthChange);
-            startPoint.setY(startPoint.y() - dy);
-            endPoint.setY(endPoint.y() + dy);
-        }
-        if (controlPoint.x() > endPoint.x()) {
-            dx = qMin(controlPoint.x() - endPoint.x(), maximumAllowedLengthChange);
-            startPoint.setX(startPoint.x() - dx);
-            endPoint.setX(endPoint.x() + dx);
-        }
-        if (controlPoint.y() > endPoint.y()) {
-            dy = qMin(controlPoint.y() - endPoint.y(), maximumAllowedLengthChange);
-            startPoint.setY(startPoint.y() - dy);
-            endPoint.setY(endPoint.y() + dy);
+        if (controlPoint.x() > maxX) {
+            dx = qMin(controlPoint.x() - maxX, maximumAllowedLengthChange);
+            minX -= dx;
+            maxX += dx;
         }
     }
 
-    return QLineF(startPoint, endPoint);
+    return QLineF(QPointF(minX, position().y()), QPointF(maxX, position().y()));
 }
 
 const qint32 MyCentroidNode::calculateNodeZValue() {
