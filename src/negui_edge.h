@@ -36,10 +36,6 @@ public:
     
     void setStyle(MyNetworkElementStyleBase* style) override;
 
-    const bool isCopyable() override;
-
-    const bool isCuttable() override;
-
     void setSelectedWithColor(const bool& selected) override;
     
     MyNetworkElementBase* arrowHead();
@@ -112,6 +108,10 @@ public:
     MyClassicEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
+
+    const bool isCopyable() override;
+
+    const bool isCuttable() override;
 };
 
 class MyConnectedToCentroidNodeEdgeBase : public MyEdgeBase {
@@ -141,6 +141,10 @@ public:
 
     EDGE_TYPE edgeType() override;
 
+    const bool isCopyable() override;
+
+    const bool isCuttable() override;
+
     const QPointF nonCentroidNodePosition() override;
 
     MyNetworkElementBase* nonCentroidNodeParent() override;
@@ -154,6 +158,10 @@ public:
     MyConnectedToTargetCentroidNodeEdge(const QString& name, MyNetworkElementBase* sourceNode, MyNetworkElementBase* targetNode);
 
     EDGE_TYPE edgeType() override;
+
+    const bool isCopyable() override;
+
+    const bool isCuttable() override;
 
     const QPointF nonCentroidNodePosition() override;
 
