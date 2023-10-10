@@ -128,10 +128,8 @@ signals:
 public slots:
     
     // menus
-    QList<QAbstractButton*> getToolBarMenuButtons();
-    QAbstractButton* getNormalModeButton();
-    QList<QAbstractButton*> getFrequentlyUsedButtons();
-    QList<QAbstractButton*> getAddModeButtons();
+    QList<QAbstractButton*> getToolbarMenuButtons();
+    QList<QAbstractButton*> getModeMenuButtons();
     
     // network
     void setNewNetworkCanvas();
@@ -223,26 +221,8 @@ protected:
     void setFileManager();
     
     // menu buttons
-    QAbstractButton* createNormalModeMenuButton();
-    QAbstractButton* createImportMenuButton();
-    QAbstractButton* createDataExportMenuButton();
-    QAbstractButton* createPrintExportMenuButton();
-    QAbstractButton* createSaveMenuButton();
-    QList<QAbstractButton*> createFrequentlyUsedMenuButtons();
-    QList<QAbstractButton*> createFrequentlyUsedNodeStyleMenuButtons();
-    QList<QAbstractButton*> createFrequentlyUsedEdgeAndTemplateStyleMenuButtons();
-    QList<QAbstractButton*> createAddElementMenuButtons();
     void addDefaultNodeStyle();
     void addDefaultEdgeStyle();
-    QList<QAbstractButton*> createElementStyleButtons();
-    QMenu* createCategoryMenu(QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory);
-    QAbstractButton* createPluginsOfCategoryAddNodeMenuButton(QList<MyPluginItemBase*> pluginsOfCategory, const QString& category);
-    QAbstractButton* createPluginItemToolButton(QMenu* subMenu, const QString& text);
-    QWidgetAction* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
-    QAbstractButton* createAutoLayoutMenuButton();
-    QAbstractButton* createUndoActionMenuButton();
-    QAbstractButton* createRedoActionMenuButton();
-    QAbstractButton* createResetSceneMenuButton();
     
     // import interface
     ImportInterface* _importInterface;
