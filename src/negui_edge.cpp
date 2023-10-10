@@ -66,20 +66,6 @@ void MyEdgeBase::setStyle(MyNetworkElementStyleBase* style) {
     setArrowHead();
 }
 
-const bool MyEdgeBase::isCopyable() {
-    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
-        return true;
-
-    return false;
-}
-
-const bool MyEdgeBase::isCuttable() {
-    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
-        return true;
-
-    return false;
-}
-
 void MyEdgeBase::setSelected(const bool& selected) {
     if (selected != isSelected()) {
         MyNetworkElementBase::setSelected(selected);
@@ -263,6 +249,20 @@ MyEdgeBase::EDGE_TYPE MyClassicEdge::edgeType() {
     return CLASSIC_EDGE;
 }
 
+const bool MyClassicEdge::isCopyable() {
+    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
+const bool MyClassicEdge::isCuttable() {
+    if (isSelected() && sourceNode()->isCopyable() && targetNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
 // MyConnectedToCentroidNodeEdgeBase
 
 MyConnectedToCentroidNodeEdgeBase::MyConnectedToCentroidNodeEdgeBase(const QString& name) : MyEdgeBase(name) {
@@ -288,6 +288,21 @@ MyEdgeBase::EDGE_TYPE MyConnectedToSourceCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_SOURCE_CENTROID_NODE_EDGE;
 }
 
+const bool MyConnectedToSourceCentroidNodeEdge::isCopyable() {
+    if (isSelected() && targetNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
+const bool MyConnectedToSourceCentroidNodeEdge::isCuttable() {
+    if (isSelected() && targetNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
+
 const QPointF MyConnectedToSourceCentroidNodeEdge::nonCentroidNodePosition() {
     return ((MyNodeBase*)targetNode())->getExtents().center();
 }
@@ -307,6 +322,20 @@ MyConnectedToTargetCentroidNodeEdge::MyConnectedToTargetCentroidNodeEdge(const Q
 
 MyEdgeBase::EDGE_TYPE MyConnectedToTargetCentroidNodeEdge::edgeType() {
     return CONNECTED_TO_TARGET_CENTROID_NODE_EDGE;
+}
+
+const bool MyConnectedToTargetCentroidNodeEdge::isCopyable() {
+    if (isSelected() && sourceNode()->isCopyable())
+        return true;
+
+    return false;
+}
+
+const bool MyConnectedToTargetCentroidNodeEdge::isCuttable() {
+    if (isSelected() && sourceNode()->isCopyable())
+        return true;
+
+    return false;
 }
 
 const QPointF MyConnectedToTargetCentroidNodeEdge::nonCentroidNodePosition() {

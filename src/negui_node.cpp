@@ -503,7 +503,7 @@ const bool MyCentroidNode::isCopyable() {
     if (!isSelected())
         return false;
     for (MyNetworkElementBase* edge : edges()) {
-        if (!edge->isSelected())
+        if (!edge->isCopyable())
             return false;
     }
 

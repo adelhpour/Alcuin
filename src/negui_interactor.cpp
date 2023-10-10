@@ -573,6 +573,11 @@ const bool MyInteractor::areAnyElementsSelected() {
 
 void MyInteractor::copySelectedNetworkElements() {
     resetCopiedNetworkElements();
+    for (MyNetworkElementBase* selectedElement : selectedNodes() + selectedEdges()) {
+        if (!selectedElement->isCopyable())
+            return;
+    }
+
     for (MyNetworkElementBase* selectedNode : selectedNodes())
         _copiedNetworkElements.push_back(selectedNode);
     for (MyNetworkElementBase* selectedEdge : selectedEdges())
@@ -583,10 +588,12 @@ void MyInteractor::copySelectedNetworkElements() {
 
 void MyInteractor::cutSelectedNetworkElements() {
     copySelectedNetworkElements();
-    for (MyNetworkElementBase* selectedNode : selectedNodes())
-        removeNode(selectedNode);
-    for (MyNetworkElementBase* selectedEdge : selectedEdges())
-        removeEdge(selectedEdge);
+    if (copiedNetworkElements().size()) {
+        for (MyNetworkElementBase* selectedEdge : selectedEdges())
+            removeEdge(selectedEdge);
+        for (MyNetworkElementBase* selectedNode : selectedNodes())
+            removeNode(selectedNode);
+    }
 }
 
 void MyInteractor::pasteCopiedNetworkElements() {
