@@ -28,8 +28,9 @@ public:
     const QJsonObject& previousStageInfo();
     const QJsonObject& currentStageInfo();
 
-    signals:
-            void askForCreateNetwork(const QJsonObject&);
+signals:
+
+    void askForCreateNetwork(const QJsonObject&);
 
 protected:
 
