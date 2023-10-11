@@ -191,6 +191,7 @@ QAbstractButton* createExtraElementMenuButton(QObject* interactor, QList<MyPlugi
         QWidgetAction* widgetAction = new QWidgetAction(extraElementMenu);
         widgetAction->setDefaultWidget(elementCategoryMenuButton);
         extraElementMenu->addAction(widgetAction);
+        extraElementMenu->addSeparator();
         QObject::connect(elementCategoryMenuButton, SIGNAL(categoryItemIsChosen()), extraElementMenu, SLOT(close()));
     }
     QAbstractButton* extraElementMenuButton = new MyModeMenuModeButton("Add_Node", "Add_Edge");
