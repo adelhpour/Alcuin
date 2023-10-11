@@ -33,7 +33,7 @@ MyModeMenuModeButton::MyModeMenuModeButton(const QString& mode, const QString& a
 // MyExtraElementMenu
 
 MyExtraElementMenu::MyExtraElementMenu(QWidget *parent) : QMenu(parent) {
-    setStyleSheet("QMenu {background-color: white; border-radius: 0px}");
+    setStyleSheet("QMenu {background-color: white; border-radius: 5px}");
     _horizontalPadding = 35;
 }
 
