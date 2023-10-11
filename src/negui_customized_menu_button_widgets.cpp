@@ -53,7 +53,7 @@ MyExtraElementCategoryButton::MyExtraElementCategoryButton(QMenu* elementCategor
     QFont textFont = font();
     textFont.setPointSize(12);
     setFont(textFont);
-    setFixedSize(100, 25);
+    setFixedSize(120, 25);
     connect(elementCategoryMenu, SIGNAL(categoryItemIsChosen()), this, SIGNAL(categoryItemIsChosen()));
 }
 
