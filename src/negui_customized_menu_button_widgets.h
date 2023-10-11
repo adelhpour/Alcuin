@@ -1,43 +1,108 @@
-#ifndef __NEGUI_CUSTOMIZED_MENU_BUTTON_WIDGETS_H
-#define __NEGUI_CUSTOMIZED_MENU_BUTTON_WIDGETS_H
+#ifndef __NEGUI_CUSTOMIZED_MODE_MENU_WIDGETS_H
+#define __NEGUI_CUSTOMIZED_MODE_MENU_WIDGETS_H
 
-#include "negui_customized_mode_menu_widgets.h"
+#include "negui_customized_common_widgets.h"
+#include "negui_scene_mode_element_base.h"
 #include "negui_plugin_item_base.h"
 
-#include <QToolButton>
 #include <QWidgetAction>
 
-class MyWidgetAction : public QWidgetAction {
+class MyModeMenuButton : public MyToolButton {
     Q_OBJECT
 
 public:
 
-    MyWidgetAction(QObject* parent = nullptr);
+    MyModeMenuButton(QWidget* parent = nullptr);
 
-    void setItems(QList<MyPluginItemBase*> items);
+    void setActive(const bool& active);
 
-    signals:
+    void setStyleToActiveForm();
 
-            void itemIsChosen(MyPluginItemBase*);
+    void setStyleToInactiveForm();
+};
+
+class MyModeMenuModeButton : public MyModeMenuButton, public MySceneModeElementBase {
+    Q_OBJECT
+
+public:
+
+    MyModeMenuModeButton(const QString& mode = "", const QString& alternativeSimilarMode = "", QWidget* parent = nullptr);
+};
+
+class MyExtraElementMenu : public QMenu {
+    Q_OBJECT
+
+public:
+
+    MyExtraElementMenu(QWidget *parent = nullptr);
 
 protected:
 
-    QWidget* createItemPreviewWidget(QList<MyPluginItemBase*> items);
-    QToolButton* createItemPreviewButton(MyPluginItemBase* item);
+    bool event(QEvent *event) override;
+
+    qint32 _horizontalPadding;
+
 };
 
-class MyItemPreviewButton : public MyModeMenuToolButton {
+class MyExtraElementCategoryButton : public MyToolButton {
     Q_OBJECT
 
 public:
 
-    MyItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
+    MyExtraElementCategoryButton(QMenu* elementCategoryMenu, const QString& text, QWidget* parent = nullptr);
 
-    void hoverOut();
+signals:
 
-    signals:
+    void categoryItemIsChosen();
+};
 
-            void itemIsChosen(MyPluginItemBase*);
+class MyExtraElementCategoryMenu : public MyMenu {
+    Q_OBJECT
+
+public:
+
+    MyExtraElementCategoryMenu(QWidget* parent = nullptr);
+
+signals:
+
+    void categoryItemIsChosen();
+
+protected:
+
+    bool event(QEvent *event) override;
+
+    qint32 _horizontalPadding;
+};
+
+class MyMenuButtonWidgetAction : public QWidgetAction {
+    Q_OBJECT
+
+public:
+
+    MyMenuButtonWidgetAction(QObject* parent = nullptr);
+
+    void setItems(QList<MyPluginItemBase*> items);
+
+signals:
+
+    void itemIsChosen(MyPluginItemBase*);
+
+protected:
+
+    QWidget* createMenuItemPreviewWidget(QList<MyPluginItemBase*> items);
+    QToolButton* createMenuItemPreviewButton(MyPluginItemBase* item);
+};
+
+class MyMenuItemPreviewButton : public MyModeMenuButton {
+    Q_OBJECT
+
+public:
+
+    MyMenuItemPreviewButton(MyPluginItemBase* item, QWidget *parent = nullptr);
+
+signals:
+
+    void itemIsChosen(MyPluginItemBase*);
 
 };
 

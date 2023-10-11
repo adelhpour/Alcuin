@@ -29,18 +29,18 @@ QList<QAbstractButton*> createModeMenuButtons(QObject* interactor, QList<MyPlugi
     buttons.push_back(createNormalModeMenuButton(interactor, iconsDirectoryPath));
     buttons += createFrequentlyUsedNodeStyleMenuButtons(interactor, plugins, iconsDirectoryPath);
     buttons += createFrequentlyUsedEdgeAndTemplateStyleMenuButtons(interactor, plugins, iconsDirectoryPath);
-    buttons += createAddElementMenuButtons(interactor, plugins, iconsDirectoryPath);
+    buttons.push_back(createExtraElementMenuButton(interactor, plugins, iconsDirectoryPath));
 
     return buttons;
 }
 
 QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
-    QMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* importWidgetAction = new MyWidgetAction(subMenu);
-    importWidgetAction->setItems(getPluginsOfType(plugins, "importtool"));
-    QObject::connect(importWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(readFromFile(MyPluginItemBase*)));
-    subMenu->addAction(importWidgetAction);
+    QMenu* subMenu = new MyMenu(button);
+    MyMenuButtonWidgetAction* importItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    importItemWidgetAction->setItems(getPluginsOfType(plugins, "importtool"));
+    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(readFromFile(MyPluginItemBase*)));
+    subMenu->addAction(importItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateImportButton(button, iconsDirectoryPath);
 
@@ -49,11 +49,11 @@ QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemB
 
 QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
-    QMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* dataExportWidgetAction = new MyWidgetAction(subMenu);
-    dataExportWidgetAction->setItems(getPluginsOfType(plugins, "dataexporttool"));
-    QObject::connect(dataExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeDataToFile(MyPluginItemBase*)));
-    subMenu->addAction(dataExportWidgetAction);
+    QMenu* subMenu = new MyMenu(button);
+    MyMenuButtonWidgetAction* dataExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    dataExportItemWidgetAction->setItems(getPluginsOfType(plugins, "dataexporttool"));
+    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeDataToFile(MyPluginItemBase*)));
+    subMenu->addAction(dataExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateDataExportButton(button, iconsDirectoryPath);
 
@@ -62,11 +62,11 @@ QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginI
 
 QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
-    QMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* printExportWidgetAction = new MyWidgetAction(subMenu);
-    printExportWidgetAction->setItems(getPluginsOfType(plugins, "printexporttool"));
-    QObject::connect(printExportWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeFigureToFile(MyPluginItemBase*)));
-    subMenu->addAction(printExportWidgetAction);
+    QMenu* subMenu = new MyMenu(button);
+    MyMenuButtonWidgetAction* printExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    printExportItemWidgetAction->setItems(getPluginsOfType(plugins, "printexporttool"));
+    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeFigureToFile(MyPluginItemBase*)));
+    subMenu->addAction(printExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decoratePrintExportButton(button, iconsDirectoryPath);
 
@@ -83,11 +83,11 @@ QAbstractButton* createSaveMenuButton(QObject* interactor, const QString& iconsD
 
 QAbstractButton* createAutoLayoutMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
-    QMenu* subMenu = new MyToolButtonMenu(button);
-    MyWidgetAction* autoLayoutWidgetAction = new MyWidgetAction(subMenu);
-    autoLayoutWidgetAction->setItems((getPluginsOfType(plugins, "autolayoutengine")));
-    QObject::connect(autoLayoutWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(autoLayout(MyPluginItemBase*)));
-    subMenu->addAction(autoLayoutWidgetAction);
+    QMenu* subMenu = new MyMenu(button);
+    MyMenuButtonWidgetAction* autoLayoutItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    autoLayoutItemWidgetAction->setItems((getPluginsOfType(plugins, "autolayoutengine")));
+    QObject::connect(autoLayoutItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(autoLayout(MyPluginItemBase*)));
+    subMenu->addAction(autoLayoutItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateAutoLayoutButton(button, iconsDirectoryPath);
 
@@ -102,60 +102,50 @@ QAbstractButton* createNewNetworkCanvasButton(QObject* interactor, const QString
     return button;
 }
 
-QList<QAbstractButton*> createElementStyleButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
-    QList<QAbstractButton*> elementStyleButtons;
+QList<QAbstractButton*> createElementCategoryMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+    QList<QAbstractButton*> elementCateogryMenuButtons;
     for (QString category : getPluginsCategories(plugins))
-        elementStyleButtons.push_back(createPluginItemToolButton(createCategoryMenu(interactor, getPluginsOfCategory(getPluginsOfType(plugins, "nodestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins, "edgestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins, "templatestyle"), category)), category));
+        elementCateogryMenuButtons.push_back(new MyExtraElementCategoryButton(createElementCategoryMenu(interactor, getPluginsOfCategory(getPluginsOfType(plugins, "nodestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins, "edgestyle"), category), getPluginsOfCategory(getPluginsOfType(plugins, "templatestyle"), category)), category));
 
-    return elementStyleButtons;
+    return elementCateogryMenuButtons;
 }
 
-QMenu* createCategoryMenu(QObject* interactor, QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory) {
-    QMenu* menu = new MyToolButtonCategoryMenu();
+QMenu* createElementCategoryMenu(QObject* interactor, QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory) {
+    QMenu* extraElementCategoryMenu = new MyExtraElementCategoryMenu();
     // node
     if (nodeStylesOfCategory.size()) {
-        QObject* nodeStyleWidgetAction = createElementStyleWidgetAction(nodeStylesOfCategory, menu);
+        QObject* nodeStyleWidgetAction = createElementStyleWidgetAction(nodeStylesOfCategory, extraElementCategoryMenu);
         QObject::connect(nodeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(enableAddNodeMode(MyPluginItemBase*)));
-        QObject::connect(nodeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
-        menu->addAction((QWidgetAction*)nodeStyleWidgetAction);
+        QObject::connect(nodeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), extraElementCategoryMenu, SIGNAL(categoryItemIsChosen()));
+        extraElementCategoryMenu->addAction((QWidgetAction*)nodeStyleWidgetAction);
     }
     if (nodeStylesOfCategory.size() && (edgeStylesOfCategory.size() || templateStylesOfCategory.size()))
-        menu->addSeparator();
+        extraElementCategoryMenu->addSeparator();
     // edge
     if (edgeStylesOfCategory.size()) {
-        QObject* edgeStyleWidgetAction = createElementStyleWidgetAction(edgeStylesOfCategory, menu);
+        QObject* edgeStyleWidgetAction = createElementStyleWidgetAction(edgeStylesOfCategory, extraElementCategoryMenu);
         QObject::connect(edgeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
-        QObject::connect(edgeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
-        menu->addAction((QWidgetAction*)edgeStyleWidgetAction);
+        QObject::connect(edgeStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), extraElementCategoryMenu, SIGNAL(categoryItemIsChosen()));
+        extraElementCategoryMenu->addAction((QWidgetAction*)edgeStyleWidgetAction);
     }
     if (edgeStylesOfCategory.size() && templateStylesOfCategory.size())
-        menu->addSeparator();
+        extraElementCategoryMenu->addSeparator();
     // template
     if (templateStylesOfCategory.size()) {
-        QObject* templateStyleWidgetAction = createElementStyleWidgetAction(templateStylesOfCategory, menu);
+        QObject* templateStyleWidgetAction = createElementStyleWidgetAction(templateStylesOfCategory, extraElementCategoryMenu);
         QObject::connect(templateStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
-        QObject::connect(templateStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), menu, SIGNAL(menuItemIsChosen()));
-        menu->addAction((QWidgetAction*)templateStyleWidgetAction);
+        QObject::connect(templateStyleWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), extraElementCategoryMenu, SIGNAL(categoryItemIsChosen()));
+        extraElementCategoryMenu->addAction((QWidgetAction*)templateStyleWidgetAction);
     }
 
-    return menu;
+    return extraElementCategoryMenu;
 }
 
 QObject* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent) {
-    QObject* widgetAction = new MyWidgetAction(parent);
-    ((MyWidgetAction*)widgetAction)->setItems(elementStyles);
+    MyMenuButtonWidgetAction* elementStyleWidgetAction = new MyMenuButtonWidgetAction(parent);
+    elementStyleWidgetAction->setItems(elementStyles);
 
-    return widgetAction;
-}
-
-QAbstractButton* createPluginItemToolButton(QMenu* subMenu, const QString& text) {
-    QAbstractButton* button = new MyToolButton();
-    button->setText(text);
-    button->setToolTip("Add " + text + " to the network");
-    ((QToolButton*)button)->setMenu(subMenu);
-    QObject::connect(subMenu, SIGNAL(menuItemIsChosen()), button, SIGNAL(menuItemIsChosen()));
-
-    return button;
+    return elementStyleWidgetAction;
 }
 
 QAbstractButton* createNormalModeMenuButton(QObject* interactor, const QString& iconsDirectoryPath) {
@@ -171,7 +161,7 @@ QList<QAbstractButton*> createFrequentlyUsedNodeStyleMenuButtons(QObject* intera
     QList<MyPluginItemBase*> nodeStyles = getPluginsOfType(plugins, "nodestyle");
     for (MyPluginItemBase* nodeStyle : nodeStyles) {
         if (nodeStyle->isFrequentlyUsed()) {
-            QAbstractButton* frequentlyUsedNodeStyleButton = new MyItemPreviewButton(nodeStyle);
+            QAbstractButton* frequentlyUsedNodeStyleButton = new MyMenuItemPreviewButton(nodeStyle);
             QObject::connect(frequentlyUsedNodeStyleButton, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(enableAddNodeMode(MyPluginItemBase*)));
             frequentlyUsedNodeStyleMenuButtons.push_back(frequentlyUsedNodeStyleButton);
         }
@@ -185,7 +175,7 @@ QList<QAbstractButton*> createFrequentlyUsedEdgeAndTemplateStyleMenuButtons(QObj
     QList<MyPluginItemBase*> edgeAndTemplateStyles = getPluginsOfType(plugins, "edgestyle") + getPluginsOfType(plugins, "templatestyle");
     for (MyPluginItemBase* edgeAndTemplateStyle : edgeAndTemplateStyles) {
         if (edgeAndTemplateStyle->isFrequentlyUsed()) {
-            QAbstractButton* frequentlyUsedEdgeAndTemplateStyleButton = new MyItemPreviewButton(edgeAndTemplateStyle);
+            QAbstractButton* frequentlyUsedEdgeAndTemplateStyleButton = new MyMenuItemPreviewButton(edgeAndTemplateStyle);
             QObject::connect(frequentlyUsedEdgeAndTemplateStyleButton, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(enableAddEdgeMode(MyPluginItemBase*)));
             frequentlyUsedEdgeAndTemplateStyleMenuButtons.push_back(frequentlyUsedEdgeAndTemplateStyleButton);
         }
@@ -194,8 +184,20 @@ QList<QAbstractButton*> createFrequentlyUsedEdgeAndTemplateStyleMenuButtons(QObj
     return frequentlyUsedEdgeAndTemplateStyleMenuButtons;
 }
 
-QList<QAbstractButton*> createAddElementMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
-    return createElementStyleButtons(interactor, plugins, iconsDirectoryPath);
+QAbstractButton* createExtraElementMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+    QMenu* extraElementMenu = new MyExtraElementMenu();
+    QList<QAbstractButton*> elementCategoryMenuButtons = createElementCategoryMenuButtons(interactor, plugins, iconsDirectoryPath);
+    for (QAbstractButton* elementCategoryMenuButton : elementCategoryMenuButtons) {
+        QWidgetAction* widgetAction = new QWidgetAction(extraElementMenu);
+        widgetAction->setDefaultWidget(elementCategoryMenuButton);
+        extraElementMenu->addAction(widgetAction);
+        QObject::connect(elementCategoryMenuButton, SIGNAL(categoryItemIsChosen()), extraElementMenu, SLOT(close()));
+    }
+    QAbstractButton* extraElementMenuButton = new MyToolButton();
+    decorateExtraElementsMenuButton(extraElementMenuButton, iconsDirectoryPath);
+    ((MyToolButton*)extraElementMenuButton)->setMenu(extraElementMenu);
+
+    return extraElementMenuButton;
 }
 
 QAbstractButton* createUndoActionMenuButton(QObject* interactor, QObject* undoStack, const QString& iconsDirectoryPath) {

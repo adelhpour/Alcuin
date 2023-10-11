@@ -1,6 +1,6 @@
 #include "negui_decorate_menu_buttons.h"
 #include "negui_customized_common_widgets.h"
-#include "negui_customized_mode_menu_widgets.h"
+#include "negui_customized_menu_button_widgets.h"
 
 #include <QShortcut>
 
@@ -80,27 +80,10 @@ QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QS
     return button;
 }
 
-void decorateAddModeButton(QAbstractButton* button, const QString& iconsDirectory) {
-    button->setText("Add Element");
-    button->setToolTip("Choose an element to add it ot the scene");
-    setIcon(button, iconsDirectory + "/add.png");
-}
-
-QMenu* createAddButtonMenu(QList<QAbstractButton*> buttons) {
-    QMenu* addButtonMenu = new QMenu();
-    for (QAbstractButton* button : qAsConst(buttons)) {
-        addButtonMenu->addAction(createButtonWidgetAction(button, addButtonMenu));
-        QObject::connect((MyModeMenuToolButton*)button, &MyModeMenuToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
-    }
-
-    return addButtonMenu;
-}
-
-QWidgetAction* createButtonWidgetAction(QAbstractButton* button, QWidget* parent) {
-    QWidgetAction* widgetAction = new QWidgetAction(parent);
-    widgetAction->setDefaultWidget(button);
-
-    return widgetAction;
+void decorateExtraElementsMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
+    button->setText("Items");
+    button->setToolTip("The list of items");
+    setIcon(button, iconsDirectory + "/plus.png");
 }
 
 void decorateCloseFeatureMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
@@ -112,7 +95,8 @@ void decorateCloseFeatureMenuButton(QAbstractButton* button, const QString& icon
 #else
     button->setIconSize(QSize(15, 15));
 #endif
-    button->setStyleSheet("QPushButton {background-color: transparent; border-width: 0px; border-color: transparent; }");
+    button->setStyleSheet(
+            "QPushButton {background-color: transparent; border-width: 0px; border-color: transparent; }");
 }
 
 void setIcon(QAbstractButton* button, const QString& iconPath) {

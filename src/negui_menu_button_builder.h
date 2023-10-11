@@ -22,9 +22,9 @@ QAbstractButton* createAutoLayoutMenuButton(QObject* interactor, QList<MyPluginI
 
 QAbstractButton* createNewNetworkCanvasButton(QObject* interactor, const QString& iconsDirectoryPath);
 
-QList<QAbstractButton*> createElementStyleButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+QList<QAbstractButton*> createElementCategoryMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
-QMenu* createCategoryMenu(QObject* interactor, QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory);
+QMenu* createElementCategoryMenu(QObject* interactor, QList<MyPluginItemBase*> nodeStylesOfCategory, QList<MyPluginItemBase*> edgeStylesOfCategory, QList<MyPluginItemBase*> templateStylesOfCategory);
 
 QObject* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, QWidget* parent);
 
@@ -39,6 +39,8 @@ QList<QAbstractButton*> createFrequentlyUsedNodeStyleMenuButtons(QObject* intera
 QList<QAbstractButton*> createFrequentlyUsedEdgeAndTemplateStyleMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
 QList<QAbstractButton*> createAddElementMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+
+QAbstractButton* createExtraElementMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
 QAbstractButton* createUndoActionMenuButton(QObject* interactor, QObject* undoStack, const QString& iconsDirectoryPath);
 

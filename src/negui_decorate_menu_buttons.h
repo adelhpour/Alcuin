@@ -27,11 +27,7 @@ void decorateZoomInButton(QAbstractButton* button, const QString& iconsDirectory
 
 void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirectory);
 
-QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QString& iconsDirectory);
-
-void decorateAddModeButton(QAbstractButton* button, const QString& iconsDirectory);
-
-QMenu* createAddButtonMenu(QList<QAbstractButton*> buttons);
+void decorateExtraElementsMenuButton(QAbstractButton* button, const QString& iconsDirectory);
 
 QWidgetAction* createButtonWidgetAction(QAbstractButton* button, QWidget* parent);
 
