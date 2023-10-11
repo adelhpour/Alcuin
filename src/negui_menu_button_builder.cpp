@@ -193,7 +193,7 @@ QAbstractButton* createExtraElementMenuButton(QObject* interactor, QList<MyPlugi
         extraElementMenu->addAction(widgetAction);
         QObject::connect(elementCategoryMenuButton, SIGNAL(categoryItemIsChosen()), extraElementMenu, SLOT(close()));
     }
-    QAbstractButton* extraElementMenuButton = new MyToolButton();
+    QAbstractButton* extraElementMenuButton = new MyModeMenuModeButton("Add_Node", "Add_Edge");
     decorateExtraElementsMenuButton(extraElementMenuButton, iconsDirectoryPath);
     ((MyToolButton*)extraElementMenuButton)->setMenu(extraElementMenu);
 
