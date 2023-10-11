@@ -78,7 +78,10 @@ set(source_files
 		negui_menu_button_builder.cpp
 		negui_decorate_menu_buttons.cpp
 		negui_mode_menu.cpp
-		negui_feature_menu.cpp
+		negui_feature_menu_base.cpp
+		negui_network_element_feature_menu.cpp
+		negui_null_feature_menu.cpp
+		negui_multi_network_element_feature_menu.cpp
 		negui_context_menu.cpp
 		negui_import_tools.cpp
 		negui_export_tools.cpp

@@ -70,16 +70,6 @@ void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirector
     setIcon(button, iconsDirectory + "/zoomOut.png");
 }
 
-QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QString& iconsDirectory) {
-    QAbstractButton* button = new MyModeMenuModeButton("Add");
-    button->setText("Add");
-    button->setToolTip("Add an item to the network");
-    ((QToolButton*)button)->setMenu(createAddButtonMenu(buttons));
-    decorateAddModeButton(button, iconsDirectory);
-
-    return button;
-}
-
 void decorateExtraElementsMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Items");
     button->setToolTip("The list of items");
