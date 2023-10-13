@@ -39,10 +39,11 @@ QList<QAbstractButton*> MyModeMenu::getButtons() {
 }
 
 void MyModeMenu::activateAddElementButton(const QString& elementStyleName) {
-    deactivateButtons();
     for (QAbstractButton* button : getButtons()) {
-        if (button->toolTip() == elementStyleName)
+        if (button->toolTip() == elementStyleName) {
+            deactivateButtons();
             ((MyModeMenuModeButton*)button)->setActive(true);
+        }
     }
 }
 
