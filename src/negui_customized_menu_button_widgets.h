@@ -16,9 +16,11 @@ public:
 
     void setActive(const bool& active);
 
-    void setStyleToActiveForm();
+protected:
 
-    void setStyleToInactiveForm();
+    bool event(QEvent* event) override;
+
+    bool _isActive;
 };
 
 class MyModeMenuModeButton : public MyModeMenuButton, public MySceneModeElementBase {

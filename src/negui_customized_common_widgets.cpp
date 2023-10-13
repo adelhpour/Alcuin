@@ -109,7 +109,28 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
 
 MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
     setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgray} QToolButton:hover:!pressed { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
+    setStyleToUnselectedMode();
+}
+
+void MyToolButton::setStyleToSelectedMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+void MyToolButton::setStyleToHoveredMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : lightgray; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+void MyToolButton::setStyleToUnselectedMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+bool MyToolButton::event(QEvent* event) {
+    if (event->type() == QEvent::Enter)
+        setStyleToHoveredMode();
+    else if (event->type() == QEvent::Leave || event->type() == QEvent::Hide || event->type() == QEvent::WindowUnblocked)
+        setStyleToUnselectedMode();
+
+    return QToolButton::event(event);
 }
 
 // MyMenu

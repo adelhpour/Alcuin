@@ -90,10 +90,20 @@ class MyToolButton : public QToolButton {
 public:
 
     MyToolButton(QWidget* parent = nullptr);
+
+    void setStyleToSelectedMode();
+
+    void setStyleToHoveredMode();
+
+    void setStyleToUnselectedMode();
     
 signals:
 
     void menuItemIsChosen();
+
+protected:
+
+    bool event(QEvent* event) override;
 };
 
 class MyMenu : public QMenu {

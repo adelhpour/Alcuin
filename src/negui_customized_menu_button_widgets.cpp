@@ -5,22 +5,28 @@
 // MyModeMenuButton
 
 MyModeMenuButton::MyModeMenuButton(QWidget* parent) : MyToolButton(parent) {
-
+    _isActive = false;
 }
 
 void MyModeMenuButton::setActive(const bool& active) {
+    _isActive = active;
     if (active)
-        setStyleToActiveForm();
+        setStyleToSelectedMode();
     else
-        setStyleToInactiveForm();
+        setStyleToUnselectedMode();
 }
 
-void MyModeMenuButton::setStyleToActiveForm() {
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgray; border-radius : 5px} QToolButton:hover { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
-}
+bool MyModeMenuButton::event(QEvent* event) {
+    if (!_isActive)
+        return MyToolButton::event(event);
+    else {
+        if (event->type() == QEvent::Enter)
+            setStyleToHoveredMode();
+        else if (event->type() == QEvent::Leave || event->type() == QEvent::Hide)
+            setStyleToSelectedMode();
 
-void MyModeMenuButton::setStyleToInactiveForm() {
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : white; border-radius : 5px} QToolButton:hover { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
+        return QToolButton::event(event);
+    }
 }
 
 // MyModeMenuModeButton
@@ -89,7 +95,7 @@ QWidget* MyMenuButtonWidgetAction::createMenuItemPreviewWidget(QList<MyPluginIte
     QList<QString> itemsSubCategories = getPluginsSubCategories(items);
     if (itemsSubCategories.size()) {
         for (QString subCategory : itemsSubCategories) {
-            itemWidgetLayoutContent->addWidget(new MyLabel(subCategory), itemWidgetLayoutContent->count());
+            itemWidgetLayoutContent->addWidget(new QLabel(subCategory), itemWidgetLayoutContent->count());
             QList<MyPluginItemBase*> itemsOfSubCategory = getPluginsOfSubCategory(items, subCategory);
             for (MyPluginItemBase* itemOfSubCategory : itemsOfSubCategory)
                 itemWidgetLayoutContent->addWidget(createMenuItemPreviewButton(itemOfSubCategory), itemWidgetLayoutContent->count());
@@ -98,9 +104,7 @@ QWidget* MyMenuButtonWidgetAction::createMenuItemPreviewWidget(QList<MyPluginIte
     else {
         for (MyPluginItemBase* item : items)
             itemWidgetLayoutContent->addWidget(createMenuItemPreviewButton(item), itemWidgetLayoutContent->count());
-
     }
-
     itemWidget->setLayout(itemWidgetLayoutContent);
     itemWidget->setStyleSheet("QWidget { background-color: white; border-radius: 10px;}");
 
@@ -125,6 +129,6 @@ MyMenuItemPreviewButton::MyMenuItemPreviewButton(MyPluginItemBase* item, QWidget
         setIcon(item->icon());
         setIconSize(item->iconSize());
     }
-    setStyleToInactiveForm();
+    setStyleToUnselectedMode();
     connect(this, &QToolButton::clicked, this, [this, item] () { emit itemIsChosen(item); clearFocus(); });
 }
