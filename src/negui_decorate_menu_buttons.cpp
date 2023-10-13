@@ -72,7 +72,7 @@ void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirector
 
 void decorateExtraElementsMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Items");
-    button->setToolTip("The list of items");
+    button->setToolTip("List of items");
     setIcon(button, iconsDirectory + "/plus.png");
 }
 
