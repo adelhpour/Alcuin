@@ -149,7 +149,7 @@ QObject* createElementStyleWidgetAction(QList<MyPluginItemBase*> elementStyles, 
 }
 
 QAbstractButton* createNormalModeMenuButton(QObject* interactor, const QString& iconsDirectoryPath) {
-    QAbstractButton* button = new MyModeMenuModeButton("Normal", "Display_Feature_Menu");
+    QAbstractButton* button = new MyModeMenuModeButton("Normal");
     decorateNormalModeButton(button, iconsDirectoryPath);
     QObject::connect(button, SIGNAL(clicked()), interactor, SLOT(enableNormalMode()));
 
