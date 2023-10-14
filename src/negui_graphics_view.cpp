@@ -1,6 +1,7 @@
 #include "negui_graphics_view.h"
 #include "negui_graphics_scene.h"
 #include "negui_customized_common_widgets.h"
+#include "negui_menu_button_builder.h"
 
 #include <QScrollbar>
 #include <QPrinter>
@@ -98,24 +99,8 @@ void MyGraphicsView::zoomOut() {
     zoom(-0.1);
 }
 
-QToolButton* MyGraphicsView::getZoomInButton() {
-    return createZoomInMenuButton();
-}
-
-QToolButton* MyGraphicsView::getZoomOutButton() {
-    return createZoomOutMenuButton();
-}
-
-QToolButton* MyGraphicsView::createZoomInMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomIn);
-    return button;
-}
-
-QToolButton* MyGraphicsView::createZoomOutMenuButton() {
-    MyToolButton* button = new MyToolButton();
-    connect(button, &QToolButton::clicked, this, &MyGraphicsView::zoomOut);
-    return button;
+QList<QAbstractButton*> MyGraphicsView::getToolbarMenuButtons(const QString& iconsDirectoryPath) {
+    return createToolbarMenuButtons(this, iconsDirectoryPath);
 }
 
 void MyGraphicsView::zoom(const qreal factor) {

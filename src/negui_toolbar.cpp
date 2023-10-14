@@ -10,7 +10,7 @@ MyToolBar::MyToolBar(QWidget* parent) : QToolBar(parent) {
     setFixedHeight(45);
 };
 
-void MyToolBar::setButtons(QList<QAbstractButton*> buttons) {
+void MyToolBar::addButtons(QList<QAbstractButton*> buttons) {
     for (QAbstractButton* button : qAsConst(buttons))
         addWidget(button);
 }

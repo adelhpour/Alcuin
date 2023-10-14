@@ -109,28 +109,36 @@ MyComboBox::MyComboBox(QWidget* parent) : QComboBox(parent) {
 
 MyToolButton::MyToolButton(QWidget* parent) : QToolButton(parent) {
     setPopupMode(QToolButton::InstantPopup);
-    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgray} QToolButton:hover:!pressed { background-color: lightgray} QToolButton::menu-indicator {width : 0}");
+    setStyleToUnselectedMode();
 }
 
-// MyToolButtonMenu
+void MyToolButton::setStyleToSelectedMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : darkgray; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
 
-MyToolButtonMenu::MyToolButtonMenu(QWidget* parent) : QMenu(parent) {
+void MyToolButton::setStyleToHoveredMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : lightgray; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+void MyToolButton::setStyleToUnselectedMode() {
+    setStyleSheet("QToolButton {border: 0px; border-radius: 5px; background-color : white; } QToolButton:pressed {background-color : darkgrey; border-radius : 5px} QToolButton::menu-indicator {width : 0}");
+}
+
+bool MyToolButton::event(QEvent* event) {
+    if (event->type() == QEvent::Enter)
+        setStyleToHoveredMode();
+    else if (event->type() == QEvent::Leave || event->type() == QEvent::Hide || event->type() == QEvent::WindowUnblocked)
+        setStyleToUnselectedMode();
+
+    return QToolButton::event(event);
+}
+
+// MyMenu
+
+MyMenu::MyMenu(QWidget* parent) : QMenu(parent) {
     setStyleSheet("QMenu { background-color: white; border-radius: 10px;} ");
-    connect(this, &MyToolButtonMenu::menuItemIsChosen, this, [this] () { close(); });
 }
 
-// MyToolButtonCategoryMenu
-
-MyToolButtonCategoryMenu::MyToolButtonCategoryMenu(QWidget* parent) : MyToolButtonMenu(parent) {
-    _horizontalPadding = 80;
-}
-
-bool MyToolButtonCategoryMenu::event(QEvent *event) {
-    if (event->type() == QEvent::Show)
-        move(pos() + QPoint(_horizontalPadding, 0));
-
-    return QMenu::event(event);
-}
 
 // MyDialog
 

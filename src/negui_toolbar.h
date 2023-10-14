@@ -13,7 +13,7 @@ public:
     
 public slots:
     
-    void setButtons(QList<QAbstractButton*> buttons);
+    void addButtons(QList<QAbstractButton*> buttons);
 };
 
 #endif

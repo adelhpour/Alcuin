@@ -90,35 +90,28 @@ class MyToolButton : public QToolButton {
 public:
 
     MyToolButton(QWidget* parent = nullptr);
+
+    void setStyleToSelectedMode();
+
+    void setStyleToHoveredMode();
+
+    void setStyleToUnselectedMode();
     
 signals:
 
     void menuItemIsChosen();
-};
-
-class MyToolButtonMenu : public QMenu {
-    Q_OBJECT
-
-public:
-
-    MyToolButtonMenu(QWidget* parent = nullptr);
-
-signals:
-    void menuItemIsChosen();
-};
-
-class MyToolButtonCategoryMenu : public MyToolButtonMenu {
-    Q_OBJECT
-
-public:
-
-    MyToolButtonCategoryMenu(QWidget* parent = nullptr);
-
-    bool event(QEvent *event) override;
 
 protected:
 
-    qint32 _horizontalPadding;
+    bool event(QEvent* event) override;
+};
+
+class MyMenu : public QMenu {
+    Q_OBJECT
+
+public:
+
+    MyMenu(QWidget* parent = nullptr);
 };
 
 class MyDialog : public QDialog {

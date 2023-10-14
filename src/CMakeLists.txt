@@ -71,17 +71,18 @@ set(source_files
 		negui_centroid_adjust_handled_graphics_item.cpp
 		negui_parameters.cpp
 		negui_customized_common_widgets.cpp
-        negui_customized_context_menu_widgets.cpp
+		negui_customized_context_menu_widgets.cpp
 		negui_customized_feature_menu_widgets.cpp
-		negui_customized_mode_menu_widgets.cpp
+		negui_customized_menu_button_widgets.cpp
 		negui_customized_interactor_widgets.cpp
+		negui_menu_button_builder.cpp
+		negui_decorate_menu_buttons.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu_base.cpp
 		negui_network_element_feature_menu.cpp
 		negui_null_feature_menu.cpp
 		negui_multi_network_element_feature_menu.cpp
 		negui_context_menu.cpp
-		negui_decorate_menu_buttons.cpp
 		negui_import_tools.cpp
 		negui_export_tools.cpp
 		negui_autolayout_engines.cpp
@@ -159,8 +160,10 @@ set(header_files
 		negui_customized_common_widgets.h
 		negui_customized_context_menu_widgets.h
         negui_customized_feature_menu_widgets.h
-		negui_customized_mode_menu_widgets.h
+		negui_customized_menu_button_widgets.h
 		negui_customized_interactor_widgets.h
+		negui_menu_button_builder.h
+		negui_decorate_menu_buttons.h
 		negui_mode_menu.h
 		negui_feature_menu_base.h
 		negui_network_element_feature_menu.h
@@ -168,7 +171,6 @@ set(header_files
 		negui_multi_network_element_feature_menu.h
 		negui_context_menu.h
 		negui_interfaces.h
-		negui_decorate_menu_buttons.h
 		negui_import_tools.h
 		negui_export_tools.h
 		negui_autolayout_engines.h

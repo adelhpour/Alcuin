@@ -1,6 +1,6 @@
 #include "negui_decorate_menu_buttons.h"
 #include "negui_customized_common_widgets.h"
-#include "negui_customized_mode_menu_widgets.h"
+#include "negui_customized_menu_button_widgets.h"
 
 #include <QShortcut>
 
@@ -45,7 +45,7 @@ void decorateRedoActionButton(QAbstractButton* button, const QString& iconsDirec
     setIcon(button, iconsDirectory + "/redo.png");
 }
 
-void decorateResetSceneButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateNewNetworkCanvasButton(QAbstractButton* button, const QString& iconsDirectory) {
     QShortcut* shortcut = new QShortcut(QKeySequence::New, button, SLOT(click()));
     button->setText("New");
     button->setToolTip("New");
@@ -70,40 +70,13 @@ void decorateZoomOutButton(QAbstractButton* button, const QString& iconsDirector
     setIcon(button, iconsDirectory + "/zoomOut.png");
 }
 
-QAbstractButton* decorateAddModeButton(QList<QAbstractButton*> buttons, const QString& iconsDirectory) {
-    QAbstractButton* button = new MyModeMenuModeButton("Add");
-    button->setText("Add");
-    button->setToolTip("Add an item to the network");
-    ((QToolButton*)button)->setMenu(createAddButtonMenu(buttons));
-    decorateAddModeButton(button, iconsDirectory);
-
-    return button;
+void decorateExtraElementsMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
+    button->setText("Items");
+    button->setToolTip("List of items");
+    setIcon(button, iconsDirectory + "/shapes.png");
 }
 
-void decorateAddModeButton(QAbstractButton* button, const QString& iconsDirectory) {
-    button->setText("Add Element");
-    button->setToolTip("Choose an element to add it ot the scene");
-    setIcon(button, iconsDirectory + "/add.png");
-}
-
-QMenu* createAddButtonMenu(QList<QAbstractButton*> buttons) {
-    QMenu* addButtonMenu = new QMenu();
-    for (QAbstractButton* button : qAsConst(buttons)) {
-        addButtonMenu->addAction(createButtonWidgetAction(button, addButtonMenu));
-        QObject::connect((MyModeMenuToolButton*)button, &MyModeMenuToolButton::menuItemIsChosen, addButtonMenu, [addButtonMenu] () { addButtonMenu->close(); });
-    }
-
-    return addButtonMenu;
-}
-
-QWidgetAction* createButtonWidgetAction(QAbstractButton* button, QWidget* parent) {
-    QWidgetAction* widgetAction = new QWidgetAction(parent);
-    widgetAction->setDefaultWidget(button);
-
-    return widgetAction;
-}
-
-void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDirectory) {
+void decorateCloseFeatureMenuButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setToolTip("Close Window");
     setIcon(button, iconsDirectory + "/close.png");
 
@@ -112,7 +85,8 @@ void decorateCloseFeatureMenuButton(QPushButton* button, const QString& iconsDir
 #else
     button->setIconSize(QSize(15, 15));
 #endif
-    button->setStyleSheet("QPushButton {background-color: transparent; border-width: 0px; border-color: transparent; }");
+    button->setStyleSheet(
+            "QPushButton {background-color: transparent; border-width: 0px; border-color: transparent; }");
 }
 
 void setIcon(QAbstractButton* button, const QString& iconPath) {
