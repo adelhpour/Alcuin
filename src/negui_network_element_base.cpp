@@ -242,3 +242,41 @@ const bool whetherNetworkElementExistsInTheListOfNetworkElements(MyNetworkElemen
 
     return false;
 }
+
+MyNetworkElementBase* getNetworkElement(QList<MyNetworkElementBase*> networkElements, const QString& name) {
+    for (MyNetworkElementBase* networkElement : networkElements) {
+        if (networkElement->name() == name)
+            return networkElement;
+    }
+    return  NULL;
+}
+
+QList<MyNetworkElementBase*> getNetworkElementsOfType(QList<MyNetworkElementBase*> networkElements, const QString& type) {
+    QList<MyNetworkElementBase*> networkElementsOfType;
+    for (MyNetworkElementBase* networkElement : networkElements) {
+        if (networkElement->type() == type)
+            networkElementsOfType.push_back(networkElement);
+    }
+
+    return networkElementsOfType;
+}
+
+QList<MyNetworkElementBase*> getNetworkElementsOfCategory(QList<MyNetworkElementBase*> networkElements, const QString& category) {
+    QList<MyNetworkElementBase*> networkElementsOfCategory;
+    for (MyNetworkElementBase* networkElement : networkElements) {
+        if (networkElement->style()->category() == category)
+            networkElementsOfCategory.push_back(networkElement);
+    }
+
+    return networkElementsOfCategory;
+}
+
+QList<MyNetworkElementBase*> getNetworkElementsOfSubCategory(QList<MyNetworkElementBase*> networkElements, const QString& subCategory) {
+    QList<MyNetworkElementBase*> networkElementsOfSubCategory;
+    for (MyNetworkElementBase* networkElement : networkElements) {
+        if (networkElement->style()->subCategory() == subCategory)
+            networkElementsOfSubCategory.push_back(networkElement);
+    }
+
+    return networkElementsOfSubCategory;
+}
