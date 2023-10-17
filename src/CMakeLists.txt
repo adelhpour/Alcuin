@@ -27,6 +27,7 @@ set(source_files
 		negui_network_element_aligner.cpp
 		negui_network_element_aligner_builder.cpp
 		negui_network_element_mover.cpp
+		negui_network_element_selector.cpp
 		negui_selection_area_graphics_item.cpp
 		negui_network_element_style_base.cpp
 		negui_template_style.cpp
@@ -114,6 +115,7 @@ set(header_files
 		negui_network_element_aligner.h
 		negui_network_element_aligner_builder.h
 		negui_network_element_mover.h
+		negui_network_element_selector.h
 		negui_selection_area_graphics_item.h
 		negui_network_element_style_base.h
 		negui_template_style.h
