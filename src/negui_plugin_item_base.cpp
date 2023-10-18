@@ -23,7 +23,6 @@ const QSize& MyPluginItemBase::iconSize() const {
     return _iconSize;
 }
 
-#include "iostream"
 void MyPluginItemBase::read(const QJsonObject &json) {
     if (name() != "Default")
         _category.clear();

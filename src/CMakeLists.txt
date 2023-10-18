@@ -15,6 +15,7 @@ set(source_files
 		negui_base.cpp
 		negui_plugin_item_base.cpp
 		negui_plugin_item_builder.cpp
+		negui_plugin_manager.cpp
 		negui_network_element_base.cpp
 		negui_node.cpp
 		negui_edge.cpp
@@ -103,6 +104,7 @@ set(header_files
 		negui_base.h
 		negui_plugin_item_base.h
 		negui_plugin_item_builder.h
+		negui_plugin_manager.h
 		negui_network_element_base.h
 		negui_node.h
 		negui_edge.h

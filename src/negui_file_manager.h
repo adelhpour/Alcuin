@@ -2,8 +2,6 @@
 #define __NEGUI_FILE_MANAGER_H
 
 #include "negui_plugin_item_base.h"
-#include "negui_export_tools.h"
-#include "negui_import_tools.h"
 
 #include <QObject>
 
@@ -27,9 +25,9 @@ public:
 
     const QString currentBaseFileName();
 
-    void setWorkingDirectory(const QString& workingDirectory);
+    void setWorkingDirectoryPath(const QString& workingDirectoryPath);
 
-    const QString& workingDirectory();
+    const QString& workingDirectoryPath();
 
     void resetCurrentExportTool();
 
@@ -64,7 +62,7 @@ protected:
     QList<MyPluginItemBase*> _importTools;
     QList<MyPluginItemBase*> _exportTools;
     QString _currentFileName;
-    QString _workingDirectory;
+    QString _workingDirectoryPath;
     QString _lastSavedFileName;
     MyPluginItemBase* _currentExportTool;
     qint32 _defaultFileNameIndex;
