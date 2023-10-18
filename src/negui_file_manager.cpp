@@ -1,5 +1,7 @@
 #include "negui_file_manager.h"
 #include "negui_customized_common_widgets.h"
+#include "negui_export_tools.h"
+#include "negui_import_tools.h"
 
 #include <QFileInfo>
 
@@ -44,12 +46,12 @@ const QString MyFileManager::currentBaseFileName() {
     return QFileInfo(currentFileName()).completeBaseName();
 }
 
-void MyFileManager::setWorkingDirectory(const QString& workingDirectory) {
-    _workingDirectory = workingDirectory;
+void MyFileManager::setWorkingDirectoryPath(const QString& workingDirectoryPath) {
+    _workingDirectoryPath = workingDirectoryPath;
 }
 
-const QString& MyFileManager::workingDirectory() {
-    return _workingDirectory;
+const QString& MyFileManager::workingDirectoryPath() {
+    return _workingDirectoryPath;
 }
 
 void MyFileManager::resetCurrentExportTool() {
