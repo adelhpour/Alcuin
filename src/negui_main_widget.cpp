@@ -79,7 +79,7 @@ void MyNetworkEditorWidget::setInteractions() {
         ((MyInteractor*)this->interactor())->displayFeatureMenu();
     });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) {
-        ((MyInteractor*)this->interactor())->selectElements(true, category);
+        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category);
         ((MyInteractor*)this->interactor())->displayFeatureMenu();
     });
     connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));

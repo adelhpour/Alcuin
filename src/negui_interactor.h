@@ -96,8 +96,8 @@ signals:
 
     void addElementModeIsEnabled(const QString&);
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
-    void askForAddGraphicsItem(QGraphicsItem* item);
-    void askForRemoveGraphicsItem(QGraphicsItem* item);
+    void askForAddGraphicsItem(QGraphicsItem*);
+    void askForRemoveGraphicsItem(QGraphicsItem*);
     const QRectF askForNetworkExtents();
     const QString askForNetworkBackgroundColor();
     void askForSetNetworkBackgroundColor(const QString&);
@@ -122,6 +122,8 @@ signals:
     void askForSettingWorkingDirectoryPath(const QString&);
     void askForAdjustConnectedEdgesOfNodes();
     void askForAdjustExtentsOfNodes();
+    void singleNetworkElementFeatureMenuIsDisplayed(const QString&);
+    void multiNetworkElementFeatureMenuIsDisplayed(const QString&);
 
     void enterKeyIsPressed();
     
@@ -143,16 +145,20 @@ public slots:
     void deleteEdge(MyNetworkElementBase* edge);
     void deleteSelectedNetworkElements();
     void alignSelectedNetworkElements(const QString& alignType);
-    const QList<MyNetworkElementBase*> selectedNodes();
-    const QList<MyNetworkElementBase*> selectedEdges();
-    void selectElement(MyNetworkElementBase* element);
-    void selectElement(const QString& elementName);
+    const QList<MyNetworkElementBase*> getSelectedElements();
+    const QList<MyNetworkElementBase*> getSelectedNodes();
+    const QList<MyNetworkElementBase*> getSelectedEdges();
+    MyNetworkElementBase* getOneSingleSelectedElement();
+    MyNetworkElementBase* getOneSingleSelectedNode();
+    MyNetworkElementBase* getOneSingleSelectedEdge();
+    void changeElementSelectionsStatus(MyNetworkElementBase* element);
+    void setElementSelected(const QString& elementName);
     void selectElements(const bool& selected);
-    void selectElements(const bool& selected, const QString& category);
+    void selectElementsOfCategory(const bool& selected, const QString& category);
     void selectNodes(const bool& selected);
-    void selectNodes(const bool& selected, const QString& category);
+    void selectNodesOfCategory(const bool& selected, const QString& category);
     void selectEdges(const bool& selected);
-    void selectEdges(const bool& selected, const QString& category);
+    void selectEdgesOfCategory(const bool& selected, const QString& category);
     void setCopiedNode(MyNetworkElementBase* node);
     void setCutNode(MyNetworkElementBase* node);
     void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
@@ -207,7 +213,6 @@ private slots:
     void pasteCopiedNodeStyle(MyNetworkElementBase* element);
     const bool isSetCopiedEdgeStyle();
     void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
-    const bool areAnyOtherElementsSelected(QList<MyNetworkElementBase*> networkElements);
     void copySelectedNetworkElements();
     void cutSelectedNetworkElements();
     const bool isElementNameAlreadyUsed(const QString& elementName);
@@ -219,6 +224,9 @@ protected:
 
     // file manager
     void setFileManager();
+
+    // network element selector
+    void setNetworkElementSelector();
     
     // menu buttons
     void addDefaultNodeStyle();
@@ -279,6 +287,9 @@ protected:
 
     // file
     QObject* _fileManager;
+
+    // select
+    QObject* _networkElementSelector;
 };
 
 #endif

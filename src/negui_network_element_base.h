@@ -145,4 +145,12 @@ MyNetworkElementBase* findTargetNode(QList<MyNetworkElementBase*> nodes, const Q
 
 const bool whetherNetworkElementExistsInTheListOfNetworkElements(MyNetworkElementBase* networkElement, QList<MyNetworkElementBase*> networkElements);
 
+MyNetworkElementBase* getNetworkElement(QList<MyNetworkElementBase*> networkElements, const QString& name);
+
+QList<MyNetworkElementBase*> getNetworkElementsOfType(QList<MyNetworkElementBase*> networkElements, const QString& type);
+
+QList<MyNetworkElementBase*> getNetworkElementsOfCategory(QList<MyNetworkElementBase*> NetworkElements, const QString& category);
+
+QList<MyNetworkElementBase*> getNetworkElementsOfSubCategory(QList<MyNetworkElementBase*> NetworkElements, const QString& subCategory);
+
 #endif

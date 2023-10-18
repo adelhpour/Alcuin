@@ -6,7 +6,6 @@
 #include "negui_edge_builder.h"
 #include "negui_new_edge_builder.h"
 #include "negui_copied_network_elements_paster.h"
-#include "negui_selection_area_graphics_item.h"
 #include "negui_node_style_builder.h"
 #include "negui_edge_style_builder.h"
 #include "negui_plugin_item_builder.h"
@@ -18,6 +17,7 @@
 #include "negui_network_element_aligner.h"
 #include "negui_network_element_aligner_builder.h"
 #include "negui_network_element_mover.h"
+#include "negui_network_element_selector.h"
 #include "negui_multi_network_element_feature_menu.h"
 
 #include <QCoreApplication>
@@ -53,7 +53,6 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     
     // builder
     _newEdgeBuilder = NULL;
-    _selectionAreaGraphicsItem = NULL;
 
     _applicationDirectory = QDir(QCoreApplication::applicationDirPath());
 
@@ -62,6 +61,9 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
     // file manager
     setFileManager();
+
+    // network element selector
+    setNetworkElementSelector();
 
     // network
     resetNetwork();
@@ -295,7 +297,7 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         _nodes.push_back(n);
         n->setActive(true);
         n->updateGraphicsItem();
-        connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
+        connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(changeElementSelectionsStatus(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(addNewEdge(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteNode(MyNetworkElementBase*)));
         connect(n, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
@@ -309,7 +311,8 @@ void MyInteractor::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedNodeStyle(MyNetworkElementStyleBase*)));
         connect(n, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedNodeStyle(MyNetworkElementBase*)));
         connect(n, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedNodeStyle()));
-        connect(n, SIGNAL(askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>)), this, SLOT(areAnyOtherElementsSelected(QList<MyNetworkElementBase*>)));
+        connect(n, &MyNetworkElementBase::askForWhetherAnyOtherElementsAreSelected, this, [this] (QList<MyNetworkElementBase*> networkElements) {
+            ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
@@ -421,7 +424,7 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
     if (e && !edgeExists(((MyEdgeBase*)e)->sourceNode(), ((MyEdgeBase*)e)->targetNode()) && e->setActive(true)) {
         _edges.push_back(e);
         e->updateGraphicsItem();
-        connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(selectElement(MyNetworkElementBase*)));
+        connect(e, SIGNAL(askForSelectNetworkElement(MyNetworkElementBase*)), this, SLOT(changeElementSelectionsStatus(MyNetworkElementBase*)));
         connect(e, SIGNAL(askForDeleteNetworkElement(MyNetworkElementBase*)), this, SLOT(deleteEdge(MyNetworkElementBase*)));
         connect(e, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
         connect(e, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
@@ -431,7 +434,8 @@ void MyInteractor::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&)), this, SLOT(isElementNameAlreadyUsed(const QString&)));
         connect(e, SIGNAL(askForCopyNetworkElementStyle(MyNetworkElementStyleBase*)), this, SLOT(setCopiedEdgeStyle(MyNetworkElementStyleBase*)));
         connect(e, SIGNAL(askForPasteNetworkElementStyle(MyNetworkElementBase*)), this, SLOT(pasteCopiedEdgeStyle(MyNetworkElementBase*)));
-        connect(e, SIGNAL(askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>)), this, SLOT(areAnyOtherElementsSelected(QList<MyNetworkElementBase*>)));
+        connect(e, &MyNetworkElementBase::askForWhetherAnyOtherElementsAreSelected, this, [this] (QList<MyNetworkElementBase*> networkElements) {
+             ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
         connect(e, SIGNAL(askForWhetherElementStyleIsCopied()), this, SLOT(isSetCopiedEdgeStyle()));
         connect(e, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -517,12 +521,12 @@ void MyInteractor::pasteCopiedEdgeStyle(MyNetworkElementBase* element) {
 }
 
 const bool MyInteractor::areSelectedElementsCopyable() {
-    if (selectedNodes().size() || selectedEdges().size()) {
-        for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+    if (getSelectedNodes().size() || getSelectedEdges().size()) {
+        for (MyNetworkElementBase* selectedNode : getSelectedNodes()) {
             if (!selectedNode->isCopyable())
                 return false;
         }
-        for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+        for (MyNetworkElementBase* selectedEdge : getSelectedEdges()) {
             if (!selectedEdge->isCopyable())
                 return false;
         }
@@ -534,12 +538,12 @@ const bool MyInteractor::areSelectedElementsCopyable() {
 }
 
 const bool MyInteractor::areSelectedElementsCuttable() {
-    if (selectedNodes().size() || selectedEdges().size()) {
-        for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+    if (getSelectedNodes().size() || getSelectedEdges().size()) {
+        for (MyNetworkElementBase* selectedNode : getSelectedNodes()) {
             if (!selectedNode->isCuttable())
                 return false;
         }
-        for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+        for (MyNetworkElementBase* selectedEdge : getSelectedEdges()) {
             if (!selectedEdge->isCuttable())
                 return false;
         }
@@ -551,7 +555,7 @@ const bool MyInteractor::areSelectedElementsCuttable() {
 }
 
 const bool MyInteractor::areSelectedElementsAlignable() {
-    if (selectedNodes().size() > 1)
+    if (getSelectedNodes().size() > 1)
         return true;
 
     return false;
@@ -565,7 +569,7 @@ const bool MyInteractor::areAnyElementsCopied() {
 }
 
 const bool MyInteractor::areAnyElementsSelected() {
-    if (selectedNodes().size() || selectedEdges().size())
+    if (getSelectedNodes().size() || getSelectedEdges().size())
         return true;
 
     return false;
@@ -573,14 +577,14 @@ const bool MyInteractor::areAnyElementsSelected() {
 
 void MyInteractor::copySelectedNetworkElements() {
     resetCopiedNetworkElements();
-    for (MyNetworkElementBase* selectedElement : selectedNodes() + selectedEdges()) {
+    for (MyNetworkElementBase* selectedElement : getSelectedElements()) {
         if (!selectedElement->isCopyable())
             return;
     }
 
-    for (MyNetworkElementBase* selectedNode : selectedNodes())
+    for (MyNetworkElementBase* selectedNode : getSelectedNodes())
         _copiedNetworkElements.push_back(selectedNode);
-    for (MyNetworkElementBase* selectedEdge : selectedEdges())
+    for (MyNetworkElementBase* selectedEdge : getSelectedEdges())
         _copiedNetworkElements.push_back(selectedEdge);
     if (_copiedNetworkElements.size())
         emit pasteElementsStatusChanged(true);
@@ -589,9 +593,9 @@ void MyInteractor::copySelectedNetworkElements() {
 void MyInteractor::cutSelectedNetworkElements() {
     copySelectedNetworkElements();
     if (copiedNetworkElements().size()) {
-        for (MyNetworkElementBase* selectedEdge : selectedEdges())
+        for (MyNetworkElementBase* selectedEdge : getSelectedEdges())
             removeEdge(selectedEdge);
-        for (MyNetworkElementBase* selectedNode : selectedNodes())
+        for (MyNetworkElementBase* selectedNode : getSelectedNodes())
             removeNode(selectedNode);
     }
 }
@@ -621,13 +625,13 @@ void MyInteractor::resetCopiedNetworkElements() {
 }
 
 void MyInteractor::moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance) {
-    MyNetworkElementMoverBase* nodeMover = new MyNodeMover(selectedNodes(), movedNode);
+    MyNetworkElementMoverBase* nodeMover = new MyNodeMover(getSelectedNodes(), movedNode);
     nodeMover->move(movedDistance.x(), movedDistance.y());
     nodeMover->deleteLater();
 }
 
 void MyInteractor::deleteNewEdgeBuilder() {
-    for (MyNetworkElementBase* selectedNode : selectedNodes())
+    for (MyNetworkElementBase* selectedNode : getSelectedNodes())
         selectedNode->setSelected(false);
     if (_newEdgeBuilder)
         _newEdgeBuilder->deleteLater();
@@ -691,97 +695,35 @@ QJsonObject MyInteractor::exportNetworkInfo() {
 }
 
 void MyInteractor::selectElements(const bool& selected) {
-    selectNodes(selected);
-    selectEdges(selected);
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectElements(selected);
 }
 
-void MyInteractor::selectElements(const bool& selected, const QString& category) {
-    selectNodes(selected, category);
-    selectEdges(selected, category);
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+void MyInteractor::selectElementsOfCategory(const bool& selected, const QString& category) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectElementsOfCategory(category, selected);
 }
 
 void MyInteractor::selectNodes(const bool& selected) {
-    for (MyNetworkElementBase* node : qAsConst(nodes()))
-        node->setSelected(selected);
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectNodes(selected);
 }
 
-void MyInteractor::selectNodes(const bool& selected, const QString& category) {
-    for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        if (node->style()->category() == category)
-            node->setSelected(selected);
-    }
+void MyInteractor::selectNodesOfCategory(const bool& selected, const QString& category) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectNodesOfCategory(category, selected);
 }
 
 void MyInteractor::selectEdges(const bool& selected) {
-    for (MyNetworkElementBase* edge : qAsConst(edges()))
-        edge->setSelected(selected);
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectEdges(selected);
 }
 
-void MyInteractor::selectEdges(const bool& selected, const QString& category) {
-    for (MyNetworkElementBase* edge : qAsConst(edges())) {
-        if (edge->style()->category() == category)
-            edge->setSelected(selected);
-    }
+void MyInteractor::selectEdgesOfCategory(const bool& selected, const QString& category) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectEdgesOfCategory(category, selected);
 }
 
-void MyInteractor::selectElement(MyNetworkElementBase* element) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (askForWhetherShiftModifierIsPressed()) {
-            if (!element->isSelected())
-                element->setSelected(true);
-            else
-                element->setSelected(false);
-        }
-        else {
-            QList<MyNetworkElementBase*> elements;
-            elements.push_back(element);
-            if (!(element->isSelected() && areAnyOtherElementsSelected(elements)))
-                selectElements(false);
-            element->setSelected(true);
-        }
-        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
-    }
+void MyInteractor::changeElementSelectionsStatus(MyNetworkElementBase* element) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->changeElementSelectionsStatus(element);
 }
 
-void MyInteractor::selectElement(const QString& elementName) {
-    for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        if (node->name() == elementName) {
-            if (!node->isSelected())
-                node->setSelected(true);
-            return;
-        }
-    }
-    for (MyNetworkElementBase* edge  : qAsConst(edges())) {
-        if (edge->name() == elementName) {
-            if (!edge->isSelected())
-                edge->setSelected(true);
-            return;
-        }
-    }
-    emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-    emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
-}
-
-const bool MyInteractor::areAnyOtherElementsSelected(QList<MyNetworkElementBase*> elements) {
-    for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        if (node->isSelected()) {
-            if (!whetherNetworkElementExistsInTheListOfNetworkElements(node, elements))
-                return true;
-        }
-    }
-    for (MyNetworkElementBase* edge : qAsConst(edges())) {
-        if (edge->isSelected()) {
-            if (!whetherNetworkElementExistsInTheListOfNetworkElements(edge, elements))
-                return true;
-        }
-    }
-
-    return false;
+void MyInteractor::setElementSelected(const QString& elementName) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
 }
 
 void MyInteractor::deleteNode(MyNetworkElementBase* node) {
@@ -799,14 +741,14 @@ void MyInteractor::deleteEdge(MyNetworkElementBase* edge) {
 }
 
 void MyInteractor::deleteSelectedNetworkElements() {
-    for (MyNetworkElementBase* selectedNode : selectedNodes()) {
+    for (MyNetworkElementBase* selectedNode : getSelectedNodes()) {
         for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges())) {
             ((MyNodeBase*)selectedNode)->removeEdge(edge);
             removeEdge(edge);
         }
         removeNode(selectedNode);
     }
-    for (MyNetworkElementBase* selectedEdge : selectedEdges()) {
+    for (MyNetworkElementBase* selectedEdge : getSelectedEdges()) {
         if (selectedEdge) {
             removeEdge(selectedEdge);
         }
@@ -815,7 +757,7 @@ void MyInteractor::deleteSelectedNetworkElements() {
 }
 
 void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
-    MyNetworkElementAlignerBase* networkElementAligner = createNetworkElementAligner(selectedNodes(), selectedEdges(), alignType);
+    MyNetworkElementAlignerBase* networkElementAligner = createNetworkElementAligner(getSelectedNodes(), getSelectedEdges(), alignType);
     if (networkElementAligner) {
         networkElementAligner->align();
         networkElementAligner->deleteLater();
@@ -823,36 +765,40 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
     }
 }
 
-const QList<MyNetworkElementBase*> MyInteractor::selectedNodes() {
-    QList<MyNetworkElementBase*> selectedNodesList;
-    for (MyNetworkElementBase *node : qAsConst(nodes())) {
-        if (node->isSelected())
-            selectedNodesList.push_back(node);
-    }
-    
-    return selectedNodesList;
+const QList<MyNetworkElementBase*> MyInteractor::getSelectedElements() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getSelectedElements();
 }
 
-const QList<MyNetworkElementBase*> MyInteractor::selectedEdges() {
-    QList<MyNetworkElementBase*> selectedEdgesList;
-    for (MyNetworkElementBase *edge : qAsConst(edges())) {
-        if (edge->isSelected())
-            selectedEdgesList.push_back(edge);
-    }
-    
-    return selectedEdgesList;
+const QList<MyNetworkElementBase*> MyInteractor::getSelectedNodes() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getSelectedNodes();
+}
+
+const QList<MyNetworkElementBase*> MyInteractor::getSelectedEdges() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getSelectedEdges();
+}
+
+MyNetworkElementBase* MyInteractor::getOneSingleSelectedElement() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getOneSingleSelectedElement();
+}
+
+MyNetworkElementBase* MyInteractor::getOneSingleSelectedNode() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getOneSingleSelectedElement();
+}
+
+MyNetworkElementBase* MyInteractor::getOneSingleSelectedEdge() {
+    return ((MyNetworkElementSelector*)_networkElementSelector)->getOneSingleSelectedElement();
 }
 
 void MyInteractor::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
     resetCopiedNetworkElements();
-    selectElements(false);
     setCopiedNode(NULL);
     setNodeStyle(NULL);
     setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
     setCopiedEdgeStyle(NULL);
     deleteNewEdgeBuilder();
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableNormalMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -866,6 +812,7 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddNodeMode();
     askForRemoveFeatureMenu();
     setNodeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableAddNodeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -880,6 +827,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddEdgeMode();
     askForRemoveFeatureMenu();
     setEdgeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableAddEdgeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -892,6 +840,7 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
 void MyInteractor::enableSelectMode(const QString& elementCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectMode();
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -903,6 +852,7 @@ void MyInteractor::enableSelectMode(const QString& elementCategory) {
 void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectNodeMode();
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectNodeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectNodeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -914,6 +864,7 @@ void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
 void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
     enableNormalMode();
     MySceneModeElementBase::enableSelectEdgeMode();
+    ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectEdgeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableSelectEdgeMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -924,12 +875,12 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
 
 void MyInteractor::displayFeatureMenu() {
     if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
-        if (selectedNodes().size() == 1 && selectedEdges().size() == 0)
-            selectedNodes().at(0)->createFeatureMenu();
-        else if (selectedNodes().size() == 0 && selectedEdges().size() == 1)
-            selectedEdges().at(0)->createFeatureMenu();
-        else if (selectedNodes().size() || selectedEdges().size()) {
-            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
+        if (getOneSingleSelectedNode())
+            getOneSingleSelectedNode()->createFeatureMenu();
+        else if (getOneSingleSelectedEdge())
+            getOneSingleSelectedEdge()->createFeatureMenu();
+        else if (getSelectedElements().size()) {
+            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), iconsDirectoryPath());
             connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
             askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
         }
@@ -940,69 +891,37 @@ void MyInteractor::displayFeatureMenu() {
 
 void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
     QString elementName = featureMenu->objectName();
-    if (!askForWhetherShiftModifierIsPressed() || (selectedNodes().size() == 1 && !selectedEdges().size()) || (selectedNodes().size() == 0 && selectedEdges().size() == 1)) {
-        selectElements(false);
-        askForDisplayFeatureMenu(featureMenu);
+    if (((MyNetworkElementSelector*)_networkElementSelector)->canDisplaySingleElementFeatureMenu()) {
+        emit askForDisplayFeatureMenu(featureMenu);
+        emit singleNetworkElementFeatureMenuIsDisplayed(elementName);
     }
     else {
         featureMenu->deleteLater();
-        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(selectedNodes() + selectedEdges(), iconsDirectoryPath());
+        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), iconsDirectoryPath());
         connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-        askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        emit askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        emit multiNetworkElementFeatureMenuIsDisplayed(elementName);
     }
-    selectElement(elementName);
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
-        createSelectionAreaGraphicsItem(position);
-        selectSelectionAreaCoveredNodes();
-        selectSelectionAreaCoveredEdges();
-        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
-    }
+    ((MyNetworkElementSelector*)_networkElementSelector)->displaySelectionArea(position);
 }
 
 void MyInteractor::createSelectionAreaGraphicsItem(const QPointF& position) {
-    if (!_selectionAreaGraphicsItem) {
-        _selectionAreaGraphicsItem = new MySelectionAreaGraphicsItem(position);
-        emit askForAddGraphicsItem(_selectionAreaGraphicsItem);
-    }
-    ((MySelectionAreaGraphicsItem*)_selectionAreaGraphicsItem)->updateExtents(position);
+    ((MyNetworkElementSelector*)_networkElementSelector)->createSelectionAreaGraphicsItem(position);
 }
 
 void MyInteractor::selectSelectionAreaCoveredNodes() {
-    QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
-    for (MyNetworkElementBase* node : qAsConst(nodes())) {
-        for (QGraphicsItem* item : qAsConst(selectedItems)) {
-            if (item->parentItem()) {
-                if (node->graphicsItem() == item->parentItem())
-                    node->setSelected(true);
-            }
-        }
-    }
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectSelectionAreaCoveredNodes();
 }
 
 void MyInteractor::selectSelectionAreaCoveredEdges() {
-    QList<QGraphicsItem *> selectedItems = _selectionAreaGraphicsItem->collidingItems();
-    for (MyNetworkElementBase* edge : qAsConst(edges())) {
-        for (QGraphicsItem* item : qAsConst(selectedItems)) {
-            if (item->parentItem()) {
-                if (edge->graphicsItem() == item->parentItem())
-                    edge->setSelected(true);
-            }
-        }
-    }
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectSelectionAreaCoveredEdges();
 }
 
 void MyInteractor::clearSelectionArea() {
-    if (_selectionAreaGraphicsItem) {
-        askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
-        delete _selectionAreaGraphicsItem;
-        _selectionAreaGraphicsItem = NULL;
-    }
+    ((MyNetworkElementSelector*)_networkElementSelector)->clearSelectionArea();
     displayFeatureMenu();
 }
 
@@ -1124,6 +1043,26 @@ void MyInteractor::setFileManager() {
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
     connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectory(); });
     connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectory(QFileInfo(workingDirectoryPath).absolutePath() + "/"); });
+}
+
+void MyInteractor::setNetworkElementSelector() {
+    _networkElementSelector = new MyNetworkElementSelector();
+    connect(_networkElementSelector, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
+    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForNodes, this, [this] () { return nodes(); });
+    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForEdges, this, [this] () { return edges(); });
+    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::networkElementsSelectedStatusIsChanged, this, [this] () {
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+    });
+    connect(this, &MyInteractor::singleNetworkElementFeatureMenuIsDisplayed, this, [this] (const QString& elementName) {
+        ((MyNetworkElementSelector*)_networkElementSelector)->selectElements(false);
+        ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
+    });
+    connect(this, &MyInteractor::multiNetworkElementFeatureMenuIsDisplayed, this, [this] (const QString& elementName) {
+        ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
+    });
+    connect(_networkElementSelector, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
+    connect(_networkElementSelector, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
