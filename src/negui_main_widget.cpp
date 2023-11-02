@@ -127,9 +127,6 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(askForNetworkBackgroundColor()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(backgroundColor()));
     connect((MyInteractor*)interactor(), SIGNAL(askForSetNetworkBackgroundColor(const QString&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setBackgroundColor(const QString&)));
 
-    // network extents
-    connect((MyInteractor*)interactor(), SIGNAL(askForNetworkExtents()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(networkExtents()));
-
     // reset scene
     connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(clearScene()));
     connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), this, SLOT(removeFeatureMenu()));
