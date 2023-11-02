@@ -167,16 +167,6 @@ void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     _panMode = false;
 }
 
-void MyGraphicsView::keyPressEvent(QKeyEvent *event) {
-    QGraphicsView::keyPressEvent(event);
-    if (!event->isAccepted()) {
-        if (event->key() == Qt::Key_Return) {
-            emit enterKeyIsPressed();
-            event->accept();
-        }
-    }
-}
-
 void MyGraphicsView::leaveEvent(QEvent *event) {
     emit mouseLeft();
     QGraphicsView::leaveEvent(event);
