@@ -70,7 +70,7 @@ public:
 
 signals:
 
-    const QString askForApplicationDirectoryPath();
+    QString askForApplicationDirectoryPath();
 
     QString askForWorkingDirectoryPath();
 
