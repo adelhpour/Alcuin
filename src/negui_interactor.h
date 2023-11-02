@@ -20,6 +20,8 @@ public:
     // undo stack
     QUndoStack* undoStack();
 
+    QObject* networkManager();
+
     QObject* fileManager();
     
     // modes
@@ -67,7 +69,6 @@ signals:
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
-    const QRectF askForNetworkExtents();
     const QString askForNetworkBackgroundColor();
     void askForSetNetworkBackgroundColor(const QString&);
     void askForClearScene();
@@ -193,51 +194,22 @@ protected:
     void setPluginManager();
     void loadPlugins();
 
+    // network manager
+    void setNetworkManager();
+
     // file manager
     void setFileManager();
-
-    // network element selector
-    void setNetworkElementSelector();
     
     // menu buttons
     void addDefaultNodeStyle();
     void addDefaultEdgeStyle();
-    
-    // element styles
-    MyNetworkElementStyleBase* _nodeStyle;
-    MyNetworkElementStyleBase* _edgeStyle;
-
-    // copied elements
-    QList<MyNetworkElementBase*> _copiedNetworkElements;
-
-    // copied styles
-    MyNetworkElementStyleBase* _copiedNodeStyle;
-    MyNetworkElementStyleBase* _copiedEdgeStyle;
 
     QDir _applicationDirectory;
-    
-    // undo stack
     QUndoStack* _undoStack;
-    
-    // elements
-    QList<MyNetworkElementBase*> _nodes;
-    QList<MyNetworkElementBase*> _edges;
-    
-    // builder
-    QObject* _newEdgeBuilder;
-    QGraphicsItem* _selectionAreaGraphicsItem;
-    
-    // network
     QJsonObject _stageInfo;
-
-    // file
+    QObject* _networkManager;
     QObject* _pluginManager;
-
-    // file
     QObject* _fileManager;
-
-    // select
-    QObject* _networkElementSelector;
 };
 
 #endif
