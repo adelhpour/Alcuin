@@ -15,6 +15,7 @@
 MyNetworkManager::MyNetworkManager() {
     _newEdgeBuilder = NULL;
     setNetworkElementSelector();
+    resetNetwork();
 }
 
 void MyNetworkManager::enableNormalMode() {
@@ -33,9 +34,9 @@ void MyNetworkManager::enableNormalMode() {
         edge->enableNormalMode();
 }
 
-void MyNetworkManager::enableAddNodeMode(MyNetworkElementStyleBase* style) {
+void MyNetworkManager::enableAddNodeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddNodeMode();
-    setNodeStyle(style);
+    setNodeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     ((MyNetworkElementSelector*)_networkElementSelector)->enableAddNodeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddNodeMode();
@@ -43,9 +44,9 @@ void MyNetworkManager::enableAddNodeMode(MyNetworkElementStyleBase* style) {
         edge->enableAddNodeMode();
 }
 
-void MyNetworkManager::enableAddEdgeMode(MyNetworkElementStyleBase* style) {
+void MyNetworkManager::enableAddEdgeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddEdgeMode();
-    setEdgeStyle(style);
+    setEdgeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     ((MyNetworkElementSelector*)_networkElementSelector)->enableAddEdgeMode();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableAddEdgeMode();

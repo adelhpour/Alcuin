@@ -13,9 +13,9 @@ public:
 
     void enableNormalMode() override;
 
-    void enableAddNodeMode(MyNetworkElementStyleBase* style);
+    void enableAddNodeMode(MyPluginItemBase* style);
 
-    void enableAddEdgeMode(MyNetworkElementStyleBase* style);
+    void enableAddEdgeMode(MyPluginItemBase* style);
 
     void enableSelectMode() override;
 
