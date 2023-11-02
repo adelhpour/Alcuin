@@ -3,12 +3,12 @@
 #include "negui_copied_network_elements_paster.h"
 #include "negui_network_element_selector.h"
 #include "negui_network_element_mover.h"
+#include "negui_network_element_aligner.h"
+#include "negui_network_element_aligner_builder.h"
 #include "negui_node.h"
 #include "negui_node_builder.h"
 #include "negui_edge.h"
 #include "negui_edge_builder.h"
-#include "negui_network_element_aligner.h"
-#include "negui_network_element_aligner_builder.h"
 #include "negui_multi_network_element_feature_menu.h"
 
 #include <QJsonArray>
@@ -688,17 +688,19 @@ void MyNetworkManager::clearSelectionArea() {
 }
 
 void MyNetworkManager::displayFeatureMenu() {
-    if (getOneSingleSelectedNode())
-        getOneSingleSelectedNode()->createFeatureMenu();
-    else if (getOneSingleSelectedEdge())
-        getOneSingleSelectedEdge()->createFeatureMenu();
-    else if (getSelectedElements().size()) {
-        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
-        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
-        askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
+        if (getOneSingleSelectedNode())
+            getOneSingleSelectedNode()->createFeatureMenu();
+        else if (getOneSingleSelectedEdge())
+            getOneSingleSelectedEdge()->createFeatureMenu();
+        else if (getSelectedElements().size()) {
+            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
+            connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+            askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        }
+        else
+            askForDisplayFeatureMenu();
     }
-    else
-        askForDisplayFeatureMenu();
 }
 
 void MyNetworkManager::displayFeatureMenu(QWidget* featureMenu) {

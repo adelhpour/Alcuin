@@ -205,7 +205,7 @@ signals:
 
     void askForDisplaySceneContextMenu(const QPointF&);
 
-    const QString askForIconsDirectoryPath();
+    QString askForIconsDirectoryPath();
 
     void pasteElementsStatusChanged(const bool&);
 
