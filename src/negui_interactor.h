@@ -19,6 +19,7 @@ public:
     
     // undo stack
     QUndoStack* undoStack();
+    void setUndoStack();
 
     QObject* networkManager();
 
@@ -34,32 +35,18 @@ public:
     void setBackground(const QJsonObject &json);
     
     // nodes
-    QList<MyNetworkElementBase*>& nodes();
     void addNodes(const QJsonObject &json);
     void addNode(const QJsonObject& json);
-    void addNode(MyNetworkElementBase* node);
-    void removeNode(MyNetworkElementBase* node);
     void updateNodeParents();
     void clearNodesInfo();
-    void setNodeStyle(MyNetworkElementStyleBase* style);
-    MyNetworkElementStyleBase* nodeStyle();
-    MyNetworkElementStyleBase* copiedNodeStyle();
     
     // edges
-    QList<MyNetworkElementBase*>& edges();
     void addEdges(const QJsonObject &json);
     void addEdge(const QJsonObject& json);
-    void addEdge(MyNetworkElementBase* edge);
-    void removeEdge(MyNetworkElementBase* edge);
     void clearEdgesInfo();
-    void setEdgeStyle(MyNetworkElementStyleBase* style);
-    MyNetworkElementStyleBase* edgeStyle();
-    MyNetworkElementStyleBase* copiedEdgeStyle();
-    QList<MyNetworkElementBase*> copiedNetworkElements();
     void resetCopiedNetworkElements();
-    void deleteNewEdgeBuilder();
-    bool edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2);
 
+    void setApplicationDirectory();
     QDir applicationDirectory();
     QDir iconsDirectory();
 
@@ -110,18 +97,12 @@ public slots:
     
     // network elements
     void addNewNode(const QPointF& position);
-    void addNewEdge(MyNetworkElementBase* element);
-    void deleteNode(MyNetworkElementBase* node);
-    void deleteEdge(MyNetworkElementBase* edge);
     void deleteSelectedNetworkElements();
     void alignSelectedNetworkElements(const QString& alignType);
     const QList<MyNetworkElementBase*> getSelectedElements();
-    const QList<MyNetworkElementBase*> getSelectedNodes();
-    const QList<MyNetworkElementBase*> getSelectedEdges();
     MyNetworkElementBase* getOneSingleSelectedElement();
     MyNetworkElementBase* getOneSingleSelectedNode();
     MyNetworkElementBase* getOneSingleSelectedEdge();
-    void changeElementSelectionsStatus(MyNetworkElementBase* element);
     void setElementSelected(const QString& elementName);
     void selectElements(const bool& selected);
     void selectElementsOfCategory(const bool& selected, const QString& category);
@@ -129,10 +110,6 @@ public slots:
     void selectNodesOfCategory(const bool& selected, const QString& category);
     void selectEdges(const bool& selected);
     void selectEdgesOfCategory(const bool& selected, const QString& category);
-    void setCopiedNode(MyNetworkElementBase* node);
-    void setCutNode(MyNetworkElementBase* node);
-    void setCopiedNodeStyle(MyNetworkElementStyleBase* style);
-    void setCopiedEdgeStyle(MyNetworkElementStyleBase* style);
     const bool areSelectedElementsCopyable();
     const bool areSelectedElementsCuttable();
     const bool areSelectedElementsAlignable();
@@ -141,7 +118,6 @@ public slots:
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     QJsonObject getNetworkElementsAndColorInfo();
-    void moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance);
     
     // modes
     void enableNormalMode() override;
@@ -177,16 +153,8 @@ private slots:
     void saveCurrentNetwork();
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
     void createChangeStageCommand();
-    void createSelectionAreaGraphicsItem(const QPointF& position);
-    void selectSelectionAreaCoveredNodes();
-    void selectSelectionAreaCoveredEdges();
-    const bool isSetCopiedNodeStyle();
-    void pasteCopiedNodeStyle(MyNetworkElementBase* element);
-    const bool isSetCopiedEdgeStyle();
-    void pasteCopiedEdgeStyle(MyNetworkElementBase* element);
     void copySelectedNetworkElements();
     void cutSelectedNetworkElements();
-    const bool isElementNameAlreadyUsed(const QString& elementName);
     
 protected:
 
@@ -199,6 +167,8 @@ protected:
 
     // file manager
     void setFileManager();
+
+    void initializeStageInfo();
     
     // menu buttons
     void addDefaultNodeStyle();
