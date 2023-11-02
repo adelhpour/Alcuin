@@ -24,6 +24,8 @@ public:
     QObject* networkManager();
 
     QObject* fileManager();
+
+    QObject* menuButtonManager();
     
     // modes
     void setSceneMode(const SceneMode& sceneMode) override;
@@ -169,10 +171,9 @@ protected:
     void setFileManager();
 
     void initializeStageInfo();
-    
+
     // menu buttons
-    void addDefaultNodeStyle();
-    void addDefaultEdgeStyle();
+    void setMenuButtonManager();
 
     QDir _applicationDirectory;
     QUndoStack* _undoStack;
@@ -180,6 +181,7 @@ protected:
     QObject* _networkManager;
     QObject* _pluginManager;
     QObject* _fileManager;
+    QObject* _menuButtonManager;
 };
 
 #endif

@@ -2,11 +2,9 @@
 #include "negui_network_manager.h"
 #include "negui_file_manager.h"
 #include "negui_plugin_manager.h"
+#include "negui_menu_button_manager.h"
 #include "negui_customized_interactor_widgets.h"
-#include "negui_menu_button_builder.h"
 #include "negui_multi_network_element_feature_menu.h"
-#include "negui_node_style_builder.h"
-#include "negui_edge_style_builder.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -22,6 +20,7 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     loadPlugins();
     setNetworkManager();
     setFileManager();
+    setMenuButtonManager();
     initializeStageInfo();
 };
 
@@ -150,6 +149,15 @@ void MyInteractor::setFileManager() {
 
 QObject* MyInteractor::fileManager() {
     return _fileManager;
+}
+
+void MyInteractor::setMenuButtonManager() {
+    _menuButtonManager = new MyMenuButtonManager();
+    connect((MyMenuButtonManager*)_menuButtonManager, &MyMenuButtonManager::askForAddPluginItem, this, [this] (MyPluginItemBase* plugin) { addPluginItem(plugin); });
+}
+
+QObject* MyInteractor::menuButtonManager() {
+    return _menuButtonManager;
 }
 
 void MyInteractor::initializeStageInfo() {
@@ -448,29 +456,11 @@ void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
-    return createToolbarMenuButtons(this, undoStack(), pluginItems(), iconsDirectoryPath());
+    return ((MyMenuButtonManager*)_menuButtonManager)->getToolbarMenuButtons(this, undoStack(), pluginItems(), iconsDirectoryPath());
 }
 
 QList<QAbstractButton*> MyInteractor::getModeMenuButtons() {
-    addDefaultNodeStyle();
-    addDefaultEdgeStyle();
-    return createModeMenuButtons(this, pluginItems(), iconsDirectoryPath());
-}
-
-void MyInteractor::addDefaultNodeStyle() {
-    if (!getPluginsOfType(pluginItems(), "nodestyle").size()) {
-        QJsonObject styleObject;
-        styleObject["name"] = "Default";
-        addPluginItem(createNodeStyle(styleObject));
-    }
-}
-
-void MyInteractor::addDefaultEdgeStyle() {
-    if (!getPluginsOfType(pluginItems(), "edgestyle").size()) {
-        QJsonObject styleObject;
-        styleObject["name"] = "Default";
-        addPluginItem(createEdgeStyle(styleObject));
-    }
+    return ((MyMenuButtonManager*)_menuButtonManager)->getModeMenuButtons(this, pluginItems(), iconsDirectoryPath());
 }
 
 void MyInteractor::createChangeStageCommand() {
