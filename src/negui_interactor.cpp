@@ -6,15 +6,11 @@
 #include "negui_customized_interactor_widgets.h"
 
 #include <QCoreApplication>
-#include <QFileDialog>
-#include <QJsonArray>
-#include <QVBoxLayout>
 
 // MyInteractor
 
 MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
     setUndoStack();
-    setApplicationDirectory();
     setPluginManager();
     loadPlugins();
     setNetworkManager();
@@ -31,16 +27,12 @@ QUndoStack* MyInteractor::undoStack() {
     return _undoStack;
 }
 
-void MyInteractor::setApplicationDirectory() {
-    _applicationDirectory = QDir(QCoreApplication::applicationDirPath());
-}
-
 QDir MyInteractor::applicationDirectory() {
-    return _applicationDirectory;
+    return QDir(QCoreApplication::applicationDirPath());
 }
 
 const QString MyInteractor::applicationDirectoryPath() {
-    return _applicationDirectory.path();
+    return applicationDirectory().path();
 }
 
 QDir MyInteractor::iconsDirectory() {
@@ -57,10 +49,10 @@ const QString MyInteractor::iconsDirectoryPath() {
 
 void MyInteractor::setPluginManager() {
     _pluginManager = new MyPluginManager();
-    connect(_pluginManager, SIGNAL(askForApplicationDirectoryPath()), this, SLOT(applicationDirectoryPath()));
+    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForApplicationDirectoryPath, this, [this] () { return applicationDirectoryPath(); } );
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
-    connect(_pluginManager, SIGNAL(askForNetworkInfo()), this, SLOT(exportNetworkInfo()));
+    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { exportNetworkInfo(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::networkInfoIsReadFromFile, this, [this] (const QJsonObject &json, MyPluginItemBase* importTool, const QString& fileName) {
         createNetwork(json);
         createChangeStageCommand();
@@ -94,11 +86,11 @@ QList<MyPluginItemBase*>& MyInteractor::pluginItems() {
     return ((MyPluginManager*)_pluginManager)->pluginItems();
 }
 
-const QStringList MyInteractor::listOfPluginItemNames(const QString type) {
+const QStringList MyInteractor::listOfPluginItemNames(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemNames(type);
 }
 
-const QStringList MyInteractor::listOfPluginItemCategories(const QString type) {
+const QStringList MyInteractor::listOfPluginItemCategories(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemCategories(type);
 }
 
@@ -109,7 +101,6 @@ void MyInteractor::addPluginItem(MyPluginItemBase* pluginItem) {
 void MyInteractor::setNetworkManager() {
     _networkManager = new MyNetworkManager();
     connect(_networkManager, SIGNAL(askForClearScene()), this, SIGNAL(askForClearScene()));
-    connect(_networkManager, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
     connect(_networkManager, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
     connect(_networkManager, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
     connect(_networkManager, SIGNAL(elementsCuttableStatusChanged(const bool&)), this, SIGNAL(elementsCuttableStatusChanged(const bool&)));
@@ -117,7 +108,6 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
     connect(_networkManager, SIGNAL(askForWhetherControlModifierIsPressed()), this, SIGNAL(askForWhetherControlModifierIsPressed()));
     connect(_networkManager, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
-    connect(_networkManager, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
     connect(_networkManager, SIGNAL(askForDisplayFeatureMenu()), this, SIGNAL(askForDisplayFeatureMenu()));
@@ -128,8 +118,10 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForNetworkBackgroundColor()), this, SIGNAL(askForNetworkBackgroundColor()));
     connect(_networkManager, SIGNAL(askForItemsBoundingRect()), this, SIGNAL(askForItemsBoundingRect()));
     connect(_networkManager, SIGNAL(askForResetScale()), this, SIGNAL(askForResetScale()));
+    connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForCreateChangeStageCommand, this, [this] () { createChangeStageCommand(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForEnableNormalMode, this, [this] () { enableNormalMode(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForClearUndoStack, this, [this] () { undoStack()->clear(); });
+    connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForIconsDirectoryPath, this, [this] () { return iconsDirectoryPath(); });
     connect(this, SIGNAL(singleNetworkElementFeatureMenuIsDisplayed(const QString&)), _networkManager, SIGNAL(singleNetworkElementFeatureMenuIsDisplayed(const QString&)));
     connect(this, SIGNAL(multiNetworkElementFeatureMenuIsDisplayed(const QString&)), _networkManager, SIGNAL(multiNetworkElementFeatureMenuIsDisplayed(const QString&)));
     connect(this, SIGNAL(askForAdjustExtentsOfNodes()), _networkManager, SIGNAL(askForAdjustExtentsOfNodes()));
@@ -162,6 +154,62 @@ QObject* MyInteractor::menuButtonManager() {
 
 void MyInteractor::initializeStageInfo() {
     _stageInfo = getNetworkElementsAndColorInfo();
+}
+
+void MyInteractor::setSceneMode(const SceneMode& sceneMode) {
+    MySceneModeElementBase::setSceneMode(sceneMode);
+    emit modeIsSet(getSceneModeAsString());
+}
+
+void MyInteractor::enableNormalMode() {
+    MySceneModeElementBase::enableNormalMode();
+    ((MyNetworkManager*)_networkManager)->enableNormalMode();
+
+    emit askForSetToolTip("");
+}
+
+void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
+    enableNormalMode();
+    MySceneModeElementBase::enableAddNodeMode();
+    askForRemoveFeatureMenu();
+    ((MyNetworkManager*)_networkManager)->enableAddNodeMode(style);
+
+    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
+    emit addElementModeIsEnabled(style->name());
+}
+
+void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
+    enableNormalMode();
+    MySceneModeElementBase::enableAddEdgeMode();
+    askForRemoveFeatureMenu();
+    ((MyNetworkManager*)_networkManager)->enableAddEdgeMode(style);
+
+    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
+    emit addElementModeIsEnabled(style->name());
+}
+
+void MyInteractor::enableSelectMode(const QString& elementCategory) {
+    enableNormalMode();
+    MySceneModeElementBase::enableSelectMode();
+    ((MyNetworkManager*)_networkManager)->enableSelectMode();
+
+    emit askForSetToolTip("Select" + elementCategory);
+}
+
+void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
+    enableNormalMode();
+    MySceneModeElementBase::enableSelectNodeMode();
+    ((MyNetworkManager*)_networkManager)->enableSelectNodeMode();
+
+    emit askForSetToolTip("Select " + nodeCategory + " nodes");
+}
+
+void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
+    enableNormalMode();
+    MySceneModeElementBase::enableSelectEdgeMode();
+    ((MyNetworkManager*)_networkManager)->enableSelectEdgeMode();
+
+    emit askForSetToolTip("Select " + edgeCategory + " edges");
 }
 
 void MyInteractor::createNetwork(const QJsonObject& json) {
@@ -304,65 +352,8 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
     ((MyNetworkManager*)_networkManager)->alignSelectedNetworkElements(alignType);
 }
 
-void MyInteractor::setSceneMode(const SceneMode& sceneMode) {
-    MySceneModeElementBase::setSceneMode(sceneMode);
-    emit modeIsSet(getSceneModeAsString());
-}
-
-void MyInteractor::enableNormalMode() {
-    MySceneModeElementBase::enableNormalMode();
-    ((MyNetworkManager*)_networkManager)->enableNormalMode();
-
-    emit askForSetToolTip("");
-}
-
-void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
-    enableNormalMode();
-    MySceneModeElementBase::enableAddNodeMode();
-    askForRemoveFeatureMenu();
-    ((MyNetworkManager*)_networkManager)->enableAddNodeMode(style);
-    
-    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
-    emit addElementModeIsEnabled(style->name());
-}
-
-void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
-    enableNormalMode();
-    MySceneModeElementBase::enableAddEdgeMode();
-    askForRemoveFeatureMenu();
-    ((MyNetworkManager*)_networkManager)->enableAddEdgeMode(style);
-
-    emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
-    emit addElementModeIsEnabled(style->name());
-}
-
-void MyInteractor::enableSelectMode(const QString& elementCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectMode();
-
-    emit askForSetToolTip("Select" + elementCategory);
-}
-
-void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectNodeMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectNodeMode();
-    
-    emit askForSetToolTip("Select " + nodeCategory + " nodes");
-}
-
-void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectEdgeMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectEdgeMode();
-    
-    emit askForSetToolTip("Select " + edgeCategory + " edges");
-}
-
 void MyInteractor::displayFeatureMenu() {
-    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu())
-        ((MyNetworkManager*)_networkManager)->displayFeatureMenu();
+    ((MyNetworkManager*)_networkManager)->displayFeatureMenu();
 }
 
 void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
@@ -375,6 +366,7 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
 
 void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
+    displayFeatureMenu();
 }
 
 void MyInteractor::readFromFile(const QString& importToolName) {
@@ -434,7 +426,7 @@ void MyInteractor::createChangeStageCommand() {
         ((MyFileManager*)fileManager())->setCurrentNetworkUnsaved(true);
         MyChangeStageCommand* changeStageCommand = new MyChangeStageCommand(_stageInfo, currentStageInfo);
         ((MyUndoStack*)undoStack())->addCommand(changeStageCommand);
-        connect(changeStageCommand, SIGNAL(askForCreateNetwork(const QJsonObject&)), this, SLOT(createNetwork(const QJsonObject&)));
+        connect((MyChangeStageCommand*)changeStageCommand, &MyChangeStageCommand::askForCreateNetwork, this, [this] (const QJsonObject& json) { createNetwork(json); });
         _stageInfo = currentStageInfo;
     }
 }
