@@ -1,14 +1,15 @@
 #ifndef __NEGUI_INTERACTOR_H
 #define __NEGUI_INTERACTOR_H
 
-#include "negui_network_element_base.h"
 #include "negui_scene_mode_element_base.h"
+#include "negui_plugin_item_base.h"
 
 #include <QObject>
 #include <QDir>
 #include <QUndoStack>
 #include <QWidgetAction>
 #include <QAbstractButton>
+#include <QGraphicsItem>
 
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
@@ -101,10 +102,6 @@ public slots:
     void addNewNode(const QPointF& position);
     void deleteSelectedNetworkElements();
     void alignSelectedNetworkElements(const QString& alignType);
-    const QList<MyNetworkElementBase*> getSelectedElements();
-    MyNetworkElementBase* getOneSingleSelectedElement();
-    MyNetworkElementBase* getOneSingleSelectedNode();
-    MyNetworkElementBase* getOneSingleSelectedEdge();
     void setElementSelected(const QString& elementName);
     void selectElements(const bool& selected);
     void selectElementsOfCategory(const bool& selected, const QString& category);

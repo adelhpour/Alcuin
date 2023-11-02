@@ -173,6 +173,10 @@ public:
 
     void clearSelectionArea();
 
+    void displayFeatureMenu();
+
+    void displayFeatureMenu(QWidget* featureMenu);
+
 signals:
 
     void askForClearScene();
@@ -208,6 +212,8 @@ signals:
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
 
     QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+
+    void askForDisplayFeatureMenu();
 
     void askForDisplayFeatureMenu(QWidget*);
 

@@ -4,7 +4,6 @@
 #include "negui_plugin_manager.h"
 #include "negui_menu_button_manager.h"
 #include "negui_customized_interactor_widgets.h"
-#include "negui_multi_network_element_feature_menu.h"
 
 #include <QCoreApplication>
 #include <QFileDialog>
@@ -121,7 +120,8 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForIconsDirectoryPath()), this, SLOT(iconsDirectoryPath()));
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
-    connect(_networkManager, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
+    connect(_networkManager, SIGNAL(askForDisplayFeatureMenu()), this, SIGNAL(askForDisplayFeatureMenu()));
+    connect(_networkManager, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
     connect(_networkManager, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
     connect(_networkManager, SIGNAL(askForSetToolTip(const QString&)), this, SIGNAL(askForSetToolTip(const QString&)));
     connect(_networkManager, SIGNAL(askForSetNetworkBackgroundColor(const QString&)), this, SIGNAL(askForSetNetworkBackgroundColor(const QString&)));
@@ -304,22 +304,6 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
     ((MyNetworkManager*)_networkManager)->alignSelectedNetworkElements(alignType);
 }
 
-const QList<MyNetworkElementBase*> MyInteractor::getSelectedElements() {
-    return ((MyNetworkManager*)_networkManager)->getSelectedElements();
-}
-
-MyNetworkElementBase* MyInteractor::getOneSingleSelectedElement() {
-    return ((MyNetworkManager*)_networkManager)->getOneSingleSelectedElement();
-}
-
-MyNetworkElementBase* MyInteractor::getOneSingleSelectedNode() {
-    return ((MyNetworkManager*)_networkManager)->getOneSingleSelectedElement();
-}
-
-MyNetworkElementBase* MyInteractor::getOneSingleSelectedEdge() {
-    return ((MyNetworkManager*)_networkManager)->getOneSingleSelectedElement();
-}
-
 void MyInteractor::setSceneMode(const SceneMode& sceneMode) {
     MySceneModeElementBase::setSceneMode(sceneMode);
     emit modeIsSet(getSceneModeAsString());
@@ -377,34 +361,12 @@ void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
 }
 
 void MyInteractor::displayFeatureMenu() {
-    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
-        if (getOneSingleSelectedNode())
-            getOneSingleSelectedNode()->createFeatureMenu();
-        else if (getOneSingleSelectedEdge())
-            getOneSingleSelectedEdge()->createFeatureMenu();
-        else if (getSelectedElements().size()) {
-            QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), iconsDirectoryPath());
-            connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-            askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
-        }
-        else
-            askForDisplayFeatureMenu();
-    }
+    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu())
+        ((MyNetworkManager*)_networkManager)->displayFeatureMenu();
 }
 
 void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
-    QString elementName = featureMenu->objectName();
-    if (((MyNetworkManager*)_networkManager)->canDisplaySingleElementFeatureMenu()) {
-        emit askForDisplayFeatureMenu(featureMenu);
-        emit singleNetworkElementFeatureMenuIsDisplayed(elementName);
-    }
-    else {
-        featureMenu->deleteLater();
-        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), iconsDirectoryPath());
-        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SLOT(createChangeStageCommand()));
-        emit askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
-        emit multiNetworkElementFeatureMenuIsDisplayed(elementName);
-    }
+    ((MyNetworkManager*)_networkManager)->displayFeatureMenu(featureMenu);
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {
@@ -413,7 +375,6 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
 
 void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
-    displayFeatureMenu();
 }
 
 void MyInteractor::readFromFile(const QString& importToolName) {

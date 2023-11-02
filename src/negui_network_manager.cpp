@@ -9,6 +9,7 @@
 #include "negui_edge_builder.h"
 #include "negui_network_element_aligner.h"
 #include "negui_network_element_aligner_builder.h"
+#include "negui_multi_network_element_feature_menu.h"
 
 #include <QJsonArray>
 
@@ -683,4 +684,34 @@ void MyNetworkManager::selectSelectionAreaCoveredEdges() {
 
 void MyNetworkManager::clearSelectionArea() {
     ((MyNetworkElementSelector*)_networkElementSelector)->clearSelectionArea();
+    displayFeatureMenu();
+}
+
+void MyNetworkManager::displayFeatureMenu() {
+    if (getOneSingleSelectedNode())
+        getOneSingleSelectedNode()->createFeatureMenu();
+    else if (getOneSingleSelectedEdge())
+        getOneSingleSelectedEdge()->createFeatureMenu();
+    else if (getSelectedElements().size()) {
+        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
+        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+        askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+    }
+    else
+        askForDisplayFeatureMenu();
+}
+
+void MyNetworkManager::displayFeatureMenu(QWidget* featureMenu) {
+    QString elementName = featureMenu->objectName();
+    if (canDisplaySingleElementFeatureMenu()) {
+        emit askForDisplayFeatureMenu(featureMenu);
+        emit singleNetworkElementFeatureMenuIsDisplayed(elementName);
+    }
+    else {
+        featureMenu->deleteLater();
+        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
+        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
+        emit askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
+        emit multiNetworkElementFeatureMenuIsDisplayed(elementName);
+    }
 }
