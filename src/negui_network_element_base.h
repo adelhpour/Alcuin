@@ -103,13 +103,13 @@ signals:
 
     void askForDeleteNetworkElement(MyNetworkElementBase*);
 
-    const bool askForWhetherElementStyleIsCopied();
+    bool askForWhetherElementStyleIsCopied();
 
     const bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
 
     const QString askForIconsDirectoryPath();
 
-    const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
+    bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
 
     void askForDisplaySceneContextMenu(const QPointF&);
 
