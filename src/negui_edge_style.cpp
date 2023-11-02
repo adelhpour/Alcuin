@@ -115,8 +115,7 @@ void MyEdgeStyleBase::read(const QJsonObject &json) {
     _connectableSourceNodeTitle = "";
     if (json.contains("connectable-source-node-title") && json["connectable-source-node-title"].isString())
         _connectableSourceNodeTitle = json["connectable-source-node-title"].toString();
-    
-    _connectableSourceNodeCategories.clear();
+
     if (json.contains("connectable-source-node-categories") && json["connectable-source-node-categories"].isArray()) {
         QJsonArray connectableSourceNodeCategoriesArray = json["connectable-source-node-categories"].toArray();
         for (int connectableSourceNodeCategoryIndex = 0; connectableSourceNodeCategoryIndex < connectableSourceNodeCategoriesArray.size(); ++connectableSourceNodeCategoryIndex) {
@@ -128,9 +127,9 @@ void MyEdgeStyleBase::read(const QJsonObject &json) {
     _connectableTargetNodeTitle = "";
     if (json.contains("connectable-target-node-title") && json["connectable-target-node-title"].isString())
         _connectableTargetNodeTitle = json["connectable-target-node-title"].toString();
-    
-    _connectableTargetNodeCategories.clear();
+
     if (json.contains("connectable-target-node-categories") && json["connectable-target-node-categories"].isArray()) {
+        _connectableTargetNodeCategories.clear();
         QJsonArray connectableTargetNodeCategoriesArray = json["connectable-target-node-categories"].toArray();
         for (int connectableTargetNodeCategoryIndex = 0; connectableTargetNodeCategoryIndex < connectableTargetNodeCategoriesArray.size(); ++connectableTargetNodeCategoryIndex) {
             if (connectableTargetNodeCategoriesArray[connectableTargetNodeCategoryIndex].isString())
