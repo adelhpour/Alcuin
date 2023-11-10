@@ -16,14 +16,6 @@ public:
     QList<QAbstractButton*> getToolbarMenuButtons(QObject* interactor, QObject* undoStack, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
     QList<QAbstractButton*> getModeMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
-
-    void addDefaultNodeStyle(QList<MyPluginItemBase*> plugins);
-
-    void addDefaultEdgeStyle(QList<MyPluginItemBase*> plugins);
-
-signals:
-
-    void askForAddPluginItem(MyPluginItemBase*);
 };
 
 #endif

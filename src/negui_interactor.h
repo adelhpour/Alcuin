@@ -76,6 +76,7 @@ public:
     void writeFigureToFile(const QString& exportToolName);
     QList<QAbstractButton*> getToolbarMenuButtons();
     QList<QAbstractButton*> getModeMenuButtons();
+    void addDefaultNetworkElementStyles();
     void createChangeStageCommand();
 
 signals:

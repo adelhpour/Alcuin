@@ -3,6 +3,7 @@
 #include "negui_file_manager.h"
 #include "negui_plugin_manager.h"
 #include "negui_menu_button_manager.h"
+#include "negui_default_network_element_style_manager.h"
 #include "negui_customized_interactor_widgets.h"
 
 #include <QCoreApplication>
@@ -95,7 +96,8 @@ const QStringList MyInteractor::listOfPluginItemCategories(const QString& type) 
 }
 
 void MyInteractor::addPluginItem(MyPluginItemBase* pluginItem) {
-    ((MyPluginManager*)_pluginManager)->addPluginItem(pluginItem);
+    if (pluginItem)
+        ((MyPluginManager*)_pluginManager)->addPluginItem(pluginItem);
 }
 
 void MyInteractor::setNetworkManager() {
@@ -145,7 +147,6 @@ QObject* MyInteractor::fileManager() {
 
 void MyInteractor::setMenuButtonManager() {
     _menuButtonManager = new MyMenuButtonManager();
-    connect((MyMenuButtonManager*)_menuButtonManager, &MyMenuButtonManager::askForAddPluginItem, this, [this] (MyPluginItemBase* plugin) { addPluginItem(plugin); });
 }
 
 QObject* MyInteractor::menuButtonManager() {
@@ -413,7 +414,15 @@ QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
 }
 
 QList<QAbstractButton*> MyInteractor::getModeMenuButtons() {
+    addDefaultNetworkElementStyles();
     return ((MyMenuButtonManager*)_menuButtonManager)->getModeMenuButtons(this, pluginItems(), iconsDirectoryPath());
+}
+
+void MyInteractor::addDefaultNetworkElementStyles() {
+    MyDefaultNetworkElementStyleManager* defaultNetworkElementStyleManager = new MyDefaultNetworkElementStyleManager();
+    addPluginItem(defaultNetworkElementStyleManager->createDefaultNodeStyle(pluginItems()));
+    addPluginItem(defaultNetworkElementStyleManager->createDefaultEdgeStyle(pluginItems()));
+    defaultNetworkElementStyleManager->deleteLater();
 }
 
 void MyInteractor::createChangeStageCommand() {
