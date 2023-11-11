@@ -53,7 +53,7 @@ void MyInteractor::setPluginManager() {
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForApplicationDirectoryPath, this, [this] () { return applicationDirectoryPath(); } );
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { exportNetworkInfo(); });
+    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::networkInfoIsReadFromFile, this, [this] (const QJsonObject &json, MyPluginItemBase* importTool, const QString& fileName) {
         createNetwork(json);
         createChangeStageCommand();
@@ -87,11 +87,11 @@ QList<MyPluginItemBase*>& MyInteractor::pluginItems() {
     return ((MyPluginManager*)_pluginManager)->pluginItems();
 }
 
-const QStringList MyInteractor::listOfPluginItemNames(const QString& type) {
+QStringList MyInteractor::listOfPluginItemNames(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemNames(type);
 }
 
-const QStringList MyInteractor::listOfPluginItemCategories(const QString& type) {
+QStringList MyInteractor::listOfPluginItemCategories(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemCategories(type);
 }
 

@@ -79,7 +79,7 @@ signals:
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
     void askForDeleteNetworkElement();
-    const bool askForWhetherElementStyleIsCopied();
+    bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
     QString askForDisplayName();
     void askForDisplaySceneContextMenu(const QPointF&);

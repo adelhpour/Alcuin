@@ -58,8 +58,8 @@ void MyNetworkEditorWidget::setInteractions() {
     /// main widget
     // menubar
     connect(this, &MyNetworkEditorWidget::askForSetNewNetworkCanvas, this, [this] () { ((MyInteractor*)interactor())->setNewNetworkCanvas(); });
-    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemNames, this, [this] (const QString& type) { ((MyInteractor*)interactor())->listOfPluginItemNames(type); });
-    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemCategories, this, [this] (const QString& type) { ((MyInteractor*)interactor())->listOfPluginItemCategories(type); });
+    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemNames, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemNames(type); });
+    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemCategories, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemCategories(type); });
     connect(this, &MyNetworkEditorWidget::askForReadFromFile, this, [this] (const QString& importToolName) { ((MyInteractor*)interactor())->readFromFile(importToolName); });
     connect(this, &MyNetworkEditorWidget::askForSaveCurrentNetwork, this, [this] () { ((MyInteractor*)interactor())->saveCurrentNetwork(); });
     connect(this, &MyNetworkEditorWidget::askForWriteDataToFile, this, [this] (const QString& exportToolName){ ((MyInteractor*)interactor())->writeDataToFile(exportToolName); });
@@ -159,11 +159,11 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
 
     // context menu
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCopyable, this, [this] { ((MyInteractor*)interactor())->areSelectedElementsCopyable(); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCuttable, this, [this] { ((MyInteractor*)interactor())->areSelectedElementsCuttable(); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreCopied, this, [this] () { ((MyInteractor*)interactor())->areAnyElementsCopied(); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreSelected, this, [this] () { ((MyInteractor*)interactor())->areAnyElementsSelected(); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreAlignable, this, [this] () { ((MyInteractor*)interactor())->areSelectedElementsAlignable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCopyable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsCopyable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCuttable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsCuttable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreCopied, this, [this] () { return ((MyInteractor*)interactor())->areAnyElementsCopied(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreSelected, this, [this] () { return ((MyInteractor*)interactor())->areAnyElementsSelected(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreAlignable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsAlignable(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCopySelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->copySelectedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCutSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->cutSelectedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForPasteCopiedNetworkElements, this, [this] (const QPointF & position) { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });

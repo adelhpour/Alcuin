@@ -26,8 +26,8 @@ public:
 signals:
 
     void askForSetNewNetworkCanvas();
-    const QStringList askForListOfPluginItemNames(const QString&);
-    const QStringList askForListOfPluginItemCategories(const QString&);
+    QStringList askForListOfPluginItemNames(const QString&);
+    QStringList askForListOfPluginItemCategories(const QString&);
     void askForReadFromFile(const QString&);
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);

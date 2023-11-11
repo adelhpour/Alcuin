@@ -32,11 +32,11 @@ signals:
     void escapeKeyIsPressed();
     void askForEnableNormalMode();
     void askForSelectAll();
-    const bool askForWhetherSelectedElementsAreCopyable();
-    const bool askForWhetherSelectedElementsAreCuttable();
-    const bool askForWhetherAnyElementsAreAlignable();
-    const bool askForWhetherAnyElementsAreCopied();
-    const bool askForWhetherAnyElementsAreSelected();
+    bool askForWhetherSelectedElementsAreCopyable();
+    bool askForWhetherSelectedElementsAreCuttable();
+    bool askForWhetherAnyElementsAreAlignable();
+    bool askForWhetherAnyElementsAreCopied();
+    bool askForWhetherAnyElementsAreSelected();
     void askForCopySelectedNetworkElements();
     void askForCutSelectedNetworkElements();
     void askForPasteCopiedNetworkElements(const QPointF&);

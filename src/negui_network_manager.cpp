@@ -396,7 +396,7 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(n, &MyNetworkElementBase::askForPasteNetworkElementStyle, this, [this] (MyNetworkElementBase* networkElement) { pasteCopiedNodeStyle(networkElement); });
         connect(n, &MyNetworkElementBase::askForWhetherElementStyleIsCopied, this, [this] () { return isSetCopiedNodeStyle(); } );
         connect(n, &MyNetworkElementBase::askForWhetherAnyOtherElementsAreSelected, this, [this] (QList<MyNetworkElementBase*> networkElements) {
-            ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
+            return ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SIGNAL(askForIconsDirectoryPath()));
         connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
@@ -465,7 +465,7 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         connect(e, &MyNetworkElementBase::askForCopyNetworkElementStyle, this, [this] (MyNetworkElementStyleBase* style) { setCopiedEdgeStyle(style); });
         connect(e, &MyNetworkElementBase::askForPasteNetworkElementStyle, this, [this] (MyNetworkElementBase* networkElement) { pasteCopiedEdgeStyle(networkElement); });
         connect(e, &MyNetworkElementBase::askForWhetherAnyOtherElementsAreSelected, this, [this] (QList<MyNetworkElementBase*> networkElements) {
-            ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
+            return ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
         connect(e, &MyNetworkElementBase::askForWhetherElementStyleIsCopied, this, [this] () { return isSetCopiedEdgeStyle(); } );
         connect(e, SIGNAL(askForIconsDirectoryPath()), this, SIGNAL(askForIconsDirectoryPath()));
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));

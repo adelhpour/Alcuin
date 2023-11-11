@@ -46,9 +46,9 @@ public:
 
     QList<MyPluginItemBase*>& pluginItems();
 
-    const QStringList listOfPluginItemNames(const QString type);
+    QStringList listOfPluginItemNames(const QString type);
 
-    const QStringList listOfPluginItemCategories(const QString type);
+    QStringList listOfPluginItemCategories(const QString type);
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
@@ -76,7 +76,7 @@ signals:
 
     QString askForCurrentBaseFileName();
 
-    const QJsonObject askForNetworkInfo();
+    QJsonObject askForNetworkInfo();
 
     void networkInfoIsReadFromFile(const QJsonObject&, MyPluginItemBase*, const QString&);
 

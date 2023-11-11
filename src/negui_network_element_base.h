@@ -105,7 +105,7 @@ signals:
 
     bool askForWhetherElementStyleIsCopied();
 
-    const bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
+    bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
 
     const QString askForIconsDirectoryPath();
 
