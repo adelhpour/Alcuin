@@ -111,7 +111,8 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForWhetherControlModifierIsPressed()), this, SIGNAL(askForWhetherControlModifierIsPressed()));
     connect(_networkManager, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
-    connect(_networkManager, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
+    connect(_networkManager, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()), this, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()));
+    connect(_networkManager, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
     connect(_networkManager, SIGNAL(askForDisplayNullFeatureMenu()), this, SIGNAL(askForDisplayNullFeatureMenu()));
     connect(_networkManager, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
     connect(_networkManager, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
@@ -124,8 +125,6 @@ void MyInteractor::setNetworkManager() {
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForEnableNormalMode, this, [this] () { enableNormalMode(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForClearUndoStack, this, [this] () { undoStack()->clear(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForIconsDirectoryPath, this, [this] () { return iconsDirectoryPath(); });
-    connect(this, SIGNAL(singleNetworkElementFeatureMenuIsDisplayed(const QString&)), _networkManager, SIGNAL(singleNetworkElementFeatureMenuIsDisplayed(const QString&)));
-    connect(this, SIGNAL(multiNetworkElementFeatureMenuIsDisplayed(const QString&)), _networkManager, SIGNAL(multiNetworkElementFeatureMenuIsDisplayed(const QString&)));
     connect(this, SIGNAL(askForAdjustExtentsOfNodes()), _networkManager, SIGNAL(askForAdjustExtentsOfNodes()));
     connect(this, SIGNAL(askForAdjustConnectedEdgesOfNodes()), _networkManager, SIGNAL(askForAdjustConnectedEdgesOfNodes()));
 }
@@ -355,10 +354,6 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
 
 void MyInteractor::updateFeatureMenu() {
     ((MyNetworkManager*)_networkManager)->updateFeatureMenu();
-}
-
-void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
-    ((MyNetworkManager*)_networkManager)->displayFeatureMenu(featureMenu);
 }
 
 void MyInteractor::displaySelectionArea(const QPointF& position) {

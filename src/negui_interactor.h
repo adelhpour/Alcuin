@@ -68,7 +68,6 @@ public:
     void deleteSelectedNetworkElements();
     void alignSelectedNetworkElements(const QString& alignType);
     void updateFeatureMenu();
-    void displayFeatureMenu(QWidget* featureMenu);
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
     void readFromFile(const QString& importToolName);
@@ -93,7 +92,8 @@ signals:
     void askForDisplayNullFeatureMenu();
     void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
-    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+    void askForEnableFeatureMenuDisplay();
+    bool askForWhetherFeatureMenuCanBeDisplayed();
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
@@ -108,8 +108,6 @@ signals:
     void askForSettingWorkingDirectoryPath(const QString&);
     void askForAdjustConnectedEdgesOfNodes();
     void askForAdjustExtentsOfNodes();
-    void singleNetworkElementFeatureMenuIsDisplayed(const QString&);
-    void multiNetworkElementFeatureMenuIsDisplayed(const QString&);
 
 public slots:
 

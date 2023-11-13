@@ -54,8 +54,6 @@ public:
 
     MyNetworkElementBase* getOneSingleSelectedEdge();
 
-    const bool canDisplaySingleElementFeatureMenu();
-
     void displaySelectionArea(const QPointF& position);
 
     void createSelectionAreaGraphicsItem(const QPointF& position);

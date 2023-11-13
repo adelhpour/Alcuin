@@ -160,19 +160,9 @@ MyNetworkElementBase* MyNetworkElementSelector::getOneSingleSelectedEdge() {
     return NULL;
 }
 
-const bool MyNetworkElementSelector::canDisplaySingleElementFeatureMenu() {
-    return !askForWhetherShiftModifierIsPressed() || getOneSingleSelectedNode() || getOneSingleSelectedEdge();
-}
-
 void MyNetworkElementSelector::displaySelectionArea(const QPointF& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
+    if (getSceneMode() == NORMAL_MODE)
         createSelectionAreaGraphicsItem(position);
-        selectSelectionAreaCoveredNodes();
-        selectSelectionAreaCoveredEdges();
-        emit networkElementsSelectedStatusIsChanged();
-    }
 }
 
 void MyNetworkElementSelector::createSelectionAreaGraphicsItem(const QPointF& position) {
@@ -209,6 +199,12 @@ void MyNetworkElementSelector::setCollidingElementsSelected(QList<MyNetworkEleme
 
 void MyNetworkElementSelector::clearSelectionArea() {
     if (_selectionAreaGraphicsItem) {
+        if (!askForWhetherShiftModifierIsPressed())
+            selectElements(false);
+        selectSelectionAreaCoveredNodes();
+        selectSelectionAreaCoveredEdges();
+        emit networkElementsSelectedStatusIsChanged();
+
         askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
         delete _selectionAreaGraphicsItem;
         _selectionAreaGraphicsItem = NULL;

@@ -52,6 +52,7 @@ private slots:
     void displayNullFeatureMenu();
     void displayFeatureMenu(QWidget* featureMenu);
     void removeFeatureMenu();
+    void deleteFeatureMenu();
 
 protected:
 
@@ -70,6 +71,7 @@ protected:
     QWidget* _featureMenu;
     QWidget* _statusBar;
     qreal _layoutMenuRow;
+    bool _canDisplayFeatureMenu;
 };
 
 #endif

@@ -10,11 +10,7 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
     _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForSelectNetworkElement()));
-    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForCreateFeatureMenu()));
-    connect(this, &MyNetworkElementGraphicsItemBase::mouseLeftButtonIsPressed, this, [this] () {
-        if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu())
-            askForCreateFeatureMenu();
-    });
+    connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
@@ -103,7 +99,7 @@ const bool MyNetworkElementGraphicsItemBase::canAddLineShape() {
 }
 
 void MyNetworkElementGraphicsItemBase::connectContextMenu(QMenu* contextMenu) {
-    connect(contextMenu, SIGNAL(askForCreateFeatureMenu()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(contextMenu, SIGNAL(askForDisplayFeatureMenu()), this, SIGNAL(askForDisplayFeatureMenu()));
     connect(contextMenu, SIGNAL(askForCopyNetworkElement()), this, SIGNAL(askForCopyNetworkElement()));
     connect(contextMenu, SIGNAL(askForCutNetworkElement()), this, SIGNAL(askForCutNetworkElement()));
     connect(contextMenu, SIGNAL(askForCopyNetworkElementStyle()), this, SIGNAL(askForCopyNetworkElementStyle()));

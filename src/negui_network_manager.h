@@ -161,8 +161,6 @@ public:
 
     MyNetworkElementBase* getOneSingleSelectedEdge();
 
-    const bool canDisplaySingleElementFeatureMenu();
-
     void displaySelectionArea(const QPointF& position);
 
     void createSelectionAreaGraphicsItem(const QPointF& position);
@@ -175,8 +173,6 @@ public:
 
     void updateFeatureMenu();
 
-    void displayFeatureMenu(QWidget* featureMenu);
-
 signals:
 
     void askForClearScene();
@@ -186,10 +182,6 @@ signals:
     void askForAddGraphicsItem(QGraphicsItem*);
 
     void askForRemoveGraphicsItem(QGraphicsItem*);
-
-    void singleNetworkElementFeatureMenuIsDisplayed(const QString&);
-
-    void multiNetworkElementFeatureMenuIsDisplayed(const QString&);
 
     void elementsCuttableStatusChanged(const bool&);
 
@@ -211,7 +203,9 @@ signals:
 
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
 
-    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+    void askForEnableFeatureMenuDisplay();
+
+    bool askForWhetherFeatureMenuCanBeDisplayed();
 
     void askForDisplayNullFeatureMenu();
 

@@ -62,7 +62,7 @@ signals:
 
     const bool askForWhetherElementStyleIsCopied();
 
-    void askForCreateFeatureMenu();
+    void askForDisplayFeatureMenu();
 
     void askForCopyNetworkElement();
 

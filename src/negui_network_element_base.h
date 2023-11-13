@@ -77,7 +77,7 @@ public:
 
     virtual const qint32 calculateZValue() = 0;
 
-    QWidget* createAndConnectFeatureMenuObject();
+    QWidget* createFeatureMenu();
 
 signals:
     
@@ -89,9 +89,9 @@ signals:
     
     void askForCreateChangeStageCommand();
 
-    void askForDisplayFeatureMenu(QWidget*);
+    void askForEnableFeatureMenuDisplay();
 
-    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+    void askForDisplayFeatureMenu(MyNetworkElementBase*);
 
     void askForCopyNetworkElement(MyNetworkElementBase*);
 
@@ -120,8 +120,6 @@ public slots:
     virtual void setSelected(const bool& selected);
 
     const bool isSelected();
-
-    void createFeatureMenu();
     
 protected slots:
 

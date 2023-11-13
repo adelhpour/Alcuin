@@ -248,13 +248,7 @@ void MyNetworkManager::setNetworkElementSelector() {
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::networkElementsSelectedStatusIsChanged, this, [this] () {
         emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
         emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
-    });
-    connect(this, &MyNetworkManager::singleNetworkElementFeatureMenuIsDisplayed, this, [this] (const QString& elementName) {
-        ((MyNetworkElementSelector*)_networkElementSelector)->selectElements(false);
-        ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
-    });
-    connect(this, &MyNetworkManager::multiNetworkElementFeatureMenuIsDisplayed, this, [this] (const QString& elementName) {
-        ((MyNetworkElementSelector *) _networkElementSelector)->setElementSelected(elementName);
+        updateFeatureMenu();
     });
     connect(_networkElementSelector, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
     connect(_networkElementSelector, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
@@ -387,8 +381,12 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(n, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
         connect(n, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
-        connect(n, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
-        connect(n, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
+        connect(n, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+        connect(n, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
+            selectElements(false);
+            setElementSelected(networkElement->name());
+            emit askForEnableFeatureMenuDisplay();
+            updateFeatureMenu(); });
         connect(n, &MyNetworkElementBase::askForCheckWhetherNetworkElementNameIsAlreadyUsed, this, [this] (const QString& elementName) { return isElementNameAlreadyUsed(elementName); });
         connect(n, &MyNetworkElementBase::askForCopyNetworkElement, this, [this] (MyNetworkElementBase* networkElement) { setCopiedNode(networkElement); });
         connect(n, &MyNetworkElementBase::askForCutNetworkElement, this, [this] (MyNetworkElementBase* networkElement) { setCutNode(networkElement); });
@@ -459,8 +457,12 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         connect(e, &MyNetworkElementBase::askForListOfElements, this, [this] () { return nodes() + edges(); } );
         connect(e, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
-        connect(e, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
-        connect(e, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
+        connect(e, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+        connect(e, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
+            selectElements(false);
+            setElementSelected(networkElement->name());
+            emit askForEnableFeatureMenuDisplay();
+            updateFeatureMenu(); });
         connect(e, &MyNetworkElementBase::askForCheckWhetherNetworkElementNameIsAlreadyUsed, this, [this] (const QString& elementName) { return isElementNameAlreadyUsed(elementName); });
         connect(e, &MyNetworkElementBase::askForCopyNetworkElementStyle, this, [this] (MyNetworkElementStyleBase* style) { setCopiedEdgeStyle(style); });
         connect(e, &MyNetworkElementBase::askForPasteNetworkElementStyle, this, [this] (MyNetworkElementBase* networkElement) { pasteCopiedEdgeStyle(networkElement); });
@@ -662,10 +664,6 @@ MyNetworkElementBase* MyNetworkManager::getOneSingleSelectedEdge() {
     return ((MyNetworkElementSelector*)_networkElementSelector)->getOneSingleSelectedElement();
 }
 
-const bool MyNetworkManager::canDisplaySingleElementFeatureMenu() {
-    return ((MyNetworkElementSelector*)_networkElementSelector)->canDisplaySingleElementFeatureMenu();
-}
-
 void MyNetworkManager::displaySelectionArea(const QPointF& position) {
     ((MyNetworkElementSelector*)_networkElementSelector)->displaySelectionArea(position);
 }
@@ -684,15 +682,14 @@ void MyNetworkManager::selectSelectionAreaCoveredEdges() {
 
 void MyNetworkManager::clearSelectionArea() {
     ((MyNetworkElementSelector*)_networkElementSelector)->clearSelectionArea();
-    updateFeatureMenu();
 }
 
 void MyNetworkManager::updateFeatureMenu() {
-    if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
+    if (askForWhetherFeatureMenuCanBeDisplayed()) {
         if (getOneSingleSelectedNode())
-            getOneSingleSelectedNode()->createFeatureMenu();
+            askForDisplayFeatureMenu(getOneSingleSelectedNode()->createFeatureMenu());
         else if (getOneSingleSelectedEdge())
-            getOneSingleSelectedEdge()->createFeatureMenu();
+            askForDisplayFeatureMenu(getOneSingleSelectedEdge()->createFeatureMenu());
         else if (getSelectedElements().size()) {
             QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
             connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
@@ -700,20 +697,5 @@ void MyNetworkManager::updateFeatureMenu() {
         }
         else
             askForDisplayNullFeatureMenu();
-    }
-}
-
-void MyNetworkManager::displayFeatureMenu(QWidget* featureMenu) {
-    QString elementName = featureMenu->objectName();
-    if (canDisplaySingleElementFeatureMenu()) {
-        emit askForDisplayFeatureMenu(featureMenu);
-        emit singleNetworkElementFeatureMenuIsDisplayed(elementName);
-    }
-    else {
-        featureMenu->deleteLater();
-        QWidget* multiNetworkElementFeatureMenu = new MyMultiNetworkElementFeatureMenu(getSelectedElements(), askForIconsDirectoryPath());
-        connect(multiNetworkElementFeatureMenu, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
-        emit askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
-        emit multiNetworkElementFeatureMenuIsDisplayed(elementName);
     }
 }

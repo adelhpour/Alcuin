@@ -18,6 +18,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setObjectName("main_widget");
     setStyleSheet("QFrame {background-color : white}");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    _canDisplayFeatureMenu = false;
 
     setWidgets();
     setInteractions();
@@ -75,13 +76,9 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(this, &MyNetworkEditorWidget::askForPasteCopiedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () {
-        ((MyInteractor*)this->interactor())->selectElements(true);
-        ((MyInteractor*)this->interactor())->updateFeatureMenu();
-    });
+        ((MyInteractor*)this->interactor())->selectElements(true); });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) {
-        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category);
-        ((MyInteractor*)this->interactor())->updateFeatureMenu();
-    });
+        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category); });
     connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));
     connect(this, SIGNAL(askForZoomOut()), (MyGraphicsView*)view(), SLOT(zoomOut()));
 
@@ -90,7 +87,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayNullFeatureMenu()), this, SLOT(displayNullFeatureMenu()));
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
-    connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedNetworkElementFeatureMenu, this, [this] () { return featureMenu(); } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForWhetherFeatureMenuCanBeDisplayed, this, [this] () { return _canDisplayFeatureMenu; } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForEnableFeatureMenuDisplay, this, [this] () { _canDisplayFeatureMenu = true; } );
 
     /// mode menu
     // set mode
@@ -229,7 +227,7 @@ void MyNetworkEditorWidget::displayNullFeatureMenu() {
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
-    removeFeatureMenu();
+    deleteFeatureMenu();
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
     ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
@@ -238,6 +236,11 @@ void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
 }
 
 void MyNetworkEditorWidget::removeFeatureMenu() {
+    deleteFeatureMenu();
+    _canDisplayFeatureMenu = false;
+}
+
+void MyNetworkEditorWidget::deleteFeatureMenu() {
     if (featureMenu()) {
         layout()->removeWidget(featureMenu());
         featureMenu()->deleteLater();

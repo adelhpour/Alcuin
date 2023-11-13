@@ -34,7 +34,8 @@ void MyNetworkElementBase::updateFocusedGraphicsItems() {
 void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDeleteNetworkElement, this, [this] () { emit askForDeleteNetworkElement(this); });
     connect(_graphicsItem, SIGNAL(askForWhetherNetworkElementIsSelected()), this, SLOT(isSelected()));
-    connect(_graphicsItem, SIGNAL(askForCreateFeatureMenu()), this, SLOT(createFeatureMenu()));
+    connect(_graphicsItem, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForDisplayFeatureMenu, this, [this] () { emit askForDisplayFeatureMenu(this); });
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElement, this, [this] () { emit askForCopyNetworkElement(this); } );
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCutNetworkElement, this, [this] () { emit askForCutNetworkElement(this); } );
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForCopyNetworkElementStyle, this, [this] () { emit askForCopyNetworkElementStyle(this->style()); } );
@@ -43,7 +44,6 @@ void MyNetworkElementBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForWhetherElementStyleIsCopied()), this, SIGNAL(askForWhetherElementStyleIsCopied()));
     connect(_graphicsItem, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
     connect(_graphicsItem, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
-    connect(_graphicsItem, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
 }
 
 MyNetworkElementStyleBase* MyNetworkElementBase::style() {
@@ -166,19 +166,7 @@ void MyNetworkElementBase::addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* f
     contentLayout->addWidget(shapeStylesButtons, contentLayout->rowCount(), 0, 1, 2, Qt::AlignRight);
 }
 
-void MyNetworkElementBase::createFeatureMenu() {
-    if (getSceneMode() == NORMAL_MODE) {
-        QWidget* currentFeatureMenu = askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
-        if (!currentFeatureMenu || currentFeatureMenu->objectName() != name()) {
-            QWidget* featureMenu = createAndConnectFeatureMenuObject();
-            if (currentFeatureMenu && ((MyFeatureMenuBase*)currentFeatureMenu)->type() == MyFeatureMenuBase::ELEMENT_FEATURE_MENU)
-                ((MyElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyElementFeatureMenu*)currentFeatureMenu)->beingModifiedShapeStyle());
-            askForDisplayFeatureMenu(featureMenu);
-        }
-    }
-}
-
-QWidget* MyNetworkElementBase::createAndConnectFeatureMenuObject() {
+QWidget* MyNetworkElementBase::createFeatureMenu() {
     MyFeatureMenuBase* featureMenu =  new MyElementFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
     featureMenu->setObjectName(name());
     ((MyElementFeatureMenu*)featureMenu)->setShapeStyles(style()->shapeStyles());

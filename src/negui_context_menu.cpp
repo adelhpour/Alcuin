@@ -61,7 +61,7 @@ void MyGraphicsSceneContextMenu::initializeActionsStatus() {
 // MyGraphicsItemContextMenuBase
 
 MyGraphicsItemContextMenuBase::MyGraphicsItemContextMenuBase(QWidget *parent) : MyContextMenuBase(parent) {
-    connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForCreateFeatureMenu()));
+    connect(addAction("Features"), SIGNAL(triggered()), this, SIGNAL(askForDisplayFeatureMenu()));
     addSeparator();
 }
 
