@@ -173,7 +173,7 @@ public:
 
     void clearSelectionArea();
 
-    void displayFeatureMenu();
+    void updateFeatureMenu();
 
     void displayFeatureMenu(QWidget* featureMenu);
 
@@ -213,7 +213,7 @@ signals:
 
     QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
 
-    void askForDisplayFeatureMenu();
+    void askForDisplayNullFeatureMenu();
 
     void askForDisplayFeatureMenu(QWidget*);
 

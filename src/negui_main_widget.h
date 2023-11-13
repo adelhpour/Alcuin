@@ -49,7 +49,7 @@ signals:
 
 private slots:
 
-    void displayFeatureMenu();
+    void displayNullFeatureMenu();
     void displayFeatureMenu(QWidget* featureMenu);
     void removeFeatureMenu();
 

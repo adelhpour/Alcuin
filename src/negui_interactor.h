@@ -67,7 +67,7 @@ public:
     void setElementSelected(const QString& elementName);
     void deleteSelectedNetworkElements();
     void alignSelectedNetworkElements(const QString& alignType);
-    void displayFeatureMenu();
+    void updateFeatureMenu();
     void displayFeatureMenu(QWidget* featureMenu);
     void displaySelectionArea(const QPointF& position);
     void clearSelectionArea();
@@ -90,7 +90,7 @@ signals:
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
-    void askForDisplayFeatureMenu();
+    void askForDisplayNullFeatureMenu();
     void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
     QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();

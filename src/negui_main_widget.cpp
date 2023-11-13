@@ -76,18 +76,18 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () {
         ((MyInteractor*)this->interactor())->selectElements(true);
-        ((MyInteractor*)this->interactor())->displayFeatureMenu();
+        ((MyInteractor*)this->interactor())->updateFeatureMenu();
     });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) {
         ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category);
-        ((MyInteractor*)this->interactor())->displayFeatureMenu();
+        ((MyInteractor*)this->interactor())->updateFeatureMenu();
     });
     connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));
     connect(this, SIGNAL(askForZoomOut()), (MyGraphicsView*)view(), SLOT(zoomOut()));
 
     /// feature menu
     // display feature menu
-    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu()), this, SLOT(displayFeatureMenu()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayNullFeatureMenu()), this, SLOT(displayNullFeatureMenu()));
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedNetworkElementFeatureMenu, this, [this] () { return featureMenu(); } );
@@ -152,7 +152,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsReleased, this, [this] () { ((MyInteractor*)interactor())->clearSelectionArea(); });
 
     // display null feature menu
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayFeatureMenu()));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayNullFeatureMenu()));
 
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
@@ -223,7 +223,7 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
     return _layoutMenuRow;
 }
 
-void MyNetworkEditorWidget::displayFeatureMenu() {
+void MyNetworkEditorWidget::displayNullFeatureMenu() {
     if (featureMenu())
         displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
 }

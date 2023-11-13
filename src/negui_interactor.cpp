@@ -112,7 +112,7 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()));
-    connect(_networkManager, SIGNAL(askForDisplayFeatureMenu()), this, SIGNAL(askForDisplayFeatureMenu()));
+    connect(_networkManager, SIGNAL(askForDisplayNullFeatureMenu()), this, SIGNAL(askForDisplayNullFeatureMenu()));
     connect(_networkManager, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
     connect(_networkManager, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
     connect(_networkManager, SIGNAL(askForSetToolTip(const QString&)), this, SIGNAL(askForSetToolTip(const QString&)));
@@ -353,8 +353,8 @@ void MyInteractor::alignSelectedNetworkElements(const QString& alignType) {
     ((MyNetworkManager*)_networkManager)->alignSelectedNetworkElements(alignType);
 }
 
-void MyInteractor::displayFeatureMenu() {
-    ((MyNetworkManager*)_networkManager)->displayFeatureMenu();
+void MyInteractor::updateFeatureMenu() {
+    ((MyNetworkManager*)_networkManager)->updateFeatureMenu();
 }
 
 void MyInteractor::displayFeatureMenu(QWidget* featureMenu) {
@@ -367,7 +367,6 @@ void MyInteractor::displaySelectionArea(const QPointF& position) {
 
 void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
-    displayFeatureMenu();
 }
 
 void MyInteractor::readFromFile(const QString& importToolName) {

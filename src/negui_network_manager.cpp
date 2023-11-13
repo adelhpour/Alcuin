@@ -684,10 +684,10 @@ void MyNetworkManager::selectSelectionAreaCoveredEdges() {
 
 void MyNetworkManager::clearSelectionArea() {
     ((MyNetworkElementSelector*)_networkElementSelector)->clearSelectionArea();
-    displayFeatureMenu();
+    updateFeatureMenu();
 }
 
-void MyNetworkManager::displayFeatureMenu() {
+void MyNetworkManager::updateFeatureMenu() {
     if (askForCurrentlyBeingDisplayedNetworkElementFeatureMenu()) {
         if (getOneSingleSelectedNode())
             getOneSingleSelectedNode()->createFeatureMenu();
@@ -699,7 +699,7 @@ void MyNetworkManager::displayFeatureMenu() {
             askForDisplayFeatureMenu(multiNetworkElementFeatureMenu);
         }
         else
-            askForDisplayFeatureMenu();
+            askForDisplayNullFeatureMenu();
     }
 }
 
