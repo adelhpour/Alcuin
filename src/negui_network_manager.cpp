@@ -27,8 +27,8 @@ void MyNetworkManager::enableNormalMode() {
     setCopiedNodeStyle(NULL);
     setEdgeStyle(NULL);
     setCopiedEdgeStyle(NULL);
-    deleteNewEdgeBuilder();
     ((MyNetworkElementSelector*)_networkElementSelector)->enableNormalMode();
+    deleteNewEdgeBuilder();
     for (MyNetworkElementBase *node : qAsConst(nodes()))
         node->enableNormalMode();
     for (MyNetworkElementBase *edge : qAsConst(edges()))
@@ -561,8 +561,7 @@ bool MyNetworkManager::isElementNameAlreadyUsed(const QString& elementName) {
 }
 
 void MyNetworkManager::deleteNewEdgeBuilder() {
-    for (MyNetworkElementBase* selectedNode : getSelectedNodes())
-        selectedNode->setSelected(false);
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectNodes(false);
     if (_newEdgeBuilder)
         _newEdgeBuilder->deleteLater();
     _newEdgeBuilder = NULL;
