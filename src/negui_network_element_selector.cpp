@@ -36,10 +36,8 @@ void MyNetworkElementSelector::setElementSelected(MyNetworkElementBase* networkE
 }
 
 void MyNetworkElementSelector::selectElement(MyNetworkElementBase* networkElement, const bool& selected) {
-    if (networkElement->isSelected() != selected) {
+    if (networkElement->isSelected() != selected)
         networkElement->setSelected(selected);
-        emit networkElementsSelectedStatusIsChanged();
-    }
 }
 
 void MyNetworkElementSelector::changeElementSelectionsStatus(MyNetworkElementBase* networkElement) {
@@ -57,7 +55,6 @@ void MyNetworkElementSelector::changeElementSelectionsStatus(MyNetworkElementBas
                 selectElements(false);
             selectElement(networkElement, true);
         }
-        emit networkElementsSelectedStatusIsChanged();
     }
 }
 
@@ -203,7 +200,6 @@ void MyNetworkElementSelector::clearSelectionArea() {
             selectElements(false);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
-        emit networkElementsSelectedStatusIsChanged();
 
         askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
         delete _selectionAreaGraphicsItem;

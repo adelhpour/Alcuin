@@ -183,6 +183,8 @@ signals:
 
     void askForRemoveGraphicsItem(QGraphicsItem*);
 
+    void networkElementsSelectedStatusIsChanged();
+
     void elementsCuttableStatusChanged(const bool&);
 
     void elementsCopyableStatusChanged(const bool&);
@@ -204,6 +206,8 @@ signals:
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
 
     void askForEnableFeatureMenuDisplay();
+
+    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
 
     bool askForWhetherFeatureMenuCanBeDisplayed();
 

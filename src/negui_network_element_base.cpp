@@ -175,6 +175,9 @@ QWidget* MyNetworkElementBase::createFeatureMenu() {
         updateGraphicsItem();
         updateFocusedGraphicsItems();
         emit askForCreateChangeStageCommand(); } );
+    QWidget* currentlyBeingDisplayedFeatureMenu = askForCurrentlyBeingDisplayedFeatureMenu();
+    if (currentlyBeingDisplayedFeatureMenu && ((MyFeatureMenuBase*)currentlyBeingDisplayedFeatureMenu)->type() == MyFeatureMenuBase::ELEMENT_FEATURE_MENU)
+        ((MyElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyElementFeatureMenu*)currentlyBeingDisplayedFeatureMenu)->beingModifiedShapeStyle());
 
     return featureMenu;
 

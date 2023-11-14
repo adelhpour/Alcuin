@@ -113,6 +113,7 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()), this, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()));
     connect(_networkManager, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+    connect(_networkManager, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()));
     connect(_networkManager, SIGNAL(askForDisplayNullFeatureMenu()), this, SIGNAL(askForDisplayNullFeatureMenu()));
     connect(_networkManager, SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SIGNAL(askForDisplayFeatureMenu(QWidget*)));
     connect(_networkManager, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));

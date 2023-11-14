@@ -93,6 +93,7 @@ signals:
     void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
     void askForEnableFeatureMenuDisplay();
+    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
     bool askForWhetherFeatureMenuCanBeDisplayed();
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);

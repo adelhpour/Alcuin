@@ -89,6 +89,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
     connect((MyInteractor*)interactor(), &MyInteractor::askForWhetherFeatureMenuCanBeDisplayed, this, [this] () { return _canDisplayFeatureMenu; } );
     connect((MyInteractor*)interactor(), &MyInteractor::askForEnableFeatureMenuDisplay, this, [this] () { _canDisplayFeatureMenu = true; } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedFeatureMenu, this, [this] () { return featureMenu(); });
 
     /// mode menu
     // set mode

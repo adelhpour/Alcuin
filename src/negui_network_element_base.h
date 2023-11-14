@@ -91,6 +91,8 @@ signals:
 
     void askForEnableFeatureMenuDisplay();
 
+    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
+
     void askForDisplayFeatureMenu(MyNetworkElementBase*);
 
     void askForCopyNetworkElement(MyNetworkElementBase*);

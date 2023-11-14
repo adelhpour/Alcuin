@@ -16,6 +16,11 @@
 MyNetworkManager::MyNetworkManager() {
     _newEdgeBuilder = NULL;
     setNetworkElementSelector();
+    connect(this, &MyNetworkManager::networkElementsSelectedStatusIsChanged, this, [this] () {
+        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
+        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
+        updateFeatureMenu();
+    });
     resetNetwork();
 }
 
@@ -245,17 +250,13 @@ void MyNetworkManager::setNetworkElementSelector() {
     connect(_networkElementSelector, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForNodes, this, [this] () { return nodes(); });
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForEdges, this, [this] () { return edges(); });
-    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::networkElementsSelectedStatusIsChanged, this, [this] () {
-        emit elementsCuttableStatusChanged(areSelectedElementsCuttable());
-        emit elementsCopyableStatusChanged(areSelectedElementsCopyable());
-        updateFeatureMenu();
-    });
     connect(_networkElementSelector, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
     connect(_networkElementSelector, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
 }
 
 void MyNetworkManager::changeElementSelectionsStatus(MyNetworkElementBase* element) {
     ((MyNetworkElementSelector*)_networkElementSelector)->changeElementSelectionsStatus(element);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 const bool MyNetworkManager::areSelectedElementsCopyable() {
@@ -382,6 +383,7 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(n, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
         connect(n, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+        connect(n, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()));
         connect(n, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
             selectElements(false);
             setElementSelected(networkElement->name());
@@ -458,6 +460,7 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForItemsAtPosition(const QPointF&)), this, SIGNAL(askForItemsAtPosition(const QPointF&)));
         connect(e, SIGNAL(askForCreateChangeStageCommand()), this, SIGNAL(askForCreateChangeStageCommand()));
         connect(e, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+        connect(e, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()));
         connect(e, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
             selectElements(false);
             setElementSelected(networkElement->name());
@@ -625,30 +628,37 @@ QJsonObject MyNetworkManager::exportNetworkInfo() {
 
 void MyNetworkManager::selectElements(const bool& selected) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectElements(selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::selectElementsOfCategory(const bool& selected, const QString& category) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectElementsOfCategory(category, selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::selectNodes(const bool& selected) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectNodes(selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::selectNodesOfCategory(const bool& selected, const QString& category) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectNodesOfCategory(category, selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::selectEdges(const bool& selected) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectEdges(selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::selectEdgesOfCategory(const bool& selected, const QString& category) {
     ((MyNetworkElementSelector*)_networkElementSelector)->selectEdgesOfCategory(category, selected);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::setElementSelected(const QString& elementName) {
     ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 MyNetworkElementBase* MyNetworkManager::getOneSingleSelectedElement() {
@@ -681,6 +691,7 @@ void MyNetworkManager::selectSelectionAreaCoveredEdges() {
 
 void MyNetworkManager::clearSelectionArea() {
     ((MyNetworkElementSelector*)_networkElementSelector)->clearSelectionArea();
+    emit networkElementsSelectedStatusIsChanged();
 }
 
 void MyNetworkManager::updateFeatureMenu() {

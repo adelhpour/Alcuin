@@ -74,8 +74,6 @@ signals:
 
     QList<MyNetworkElementBase*> askForEdges();
 
-    void networkElementsSelectedStatusIsChanged();
-
     const bool askForWhetherShiftModifierIsPressed();
 
     void askForAddGraphicsItem(QGraphicsItem*);
