@@ -66,6 +66,8 @@ public:
 
     void writeFigureToFile(MyPluginItemBase* exportTool);
 
+    void autoLayout(const QString& autoLayoutEngineName);
+
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
 
 signals:

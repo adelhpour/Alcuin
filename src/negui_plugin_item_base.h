@@ -28,6 +28,7 @@ protected:
 QList<MyPluginItemBase*> getPluginsOfType(QList<MyPluginItemBase*> plugins, const QString& type);
 QList<MyPluginItemBase*> getPluginsOfCategory(QList<MyPluginItemBase*> plugins, const QString& category);
 QList<MyPluginItemBase*> getPluginsOfSubCategory(QList<MyPluginItemBase*> plugins, const QString& subCategory);
+MyPluginItemBase* findPluginByName(QList<MyPluginItemBase*> plugins, const QString& pluginName);
 const QList<QString> getPluginsCategories(QList<MyPluginItemBase*> plugins);
 const QList<QString> getPluginsSubCategories(QList<MyPluginItemBase*> plugins);
 

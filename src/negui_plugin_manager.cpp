@@ -193,11 +193,9 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
 }
 
 void MyPluginManager::readFromFile(const QString& importToolName) {
-    QList<MyPluginItemBase*> importTools = getPluginsOfType(pluginItems(), "importtool");
-    for (MyPluginItemBase* importTool : importTools) {
-        if (importTool->name() == importToolName)
-            return readFromFile(importTool);
-    }
+    MyPluginItemBase* importTool = findPluginByName(getPluginsOfType(pluginItems(), "importtool"), importToolName);
+    if (importTool)
+        readFromFile(importTool);
 }
 
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
@@ -209,11 +207,9 @@ void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
 }
 
 void MyPluginManager::writeDataToFile(const QString& exportToolName) {
-    QList<MyPluginItemBase*> exportTools = getPluginsOfType(pluginItems(), "dataexporttool");
-    for (MyPluginItemBase* exportTool : exportTools) {
-        if (exportTool->name() == exportToolName)
-            return writeDataToFile(exportTool);
-    }
+    MyPluginItemBase* exportTool = findPluginByName(getPluginsOfType(pluginItems(), "dataexporttool"), exportToolName);
+    if (exportTool)
+        writeDataToFile(exportTool);
 }
 
 void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
@@ -233,17 +229,21 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QStrin
 }
 
 void MyPluginManager::writeFigureToFile(const QString& exportToolName) {
-    QList<MyPluginItemBase*> exportTools = getPluginsOfType(pluginItems(), "printexporttool");
-    for (MyPluginItemBase* exportTool : exportTools) {
-        if (exportTool->name() == exportToolName)
-            return writeFigureToFile(exportTool);
-    }
+    MyPluginItemBase* exportTool = findPluginByName(getPluginsOfType(pluginItems(), "printexporttool"), exportToolName);
+    if (exportTool)
+        writeFigureToFile(exportTool);
 }
 
 void MyPluginManager::writeFigureToFile(MyPluginItemBase* exportTool) {
     QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(askForWorkingDirectoryPath());
     if (!fileName.isEmpty())
         emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->fileExtension());
+}
+
+void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
+    MyPluginItemBase* autolayoutEngine = findPluginByName(getPluginsOfType(pluginItems(), "autolayoutengine"), autoLayoutEngineName);
+    if (autolayoutEngine)
+        autoLayout(autolayoutEngine);
 }
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {

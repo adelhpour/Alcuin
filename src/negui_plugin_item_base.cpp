@@ -71,6 +71,15 @@ QList<MyPluginItemBase*> getPluginsOfSubCategory(QList<MyPluginItemBase*> plugin
     return pluginsOfSubCategory;
 }
 
+MyPluginItemBase* findPluginByName(QList<MyPluginItemBase*> plugins, const QString& pluginName) {
+    for (MyPluginItemBase* plugin : plugins) {
+        if (plugin->name() == pluginName)
+            return plugin;
+    }
+
+    return NULL;
+}
+
 const QList<QString> getPluginsCategories(QList<MyPluginItemBase*> plugins) {
     QList<QString> categories;
     for (MyPluginItemBase* plugin : plugins) {
