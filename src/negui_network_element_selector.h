@@ -54,8 +54,6 @@ public:
 
     MyNetworkElementBase* getOneSingleSelectedEdge();
 
-    const bool canDisplaySingleElementFeatureMenu();
-
     void displaySelectionArea(const QPointF& position);
 
     void createSelectionAreaGraphicsItem(const QPointF& position);
@@ -75,8 +73,6 @@ signals:
     QList<MyNetworkElementBase*> askForNodes();
 
     QList<MyNetworkElementBase*> askForEdges();
-
-    void networkElementsSelectedStatusIsChanged();
 
     const bool askForWhetherShiftModifierIsPressed();
 

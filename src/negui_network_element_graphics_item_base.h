@@ -73,17 +73,17 @@ signals:
     void askForRemoveGraphicsItem(QGraphicsItem*);
     void askForCreateChangeStageCommand();
     void askForClearFocusedGraphicsItems();
-    void askForCreateFeatureMenu();
+    void askForEnableFeatureMenuDisplay();
     void askForCopyNetworkElement();
     void askForCutNetworkElement();
     void askForCopyNetworkElementStyle();
     void askForPasteNetworkElementStyle();
     void askForDeleteNetworkElement();
-    const bool askForWhetherElementStyleIsCopied();
+    bool askForWhetherElementStyleIsCopied();
     const bool askForWhetherAnyOtherElementsAreSelected();
     QString askForDisplayName();
+    void askForDisplayFeatureMenu();
     void askForDisplaySceneContextMenu(const QPointF&);
-    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
 
 public slots:
 

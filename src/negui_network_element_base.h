@@ -77,7 +77,7 @@ public:
 
     virtual const qint32 calculateZValue() = 0;
 
-    QWidget* createAndConnectFeatureMenuObject();
+    QWidget* createFeatureMenu();
 
 signals:
     
@@ -89,9 +89,11 @@ signals:
     
     void askForCreateChangeStageCommand();
 
-    void askForDisplayFeatureMenu(QWidget*);
+    void askForEnableFeatureMenuDisplay();
 
-    QWidget* askForCurrentlyBeingDisplayedNetworkElementFeatureMenu();
+    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
+
+    void askForDisplayFeatureMenu(MyNetworkElementBase*);
 
     void askForCopyNetworkElement(MyNetworkElementBase*);
 
@@ -103,13 +105,13 @@ signals:
 
     void askForDeleteNetworkElement(MyNetworkElementBase*);
 
-    const bool askForWhetherElementStyleIsCopied();
+    bool askForWhetherElementStyleIsCopied();
 
-    const bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
+    bool askForWhetherAnyOtherElementsAreSelected(QList<MyNetworkElementBase*>);
 
     const QString askForIconsDirectoryPath();
 
-    const bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
+    bool askForCheckWhetherNetworkElementNameIsAlreadyUsed(const QString&);
 
     void askForDisplaySceneContextMenu(const QPointF&);
 
@@ -120,8 +122,6 @@ public slots:
     virtual void setSelected(const bool& selected);
 
     const bool isSelected();
-
-    void createFeatureMenu();
     
 protected slots:
 

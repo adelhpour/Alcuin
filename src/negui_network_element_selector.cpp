@@ -36,10 +36,8 @@ void MyNetworkElementSelector::setElementSelected(MyNetworkElementBase* networkE
 }
 
 void MyNetworkElementSelector::selectElement(MyNetworkElementBase* networkElement, const bool& selected) {
-    if (networkElement->isSelected() != selected) {
+    if (networkElement->isSelected() != selected)
         networkElement->setSelected(selected);
-        emit networkElementsSelectedStatusIsChanged();
-    }
 }
 
 void MyNetworkElementSelector::changeElementSelectionsStatus(MyNetworkElementBase* networkElement) {
@@ -57,7 +55,6 @@ void MyNetworkElementSelector::changeElementSelectionsStatus(MyNetworkElementBas
                 selectElements(false);
             selectElement(networkElement, true);
         }
-        emit networkElementsSelectedStatusIsChanged();
     }
 }
 
@@ -160,19 +157,9 @@ MyNetworkElementBase* MyNetworkElementSelector::getOneSingleSelectedEdge() {
     return NULL;
 }
 
-const bool MyNetworkElementSelector::canDisplaySingleElementFeatureMenu() {
-    return !askForWhetherShiftModifierIsPressed() || getOneSingleSelectedNode() || getOneSingleSelectedEdge();
-}
-
 void MyNetworkElementSelector::displaySelectionArea(const QPointF& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
+    if (getSceneMode() == NORMAL_MODE)
         createSelectionAreaGraphicsItem(position);
-        selectSelectionAreaCoveredNodes();
-        selectSelectionAreaCoveredEdges();
-        emit networkElementsSelectedStatusIsChanged();
-    }
 }
 
 void MyNetworkElementSelector::createSelectionAreaGraphicsItem(const QPointF& position) {
@@ -209,6 +196,11 @@ void MyNetworkElementSelector::setCollidingElementsSelected(QList<MyNetworkEleme
 
 void MyNetworkElementSelector::clearSelectionArea() {
     if (_selectionAreaGraphicsItem) {
+        if (!askForWhetherShiftModifierIsPressed())
+            selectElements(false);
+        selectSelectionAreaCoveredNodes();
+        selectSelectionAreaCoveredEdges();
+
         askForRemoveGraphicsItem(_selectionAreaGraphicsItem);
         delete _selectionAreaGraphicsItem;
         _selectionAreaGraphicsItem = NULL;

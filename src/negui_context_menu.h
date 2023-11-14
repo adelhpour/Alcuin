@@ -26,15 +26,15 @@ public:
 
 signals:
 
-    const bool askForWhetherSelectedElementsAreCopyable();
+    bool askForWhetherSelectedElementsAreCopyable();
 
-    const bool askForWhetherSelectedElementsAreCuttable();
+    bool askForWhetherSelectedElementsAreCuttable();
 
-    const bool askForWhetherAnyElementsAreAlignable();
+    bool askForWhetherAnyElementsAreAlignable();
 
-    const bool askForWhetherAnyElementsAreCopied();
+    bool askForWhetherAnyElementsAreCopied();
 
-    const bool askForWhetherAnyElementsAreSelected();
+    bool askForWhetherAnyElementsAreSelected();
 
     void askForCopySelectedNetworkElements();
 
@@ -62,7 +62,7 @@ signals:
 
     const bool askForWhetherElementStyleIsCopied();
 
-    void askForCreateFeatureMenu();
+    void askForDisplayFeatureMenu();
 
     void askForCopyNetworkElement();
 

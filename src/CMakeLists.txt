@@ -16,6 +16,8 @@ set(source_files
 		negui_plugin_item_base.cpp
 		negui_plugin_item_builder.cpp
 		negui_plugin_manager.cpp
+		negui_network_manager.cpp
+		negui_default_network_element_style_manager.cpp
 		negui_network_element_base.cpp
 		negui_node.cpp
 		negui_edge.cpp
@@ -77,6 +79,7 @@ set(source_files
 		negui_customized_feature_menu_widgets.cpp
 		negui_customized_menu_button_widgets.cpp
 		negui_customized_interactor_widgets.cpp
+		negui_menu_button_manager.cpp
 		negui_menu_button_builder.cpp
 		negui_decorate_menu_buttons.cpp
 		negui_mode_menu.cpp
@@ -105,6 +108,8 @@ set(header_files
 		negui_plugin_item_base.h
 		negui_plugin_item_builder.h
 		negui_plugin_manager.h
+		negui_network_manager.h
+		negui_default_network_element_style_manager.h
 		negui_network_element_base.h
 		negui_node.h
 		negui_edge.h
@@ -166,6 +171,7 @@ set(header_files
         negui_customized_feature_menu_widgets.h
 		negui_customized_menu_button_widgets.h
 		negui_customized_interactor_widgets.h
+		negui_menu_button_manager.h
 		negui_menu_button_builder.h
 		negui_decorate_menu_buttons.h
 		negui_mode_menu.h

@@ -26,8 +26,8 @@ public:
 signals:
 
     void askForSetNewNetworkCanvas();
-    const QStringList askForListOfPluginItemNames(const QString&);
-    const QStringList askForListOfPluginItemCategories(const QString&);
+    QStringList askForListOfPluginItemNames(const QString&);
+    QStringList askForListOfPluginItemCategories(const QString&);
     void askForReadFromFile(const QString&);
     void askForSaveCurrentNetwork();
     void askForWriteDataToFile(const QString&);
@@ -49,9 +49,10 @@ signals:
 
 private slots:
 
-    void displayFeatureMenu();
+    void displayNullFeatureMenu();
     void displayFeatureMenu(QWidget* featureMenu);
     void removeFeatureMenu();
+    void deleteFeatureMenu();
 
 protected:
 
@@ -70,6 +71,7 @@ protected:
     QWidget* _featureMenu;
     QWidget* _statusBar;
     qreal _layoutMenuRow;
+    bool _canDisplayFeatureMenu;
 };
 
 #endif

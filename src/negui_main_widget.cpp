@@ -18,6 +18,7 @@ MyNetworkEditorWidget::MyNetworkEditorWidget(QWidget *parent) :  QFrame(parent) 
     setObjectName("main_widget");
     setStyleSheet("QFrame {background-color : white}");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    _canDisplayFeatureMenu = false;
 
     setWidgets();
     setInteractions();
@@ -57,40 +58,38 @@ void MyNetworkEditorWidget::setWidgets() {
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
     // menubar
-    connect(this, SIGNAL(askForSetNewNetworkCanvas()), (MyInteractor*)interactor(), SLOT(setNewNetworkCanvas()));
-    connect(this, SIGNAL(askForListOfPluginItemNames(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemNames(const QString&)));
-    connect(this, SIGNAL(askForListOfPluginItemCategories(const QString&)), (MyInteractor*)interactor(), SLOT(listOfPluginItemCategories(const QString&)));
-    connect(this, SIGNAL(askForReadFromFile(const QString&)), (MyInteractor*)interactor(), SLOT(readFromFile(const QString&)));
-    connect(this, SIGNAL(askForSaveCurrentNetwork()), (MyInteractor*)interactor(), SLOT(saveCurrentNetwork()));
-    connect(this, SIGNAL(askForWriteDataToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeDataToFile(const QString&)));
-    connect(this, SIGNAL(askForWriteFigureToFile(const QString&)), (MyInteractor*)interactor(), SLOT(writeFigureToFile(const QString&)));
+    connect(this, &MyNetworkEditorWidget::askForSetNewNetworkCanvas, this, [this] () { ((MyInteractor*)interactor())->setNewNetworkCanvas(); });
+    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemNames, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemNames(type); });
+    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemCategories, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemCategories(type); });
+    connect(this, &MyNetworkEditorWidget::askForReadFromFile, this, [this] (const QString& importToolName) { ((MyInteractor*)interactor())->readFromFile(importToolName); });
+    connect(this, &MyNetworkEditorWidget::askForSaveCurrentNetwork, this, [this] () { ((MyInteractor*)interactor())->saveCurrentNetwork(); });
+    connect(this, &MyNetworkEditorWidget::askForWriteDataToFile, this, [this] (const QString& exportToolName){ ((MyInteractor*)interactor())->writeDataToFile(exportToolName); });
+    connect(this, &MyNetworkEditorWidget::askForWriteFigureToFile, this, [this] (const QString& exportToolName) { ((MyInteractor*)interactor())->writeFigureToFile(exportToolName); });
     connect(this, SIGNAL(askForTriggerUndoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(undo()));
     connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(canUndoChanged(const bool&)));
     connect(this, SIGNAL(askForTriggerRedoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(redo()));
     connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(canRedoChanged(const bool&)));
-    connect(this, SIGNAL(askForCutSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(cutSelectedNetworkElements()));
+    connect(this, &MyNetworkEditorWidget::askForCutSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->cutSelectedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(elementsCuttableStatusChanged(const bool&)), this, SIGNAL(elementsCuttableStatusChanged(const bool&)));
-    connect(this, SIGNAL(askForCopySelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(copySelectedNetworkElements()));
+    connect(this, &MyNetworkEditorWidget::askForCopySelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->copySelectedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(elementsCopyableStatusChanged(const bool&)), this, SIGNAL(elementsCopyableStatusChanged(const bool&)));
-    connect(this, SIGNAL(askForPasteCopiedNetworkElements()), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements()));
+    connect(this, &MyNetworkEditorWidget::askForPasteCopiedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () {
-        ((MyInteractor*)this->interactor())->selectElements(true);
-        ((MyInteractor*)this->interactor())->displayFeatureMenu();
-    });
+        ((MyInteractor*)this->interactor())->selectElements(true); });
     connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) {
-        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category);
-        ((MyInteractor*)this->interactor())->displayFeatureMenu();
-    });
+        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category); });
     connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));
     connect(this, SIGNAL(askForZoomOut()), (MyGraphicsView*)view(), SLOT(zoomOut()));
 
     /// feature menu
     // display feature menu
-    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu()), this, SLOT(displayFeatureMenu()));
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplayNullFeatureMenu()), this, SLOT(displayNullFeatureMenu()));
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplayFeatureMenu(QWidget*)), this, SLOT(displayFeatureMenu(QWidget*)));
     connect((MyInteractor*)interactor(), SIGNAL(askForRemoveFeatureMenu()), this, SLOT(removeFeatureMenu()));
-    connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedNetworkElementFeatureMenu, this, [this] () { return featureMenu(); } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForWhetherFeatureMenuCanBeDisplayed, this, [this] () { return _canDisplayFeatureMenu; } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForEnableFeatureMenuDisplay, this, [this] () { _canDisplayFeatureMenu = true; } );
+    connect((MyInteractor*)interactor(), &MyInteractor::askForCurrentlyBeingDisplayedFeatureMenu, this, [this] () { return featureMenu(); });
 
     /// mode menu
     // set mode
@@ -107,12 +106,9 @@ void MyNetworkEditorWidget::setInteractions() {
     // reset scale
     connect((MyInteractor*)interactor(), SIGNAL(askForResetScale()), (MyGraphicsView*)view(), SLOT(resetScale()));
 
-    // enter key pressed
-    connect((MyGraphicsView*)view(), SIGNAL(enterKeyIsPressed()), (MyInteractor*)interactor(), SIGNAL(enterKeyIsPressed()));
-
     /// graphics scene
     // change stage command
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(askForCreateChangeStageCommand()), (MyInteractor*)interactor(), SLOT(createChangeStageCommand()));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCreateChangeStageCommand, this, [this] () { ((MyInteractor*)interactor())->createChangeStageCommand(); });
 
     // set scene mode
     connect((MyInteractor*)interactor(), &MyInteractor::modeIsSet, ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), [this] (const QString& mode) { ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->setSceneMode(mode); });
@@ -126,9 +122,6 @@ void MyNetworkEditorWidget::setInteractions() {
     // network background color
     connect((MyInteractor*)interactor(), SIGNAL(askForNetworkBackgroundColor()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(backgroundColor()));
     connect((MyInteractor*)interactor(), SIGNAL(askForSetNetworkBackgroundColor(const QString&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(setBackgroundColor(const QString&)));
-
-    // network extents
-    connect((MyInteractor*)interactor(), SIGNAL(askForNetworkExtents()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(networkExtents()));
 
     // reset scene
     connect((MyInteractor*)interactor(), SIGNAL(askForClearScene()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(clearScene()));
@@ -150,31 +143,28 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
     
     // add node
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), (MyInteractor*)interactor(), SLOT(addNewNode(const QPointF&)));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->addNewNode(position); });
 
     // display the element selection rectangle
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsPressed(const QPointF&)), (MyInteractor*)interactor(), SLOT(displaySelectionArea(const QPointF&)));
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mousePressedLeftButtonIsMoved(const QPointF&)), (MyInteractor*)interactor(), SLOT(displaySelectionArea(const QPointF&)));
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(mouseLeftButtonIsReleased()), (MyInteractor*)interactor(), SLOT(clearSelectionArea()));
-
-    // display null feature menu
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SIGNAL(escapeKeyIsPressed()), this, SLOT(displayFeatureMenu()));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->displaySelectionArea(position); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mousePressedLeftButtonIsMoved, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->displaySelectionArea(position); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsReleased, this, [this] () { ((MyInteractor*)interactor())->clearSelectionArea(); });
 
     // change mode
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::escapeKeyIsPressed, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForEnableNormalMode, (MyInteractor*)interactor(), &MyInteractor::enableNormalMode);
 
     // context menu
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCopyable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCopyable()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherSelectedElementsAreCuttable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsCuttable()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreCopied()), (MyInteractor*)interactor(), SLOT(areAnyElementsCopied()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreSelected()), (MyInteractor*)interactor(), SLOT(areAnyElementsSelected()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForWhetherAnyElementsAreAlignable()), (MyInteractor*)interactor(), SLOT(areSelectedElementsAlignable()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCopySelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(copySelectedNetworkElements()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForCutSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(cutSelectedNetworkElements()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForPasteCopiedNetworkElements(const QPointF &)), (MyInteractor*)interactor(), SLOT(pasteCopiedNetworkElements(const QPointF &)));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForDeleteSelectedNetworkElements()), (MyInteractor*)interactor(), SLOT(deleteSelectedNetworkElements()));
-    connect(((MyGraphicsView*)view())->scene(), SIGNAL(askForAlignSelectedNetworkElements(const QString&)), (MyInteractor*)interactor(), SLOT(alignSelectedNetworkElements(const QString&)));
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCopyable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsCopyable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherSelectedElementsAreCuttable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsCuttable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreCopied, this, [this] () { return ((MyInteractor*)interactor())->areAnyElementsCopied(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreSelected, this, [this] () { return ((MyInteractor*)interactor())->areAnyElementsSelected(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreAlignable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsAlignable(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCopySelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->copySelectedNetworkElements(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCutSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->cutSelectedNetworkElements(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForPasteCopiedNetworkElements, this, [this] (const QPointF & position) { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForDeleteSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->deleteSelectedNetworkElements(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForAlignSelectedNetworkElements, this, [this] (const QString& type)  { ((MyInteractor*)interactor())->alignSelectedNetworkElements(type); });
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), ((MyGraphicsView*)view())->scene(), SLOT(displayContextMenu(const QPointF&)));
 
     // status bar
@@ -229,13 +219,13 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
     return _layoutMenuRow;
 }
 
-void MyNetworkEditorWidget::displayFeatureMenu() {
+void MyNetworkEditorWidget::displayNullFeatureMenu() {
     if (featureMenu())
         displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
-    removeFeatureMenu();
+    deleteFeatureMenu();
     featureMenu->setFixedHeight(height() - 2 * toolBar()->height() - 2 * statusBar()->height());
     ((QGridLayout*)layout())->addWidget(featureMenu, layoutMenuRow(), 2, Qt::AlignTop | Qt::AlignRight);
     arrangeWidgetLayers();
@@ -244,6 +234,11 @@ void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
 }
 
 void MyNetworkEditorWidget::removeFeatureMenu() {
+    deleteFeatureMenu();
+    _canDisplayFeatureMenu = false;
+}
+
+void MyNetworkEditorWidget::deleteFeatureMenu() {
     if (featureMenu()) {
         layout()->removeWidget(featureMenu());
         featureMenu()->deleteLater();
