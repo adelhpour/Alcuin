@@ -22,6 +22,8 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
 void MyInteractor::setUndoStack() {
     _undoStack = new MyUndoStack(this);
+    connect(_undoStack, SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(canUndoChanged(const bool&)));
+    connect(_undoStack, SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(canRedoChanged(const bool&)));
 }
 
 QUndoStack* MyInteractor::undoStack() {
@@ -169,6 +171,12 @@ void MyInteractor::enableNormalMode() {
     emit askForSetToolTip("");
 }
 
+void MyInteractor::enableAddNodeMode(const QString& nodeStyleName) {
+    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodeStyle"), nodeStyleName);
+    if (nodeStyle)
+        enableAddNodeMode(nodeStyle);
+}
+
 void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddNodeMode();
@@ -178,6 +186,13 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
     emit addElementModeIsEnabled(style->name());
 }
+
+void MyInteractor::enableAddEdgeMode(const QString& edgeStyleName) {
+    MyPluginItemBase* edgeStyle = findPluginByName(getPluginsOfType(pluginItems(), "edgeStyle"), edgeStyleName);
+    if (edgeStyle)
+        enableAddEdgeMode(edgeStyle);
+}
+
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
@@ -249,8 +264,8 @@ void MyInteractor::addNode(const QJsonObject &json) {
     ((MyNetworkManager*)_networkManager)->addNode(json);
 }
 
-void MyInteractor::addNewNode(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->addNewNode(position);
+void MyInteractor::addNode(const QPointF& position) {
+    ((MyNetworkManager*)_networkManager)->addNode(position);
 }
 
 void MyInteractor::clearNodesInfo() {
@@ -400,6 +415,10 @@ void MyInteractor::saveCurrentNetwork() {
         ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool(), ((MyFileManager*)fileManager())->currentFileName());
 }
 
+void MyInteractor::autoLayout(const QString& autoLayoutEngineName) {
+    ((MyPluginManager*)_pluginManager)->autoLayout(autoLayoutEngineName);
+}
+
 void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     ((MyPluginManager*)_pluginManager)->autoLayout(autoLayoutEngine);
 }
@@ -433,4 +452,20 @@ void MyInteractor::createChangeStageCommand() {
         connect((MyChangeStageCommand*)changeStageCommand, &MyChangeStageCommand::askForCreateNetwork, this, [this] (const QJsonObject& json) { createNetwork(json); });
         _stageInfo = currentStageInfo;
     }
+}
+
+void MyInteractor::triggerUndoAction() {
+    undoStack()->undo();
+}
+
+void MyInteractor::triggerRedoAction() {
+    undoStack()->redo();
+}
+
+void MyInteractor::selectAllElements() {
+    selectElements(true);
+}
+
+void MyInteractor::selectAllElements(const QString& category) {
+    selectElementsOfCategory(true, category);
 }
