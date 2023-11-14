@@ -91,7 +91,7 @@ set(source_files
 		negui_import_tools.cpp
 		negui_export_tools.cpp
 		negui_autolayout_engines.cpp
-		negui_c_api.cpp
+		negui_main_widget_builder.cpp
 		)
 
 set(header_files
@@ -184,7 +184,7 @@ set(header_files
 		negui_import_tools.h
 		negui_export_tools.h
 		negui_autolayout_engines.h
-		negui_c_api.h
+        negui_main_widget_builder.h
 		)
 
 ## build
