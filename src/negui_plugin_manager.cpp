@@ -5,31 +5,14 @@
 #include "negui_export_tools.h"
 
 #include <QPluginLoader>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 
 // MyPluginManager
 
 MyPluginManager::MyPluginManager() {
-    // import interface
-    _importInterface = NULL;
-    _isSetImportInterface = false;
-
-    // data export interface
-    _dataExportInterface = NULL;
-    _isSetDataExportInterface = false;
-
-    // print export interface
-    _printExportInterface = NULL;
-    _isSetPrintExportInterface = false;
-
-    // element style interface
-    _elementStyleInterface = NULL;
-    _isSetElementStyleInterface = false;
-
-    // autolayout interface
-    _autoLayoutInterface = NULL;
-    _isSetAutoLayoutInterface = false;
+    _generalInterface = NULL;
 }
 
 void MyPluginManager::load() {
@@ -40,21 +23,8 @@ void MyPluginManager::load() {
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject* plugin = pluginLoader.instance();
         if (plugin) {
-            // import interface
-            if (qobject_cast<ImportInterface *>(plugin))
-                setImportInterface(qobject_cast<ImportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // data export interface
-            else if (qobject_cast<DataExportInterface *>(plugin))
-                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // print export interface
-            else if (qobject_cast<PrintExportInterface *>(plugin))
-                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // element style interface
-            else if (qobject_cast<ElementStyleInterface *>(plugin))
-                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // auto layout interface
-            else if (qobject_cast<AutoLayoutInterface *>(plugin))
-                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
+            if (qobject_cast<GeneralInterface *>(plugin))
+                setGeneralInterface(qobject_cast<GeneralInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
         }
     }
 }
@@ -73,84 +43,16 @@ const QDir MyPluginManager::getPluginsDirectory(const QDir applicationDirectory)
     return pluginsDir;
 }
 
-bool MyPluginManager::setImportInterface(ImportInterface* importInterface, const QString &appPath, const QString &pluginsPath) {
-    if (importInterface) {
-        _importInterface = importInterface;
-        if (!_importInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_importInterface->loadItemsInfo());
-            _isSetImportInterface = true;
-        }
+void MyPluginManager::setGeneralInterface(GeneralInterface* generalInterface, const QString &appPath, const QString &pluginsPath) {
+    if (generalInterface) {
+        _generalInterface = generalInterface;
+        if (!generalInterface->initialize(appPath, pluginsPath))
+            readPluginItemsInfo(_generalInterface->loadItemsInfo());
     }
-
-    return _isSetImportInterface;
 }
 
-ImportInterface* MyPluginManager::importInterface() {
-    return _importInterface;
-}
-
-bool MyPluginManager::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &appPath, const QString &pluginsPath) {
-    if (dataExportInterface) {
-        _dataExportInterface = dataExportInterface;
-        if (!_dataExportInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_dataExportInterface->loadItemsInfo());
-            _isSetDataExportInterface = true;
-        }
-    }
-
-    return _isSetDataExportInterface;
-}
-
-DataExportInterface* MyPluginManager::dataExportInterface() {
-    return _dataExportInterface;
-}
-
-bool MyPluginManager::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &appPath, const QString &pluginsPath) {
-    if (printExportInterface) {
-        _printExportInterface = printExportInterface;
-        if (!_printExportInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_printExportInterface->loadItemsInfo());
-            _isSetPrintExportInterface = true;
-        }
-    }
-
-    return _isSetPrintExportInterface;
-}
-
-PrintExportInterface* MyPluginManager::printExportInterface() {
-    return _printExportInterface;
-}
-
-bool MyPluginManager::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
-    if (elementStyleInterface) {
-        _elementStyleInterface = elementStyleInterface;
-        if (!_elementStyleInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_elementStyleInterface->loadItemsInfo());
-            _isSetElementStyleInterface = true;
-        }
-    }
-
-    return _isSetElementStyleInterface;
-}
-
-ElementStyleInterface* MyPluginManager::elementStyleInterface() {
-    return _elementStyleInterface;
-}
-
-bool MyPluginManager::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &appPath, const QString &pluginsPath) {
-    if (autoLayoutInterface) {
-        _autoLayoutInterface = autoLayoutInterface;
-        if (!_autoLayoutInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_autoLayoutInterface->loadItemsInfo());
-            _isSetAutoLayoutInterface = true;
-        }
-    }
-
-    return _isSetAutoLayoutInterface;
-}
-
-AutoLayoutInterface* MyPluginManager::autoLayoutInterface() {
-    return _autoLayoutInterface;
+GeneralInterface* MyPluginManager::generalInterface() {
+    return _generalInterface;
 }
 
 void MyPluginManager::readPluginItemsInfo(const QJsonObject &json) {
@@ -200,9 +102,23 @@ void MyPluginManager::readFromFile(const QString& importToolName) {
 
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
-    if (!fileName.isEmpty()) {
-        QJsonObject networkInfo = (importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
-        emit networkInfoIsReadFromFile(networkInfo, importTool, fileName);
+    if (!fileName.isEmpty())
+        processReadFromFileOutputList(generalInterface()->call("readGraphInfoFromFile", createReadFromFileInputList(importTool, fileName)), importTool, fileName);
+}
+
+const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
+    QStringList readFromFileInputList;
+    readFromFileInputList.append(importTool->name());
+    readFromFileInputList.append(fileName);
+
+    return readFromFileInputList;
+}
+
+void MyPluginManager::processReadFromFileOutputList(const QStringList& readFromFileOutputList, MyPluginItemBase* importTool, const QString& fileName) {
+    if (readFromFileOutputList.size() == 1) {
+        QJsonDocument doc = QJsonDocument::fromJson(readFromFileOutputList.at(0).toUtf8());
+        if (!doc.isNull())
+            emit networkInfoIsReadFromFile(doc.object(), importTool, fileName);
     }
 }
 
@@ -219,13 +135,39 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
 }
 
 void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
-    QJsonObject graphInfoObject = askForNetworkInfo();
-    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibility(graphInfoObject, exportTool->name()));
+    QStringList checkForGraphInfoCompatibilityInputList = createCheckForGraphInfoCompatibilityInputList(exportTool);
+    processCheckForGraphInfoCompatibilityOutputList(generalInterface()->call("checkForGraphInfoCompatibility", createCheckForGraphInfoCompatibilityInputList(exportTool)), exportTool);
     if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
-        dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
+        QStringList writeToFileInputList = createWriteToFileInputList(exportTool, fileName);
+        generalInterface()->call("writeGraphInfoToFile", writeToFileInputList);
         emit networkInfoIsWrittenToFile(exportTool, fileName);
     }
     ((MyDataExportTool*)exportTool)->showMessages();
+}
+
+const QStringList MyPluginManager::createCheckForGraphInfoCompatibilityInputList(MyPluginItemBase* exportTool) {
+    QStringList checkForGraphInfoCompatibilityInputList;
+    checkForGraphInfoCompatibilityInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
+    checkForGraphInfoCompatibilityInputList.append(exportTool->name());
+
+    return checkForGraphInfoCompatibilityInputList;
+}
+
+void MyPluginManager::processCheckForGraphInfoCompatibilityOutputList(const QStringList& checkForGraphInfoCompatibilityOutputList, MyPluginItemBase* exportTool) {
+    if (checkForGraphInfoCompatibilityOutputList.size() == 1) {
+        QJsonDocument doc = QJsonDocument::fromJson(checkForGraphInfoCompatibilityOutputList.at(0).toUtf8());
+        if (!doc.isNull())
+            ((MyDataExportTool*)exportTool)->readCompatibilityInfo(doc.object());
+    }
+}
+
+const QStringList MyPluginManager::createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName) {
+    QStringList writeToFileInputList;
+    writeToFileInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
+    writeToFileInputList.append(exportTool->name());
+    writeToFileInputList.append(fileName);
+
+    return writeToFileInputList;
 }
 
 void MyPluginManager::writeFigureToFile(const QString& exportToolName) {
@@ -247,11 +189,25 @@ void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
 }
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
-    if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters()) {
-        QJsonObject autoLayoutInfoObject;
-        autoLayoutEngine->write(autoLayoutInfoObject);
-        QJsonObject graphInfoObject = askForNetworkInfo();
-        autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
-        emit auotLayoutAlgorithmIsApplied(graphInfoObject);
+    if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
+        processAutoLayoutOutputList(generalInterface()->call("autoLayout", createAutoLayoutInputList(autoLayoutEngine)));
+}
+
+const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {
+    QJsonObject autoLayoutInfoObject;
+    autoLayoutEngine->write(autoLayoutInfoObject);
+    QJsonObject graphInfoObject = askForNetworkInfo();
+    QStringList autoLayoutInputList;
+    autoLayoutInputList.append(QJsonDocument(graphInfoObject).toJson(QJsonDocument::Compact));
+    autoLayoutInputList.append(QJsonDocument(autoLayoutInfoObject).toJson(QJsonDocument::Compact));
+
+    return autoLayoutInputList;
+}
+
+void MyPluginManager::processAutoLayoutOutputList(const QStringList& autoLayoutOutputList) {
+    if (autoLayoutOutputList.size() == 1) {
+        QJsonDocument doc = QJsonDocument::fromJson(autoLayoutOutputList.at(0).toUtf8());
+        if (!doc.isNull())
+            emit autoLayoutAlgorithmIsApplied(doc.object());
     }
 }
