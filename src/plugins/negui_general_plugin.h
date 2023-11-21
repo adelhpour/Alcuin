@@ -12,8 +12,15 @@ public:
     QStringList call(const QString& functionName, const QStringList& inputList) override;
 
 protected:
+    void loadPluginScripts(const QString &pluginsPath);
+    const QJsonObject loadItemsInfo(CPyObject script);
+    const QJsonObject addItemsInfo(QJsonObject itemsInfo, const QJsonObject& newItemsInfo);
+    const QJsonObject createItemsInfoJsonObject(CPyObject itemsInfo);
+    CPyObject createPythonInput(const QStringList& inputList);
+    const QStringList processPythonOutput(CPyObject output);
+
     CPyInstance* _pyInstance;
-    CPyObject _script;
+    QList<CPyObject> _scripts;
 };
 
 
