@@ -1,7 +1,7 @@
 import json
 import sbmlplot
     
-def importInfo():
+def items_info():
     # json
     jsonformat = {'name' : "JSON", 'type': "importtool", 'file-extension' : "json"}
 
@@ -9,31 +9,33 @@ def importInfo():
     sbmlformat = {'name' : "SBML", 'type': "importtool", 'file-extension' : "xml"}
     
     return json.dumps({'items': [jsonformat, sbmlformat]})
-    
 
-def readGraphInfoFromFile(filename, filetype):
+
+def readGraphInfoFromFile(input):
+    file_type = input[0]
+    file_name = input[1]
     # json
-    if filetype == "JSON":
-        return loadJson(filename)
+    if file_type == "JSON":
+        return loadJson(file_name)
     # sbml
-    elif filetype == "SBML":
-        return loadSBML(filename)
-    
-        
-    return json.dumps({'items': [{'name' : "SBML", 'file-extension' : "xml"}]})
-        
-    
-def loadJson(filename):
-    f = open(filename)
-    return json.dumps(json.load(f))
+    elif file_type == "SBML":
+        return loadSBML(file_name)
 
-def loadSBML(filename):
+    return (json.dumps({'items': [{'name' : "SBML", 'file-extension' : "xml"}]}),)
+
+
+def loadJson(file_name):
+    f = open(file_name)
+    return (json.dumps(json.load(f)),)
+
+
+def loadSBML(file_name):
     sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromSBMLModel()
-    sbml_graph_info.extract_info(filename)
+    sbml_graph_info.extract_info(file_name)
     network_editor_json = sbmlplot.SBMLGraphInfoExportToNetworkEditor()
     network_editor_json.extract_graph_info(sbml_graph_info)
     graph_info = network_editor_json.export()
-    return json.dumps(graph_info)
+    return (json.dumps(graph_info),)
 
 """
 # keep commented till using the new version of sbmlplot

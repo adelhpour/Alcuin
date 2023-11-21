@@ -1,6 +1,6 @@
 import json
 
-def printExportInfo():
+def items_info():
     # pdf
     pdf_format = {'name' : "as PDF", 'type': "printexporttool", 'file-extension' : "pdf", 'default-save-file-name' : "Drawing"}
 
