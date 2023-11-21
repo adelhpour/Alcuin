@@ -55,10 +55,6 @@ public:
         
     }
 
-    ~CPyObject() {
-        Release();
-    }
-
     PyObject* getObject() {
         return p;
     }
