@@ -13,7 +13,7 @@ public:
 
 protected:
     CPyInstance* _pyInstance;
-    QList<CPyObject> _scripts;
+    CPyObject _script;
 };
 
 

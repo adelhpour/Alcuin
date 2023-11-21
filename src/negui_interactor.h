@@ -17,7 +17,7 @@ public:
     
     MyInteractor(QObject *parent = nullptr);
     QList<QAbstractButton*> getToolbarMenuButtons();
-    QList<QAbstractButton*> getModeMenuButtons()
+    QList<QAbstractButton*> getModeMenuButtons();
 
 signals:
 

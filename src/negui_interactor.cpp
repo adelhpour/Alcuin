@@ -72,7 +72,7 @@ void MyInteractor::setPluginManager() {
         ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
     } );
     connect(_pluginManager, SIGNAL(askForExportFigure(const QString&, const QString&)), this, SIGNAL(askForExportFigure(const QString&, const QString&)));
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::auotLayoutAlgorithmIsApplied, this, [this] (const QJsonObject &json) {
+    connect((MyPluginManager*)_pluginManager, &MyPluginManager::autoLayoutAlgorithmIsApplied, this, [this] (const QJsonObject &json) {
         createNetwork(json);
         emit askForAdjustExtentsOfNodes();
         emit askForAdjustConnectedEdgesOfNodes();
