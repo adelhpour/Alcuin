@@ -1,18 +1,26 @@
 import json
 
 def items_info():
-    # json
-    first_extra_plugin = {'name': "First", 'name-of-call-functions': ["print_first"]}
+    select_nodes = {'name': "Select Elements", 'name-of-call-functions': ["select_elements"]}
+    select_edges = {'name': "Delete Selected Elements", 'name-of-call-functions': ["delete_selected_elements"]}
+    delete_and_select = {'name': "Delete & Select", 'name-of-call-functions': ["delete_and_select"]}
 
-    # sbml
-    second_extra_plugin = {'name': "Second", 'name-of-call-functions': ["print_second"]}
-
-    return json.dumps({'items': [first_extra_plugin, second_extra_plugin]})
+    return json.dumps({'items': [select_nodes, select_edges, delete_and_select]})
 
 
-def print_first(input):
-    print("First")
+def select_elements(input):
+    function1 = {'name': "selectElements", 'inputs': [True]}
+
+    return json.dumps({'functions': [function1]})
 
 
-def print_second(input):
-    print("Second")
+def delete_selected_elements(input):
+    function1 = {'name': "deleteSelectedNetworkElements", 'inputs': []}
+
+    return json.dumps({'functions': [function1]})
+
+def delete_and_select(input):
+    function1 = {'name': "deleteSelectedNetworkElements", 'inputs': []}
+    function2 = {'name': "selectElements", 'inputs': [True]}
+
+    return json.dumps({'functions': [function1, function2]})
