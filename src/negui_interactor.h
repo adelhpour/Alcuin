@@ -9,6 +9,7 @@
 #include <QUndoStack>
 #include <QAbstractButton>
 #include <QGraphicsItem>
+#include <QJsonArray>
 
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
@@ -121,6 +122,8 @@ public slots:
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
+    void triggerAPIAction(const QJsonObject& json);
+    void triggerAPIAction(const QString& functionName, const QJsonArray& inputs);
     
 protected:
 

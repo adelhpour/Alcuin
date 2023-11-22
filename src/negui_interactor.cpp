@@ -79,6 +79,7 @@ void MyInteractor::setPluginManager() {
         createChangeStageCommand();
         enableNormalMode();
     } );
+    connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QJsonObject&)), this, SLOT(triggerAPIAction(const QJsonObject&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -472,4 +473,27 @@ void MyInteractor::selectAllElements(const QString& category) {
 
 void MyInteractor::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
     ((MyPluginManager*)_pluginManager)->defaultPluginAction(defaultPluginItem);
+}
+
+void MyInteractor::triggerAPIAction(const QJsonObject& json) {
+    if (json.contains("functions") && json["functions"].isArray()) {
+        QJsonArray functionsArray = json["functions"].toArray();
+        for (int functionIndex = 0; functionIndex < functionsArray.size(); ++functionIndex) {
+            QJsonObject functionObject = functionsArray[functionIndex].toObject();
+            if (functionObject.contains("name") && functionObject["name"].isString()) {
+                QString functionName = functionObject["name"].toString();
+                if (functionObject.contains("inputs") && functionObject["inputs"].isArray())
+                    triggerAPIAction1(functionName, functionObject["inputs"].toArray());
+            }
+        }
+    }
+}
+
+void MyInteractor::triggerAPIAction(const QString& functionName, const QJsonArray& inputs) {
+    if (functionName == "selectElements") {
+        if (inputs.size() == 1 && inputs[0].isBool())
+            selectElements(inputs[0].toBool());
+    }
+    else if (functionName == "deleteSelectedNetworkElements")
+        deleteSelectedNetworkElements();
 }
