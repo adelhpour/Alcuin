@@ -20,6 +20,8 @@ QList<QAbstractButton*> createToolbarMenuButtons(QObject* interactor, QObject* u
         buttons.push_back(createAutoLayoutMenuButton(interactor, plugins, iconsDirectoryPath));
     buttons.push_back(createUndoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     buttons.push_back(createRedoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
+    if (getPluginsOfType(plugins, "default").size())
+        buttons.push_back(createDefaultMenuButton(interactor, plugins, iconsDirectoryPath));
 
     return buttons;
 }
@@ -254,5 +256,18 @@ QAbstractButton* createZoomOutMenuButton(QObject* graphicsView, const QString& i
     QAbstractButton* button = new MyToolButton();
     decorateZoomOutButton(button, iconsDirectoryPath);
     QObject::connect(button, SIGNAL(clicked()), graphicsView, SLOT(zoomOut()));
+    return button;
+}
+
+QAbstractButton* createDefaultMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+    QAbstractButton* button = new MyToolButton();
+    QMenu* subMenu = new MyMenu(button);
+    MyMenuButtonWidgetAction* defaultItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    defaultItemWidgetAction->setItems(getPluginsOfType(plugins, "default"));
+    QObject::connect(defaultItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
+    subMenu->addAction(defaultItemWidgetAction);
+    ((QToolButton*)button)->setMenu(subMenu);
+    decorateDefaultButton(button, iconsDirectoryPath);
+
     return button;
 }

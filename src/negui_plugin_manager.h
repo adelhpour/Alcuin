@@ -63,6 +63,10 @@ public:
 
     void processAutoLayoutOutputList(const QStringList& autoLayoutOutputList);
 
+    void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
+
+    const QStringList createDefaultPluginActionInputList(MyPluginItemBase* defaultPluginItem);
+
 signals:
 
     QString askForApplicationDirectoryPath();

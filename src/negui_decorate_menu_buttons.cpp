@@ -35,6 +35,12 @@ void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirec
     setIcon(button, iconsDirectory + "/autoLayout.png");
 }
 
+void decorateDefaultButton(QAbstractButton* button, const QString& iconsDirectory) {
+    button->setText("More");
+    button->setToolTip("More actions");
+    setIcon(button, iconsDirectory + "/more.png");
+}
+
 void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setShortcut(QKeySequence::Undo);
     setIcon(button, iconsDirectory + "/undo.png");

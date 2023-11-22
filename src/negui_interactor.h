@@ -120,6 +120,7 @@ public slots:
     void createChangeStageCommand();
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
+    void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
     
 protected:
 

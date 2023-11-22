@@ -5,6 +5,7 @@
 #include "negui_import_tools.h"
 #include "negui_export_tools.h"
 #include "negui_autolayout_engines.h"
+#include "negui_default_plugin_item.h"
 
 MyPluginItemBase* createPluginItem(const QJsonObject &json) {
     if (json.contains("type") && json["type"].isString()) {
@@ -23,8 +24,8 @@ MyPluginItemBase* createPluginItem(const QJsonObject &json) {
         else if (json["type"].toString() == "autolayoutengine")
             return createAutoLayoutEngine(json);
     }
-    
-    return NULL;
+
+    return createDefaultPlugin(json);
 }
 
 MyPluginItemBase* createImportTool(const QJsonObject &json) {
@@ -61,6 +62,16 @@ MyPluginItemBase* createAutoLayoutEngine(const QJsonObject &json) {
     MyPluginItemBase* pluginItem = NULL;
     if (json.contains("name") && json["name"].isString()) {
         pluginItem = new MyAutoLayoutEngine(json["name"].toString());
+        pluginItem->read(json);
+    }
+
+    return pluginItem;
+}
+
+MyPluginItemBase* createDefaultPlugin(const QJsonObject &json) {
+    MyPluginItemBase* pluginItem = NULL;
+    if (json.contains("name") && json["name"].isString()) {
+        pluginItem = new MyDefaultPluginItem(json["name"].toString());
         pluginItem->read(json);
     }
 

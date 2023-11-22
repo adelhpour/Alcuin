@@ -15,6 +15,8 @@ void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory);
 
 void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirectory);
 
+void decorateDefaultButton(QAbstractButton* button, const QString& iconsDirectory);
+
 void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory);
 
 void decorateRedoActionButton(QAbstractButton* button, const QString& iconsDirectory);

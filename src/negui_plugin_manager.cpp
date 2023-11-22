@@ -208,3 +208,11 @@ void MyPluginManager::processAutoLayoutOutputList(const QStringList& autoLayoutO
             emit autoLayoutAlgorithmIsApplied(doc.object());
     }
 }
+
+void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
+    generalInterface()->call(defaultPluginItem->defaultNameOfCallFunction(), createDefaultPluginActionInputList(defaultPluginItem));
+}
+
+const QStringList MyPluginManager::createDefaultPluginActionInputList(MyPluginItemBase* defaultPluginItem) {
+    return QStringList();
+}

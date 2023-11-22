@@ -469,3 +469,7 @@ void MyInteractor::selectAllElements() {
 void MyInteractor::selectAllElements(const QString& category) {
     selectElementsOfCategory(true, category);
 }
+
+void MyInteractor::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
+    ((MyPluginManager*)_pluginManager)->defaultPluginAction(defaultPluginItem);
+}
