@@ -37,8 +37,6 @@ public:
 
     const QStringList createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName);
 
-    void processReadFromFileOutputList(const QStringList& readFromFileOutputList, MyPluginItemBase* importTool, const QString& fileName);
-
     void writeDataToFile(const QString& exportToolName);
 
     void writeDataToFile(MyPluginItemBase* exportTool);
@@ -46,8 +44,6 @@ public:
     void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
 
     const QStringList createCheckForGraphInfoCompatibilityInputList(MyPluginItemBase* exportTool);
-
-    void processCheckForGraphInfoCompatibilityOutputList(const QStringList& checkForGraphInfoCompatibilityOutputList, MyPluginItemBase* exportTool);
 
     const QStringList createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName);
 
@@ -60,8 +56,6 @@ public:
     void autoLayout(MyPluginItemBase* autoLayoutEngine);
 
     const QStringList createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine);
-
-    void processAutoLayoutOutputList(const QStringList& autoLayoutOutputList);
 
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
 
@@ -84,6 +78,8 @@ signals:
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
 
     void autoLayoutAlgorithmIsApplied(const QJsonObject&);
+
+    void askForTriggerAPIAction(const QJsonObject&);
 
 protected:
 

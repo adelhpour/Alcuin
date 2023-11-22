@@ -103,7 +103,7 @@ void MyPluginManager::readFromFile(const QString& importToolName) {
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
     if (!fileName.isEmpty())
-        processReadFromFileOutputList(generalInterface()->call(importTool->defaultNameOfCallFunction(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
+        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->defaultNameOfCallFunction(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
 }
 
 const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
@@ -111,14 +111,6 @@ const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase*
     readFromFileInputList.append(fileName);
 
     return readFromFileInputList;
-}
-
-void MyPluginManager::processReadFromFileOutputList(const QStringList& readFromFileOutputList, MyPluginItemBase* importTool, const QString& fileName) {
-    if (readFromFileOutputList.size() == 1) {
-        QJsonDocument doc = QJsonDocument::fromJson(readFromFileOutputList.at(0).toUtf8());
-        if (!doc.isNull())
-            emit networkInfoIsReadFromFile(doc.object(), importTool, fileName);
-    }
 }
 
 void MyPluginManager::writeDataToFile(const QString& exportToolName) {
@@ -135,7 +127,7 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
 
 void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QStringList checkForGraphInfoCompatibilityInputList = createCheckForGraphInfoCompatibilityInputList(exportTool);
-    processCheckForGraphInfoCompatibilityOutputList(generalInterface()->call(exportTool->nameOfCallFunctions().at(0), createCheckForGraphInfoCompatibilityInputList(exportTool)), exportTool);
+    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(generalInterface()->call(exportTool->nameOfCallFunctions().at(0), createCheckForGraphInfoCompatibilityInputList(exportTool)));
     if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
         QStringList writeToFileInputList = createWriteToFileInputList(exportTool, fileName);
         generalInterface()->call(exportTool->nameOfCallFunctions().at(1), writeToFileInputList);
@@ -149,14 +141,6 @@ const QStringList MyPluginManager::createCheckForGraphInfoCompatibilityInputList
     checkForGraphInfoCompatibilityInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
 
     return checkForGraphInfoCompatibilityInputList;
-}
-
-void MyPluginManager::processCheckForGraphInfoCompatibilityOutputList(const QStringList& checkForGraphInfoCompatibilityOutputList, MyPluginItemBase* exportTool) {
-    if (checkForGraphInfoCompatibilityOutputList.size() == 1) {
-        QJsonDocument doc = QJsonDocument::fromJson(checkForGraphInfoCompatibilityOutputList.at(0).toUtf8());
-        if (!doc.isNull())
-            ((MyDataExportTool*)exportTool)->readCompatibilityInfo(doc.object());
-    }
 }
 
 const QStringList MyPluginManager::createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName) {
@@ -187,7 +171,7 @@ void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
-        processAutoLayoutOutputList(generalInterface()->call(autoLayoutEngine->defaultNameOfCallFunction(), createAutoLayoutInputList(autoLayoutEngine)));
+        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->defaultNameOfCallFunction(), createAutoLayoutInputList(autoLayoutEngine)));
 }
 
 const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {
@@ -201,16 +185,8 @@ const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* a
     return autoLayoutInputList;
 }
 
-void MyPluginManager::processAutoLayoutOutputList(const QStringList& autoLayoutOutputList) {
-    if (autoLayoutOutputList.size() == 1) {
-        QJsonDocument doc = QJsonDocument::fromJson(autoLayoutOutputList.at(0).toUtf8());
-        if (!doc.isNull())
-            emit autoLayoutAlgorithmIsApplied(doc.object());
-    }
-}
-
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
-    generalInterface()->call(defaultPluginItem->defaultNameOfCallFunction(), createDefaultPluginActionInputList(defaultPluginItem));
+    emit askForTriggerAPIAction(generalInterface()->call(defaultPluginItem->defaultNameOfCallFunction(), createDefaultPluginActionInputList(defaultPluginItem)));
 }
 
 const QStringList MyPluginManager::createDefaultPluginActionInputList(MyPluginItemBase* defaultPluginItem) {

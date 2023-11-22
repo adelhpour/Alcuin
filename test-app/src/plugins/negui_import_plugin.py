@@ -14,7 +14,7 @@ def items_info():
 def load_json(input):
     file_name = input[0]
     f = open(file_name)
-    return (json.dumps(json.load(f)),)
+    return json.dumps(json.load(f))
 
 
 def load_sbml(input):
@@ -24,7 +24,7 @@ def load_sbml(input):
     network_editor_json = sbmlplot.SBMLGraphInfoExportToNetworkEditor()
     network_editor_json.extract_graph_info(sbml_graph_info)
     graph_info = network_editor_json.export()
-    return (json.dumps(graph_info),)
+    return json.dumps(graph_info)
 
 """
 # keep commented till using the new version of sbmlplot

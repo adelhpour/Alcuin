@@ -66,7 +66,7 @@ def auto_layout(input):
                     graph_info['nodes'][n_index]['position']['x'] = node_pos[graph_info['nodes'][n_index]['id']][0]
                     graph_info['nodes'][n_index]['position']['y'] = node_pos[graph_info['nodes'][n_index]['id']][1]
 
-    return (json.dumps(graph_info), )
+    return json.dumps(graph_info)
 
 
 def is_parent(node):

@@ -12,7 +12,7 @@ def items_info():
 
 
 def check_for_json_compatibility(input):
-    return (json.dumps({'isInfoCompatible': True}),)
+    return json.dumps({'isInfoCompatible': True})
 
 
 def check_for_sbml_compatibility(input):
@@ -29,7 +29,7 @@ def check_for_sbml_compatibility(input):
         messages.append({'message': "Some Species in the network do not belong to any Compartments."})
 
     is_info_compatible = all_species_have_parents
-    return (json.dumps({'isInfoCompatible': is_info_compatible, 'messages': messages}),)
+    return json.dumps({'isInfoCompatible': is_info_compatible, 'messages': messages})
 
 
 def write_json(input):
