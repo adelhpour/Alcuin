@@ -60,6 +60,7 @@ const QString& MyAutoLayoutEngine::iconDirectory() const {
 }
 
 void MyAutoLayoutEngine::read(const QJsonObject &json) {
+    MyPluginItemBase::read(json);
     // parameters
     clearParameters();
     if (json.contains("parameters") && json["parameters"].isArray()) {
@@ -93,6 +94,7 @@ void MyAutoLayoutEngine::read(const QJsonObject &json) {
 }
 
 void MyAutoLayoutEngine::write(QJsonObject &json) {
+    MyPluginItemBase::write(json);
     // name
     json["name"] = name();
 

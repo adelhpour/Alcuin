@@ -37,6 +37,7 @@ const QString& MyExportToolBase::defaultSaveFileName() const {
 }
 
 void MyExportToolBase::read(const QJsonObject &json) {
+    MyPluginItemBase::read(json);
     // file extension
     if (json.contains("file-extension") && json["file-extension"].isString())
         _fileExtension = json["file-extension"].toString();
@@ -51,6 +52,7 @@ void MyExportToolBase::read(const QJsonObject &json) {
 }
 
 void MyExportToolBase::write(QJsonObject &json) {
+    MyPluginItemBase::write(json);
     // name
     json["name"] = name();
     

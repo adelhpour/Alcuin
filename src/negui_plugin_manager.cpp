@@ -103,12 +103,11 @@ void MyPluginManager::readFromFile(const QString& importToolName) {
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
     if (!fileName.isEmpty())
-        processReadFromFileOutputList(generalInterface()->call("readGraphInfoFromFile", createReadFromFileInputList(importTool, fileName)), importTool, fileName);
+        processReadFromFileOutputList(generalInterface()->call(importTool->defaultNameOfCallFunction(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
 }
 
 const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
     QStringList readFromFileInputList;
-    readFromFileInputList.append(importTool->name());
     readFromFileInputList.append(fileName);
 
     return readFromFileInputList;
@@ -136,10 +135,10 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
 
 void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QStringList checkForGraphInfoCompatibilityInputList = createCheckForGraphInfoCompatibilityInputList(exportTool);
-    processCheckForGraphInfoCompatibilityOutputList(generalInterface()->call("checkForGraphInfoCompatibility", createCheckForGraphInfoCompatibilityInputList(exportTool)), exportTool);
+    processCheckForGraphInfoCompatibilityOutputList(generalInterface()->call(exportTool->nameOfCallFunctions().at(0), createCheckForGraphInfoCompatibilityInputList(exportTool)), exportTool);
     if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
         QStringList writeToFileInputList = createWriteToFileInputList(exportTool, fileName);
-        generalInterface()->call("writeGraphInfoToFile", writeToFileInputList);
+        generalInterface()->call(exportTool->nameOfCallFunctions().at(1), writeToFileInputList);
         emit networkInfoIsWrittenToFile(exportTool, fileName);
     }
     ((MyDataExportTool*)exportTool)->showMessages();
@@ -148,7 +147,6 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QStrin
 const QStringList MyPluginManager::createCheckForGraphInfoCompatibilityInputList(MyPluginItemBase* exportTool) {
     QStringList checkForGraphInfoCompatibilityInputList;
     checkForGraphInfoCompatibilityInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
-    checkForGraphInfoCompatibilityInputList.append(exportTool->name());
 
     return checkForGraphInfoCompatibilityInputList;
 }
@@ -164,7 +162,6 @@ void MyPluginManager::processCheckForGraphInfoCompatibilityOutputList(const QStr
 const QStringList MyPluginManager::createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName) {
     QStringList writeToFileInputList;
     writeToFileInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
-    writeToFileInputList.append(exportTool->name());
     writeToFileInputList.append(fileName);
 
     return writeToFileInputList;
@@ -190,7 +187,7 @@ void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
-        processAutoLayoutOutputList(generalInterface()->call("autoLayout", createAutoLayoutInputList(autoLayoutEngine)));
+        processAutoLayoutOutputList(generalInterface()->call(autoLayoutEngine->defaultNameOfCallFunction(), createAutoLayoutInputList(autoLayoutEngine)));
 }
 
 const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {

@@ -3,33 +3,22 @@ import sbmlplot
     
 def items_info():
     # json
-    jsonformat = {'name' : "JSON", 'type': "importtool", 'file-extension' : "json"}
+    jsonformat = {'name' : "JSON", 'type': "importtool", 'file-extension' : "json", 'name-of-call-functions': ["load_json"]}
 
     # sbml
-    sbmlformat = {'name' : "SBML", 'type': "importtool", 'file-extension' : "xml"}
+    sbmlformat = {'name' : "SBML", 'type': "importtool", 'file-extension' : "xml", 'name-of-call-functions': ["load_sbml"]}
     
     return json.dumps({'items': [jsonformat, sbmlformat]})
 
 
-def readGraphInfoFromFile(input):
-    file_type = input[0]
-    file_name = input[1]
-    # json
-    if file_type == "JSON":
-        return loadJson(file_name)
-    # sbml
-    elif file_type == "SBML":
-        return loadSBML(file_name)
-
-    return (json.dumps({'items': [{'name' : "SBML", 'file-extension' : "xml"}]}),)
-
-
-def loadJson(file_name):
+def load_json(input):
+    file_name = input[0]
     f = open(file_name)
     return (json.dumps(json.load(f)),)
 
 
-def loadSBML(file_name):
+def load_sbml(input):
+    file_name = input[0]
     sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromSBMLModel()
     sbml_graph_info.extract_info(file_name)
     network_editor_json = sbmlplot.SBMLGraphInfoExportToNetworkEditor()

@@ -13,6 +13,8 @@ public:
     const bool isFrequentlyUsed();
     const QString& category() const;
     const QString& subCategory() const;
+    const QStringList& nameOfCallFunctions() const;
+    const QString& defaultNameOfCallFunction() const;
     virtual const QIcon icon() = 0;
     const QSize& iconSize() const;
     virtual void read(const QJsonObject &json) override;
@@ -22,6 +24,7 @@ protected:
     bool _isFrequentlyUsed;
     QString _category;
     QString _subCategory;
+    QStringList _nameOfCallFunctions;
     QSize _iconSize;
 };
 

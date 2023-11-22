@@ -3,32 +3,20 @@ import sbmlplot
 
 def items_info():
     # json
-    json_format = {'name' : "as JSON", 'type': "dataexporttool", 'file-extension' : "json", 'default-save-file-name' : "network", 'element-types': {'node': ["Reaction", "Compartment"], 'edge': ["Reactant", "Product", "Modifier"]}}
+    json_format = {'name' : "as JSON", 'type': "dataexporttool", 'file-extension' : "json", 'default-save-file-name' : "network", 'name-of-call-functions': ["check_for_json_compatibility", "write_json"]}
 
     # sbml
-    sbml_format = {'name' : "as SBML", 'type': "dataexporttool", 'file-extension' : "xml", 'default-save-file-name' : "model", 'element-types': {'node': ["Reaction"], 'edge': ["Reactant", "Product", "Modifier"]}}
+    sbml_format = {'name' : "as SBML", 'type': "dataexporttool", 'file-extension' : "xml", 'default-save-file-name' : "model", 'name-of-call-functions': ["check_for_sbml_compatibility", "write_sbml"]}
 
     return json.dumps({'items': [json_format, sbml_format]})
 
 
-def checkForGraphInfoCompatibility(input):
-    graph_info = json.loads(input[0])
-    file_type = input[1]
-    # json
-    if file_type == "as JSON":
-        return checkForJSONCompatibility()
-    # sbml
-    elif file_type == "as SBML":
-        return checkForSBMLCompatibility(graph_info)
-
-    return ({'isInfoCompatible': False, 'messages': [{'message': "export format is not supported"}]},)
-
-
-def checkForJSONCompatibility():
+def check_for_json_compatibility(input):
     return (json.dumps({'isInfoCompatible': True}),)
 
 
-def checkForSBMLCompatibility(graph_info):
+def check_for_sbml_compatibility(input):
+    graph_info = json.loads(input[0])
     all_species_have_parents = True
     for n_index in range(len(graph_info['nodes'])):
         if graph_info['nodes'][n_index]['style']['category'] == "Species":
@@ -43,25 +31,17 @@ def checkForSBMLCompatibility(graph_info):
     is_info_compatible = all_species_have_parents
     return (json.dumps({'isInfoCompatible': is_info_compatible, 'messages': messages}),)
 
-def writeGraphInfoToFile(input):
+
+def write_json(input):
     graph_info = json.loads(input[0])
-    file_type = input[1]
-    file_name = input[2]
-
-    # json
-    if file_type == "as JSON":
-        return writeJSON(graph_info, file_name)
-    # sbml
-    elif file_type == "as SBML":
-        return writeSBML(graph_info, file_name)
-
-
-def writeJSON(graph_info, file_name):
+    file_name = input[1]
     with open(file_name, 'w', encoding='utf8') as js_file:
         json.dump(graph_info, js_file, indent=1)
 
 
-def writeSBML(graph_info, file_name):
+def write_sbml(input):
+    graph_info = json.loads(input[0])
+    file_name = input[1]
     sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromNetworkEditor()
     sbml_graph_info.extract_info(graph_info)
     sbml_export = sbmlplot.SBMLGraphInfoExportToSBMLModel()

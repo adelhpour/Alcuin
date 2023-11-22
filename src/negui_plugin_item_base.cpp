@@ -1,4 +1,5 @@
 #include "negui_plugin_item_base.h"
+#include <QJsonArray>
 
 // MyPluginItemBase
 
@@ -19,6 +20,17 @@ const QString& MyPluginItemBase::subCategory() const {
     return _subCategory;
 }
 
+const QStringList& MyPluginItemBase::nameOfCallFunctions() const {
+    return _nameOfCallFunctions;
+}
+
+const QString& MyPluginItemBase::defaultNameOfCallFunction() const {
+    if (_nameOfCallFunctions.size())
+        return _nameOfCallFunctions.at(0);
+
+    return "";
+}
+
 const QSize& MyPluginItemBase::iconSize() const {
     return _iconSize;
 }
@@ -33,12 +45,24 @@ void MyPluginItemBase::read(const QJsonObject &json) {
         _category = json["category"].toString();
     if (json.contains("sub-category") && json["sub-category"].isString())
         _subCategory = json["sub-category"].toString();
+    _nameOfCallFunctions.clear();
+    if (json.contains("name-of-call-functions") && json["name-of-call-functions"].isArray()) {
+        QJsonArray nameOfCallFunctionsArray = json["name-of-call-functions"].toArray();
+        for (int nameOfCallFunctionIndex = 0; nameOfCallFunctionIndex < nameOfCallFunctionsArray.size(); ++nameOfCallFunctionIndex) {
+            if (nameOfCallFunctionsArray[nameOfCallFunctionIndex].isString())
+                _nameOfCallFunctions.append(nameOfCallFunctionsArray[nameOfCallFunctionIndex].toString());
+        }
+    }
 }
 
 void MyPluginItemBase::write(QJsonObject &json) {
     json["is-frequently-used"]  = isFrequentlyUsed();
     json["category"] = category();
     json["sub-category"] = subCategory();
+    QJsonArray nameOfCallFunctionsArray;
+    for (QString nameOfCallFunction : nameOfCallFunctions())
+        nameOfCallFunctionsArray.append(nameOfCallFunction);
+    json["name-of-call-functions"] = nameOfCallFunctionsArray;
 }
 
 QList<MyPluginItemBase*> getPluginsOfType(QList<MyPluginItemBase*> plugins, const QString& type) {

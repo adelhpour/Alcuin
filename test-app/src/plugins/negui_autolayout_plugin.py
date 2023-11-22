@@ -3,19 +3,18 @@ import json
 
 def items_info():
     # circular
-    circular = {'name' : "Circular", 'type': "autolayoutengine"}
+    circular = {'name' : "Circular", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
     # planar
-    planar = {'name' : "Planar", 'type': "autolayoutengine"}
+    planar = {'name' : "Planar", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
     # kamad_kawai
-    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine"}
+    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
     # spiral
-    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
+    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"], 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
 
     return json.dumps({'items': [circular, planar, kamad_kawai, spiral]})
 
 
-def autoLayout(input):
-    # read graph info
+def auto_layout(input):
     graph_info = json.loads(input[0])
     autolayout_info = json.loads(input[1])
     graph = nx.Graph()

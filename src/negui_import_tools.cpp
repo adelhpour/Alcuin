@@ -31,6 +31,7 @@ const QString& MyImportTool::iconDirectory() const {
 }
 
 void MyImportTool::read(const QJsonObject &json) {
+    MyPluginItemBase::read(json);
     // file extension
     if (json.contains("file-extension") && json["file-extension"].isString())
         _fileExtension = json["file-extension"].toString();
@@ -41,6 +42,7 @@ void MyImportTool::read(const QJsonObject &json) {
 }
 
 void MyImportTool::write(QJsonObject &json) {
+    MyPluginItemBase::write(json);
     // name
     json["name"] = name();
     
