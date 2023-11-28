@@ -3,10 +3,22 @@ import sbmlplot
 
 def items_info():
     # json
-    json_format = {'name' : "as JSON", 'type': "dataexporttool", 'file-extension' : "json", 'default-save-file-name' : "network", 'name-of-call-functions': ["check_for_json_compatibility", "write_json"]}
+    json_format = {'name' : "as JSON",
+                   'type': "dataexporttool",
+                   'file-extension' : "json",
+                   'default-save-file-name' : "network",
+                   'call-functions': [
+                       {'name': "check_for_json_compatibility", 'input-api-functions': []},
+                       {'name': "write_json", 'input-api-functions': []}]}
 
     # sbml
-    sbml_format = {'name' : "as SBML", 'type': "dataexporttool", 'file-extension' : "xml", 'default-save-file-name' : "model", 'name-of-call-functions': ["check_for_sbml_compatibility", "write_sbml"]}
+    sbml_format = {'name' : "as SBML",
+                   'type': "dataexporttool",
+                   'file-extension' : "xml",
+                   'default-save-file-name' : "model",
+                   'call-functions': [
+                       {'name': "check_for_sbml_compatibility", 'input-api-functions': []},
+                       {'name': "write_sbml", 'input-api-functions': []}]}
 
     return json.dumps({'items': [json_format, sbml_format]})
 

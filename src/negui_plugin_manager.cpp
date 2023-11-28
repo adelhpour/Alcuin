@@ -103,7 +103,7 @@ void MyPluginManager::readFromFile(const QString& importToolName) {
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
     if (!fileName.isEmpty())
-        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->defaultNameOfCallFunction(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
+        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->defaultCallFunction()->name(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
 }
 
 const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
@@ -127,10 +127,10 @@ void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
 
 void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
     QStringList checkForGraphInfoCompatibilityInputList = createCheckForGraphInfoCompatibilityInputList(exportTool);
-    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(generalInterface()->call(exportTool->nameOfCallFunctions().at(0), createCheckForGraphInfoCompatibilityInputList(exportTool)));
+    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(generalInterface()->call(exportTool->callFunctions().at(0)->name(), createCheckForGraphInfoCompatibilityInputList(exportTool)));
     if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
         QStringList writeToFileInputList = createWriteToFileInputList(exportTool, fileName);
-        generalInterface()->call(exportTool->nameOfCallFunctions().at(1), writeToFileInputList);
+        generalInterface()->call(exportTool->callFunctions().at(1)->name(), writeToFileInputList);
         emit networkInfoIsWrittenToFile(exportTool, fileName);
     }
     ((MyDataExportTool*)exportTool)->showMessages();
@@ -171,7 +171,7 @@ void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
-        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->defaultNameOfCallFunction(), createAutoLayoutInputList(autoLayoutEngine)));
+        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->defaultCallFunction()->name(), createAutoLayoutInputList(autoLayoutEngine)));
 }
 
 const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {
@@ -186,9 +186,14 @@ const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* a
 }
 
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
-    emit askForTriggerAPIAction(generalInterface()->call(defaultPluginItem->defaultNameOfCallFunction(), createDefaultPluginActionInputList(defaultPluginItem)));
+    for (MyPluginItemCallFunction* callFunction : defaultPluginItem->callFunctions())
+        emit askForTriggerAPIAction(generalInterface()->call(callFunction->name(), createDefaultPluginActionInputList(callFunction)));
 }
 
-const QStringList MyPluginManager::createDefaultPluginActionInputList(MyPluginItemBase* defaultPluginItem) {
-    return QStringList();
+const QStringList MyPluginManager::createDefaultPluginActionInputList(MyPluginItemCallFunction* callFunction) {
+    QStringList defaultPluginActionInputList;
+    for (QString inputAPIFunction : callFunction->inputAPIFunctions())
+        defaultPluginActionInputList.append(askForTriggerAPIAction(inputAPIFunction));
+
+    return defaultPluginActionInputList;
 }

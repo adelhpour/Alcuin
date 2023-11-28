@@ -5,6 +5,7 @@
 #include "negui_interfaces.h"
 
 #include <QDir>
+#include <QJsonDocument>
 
 class MyPluginManager : public QObject {
     Q_OBJECT
@@ -59,7 +60,7 @@ public:
 
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
 
-    const QStringList createDefaultPluginActionInputList(MyPluginItemBase* defaultPluginItem);
+    const QStringList createDefaultPluginActionInputList(MyPluginItemCallFunction* callFunction);
 
 signals:
 
@@ -80,6 +81,8 @@ signals:
     void autoLayoutAlgorithmIsApplied(const QJsonObject&);
 
     void askForTriggerAPIAction(const QJsonObject&);
+
+    const QString askForTriggerAPIAction(const QString&);
 
 protected:
 

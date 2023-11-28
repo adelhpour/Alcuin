@@ -20,15 +20,15 @@ const QString& MyPluginItemBase::subCategory() const {
     return _subCategory;
 }
 
-const QStringList& MyPluginItemBase::nameOfCallFunctions() const {
-    return _nameOfCallFunctions;
+QList<MyPluginItemCallFunction*> MyPluginItemBase::callFunctions() const {
+    return _callFunctions;
 }
 
-const QString& MyPluginItemBase::defaultNameOfCallFunction() const {
-    if (_nameOfCallFunctions.size())
-        return _nameOfCallFunctions.at(0);
+MyPluginItemCallFunction* MyPluginItemBase::defaultCallFunction() const {
+    if (_callFunctions.size())
+        return _callFunctions.at(0);
 
-    return "";
+    return NULL;
 }
 
 const QSize& MyPluginItemBase::iconSize() const {
@@ -45,12 +45,18 @@ void MyPluginItemBase::read(const QJsonObject &json) {
         _category = json["category"].toString();
     if (json.contains("sub-category") && json["sub-category"].isString())
         _subCategory = json["sub-category"].toString();
-    _nameOfCallFunctions.clear();
-    if (json.contains("name-of-call-functions") && json["name-of-call-functions"].isArray()) {
-        QJsonArray nameOfCallFunctionsArray = json["name-of-call-functions"].toArray();
-        for (int nameOfCallFunctionIndex = 0; nameOfCallFunctionIndex < nameOfCallFunctionsArray.size(); ++nameOfCallFunctionIndex) {
-            if (nameOfCallFunctionsArray[nameOfCallFunctionIndex].isString())
-                _nameOfCallFunctions.append(nameOfCallFunctionsArray[nameOfCallFunctionIndex].toString());
+    //clearCallFunctions();
+    if (json.contains("call-functions") && json["call-functions"].isArray()) {
+        QJsonArray callFunctionsArray = json["call-functions"].toArray();
+        for (int callFunctionIndex = 0; callFunctionIndex < callFunctionsArray.size(); ++callFunctionIndex) {
+            if (callFunctionsArray[callFunctionIndex].isObject()) {
+                QJsonObject callFunctionObject = callFunctionsArray[callFunctionIndex].toObject();
+                if (callFunctionObject.contains("name") && callFunctionObject["name"].isString()) {
+                    MyPluginItemCallFunction* callFunction = new MyPluginItemCallFunction(callFunctionObject["name"].toString());
+                    callFunction->read(callFunctionObject);
+                    _callFunctions.append(callFunction);
+                }
+            }
         }
     }
 }
@@ -59,10 +65,13 @@ void MyPluginItemBase::write(QJsonObject &json) {
     json["is-frequently-used"]  = isFrequentlyUsed();
     json["category"] = category();
     json["sub-category"] = subCategory();
-    QJsonArray nameOfCallFunctionsArray;
-    for (QString nameOfCallFunction : nameOfCallFunctions())
-        nameOfCallFunctionsArray.append(nameOfCallFunction);
-    json["name-of-call-functions"] = nameOfCallFunctionsArray;
+    QJsonArray callFunctionsArray;
+    for (MyPluginItemCallFunction* callFunction : callFunctions()) {
+        QJsonObject callFunctionObject;
+        callFunction->write(callFunctionObject);
+        callFunctionsArray.append(callFunctionObject);
+    }
+    json["call-functions"] = callFunctionsArray;
 }
 
 QList<MyPluginItemBase*> getPluginsOfType(QList<MyPluginItemBase*> plugins, const QString& type) {

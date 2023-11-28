@@ -3,10 +3,16 @@ import sbmlplot
     
 def items_info():
     # json
-    jsonformat = {'name' : "JSON", 'type': "importtool", 'file-extension' : "json", 'name-of-call-functions': ["load_json"]}
+    jsonformat = {'name' : "JSON",
+                  'type': "importtool",
+                  'file-extension' : "json",
+                  'call-functions': [{'name': "load_json", 'input-api-functions': []}]}
 
     # sbml
-    sbmlformat = {'name' : "SBML", 'type': "importtool", 'file-extension' : "xml", 'name-of-call-functions': ["load_sbml"]}
+    sbmlformat = {'name' : "SBML",
+                  'type': "importtool",
+                  'file-extension' : "xml",
+                  'call-functions': [{'name': "load_sbml", 'input-api-functions': []}]}
     
     return json.dumps({'items': [jsonformat, sbmlformat]})
 

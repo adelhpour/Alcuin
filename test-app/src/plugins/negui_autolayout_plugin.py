@@ -3,13 +3,13 @@ import json
 
 def items_info():
     # circular
-    circular = {'name' : "Circular", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
+    circular = {'name' : "Circular", 'type': "autolayoutengine", 'call-functions': [{'name': "auto_layout", 'input-api-functions': []}]}
     # planar
-    planar = {'name' : "Planar", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
+    planar = {'name' : "Planar", 'type': "autolayoutengine", 'call-functions': [{'name': "auto_layout", 'input-api-functions': []}]}
     # kamad_kawai
-    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"]}
+    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine", 'call-functions': [{'name': "auto_layout", 'input-api-functions': []}]}
     # spiral
-    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'name-of-call-functions': ["auto_layout"], 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
+    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'call-functions': [{'name': "auto_layout", 'input-api-functions': []}], 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
 
     return json.dumps({'items': [circular, planar, kamad_kawai, spiral]})
 

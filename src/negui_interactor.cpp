@@ -80,6 +80,7 @@ void MyInteractor::setPluginManager() {
         enableNormalMode();
     } );
     connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QJsonObject&)), this, SLOT(triggerAPIAction(const QJsonObject&)));
+    connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&)), this, SLOT(triggerAPIAction(const QString&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -483,7 +484,7 @@ void MyInteractor::triggerAPIAction(const QJsonObject& json) {
             if (functionObject.contains("name") && functionObject["name"].isString()) {
                 QString functionName = functionObject["name"].toString();
                 if (functionObject.contains("inputs") && functionObject["inputs"].isArray())
-                    triggerAPIAction1(functionName, functionObject["inputs"].toArray());
+                    triggerAPIAction(functionName, functionObject["inputs"].toArray());
             }
         }
     }
@@ -496,4 +497,11 @@ void MyInteractor::triggerAPIAction(const QString& functionName, const QJsonArra
     }
     else if (functionName == "deleteSelectedNetworkElements")
         deleteSelectedNetworkElements();
+}
+
+const QString MyInteractor::triggerAPIAction(const QString& functionName) {
+    if (functionName == "exportNetworkInfo")
+        return QJsonDocument(exportNetworkInfo()).toJson(QJsonDocument::Compact);
+
+    return "";
 }

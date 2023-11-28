@@ -15,6 +15,7 @@ set(source_files
 		negui_base.cpp
 		negui_plugin_item_base.cpp
 		negui_plugin_item_builder.cpp
+		negui_plugin_item_call_function.cpp
 		negui_plugin_manager.cpp
 		negui_network_manager.cpp
 		negui_default_network_element_style_manager.cpp
@@ -108,6 +109,7 @@ set(header_files
 		negui_base.h
 		negui_plugin_item_base.h
 		negui_plugin_item_builder.h
+		negui_plugin_item_call_function.h
 		negui_plugin_manager.h
 		negui_network_manager.h
 		negui_default_network_element_style_manager.h

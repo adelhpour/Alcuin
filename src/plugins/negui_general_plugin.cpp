@@ -80,8 +80,8 @@ CPyObject GeneralPlugin::createFunctionInput(const QStringList& functionInputLis
 }
 
 const QJsonObject GeneralPlugin::processFunctionOutput(CPyObject functionOutput) {
-    if (functionOutput) {
-        QJsonDocument doc = QJsonDocument::fromJson(QString(PyBytes_AsString(PyUnicode_AsEncodedString(functionOutput, "utf-8", "~E~"))).toUtf8());
+    if (PyUnicode_Check(functionOutput.getObject())) {
+        QJsonDocument doc = QJsonDocument::fromJson(QString(PyBytes_AsString(PyUnicode_AsEncodedString(functionOutput.getObject(), "utf-8", "~E~"))).toUtf8());
         if (!doc.isNull())
             return doc.object();
     }
