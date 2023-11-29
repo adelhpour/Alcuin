@@ -1,5 +1,5 @@
 import json
-import sbmlplot
+import networkinfotranslator
 
 def items_info():
     # json
@@ -52,21 +52,10 @@ def write_json(input):
 
 
 def write_sbml(input):
-    graph_info = json.loads(input[0])
+    network_info = json.loads(input[0])
     file_name = input[1]
-    sbml_graph_info = sbmlplot.SBMLGraphInfoImportFromNetworkEditor()
-    sbml_graph_info.extract_info(graph_info)
-    sbml_export = sbmlplot.SBMLGraphInfoExportToSBMLModel()
-    sbml_export.extract_graph_info(sbml_graph_info)
-    sbml_export.export(file_name)
-
-"""
-# keep commented till using the new version of sbmlplot
-def writeSBML(network_info, file_name):
-    network_info_import_from_network_editor = sbmlplot.NetworkInfoImportFromNetworkEditor()
+    network_info_import_from_network_editor = networkinfotranslator.NetworkInfoImportFromNetworkEditor()
     network_info_import_from_network_editor.extract_info(network_info)
-    network_info_export_to_sbml_model = sbmlplot.NetworkInfoExportToSBMLModel()
+    network_info_export_to_sbml_model = networkinfotranslator.NetworkInfoExportToSBMLModel()
     network_info_export_to_sbml_model.extract_graph_info(network_info_import_from_network_editor)
     network_info_export_to_sbml_model.export(file_name)
-    
-"""
