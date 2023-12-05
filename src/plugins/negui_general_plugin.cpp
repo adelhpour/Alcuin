@@ -71,11 +71,47 @@ const QJsonObject GeneralPlugin::call(const QString& functionName, const QString
     return QJsonObject();
 }
 
+const QJsonObject GeneralPlugin::call1(const QString& functionName, const QJsonObject& functionInput) {
+    PyErr_Print();
+    for (CPyObject script : _scripts) {
+        CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
+        if (function)
+            return processFunctionOutput(PyObject_CallObject(function.getObject(), processFunctionInput(functionInput)));
+    }
+
+    return QJsonObject();
+}
+
 CPyObject GeneralPlugin::createFunctionInput(const QStringList& functionInputList) {
     CPyObject inputs = PyTuple_New(functionInputList.size());
     for (unsigned int i = 0; i < functionInputList.size(); i++)
         PyTuple_SetItem(inputs, i, PyUnicode_FromString((char*)functionInputList.at(i).toStdString().c_str()));
 
+    return PyTuple_Pack(1, inputs.getObject());
+}
+
+CPyObject GeneralPlugin::processFunctionInput(const QJsonObject& functionInput) {
+    CPyObject inputs;
+    if (functionInput.contains("inputs") && functionInput["inputs"].isArray()) {
+        QJsonArray inputArray = functionInput["inputs"].toArray();
+        inputs = PyTuple_New(inputArray.size());
+        for (int inputIndex = 0; inputIndex < inputArray.size(); ++inputIndex) {
+            if (inputArray[inputIndex].isString())
+                PyTuple_SetItem(inputs, inputIndex, PyUnicode_FromString((char*)inputArray[inputIndex].toString().toStdString().c_str()));
+            else if (inputArray[inputIndex].isDouble())
+                PyTuple_SetItem(inputs, inputIndex, PyFloat_FromDouble(inputArray[inputIndex].toDouble()));
+            else if (inputArray[inputIndex].isBool()) {
+                if (inputArray[inputIndex].toBool())
+                    PyTuple_SetItem(inputs, inputIndex, Py_True);
+                else
+                    PyTuple_SetItem(inputs, inputIndex, Py_False);
+            }
+            else if (inputArray[inputIndex].isObject())
+                PyTuple_SetItem(inputs, inputIndex, PyUnicode_FromString((char*)QJsonDocument(inputArray[inputIndex].toObject()).toJson(QJsonDocument::Compact).toStdString().c_str()));
+        }
+    }
+    else
+        inputs = PyTuple_New(0);
     return PyTuple_Pack(1, inputs.getObject());
 }
 

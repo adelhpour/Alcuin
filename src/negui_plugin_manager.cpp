@@ -3,6 +3,7 @@
 #include "negui_import_tools.h"
 #include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
+#include "negui_plugin_item_call_function.h"
 
 #include <QPluginLoader>
 #include <QJsonDocument>
@@ -103,7 +104,7 @@ void MyPluginManager::readFromFile(const QString& importToolName) {
 void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
     QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
     if (!fileName.isEmpty())
-        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->defaultCallFunction()->name(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
+        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->callFunctions().at(0)->name(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
 }
 
 const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
@@ -171,7 +172,7 @@ void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
 
 void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
     if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
-        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->defaultCallFunction()->name(), createAutoLayoutInputList(autoLayoutEngine)));
+        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->callFunctions().at(0)->name(), createAutoLayoutInputList(autoLayoutEngine)));
 }
 
 const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {
@@ -186,14 +187,13 @@ const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* a
 }
 
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
-    for (MyPluginItemCallFunction* callFunction : defaultPluginItem->callFunctions())
-        emit askForTriggerAPIAction(generalInterface()->call(callFunction->name(), createDefaultPluginActionInputList(callFunction)));
-}
-
-const QStringList MyPluginManager::createDefaultPluginActionInputList(MyPluginItemCallFunction* callFunction) {
-    QStringList defaultPluginActionInputList;
-    for (QString inputAPIFunction : callFunction->inputAPIFunctions())
-        defaultPluginActionInputList.append(askForTriggerAPIAction(inputAPIFunction));
-
-    return defaultPluginActionInputList;
+    for (MyBase* callFunction : defaultPluginItem->callFunctions()) {
+        auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonObject& inputs) {
+                return generalInterface()->call1(name, inputs); });
+        auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonObject& inputs) {
+                return askForTriggerAPIAction(name, inputs); });
+        ((MyPluginItemCallFunction*)callFunction)->call();
+        disconnect(pythonConnection);
+        disconnect(cPlusPlusConnection);
+    }
 }

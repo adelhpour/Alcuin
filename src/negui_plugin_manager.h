@@ -60,8 +60,6 @@ public:
 
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
 
-    const QStringList createDefaultPluginActionInputList(MyPluginItemCallFunction* callFunction);
-
 signals:
 
     QString askForApplicationDirectoryPath();
@@ -80,9 +78,7 @@ signals:
 
     void autoLayoutAlgorithmIsApplied(const QJsonObject&);
 
-    void askForTriggerAPIAction(const QJsonObject&);
-
-    const QString askForTriggerAPIAction(const QString&);
+    const QJsonObject askForTriggerAPIAction(const QString&, const QJsonObject&);
 
 protected:
 

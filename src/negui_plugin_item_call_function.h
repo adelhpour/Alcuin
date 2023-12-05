@@ -5,20 +5,28 @@
 
 #include <QObject>
 
-class MyPluginItemCallFunction : public QObject, public MyBase{
+class MyPluginItemCallFunction : public QObject, public MyBase {
     Q_OBJECT
 
 public:
 
     MyPluginItemCallFunction(const QString& name);
+    void call();
+    const QJsonObject call(QJsonObject json);
 
-    const QStringList& inputAPIFunctions() const;
     void read(const QJsonObject &json) override;
     void write(QJsonObject &json) override;
 
+signals:
+
+    QJsonObject askForCallPythonFunction(const QString, const QJsonObject&);
+    QJsonObject askForCallCPlusPlusFunction(const QString, const QJsonObject&);
+
 protected:
 
-    QStringList _inputAPIFunctions;
+    const QJsonArray processInputArray(QJsonObject json);
+
+    QJsonObject _callFunctionInfo;
 };
 
 #endif

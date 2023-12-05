@@ -6,24 +6,44 @@ MyPluginItemCallFunction::MyPluginItemCallFunction(const QString& name) : MyBase
 
 }
 
-const QStringList& MyPluginItemCallFunction::inputAPIFunctions() const {
-    return _inputAPIFunctions;
+void MyPluginItemCallFunction::call() {
+    call(_callFunctionInfo);
+}
+
+const QJsonObject MyPluginItemCallFunction::call(QJsonObject json) {
+    if (json.contains("name") && json["name"].isString()) {
+        json["inputs"] = processInputArray(json);
+        if (json.contains("api") && json["api"].isString() && json["api"].toString() == "python")
+            return askForCallPythonFunction(json["name"].toString(), json);
+        else
+            return askForCallCPlusPlusFunction(json["name"].toString(), json);
+    }
+
+    return QJsonObject();
+}
+
+const QJsonArray MyPluginItemCallFunction::processInputArray(QJsonObject json) {
+    QJsonArray inputsArray;
+    if (json.contains("inputs") && json["inputs"].isArray()) {
+        inputsArray = json["inputs"].toArray();
+        for (int inputsIndex = 0; inputsIndex < inputsArray.size(); ++inputsIndex) {
+            if (inputsArray[inputsIndex].isObject()) {
+                QJsonObject output = call(inputsArray[inputsIndex].toObject());
+                if (output.contains("value"))
+                    inputsArray[inputsIndex] = output["value"];
+                else
+                    inputsArray[inputsIndex] = output;
+            }
+        }
+    }
+
+    return inputsArray;
 }
 
 void MyPluginItemCallFunction::read(const QJsonObject &json) {
-    _inputAPIFunctions.clear();
-    if (json.contains("input-api-functions") && json["input-api-functions"].isArray()) {
-        QJsonArray inputAPIFunctionsArray = json["input-api-functions"].toArray();
-        for (int inputAPIFunctionIndex = 0; inputAPIFunctionIndex < inputAPIFunctionsArray.size(); ++inputAPIFunctionIndex) {
-            if (inputAPIFunctionsArray[inputAPIFunctionIndex].isString())
-                _inputAPIFunctions.append(inputAPIFunctionsArray[inputAPIFunctionIndex].toString());
-        }
-    }
+    _callFunctionInfo = json;
 }
 
 void MyPluginItemCallFunction::write(QJsonObject &json) {
-    QJsonArray inputAPIFunctionsArray;
-    for (QString inputAPIFunction : inputAPIFunctions())
-        inputAPIFunctionsArray.append(inputAPIFunction);
-    json["input-api-functions"] = inputAPIFunctionsArray;
+    json = _callFunctionInfo;
 }

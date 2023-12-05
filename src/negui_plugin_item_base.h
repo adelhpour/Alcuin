@@ -2,7 +2,6 @@
 #define __NEGUI_PLUGIN_ITEM_BASE_H
 
 #include "negui_base.h"
-#include "negui_plugin_item_call_function.h"
 
 #include <QIcon>
 
@@ -15,18 +14,20 @@ public:
     const bool isFrequentlyUsed();
     const QString& category() const;
     const QString& subCategory() const;
-    QList<MyPluginItemCallFunction*> callFunctions() const;
-    MyPluginItemCallFunction* defaultCallFunction() const;
+    QList<MyBase*> callFunctions() const;
+    void clearCallFunctions();
     virtual const QIcon icon() = 0;
     const QSize& iconSize() const;
     virtual void read(const QJsonObject &json) override;
     virtual void write(QJsonObject &json) override;
     
 protected:
+    void updateCallFunctions(const QJsonObject &json);
+    void addCallFunction(const QJsonObject &json);
     bool _isFrequentlyUsed;
     QString _category;
     QString _subCategory;
-    QList<MyPluginItemCallFunction*> _callFunctions;
+    QList<MyBase*> _callFunctions;
     QSize _iconSize;
 };
 

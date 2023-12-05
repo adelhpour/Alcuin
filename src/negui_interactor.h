@@ -122,8 +122,7 @@ public slots:
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
-    void triggerAPIAction(const QJsonObject& json);
-    const QString triggerAPIAction(const QString& functionName);
+    const QJsonObject triggerAPIAction(const QString& functionName, const QJsonObject& inputs);
 
 protected:
 
@@ -144,7 +143,6 @@ protected:
     void setMenuButtonManager();
     void initializeStageInfo();
     QJsonObject getNetworkElementsAndColorInfo();
-    void triggerAPIAction(const QString& functionName, const QJsonArray& inputs);
 
     QUndoStack* _undoStack;
     QJsonObject _stageInfo;
