@@ -15,7 +15,7 @@ public:
 class GeneralInterface : public InterfaceBase {
 public:
     virtual const QJsonObject call(const QString& functionName, const QStringList& inputList) = 0;
-    virtual const QJsonObject call1(const QString& functionName, const QJsonObject& functionInput) = 0;
+    virtual const QJsonValue call1(const QString& functionName, const QJsonValue& functionInput) = 0;
 };
 
 #define GeneralInterface_iid "org.sys-bio.alcuin.generalinterface/1.0"

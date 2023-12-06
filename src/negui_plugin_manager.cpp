@@ -1,7 +1,6 @@
 #include "negui_plugin_manager.h"
 #include "negui_plugin_item_builder.h"
 #include "negui_import_tools.h"
-#include "negui_autolayout_engines.h"
 #include "negui_export_tools.h"
 #include "negui_plugin_item_call_function.h"
 
@@ -164,33 +163,11 @@ void MyPluginManager::writeFigureToFile(MyPluginItemBase* exportTool) {
         emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->fileExtension());
 }
 
-void MyPluginManager::autoLayout(const QString& autoLayoutEngineName) {
-    MyPluginItemBase* autolayoutEngine = findPluginByName(getPluginsOfType(pluginItems(), "autolayoutengine"), autoLayoutEngineName);
-    if (autolayoutEngine)
-        autoLayout(autolayoutEngine);
-}
-
-void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
-    if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters())
-        autoLayoutAlgorithmIsApplied(generalInterface()->call(autoLayoutEngine->callFunctions().at(0)->name(), createAutoLayoutInputList(autoLayoutEngine)));
-}
-
-const QStringList MyPluginManager::createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine) {
-    QJsonObject autoLayoutInfoObject;
-    autoLayoutEngine->write(autoLayoutInfoObject);
-    QJsonObject graphInfoObject = askForNetworkInfo();
-    QStringList autoLayoutInputList;
-    autoLayoutInputList.append(QJsonDocument(graphInfoObject).toJson(QJsonDocument::Compact));
-    autoLayoutInputList.append(QJsonDocument(autoLayoutInfoObject).toJson(QJsonDocument::Compact));
-
-    return autoLayoutInputList;
-}
-
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
     for (MyBase* callFunction : defaultPluginItem->callFunctions()) {
-        auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonObject& inputs) {
+        auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
                 return generalInterface()->call1(name, inputs); });
-        auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonObject& inputs) {
+        auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
                 return askForTriggerAPIAction(name, inputs); });
         ((MyPluginItemCallFunction*)callFunction)->call();
         disconnect(pythonConnection);

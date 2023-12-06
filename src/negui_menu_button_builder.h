@@ -18,8 +18,6 @@ QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPlugin
 
 QAbstractButton* createSaveMenuButton(QObject* interactor, const QString& iconsDirectoryPath);
 
-QAbstractButton* createAutoLayoutMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
-
 QAbstractButton* createNewNetworkCanvasButton(QObject* interactor, const QString& iconsDirectoryPath);
 
 QList<QAbstractButton*> createElementCategoryMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);

@@ -346,10 +346,6 @@ void MyNetworkEditorWidget::writeFigureToFile(const QString& exportToolName) {
     ((MyInteractor*)interactor())->writeFigureToFile(exportToolName);
 }
 
-void MyNetworkEditorWidget::autoLayout(const QString& autoLayoutEngineName) {
-    ((MyInteractor*)interactor())->autoLayout(autoLayoutEngineName);
-}
-
 void MyNetworkEditorWidget::triggerUndoAction() {
     ((MyInteractor*)interactor())->triggerUndoAction();
 }

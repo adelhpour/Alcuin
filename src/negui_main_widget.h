@@ -52,7 +52,6 @@ public slots:
     void saveCurrentNetwork();
     void writeDataToFile(const QString&);
     void writeFigureToFile(const QString&);
-    void autoLayout(const QString& autoLayoutEngineName);
     void triggerUndoAction();
     void triggerRedoAction();
     void cutSelectedNetworkElements();

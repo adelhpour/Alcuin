@@ -72,14 +72,7 @@ void MyInteractor::setPluginManager() {
         ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
     } );
     connect(_pluginManager, SIGNAL(askForExportFigure(const QString&, const QString&)), this, SIGNAL(askForExportFigure(const QString&, const QString&)));
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::autoLayoutAlgorithmIsApplied, this, [this] (const QJsonObject &json) {
-        createNetwork(json);
-        emit askForAdjustExtentsOfNodes();
-        emit askForAdjustConnectedEdgesOfNodes();
-        createChangeStageCommand();
-        enableNormalMode();
-    } );
-    connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&, const QJsonObject&)), this, SLOT(triggerAPIAction(const QString&, const QJsonObject&)));
+    connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&, const QJsonValue&)), this, SLOT(triggerAPIAction(const QString&, const QJsonValue&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -416,14 +409,6 @@ void MyInteractor::saveCurrentNetwork() {
         ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool(), ((MyFileManager*)fileManager())->currentFileName());
 }
 
-void MyInteractor::autoLayout(const QString& autoLayoutEngineName) {
-    ((MyPluginManager*)_pluginManager)->autoLayout(autoLayoutEngineName);
-}
-
-void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
-    ((MyPluginManager*)_pluginManager)->autoLayout(autoLayoutEngine);
-}
-
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
     return ((MyMenuButtonManager*)_menuButtonManager)->getToolbarMenuButtons(this, undoStack(), pluginItems(), iconsDirectoryPath());
 }
@@ -471,13 +456,18 @@ void MyInteractor::selectAllElements(const QString& category) {
     selectElementsOfCategory(true, category);
 }
 
+const QJsonValue MyInteractor::takeParameterFromUser(const QString& name, const QJsonValue defaultValue) {
+    MyTakeParameterDialog* takeParameterDialog = new MyTakeParameterDialog(name, defaultValue);
+    return takeParameterDialog->execute();
+}
+
 void MyInteractor::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
     ((MyPluginManager*)_pluginManager)->defaultPluginAction(defaultPluginItem);
 }
 
-const QJsonObject MyInteractor::triggerAPIAction(const QString& functionName, const QJsonObject& inputs) {
-    if (inputs.contains("inputs") && inputs["inputs"].isArray()) {
-        QJsonArray inputArray = inputs["inputs"].toArray();
+const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, const QJsonValue& inputs) {
+    if (inputs.isArray()) {
+        QJsonArray inputArray = inputs.toArray();
         if (functionName == "selectElements") {
             if (inputArray.size() == 1 && inputArray[0].isBool())
                 selectElements(inputArray[0].toBool());
@@ -498,6 +488,10 @@ const QJsonObject MyInteractor::triggerAPIAction(const QString& functionName, co
             createChangeStageCommand();
         else if (functionName == "enableNormalMode")
             enableNormalMode();
+        else if (functionName == "takeParameterFromUser") {
+            if (inputArray.size() == 2 && inputArray[0].isString())
+                return takeParameterFromUser(inputArray[0].toString(), inputArray[1]);
+        }
     }
 
     return QJsonObject();

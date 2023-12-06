@@ -10,29 +10,30 @@ void MyPluginItemCallFunction::call() {
     call(_callFunctionInfo);
 }
 
-const QJsonObject MyPluginItemCallFunction::call(QJsonObject json) {
-    if (json.contains("name") && json["name"].isString()) {
-        json["inputs"] = processInputArray(json);
-        if (json.contains("api") && json["api"].isString() && json["api"].toString() == "python")
-            return askForCallPythonFunction(json["name"].toString(), json);
-        else
-            return askForCallCPlusPlusFunction(json["name"].toString(), json);
+const QJsonValue MyPluginItemCallFunction::call(QJsonValue json) {
+    if (json.isObject()) {
+        QJsonObject jsonObject = json.toObject();
+        if (jsonObject.contains("name") && jsonObject["name"].isString()) {
+            jsonObject["inputs"] = processInputArray(json);
+            if (jsonObject.contains("api") && jsonObject["api"].isString() && jsonObject["api"].toString() == "python")
+                return askForCallPythonFunction(jsonObject["name"].toString(), jsonObject["inputs"]);
+            else
+                return askForCallCPlusPlusFunction(jsonObject["name"].toString(), jsonObject["inputs"]);
+        }
     }
 
-    return QJsonObject();
+    return QJsonValue();
 }
 
-const QJsonArray MyPluginItemCallFunction::processInputArray(QJsonObject json) {
+const QJsonArray MyPluginItemCallFunction::processInputArray(QJsonValue json) {
     QJsonArray inputsArray;
-    if (json.contains("inputs") && json["inputs"].isArray()) {
-        inputsArray = json["inputs"].toArray();
-        for (int inputsIndex = 0; inputsIndex < inputsArray.size(); ++inputsIndex) {
-            if (inputsArray[inputsIndex].isObject()) {
-                QJsonObject output = call(inputsArray[inputsIndex].toObject());
-                if (output.contains("value"))
-                    inputsArray[inputsIndex] = output["value"];
-                else
-                    inputsArray[inputsIndex] = output;
+    if (json.isObject()) {
+        QJsonObject jsonObject = json.toObject();
+        if (jsonObject.contains("inputs") && jsonObject["inputs"].isArray()) {
+            inputsArray = json["inputs"].toArray();
+            for (int inputsIndex = 0; inputsIndex < inputsArray.size(); ++inputsIndex) {
+                if (inputsArray[inputsIndex].isObject())
+                    inputsArray[inputsIndex] = call(inputsArray[inputsIndex]);
             }
         }
     }
@@ -45,5 +46,5 @@ void MyPluginItemCallFunction::read(const QJsonObject &json) {
 }
 
 void MyPluginItemCallFunction::write(QJsonObject &json) {
-    json = _callFunctionInfo;
+    json = _callFunctionInfo.toObject();
 }

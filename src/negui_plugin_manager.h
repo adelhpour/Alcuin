@@ -52,12 +52,6 @@ public:
 
     void writeFigureToFile(MyPluginItemBase* exportTool);
 
-    void autoLayout(const QString& autoLayoutEngineName);
-
-    void autoLayout(MyPluginItemBase* autoLayoutEngine);
-
-    const QStringList createAutoLayoutInputList(MyPluginItemBase* autoLayoutEngine);
-
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
 
 signals:
@@ -76,9 +70,7 @@ signals:
 
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
 
-    void autoLayoutAlgorithmIsApplied(const QJsonObject&);
-
-    const QJsonObject askForTriggerAPIAction(const QString&, const QJsonObject&);
+    const QJsonValue askForTriggerAPIAction(const QString&, const QJsonValue&);
 
 protected:
 

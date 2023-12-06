@@ -29,12 +29,6 @@ void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory) 
     setIcon(button, iconsDirectory + "/save.png");
 }
 
-void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirectory) {
-    button->setText("AutoLayout");
-    button->setToolTip("AutoLayout");
-    setIcon(button, iconsDirectory + "/autoLayout.png");
-}
-
 void decorateDefaultButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("More");
     button->setToolTip("More actions");

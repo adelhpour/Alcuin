@@ -12,21 +12,21 @@ public:
 
     MyPluginItemCallFunction(const QString& name);
     void call();
-    const QJsonObject call(QJsonObject json);
+    const QJsonValue call(QJsonValue json);
 
     void read(const QJsonObject &json) override;
     void write(QJsonObject &json) override;
 
 signals:
 
-    QJsonObject askForCallPythonFunction(const QString, const QJsonObject&);
-    QJsonObject askForCallCPlusPlusFunction(const QString, const QJsonObject&);
+    QJsonValue askForCallPythonFunction(const QString, const QJsonValue&);
+    QJsonValue askForCallCPlusPlusFunction(const QString, const QJsonValue&);
 
 protected:
 
-    const QJsonArray processInputArray(QJsonObject json);
+    const QJsonArray processInputArray(QJsonValue json);
 
-    QJsonObject _callFunctionInfo;
+    QJsonValue _callFunctionInfo;
 };
 
 #endif

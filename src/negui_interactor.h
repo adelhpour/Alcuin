@@ -62,7 +62,6 @@ public slots:
     void readFromFile(MyPluginItemBase* importToo);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeFigureToFile(MyPluginItemBase* exportTool);
-    void autoLayout(MyPluginItemBase* autoLayoutEngine);
 
     void enableNormalMode() override;
     void enableAddNodeMode(const QString& nodeStyleName);
@@ -82,7 +81,6 @@ public slots:
     void saveCurrentNetwork();
     void writeDataToFile(const QString& exportToolName);
     void writeFigureToFile(const QString& exportToolName);
-    void autoLayout(const QString& autoLayoutEngineName);
     void triggerUndoAction();
     void triggerRedoAction();
     void cutSelectedNetworkElements();
@@ -121,8 +119,9 @@ public slots:
     void createChangeStageCommand();
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
+    const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
-    const QJsonObject triggerAPIAction(const QString& functionName, const QJsonObject& inputs);
+    const QJsonValue triggerAPIAction(const QString& functionName, const QJsonValue& inputs);
 
 protected:
 

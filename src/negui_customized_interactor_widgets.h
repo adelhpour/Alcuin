@@ -3,6 +3,10 @@
 
 #include <QUndoStack>
 #include <QJsonObject>
+#include <QDialog>
+
+#include "negui_base.h"
+#include "negui_customized_common_widgets.h"
 
 class MyUndoStack : public QUndoStack {
 
@@ -36,6 +40,22 @@ protected:
 
     QJsonObject _previousStageInfo;
     QJsonObject _currentStageInfo;
+};
+
+class MyTakeParameterDialog : public MyDialog {
+    Q_OBJECT
+
+public:
+
+    MyTakeParameterDialog(const QString& name, const QJsonValue& defaultValue, QWidget *parent = nullptr);
+
+    const QJsonValue execute();
+
+protected:
+
+    MyBase* createParameter(const QString& name, const QJsonValue& defaultValue);
+
+    MyBase* _parameter;
 };
 
 #endif

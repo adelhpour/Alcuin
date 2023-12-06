@@ -16,8 +16,6 @@ QList<QAbstractButton*> createToolbarMenuButtons(QObject* interactor, QObject* u
     }
     if (getPluginsOfType(plugins, "printexporttool").size())
         buttons.push_back(createPrintExportMenuButton(interactor, plugins, iconsDirectoryPath));
-    if (getPluginsOfType(plugins, "autolayoutengine").size())
-        buttons.push_back(createAutoLayoutMenuButton(interactor, plugins, iconsDirectoryPath));
     buttons.push_back(createUndoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     buttons.push_back(createRedoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     if (getPluginsOfType(plugins, "default").size())
@@ -79,19 +77,6 @@ QAbstractButton* createSaveMenuButton(QObject* interactor, const QString& iconsD
     QAbstractButton* button = new MyToolButton();
     QObject::connect(button, SIGNAL(clicked()), interactor, SLOT(saveCurrentNetwork()));
     decorateSaveButton(button, iconsDirectoryPath);
-
-    return button;
-}
-
-QAbstractButton* createAutoLayoutMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
-    QAbstractButton* button = new MyToolButton();
-    QMenu* subMenu = new MyMenu(button);
-    MyMenuButtonWidgetAction* autoLayoutItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
-    autoLayoutItemWidgetAction->setItems((getPluginsOfType(plugins, "autolayoutengine")));
-    QObject::connect(autoLayoutItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(autoLayout(MyPluginItemBase*)));
-    subMenu->addAction(autoLayoutItemWidgetAction);
-    ((QToolButton*)button)->setMenu(subMenu);
-    decorateAutoLayoutButton(button, iconsDirectoryPath);
 
     return button;
 }

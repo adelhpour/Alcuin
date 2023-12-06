@@ -4,7 +4,6 @@
 #include "negui_template_style_builder.h"
 #include "negui_import_tools.h"
 #include "negui_export_tools.h"
-#include "negui_autolayout_engines.h"
 #include "negui_default_plugin_item.h"
 
 MyPluginItemBase* createPluginItem(const QJsonObject &json) {
@@ -21,8 +20,6 @@ MyPluginItemBase* createPluginItem(const QJsonObject &json) {
             return createEdgeStyle(json);
         else if (json["type"].toString() == "templatestyle")
             return createTemplateStyle(json);
-        else if (json["type"].toString() == "autolayoutengine")
-            return createAutoLayoutEngine(json);
     }
 
     return createDefaultPlugin(json);
@@ -52,16 +49,6 @@ MyPluginItemBase* createPrintExportTool(const QJsonObject &json) {
     MyPluginItemBase* pluginItem = NULL;
     if (json.contains("name") && json["name"].isString()) {
         pluginItem = new MyPrintExportTool(json["name"].toString());
-        pluginItem->read(json);
-    }
-
-    return pluginItem;
-}
-
-MyPluginItemBase* createAutoLayoutEngine(const QJsonObject &json) {
-    MyPluginItemBase* pluginItem = NULL;
-    if (json.contains("name") && json["name"].isString()) {
-        pluginItem = new MyAutoLayoutEngine(json["name"].toString());
         pluginItem->read(json);
     }
 
