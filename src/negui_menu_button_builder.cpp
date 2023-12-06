@@ -39,7 +39,7 @@ QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemB
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* importItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     importItemWidgetAction->setItems(getPluginsOfType(plugins, "importtool"));
-    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(readFromFile(MyPluginItemBase*)));
+    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
     subMenu->addAction(importItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateImportButton(button, iconsDirectoryPath);

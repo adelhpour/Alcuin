@@ -19,10 +19,10 @@ void MyMenuBar::setMenus() {
     fileMenu->addSeparator();
     // open
     QMenu* openMenu = fileMenu->addMenu(tr("&Open"));
-    const QStringList importToolNames = askForListOfPluginItemNames("importtool");
-    for (const QString& importToolName: importToolNames) {
-        QAction* openAction = openMenu->addAction(importToolName);
-        connect(openAction, &QAction::triggered, this, [this, importToolName] () { askForReadFromFile(importToolName); });
+    const QStringList pluginItemNames = askForListOfPluginItemNames("importtool");
+    for (const QString& pluginItemName: pluginItemNames) {
+        QAction* openAction = openMenu->addAction(pluginItemName);
+        connect(openAction, &QAction::triggered, this, [this, pluginItemName] () { askForDefaultPluginAction(pluginItemName); });
     }
     // open recent
     QAction* openRecentAction = new QAction(tr("&Open Recent"), fileMenu);

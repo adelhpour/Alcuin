@@ -18,13 +18,7 @@ public:
     
     // get the save file name from the user by popping up a file dialog
     const QString getSaveFileName(const QString& workingDirectory) const;
-    
-    // get the icon associated with this plugin
-    const QIcon icon() override;
-    
-    // get the icon dirctory of the export tool
-    const QString& iconDirectory() const;
-    
+
     // get the default save file name of the export tool
     const QString& defaultSaveFileName() const;
     

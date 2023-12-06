@@ -1,6 +1,5 @@
 #include "negui_plugin_manager.h"
 #include "negui_plugin_item_builder.h"
-#include "negui_import_tools.h"
 #include "negui_export_tools.h"
 #include "negui_plugin_item_call_function.h"
 
@@ -92,25 +91,6 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
         pluginItemCategories.push_back(pluginOfType->category());
 
     return pluginItemCategories;
-}
-
-void MyPluginManager::readFromFile(const QString& importToolName) {
-    MyPluginItemBase* importTool = findPluginByName(getPluginsOfType(pluginItems(), "importtool"), importToolName);
-    if (importTool)
-        readFromFile(importTool);
-}
-
-void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
-    QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
-    if (!fileName.isEmpty())
-        emit networkInfoIsReadFromFile(generalInterface()->call(importTool->callFunctions().at(0)->name(), createReadFromFileInputList(importTool, fileName)), importTool, fileName);
-}
-
-const QStringList MyPluginManager::createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName) {
-    QStringList readFromFileInputList;
-    readFromFileInputList.append(fileName);
-
-    return readFromFileInputList;
 }
 
 void MyPluginManager::writeDataToFile(const QString& exportToolName) {

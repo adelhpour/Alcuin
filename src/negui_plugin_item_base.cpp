@@ -13,6 +13,10 @@ const bool MyPluginItemBase::isFrequentlyUsed() {
     return _isFrequentlyUsed;
 }
 
+const QString MyPluginItemBase::type() const {
+    return _type;
+}
+
 const QString& MyPluginItemBase::category() const {
     return _category;
 }
@@ -30,6 +34,15 @@ void MyPluginItemBase::clearCallFunctions() {
         delete callFunctions().takeLast();
 }
 
+const QIcon MyPluginItemBase::icon() {
+    QPixmap pixMap(iconDirectory());
+    return QIcon(pixMap);
+}
+
+const QString& MyPluginItemBase::iconDirectory() const {
+    return _iconDirectory;
+}
+
 const QSize& MyPluginItemBase::iconSize() const {
     return _iconSize;
 }
@@ -40,6 +53,8 @@ void MyPluginItemBase::read(const QJsonObject &json) {
     _isFrequentlyUsed = false;
     if (json.contains("is-frequently-used") && json["is-frequently-used"].isBool())
         _isFrequentlyUsed = json["is-frequently-used"].toBool();
+    if (json.contains("type") && json["type"].isString())
+        _type = json["type"].toString();
     if (json.contains("category") && json["category"].isString())
         _category = json["category"].toString();
     if (json.contains("sub-category") && json["sub-category"].isString())
@@ -49,6 +64,7 @@ void MyPluginItemBase::read(const QJsonObject &json) {
 
 void MyPluginItemBase::write(QJsonObject &json) {
     json["is-frequently-used"]  = isFrequentlyUsed();
+    json["type"] = type();
     json["category"] = category();
     json["sub-category"] = subCategory();
     QJsonArray callFunctionsArray;

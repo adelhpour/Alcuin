@@ -2,20 +2,23 @@ import json
 import networkinfotranslator
     
 def items_info():
-    # json
-    jsonformat = {'name' : "JSON",
+    import_json_format = {'name' : "JSON",
                   'type': "importtool",
-                  'file-extension' : "json",
-                  'call-functions': [{'name': "load_json", 'input-api-functions': []}]}
+                  'call-functions': [
+                      {'name': "saveCurrentNetwork", 'inputs':[]},
+                      {'name': "createNetwork", 'inputs': [{'name': "load_json", 'api': "python", 'inputs': [
+                          {'name': "getOpenFileName", 'inputs': ["json"]}]}]},
+                      {'name': "createChangeStageCommand", 'inputs': []}]}
 
-    # sbml
-    sbmlformat = {'name' : "SBML",
+    import_sbml_format = {'name' : "SBML",
                   'type': "importtool",
-                  'file-extension' : "xml",
-                  'call-functions': [{'name': "load_sbml", 'input-api-functions': []}]}
+                  'call-functions': [
+                      {'name': "saveCurrentNetwork", 'inputs':[]},
+                      {'name': "createNetwork", 'inputs': [{'name': "load_sbml", 'api': "python", 'inputs': [
+                          {'name': "getOpenFileName", 'inputs': ["xml"]}]}]},
+                      {'name': "createChangeStageCommand", 'inputs': []}]}
     
-    return json.dumps({'items': [jsonformat, sbmlformat]})
-
+    return json.dumps({'items': [import_json_format, import_sbml_format]})
 
 def load_json(input):
     file_name = input[0]

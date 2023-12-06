@@ -48,7 +48,7 @@ public slots:
     void setNewNetworkCanvas();
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
-    void readFromFile(const QString&);
+    void defaultPluginAction(const QString& defaultPluginItemName);
     void saveCurrentNetwork();
     void writeDataToFile(const QString&);
     void writeFigureToFile(const QString&);

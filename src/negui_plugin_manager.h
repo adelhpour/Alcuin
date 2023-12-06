@@ -32,12 +32,6 @@ public:
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
-    void readFromFile(const QString& importToolName);
-
-    void readFromFile(MyPluginItemBase* importTool);
-
-    const QStringList createReadFromFileInputList(MyPluginItemBase* importTool, const QString& fileName);
-
     void writeDataToFile(const QString& exportToolName);
 
     void writeDataToFile(MyPluginItemBase* exportTool);
@@ -63,8 +57,6 @@ signals:
     QString askForCurrentBaseFileName();
 
     QJsonObject askForNetworkInfo();
-
-    void networkInfoIsReadFromFile(const QJsonObject&, MyPluginItemBase*, const QString&);
 
     void networkInfoIsWrittenToFile(MyPluginItemBase*, const QString&);
 

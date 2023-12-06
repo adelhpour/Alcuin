@@ -59,10 +59,8 @@ public slots:
     void setSceneMode(const SceneMode& sceneMode) override;
     void enableAddNodeMode(MyPluginItemBase* style);
     void enableAddEdgeMode(MyPluginItemBase* style);
-    void readFromFile(MyPluginItemBase* importToo);
     void writeDataToFile(MyPluginItemBase* exportTool);
     void writeFigureToFile(MyPluginItemBase* exportTool);
-
     void enableNormalMode() override;
     void enableAddNodeMode(const QString& nodeStyleName);
     void enableAddEdgeMode(const QString& edgeStyleName);
@@ -77,7 +75,6 @@ public slots:
     void setNewNetworkCanvas();
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
-    void readFromFile(const QString& importToolName);
     void saveCurrentNetwork();
     void writeDataToFile(const QString& exportToolName);
     void writeFigureToFile(const QString& exportToolName);
@@ -120,6 +117,8 @@ public slots:
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
+    const QString getOpenFileName(const QString& fileExtension);
+    void defaultPluginAction(const QString& defaultPluginItemName);
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
     const QJsonValue triggerAPIAction(const QString& functionName, const QJsonValue& inputs);
 

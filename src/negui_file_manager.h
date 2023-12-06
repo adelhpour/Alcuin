@@ -53,6 +53,8 @@ public:
 
     void setCurrentNetworkUnsaved(const bool& currentNetworkUnsaved);
 
+    const QString getOpenFileName(const QString& fileExtension);
+
 signals:
 
     QJsonObject askForNetworkInfo();

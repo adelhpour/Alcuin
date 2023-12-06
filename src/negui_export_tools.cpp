@@ -23,15 +23,6 @@ const QString& MyExportToolBase::fileExtension() const {
     return _fileExtension;
 }
 
-const QIcon MyExportToolBase::icon() {
-    QPixmap pixMap(iconDirectory());
-    return QIcon(pixMap);
-}
-
-const QString& MyExportToolBase::iconDirectory() const {
-    return _iconDirectory;
-}
-
 const QString& MyExportToolBase::defaultSaveFileName() const {
     return _defaultSaveFileName;
 }

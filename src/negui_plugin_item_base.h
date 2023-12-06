@@ -10,13 +10,14 @@ class MyPluginItemBase : public MyBase {
 public:
     
     MyPluginItemBase(const QString& name);
-    virtual const QString type() const = 0;
+    virtual const QString type() const;
     const bool isFrequentlyUsed();
     const QString& category() const;
     const QString& subCategory() const;
     QList<MyBase*> callFunctions() const;
     void clearCallFunctions();
-    virtual const QIcon icon() = 0;
+    virtual const QIcon icon();
+    const QString& iconDirectory() const;
     const QSize& iconSize() const;
     virtual void read(const QJsonObject &json) override;
     virtual void write(QJsonObject &json) override;
@@ -25,10 +26,12 @@ protected:
     void updateCallFunctions(const QJsonObject &json);
     void addCallFunction(const QJsonObject &json);
     bool _isFrequentlyUsed;
+    QString _type;
     QString _category;
     QString _subCategory;
     QList<MyBase*> _callFunctions;
     QSize _iconSize;
+    QString _iconDirectory;
 };
 
 QList<MyPluginItemBase*> getPluginsOfType(QList<MyPluginItemBase*> plugins, const QString& type);

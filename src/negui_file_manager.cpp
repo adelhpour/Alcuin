@@ -1,9 +1,9 @@
 #include "negui_file_manager.h"
 #include "negui_customized_common_widgets.h"
 #include "negui_export_tools.h"
-#include "negui_import_tools.h"
 
 #include <QFileInfo>
+#include <QFileDialog>
 
 // MyFileManager
 
@@ -66,12 +66,14 @@ void MyFileManager::setCurrentExportTool(MyPluginItemBase* exportTool) {
 }
 
 void MyFileManager::setCurrentExportToolCompatibleWithImportTool(MyPluginItemBase* importTool) {
+    /*
     for (MyPluginItemBase* exportTool : exportTools()) {
         if (((MyExportToolBase*)exportTool)->fileExtension() == ((MyImportTool*)importTool)->fileExtension()) {
             setCurrentExportTool(exportTool);
             return;
         }
     }
+     */
 }
 
 MyPluginItemBase* MyFileManager::currentExportTool() {
@@ -120,6 +122,17 @@ void MyFileManager::setCurrentNetworkUnsaved(const bool& currentNetworkUnsaved) 
     _isCurrentNetworkUnsaved = currentNetworkUnsaved;
 }
 
+const QString MyFileManager::getOpenFileName(const QString& fileExtension) {
+    QString fileName = QFileDialog::getOpenFileName(NULL, "Select the (." + fileExtension + ") File", workingDirectoryPath(), fileExtension + " files (*." + fileExtension + ")");
+    if (!fileName.isEmpty()) {
+        setCurrentFileName(fileName);
+        setLastSavedFileName(fileName);
+        setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
+    }
+
+    return fileName;
+}
+
 MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName) {
     QStringList fileNameSections = fileName.split(".");
     if (fileNameSections.size() > 1) {
@@ -133,4 +146,3 @@ MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, co
 
     return NULL;
 }
-
