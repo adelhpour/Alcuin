@@ -118,6 +118,7 @@ public slots:
     const QString iconsDirectoryPath();
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
     const QString getOpenFileName(const QString& fileExtension);
+    const QString getSaveFileName(const QString& fileExtension);
     void defaultPluginAction(const QString& defaultPluginItemName);
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
     const QJsonValue triggerAPIAction(const QString& functionName, const QJsonValue& inputs);

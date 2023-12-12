@@ -133,6 +133,17 @@ const QString MyFileManager::getOpenFileName(const QString& fileExtension) {
     return fileName;
 }
 
+const QString MyFileManager::getSaveFileName(const QString& fileExtension) {
+    QString fileName = QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension + ") File", workingDirectoryPath() + "/" + currentBaseFileName(), "(*." + fileExtension + ")");
+    if (!fileName.isEmpty()) {
+        setCurrentFileName(fileName);
+        setLastSavedFileName(fileName);
+        setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
+    }
+
+    return fileName;
+}
+
 MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName) {
     QStringList fileNameSections = fileName.split(".");
     if (fileNameSections.size() > 1) {

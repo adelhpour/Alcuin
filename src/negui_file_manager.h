@@ -55,6 +55,8 @@ public:
 
     const QString getOpenFileName(const QString& fileExtension);
 
+    const QString getSaveFileName(const QString& fileExtension);
+
 signals:
 
     QJsonObject askForNetworkInfo();

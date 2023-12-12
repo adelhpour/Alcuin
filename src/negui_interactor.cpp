@@ -445,6 +445,10 @@ const QString MyInteractor::getOpenFileName(const QString& fileExtension) {
     return ((MyFileManager*)fileManager())->getOpenFileName(fileExtension);
 }
 
+const QString MyInteractor::getSaveFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveFileName(fileExtension);
+}
+
 void MyInteractor::defaultPluginAction(const QString& defaultPluginItemName) {
     defaultPluginAction(findPluginByName(pluginItems(), defaultPluginItemName));
 }
@@ -488,6 +492,10 @@ const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, con
         else if (functionName == "getOpenFileName") {
             if (inputArray.size() == 1 && inputArray[0].isString())
                 return getOpenFileName(inputArray[0].toString());
+        }
+        else if (functionName == "getSaveFileName") {
+            if (inputArray.size() == 1 && inputArray[0].isString())
+                return getSaveFileName(inputArray[0].toString());
         }
     }
 
