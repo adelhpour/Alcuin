@@ -5,6 +5,7 @@
 #include "negui_menu_button_manager.h"
 #include "negui_default_network_element_style_manager.h"
 #include "negui_customized_interactor_widgets.h"
+#include "negui_call_interactor_api_function.h"
 
 #include <QCoreApplication>
 
@@ -56,7 +57,7 @@ void MyInteractor::setPluginManager() {
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
-    connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&, const QJsonValue&)), this, SLOT(triggerAPIAction(const QString&, const QJsonValue&)));
+    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SLOT(callAPIFunction(const QString&, const QJsonValue&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -448,60 +449,6 @@ void MyInteractor::callPluginFunctions(MyPluginItemBase* plugin) {
         ((MyPluginManager*)_pluginManager)->callPluginFunctions(plugin);
 }
 
-const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, const QJsonValue& inputs) {
-    if (inputs.isArray()) {
-        QJsonArray inputArray = inputs.toArray();
-        if (functionName == "selectElements") {
-            if (inputArray.size() == 1 && inputArray[0].isBool())
-                selectElements(inputArray[0].toBool());
-        }
-        else if (functionName == "deleteSelectedNetworkElements")
-            deleteSelectedNetworkElements();
-        else if (functionName == "exportNetworkInfo")
-            return exportNetworkInfo();
-        else if (functionName == "createNetwork") {
-            if (inputArray.size() == 1 && inputArray[0].isObject())
-                createNetwork(inputArray[0].toObject());
-        }
-        else if (functionName == "askForAdjustExtentsOfNodes")
-            emit askForAdjustExtentsOfNodes();
-        else if (functionName == "askForAdjustConnectedEdgesOfNodes")
-            emit askForAdjustConnectedEdgesOfNodes();
-        else if (functionName == "createChangeStageCommand")
-            createChangeStageCommand();
-        else if (functionName == "resetCanvas")
-            resetCanvas();
-        else if (functionName == "enableNormalMode")
-            enableNormalMode();
-        else if (functionName == "takeParameterFromUser") {
-            if (inputArray.size() == 2 && inputArray[0].isString())
-                return takeParameterFromUser(inputArray[0].toString(), inputArray[1]);
-        }
-        else if (functionName == "saveCurrentNetwork")
-            saveCurrentNetwork();
-        else if (functionName == "saveCurrentNetworkWithUserPermission")
-            saveCurrentNetworkWithUserPermission();
-        else if (functionName == "getOpenFileName") {
-            if (inputArray.size() == 1 && inputArray[0].isString())
-                return getOpenFileName(inputArray[0].toString());
-        }
-        else if (functionName == "getSaveAsFileName") {
-            if (inputArray.size() == 1 && inputArray[0].isString())
-                return getSaveAsFileName(inputArray[0].toString());
-        }
-        else if (functionName == "getSaveFileName") {
-            if (inputArray.size() == 1 && inputArray[0].isString())
-                return getSaveFileName(inputArray[0].toString());
-        }
-        else if (functionName == "getSaveFigureFileName") {
-            if (inputArray.size() == 1 && inputArray[0].isString())
-                return getSaveFigureFileName(inputArray[0].toString());
-        }
-        else if (functionName == "saveFigure") {
-            if (inputArray.size() == 1 && inputArray[0].isString())
-                saveFigure(inputArray[0].toString());
-        }
-    }
-
-    return QJsonObject();
+const QJsonValue MyInteractor::callAPIFunction(const QString& functionName, const QJsonValue& inputs) {
+    return callInteractorAPIFunction(this, functionName, inputs);
 }

@@ -97,7 +97,7 @@ void MyPluginManager::callPluginFunctions(MyPluginItemBase* plugin) {
         auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
                 return generalInterface()->call(name, inputs); });
         auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
-                return askForTriggerAPIAction(name, inputs); });
+                return askForCallAPIFunction(name, inputs); });
         ((MyPluginItemCallFunction*)callFunction)->call();
         disconnect(pythonConnection);
         disconnect(cPlusPlusConnection);

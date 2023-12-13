@@ -44,7 +44,7 @@ signals:
 
     QJsonObject askForNetworkInfo();
 
-    const QJsonValue askForTriggerAPIAction(const QString&, const QJsonValue&);
+    const QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
 
 protected:
 
