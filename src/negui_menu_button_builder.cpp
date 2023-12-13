@@ -52,7 +52,7 @@ QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginI
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* dataExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     dataExportItemWidgetAction->setItems(getPluginsOfType(plugins, "dataexporttool"));
-    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeDataToFile(MyPluginItemBase*)));
+    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
     subMenu->addAction(dataExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateDataExportButton(button, iconsDirectoryPath);

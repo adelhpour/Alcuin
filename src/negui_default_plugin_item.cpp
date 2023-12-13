@@ -7,7 +7,10 @@ MyDefaultPluginItem::MyDefaultPluginItem(const QString& name) : MyPluginItemBase
 }
 
 const QString MyDefaultPluginItem::type() const {
-    return "default";
+    if (_type.isEmpty())
+        return "default";
+
+    return _type;
 }
 
 const QIcon MyDefaultPluginItem::icon() {

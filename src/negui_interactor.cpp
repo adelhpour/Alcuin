@@ -381,12 +381,9 @@ void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
 }
 
 void MyInteractor::saveCurrentNetwork() {
-    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork()) {
-        if (((MyFileManager*)fileManager())->lastSavedFileName().isEmpty())
-            ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool());
-        else
-            ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool(), ((MyFileManager*)fileManager())->currentFileName());
-    }
+    MyPluginItemBase* savePlugin = ((MyFileManager*)fileManager())->getSavePlugin(pluginItems());
+    if (savePlugin && ((MyFileManager*)fileManager())->canSaveCurrentNetwork())
+        defaultPluginAction(savePlugin);
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
@@ -409,7 +406,7 @@ void MyInteractor::createChangeStageCommand() {
     QJsonObject currentStageInfo = getNetworkElementsAndColorInfo();
     if (undoStack()->count() > undoStack()->index()) {
         const QUndoCommand* indexCommand = undoStack()->command(undoStack()->index());
-        _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
+        _stageInfo = ((MyChafngeStageCommand*)indexCommand)->previousStageInfo();
     }
     if (currentStageInfo != _stageInfo) {
         ((MyFileManager*)fileManager())->setCurrentNetworkUnsaved(true);
@@ -445,8 +442,12 @@ const QString MyInteractor::getOpenFileName(const QString& fileExtension) {
     return ((MyFileManager*)fileManager())->getOpenFileName(fileExtension);
 }
 
-const QString MyInteractor::getSaveFileName(const QString& fileExtension) {
-    return ((MyFileManager*)fileManager())->getSaveFileName(fileExtension);
+const QString MyInteractor::getSaveFileName(const QString& defaultFileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveFileName(defaultFileExtension);
+}
+
+const QString MyInteractor::getSaveAsFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveAsFileName(fileExtension);
 }
 
 void MyInteractor::defaultPluginAction(const QString& defaultPluginItemName) {
@@ -492,6 +493,10 @@ const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, con
         else if (functionName == "getOpenFileName") {
             if (inputArray.size() == 1 && inputArray[0].isString())
                 return getOpenFileName(inputArray[0].toString());
+        }
+        else if (functionName == "getSaveAsFileName") {
+            if (inputArray.size() == 1 && inputArray[0].isString())
+                return getSaveAsFileName(inputArray[0].toString());
         }
         else if (functionName == "getSaveFileName") {
             if (inputArray.size() == 1 && inputArray[0].isString())

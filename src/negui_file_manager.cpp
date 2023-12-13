@@ -94,16 +94,14 @@ const QString MyFileManager::lastSavedFileName() {
 }
 
 const QString MyFileManager::createDefaultFileName() {
-    QString fileName = "network";
-    if (currentExportTool())
-        fileName = ((MyExportToolBase*)currentExportTool())->defaultSaveFileName();
-    ++_defaultFileNameIndex;
-
-    return fileName + QString::number(_defaultFileNameIndex);
+    return "network" + QString::number(++_defaultFileNameIndex);
 }
 
 const bool MyFileManager::canSaveCurrentNetwork() {
-    return (isCurrentNetworkUnsaved() && isWillingToSaveCurrentNetwork());
+    if (isCurrentNetworkUnsaved())
+        return isWillingToSaveCurrentNetwork();
+
+    return false;
 }
 
 const bool MyFileManager::isWillingToSaveCurrentNetwork() {
@@ -133,7 +131,18 @@ const QString MyFileManager::getOpenFileName(const QString& fileExtension) {
     return fileName;
 }
 
-const QString MyFileManager::getSaveFileName(const QString& fileExtension) {
+const QString MyFileManager::getSaveFileName(const QString& defaultFileExtension) {
+    if (isCurrentNetworkUnsaved()) {
+        if (lastSavedFileName().isEmpty())
+            return getSaveAsFileName(defaultFileExtension);
+        else
+            return lastSavedFileName();
+    }
+
+    return "";
+}
+
+const QString MyFileManager::getSaveAsFileName(const QString& fileExtension) {
     QString fileName = QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension + ") File", workingDirectoryPath() + "/" + currentBaseFileName(), "(*." + fileExtension + ")");
     if (!fileName.isEmpty()) {
         setCurrentFileName(fileName);
@@ -143,6 +152,15 @@ const QString MyFileManager::getSaveFileName(const QString& fileExtension) {
 
     return fileName;
 }
+
+MyPluginItemBase* MyFileManager::getSavePlugin(QList<MyPluginItemBase*> plugins) {
+    QList<MyPluginItemBase*> savePlugins = getPluginsOfType(plugins, "datasavetool");
+    if (savePlugins.size())
+        return savePlugins.at(0);
+
+    return NULL;
+}
+
 
 MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName) {
     QStringList fileNameSections = fileName.split(".");

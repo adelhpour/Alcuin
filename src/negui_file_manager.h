@@ -55,7 +55,11 @@ public:
 
     const QString getOpenFileName(const QString& fileExtension);
 
-    const QString getSaveFileName(const QString& fileExtension);
+    const QString getSaveFileName(const QString& defaultFileExtension);
+
+    const QString getSaveAsFileName(const QString& fileExtension);
+
+    MyPluginItemBase* getSavePlugin(QList<MyPluginItemBase*> plugins);
 
 signals:
 
