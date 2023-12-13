@@ -56,7 +56,6 @@ void MyInteractor::setPluginManager() {
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
-    connect(_pluginManager, SIGNAL(askForExportFigure(const QString&, const QString&)), this, SIGNAL(askForExportFigure(const QString&, const QString&)));
     connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&, const QJsonValue&)), this, SLOT(triggerAPIAction(const QString&, const QJsonValue&)));
 }
 
@@ -358,18 +357,14 @@ void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
 }
 
-void MyInteractor::writeFigureToFile(const QString& exportToolName) {
-    ((MyPluginManager*)_pluginManager)->writeFigureToFile(exportToolName);
-}
-
-void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
-    ((MyPluginManager*)_pluginManager)->writeFigureToFile(exportTool);
-}
-
 void MyInteractor::saveCurrentNetwork() {
     MyPluginItemBase* savePlugin = getDefaultSavePlugin(pluginItems());
     if (savePlugin && ((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         defaultPluginAction(savePlugin);
+}
+
+void MyInteractor::saveFigure(const QString& fileName) {
+    emit askForSaveFigure(fileName);
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
@@ -436,6 +431,10 @@ const QString MyInteractor::getSaveAsFileName(const QString& fileExtension) {
     return ((MyFileManager*)fileManager())->getSaveAsFileName(fileExtension);
 }
 
+const QString MyInteractor::getSaveFigureFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveFigureFileName(fileExtension);
+}
+
 void MyInteractor::defaultPluginAction(const QString& defaultPluginItemName) {
     defaultPluginAction(findPluginByName(pluginItems(), defaultPluginItemName));
 }
@@ -487,6 +486,14 @@ const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, con
         else if (functionName == "getSaveFileName") {
             if (inputArray.size() == 1 && inputArray[0].isString())
                 return getSaveFileName(inputArray[0].toString());
+        }
+        else if (functionName == "getSaveFigureFileName") {
+            if (inputArray.size() == 1 && inputArray[0].isString())
+                return getSaveFigureFileName(inputArray[0].toString());
+        }
+        else if (functionName == "saveFigure") {
+            if (inputArray.size() == 1 && inputArray[0].isString())
+                saveFigure(inputArray[0].toString());
         }
     }
 

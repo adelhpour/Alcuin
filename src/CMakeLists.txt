@@ -89,7 +89,6 @@ set(source_files
 		negui_null_feature_menu.cpp
 		negui_multi_network_element_feature_menu.cpp
 		negui_context_menu.cpp
-        negui_export_tools.cpp
         negui_default_plugin_item.cpp
 		negui_main_widget_builder.cpp
 		)
@@ -182,7 +181,6 @@ set(header_files
 		negui_multi_network_element_feature_menu.h
 		negui_context_menu.h
 		negui_interfaces.h
-		negui_export_tools.h
 		negui_default_plugin_item.h
         negui_main_widget_builder.h
 		)

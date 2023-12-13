@@ -25,7 +25,7 @@ signals:
     void canUndoChanged(const bool&);
     void canRedoChanged(const bool&);
     void addElementModeIsEnabled(const QString&);
-    void askForExportFigure(const QString& fileName, const QString& fileExtension);
+    void askForSaveFigure(const QString& fileName);
     void askForAddGraphicsItem(QGraphicsItem*);
     void askForRemoveGraphicsItem(QGraphicsItem*);
     const QString askForNetworkBackgroundColor();
@@ -59,7 +59,6 @@ public slots:
     void setSceneMode(const SceneMode& sceneMode) override;
     void enableAddNodeMode(MyPluginItemBase* style);
     void enableAddEdgeMode(MyPluginItemBase* style);
-    void writeFigureToFile(MyPluginItemBase* exportTool);
     void enableNormalMode() override;
     void enableAddNodeMode(const QString& nodeStyleName);
     void enableAddEdgeMode(const QString& edgeStyleName);
@@ -75,7 +74,7 @@ public slots:
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
     void saveCurrentNetwork();
-    void writeFigureToFile(const QString& exportToolName);
+    void saveFigure(const QString& fileName);
     void triggerUndoAction();
     void triggerRedoAction();
     void cutSelectedNetworkElements();
@@ -118,6 +117,7 @@ public slots:
     const QString getOpenFileName(const QString& fileExtension);
     const QString getSaveFileName(const QString& defaultFileExtension);
     const QString getSaveAsFileName(const QString& fileExtension);
+    const QString getSaveFigureFileName(const QString& fileExtension);
     void defaultPluginAction(const QString& defaultPluginItemName);
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
     const QJsonValue triggerAPIAction(const QString& functionName, const QJsonValue& inputs);

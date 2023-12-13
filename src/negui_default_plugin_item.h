@@ -14,7 +14,6 @@ public:
     const QIcon icon() override;
     const QString& iconDirectory() const;
 
-    // import/export info
     void read(const QJsonObject &json) override;
     void write(QJsonObject &json) override;
 

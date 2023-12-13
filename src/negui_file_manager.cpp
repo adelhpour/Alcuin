@@ -114,3 +114,11 @@ const QString MyFileManager::getSaveAsFileName(const QString& fileExtension) {
 
     return fileName;
 }
+
+const QString MyFileManager::getSaveFigureFileName(const QString& fileExtension) {
+    QString fileName = QFileDialog::getSaveFileName(NULL, "Save (." + fileExtension + ") File", workingDirectoryPath() + "/" + currentBaseFileName(), "(*." + fileExtension + ")");
+    if (!fileName.isEmpty())
+        setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
+
+    return fileName;
+}

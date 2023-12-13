@@ -1,10 +1,12 @@
 import json
 
 def items_info():
-    # pdf
-    pdf_format = {'name' : "as PDF", 'type': "printexporttool", 'file-extension' : "pdf", 'default-save-file-name' : "Drawing"}
+    pdf_format = {'name' : " as PDF",
+                   'type': "printexporttool",
+                   'call-functions': [{'name': "saveFigure", 'inputs': [{'name': "getSaveFigureFileName", 'inputs':["pdf"]}]}]}
 
-    # svg
-    svg_format = {'name' : "as SVG", 'type': "printexporttool", 'file-extension' : "svg", 'default-save-file-name' : "Drawing"}
+    svg_format = {'name' : " as SVG",
+                  'type': "printexporttool",
+                  'call-functions': [{'name': "saveFigure", 'inputs': [{'name': "getSaveFigureFileName", 'inputs':["svg"]}]}]}
     
     return json.dumps({'items': [pdf_format, svg_format]})

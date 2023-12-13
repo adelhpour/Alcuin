@@ -79,8 +79,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(addElementModeIsEnabled(const QString &)), modeMenu(), SLOT(activateAddElementButton(const QString&)));
 
     /// graphics view
-    // export screen scene
-    connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, const QString&)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, const QString&)));
+    // save screen scene
+    connect((MyInteractor*)interactor(), SIGNAL(askForSaveFigure(const QString&)), (MyGraphicsView*)view(), SLOT(saveFigure(const QString&)));
     
     // set tool tip
     connect((MyInteractor*)interactor(), SIGNAL(askForSetToolTip(const QString&)), (MyGraphicsView*)view(), SLOT(setToolTip(const QString&)));
@@ -336,10 +336,6 @@ void MyNetworkEditorWidget::defaultPluginAction(const QString& defaultPluginItem
 
 void MyNetworkEditorWidget::saveCurrentNetwork() {
     ((MyInteractor*)interactor())->saveCurrentNetwork();
-}
-
-void MyNetworkEditorWidget::writeFigureToFile(const QString& exportToolName) {
-    ((MyInteractor*)interactor())->writeFigureToFile(exportToolName);
 }
 
 void MyNetworkEditorWidget::triggerUndoAction() {

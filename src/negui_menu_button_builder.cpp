@@ -65,7 +65,7 @@ QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPlugin
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* printExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     printExportItemWidgetAction->setItems(getPluginsOfType(plugins, "printexporttool"));
-    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(writeFigureToFile(MyPluginItemBase*)));
+    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
     subMenu->addAction(printExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decoratePrintExportButton(button, iconsDirectoryPath);

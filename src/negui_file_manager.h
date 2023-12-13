@@ -45,6 +45,8 @@ public:
 
     const QString getSaveAsFileName(const QString& fileExtension);
 
+    const QString getSaveFigureFileName(const QString& fileExtension);
+
 signals:
 
     QJsonObject askForNetworkInfo();

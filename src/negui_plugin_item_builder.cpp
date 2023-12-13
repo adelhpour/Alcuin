@@ -2,7 +2,6 @@
 #include "negui_node_style_builder.h"
 #include "negui_edge_style_builder.h"
 #include "negui_template_style_builder.h"
-#include "negui_export_tools.h"
 #include "negui_default_plugin_item.h"
 
 MyPluginItemBase* createPluginItem(const QJsonObject &json) {
@@ -47,7 +46,7 @@ MyPluginItemBase* createDataExportTool(const QJsonObject &json) {
 MyPluginItemBase* createPrintExportTool(const QJsonObject &json) {
     MyPluginItemBase* pluginItem = NULL;
     if (json.contains("name") && json["name"].isString()) {
-        pluginItem = new MyPrintExportTool(json["name"].toString());
+        pluginItem = new MyPluginItemBase(json["name"].toString());
         pluginItem->read(json);
     }
 

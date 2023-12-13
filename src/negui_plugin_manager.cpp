@@ -1,6 +1,5 @@
 #include "negui_plugin_manager.h"
 #include "negui_plugin_item_builder.h"
-#include "negui_export_tools.h"
 #include "negui_plugin_item_call_function.h"
 
 #include <QPluginLoader>
@@ -91,18 +90,6 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
         pluginItemCategories.push_back(pluginOfType->category());
 
     return pluginItemCategories;
-}
-
-void MyPluginManager::writeFigureToFile(const QString& exportToolName) {
-    MyPluginItemBase* exportTool = findPluginByName(getPluginsOfType(pluginItems(), "printexporttool"), exportToolName);
-    if (exportTool)
-        writeFigureToFile(exportTool);
-}
-
-void MyPluginManager::writeFigureToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(askForWorkingDirectoryPath());
-    if (!fileName.isEmpty())
-        emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->fileExtension());
 }
 
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {

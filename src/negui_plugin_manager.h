@@ -32,10 +32,6 @@ public:
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
-    void writeFigureToFile(const QString& exportToolName);
-
-    void writeFigureToFile(MyPluginItemBase* exportTool);
-
     void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
 
 signals:
@@ -47,8 +43,6 @@ signals:
     QString askForCurrentBaseFileName();
 
     QJsonObject askForNetworkInfo();
-
-    void askForExportFigure(const QString& fileName, const QString& fileExtension);
 
     const QJsonValue askForTriggerAPIAction(const QString&, const QJsonValue&);
 
