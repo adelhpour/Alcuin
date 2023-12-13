@@ -7,6 +7,7 @@
 MyPluginItemBase::MyPluginItemBase(const QString& name) : MyBase(name) {
     _isFrequentlyUsed = false;
     _iconSize = QSize(0, 0);
+    _type = "default";
 }
 
 const bool MyPluginItemBase::isFrequentlyUsed() {
