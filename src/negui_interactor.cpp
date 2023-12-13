@@ -56,12 +56,6 @@ void MyInteractor::setPluginManager() {
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::networkInfoIsWrittenToFile, this, [this] (MyPluginItemBase* exportTool, const QString& fileName) {
-        ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
-        ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
-        ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-        ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
-    } );
     connect(_pluginManager, SIGNAL(askForExportFigure(const QString&, const QString&)), this, SIGNAL(askForExportFigure(const QString&, const QString&)));
     connect(_pluginManager, SIGNAL(askForTriggerAPIAction(const QString&, const QJsonValue&)), this, SLOT(triggerAPIAction(const QString&, const QJsonValue&)));
 }
@@ -122,7 +116,7 @@ QObject* MyInteractor::networkManager() {
 }
 
 void MyInteractor::setFileManager() {
-    _fileManager = new MyFileManager(getPluginsOfType(pluginItems(), "importtool"), getPluginsOfType(pluginItems(), "dataexporttool"));
+    _fileManager = new MyFileManager();
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
     connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(workingDirectoryPath).absolutePath() + "/"); });
@@ -364,14 +358,6 @@ void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
 }
 
-void MyInteractor::writeDataToFile(const QString& exportToolName) {
-    ((MyPluginManager*)_pluginManager)->writeDataToFile(exportToolName);
-}
-
-void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    ((MyPluginManager*)_pluginManager)->writeDataToFile(exportTool);
-}
-
 void MyInteractor::writeFigureToFile(const QString& exportToolName) {
     ((MyPluginManager*)_pluginManager)->writeFigureToFile(exportToolName);
 }
@@ -381,7 +367,7 @@ void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
 }
 
 void MyInteractor::saveCurrentNetwork() {
-    MyPluginItemBase* savePlugin = ((MyFileManager*)fileManager())->getSavePlugin(pluginItems());
+    MyPluginItemBase* savePlugin = getDefaultSavePlugin(pluginItems());
     if (savePlugin && ((MyFileManager*)fileManager())->canSaveCurrentNetwork())
         defaultPluginAction(savePlugin);
 }
@@ -406,7 +392,7 @@ void MyInteractor::createChangeStageCommand() {
     QJsonObject currentStageInfo = getNetworkElementsAndColorInfo();
     if (undoStack()->count() > undoStack()->index()) {
         const QUndoCommand* indexCommand = undoStack()->command(undoStack()->index());
-        _stageInfo = ((MyChafngeStageCommand*)indexCommand)->previousStageInfo();
+        _stageInfo = ((MyChangeStageCommand*)indexCommand)->previousStageInfo();
     }
     if (currentStageInfo != _stageInfo) {
         ((MyFileManager*)fileManager())->setCurrentNetworkUnsaved(true);

@@ -40,5 +40,6 @@ QList<MyPluginItemBase*> getPluginsOfSubCategory(QList<MyPluginItemBase*> plugin
 MyPluginItemBase* findPluginByName(QList<MyPluginItemBase*> plugins, const QString& pluginName);
 const QList<QString> getPluginsCategories(QList<MyPluginItemBase*> plugins);
 const QList<QString> getPluginsSubCategories(QList<MyPluginItemBase*> plugins);
+MyPluginItemBase* getDefaultSavePlugin(QList<MyPluginItemBase*> plugins);
 
 #endif

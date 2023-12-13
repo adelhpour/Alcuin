@@ -50,7 +50,6 @@ public slots:
     QStringList listOfPluginItemCategories(const QString& type);
     void defaultPluginAction(const QString& defaultPluginItemName);
     void saveCurrentNetwork();
-    void writeDataToFile(const QString&);
     void writeFigureToFile(const QString&);
     void triggerUndoAction();
     void triggerRedoAction();

@@ -59,7 +59,6 @@ public slots:
     void setSceneMode(const SceneMode& sceneMode) override;
     void enableAddNodeMode(MyPluginItemBase* style);
     void enableAddEdgeMode(MyPluginItemBase* style);
-    void writeDataToFile(MyPluginItemBase* exportTool);
     void writeFigureToFile(MyPluginItemBase* exportTool);
     void enableNormalMode() override;
     void enableAddNodeMode(const QString& nodeStyleName);
@@ -76,7 +75,6 @@ public slots:
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
     void saveCurrentNetwork();
-    void writeDataToFile(const QString& exportToolName);
     void writeFigureToFile(const QString& exportToolName);
     void triggerUndoAction();
     void triggerRedoAction();

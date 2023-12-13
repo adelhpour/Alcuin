@@ -34,35 +34,6 @@ protected:
     QString _defaultSaveFileName;
 };
 
-class MyDataExportTool : public QObject, public MyExportToolBase {
-    Q_OBJECT
-public:
-    
-    MyDataExportTool(const QString& name);
-    
-    const QString type() const override;
-    
-    QJsonObject getGraphInfoObject();
-    
-    const QList<QString>& nodeTypes() const;
-    
-    const QList<QString>& edgeTypes() const;
-    
-    void readCompatibilityInfo(const QJsonObject &json);
-    
-    const bool isInfoCompatible() const { return _isInfoCompatible; };
-    
-    const QString defaultUnsuccessfullExport() const;
-    
-    const QString messagesAsString() const;
-    
-    void showMessages();
-
-protected:
-    bool _isInfoCompatible;
-    QList<QString> _messages;
-};
-
 class MyPrintExportTool : public MyExportToolBase {
 public:
     

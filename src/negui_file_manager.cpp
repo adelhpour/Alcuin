@@ -1,32 +1,20 @@
 #include "negui_file_manager.h"
 #include "negui_customized_common_widgets.h"
-#include "negui_export_tools.h"
 
 #include <QFileInfo>
 #include <QFileDialog>
 
 // MyFileManager
 
-MyFileManager::MyFileManager(QList<MyPluginItemBase*> importTools, QList<MyPluginItemBase*> exportTools) {
-    _importTools = importTools;
-    _exportTools = exportTools;
+MyFileManager::MyFileManager() {
     _defaultFileNameIndex = 0;
     _isCurrentNetworkUnsaved = false;
 }
 
-void MyFileManager::reset() {
-    resetCurrentExportTool();
+void MyFileManager::reset() {;
     resetCurrentFileName();
     resetLastSavedFileName();
     _isCurrentNetworkUnsaved = false;
-}
-
-QList<MyPluginItemBase*> MyFileManager::importTools() {
-    return _importTools;
-}
-
-QList<MyPluginItemBase*> MyFileManager::exportTools() {
-    return _exportTools;
 }
 
 void MyFileManager::resetCurrentFileName() {
@@ -52,32 +40,6 @@ void MyFileManager::setWorkingDirectoryPath(const QString& workingDirectoryPath)
 
 const QString& MyFileManager::workingDirectoryPath() {
     return _workingDirectoryPath;
-}
-
-void MyFileManager::resetCurrentExportTool() {
-    if (_exportTools.size())
-        setCurrentExportTool(_exportTools.at(0));
-    else
-        setCurrentExportTool(NULL);
-}
-
-void MyFileManager::setCurrentExportTool(MyPluginItemBase* exportTool) {
-    _currentExportTool = exportTool;
-}
-
-void MyFileManager::setCurrentExportToolCompatibleWithImportTool(MyPluginItemBase* importTool) {
-    /*
-    for (MyPluginItemBase* exportTool : exportTools()) {
-        if (((MyExportToolBase*)exportTool)->fileExtension() == ((MyImportTool*)importTool)->fileExtension()) {
-            setCurrentExportTool(exportTool);
-            return;
-        }
-    }
-     */
-}
-
-MyPluginItemBase* MyFileManager::currentExportTool() {
-    return _currentExportTool;
 }
 
 void MyFileManager::resetLastSavedFileName() {
@@ -151,27 +113,4 @@ const QString MyFileManager::getSaveAsFileName(const QString& fileExtension) {
     }
 
     return fileName;
-}
-
-MyPluginItemBase* MyFileManager::getSavePlugin(QList<MyPluginItemBase*> plugins) {
-    QList<MyPluginItemBase*> savePlugins = getPluginsOfType(plugins, "datasavetool");
-    if (savePlugins.size())
-        return savePlugins.at(0);
-
-    return NULL;
-}
-
-
-MyPluginItemBase* getDataExportTool(QList<MyPluginItemBase*> dataExportTools, const QString& fileName) {
-    QStringList fileNameSections = fileName.split(".");
-    if (fileNameSections.size() > 1) {
-        for (MyPluginItemBase* dataExportTool : dataExportTools) {
-            if (fileNameSections.at(1) == ((MyDataExportTool*)dataExportTool)->fileExtension())
-                return dataExportTool;
-        }
-    }
-    if (dataExportTools.size())
-        return dataExportTools.at(0);
-
-    return NULL;
 }

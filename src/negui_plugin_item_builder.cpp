@@ -37,7 +37,7 @@ MyPluginItemBase* createImportTool(const QJsonObject &json) {
 MyPluginItemBase* createDataExportTool(const QJsonObject &json) {
     MyPluginItemBase* pluginItem = NULL;
     if (json.contains("name") && json["name"].isString()) {
-        pluginItem = new MyDataExportTool(json["name"].toString());
+        pluginItem = new MyPluginItemBase(json["name"].toString());
         pluginItem->read(json);
     }
 

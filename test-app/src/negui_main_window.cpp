@@ -23,7 +23,6 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(menuBar, SIGNAL(askForListOfPluginItemCategories(const QString&)), centralWidget(), SLOT(listOfPluginItemCategories(const QString&)));
     connect(menuBar, SIGNAL(askForDefaultPluginAction(const QString&)), centralWidget(), SLOT(defaultPluginAction(const QString&)));
     connect(menuBar, SIGNAL(askForSaveCurrentNetwork()), centralWidget(), SLOT(saveCurrentNetwork()));
-    connect(menuBar, SIGNAL(askForWriteDataToFile(const QString&)), centralWidget(), SLOT(writeDataToFile(const QString&)));
     connect(menuBar, SIGNAL(askForWriteFigureToFile(const QString&)), centralWidget(), SLOT(writeFigureToFile(const QString&)));
     connect((MyMenuBar*)menuBar, &MyMenuBar::askForCloseTheApp, centralWidget(), [this] () { close(); });
     connect(menuBar, SIGNAL(askForTriggerUndoAction()), centralWidget(), SLOT(triggerUndoAction()));

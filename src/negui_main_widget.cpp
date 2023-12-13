@@ -338,10 +338,6 @@ void MyNetworkEditorWidget::saveCurrentNetwork() {
     ((MyInteractor*)interactor())->saveCurrentNetwork();
 }
 
-void MyNetworkEditorWidget::writeDataToFile(const QString& exportToolName) {
-    ((MyInteractor*)interactor())->writeDataToFile(exportToolName);
-}
-
 void MyNetworkEditorWidget::writeFigureToFile(const QString& exportToolName) {
     ((MyInteractor*)interactor())->writeFigureToFile(exportToolName);
 }

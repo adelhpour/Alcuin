@@ -153,3 +153,11 @@ const QList<QString> getPluginsSubCategories(QList<MyPluginItemBase*> plugins) {
     
     return subCategories;
 }
+
+MyPluginItemBase* getDefaultSavePlugin(QList<MyPluginItemBase*> plugins) {
+    QList<MyPluginItemBase*> savePlugins = getPluginsOfType(plugins, "datasavetool");
+    if (savePlugins.size())
+        return savePlugins.at(0);
+
+    return NULL;
+}

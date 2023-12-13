@@ -32,16 +32,6 @@ public:
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
-    void writeDataToFile(const QString& exportToolName);
-
-    void writeDataToFile(MyPluginItemBase* exportTool);
-
-    void writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName);
-
-    const QStringList createCheckForGraphInfoCompatibilityInputList(MyPluginItemBase* exportTool);
-
-    const QStringList createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName);
-
     void writeFigureToFile(const QString& exportToolName);
 
     void writeFigureToFile(MyPluginItemBase* exportTool);
@@ -57,8 +47,6 @@ signals:
     QString askForCurrentBaseFileName();
 
     QJsonObject askForNetworkInfo();
-
-    void networkInfoIsWrittenToFile(MyPluginItemBase*, const QString&);
 
     void askForExportFigure(const QString& fileName, const QString& fileExtension);
 

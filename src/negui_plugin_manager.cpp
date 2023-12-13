@@ -93,44 +93,6 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
     return pluginItemCategories;
 }
 
-void MyPluginManager::writeDataToFile(const QString& exportToolName) {
-    MyPluginItemBase* exportTool = findPluginByName(getPluginsOfType(pluginItems(), "dataexporttool"), exportToolName);
-    if (exportTool)
-        writeDataToFile(exportTool);
-}
-
-void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(askForWorkingDirectoryPath(), askForCurrentBaseFileName());
-    if (!fileName.isEmpty())
-        writeDataToFile(exportTool, fileName);
-}
-
-void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
-    QStringList checkForGraphInfoCompatibilityInputList = createCheckForGraphInfoCompatibilityInputList(exportTool);
-    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(generalInterface()->call(exportTool->callFunctions().at(0)->name(), createCheckForGraphInfoCompatibilityInputList(exportTool)));
-    if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
-        QStringList writeToFileInputList = createWriteToFileInputList(exportTool, fileName);
-        generalInterface()->call(exportTool->callFunctions().at(1)->name(), writeToFileInputList);
-        emit networkInfoIsWrittenToFile(exportTool, fileName);
-    }
-    ((MyDataExportTool*)exportTool)->showMessages();
-}
-
-const QStringList MyPluginManager::createCheckForGraphInfoCompatibilityInputList(MyPluginItemBase* exportTool) {
-    QStringList checkForGraphInfoCompatibilityInputList;
-    checkForGraphInfoCompatibilityInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
-
-    return checkForGraphInfoCompatibilityInputList;
-}
-
-const QStringList MyPluginManager::createWriteToFileInputList(MyPluginItemBase* exportTool, const QString& fileName) {
-    QStringList writeToFileInputList;
-    writeToFileInputList.append(QJsonDocument(askForNetworkInfo()).toJson(QJsonDocument::Compact));
-    writeToFileInputList.append(fileName);
-
-    return writeToFileInputList;
-}
-
 void MyPluginManager::writeFigureToFile(const QString& exportToolName) {
     MyPluginItemBase* exportTool = findPluginByName(getPluginsOfType(pluginItems(), "printexporttool"), exportToolName);
     if (exportTool)
