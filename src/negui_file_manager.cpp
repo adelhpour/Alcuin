@@ -59,13 +59,6 @@ const QString MyFileManager::createDefaultFileName() {
     return "network" + QString::number(++_defaultFileNameIndex);
 }
 
-const bool MyFileManager::canSaveCurrentNetwork() {
-    if (isCurrentNetworkUnsaved())
-        return isWillingToSaveCurrentNetwork();
-
-    return false;
-}
-
 const bool MyFileManager::isWillingToSaveCurrentNetwork() {
     QMessageBox* autoSaveMessageBox =  new MyAutoSaveMessageBox(currentFileName());
     if (autoSaveMessageBox->exec() == QMessageBox::Yes)
@@ -97,8 +90,10 @@ const QString MyFileManager::getSaveFileName(const QString& defaultFileExtension
     if (isCurrentNetworkUnsaved()) {
         if (lastSavedFileName().isEmpty())
             return getSaveAsFileName(defaultFileExtension);
-        else
+        else {
+            setLastSavedFileName(lastSavedFileName());
             return lastSavedFileName();
+        }
     }
 
     return "";

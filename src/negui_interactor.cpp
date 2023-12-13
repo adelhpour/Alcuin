@@ -211,7 +211,7 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
 }
 
 void MyInteractor::setNewNetworkCanvas() {
-    saveCurrentNetwork();
+    saveCurrentNetworkWithUserPermission();
     askForRemoveFeatureMenu();
     ((MyNetworkManager*)_networkManager)->resetNetworkCanvas();
     ((MyFileManager*)fileManager())->reset();
@@ -358,9 +358,13 @@ void MyInteractor::clearSelectionArea() {
 }
 
 void MyInteractor::saveCurrentNetwork() {
-    MyPluginItemBase* savePlugin = getDefaultSavePlugin(pluginItems());
-    if (savePlugin && ((MyFileManager*)fileManager())->canSaveCurrentNetwork())
-        callPluginFunctions(savePlugin);
+    if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved())
+        callPluginFunctions(getDefaultSavePlugin(pluginItems()));
+}
+
+void MyInteractor::saveCurrentNetworkWithUserPermission() {
+    if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved() && ((MyFileManager*)fileManager())->isWillingToSaveCurrentNetwork())
+        saveCurrentNetwork();
 }
 
 void MyInteractor::saveFigure(const QString& fileName) {
@@ -475,6 +479,8 @@ const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, con
         }
         else if (functionName == "saveCurrentNetwork")
             saveCurrentNetwork();
+        else if (functionName == "saveCurrentNetworkWithUserPermission")
+            saveCurrentNetworkWithUserPermission();
         else if (functionName == "getOpenFileName") {
             if (inputArray.size() == 1 && inputArray[0].isString())
                 return getOpenFileName(inputArray[0].toString());

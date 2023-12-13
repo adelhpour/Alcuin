@@ -31,8 +31,6 @@ public:
 
     const QString createDefaultFileName();
 
-    const bool canSaveCurrentNetwork();
-
     const bool isWillingToSaveCurrentNetwork();
 
     const bool isCurrentNetworkUnsaved();

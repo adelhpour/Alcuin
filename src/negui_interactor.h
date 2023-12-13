@@ -74,6 +74,7 @@ public slots:
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
     void saveCurrentNetwork();
+    void saveCurrentNetworkWithUserPermission();
     void saveFigure(const QString& fileName);
     void triggerUndoAction();
     void triggerRedoAction();
