@@ -95,7 +95,7 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
 void MyPluginManager::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
     for (MyBase* callFunction : defaultPluginItem->callFunctions()) {
         auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
-                return generalInterface()->call1(name, inputs); });
+                return generalInterface()->call(name, inputs); });
         auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
                 return askForTriggerAPIAction(name, inputs); });
         ((MyPluginItemCallFunction*)callFunction)->call();

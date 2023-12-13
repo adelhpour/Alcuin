@@ -9,8 +9,7 @@ class GeneralPlugin : public QObject, GeneralInterface {
 public:
     int initialize(const QString &appPath, const QString &pluginsPath) override;
     const QJsonObject loadItemsInfo() override;
-    const QJsonObject call(const QString& functionName, const QStringList& inputList) override;
-    const QJsonValue call1(const QString& functionName, const QJsonValue& functionInput) override;
+    const QJsonValue call(const QString& functionName, const QJsonValue& functionInput) override;
 
 protected:
     void loadPluginScripts(const QString &pluginsPath);

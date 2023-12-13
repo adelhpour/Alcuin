@@ -60,18 +60,7 @@ const QJsonObject GeneralPlugin::addItemsInfo(QJsonObject itemsInfo, const QJson
     return itemsInfo;
 }
 
-const QJsonObject GeneralPlugin::call(const QString& functionName, const QStringList& callFunctionInput) {
-    PyErr_Print();
-    for (CPyObject script : _scripts) {
-        CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
-        if (function)
-            return processFunctionOutput(PyObject_CallObject(function.getObject(), createFunctionInput(callFunctionInput)));
-    }
-
-    return QJsonObject();
-}
-
-const QJsonValue GeneralPlugin::call1(const QString& functionName, const QJsonValue& functionInput) {
+const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonValue& functionInput) {
     PyErr_Print();
     for (CPyObject script : _scripts) {
         CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
