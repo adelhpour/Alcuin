@@ -19,10 +19,10 @@ void MyMenuBar::setMenus() {
     fileMenu->addSeparator();
     // open
     QMenu* openMenu = fileMenu->addMenu(tr("&Open"));
-    const QStringList pluginItemNames = askForListOfPluginItemNames("importtool");
+    QStringList pluginItemNames = askForListOfPluginItemNames("importtool");
     for (const QString& pluginItemName: pluginItemNames) {
         QAction* openAction = openMenu->addAction(pluginItemName);
-        connect(openAction, &QAction::triggered, this, [this, pluginItemName] () { askForDefaultPluginAction(pluginItemName); });
+        connect(openAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
     }
     // open recent
     QAction* openRecentAction = new QAction(tr("&Open Recent"), fileMenu);
@@ -33,21 +33,23 @@ void MyMenuBar::setMenus() {
     QAction* saveAction = new QAction(tr("&Save"), fileMenu);
     saveAction->setShortcut(QKeySequence::Save);
     fileMenu->addAction(saveAction);
-    connect(saveAction, &QAction::triggered, this, &MyMenuBar::askForSaveCurrentNetwork);
+    pluginItemNames = askForListOfPluginItemNames("datasavetool");
+    if (pluginItemNames.size())
+        connect(saveAction, &QAction::triggered, this, [this, pluginItemNames] () { askForCallPluginFunctions(pluginItemNames.at(0)); });
     // save as
     QMenu* saveAsMenu = fileMenu->addMenu(tr("&Save As"));
-    const QStringList dataExportToolNames = askForListOfPluginItemNames("dataexporttool");
-    for (const QString& dataExportToolName: dataExportToolNames) {
-        QAction* saveAsAction = saveAsMenu->addAction(dataExportToolName);
-        connect(saveAsAction, &QAction::triggered, this, [this, dataExportToolName] () { askForWriteDataToFile(dataExportToolName); });
+    pluginItemNames = askForListOfPluginItemNames("dataexporttool");
+    for (const QString& pluginItemName: pluginItemNames) {
+        QAction* saveAsAction = saveAsMenu->addAction(pluginItemName);
+        connect(saveAsAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
     }
     fileMenu->addSeparator();
     // export
     QMenu* exportMenu = fileMenu->addMenu(tr("&Export"));
-    const QStringList printExportToolNames = askForListOfPluginItemNames("printexporttool");
-    for (const QString& printExportToolName: printExportToolNames) {
-        QAction* exportAction = exportMenu->addAction(printExportToolName);
-        connect(exportAction, &QAction::triggered, this, [this, printExportToolName] () { askForWriteFigureToFile(printExportToolName); });
+    pluginItemNames = askForListOfPluginItemNames("printexporttool");
+    for (const QString& pluginItemName: pluginItemNames) {
+        QAction* exportAction = exportMenu->addAction(pluginItemName);
+        connect(exportAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
     }
     fileMenu->addSeparator();
     // print

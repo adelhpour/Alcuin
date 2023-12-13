@@ -330,8 +330,8 @@ QStringList MyNetworkEditorWidget::listOfPluginItemCategories(const QString& typ
     return ((MyInteractor*)interactor())->listOfPluginItemCategories(type);
 }
 
-void MyNetworkEditorWidget::defaultPluginAction(const QString& defaultPluginItemName) {
-    ((MyInteractor*)interactor())->defaultPluginAction(defaultPluginItemName);
+void MyNetworkEditorWidget::callPluginFunctions(const QString& pluginName) {
+    ((MyInteractor*)interactor())->callPluginFunctions(pluginName);
 }
 
 void MyNetworkEditorWidget::saveCurrentNetwork() {

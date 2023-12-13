@@ -13,7 +13,7 @@ void decoratePrintExportButton(QAbstractButton* button, const QString& iconsDire
 
 void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateDefaultButton(QAbstractButton* button, const QString& iconsDirectory);
+void decorateMoreButton(QAbstractButton* button, const QString& iconsDirectory);
 
 void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory);
 

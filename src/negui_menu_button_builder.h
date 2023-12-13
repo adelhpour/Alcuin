@@ -52,7 +52,7 @@ QAbstractButton* createZoomInMenuButton(QObject* graphicsView, const QString& ic
 
 QAbstractButton* createZoomOutMenuButton(QObject* graphicsView, const QString& iconsDirectoryPath);
 
-QAbstractButton* createDefaultMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+QAbstractButton* createMoreMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
 
 #endif

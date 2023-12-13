@@ -32,7 +32,7 @@ public:
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
-    void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
+    void callPluginFunctions(MyPluginItemBase* plugin);
 
 signals:
 

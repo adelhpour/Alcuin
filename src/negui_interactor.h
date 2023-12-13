@@ -118,8 +118,8 @@ public slots:
     const QString getSaveFileName(const QString& defaultFileExtension);
     const QString getSaveAsFileName(const QString& fileExtension);
     const QString getSaveFigureFileName(const QString& fileExtension);
-    void defaultPluginAction(const QString& defaultPluginItemName);
-    void defaultPluginAction(MyPluginItemBase* defaultPluginItem);
+    void callPluginFunctions(const QString& pluginName);
+    void callPluginFunctions(MyPluginItemBase* plugin);
     const QJsonValue triggerAPIAction(const QString& functionName, const QJsonValue& inputs);
 
 protected:

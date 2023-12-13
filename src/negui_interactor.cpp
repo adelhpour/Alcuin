@@ -360,7 +360,7 @@ void MyInteractor::clearSelectionArea() {
 void MyInteractor::saveCurrentNetwork() {
     MyPluginItemBase* savePlugin = getDefaultSavePlugin(pluginItems());
     if (savePlugin && ((MyFileManager*)fileManager())->canSaveCurrentNetwork())
-        defaultPluginAction(savePlugin);
+        callPluginFunctions(savePlugin);
 }
 
 void MyInteractor::saveFigure(const QString& fileName) {
@@ -435,13 +435,13 @@ const QString MyInteractor::getSaveFigureFileName(const QString& fileExtension) 
     return ((MyFileManager*)fileManager())->getSaveFigureFileName(fileExtension);
 }
 
-void MyInteractor::defaultPluginAction(const QString& defaultPluginItemName) {
-    defaultPluginAction(findPluginByName(pluginItems(), defaultPluginItemName));
+void MyInteractor::callPluginFunctions(const QString& pluginName) {
+    callPluginFunctions(findPluginByName(pluginItems(), pluginName));
 }
 
-void MyInteractor::defaultPluginAction(MyPluginItemBase* defaultPluginItem) {
-    if (defaultPluginItem)
-        ((MyPluginManager*)_pluginManager)->defaultPluginAction(defaultPluginItem);
+void MyInteractor::callPluginFunctions(MyPluginItemBase* plugin) {
+    if (plugin)
+        ((MyPluginManager*)_pluginManager)->callPluginFunctions(plugin);
 }
 
 const QJsonValue MyInteractor::triggerAPIAction(const QString& functionName, const QJsonValue& inputs) {

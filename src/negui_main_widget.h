@@ -48,7 +48,7 @@ public slots:
     void setNewNetworkCanvas();
     QStringList listOfPluginItemNames(const QString& type);
     QStringList listOfPluginItemCategories(const QString& type);
-    void defaultPluginAction(const QString& defaultPluginItemName);
+    void callPluginFunctions(const QString& pluginName);
     void saveCurrentNetwork();
     void triggerUndoAction();
     void triggerRedoAction();

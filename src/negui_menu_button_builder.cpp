@@ -19,7 +19,7 @@ QList<QAbstractButton*> createToolbarMenuButtons(QObject* interactor, QObject* u
     buttons.push_back(createUndoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     buttons.push_back(createRedoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     if (getPluginsOfType(plugins, "default").size())
-        buttons.push_back(createDefaultMenuButton(interactor, plugins, iconsDirectoryPath));
+        buttons.push_back(createMoreMenuButton(interactor, plugins, iconsDirectoryPath));
 
     return buttons;
 }
@@ -39,7 +39,7 @@ QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemB
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* importItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     importItemWidgetAction->setItems(getPluginsOfType(plugins, "importtool"));
-    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
+    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
     subMenu->addAction(importItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateImportButton(button, iconsDirectoryPath);
@@ -52,7 +52,7 @@ QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginI
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* dataExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     dataExportItemWidgetAction->setItems(getPluginsOfType(plugins, "dataexporttool"));
-    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
+    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
     subMenu->addAction(dataExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decorateDataExportButton(button, iconsDirectoryPath);
@@ -65,7 +65,7 @@ QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPlugin
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* printExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     printExportItemWidgetAction->setItems(getPluginsOfType(plugins, "printexporttool"));
-    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
+    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
     subMenu->addAction(printExportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
     decoratePrintExportButton(button, iconsDirectoryPath);
@@ -244,15 +244,15 @@ QAbstractButton* createZoomOutMenuButton(QObject* graphicsView, const QString& i
     return button;
 }
 
-QAbstractButton* createDefaultMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+QAbstractButton* createMoreMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyMenu(button);
     MyMenuButtonWidgetAction* defaultItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
     defaultItemWidgetAction->setItems(getPluginsOfType(plugins, "default"));
-    QObject::connect(defaultItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(defaultPluginAction(MyPluginItemBase*)));
+    QObject::connect(defaultItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
     subMenu->addAction(defaultItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
-    decorateDefaultButton(button, iconsDirectoryPath);
+    decorateMoreButton(button, iconsDirectoryPath);
 
     return button;
 }

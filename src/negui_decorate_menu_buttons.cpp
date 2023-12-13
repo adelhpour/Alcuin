@@ -29,7 +29,7 @@ void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory) 
     setIcon(button, iconsDirectory + "/save.png");
 }
 
-void decorateDefaultButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateMoreButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("More");
     button->setToolTip("More actions");
     setIcon(button, iconsDirectory + "/more.png");
