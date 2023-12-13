@@ -10,11 +10,11 @@ QList<QAbstractButton*> createToolbarMenuButtons(QObject* interactor, QObject* u
 
 QList<QAbstractButton*> createModeMenuButtons(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
-QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+QAbstractButton* createOpenMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
-QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+QAbstractButton* createSaveAsMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
-QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
+QAbstractButton* createExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath);
 
 QAbstractButton* createSaveMenuButton(QObject* interactor, const QString& iconsDirectoryPath);
 

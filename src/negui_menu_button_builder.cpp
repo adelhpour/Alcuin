@@ -8,14 +8,14 @@
 QList<QAbstractButton*> createToolbarMenuButtons(QObject* interactor, QObject* undoStack, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QList<QAbstractButton*> buttons;
     buttons.push_back(createNewNetworkCanvasButton(interactor, iconsDirectoryPath));
-    if (getPluginsOfType(plugins, "importtool").size())
-        buttons.push_back(createImportMenuButton(interactor, plugins, iconsDirectoryPath));
-    if (getPluginsOfType(plugins, "dataexporttool").size()) {
+    if (getPluginsOfType(plugins, "open").size())
+        buttons.push_back(createOpenMenuButton(interactor, plugins, iconsDirectoryPath));
+    if (getPluginsOfType(plugins, "save_as").size()) {
         buttons.push_back(createSaveMenuButton(interactor, iconsDirectoryPath));
-        buttons.push_back(createDataExportMenuButton(interactor, plugins, iconsDirectoryPath));
+        buttons.push_back(createSaveAsMenuButton(interactor, plugins, iconsDirectoryPath));
     }
-    if (getPluginsOfType(plugins, "printexporttool").size())
-        buttons.push_back(createPrintExportMenuButton(interactor, plugins, iconsDirectoryPath));
+    if (getPluginsOfType(plugins, "export").size())
+        buttons.push_back(createExportMenuButton(interactor, plugins, iconsDirectoryPath));
     buttons.push_back(createUndoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     buttons.push_back(createRedoActionMenuButton(interactor, undoStack, iconsDirectoryPath));
     if (getPluginsOfType(plugins, "default").size())
@@ -34,41 +34,41 @@ QList<QAbstractButton*> createModeMenuButtons(QObject* interactor, QList<MyPlugi
     return buttons;
 }
 
-QAbstractButton* createImportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+QAbstractButton* createOpenMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyMenu(button);
-    MyMenuButtonWidgetAction* importItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
-    importItemWidgetAction->setItems(getPluginsOfType(plugins, "importtool"));
-    QObject::connect(importItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
-    subMenu->addAction(importItemWidgetAction);
+    MyMenuButtonWidgetAction* openItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    openItemWidgetAction->setItems(getPluginsOfType(plugins, "open"));
+    QObject::connect(openItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
+    subMenu->addAction(openItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
-    decorateImportButton(button, iconsDirectoryPath);
+    decorateOpenButton(button, iconsDirectoryPath);
 
     return button;
 }
 
-QAbstractButton* createDataExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+QAbstractButton* createSaveAsMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyMenu(button);
-    MyMenuButtonWidgetAction* dataExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
-    dataExportItemWidgetAction->setItems(getPluginsOfType(plugins, "dataexporttool"));
-    QObject::connect(dataExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
-    subMenu->addAction(dataExportItemWidgetAction);
+    MyMenuButtonWidgetAction* saveAsItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    saveAsItemWidgetAction->setItems(getPluginsOfType(plugins, "save_as"));
+    QObject::connect(saveAsItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
+    subMenu->addAction(saveAsItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
-    decorateDataExportButton(button, iconsDirectoryPath);
+    decorateSaveAsButton(button, iconsDirectoryPath);
 
     return button;
 }
 
-QAbstractButton* createPrintExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
+QAbstractButton* createExportMenuButton(QObject* interactor, QList<MyPluginItemBase*> plugins, const QString& iconsDirectoryPath) {
     QAbstractButton* button = new MyToolButton();
     QMenu* subMenu = new MyMenu(button);
-    MyMenuButtonWidgetAction* printExportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
-    printExportItemWidgetAction->setItems(getPluginsOfType(plugins, "printexporttool"));
-    QObject::connect(printExportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
-    subMenu->addAction(printExportItemWidgetAction);
+    MyMenuButtonWidgetAction* exportItemWidgetAction = new MyMenuButtonWidgetAction(subMenu);
+    exportItemWidgetAction->setItems(getPluginsOfType(plugins, "export"));
+    QObject::connect(exportItemWidgetAction, SIGNAL(itemIsChosen(MyPluginItemBase*)), interactor, SLOT(callPluginFunctions(MyPluginItemBase*)));
+    subMenu->addAction(exportItemWidgetAction);
     ((QToolButton*)button)->setMenu(subMenu);
-    decoratePrintExportButton(button, iconsDirectoryPath);
+    decorateExportButton(button, iconsDirectoryPath);
 
     return button;
 }

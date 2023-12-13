@@ -4,19 +4,19 @@
 
 #include <QShortcut>
 
-void decorateImportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateOpenButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Open");
     button->setToolTip("Open");
     setIcon(button, iconsDirectory + "/open.png");
 }
 
-void decorateDataExportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateSaveAsButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("SaveAs");
     button->setToolTip("SaveAs");
     setIcon(button, iconsDirectory + "/saveAs.png");
 }
 
-void decoratePrintExportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateExportButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Export");
     button->setToolTip("Export");
     setIcon(button, iconsDirectory + "/export.png");
