@@ -6,6 +6,7 @@
 #include <QScrollbar>
 #include <QPrinter>
 #include <QSvgGenerator>
+#include <QFileInfo>
 
 // MyGraphicsView
 
@@ -56,14 +57,15 @@ void MyGraphicsView::setToolTip(const QString& toolTip) {
     QWidget::setToolTip(toolTip);
 }
 
-void MyGraphicsView::exportFigure(const QString& fileName, const QString& fileExtension) {
+void MyGraphicsView::saveFigure(const QString& fileName) {
+    QString fileExtension = QFileInfo(fileName).completeSuffix();
     if (fileExtension == "pdf")
-        exportFigureAsPDF(fileName, mapToScene(viewport()->geometry()).boundingRect());
+        saveFigureAsPDF(fileName, mapToScene(viewport()->geometry()).boundingRect());
     else if (fileExtension == "svg")
-        exportFigureAsSVG(fileName, mapToScene(viewport()->geometry()).boundingRect());
+        saveFigureAsSVG(fileName, mapToScene(viewport()->geometry()).boundingRect());
 }
 
-void MyGraphicsView::exportFigureAsPDF(const QString& fileName, const QRectF& pageRect) {
+void MyGraphicsView::saveFigureAsPDF(const QString& fileName, const QRectF& pageRect) {
     QPrinter printer(QPrinter::ScreenResolution);
     printer.setPageMargins(QMarginsF(0.0, 0.0, 0.0, 0.0));
     printer.setOutputFormat(QPrinter::PdfFormat);
@@ -73,7 +75,7 @@ void MyGraphicsView::exportFigureAsPDF(const QString& fileName, const QRectF& pa
     scene()->render(&painter, QRectF(), QRectF(pageRect.x() + 10, pageRect.y() + 10, pageRect.width() - 20, pageRect.height() - 20));
 }
 
-void MyGraphicsView::exportFigureAsSVG(const QString& fileName, const QRectF& pageRect) {
+void MyGraphicsView::saveFigureAsSVG(const QString& fileName, const QRectF& pageRect) {
     QSvgGenerator svgGenerator;
     svgGenerator.setFileName(fileName);
     svgGenerator.setSize(QSize(pageRect.width(), pageRect.height()));

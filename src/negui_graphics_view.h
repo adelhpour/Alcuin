@@ -21,8 +21,8 @@ public:
 
     QList<QAbstractButton*> getToolbarMenuButtons(const QString& iconsDirectoryPath);
 
-    void exportFigureAsPDF(const QString& fileName, const QRectF& pageRect);
-    void exportFigureAsSVG(const QString& fileName ,const QRectF& pageRect);
+    void saveFigureAsPDF(const QString& fileName, const QRectF& pageRect);
+    void saveFigureAsSVG(const QString& fileName ,const QRectF& pageRect);
     
 signals:
 
@@ -40,7 +40,7 @@ public slots:
 private slots:
     
     void setToolTip(const QString& toolTip);
-    void exportFigure(const QString& fileName, const QString& fileExtension);
+    void saveFigure(const QString& fileName);
     void resetScale();
     void zoom(const qreal factor);
     

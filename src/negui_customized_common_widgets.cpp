@@ -144,7 +144,7 @@ MyMenu::MyMenu(QWidget* parent) : QMenu(parent) {
 
 MyDialog::MyDialog(QWidget *parent) : QDialog(parent) {
     setStyleSheet("QDialog {background-color: white;}");
-    resize(300, 150);
+    resize(350, 150);
     setLayout(new QGridLayout());
 }
 

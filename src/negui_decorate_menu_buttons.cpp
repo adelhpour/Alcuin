@@ -4,19 +4,19 @@
 
 #include <QShortcut>
 
-void decorateImportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateOpenButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Open");
     button->setToolTip("Open");
     setIcon(button, iconsDirectory + "/open.png");
 }
 
-void decorateDataExportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateSaveAsButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("SaveAs");
     button->setToolTip("SaveAs");
     setIcon(button, iconsDirectory + "/saveAs.png");
 }
 
-void decoratePrintExportButton(QAbstractButton* button, const QString& iconsDirectory) {
+void decorateExportButton(QAbstractButton* button, const QString& iconsDirectory) {
     button->setText("Export");
     button->setToolTip("Export");
     setIcon(button, iconsDirectory + "/export.png");
@@ -29,10 +29,10 @@ void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory) 
     setIcon(button, iconsDirectory + "/save.png");
 }
 
-void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirectory) {
-    button->setText("AutoLayout");
-    button->setToolTip("AutoLayout");
-    setIcon(button, iconsDirectory + "/autoLayout.png");
+void decorateMoreButton(QAbstractButton* button, const QString& iconsDirectory) {
+    button->setText("More");
+    button->setToolTip("More actions");
+    setIcon(button, iconsDirectory + "/more.png");
 }
 
 void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory) {

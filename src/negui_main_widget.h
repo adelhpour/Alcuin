@@ -25,33 +25,85 @@ public:
 
 signals:
 
-    void askForSetNewNetworkCanvas();
-    QStringList askForListOfPluginItemNames(const QString&);
-    QStringList askForListOfPluginItemCategories(const QString&);
-    void askForReadFromFile(const QString&);
-    void askForSaveCurrentNetwork();
-    void askForWriteDataToFile(const QString&);
-    void askForWriteFigureToFile(const QString&);
-    void askForTriggerUndoAction();
     void canUndoChanged(const bool&);
-    void askForTriggerRedoAction();
     void canRedoChanged(const bool&);
-    void askForCutSelectedNetworkElements();
     void elementsCuttableStatusChanged(const bool&);
-    void askForCopySelectedNetworkElements();
     void elementsCopyableStatusChanged(const bool&);
-    void askForPasteCopiedNetworkElements();
     void pasteElementsStatusChanged(const bool&);
-    void askForSelectAllElements();
-    void askForSelectAllElements(const QString&);
-    void askForZoomIn();
-    void askForZoomOut();
+
+public slots:
+
+    // interactor
+    void enableNormalMode();
+    void enableAddNodeMode(const QString& nodeStyleName);
+    void enableAddEdgeMode(const QString& edgeStyleName);
+    void enableSelectMode(const QString& elementCategory = "");
+    void enableSelectNodeMode(const QString& nodeCategory = "");
+    void enableSelectEdgeMode(const QString& edgeCategory = "");
+    void createNetwork(const QJsonObject &json);
+    void resetNetworkCanvas();
+    void resetNetwork();
+    void resetCanvas();
+    void setBackground(const QJsonObject &json);
+    void setNewNetworkCanvas();
+    QStringList listOfPluginItemNames(const QString& type);
+    QStringList listOfPluginItemCategories(const QString& type);
+    void callPluginFunctions(const QString& pluginName);
+    void saveCurrentNetwork();
+    void triggerUndoAction();
+    void triggerRedoAction();
+    void cutSelectedNetworkElements();
+    void copySelectedNetworkElements();
+    void pasteCopiedNetworkElements();
+    void pasteCopiedNetworkElements(const QPointF& position);
+    void resetCopiedNetworkElements();
+    void selectAllElements();
+    void selectAllElements(const QString&);
+    void selectElements(const bool& selected);
+    void selectElementsOfCategory(const bool& selected, const QString& category);
+    void selectNodes(const bool& selected);
+    void selectNodesOfCategory(const bool& selected, const QString& category);
+    void selectEdges(const bool& selected);
+    void selectEdgesOfCategory(const bool& selected, const QString& category);
+    void setElementSelected(const QString& elementName);
+    const bool areSelectedElementsCopyable();
+    const bool areSelectedElementsCuttable();
+    const bool areSelectedElementsAlignable();
+    const bool areAnyElementsCopied();
+    const bool areAnyElementsSelected();
+    void deleteSelectedNetworkElements();
+    void alignSelectedNetworkElements(const QString& alignType);
+    void updateFeatureMenu();
+    void displaySelectionArea(const QPointF& position);
+    void clearSelectionArea();
+    void addNodes(const QJsonObject &json);
+    void addNode(const QJsonObject& json);
+    void addNode(const QPointF& position);
+    void clearNodesInfo();
+    void addEdges(const QJsonObject &json);
+    void addEdge(const QJsonObject& json);
+    void clearEdgesInfo();
+    QJsonObject exportNetworkInfo();
+    void addDefaultNetworkElementStyles();
+    void createChangeStageCommand();
+    const QString applicationDirectoryPath();
+    const QString iconsDirectoryPath();
+
+    // graphics view
+    void zoomIn();
+    void zoomOut();
+
+    // feature menu
+    void displayNullFeatureMenu();
+    void removeFeatureMenu();
+
+    // app
+    const QString getName();
+    const QString getVersionNumber();
 
 private slots:
 
-    void displayNullFeatureMenu();
     void displayFeatureMenu(QWidget* featureMenu);
-    void removeFeatureMenu();
     void deleteFeatureMenu();
 
 protected:

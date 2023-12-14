@@ -1,6 +1,6 @@
 import json
  
-def elementStylesInfo():
+def items_info():
 
     compartment_node_style1 = {'name' : "Compartment", 'is-frequently-used' : True, 'type' : "nodestyle", 'category' : "Compartment", 'convertible-parent-category' : "Compartment", 'name-title' : "Id", 'is-name-editable' : True, 'shapes' :  [{'shape' : "rectangle", 'fill-color' : "white", 'border-color' : "black", 'border-width' : 2, 'x' : -200.0, 'y' : -150.0, 'width' : 400.0, 'height' : 300.0, 'rx' : 12.0, 'ry' : 12.0}, {'shape': "text", 'color': "black", 'font-family': "arial", 'font-size': 6, 'set_name_as_default_plain_text': True, 'x': -200.0, 'y': -150.0, 'width': 400.0, 'height': 300.0 }]}
 

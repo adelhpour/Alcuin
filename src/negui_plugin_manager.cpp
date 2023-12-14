@@ -1,35 +1,16 @@
 #include "negui_plugin_manager.h"
 #include "negui_plugin_item_builder.h"
-#include "negui_import_tools.h"
-#include "negui_autolayout_engines.h"
-#include "negui_export_tools.h"
+#include "negui_plugin_item_call_function.h"
 
 #include <QPluginLoader>
+#include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
 
 // MyPluginManager
 
 MyPluginManager::MyPluginManager() {
-    // import interface
-    _importInterface = NULL;
-    _isSetImportInterface = false;
-
-    // data export interface
-    _dataExportInterface = NULL;
-    _isSetDataExportInterface = false;
-
-    // print export interface
-    _printExportInterface = NULL;
-    _isSetPrintExportInterface = false;
-
-    // element style interface
-    _elementStyleInterface = NULL;
-    _isSetElementStyleInterface = false;
-
-    // autolayout interface
-    _autoLayoutInterface = NULL;
-    _isSetAutoLayoutInterface = false;
+    _generalInterface = NULL;
 }
 
 void MyPluginManager::load() {
@@ -40,21 +21,8 @@ void MyPluginManager::load() {
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));
         QObject* plugin = pluginLoader.instance();
         if (plugin) {
-            // import interface
-            if (qobject_cast<ImportInterface *>(plugin))
-                setImportInterface(qobject_cast<ImportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // data export interface
-            else if (qobject_cast<DataExportInterface *>(plugin))
-                setDataExportInterface(qobject_cast<DataExportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // print export interface
-            else if (qobject_cast<PrintExportInterface *>(plugin))
-                setPrintExportInterface(qobject_cast<PrintExportInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // element style interface
-            else if (qobject_cast<ElementStyleInterface *>(plugin))
-                setElementStyleInterface(qobject_cast<ElementStyleInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
-                // auto layout interface
-            else if (qobject_cast<AutoLayoutInterface *>(plugin))
-                setAutoLayoutInterface(qobject_cast<AutoLayoutInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
+            if (qobject_cast<GeneralInterface *>(plugin))
+                setGeneralInterface(qobject_cast<GeneralInterface *>(plugin), applicationDirectoryPath, pluginsDir.path());
         }
     }
 }
@@ -73,84 +41,16 @@ const QDir MyPluginManager::getPluginsDirectory(const QDir applicationDirectory)
     return pluginsDir;
 }
 
-bool MyPluginManager::setImportInterface(ImportInterface* importInterface, const QString &appPath, const QString &pluginsPath) {
-    if (importInterface) {
-        _importInterface = importInterface;
-        if (!_importInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_importInterface->loadItemsInfo());
-            _isSetImportInterface = true;
-        }
+void MyPluginManager::setGeneralInterface(GeneralInterface* generalInterface, const QString &appPath, const QString &pluginsPath) {
+    if (generalInterface) {
+        _generalInterface = generalInterface;
+        if (!generalInterface->initialize(appPath, pluginsPath))
+            readPluginItemsInfo(_generalInterface->loadItemsInfo());
     }
-
-    return _isSetImportInterface;
 }
 
-ImportInterface* MyPluginManager::importInterface() {
-    return _importInterface;
-}
-
-bool MyPluginManager::setDataExportInterface(DataExportInterface* dataExportInterface, const QString &appPath, const QString &pluginsPath) {
-    if (dataExportInterface) {
-        _dataExportInterface = dataExportInterface;
-        if (!_dataExportInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_dataExportInterface->loadItemsInfo());
-            _isSetDataExportInterface = true;
-        }
-    }
-
-    return _isSetDataExportInterface;
-}
-
-DataExportInterface* MyPluginManager::dataExportInterface() {
-    return _dataExportInterface;
-}
-
-bool MyPluginManager::setPrintExportInterface(PrintExportInterface* printExportInterface, const QString &appPath, const QString &pluginsPath) {
-    if (printExportInterface) {
-        _printExportInterface = printExportInterface;
-        if (!_printExportInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_printExportInterface->loadItemsInfo());
-            _isSetPrintExportInterface = true;
-        }
-    }
-
-    return _isSetPrintExportInterface;
-}
-
-PrintExportInterface* MyPluginManager::printExportInterface() {
-    return _printExportInterface;
-}
-
-bool MyPluginManager::setElementStyleInterface(ElementStyleInterface* elementStyleInterface, const QString &appPath, const QString &pluginsPath) {
-    if (elementStyleInterface) {
-        _elementStyleInterface = elementStyleInterface;
-        if (!_elementStyleInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_elementStyleInterface->loadItemsInfo());
-            _isSetElementStyleInterface = true;
-        }
-    }
-
-    return _isSetElementStyleInterface;
-}
-
-ElementStyleInterface* MyPluginManager::elementStyleInterface() {
-    return _elementStyleInterface;
-}
-
-bool MyPluginManager::setAutoLayoutInterface(AutoLayoutInterface* autoLayoutInterface, const QString &appPath, const QString &pluginsPath) {
-    if (autoLayoutInterface) {
-        _autoLayoutInterface = autoLayoutInterface;
-        if (!_autoLayoutInterface->initialize(appPath, pluginsPath)) {
-            readPluginItemsInfo(_autoLayoutInterface->loadItemsInfo());
-            _isSetAutoLayoutInterface = true;
-        }
-    }
-
-    return _isSetAutoLayoutInterface;
-}
-
-AutoLayoutInterface* MyPluginManager::autoLayoutInterface() {
-    return _autoLayoutInterface;
+GeneralInterface* MyPluginManager::generalInterface() {
+    return _generalInterface;
 }
 
 void MyPluginManager::readPluginItemsInfo(const QJsonObject &json) {
@@ -192,66 +92,14 @@ QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
     return pluginItemCategories;
 }
 
-void MyPluginManager::readFromFile(const QString& importToolName) {
-    QList<MyPluginItemBase*> importTools = getPluginsOfType(pluginItems(), "importtool");
-    for (MyPluginItemBase* importTool : importTools) {
-        if (importTool->name() == importToolName)
-            return readFromFile(importTool);
-    }
-}
-
-void MyPluginManager::readFromFile(MyPluginItemBase* importTool) {
-    QString fileName = ((MyImportTool*)importTool)->getOpenFileName(askForWorkingDirectoryPath());
-    if (!fileName.isEmpty()) {
-        QJsonObject networkInfo = (importInterface()->readGraphInfoFromFile(fileName, importTool->name()));
-        emit networkInfoIsReadFromFile(networkInfo, importTool, fileName);
-    }
-}
-
-void MyPluginManager::writeDataToFile(const QString& exportToolName) {
-    QList<MyPluginItemBase*> exportTools = getPluginsOfType(pluginItems(), "dataexporttool");
-    for (MyPluginItemBase* exportTool : exportTools) {
-        if (exportTool->name() == exportToolName)
-            return writeDataToFile(exportTool);
-    }
-}
-
-void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(askForWorkingDirectoryPath(), askForCurrentBaseFileName());
-    if (!fileName.isEmpty())
-        writeDataToFile(exportTool, fileName);
-}
-
-void MyPluginManager::writeDataToFile(MyPluginItemBase* exportTool, const QString& fileName) {
-    QJsonObject graphInfoObject = askForNetworkInfo();
-    ((MyDataExportTool*)exportTool)->readCompatibilityInfo(dataExportInterface()->checkForGraphInfoCompatibility(graphInfoObject, exportTool->name()));
-    if (((MyDataExportTool*)exportTool)->isInfoCompatible()) {
-        dataExportInterface()->writeGraphInfoToFile(graphInfoObject, fileName, exportTool->name());
-        emit networkInfoIsWrittenToFile(exportTool, fileName);
-    }
-    ((MyDataExportTool*)exportTool)->showMessages();
-}
-
-void MyPluginManager::writeFigureToFile(const QString& exportToolName) {
-    QList<MyPluginItemBase*> exportTools = getPluginsOfType(pluginItems(), "printexporttool");
-    for (MyPluginItemBase* exportTool : exportTools) {
-        if (exportTool->name() == exportToolName)
-            return writeFigureToFile(exportTool);
-    }
-}
-
-void MyPluginManager::writeFigureToFile(MyPluginItemBase* exportTool) {
-    QString fileName = ((MyExportToolBase*)exportTool)->getSaveFileName(askForWorkingDirectoryPath());
-    if (!fileName.isEmpty())
-        emit askForExportFigure(fileName, ((MyPrintExportTool*)exportTool)->fileExtension());
-}
-
-void MyPluginManager::autoLayout(MyPluginItemBase* autoLayoutEngine) {
-    if (!((MyAutoLayoutEngine*) autoLayoutEngine)->takeParameters()) {
-        QJsonObject autoLayoutInfoObject;
-        autoLayoutEngine->write(autoLayoutInfoObject);
-        QJsonObject graphInfoObject = askForNetworkInfo();
-        autoLayoutInterface()->autoLayout(graphInfoObject, autoLayoutInfoObject);
-        emit auotLayoutAlgorithmIsApplied(graphInfoObject);
+void MyPluginManager::callPluginFunctions(MyPluginItemBase* plugin) {
+    for (MyBase* callFunction : plugin->callFunctions()) {
+        auto pythonConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallPythonFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
+                return generalInterface()->call(name, inputs); });
+        auto cPlusPlusConnection = connect((MyPluginItemCallFunction*)callFunction, &MyPluginItemCallFunction::askForCallCPlusPlusFunction, this, [this] (const QString& name, const QJsonValue& inputs) {
+                return askForCallAPIFunction(name, inputs); });
+        ((MyPluginItemCallFunction*)callFunction)->call();
+        disconnect(pythonConnection);
+        disconnect(cPlusPlusConnection);
     }
 }

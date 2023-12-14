@@ -5,12 +5,6 @@
 
 MyPluginItemBase* createPluginItem(const QJsonObject &json);
 
-MyPluginItemBase* createImportTool(const QJsonObject &json);
-
-MyPluginItemBase* createDataExportTool(const QJsonObject &json);
-
-MyPluginItemBase* createPrintExportTool(const QJsonObject &json);
-
-MyPluginItemBase* createAutoLayoutEngine(const QJsonObject &json);
+MyPluginItemBase* createPluginItemBase(const QJsonObject &json);
 
 #endif

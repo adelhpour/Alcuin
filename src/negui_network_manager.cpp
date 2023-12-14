@@ -363,7 +363,7 @@ void MyNetworkManager::addNode(const QJsonObject &json) {
         addNode(node);
 }
 
-void MyNetworkManager::addNewNode(const QPointF& position) {
+void MyNetworkManager::addNode(const QPointF& position) {
     if (getSceneMode() == ADD_NODE_MODE) {
         MyNetworkElementBase* node = createNode(getElementUniqueName(nodes(), nodeStyle()->category()), getCopyNodeStyle(getElementUniqueName(nodes(), nodeStyle()->category()) + "_style", nodeStyle()), position.x(), position.y());
         addNode(node);

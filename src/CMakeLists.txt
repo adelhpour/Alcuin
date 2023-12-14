@@ -15,8 +15,10 @@ set(source_files
 		negui_base.cpp
 		negui_plugin_item_base.cpp
 		negui_plugin_item_builder.cpp
+		negui_plugin_item_call_function.cpp
 		negui_plugin_manager.cpp
 		negui_network_manager.cpp
+		negui_call_interactor_api_function.cpp
 		negui_default_network_element_style_manager.cpp
 		negui_network_element_base.cpp
 		negui_node.cpp
@@ -88,10 +90,7 @@ set(source_files
 		negui_null_feature_menu.cpp
 		negui_multi_network_element_feature_menu.cpp
 		negui_context_menu.cpp
-		negui_import_tools.cpp
-		negui_export_tools.cpp
-		negui_autolayout_engines.cpp
-		negui_c_api.cpp
+		negui_main_widget_builder.cpp
 		)
 
 set(header_files
@@ -107,8 +106,10 @@ set(header_files
 		negui_base.h
 		negui_plugin_item_base.h
 		negui_plugin_item_builder.h
+		negui_plugin_item_call_function.h
 		negui_plugin_manager.h
 		negui_network_manager.h
+		negui_call_interactor_api_function.h
 		negui_default_network_element_style_manager.h
 		negui_network_element_base.h
 		negui_node.h
@@ -181,10 +182,7 @@ set(header_files
 		negui_multi_network_element_feature_menu.h
 		negui_context_menu.h
 		negui_interfaces.h
-		negui_import_tools.h
-		negui_export_tools.h
-		negui_autolayout_engines.h
-		negui_c_api.h
+		negui_main_widget_builder.h
 		)
 
 ## build

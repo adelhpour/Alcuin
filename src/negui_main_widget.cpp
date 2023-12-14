@@ -51,36 +51,18 @@ void MyNetworkEditorWidget::setWidgets() {
     _interactor = new MyInteractor(this);
     _featureMenu = NULL;
 
-    ((MyToolBar*)toolBar())->addButtons(((MyInteractor*)interactor())->getToolbarMenuButtons() + ((MyGraphicsView*)view())->getToolbarMenuButtons(((MyInteractor*)interactor())->iconsDirectory().path()));
+    ((MyToolBar*)toolBar())->addButtons(((MyInteractor*)interactor())->getToolbarMenuButtons() + ((MyGraphicsView*)view())->getToolbarMenuButtons(((MyInteractor*)interactor())->iconsDirectoryPath()));
     ((MyModeMenu*)modeMenu())->addButtons(((MyInteractor*)interactor())->getModeMenuButtons());
 }
 
 void MyNetworkEditorWidget::setInteractions() {
     /// main widget
     // menubar
-    connect(this, &MyNetworkEditorWidget::askForSetNewNetworkCanvas, this, [this] () { ((MyInteractor*)interactor())->setNewNetworkCanvas(); });
-    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemNames, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemNames(type); });
-    connect(this, &MyNetworkEditorWidget::askForListOfPluginItemCategories, this, [this] (const QString& type) { return ((MyInteractor*)interactor())->listOfPluginItemCategories(type); });
-    connect(this, &MyNetworkEditorWidget::askForReadFromFile, this, [this] (const QString& importToolName) { ((MyInteractor*)interactor())->readFromFile(importToolName); });
-    connect(this, &MyNetworkEditorWidget::askForSaveCurrentNetwork, this, [this] () { ((MyInteractor*)interactor())->saveCurrentNetwork(); });
-    connect(this, &MyNetworkEditorWidget::askForWriteDataToFile, this, [this] (const QString& exportToolName){ ((MyInteractor*)interactor())->writeDataToFile(exportToolName); });
-    connect(this, &MyNetworkEditorWidget::askForWriteFigureToFile, this, [this] (const QString& exportToolName) { ((MyInteractor*)interactor())->writeFigureToFile(exportToolName); });
-    connect(this, SIGNAL(askForTriggerUndoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(undo()));
-    connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(canUndoChanged(const bool&)));
-    connect(this, SIGNAL(askForTriggerRedoAction()), ((MyInteractor*)interactor())->undoStack(), SLOT(redo()));
-    connect(((MyInteractor*)interactor())->undoStack(), SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(canRedoChanged(const bool&)));
-    connect(this, &MyNetworkEditorWidget::askForCutSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->cutSelectedNetworkElements(); });
+    connect((MyInteractor*)interactor(), SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(canUndoChanged(const bool&)));
+    connect((MyInteractor*)interactor(), SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(canRedoChanged(const bool&)));
     connect((MyInteractor*)interactor(), SIGNAL(elementsCuttableStatusChanged(const bool&)), this, SIGNAL(elementsCuttableStatusChanged(const bool&)));
-    connect(this, &MyNetworkEditorWidget::askForCopySelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->copySelectedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(elementsCopyableStatusChanged(const bool&)), this, SIGNAL(elementsCopyableStatusChanged(const bool&)));
-    connect(this, &MyNetworkEditorWidget::askForPasteCopiedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
     connect((MyInteractor*)interactor(), SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
-    connect(this, QOverload<>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] () {
-        ((MyInteractor*)this->interactor())->selectElements(true); });
-    connect(this, QOverload<const QString&>::of(&MyNetworkEditorWidget::askForSelectAllElements), (MyInteractor*)interactor(), [this] (const QString& category) {
-        ((MyInteractor*)this->interactor())->selectElementsOfCategory(true, category); });
-    connect(this, SIGNAL(askForZoomIn()), (MyGraphicsView*)view(), SLOT(zoomIn()));
-    connect(this, SIGNAL(askForZoomOut()), (MyGraphicsView*)view(), SLOT(zoomOut()));
 
     /// feature menu
     // display feature menu
@@ -97,8 +79,8 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), SIGNAL(addElementModeIsEnabled(const QString &)), modeMenu(), SLOT(activateAddElementButton(const QString&)));
 
     /// graphics view
-    // export screen scene
-    connect((MyInteractor*)interactor(), SIGNAL(askForExportFigure(const QString&, const QString&)), (MyGraphicsView*)view(), SLOT(exportFigure(const QString&, const QString&)));
+    // save screen scene
+    connect((MyInteractor*)interactor(), SIGNAL(askForSaveFigure(const QString&)), (MyGraphicsView*)view(), SLOT(saveFigure(const QString&)));
     
     // set tool tip
     connect((MyInteractor*)interactor(), SIGNAL(askForSetToolTip(const QString&)), (MyGraphicsView*)view(), SLOT(setToolTip(const QString&)));
@@ -143,7 +125,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
     
     // add node
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->addNewNode(position); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->addNode(position); });
 
     // display the element selection rectangle
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->displaySelectionArea(position); });
@@ -221,7 +203,7 @@ const qreal& MyNetworkEditorWidget::layoutMenuRow() {
 
 void MyNetworkEditorWidget::displayNullFeatureMenu() {
     if (featureMenu())
-        displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectory().path()));
+        displayFeatureMenu(new MyNullFeatureMenu(((MyInteractor *) interactor())->iconsDirectoryPath()));
 }
 
 void MyNetworkEditorWidget::displayFeatureMenu(QWidget* featureMenu) {
@@ -290,4 +272,236 @@ void MyNetworkEditorWidget::writeSettings() {
 void MyNetworkEditorWidget::closeEvent(QCloseEvent *event) {
     writeSettings();
     QWidget::closeEvent(event);
+}
+
+void MyNetworkEditorWidget::enableNormalMode() {
+    ((MyInteractor*)interactor())->enableNormalMode();
+}
+
+void MyNetworkEditorWidget::enableAddNodeMode(const QString& nodeStyleName) {
+    ((MyInteractor*)interactor())->enableAddNodeMode(nodeStyleName);
+}
+
+void MyNetworkEditorWidget::enableAddEdgeMode(const QString& edgeStyleName) {
+    ((MyInteractor*)interactor())->enableAddEdgeMode(edgeStyleName);
+}
+
+void MyNetworkEditorWidget::enableSelectMode(const QString& elementCategory) {
+    ((MyInteractor*)interactor())->enableSelectMode(elementCategory);
+}
+
+void MyNetworkEditorWidget::enableSelectNodeMode(const QString& nodeCategory) {
+    ((MyInteractor*)interactor())->enableSelectNodeMode(nodeCategory);
+}
+
+void MyNetworkEditorWidget::enableSelectEdgeMode(const QString& edgeCategory) {
+    ((MyInteractor*)interactor())->enableSelectEdgeMode(edgeCategory);
+}
+
+void MyNetworkEditorWidget::createNetwork(const QJsonObject &json) {
+    ((MyInteractor*)interactor())->createNetwork(json);
+}
+
+void MyNetworkEditorWidget::resetNetworkCanvas() {
+    ((MyInteractor*)interactor())->resetNetworkCanvas();
+}
+
+void MyNetworkEditorWidget::resetNetwork() {
+    ((MyInteractor*)interactor())->resetNetwork();
+}
+
+void MyNetworkEditorWidget::resetCanvas() {
+    ((MyInteractor*)interactor())->resetCanvas();
+}
+
+void MyNetworkEditorWidget::setBackground(const QJsonObject &json) {
+    ((MyInteractor*)interactor())->setBackground(json);
+}
+
+void MyNetworkEditorWidget::setNewNetworkCanvas() {
+    ((MyInteractor*)interactor())->setNewNetworkCanvas();
+}
+
+QStringList MyNetworkEditorWidget::listOfPluginItemNames(const QString& type) {
+    return ((MyInteractor*)interactor())->listOfPluginItemNames(type);
+}
+
+QStringList MyNetworkEditorWidget::listOfPluginItemCategories(const QString& type) {
+    return ((MyInteractor*)interactor())->listOfPluginItemCategories(type);
+}
+
+void MyNetworkEditorWidget::callPluginFunctions(const QString& pluginName) {
+    ((MyInteractor*)interactor())->callPluginFunctions(pluginName);
+}
+
+void MyNetworkEditorWidget::saveCurrentNetwork() {
+    ((MyInteractor*)interactor())->saveCurrentNetwork();
+}
+
+void MyNetworkEditorWidget::triggerUndoAction() {
+    ((MyInteractor*)interactor())->triggerUndoAction();
+}
+
+void MyNetworkEditorWidget::triggerRedoAction() {
+    ((MyInteractor*)interactor())->triggerRedoAction();
+}
+
+void MyNetworkEditorWidget::cutSelectedNetworkElements() {
+    ((MyInteractor*)interactor())->cutSelectedNetworkElements();
+}
+
+void MyNetworkEditorWidget::copySelectedNetworkElements() {
+    ((MyInteractor*)interactor())->copySelectedNetworkElements();
+}
+
+void MyNetworkEditorWidget::pasteCopiedNetworkElements() {
+    ((MyInteractor*)interactor())->pasteCopiedNetworkElements();
+}
+
+void MyNetworkEditorWidget::pasteCopiedNetworkElements(const QPointF& position) {
+    ((MyInteractor*)interactor())->pasteCopiedNetworkElements(position);
+}
+
+void MyNetworkEditorWidget::resetCopiedNetworkElements() {
+    ((MyInteractor*)interactor())->resetCopiedNetworkElements();
+}
+
+void MyNetworkEditorWidget::selectAllElements() {
+    ((MyInteractor*)interactor())->selectAllElements();
+}
+
+void MyNetworkEditorWidget::selectAllElements(const QString& category) {
+    ((MyInteractor*)interactor())->selectAllElements(category);
+}
+
+void MyNetworkEditorWidget::selectElements(const bool& selected) {
+    ((MyInteractor*)interactor())->selectElements(selected);
+}
+
+void MyNetworkEditorWidget::selectElementsOfCategory(const bool& selected, const QString& category) {
+    ((MyInteractor*)interactor())->selectElementsOfCategory(selected, category);
+}
+
+void MyNetworkEditorWidget::selectNodes(const bool& selected) {
+    ((MyInteractor*)interactor())->selectNodes(selected);
+}
+
+void MyNetworkEditorWidget::selectNodesOfCategory(const bool& selected, const QString& category) {
+    ((MyInteractor*)interactor())->selectNodesOfCategory(selected, category);
+}
+
+void MyNetworkEditorWidget::selectEdges(const bool& selected) {
+    ((MyInteractor*)interactor())->selectEdges(selected);
+}
+
+void MyNetworkEditorWidget::selectEdgesOfCategory(const bool& selected, const QString& category) {
+    ((MyInteractor*)interactor())->selectEdgesOfCategory(selected, category);
+}
+
+void MyNetworkEditorWidget::setElementSelected(const QString& elementName) {
+    ((MyInteractor*)interactor())->setElementSelected(elementName);
+}
+
+const bool MyNetworkEditorWidget::areSelectedElementsCopyable() {
+    return ((MyInteractor*)interactor())->areSelectedElementsCopyable();
+}
+
+const bool MyNetworkEditorWidget::areSelectedElementsCuttable() {
+    return ((MyInteractor*)interactor())->areSelectedElementsCuttable();
+}
+
+const bool MyNetworkEditorWidget::areSelectedElementsAlignable() {
+    return ((MyInteractor*)interactor())->areSelectedElementsAlignable();
+}
+
+const bool MyNetworkEditorWidget::areAnyElementsCopied() {
+    return ((MyInteractor*)interactor())->areAnyElementsCopied();
+}
+
+const bool MyNetworkEditorWidget::areAnyElementsSelected() {
+    return ((MyInteractor*)interactor())->areAnyElementsSelected();
+}
+
+void MyNetworkEditorWidget::deleteSelectedNetworkElements() {
+    ((MyInteractor*)interactor())->deleteSelectedNetworkElements();
+}
+
+void MyNetworkEditorWidget::alignSelectedNetworkElements(const QString& alignType) {
+    ((MyInteractor*)interactor())->alignSelectedNetworkElements(alignType);
+}
+
+void MyNetworkEditorWidget::updateFeatureMenu() {
+    ((MyInteractor*)interactor())->updateFeatureMenu();
+}
+
+void MyNetworkEditorWidget::displaySelectionArea(const QPointF& position) {
+    ((MyInteractor*)interactor())->displaySelectionArea(position);
+}
+
+void MyNetworkEditorWidget::clearSelectionArea() {
+    ((MyInteractor*)interactor())->clearSelectionArea();
+}
+
+void MyNetworkEditorWidget::addNodes(const QJsonObject &json) {
+    ((MyInteractor*)interactor())->addNodes(json);
+}
+
+void MyNetworkEditorWidget::addNode(const QJsonObject& json) {
+    ((MyInteractor*)interactor())->addNode(json);
+}
+
+void MyNetworkEditorWidget::addNode(const QPointF& position) {
+    ((MyInteractor*)interactor())->addNode(position);
+}
+
+void MyNetworkEditorWidget::clearNodesInfo() {
+    ((MyInteractor*)interactor())->clearNodesInfo();
+}
+
+void MyNetworkEditorWidget::addEdges(const QJsonObject &json) {
+    ((MyInteractor*)interactor())->addEdges(json);
+}
+
+void MyNetworkEditorWidget::addEdge(const QJsonObject& json) {
+    ((MyInteractor*)interactor())->addEdge(json);
+}
+
+void MyNetworkEditorWidget::clearEdgesInfo() {
+    ((MyInteractor*)interactor())->clearEdgesInfo();
+}
+
+QJsonObject MyNetworkEditorWidget::exportNetworkInfo() {
+    return ((MyInteractor*)interactor())->exportNetworkInfo();
+}
+
+void MyNetworkEditorWidget::addDefaultNetworkElementStyles() {
+    ((MyInteractor*)interactor())->addDefaultNetworkElementStyles();
+}
+
+void MyNetworkEditorWidget::createChangeStageCommand() {
+    ((MyInteractor*)interactor())->createChangeStageCommand();
+}
+
+const QString MyNetworkEditorWidget::applicationDirectoryPath() {
+    return ((MyInteractor*)interactor())->applicationDirectoryPath();
+}
+
+const QString MyNetworkEditorWidget::iconsDirectoryPath() {
+    return ((MyInteractor*)interactor())->iconsDirectoryPath();
+}
+
+void MyNetworkEditorWidget::zoomIn() {
+    ((MyGraphicsView*)view())->zoomIn();
+}
+
+void MyNetworkEditorWidget::zoomOut() {
+    ((MyGraphicsView*)view())->zoomOut();
+}
+
+const QString MyNetworkEditorWidget::getName() {
+    return Name_Definition;
+}
+
+const QString MyNetworkEditorWidget::getVersionNumber() {
+    return Version_Definition;
 }

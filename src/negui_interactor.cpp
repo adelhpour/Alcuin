@@ -5,6 +5,7 @@
 #include "negui_menu_button_manager.h"
 #include "negui_default_network_element_style_manager.h"
 #include "negui_customized_interactor_widgets.h"
+#include "negui_call_interactor_api_function.h"
 
 #include <QCoreApplication>
 
@@ -22,6 +23,8 @@ MyInteractor::MyInteractor(QObject *parent) : QObject(parent) {
 
 void MyInteractor::setUndoStack() {
     _undoStack = new MyUndoStack(this);
+    connect(_undoStack, SIGNAL(canUndoChanged(const bool&)), this, SIGNAL(canUndoChanged(const bool&)));
+    connect(_undoStack, SIGNAL(canRedoChanged(const bool&)), this, SIGNAL(canRedoChanged(const bool&)));
 }
 
 QUndoStack* MyInteractor::undoStack() {
@@ -54,29 +57,7 @@ void MyInteractor::setPluginManager() {
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::networkInfoIsReadFromFile, this, [this] (const QJsonObject &json, MyPluginItemBase* importTool, const QString& fileName) {
-        createNetwork(json);
-        createChangeStageCommand();
-        resetCanvas();
-        ((MyFileManager*)fileManager())->setCurrentExportToolCompatibleWithImportTool(importTool);
-        ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
-        ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-        ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
-    } );
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::networkInfoIsWrittenToFile, this, [this] (MyPluginItemBase* exportTool, const QString& fileName) {
-        ((MyFileManager*)fileManager())->setCurrentExportTool(exportTool);
-        ((MyFileManager*)fileManager())->setCurrentFileName(fileName);
-        ((MyFileManager*)fileManager())->setLastSavedFileName(fileName);
-        ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(fileName).absolutePath() + "/");
-    } );
-    connect(_pluginManager, SIGNAL(askForExportFigure(const QString&, const QString&)), this, SIGNAL(askForExportFigure(const QString&, const QString&)));
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::auotLayoutAlgorithmIsApplied, this, [this] (const QJsonObject &json) {
-        createNetwork(json);
-        emit askForAdjustExtentsOfNodes();
-        emit askForAdjustConnectedEdgesOfNodes();
-        createChangeStageCommand();
-        enableNormalMode();
-    } );
+    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SLOT(callAPIFunction(const QString&, const QJsonValue&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -135,7 +116,7 @@ QObject* MyInteractor::networkManager() {
 }
 
 void MyInteractor::setFileManager() {
-    _fileManager = new MyFileManager(getPluginsOfType(pluginItems(), "importtool"), getPluginsOfType(pluginItems(), "dataexporttool"));
+    _fileManager = new MyFileManager();
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
     connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
     connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(workingDirectoryPath).absolutePath() + "/"); });
@@ -169,6 +150,12 @@ void MyInteractor::enableNormalMode() {
     emit askForSetToolTip("");
 }
 
+void MyInteractor::enableAddNodeMode(const QString& nodeStyleName) {
+    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodeStyle"), nodeStyleName);
+    if (nodeStyle)
+        enableAddNodeMode(nodeStyle);
+}
+
 void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     enableNormalMode();
     MySceneModeElementBase::enableAddNodeMode();
@@ -178,6 +165,13 @@ void MyInteractor::enableAddNodeMode(MyPluginItemBase* style) {
     emit askForSetToolTip(((MyNetworkElementStyleBase*)style)->toolTipText());
     emit addElementModeIsEnabled(style->name());
 }
+
+void MyInteractor::enableAddEdgeMode(const QString& edgeStyleName) {
+    MyPluginItemBase* edgeStyle = findPluginByName(getPluginsOfType(pluginItems(), "edgeStyle"), edgeStyleName);
+    if (edgeStyle)
+        enableAddEdgeMode(edgeStyle);
+}
+
 
 void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     enableNormalMode();
@@ -218,8 +212,7 @@ void MyInteractor::createNetwork(const QJsonObject& json) {
 }
 
 void MyInteractor::setNewNetworkCanvas() {
-    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
-        saveCurrentNetwork();
+    saveCurrentNetworkWithUserPermission();
     askForRemoveFeatureMenu();
     ((MyNetworkManager*)_networkManager)->resetNetworkCanvas();
     ((MyFileManager*)fileManager())->reset();
@@ -249,8 +242,8 @@ void MyInteractor::addNode(const QJsonObject &json) {
     ((MyNetworkManager*)_networkManager)->addNode(json);
 }
 
-void MyInteractor::addNewNode(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->addNewNode(position);
+void MyInteractor::addNode(const QPointF& position) {
+    ((MyNetworkManager*)_networkManager)->addNode(position);
 }
 
 void MyInteractor::clearNodesInfo() {
@@ -365,43 +358,18 @@ void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
 }
 
-void MyInteractor::readFromFile(const QString& importToolName) {
-    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
-        saveCurrentNetwork();
-    ((MyPluginManager*)_pluginManager)->readFromFile(importToolName);
-}
-
-void MyInteractor::readFromFile(MyPluginItemBase* importTool) {
-    if (((MyFileManager*)fileManager())->canSaveCurrentNetwork())
-        saveCurrentNetwork();
-    ((MyPluginManager*)_pluginManager)->readFromFile(importTool);
-}
-
-void MyInteractor::writeDataToFile(const QString& exportToolName) {
-    ((MyPluginManager*)_pluginManager)->writeDataToFile(exportToolName);
-}
-
-void MyInteractor::writeDataToFile(MyPluginItemBase* exportTool) {
-    ((MyPluginManager*)_pluginManager)->writeDataToFile(exportTool);
-}
-
-void MyInteractor::writeFigureToFile(const QString& exportToolName) {
-    ((MyPluginManager*)_pluginManager)->writeFigureToFile(exportToolName);
-}
-
-void MyInteractor::writeFigureToFile(MyPluginItemBase* exportTool) {
-    ((MyPluginManager*)_pluginManager)->writeFigureToFile(exportTool);
-}
-
 void MyInteractor::saveCurrentNetwork() {
-    if (((MyFileManager*)fileManager())->lastSavedFileName().isEmpty())
-        ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool());
-    else
-        ((MyPluginManager*)_pluginManager)->writeDataToFile(((MyFileManager*)fileManager())->currentExportTool(), ((MyFileManager*)fileManager())->currentFileName());
+    if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved())
+        callPluginFunctions(getDefaultSavePlugin(pluginItems()));
 }
 
-void MyInteractor::autoLayout(MyPluginItemBase* autoLayoutEngine) {
-    ((MyPluginManager*)_pluginManager)->autoLayout(autoLayoutEngine);
+void MyInteractor::saveCurrentNetworkWithUserPermission() {
+    if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved() && ((MyFileManager*)fileManager())->isWillingToSaveCurrentNetwork())
+        saveCurrentNetwork();
+}
+
+void MyInteractor::saveFigure(const QString& fileName) {
+    emit askForSaveFigure(fileName);
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
@@ -433,4 +401,54 @@ void MyInteractor::createChangeStageCommand() {
         connect((MyChangeStageCommand*)changeStageCommand, &MyChangeStageCommand::askForCreateNetwork, this, [this] (const QJsonObject& json) { createNetwork(json); });
         _stageInfo = currentStageInfo;
     }
+}
+
+void MyInteractor::triggerUndoAction() {
+    undoStack()->undo();
+}
+
+void MyInteractor::triggerRedoAction() {
+    undoStack()->redo();
+}
+
+void MyInteractor::selectAllElements() {
+    selectElements(true);
+}
+
+void MyInteractor::selectAllElements(const QString& category) {
+    selectElementsOfCategory(true, category);
+}
+
+const QJsonValue MyInteractor::takeParameterFromUser(const QString& name, const QJsonValue defaultValue) {
+    MyTakeParameterDialog* takeParameterDialog = new MyTakeParameterDialog(name, defaultValue);
+    return takeParameterDialog->execute();
+}
+
+const QString MyInteractor::getOpenFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getOpenFileName(fileExtension);
+}
+
+const QString MyInteractor::getSaveFileName(const QString& defaultFileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveFileName(defaultFileExtension);
+}
+
+const QString MyInteractor::getSaveAsFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveAsFileName(fileExtension);
+}
+
+const QString MyInteractor::getSaveFigureFileName(const QString& fileExtension) {
+    return ((MyFileManager*)fileManager())->getSaveFigureFileName(fileExtension);
+}
+
+void MyInteractor::callPluginFunctions(const QString& pluginName) {
+    callPluginFunctions(findPluginByName(pluginItems(), pluginName));
+}
+
+void MyInteractor::callPluginFunctions(MyPluginItemBase* plugin) {
+    if (plugin)
+        ((MyPluginManager*)_pluginManager)->callPluginFunctions(plugin);
+}
+
+const QJsonValue MyInteractor::callAPIFunction(const QString& functionName, const QJsonValue& inputs) {
+    return callInteractorAPIFunction(this, functionName, inputs);
 }

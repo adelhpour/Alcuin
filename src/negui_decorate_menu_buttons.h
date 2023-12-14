@@ -5,15 +5,15 @@
 #include <QPushButton>
 #include <QWidgetAction>
 
-void decorateImportButton(QAbstractButton* button, const QString& iconsDirectory);
+void decorateOpenButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateDataExportButton(QAbstractButton* button, const QString& iconsDirectory);
+void decorateSaveAsButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decoratePrintExportButton(QAbstractButton* button, const QString& iconsDirectory);
+void decorateExportButton(QAbstractButton* button, const QString& iconsDirectory);
 
 void decorateSaveButton(QAbstractButton* button, const QString& iconsDirectory);
 
-void decorateAutoLayoutButton(QAbstractButton* button, const QString& iconsDirectory);
+void decorateMoreButton(QAbstractButton* button, const QString& iconsDirectory);
 
 void decorateUndoActionButton(QAbstractButton* button, const QString& iconsDirectory);
 

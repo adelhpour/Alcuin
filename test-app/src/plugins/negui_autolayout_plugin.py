@@ -1,79 +1,99 @@
 import networkx as nx
 import json
 
-def autoLayoutInfo():
+def items_info():
     # circular
-    circular = {'name' : "Circular", 'type': "autolayoutengine"}
-    # planar
-    planar = {'name' : "Planar", 'type': "autolayoutengine"}
-    # kamad_kawai
-    kamad_kawai = {'name' : "Kamda-Kawai", 'type': "autolayoutengine"}
-    # spiral
-    spiral = {'name' : "Spiral", 'type': "autolayoutengine", 'parameters' : [{'parameter' : "resolution", 'type' : "double", 'min' : 0.01, 'max' : 1.0, 'step' : 0.01, 'default' : 0.35}, {'parameter' : "equidistant", 'type' : "boolean", 'default' : False}]}
+    circular = {'name' : "AutoLayout (Circular)", 'call-functions':[
+        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_circular", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs': []}]}]},
+        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
+        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
+        {'name': "createChangeStageCommand", 'inputs': []},
+        {'name': "enableNormalMode", 'inputs': []}]}
 
-    return json.dumps({'items': [circular, planar, kamad_kawai, spiral]})
+    planar = {'name' : "AutoLayout (Planar)", 'call-functions':[
+        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_planar", 'api': "python", 'inputs': [
+            {'name': "exportNetworkInfo", 'inputs': []}]}]},
+        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
+        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
+        {'name': "createChangeStageCommand", 'inputs': []},
+        {'name': "enableNormalMode", 'inputs': []}]}
 
+    spiral = {'name' : "AutoLayout (Spiral)", 'call-functions':[
+        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_spiral", 'api': "python", 'inputs': [
+            {'name': "exportNetworkInfo", 'inputs': []},
+            {'name': "takeParameterFromUser", 'inputs': ["resolution", 0.35]},
+            {'name': "takeParameterFromUser", 'inputs': ["equidistant", False]}]}]},
+        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
+        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
+        {'name': "createChangeStageCommand", 'inputs': []},
+        {'name': "enableNormalMode", 'inputs': []}]}
 
-def autoLayout(graphInfoString, autoLayoutInfoString):
-    # read graph info
-    graphInfo = json.loads(graphInfoString)
-    autoLayoutInfo = json.loads(autoLayoutInfoString)
+    return json.dumps({'items': [circular, planar, spiral]})
+
+def auto_layout_circular(input):
+    graph_info = json.loads(input[0])
+    return json.dumps(update_graph_info_node_positions(graph_info, nx.circular_layout(get_graph(graph_info),
+                                                                                      center = get_pos_center(graph_info),
+                                                                                      scale = get_dim_scale(graph_info))))
+
+def auto_layout_planar(input):
+    graph_info = json.loads(input[0])
+    return json.dumps(update_graph_info_node_positions(graph_info, nx.planar_layout(get_graph(graph_info),
+                                                                                      center = get_pos_center(graph_info),
+                                                                                      scale = get_dim_scale(graph_info))))
+
+def auto_layout_spiral(input):
+    graph_info = json.loads(input[0])
+    resolution = input[1]
+    equidistant = input[2]
+    return json.dumps(update_graph_info_node_positions(graph_info, nx.spiral_layout(get_graph(graph_info),
+                                                                                    center = get_pos_center(graph_info),
+                                                                                    scale = get_dim_scale(graph_info),
+                                                                                    resolution = resolution,
+                                                                                    equidistant = equidistant)))
+
+def get_graph(graph_info):
     graph = nx.Graph()
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'id' in list(graphInfo['nodes'][n_index].keys()) and 'position' in list(graphInfo['nodes'][n_index].keys()) and not is_parent(graphInfo['nodes'][n_index]) and not is_centroid_node(graphInfo['nodes'][n_index]):
-                graph.add_node(graphInfo['nodes'][n_index]['id'], pos = '{},{}'.format(graphInfo['nodes'][n_index]['position']['x'],     graphInfo['nodes'][n_index]['position']['y']))
+    if 'nodes' in list(graph_info.keys()):
+        for n_index in range(len(graph_info['nodes'])):
+            if 'id' in list(graph_info['nodes'][n_index].keys()) and 'position' in list(graph_info['nodes'][n_index].keys()) and not is_parent(graph_info['nodes'][n_index]) and not is_centroid_node(graph_info['nodes'][n_index]):
+                graph.add_node(graph_info['nodes'][n_index]['id'], pos = '{},{}'.format(graph_info['nodes'][n_index]['position']['x'], graph_info['nodes'][n_index]['position']['y']))
+    if 'edges' in list(graph_info.keys()):
+        for e_index in range(len(graph_info['edges'])):
+            if 'id' in list(graph_info['edges'][e_index].keys()) and 'start' in list(graph_info['edges'][e_index].keys()) and 'end' in list(graph_info['edges'][e_index].keys()):
+                if 'node' in list(graph_info['edges'][e_index]['start']) and 'node' in list(graph_info['edges'][e_index]['end']):
+                    graph.add_edge(graph_info['edges'][e_index]['start']['node'], graph_info['edges'][e_index]['end']['node'])
 
-    if 'edges' in list(graphInfo.keys()):
-        for e_index in range(len(graphInfo['edges'])):
-            if 'id' in list(graphInfo['edges'][e_index].keys()) and 'start' in list(graphInfo['edges'][e_index].keys()) and 'end' in list(graphInfo['edges'][e_index].keys()):
-                if 'node' in list(graphInfo['edges'][e_index]['start']) and 'node' in list(graphInfo['edges'][e_index]['end']):
-                    graph.add_edge(graphInfo['edges'][e_index]['start']['node'], graphInfo['edges'][e_index]['end']['node'])
-    pos_center = [0, 0]
-    dim_scale = 1.0
-    if 'dimensions' in list(graphInfo.keys()) and 'width' in list(graphInfo['dimensions'].keys()) and 'height' in list(graphInfo['dimensions'].keys()):
-        dim_scale = 0.5 * min(graphInfo['dimensions']['width'], graphInfo['dimensions']['height'])
-        if 'position' in list(graphInfo.keys()) and 'x' in list(graphInfo['position'].keys()) and 'y' in list(graphInfo['position'].keys()):
-            pos_center = [graphInfo['position']['x'], graphInfo['position']['y']]
+    return graph
 
-    # apply autolayout algorithm
-    node_pos = {}
-    if 'name' in list(autoLayoutInfo.keys()):
-        if autoLayoutInfo['name'] == "Circular":
-            node_pos = nx.circular_layout(graph, center = pos_center, scale = dim_scale)
-        elif autoLayoutInfo['name'] == "Planar":
-            node_pos = nx.planar_layout(graph, center = pos_center, scale = dim_scale)
-        elif autoLayoutInfo['name'] == "Kamda-Kawai":
-            node_pos = nx.kamada_kawai_layout(graph, center = pos_center, scale = dim_scale)
-        elif autoLayoutInfo['name'] == "Spiral":
-            _resolution = 0.35
-            _equidistant = False
-            if 'parameters' in list(autoLayoutInfo.keys()):
-                for p_index in range(len(autoLayoutInfo['parameters'])):
-                    if 'parameter' in list(autoLayoutInfo['parameters'][p_index].keys()) and 'value' in list(autoLayoutInfo['parameters'][p_index].keys()):
-                        if autoLayoutInfo['parameters'][p_index]['parameter'] == "resolution" :
-                            _resolution = autoLayoutInfo['parameters'][p_index]['value']
-                        if autoLayoutInfo['parameters'][p_index]['parameter'] == "equidistant" :
-                            _equidistant = autoLayoutInfo['parameters'][p_index]['value']
-            node_pos = nx.spiral_layout(graph, center = pos_center, scale = dim_scale, resolution = _resolution, equidistant = _equidistant)
-        else:
-            node_pos = nx.circular_layout(graph, center = pos_center, scale = dim_scale)
+def get_pos_center(graph_info):
+    if 'position' in list(graph_info.keys()) and 'x' in list(graph_info['position'].keys()) and 'y' in list(graph_info['position'].keys()):
+        return [graph_info['position']['x'], graph_info['position']['y']]
 
-    # write graph info
-    if 'nodes' in list(graphInfo.keys()):
-        for n_index in range(len(graphInfo['nodes'])):
-            if 'id' in list(graphInfo['nodes'][n_index].keys()) and 'position' in list(graphInfo['nodes'][n_index].keys()):
-                if graphInfo['nodes'][n_index]['id'] in list(node_pos.keys()):
-                    graphInfo['nodes'][n_index]['position']['x'] = node_pos[graphInfo['nodes'][n_index]['id']][0]
-                    graphInfo['nodes'][n_index]['position']['y'] = node_pos[graphInfo['nodes'][n_index]['id']][1]
+    return [0, 0]
 
-    return json.dumps(graphInfo)
+def get_dim_scale(graph_info):
+    if 'dimensions' in list(graph_info.keys()) and 'width' in list(graph_info['dimensions'].keys()) and 'height' in list(graph_info['dimensions'].keys()):
+        return 0.5 * min(graph_info['dimensions']['width'], graph_info['dimensions']['height'])
+
+    return 1.0
+
+def update_graph_info_node_positions(graph_info, node_pos):
+    if 'nodes' in list(graph_info.keys()):
+        for n_index in range(len(graph_info['nodes'])):
+            if 'id' in list(graph_info['nodes'][n_index].keys()) and 'position' in list(graph_info['nodes'][n_index].keys()):
+                if graph_info['nodes'][n_index]['id'] in list(node_pos.keys()):
+                    graph_info['nodes'][n_index]['position']['x'] = node_pos[graph_info['nodes'][n_index]['id']][0]
+                    graph_info['nodes'][n_index]['position']['y'] = node_pos[graph_info['nodes'][n_index]['id']][1]
+
+    return graph_info
 
 def is_parent(node):
     if "style" in list(node.keys()) and "convertible-parent-category" in list(node['style'].keys()) and node['style']['convertible-parent-category']:
         return True
 
     return False
+
 
 def is_centroid_node(node):
     if 'style' in list(node.keys()) and 'shapes' in list(node['style']):

@@ -17,10 +17,8 @@ signals:
     const QStringList askForListOfPluginItemNames(const QString&);
     const QStringList askForListOfPluginItemCategories(const QString&);
     void askForSetNewNetworkCanvas();
-    void askForReadFromFile(const QString&);
+    void askForCallPluginFunctions(const QString&);
     void askForSaveCurrentNetwork();
-    void askForWriteDataToFile(const QString&);
-    void askForWriteFigureToFile(const QString&);
     void askForCloseTheApp();
     void askForTriggerUndoAction();
     void canUndoChanged(const bool&);

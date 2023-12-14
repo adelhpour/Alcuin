@@ -71,7 +71,7 @@ public:
 
     void addNode(const QJsonObject &json);
 
-    void addNewNode(const QPointF& position);
+    void addNode(const QPointF& position);
 
     void addNode(MyNetworkElementBase* n);
 
