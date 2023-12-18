@@ -38,12 +38,6 @@ signals:
 
     QString askForApplicationDirectoryPath();
 
-    QString askForWorkingDirectoryPath();
-
-    QString askForCurrentBaseFileName();
-
-    QJsonObject askForNetworkInfo();
-
     const QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
 
 protected:
