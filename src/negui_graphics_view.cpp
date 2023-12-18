@@ -25,7 +25,7 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setScene(new MyGraphicsScene(this));
     setSceneRect(scene()->sceneRect().x(), scene()->sceneRect().y(), scene()->sceneRect().width(), scene()->sceneRect().height());
-    connect(this, SIGNAL(askForDisplayContextMenu(const QPointF&)), scene(), SLOT(displayContextMenu(const QPointF&)));
+    connect(this, SIGNAL(askForDisplayContextMenu(const qreal&, const qreal&)), scene(), SLOT(displayContextMenu(const qreal&, const qreal&)));
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
 
@@ -162,7 +162,7 @@ void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     if (!((MyGraphicsScene*)scene())->whetherMouseReleaseEventIsAccepted()) {
         if (event->button() == Qt::RightButton) {
             if (!_isPanned)
-                emit askForDisplayContextMenu(event->globalPos());
+                emit askForDisplayContextMenu(event->globalPos().x(), event->globalPos().y());
         }
     }
     _isPanned = false;

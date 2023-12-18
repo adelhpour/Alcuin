@@ -122,7 +122,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect((MyInteractor*)interactor(), &MyInteractor::askForItemsBoundingRect, ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), [this] () { return ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->itemsBoundingRect(); });
 
     // select all
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectElements(true); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectNetworkElements(true); });
     
     // add node
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->addNode(position); });
@@ -147,7 +147,7 @@ void MyNetworkEditorWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForPasteCopiedNetworkElements, this, [this] (const QPointF & position) { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForDeleteSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->deleteSelectedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForAlignSelectedNetworkElements, this, [this] (const QString& type)  { ((MyInteractor*)interactor())->alignSelectedNetworkElements(type); });
-    connect((MyInteractor*)interactor(), SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), ((MyGraphicsView*)view())->scene(), SLOT(displayContextMenu(const QPointF&)));
+    connect((MyInteractor*)interactor(), SIGNAL(askForDisplaySceneContextMenu(const qreal&, const qreal&)), ((MyGraphicsView*)view())->scene(), SLOT(displayContextMenu(const qreal&, const qreal&)));
 
     // status bar
     connect(view(), SIGNAL(mouseLeft()), statusBar(), SLOT(resetMessage()));
@@ -246,9 +246,9 @@ void MyNetworkEditorWidget::readSettings() {
     // working directory
     const auto workingDirectory = settings.value("working directory", QByteArray()).toByteArray();
     if (workingDirectory.isEmpty())
-        ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Documents");
+        ((MyInteractor*)interactor())->setWorkingDirectoryPath(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/Documents");
     else
-        ((MyInteractor*)interactor())->askForSettingWorkingDirectoryPath(workingDirectory);
+        ((MyInteractor*)interactor())->setWorkingDirectoryPath(workingDirectory);
 
     settings.endGroup();
 }
@@ -264,7 +264,7 @@ void MyNetworkEditorWidget::writeSettings() {
         settings.setValue("geometry", saveGeometry());
 
     // working directory
-    settings.setValue("working directory", ((MyInteractor*)interactor())->askForWorkingDirectoryPath());
+    settings.setValue("working directory", ((MyInteractor*)interactor())->workingDirectoryPath());
 
     settings.endGroup();
 }
@@ -286,18 +286,6 @@ void MyNetworkEditorWidget::enableAddEdgeMode(const QString& edgeStyleName) {
     ((MyInteractor*)interactor())->enableAddEdgeMode(edgeStyleName);
 }
 
-void MyNetworkEditorWidget::enableSelectMode(const QString& elementCategory) {
-    ((MyInteractor*)interactor())->enableSelectMode(elementCategory);
-}
-
-void MyNetworkEditorWidget::enableSelectNodeMode(const QString& nodeCategory) {
-    ((MyInteractor*)interactor())->enableSelectNodeMode(nodeCategory);
-}
-
-void MyNetworkEditorWidget::enableSelectEdgeMode(const QString& edgeCategory) {
-    ((MyInteractor*)interactor())->enableSelectEdgeMode(edgeCategory);
-}
-
 void MyNetworkEditorWidget::createNetwork(const QJsonObject &json) {
     ((MyInteractor*)interactor())->createNetwork(json);
 }
@@ -314,8 +302,8 @@ void MyNetworkEditorWidget::resetCanvas() {
     ((MyInteractor*)interactor())->resetCanvas();
 }
 
-void MyNetworkEditorWidget::setBackground(const QJsonObject &json) {
-    ((MyInteractor*)interactor())->setBackground(json);
+void MyNetworkEditorWidget::setBackgroundColor(const QString& backgroundColor) {
+    ((MyGraphicsScene*)((MyGraphicsView*)view())->scene())->setBackgroundColor(backgroundColor);
 }
 
 void MyNetworkEditorWidget::setNewNetworkCanvas() {
@@ -366,20 +354,12 @@ void MyNetworkEditorWidget::resetCopiedNetworkElements() {
     ((MyInteractor*)interactor())->resetCopiedNetworkElements();
 }
 
-void MyNetworkEditorWidget::selectAllElements() {
-    ((MyInteractor*)interactor())->selectAllElements();
+void MyNetworkEditorWidget::selectNetworkElements(const bool& selected) {
+    ((MyInteractor*)interactor())->selectNetworkElements(selected);
 }
 
-void MyNetworkEditorWidget::selectAllElements(const QString& category) {
-    ((MyInteractor*)interactor())->selectAllElements(category);
-}
-
-void MyNetworkEditorWidget::selectElements(const bool& selected) {
-    ((MyInteractor*)interactor())->selectElements(selected);
-}
-
-void MyNetworkEditorWidget::selectElementsOfCategory(const bool& selected, const QString& category) {
-    ((MyInteractor*)interactor())->selectElementsOfCategory(selected, category);
+void MyNetworkEditorWidget::selectNetworkElementsOfCategory(const bool& selected, const QString& category) {
+    ((MyInteractor*)interactor())->selectNetworkElementsOfCategory(selected, category);
 }
 
 void MyNetworkEditorWidget::selectNodes(const bool& selected) {
@@ -398,8 +378,8 @@ void MyNetworkEditorWidget::selectEdgesOfCategory(const bool& selected, const QS
     ((MyInteractor*)interactor())->selectEdgesOfCategory(selected, category);
 }
 
-void MyNetworkEditorWidget::setElementSelected(const QString& elementName) {
-    ((MyInteractor*)interactor())->setElementSelected(elementName);
+void MyNetworkEditorWidget::setNetworkElementSelected(const QString& elementName, const bool& selected) {
+    ((MyInteractor*)interactor())->setNetworkElementSelected(elementName, selected);
 }
 
 const bool MyNetworkEditorWidget::areSelectedElementsCopyable() {

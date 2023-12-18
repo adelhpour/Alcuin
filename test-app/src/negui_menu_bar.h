@@ -30,8 +30,8 @@ signals:
     void elementsCopyableStatusChanged(const bool&);
     void askForPasteCopiedNetworkElements();
     void pasteElementsStatusChanged(const bool&);
-    void askForSelectAllElements();
-    void askForSelectAllElements(const QString&);
+    void askForSelectNetworkElements(const bool&);
+    void askForSelectNetworkElementsOfCategory(const bool&, const QString&);
     void askForZoomIn();
     void askForZoomOut();
     QString askForName();

@@ -26,7 +26,7 @@ public:
     
 signals:
 
-    void askForDisplayContextMenu(const QPointF& position);
+    void askForDisplayContextMenu(const qreal&, const qreal&);
     void mouseLeft();
     void scaleChanged(const qreal);
 

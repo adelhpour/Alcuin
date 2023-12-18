@@ -9,33 +9,33 @@ MyNetworkElementSelector::MyNetworkElementSelector() {
 
 void MyNetworkElementSelector::enableNormalMode() {
     MySceneModeElementBase::enableNormalMode();
-    selectElements(false);
+    selectNetworkElements(false);
 }
 
-void MyNetworkElementSelector::selectElements(const bool& selected) {
+void MyNetworkElementSelector::selectNetworkElements(const bool& selected) {
     selectNodes(selected);
     selectEdges(selected);
 }
 
-void MyNetworkElementSelector::selectElementsOfCategory(const QString& category, const bool& selected) {
+void MyNetworkElementSelector::selectNetworkElementsOfCategory(const QString& category, const bool& selected) {
     selectNodesOfCategory(category, selected);
     selectEdgesOfCategory(category, selected);
 }
 
-void MyNetworkElementSelector::selectElements(QList<MyNetworkElementBase*> networkElements, const bool& selected) {
+void MyNetworkElementSelector::selectNetworkElements(QList<MyNetworkElementBase*> networkElements, const bool& selected) {
     for (MyNetworkElementBase* networkElement : networkElements)
-        selectElement(networkElement, selected);
+        selectNetworkElement(networkElement, selected);
 }
 
-void MyNetworkElementSelector::setElementSelected(const QString& networkElementName) {
-    setElementSelected(getNetworkElement(askForNodes() + askForEdges(), networkElementName));
+void MyNetworkElementSelector::setNetworkElementSelected(const QString& networkElementName, const bool& selected) {
+    setNetworkElementSelected(getNetworkElement(askForNodes() + askForEdges(), networkElementName), selected);
 }
 
-void MyNetworkElementSelector::setElementSelected(MyNetworkElementBase* networkElement) {
-    networkElement->setSelected(true);
+void MyNetworkElementSelector::setNetworkElementSelected(MyNetworkElementBase* networkElement, const bool& selected) {
+    networkElement->setSelected(selected);
 }
 
-void MyNetworkElementSelector::selectElement(MyNetworkElementBase* networkElement, const bool& selected) {
+void MyNetworkElementSelector::selectNetworkElement(MyNetworkElementBase* networkElement, const bool& selected) {
     if (networkElement->isSelected() != selected)
         networkElement->setSelected(selected);
 }
@@ -44,34 +44,34 @@ void MyNetworkElementSelector::changeElementSelectionsStatus(MyNetworkElementBas
     if (getSceneMode() == MyNetworkElementBase::NORMAL_MODE) {
         if (askForWhetherShiftModifierIsPressed()) {
             if (!networkElement->isSelected())
-                selectElement(networkElement, true);
+                selectNetworkElement(networkElement, true);
             else
-                selectElement(networkElement, false);
+                selectNetworkElement(networkElement, false);
         }
         else {
             QList<MyNetworkElementBase*> networkElements;
             networkElements.push_back(networkElement);
             if (!(networkElement->isSelected() && areAnyOtherElementsSelected(networkElements)))
-                selectElements(false);
-            selectElement(networkElement, true);
+                selectNetworkElements(false);
+            selectNetworkElement(networkElement, true);
         }
     }
 }
 
 void MyNetworkElementSelector::selectNodes(const bool& selected) {
-    selectElements(askForNodes(), selected);
+    selectNetworkElements(askForNodes(), selected);
 }
 
 void MyNetworkElementSelector::selectNodesOfCategory(const QString& category, const bool& selected) {
-    selectElements(getNetworkElementsOfCategory(askForNodes(), category), selected);
+    selectNetworkElements(getNetworkElementsOfCategory(askForNodes(), category), selected);
 }
 
 void MyNetworkElementSelector::selectEdges(const bool& selected) {
-    selectElements(askForEdges(), selected);
+    selectNetworkElements(askForEdges(), selected);
 }
 
 void MyNetworkElementSelector::selectEdgesOfCategory(const QString& category, const bool& selected) {
-    selectElements(getNetworkElementsOfCategory(askForEdges(), category), selected);
+    selectNetworkElements(getNetworkElementsOfCategory(askForEdges(), category), selected);
 }
 
 const bool MyNetworkElementSelector::areAnyOtherElementsSelected(QList<MyNetworkElementBase*> elements) {
@@ -197,7 +197,7 @@ void MyNetworkElementSelector::setCollidingElementsSelected(QList<MyNetworkEleme
 void MyNetworkElementSelector::clearSelectionArea() {
     if (_selectionAreaGraphicsItem) {
         if (!askForWhetherShiftModifierIsPressed())
-            selectElements(false);
+            selectNetworkElements(false);
         selectSelectionAreaCoveredNodes();
         selectSelectionAreaCoveredEdges();
 

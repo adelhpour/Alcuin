@@ -65,7 +65,7 @@ public:
 
     void resetCanvas();
 
-    void setBackground(const QJsonObject &json);
+    void setBackgroundColor(const QJsonObject &json);
 
     void addNodes(const QJsonObject &json);
 
@@ -141,9 +141,9 @@ public:
 
     void alignSelectedNetworkElements(const QString& alignType);
 
-    void selectElements(const bool& selected);
+    void selectNetworkElements(const bool& selected);
 
-    void selectElementsOfCategory(const bool& selected, const QString& category);
+    void selectNetworkElementsOfCategory(const bool& selected, const QString& category);
 
     void selectNodes(const bool& selected);
 
@@ -153,7 +153,7 @@ public:
 
     void selectEdgesOfCategory(const bool& selected, const QString& category);
 
-    void setElementSelected(const QString& elementName);
+    void setNetworkElementSelected(const QString& networkElementName, const bool& selected);
 
     MyNetworkElementBase* getOneSingleSelectedElement();
 

@@ -108,7 +108,7 @@ void MyMenuBar::setMenus() {
     QAction* selectAllAction = new QAction(tr("&Select All"), editMenu);
     selectAllAction->setShortcut(QKeySequence::SelectAll);
     editMenu->addAction(selectAllAction);
-    connect(selectAllAction, &QAction::triggered, this, QOverload<>::of(&MyMenuBar::askForSelectAllElements));
+    connect(selectAllAction, &QAction::triggered, this, [this] () { askForSelectNetworkElements(true); });
     // select all by category
     QMenu* selectMenu = editMenu->addMenu(tr("&Select All by Category"));
     QStringList elementStyleCategories = askForListOfPluginItemCategories("nodestyle");
@@ -116,7 +116,7 @@ void MyMenuBar::setMenus() {
     elementStyleCategories.removeDuplicates();
     for (const QString& elementStyleCategory : elementStyleCategories) {
         QAction* selectAction = selectMenu->addAction(elementStyleCategory);
-        connect(selectAction, &QAction::triggered, this, [this, elementStyleCategory] () { askForSelectAllElements(elementStyleCategory);  });
+        connect(selectAction, &QAction::triggered, this, [this, elementStyleCategory] () { askForSelectNetworkElementsOfCategory(true, elementStyleCategory);  });
     }
     // zoom in
     QAction* zoomInAction = new QAction(tr("&Zoom In"), editMenu);

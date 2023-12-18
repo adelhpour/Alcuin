@@ -102,10 +102,10 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     });
 }
 
-void MyGraphicsScene::displayContextMenu(const QPointF& position) {
+void MyGraphicsScene::displayContextMenu(const qreal& x, const qreal& y) {
     if (getSceneMode() == NORMAL_MODE) {
         QMenu* contextMenu = createContextMenu();
-        contextMenu->exec(QPoint(position.x(), position.y()));
+        contextMenu->exec(QPoint(x, y));
     }
 }
 
