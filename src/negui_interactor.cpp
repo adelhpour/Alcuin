@@ -5,7 +5,6 @@
 #include "negui_menu_button_manager.h"
 #include "negui_default_network_element_style_manager.h"
 #include "negui_customized_interactor_widgets.h"
-#include "negui_call_interactor_api_function.h"
 
 #include <QCoreApplication>
 
@@ -62,7 +61,7 @@ void MyInteractor::setWorkingDirectoryPath(const QString& workingDirectoryPath) 
 void MyInteractor::setPluginManager() {
     _pluginManager = new MyPluginManager();
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForApplicationDirectoryPath, this, [this] () { return applicationDirectoryPath(); } );
-    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SLOT(callAPIFunction(const QString&, const QJsonValue&)));
+    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -73,11 +72,11 @@ QList<MyPluginItemBase*>& MyInteractor::pluginItems() {
     return ((MyPluginManager*)_pluginManager)->pluginItems();
 }
 
-QStringList MyInteractor::listOfPluginItemNames(const QString& type) {
+QJsonArray MyInteractor::listOfPluginItemNames(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemNames(type);
 }
 
-QStringList MyInteractor::listOfPluginItemCategories(const QString& type) {
+QJsonArray MyInteractor::listOfPluginItemCategories(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemCategories(type);
 }
 
@@ -114,8 +113,6 @@ void MyInteractor::setNetworkManager() {
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForEnableNormalMode, this, [this] () { enableNormalMode(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForClearUndoStack, this, [this] () { undoStack()->clear(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForIconsDirectoryPath, this, [this] () { return iconsDirectoryPath(); });
-    connect(this, SIGNAL(askForAdjustExtentsOfNodes()), _networkManager, SIGNAL(askForAdjustExtentsOfNodes()));
-    connect(this, SIGNAL(askForAdjustConnectedEdgesOfNodes()), _networkManager, SIGNAL(askForAdjustConnectedEdgesOfNodes()));
 }
 
 QObject* MyInteractor::networkManager() {
@@ -272,11 +269,7 @@ void MyInteractor::pasteCopiedNetworkElements() {
 }
 
 void MyInteractor::pasteCopiedNetworkElements(const qreal& x, const qreal& y) {
-    pasteCopiedNetworkElements(QPointF(x, y));
-}
-
-void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(position);
+    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(QPointF(x, y));
 }
 
 void MyInteractor::resetCopiedNetworkElements() {
@@ -347,6 +340,14 @@ void MyInteractor::addNode(const qreal& x, const qreal& y) {
     ((MyNetworkManager*)_networkManager)->addNode(QPointF(x, y));
 }
 
+void MyInteractor::adjustConnectedEdgesOfNodes() {
+    ((MyNetworkManager*)_networkManager)->askForAdjustConnectedEdgesOfNodes();
+}
+
+void MyInteractor::adjustExtentsOfNodes() {
+    ((MyNetworkManager*)_networkManager)->askForAdjustExtentsOfNodes();
+}
+
 void MyInteractor::saveCurrentNetwork() {
     if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved())
         callPluginFunctions(getDefaultSavePlugin(pluginItems()));
@@ -355,10 +356,6 @@ void MyInteractor::saveCurrentNetwork() {
 void MyInteractor::saveCurrentNetworkWithUserPermission() {
     if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved() && ((MyFileManager*)fileManager())->isWillingToSaveCurrentNetwork())
         saveCurrentNetwork();
-}
-
-void MyInteractor::saveFigure(const QString& fileName) {
-    emit askForSaveFigure(fileName);
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
@@ -428,8 +425,4 @@ void MyInteractor::callPluginFunctions(const QString& pluginName) {
 void MyInteractor::callPluginFunctions(MyPluginItemBase* plugin) {
     if (plugin)
         ((MyPluginManager*)_pluginManager)->callPluginFunctions(plugin);
-}
-
-const QJsonValue MyInteractor::callAPIFunction(const QString& functionName, const QJsonValue& inputs) {
-    return callInteractorAPIFunction(this, functionName, inputs);
 }

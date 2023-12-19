@@ -74,20 +74,20 @@ void MyPluginManager::addPluginItem(MyPluginItemBase* pluginItem) {
     _pluginItems.push_back(pluginItem);
 }
 
-QStringList MyPluginManager::listOfPluginItemNames(const QString type) {
-    QStringList pluginItemNames;
+QJsonArray MyPluginManager::listOfPluginItemNames(const QString type) {
+    QJsonArray pluginItemNames;
     QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(pluginItems(), type);
     for (MyPluginItemBase* pluginOfType: pluginsOfType)
-        pluginItemNames.push_back(pluginOfType->name());
+        pluginItemNames.append(pluginOfType->name());
 
     return pluginItemNames;
 }
 
-QStringList MyPluginManager::listOfPluginItemCategories(const QString type) {
-    QStringList pluginItemCategories;
+QJsonArray MyPluginManager::listOfPluginItemCategories(const QString type) {
+    QJsonArray pluginItemCategories;
     QList<MyPluginItemBase*> pluginsOfType = getPluginsOfType(pluginItems(), type);
     for (MyPluginItemBase* pluginOfType: pluginsOfType)
-        pluginItemCategories.push_back(pluginOfType->category());
+        pluginItemCategories.append(pluginOfType->category());
 
     return pluginItemCategories;
 }

@@ -26,9 +26,9 @@ public:
 
     QList<MyPluginItemBase*>& pluginItems();
 
-    QStringList listOfPluginItemNames(const QString type);
+    QJsonArray listOfPluginItemNames(const QString type);
 
-    QStringList listOfPluginItemCategories(const QString type);
+    QJsonArray listOfPluginItemCategories(const QString type);
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 

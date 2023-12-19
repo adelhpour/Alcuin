@@ -93,7 +93,7 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreAlignable()), this, SIGNAL(askForWhetherAnyElementsAreAlignable()));
-    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForSetBackgroundColor, this, [this] () {
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForSetNetworkBackgroundColor, this, [this] () {
         QColor backgroundColor = QColorDialog::getColor(backgroundBrush().color(), nullptr, "Select Background Color", QColorDialog::DontUseNativeDialog);
         if (backgroundColor.isValid()) {
             setBackgroundColor(backgroundColor.name());

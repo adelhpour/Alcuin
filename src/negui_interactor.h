@@ -13,9 +13,9 @@
 
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
-    
+
 public:
-    
+
     MyInteractor(QObject *parent = nullptr);
     QList<QAbstractButton*> getToolbarMenuButtons();
     QList<QAbstractButton*> getModeMenuButtons();
@@ -25,9 +25,6 @@ signals:
     // network
     const QString askForNetworkBackgroundColor();
     void askForSetNetworkBackgroundColor(const QString&);
-    void askForAdjustConnectedEdgesOfNodes();
-    void askForAdjustExtentsOfNodes();
-    void askForSaveFigure(const QString& fileName);
 
     // view
     void askForClearScene();
@@ -59,6 +56,7 @@ signals:
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
+    void askForCallAPIFunction(const QString& functionName, const QJsonValue& inputs);
 
 public slots:
     // modes
@@ -74,7 +72,6 @@ public slots:
     void createNetwork(const QJsonObject &json);
     void saveCurrentNetwork();
     void saveCurrentNetworkWithUserPermission();
-    void saveFigure(const QString& fileName);
     QJsonObject exportNetworkInfo();
 
     // undo/redo
@@ -114,8 +111,10 @@ public slots:
     // feature menu
     void updateFeatureMenu();
 
-    // add elements
+    // elements
     void addNode(const qreal& x, const qreal& y);
+    void adjustConnectedEdgesOfNodes();
+    void adjustExtentsOfNodes();
 
     // paths
     const QString applicationDirectoryPath();
@@ -130,14 +129,14 @@ public slots:
     // interact with user
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
 
-
-
+    // plugins
+    QJsonArray listOfPluginItemNames(const QString& type);
+    QJsonArray listOfPluginItemCategories(const QString& type);
 
     void addDefaultNetworkElementStyles();
     void setSceneMode(const SceneMode& sceneMode) override;
     void enableAddNodeMode(MyPluginItemBase* style);
     void enableAddEdgeMode(MyPluginItemBase* style);
-    void pasteCopiedNetworkElements(const QPointF& position);
     void displaySelectionArea(const QPointF& position);
     void addNodes(const QJsonObject &json);
     void addNode(const QJsonObject& json);
@@ -148,9 +147,6 @@ public slots:
     void clearEdgesInfo();
     void callPluginFunctions(const QString& pluginName);
     void callPluginFunctions(MyPluginItemBase* plugin);
-    const QJsonValue callAPIFunction(const QString& functionName, const QJsonValue& inputs);
-    QStringList listOfPluginItemNames(const QString& type);
-    QStringList listOfPluginItemCategories(const QString& type);
 
 protected:
 

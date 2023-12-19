@@ -36,12 +36,12 @@ public slots:
     void zoomOut();
     void updateFrame();
     void updateFrame(const QRectF& frameRect);
-    
-private slots:
-    
+    void resetScale();
     void setToolTip(const QString& toolTip);
     void saveFigure(const QString& fileName);
-    void resetScale();
+
+private slots:
+
     void zoom(const qreal factor);
     
 protected:
