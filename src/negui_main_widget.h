@@ -33,27 +33,26 @@ signals:
 
 public slots:
 
-    // interactor
+    // modes
     void enableNormalMode();
     void enableAddNodeMode(const QString& nodeStyleName);
     void enableAddEdgeMode(const QString& edgeStyleName);
+
+    // network
+    void createNetwork(const QJsonObject &json);
+    QJsonObject exportNetworkInfo();
     void setNewNetworkCanvas();
     void resetNetworkCanvas();
     void resetNetwork();
     void resetCanvas();
-    void clearScene();
-    void resetScale();
-    void setToolTip(const QString& toolTip);
-    void createNetwork(const QJsonObject &json);
     void setNetworkBackgroundColor(const QString& backgroundColor);
     const QString getNetworkBackgroundColor();
     void saveCurrentNetwork();
     void saveCurrentNetworkWithUserPermission();
     void saveFigure(const QString& fileName);
-    QJsonObject exportNetworkInfo();
-    void triggerUndoAction();
-    void triggerRedoAction();
-    void createChangeStageCommand();
+
+    // network elements
+    void addNode(const qreal& x, const qreal& y);
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
@@ -75,41 +74,56 @@ public slots:
     const bool areSelectedElementsAlignable();
     void alignSelectedNetworkElements(const QString& alignType);
     void deleteSelectedNetworkElements();
-    void updateFeatureMenu();
-    void addNode(const qreal& x, const qreal& y);
     void adjustConnectedEdgesOfNodes();
     void adjustExtentsOfNodes();
+
+    // scene
+    void clearScene();
+    void resetScale();
+    void setToolTip(const QString& toolTip);
+    void zoomIn();
+    void zoomOut();
+
+    // undo/redo
+    void triggerUndoAction();
+    void triggerRedoAction();
+    void createChangeStageCommand();
+
+    // feature menu
+    void updateFeatureMenu();
+    const bool canDisplayFeatureMenu();
+    void enableDisplayFeatureMenu(const bool& enable);
+    void displayNullFeatureMenu();
+    void removeFeatureMenu();
+    void displaySceneContextMenu(const qreal& x, const qreal& y);
+
+    // directories
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     const QString& workingDirectoryPath();
     void setWorkingDirectoryPath(const QString& workingDirectoryPath);
+
+    // file names
     const QString getOpenFileName(const QString& fileExtension);
     const QString getSaveFileName(const QString& defaultFileExtension);
     const QString getSaveAsFileName(const QString& fileExtension);
     const QString getSaveFigureFileName(const QString& fileExtension);
+
+    // parameters
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
 
+    // keyboard modifiers
     const bool isControlModifierPressed();
     const bool isShiftModifierPressed();
-    void displaySceneContextMenu(const qreal& x, const qreal& y);
-    void enableDisplayFeatureMenu(const bool& enable);
-    const bool canDisplayFeatureMenu();
-    void zoomIn();
-    void zoomOut();
-    void displayNullFeatureMenu();
-    void removeFeatureMenu();
-    const QString getName();
-    const QString getVersionNumber();
+
+    // plugins
     QJsonArray listOfPluginItemNames(const QString& type);
     QJsonArray listOfPluginItemCategories(const QString& type);
-
-
     void callPluginFunctions(const QString& pluginName);
-    void clearNodesInfo();
-    void addEdges(const QJsonObject &json);
-    void addEdge(const QJsonObject& json);
-    void clearEdgesInfo();
-    void addDefaultNetworkElementStyles();
+
+    // application
+    const QString getName();
+    const QString getVersionNumber();
 
 protected:
 

@@ -216,10 +216,6 @@ void MyInteractor::addNode(const QJsonObject &json) {
     ((MyNetworkManager*)_networkManager)->addNode(json);
 }
 
-void MyInteractor::addNode(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->addNode(position);
-}
-
 void MyInteractor::clearNodesInfo() {
     ((MyNetworkManager*)_networkManager)->clearNodesInfo();
 }
@@ -324,12 +320,8 @@ void MyInteractor::updateFeatureMenu() {
     ((MyNetworkManager*)_networkManager)->updateFeatureMenu();
 }
 
-void MyInteractor::displaySelectionArea(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->displaySelectionArea(position);
-}
-
 void MyInteractor::displaySelectionArea(const qreal& x, const qreal& y) {
-    displaySelectionArea(QPointF(x, y));
+    ((MyNetworkManager*)_networkManager)->displaySelectionArea(QPointF(x, y));
 }
 
 void MyInteractor::clearSelectionArea() {

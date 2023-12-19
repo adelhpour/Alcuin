@@ -65,21 +65,17 @@ public slots:
     void enableAddEdgeMode(const QString& edgeStyleName);
 
     // network
+    void createNetwork(const QJsonObject &json);
+    QJsonObject exportNetworkInfo();
     void setNewNetworkCanvas();
     void resetNetworkCanvas();
     void resetNetwork();
     void resetCanvas();
-    void createNetwork(const QJsonObject &json);
     void saveCurrentNetwork();
     void saveCurrentNetworkWithUserPermission();
-    QJsonObject exportNetworkInfo();
 
-    // undo/redo
-    void triggerUndoAction();
-    void triggerRedoAction();
-    void createChangeStageCommand();
-
-    // copy/cut/paste
+    // network elements
+    void addNode(const qreal& x, const qreal& y);
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
@@ -88,8 +84,6 @@ public slots:
     const bool areSelectedElementsCopyable();
     const bool areSelectedElementsCuttable();
     const bool areAnyElementsCopied();
-
-    // select
     void selectNetworkElements(const bool& selected);
     void selectNetworkElementsOfCategory(const bool& selected, const QString&);
     void selectNodes(const bool& selected);
@@ -100,56 +94,53 @@ public slots:
     const bool areAnyElementsSelected();
     void displaySelectionArea(const qreal& x, const qreal& y);
     void clearSelectionArea();
-
-    // align
     const bool areSelectedElementsAlignable();
     void alignSelectedNetworkElements(const QString& alignType);
-
-    // delete
     void deleteSelectedNetworkElements();
+    void adjustConnectedEdgesOfNodes();
+    void adjustExtentsOfNodes();
 
     // feature menu
     void updateFeatureMenu();
 
-    // elements
-    void addNode(const qreal& x, const qreal& y);
-    void adjustConnectedEdgesOfNodes();
-    void adjustExtentsOfNodes();
+    // undo/redo
+    void triggerUndoAction();
+    void triggerRedoAction();
+    void createChangeStageCommand();
 
-    // paths
+    // directories
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
     const QString& workingDirectoryPath();
     void setWorkingDirectoryPath(const QString& workingDirectoryPath);
+
+    // file names
     const QString getOpenFileName(const QString& fileExtension);
     const QString getSaveFileName(const QString& defaultFileExtension);
     const QString getSaveAsFileName(const QString& fileExtension);
     const QString getSaveFigureFileName(const QString& fileExtension);
 
-    // interact with user
+    // parameters
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
 
     // plugins
     QJsonArray listOfPluginItemNames(const QString& type);
     QJsonArray listOfPluginItemCategories(const QString& type);
+    void callPluginFunctions(const QString& pluginName);
+
+protected:
 
     void addDefaultNetworkElementStyles();
     void setSceneMode(const SceneMode& sceneMode) override;
-    void enableAddNodeMode(MyPluginItemBase* style);
-    void enableAddEdgeMode(MyPluginItemBase* style);
-    void displaySelectionArea(const QPointF& position);
     void addNodes(const QJsonObject &json);
     void addNode(const QJsonObject& json);
-    void addNode(const QPointF& position);
     void clearNodesInfo();
     void addEdges(const QJsonObject &json);
     void addEdge(const QJsonObject& json);
     void clearEdgesInfo();
-    void callPluginFunctions(const QString& pluginName);
     void callPluginFunctions(MyPluginItemBase* plugin);
-
-protected:
-
+    void enableAddNodeMode(MyPluginItemBase* style);
+    void enableAddEdgeMode(MyPluginItemBase* style);
     QUndoStack* undoStack();
     void setUndoStack();
     QDir applicationDirectory();

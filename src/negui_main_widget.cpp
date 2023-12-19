@@ -127,11 +127,11 @@ void MyMainWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForSelectAll, (MyInteractor*)interactor(), [this] () { ((MyInteractor*)this->interactor())->selectNetworkElements(true); });
     
     // add node
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->addNode(position); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { addNode(position.x(), position.y()); });
 
     // display the element selection rectangle
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->displaySelectionArea(position); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mousePressedLeftButtonIsMoved, this, [this] (const QPointF& position) { ((MyInteractor*)interactor())->displaySelectionArea(position); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsPressed, this, [this] (const QPointF& position) { displaySelectionArea(position.x(), position.y()); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mousePressedLeftButtonIsMoved, this, [this] (const QPointF& position) { (displaySelectionArea(position.x(), position.y())); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::mouseLeftButtonIsReleased, this, [this] () { ((MyInteractor*)interactor())->clearSelectionArea(); });
 
     // change mode
@@ -452,28 +452,8 @@ void MyMainWidget::adjustExtentsOfNodes() {
     ((MyInteractor*)interactor())->adjustExtentsOfNodes();
 }
 
-void MyMainWidget::clearNodesInfo() {
-    ((MyInteractor*)interactor())->clearNodesInfo();
-}
-
-void MyMainWidget::addEdges(const QJsonObject &json) {
-    ((MyInteractor*)interactor())->addEdges(json);
-}
-
-void MyMainWidget::addEdge(const QJsonObject& json) {
-    ((MyInteractor*)interactor())->addEdge(json);
-}
-
-void MyMainWidget::clearEdgesInfo() {
-    ((MyInteractor*)interactor())->clearEdgesInfo();
-}
-
 QJsonObject MyMainWidget::exportNetworkInfo() {
     return ((MyInteractor*)interactor())->exportNetworkInfo();
-}
-
-void MyMainWidget::addDefaultNetworkElementStyles() {
-    ((MyInteractor*)interactor())->addDefaultNetworkElementStyles();
 }
 
 void MyMainWidget::createChangeStageCommand() {
