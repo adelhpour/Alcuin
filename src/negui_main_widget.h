@@ -53,6 +53,7 @@ public slots:
 
     // network elements
     void addNode(const qreal& x, const qreal& y);
+    void deleteNode(const QString& nodeName);
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();

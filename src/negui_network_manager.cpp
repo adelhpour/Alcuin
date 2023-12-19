@@ -409,13 +409,19 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
     }
 }
 
+void MyNetworkManager::deleteNode(const QString& nodeName) {
+    MyNetworkElementBase *node = findElement(nodes(), nodeName);
+}
+
 void MyNetworkManager::deleteNode(MyNetworkElementBase* node) {
-    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
-        ((MyNodeBase*)node)->removeEdge(edge);
-        removeEdge(edge);
+    if (node) {
+        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
+            ((MyNodeBase*)node)->removeEdge(edge);
+            removeEdge(edge);
+        }
+        removeNode(node);
+        askForCreateChangeStageCommand();
     }
-    removeNode(node);
-    askForCreateChangeStageCommand();
 }
 
 void MyNetworkManager::removeNode(MyNetworkElementBase* n) {

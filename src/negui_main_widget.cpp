@@ -444,6 +444,10 @@ void MyMainWidget::addNode(const qreal& x, const qreal& y) {
     ((MyInteractor*)interactor())->addNode(x, y);
 }
 
+void MyMainWidget::deleteNode(const QString& nodeName) {
+    ((MyInteractor*)interactor())->deleteNode(nodeName);
+}
+
 void MyMainWidget::adjustConnectedEdgesOfNodes() {
     ((MyInteractor*)interactor())->adjustConnectedEdgesOfNodes();
 }

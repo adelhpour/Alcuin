@@ -332,6 +332,10 @@ void MyInteractor::addNode(const qreal& x, const qreal& y) {
     ((MyNetworkManager*)_networkManager)->addNode(QPointF(x, y));
 }
 
+void MyInteractor::deleteNode(const QString& nodeName) {
+    ((MyNetworkManager*)_networkManager)->deleteNode(nodeName);
+}
+
 void MyInteractor::adjustConnectedEdgesOfNodes() {
     ((MyNetworkManager*)_networkManager)->askForAdjustConnectedEdgesOfNodes();
 }

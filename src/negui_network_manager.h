@@ -75,6 +75,8 @@ public:
 
     void addNode(MyNetworkElementBase* n);
 
+    void deleteNode(const QString& nodeName);
+
     void deleteNode(MyNetworkElementBase* node);
 
     void removeNode(MyNetworkElementBase* n);
