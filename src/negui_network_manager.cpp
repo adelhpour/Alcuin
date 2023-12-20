@@ -93,8 +93,32 @@ QList<MyNetworkElementBase*>& MyNetworkManager::nodes() {
     return _nodes;
 }
 
+QJsonArray MyNetworkManager::listOfNodes() {
+    QJsonArray listOfNodes;
+    for (MyNetworkElementBase* node : nodes())
+        listOfNodes.append(node->name());
+
+    return listOfNodes;
+}
+
+const qreal MyNetworkManager::numberOfNodes() {
+    return nodes().size();
+}
+
 QList<MyNetworkElementBase*>& MyNetworkManager::edges() {
     return _edges;
+}
+
+QJsonArray MyNetworkManager::listOfEdges() {
+    QJsonArray listOfEdges;
+    for (MyNetworkElementBase* edge : edges())
+        listOfEdges.append(edge->name());
+
+    return listOfEdges;
+}
+
+const qreal MyNetworkManager::numberOfEdges() {
+    return edges().size();
 }
 
 void MyNetworkManager::clearNodesInfo() {
@@ -321,7 +345,7 @@ const QList<MyNetworkElementBase*> MyNetworkManager::getSelectedEdges() {
 
 void MyNetworkManager::createNetwork(const QJsonObject& json) {
     resetNetwork();
-    setBackground(json);
+    setBackgroundColor(json);
     addNodes(json);
     addEdges(json);
 }
@@ -343,7 +367,7 @@ void MyNetworkManager::resetCanvas() {
     askForClearUndoStack();
 }
 
-void MyNetworkManager::setBackground(const QJsonObject &json) {
+void MyNetworkManager::setBackgroundColor(const QJsonObject &json) {
     if (json.contains("background-color") && json["background-color"].isString())
         askForSetNetworkBackgroundColor(json["background-color"].toString());
 }
@@ -385,8 +409,8 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(n, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
         connect(n, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()));
         connect(n, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
-            selectElements(false);
-            setElementSelected(networkElement->name());
+            selectNetworkElements(false);
+            setNetworkElementSelected(networkElement->name(), true);
             emit askForEnableFeatureMenuDisplay();
             updateFeatureMenu(); });
         connect(n, &MyNetworkElementBase::askForCheckWhetherNetworkElementNameIsAlreadyUsed, this, [this] (const QString& elementName) { return isElementNameAlreadyUsed(elementName); });
@@ -407,6 +431,12 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(this, SIGNAL(askForAdjustExtentsOfNodes()), n, SLOT(adjustExtents()));
         emit askForAddGraphicsItem(n->graphicsItem());
     }
+}
+
+void MyNetworkManager::deleteNode(const QString& nodeName) {
+    MyNetworkElementBase *node = findElement(nodes(), nodeName);
+    if (node)
+        deleteNode(node);
 }
 
 void MyNetworkManager::deleteNode(MyNetworkElementBase* node) {
@@ -462,8 +492,8 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         connect(e, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
         connect(e, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()), this, SIGNAL(askForCurrentlyBeingDisplayedFeatureMenu()));
         connect(e, &MyNetworkElementBase::askForDisplayFeatureMenu, this, [this] (MyNetworkElementBase* networkElement) {
-            selectElements(false);
-            setElementSelected(networkElement->name());
+            selectNetworkElements(false);
+            setNetworkElementSelected(networkElement->name(), true);
             emit askForEnableFeatureMenuDisplay();
             updateFeatureMenu(); });
         connect(e, &MyNetworkElementBase::askForCheckWhetherNetworkElementNameIsAlreadyUsed, this, [this] (const QString& elementName) { return isElementNameAlreadyUsed(elementName); });
@@ -478,6 +508,16 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         emit askForAddGraphicsItem(e->graphicsItem());
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
+    }
+}
+
+void MyNetworkManager::addNewEdge(QList<QString> sourceNodes, QList<QString> targetNodes) {
+    MyNetworkElementBase* node = NULL;
+    for (QString nodeName : sourceNodes + targetNodes) {
+        node = findElement(nodes(), nodeName);
+        if (!node)
+            break;
+        addNewEdge(node);
     }
 }
 
@@ -512,6 +552,12 @@ void MyNetworkManager::removeEdge(MyNetworkElementBase* e) {
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
     }
+}
+
+void MyNetworkManager::deleteEdge(const QString& edgeName) {
+    MyNetworkElementBase *edge = findElement(edges(), edgeName);
+    if (edge)
+        deleteEdge(edge);
 }
 
 void MyNetworkManager::deleteEdge(MyNetworkElementBase* edge) {
@@ -626,13 +672,13 @@ QJsonObject MyNetworkManager::exportNetworkInfo() {
     return json;
 }
 
-void MyNetworkManager::selectElements(const bool& selected) {
-    ((MyNetworkElementSelector*)_networkElementSelector)->selectElements(selected);
+void MyNetworkManager::selectNetworkElements(const bool& selected) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectNetworkElements(selected);
     emit networkElementsSelectedStatusIsChanged();
 }
 
-void MyNetworkManager::selectElementsOfCategory(const bool& selected, const QString& category) {
-    ((MyNetworkElementSelector*)_networkElementSelector)->selectElementsOfCategory(category, selected);
+void MyNetworkManager::selectNetworkElementsOfCategory(const bool& selected, const QString& category) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->selectNetworkElementsOfCategory(category, selected);
     emit networkElementsSelectedStatusIsChanged();
 }
 
@@ -656,8 +702,8 @@ void MyNetworkManager::selectEdgesOfCategory(const bool& selected, const QString
     emit networkElementsSelectedStatusIsChanged();
 }
 
-void MyNetworkManager::setElementSelected(const QString& elementName) {
-    ((MyNetworkElementSelector*)_networkElementSelector)->setElementSelected(elementName);
+void MyNetworkManager::setNetworkElementSelected(const QString& networkElementName, const bool& selected) {
+    ((MyNetworkElementSelector*)_networkElementSelector)->setNetworkElementSelected(networkElementName, selected);
     emit networkElementsSelectedStatusIsChanged();
 }
 

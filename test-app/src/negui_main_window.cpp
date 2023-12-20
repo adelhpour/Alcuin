@@ -34,8 +34,8 @@ void MyMainWindow::connectToCentralWidget(QWidget* menuBar) {
     connect(centralWidget(), SIGNAL(elementsCopyableStatusChanged(const bool&)), menuBar, SIGNAL(elementsCopyableStatusChanged(const bool&)));
     connect(menuBar, SIGNAL(askForPasteCopiedNetworkElements()), centralWidget(), SLOT(pasteCopiedNetworkElements()));
     connect(centralWidget(), SIGNAL(pasteElementsStatusChanged(const bool&)), menuBar, SIGNAL(pasteElementsStatusChanged(const bool&)));
-    connect(menuBar, SIGNAL(askForSelectAllElements()), centralWidget(), SLOT(selectAllElements()));
-    connect(menuBar, SIGNAL(askForSelectAllElements(const QString&)), centralWidget(), SLOT(selectAllElements(const QString&)));
+    connect(menuBar, SIGNAL(askForSelectNetworkElements(const bool&)), centralWidget(), SLOT(selectNetworkElements(const bool&)));
+    connect(menuBar, SIGNAL(askForSelectNetworkElementsOfCategory(const bool&, const QString&)), centralWidget(), SLOT(selectNetworkElementsOfCategory(const bool&, const QString&)));
     connect(menuBar, SIGNAL(askForZoomIn()), centralWidget(), SLOT(zoomIn()));
     connect(menuBar, SIGNAL(askForZoomOut()), centralWidget(), SLOT(zoomOut()));
     connect(menuBar, SIGNAL(askForName()), centralWidget(), SLOT(getName()));

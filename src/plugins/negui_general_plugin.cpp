@@ -25,39 +25,32 @@ void GeneralPlugin::loadPluginScripts(const QString &pluginsPath) {
     }
 }
 
-const QJsonObject GeneralPlugin::loadItemsInfo() {
-    QJsonObject object;
-    object["items"] = QJsonArray();
-    for (CPyObject script : _scripts)
-        object = addItemsInfo(object, loadItemsInfo(script));
+const QJsonArray GeneralPlugin::loadItemsInfo() {
+    QJsonArray itemsArray;
+    for (CPyObject script : _scripts) {
+        QJsonArray newItemsArray = loadItemsInfo(script);
+        for (unsigned int i = 0; i < newItemsArray.size(); i++)
+            itemsArray.append(newItemsArray[i]);
+    }
 
-    return object;
+    return itemsArray;
 }
 
-const QJsonObject GeneralPlugin::loadItemsInfo(CPyObject script) {
-    QJsonObject object;
+const QJsonArray GeneralPlugin::loadItemsInfo(CPyObject script) {
     PyErr_Print();
+    QJsonArray itemsArray;
     if (script) {
         CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)"items_info");
-        if (function)
-            return processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
-    }
-
-    return object;
-}
-
-const QJsonObject GeneralPlugin::addItemsInfo(QJsonObject itemsInfo, const QJsonObject& newItemsInfo) {
-    if (itemsInfo.contains("items") && itemsInfo["items"].isArray()) {
-        QJsonArray itemsArray = itemsInfo["items"].toArray();
-        if (newItemsInfo.contains("items") && newItemsInfo["items"].isArray()) {
-            QJsonArray newItemsArray = newItemsInfo["items"].toArray();
-            for (int itemIndex = 0; itemIndex < newItemsArray.size(); ++itemIndex)
-                itemsArray.append(newItemsArray[itemIndex].toObject());
+        if (function) {
+            QJsonValue itemsValue = processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
+            if (itemsValue.isArray())
+                itemsArray = itemsValue.toArray();
+            else if (itemsValue.isObject())
+                itemsArray.append(itemsValue.toObject());
         }
-        itemsInfo["items"] = itemsArray;
     }
 
-    return itemsInfo;
+    return itemsArray;
 }
 
 const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonValue& functionInput) {
@@ -65,7 +58,7 @@ const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonVal
     for (CPyObject script : _scripts) {
         CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
         if (function)
-            return processFunctionOutput1(PyObject_CallObject(function.getObject(), processFunctionInput(functionInput)));
+            return processFunctionOutput(PyObject_CallObject(function.getObject(), processFunctionInput(functionInput)));
     }
 
     return QJsonValue();
@@ -80,42 +73,47 @@ CPyObject GeneralPlugin::createFunctionInput(const QStringList& functionInputLis
 }
 
 CPyObject GeneralPlugin::processFunctionInput(const QJsonValue& functionInput) {
-    CPyObject inputs;
-    if (functionInput.isArray()) {
-        QJsonArray inputArray = functionInput.toArray();
-        inputs = PyTuple_New(inputArray.size());
-        for (int inputIndex = 0; inputIndex < inputArray.size(); ++inputIndex) {
-            if (inputArray[inputIndex].isString())
-                PyTuple_SetItem(inputs, inputIndex, PyUnicode_FromString((char*)inputArray[inputIndex].toString().toStdString().c_str()));
-            else if (inputArray[inputIndex].isDouble())
-                PyTuple_SetItem(inputs, inputIndex, PyFloat_FromDouble(inputArray[inputIndex].toDouble()));
-            else if (inputArray[inputIndex].isBool()) {
-                if (inputArray[inputIndex].toBool())
-                    PyTuple_SetItem(inputs, inputIndex, Py_True);
-                else
-                    PyTuple_SetItem(inputs, inputIndex, Py_False);
-            }
-            else if (inputArray[inputIndex].isObject())
-                PyTuple_SetItem(inputs, inputIndex, PyUnicode_FromString((char*)QJsonDocument(inputArray[inputIndex].toObject()).toJson(QJsonDocument::Compact).toStdString().c_str()));
-        }
-    }
-    else
+    CPyObject inputs = createPythonObject(functionInput);
+    if (!inputs.getObject())
         inputs = PyTuple_New(0);
     return PyTuple_Pack(1, inputs.getObject());
 }
 
-const QJsonObject GeneralPlugin::processFunctionOutput(CPyObject functionOutput) {
-    if (PyUnicode_Check(functionOutput.getObject())) {
-        QJsonDocument doc = QJsonDocument::fromJson(QString(PyBytes_AsString(PyUnicode_AsEncodedString(functionOutput.getObject(), "utf-8", "~E~"))).toUtf8());
-        if (!doc.isNull())
-            return doc.object();
+CPyObject GeneralPlugin::createPythonObject(const QJsonValue& jsonInput) {
+    if (jsonInput.isArray()) {
+        QJsonArray jsonInputArray = jsonInput.toArray();
+        CPyObject pythonInputs = PyTuple_New(jsonInputArray.size());
+        for (int inputIndex = 0; inputIndex < jsonInputArray.size(); ++inputIndex) {
+            CPyObject pythonInput = createPythonObject(jsonInputArray[inputIndex]);
+            if (pythonInput.getObject())
+                PyTuple_SetItem(pythonInputs, inputIndex, pythonInput.getObject());
+        }
+        return pythonInputs;
     }
+    else if (jsonInput.isString())
+        return PyUnicode_FromString((char*)jsonInput.toString().toStdString().c_str());
+    else if (jsonInput.isDouble())
+        return PyFloat_FromDouble(jsonInput.toDouble());
+    else if (jsonInput.isBool()) {
+        if (jsonInput.toBool())
+            return Py_True;
+        else
+            return Py_False;
+    }
+    else if (jsonInput.isObject())
+        return PyUnicode_FromString((char*)QJsonDocument(jsonInput.toObject()).toJson(QJsonDocument::Compact).toStdString().c_str());
 
-    return QJsonObject();
+    return CPyObject();
 }
 
-const QJsonValue GeneralPlugin::processFunctionOutput1(CPyObject functionOutput) {
-    if (PyUnicode_Check(functionOutput.getObject())) {
+const QJsonValue GeneralPlugin::processFunctionOutput(CPyObject functionOutput) {
+    if (PyTuple_Check(functionOutput.getObject())) {
+        QJsonArray outputArray;
+        for (unsigned int i = 0; i < PyTuple_Size(functionOutput.getObject()); i++)
+            outputArray.append(processFunctionOutput(PyTuple_GetItem(functionOutput.getObject(), i)));
+        return outputArray;
+    }
+    else if (PyUnicode_Check(functionOutput.getObject())) {
         QString outputString = QString(PyBytes_AsString(PyUnicode_AsEncodedString(functionOutput.getObject(), "utf-8", "~E~")));
         QJsonDocument doc = QJsonDocument::fromJson(outputString.toUtf8());
         if (!doc.isNull())

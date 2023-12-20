@@ -2,6 +2,7 @@
 #define __NEGUI_MENUBAR_H
 
 #include <QMenuBar>
+#include <QJsonArray>
 
 class MyMenuBar : public QMenuBar {
     Q_OBJECT
@@ -14,8 +15,8 @@ public:
 
 signals:
 
-    const QStringList askForListOfPluginItemNames(const QString&);
-    const QStringList askForListOfPluginItemCategories(const QString&);
+    const QJsonArray askForListOfPluginItemNames(const QString&);
+    const QJsonArray askForListOfPluginItemCategories(const QString&);
     void askForSetNewNetworkCanvas();
     void askForCallPluginFunctions(const QString&);
     void askForSaveCurrentNetwork();
@@ -30,12 +31,14 @@ signals:
     void elementsCopyableStatusChanged(const bool&);
     void askForPasteCopiedNetworkElements();
     void pasteElementsStatusChanged(const bool&);
-    void askForSelectAllElements();
-    void askForSelectAllElements(const QString&);
+    void askForSelectNetworkElements(const bool&);
+    void askForSelectNetworkElementsOfCategory(const bool&, const QString&);
     void askForZoomIn();
     void askForZoomOut();
     QString askForName();
     QString askForVersionNumber();
 };
+
+const QStringList toStringList(const QJsonArray& json);
 
 #endif

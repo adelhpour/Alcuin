@@ -18,7 +18,7 @@ public:
 
     const QDir getPluginsDirectory(const QDir applicationDirectory);
 
-    void readPluginItemsInfo(const QJsonObject &json);
+    void readPluginItemsInfo(const QJsonArray &itemsArray);
 
     void setGeneralInterface(GeneralInterface* generalInterface, const QString &appPath, const QString &pluginsPath);
 
@@ -26,9 +26,9 @@ public:
 
     QList<MyPluginItemBase*>& pluginItems();
 
-    QStringList listOfPluginItemNames(const QString type);
+    QJsonArray listOfPluginItemNames(const QString type);
 
-    QStringList listOfPluginItemCategories(const QString type);
+    QJsonArray listOfPluginItemCategories(const QString type);
 
     void addPluginItem(MyPluginItemBase* pluginItem);
 
@@ -38,13 +38,7 @@ signals:
 
     QString askForApplicationDirectoryPath();
 
-    QString askForWorkingDirectoryPath();
-
-    QString askForCurrentBaseFileName();
-
-    QJsonObject askForNetworkInfo();
-
-    const QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
+    QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
 
 protected:
 

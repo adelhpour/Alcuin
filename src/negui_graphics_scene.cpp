@@ -93,7 +93,7 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreCopied()), this, SIGNAL(askForWhetherAnyElementsAreCopied()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreSelected()), this, SIGNAL(askForWhetherAnyElementsAreSelected()));
     connect(contextMenu, SIGNAL(askForWhetherAnyElementsAreAlignable()), this, SIGNAL(askForWhetherAnyElementsAreAlignable()));
-    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForSetBackgroundColor, this, [this] () {
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForSetNetworkBackgroundColor, this, [this] () {
         QColor backgroundColor = QColorDialog::getColor(backgroundBrush().color(), nullptr, "Select Background Color", QColorDialog::DontUseNativeDialog);
         if (backgroundColor.isValid()) {
             setBackgroundColor(backgroundColor.name());
@@ -102,10 +102,10 @@ void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     });
 }
 
-void MyGraphicsScene::displayContextMenu(const QPointF& position) {
+void MyGraphicsScene::displayContextMenu(const qreal& x, const qreal& y) {
     if (getSceneMode() == NORMAL_MODE) {
         QMenu* contextMenu = createContextMenu();
-        contextMenu->exec(QPoint(position.x(), position.y()));
+        contextMenu->exec(QPoint(x, y));
     }
 }
 

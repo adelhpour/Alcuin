@@ -2,21 +2,21 @@ import json
 import networkinfotranslator
 
 def items_info():
+    save_as_sbml = {'name' : " as SBML",
+                    'type': "save_as",
+                    'call-functions': [{'name': "write_sbml", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs':[]},
+                                                                                          {'name': "getSaveAsFileName", 'inputs':["xml"]}]}]}
+
     save_as_json = {'name' : " as JSON",
                     'type': "save_as",
                     'call-functions': [{'name': "write_json", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs':[]},
                                                                                                 {'name': "getSaveAsFileName", 'inputs':["json"]}]}]}
 
-    save_as_sbml = {'name' : " as SBML",
-                    'type': "save_as",
-                    'call-functions': [{'name': "write_sbml", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs':[]},
-                                                                                                 {'name': "getSaveAsFileName", 'inputs':["xml"]}]}]}
-
     save = {'name' : "Save",
                     'type': "save",
-                    'call-functions': [{'name': "save_file", 'api': "python", 'inputs':[{'name': "exportNetworkInfo", 'inputs':[]},
-                                                                                                {'name': "getSaveFileName", 'inputs':["json"]}]}]}
-    return json.dumps({'items': [save_as_json, save_as_sbml, save]})
+                    'call-functions': [{'name': "save_file", 'api': "python", 'inputs':[{'name': "exportNetworkInfo", 'inputs':[]}]}]}
+
+    return (json.dumps(save_as_sbml), json.dumps(save_as_json), json.dumps(save))
 
 def write_json(input):
     if len(input) == 2 and input[1]:

@@ -13,118 +13,144 @@
 
 class MyInteractor : public QObject, public MySceneModeElementBase {
     Q_OBJECT
-    
+
 public:
-    
+
     MyInteractor(QObject *parent = nullptr);
     QList<QAbstractButton*> getToolbarMenuButtons();
     QList<QAbstractButton*> getModeMenuButtons();
 
 signals:
 
-    void canUndoChanged(const bool&);
-    void canRedoChanged(const bool&);
-    void addElementModeIsEnabled(const QString&);
-    void askForSaveFigure(const QString& fileName);
-    void askForAddGraphicsItem(QGraphicsItem*);
-    void askForRemoveGraphicsItem(QGraphicsItem*);
+    // network
     const QString askForNetworkBackgroundColor();
     void askForSetNetworkBackgroundColor(const QString&);
+
+    // view
     void askForClearScene();
     void askForResetScale();
     void askForSetToolTip(const QString& toolTip);
+    QRectF askForItemsBoundingRect();
+
+    // menu
     void askForDisplayNullFeatureMenu();
-    void askForDisplayFeatureMenu(QWidget*);
     void askForRemoveFeatureMenu();
     void askForEnableFeatureMenuDisplay();
-    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
     bool askForWhetherFeatureMenuCanBeDisplayed();
+    void askForDisplaySceneContextMenu(const qreal&, const qreal&);
+
+    // pressed key
+    const bool askForWhetherShiftModifierIsPressed();
+    const bool askForWhetherControlModifierIsPressed();
+
+    void canUndoChanged(const bool&);
+    void canRedoChanged(const bool&);
+    void addElementModeIsEnabled(const QString&);
+    void askForAddGraphicsItem(QGraphicsItem*);
+    void askForRemoveGraphicsItem(QGraphicsItem*);
+    void askForDisplayFeatureMenu(QWidget*);
+    QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
-    const bool askForWhetherShiftModifierIsPressed();
-    const bool askForWhetherControlModifierIsPressed();
-    QRectF askForItemsBoundingRect();
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
-    void askForDisplaySceneContextMenu(const QPointF&);
-    QString askForWorkingDirectoryPath();
-    void askForSettingWorkingDirectoryPath(const QString&);
-    void askForAdjustConnectedEdgesOfNodes();
-    void askForAdjustExtentsOfNodes();
+    QJsonValue askForCallAPIFunction(const QString& functionName, const QJsonValue& inputs);
 
 public slots:
-
-    void setSceneMode(const SceneMode& sceneMode) override;
-    void enableAddNodeMode(MyPluginItemBase* style);
-    void enableAddEdgeMode(MyPluginItemBase* style);
+    // modes
     void enableNormalMode() override;
     void enableAddNodeMode(const QString& nodeStyleName);
     void enableAddEdgeMode(const QString& edgeStyleName);
-    void enableSelectMode(const QString& elementCategory = "");
-    void enableSelectNodeMode(const QString& nodeCategory = "");
-    void enableSelectEdgeMode(const QString& edgeCategory = "");
+
+    // network
     void createNetwork(const QJsonObject &json);
+    QJsonObject exportNetworkInfo();
+    void setNewNetworkCanvas();
     void resetNetworkCanvas();
     void resetNetwork();
     void resetCanvas();
-    void setBackground(const QJsonObject &json);
-    void setNewNetworkCanvas();
-    QStringList listOfPluginItemNames(const QString& type);
-    QStringList listOfPluginItemCategories(const QString& type);
     void saveCurrentNetwork();
     void saveCurrentNetworkWithUserPermission();
-    void saveFigure(const QString& fileName);
-    void triggerUndoAction();
-    void triggerRedoAction();
+
+    // network elements
+    void addNode(const qreal& x, const qreal& y);
+    void deleteNode(const QString& nodeName);
+    QJsonArray listOfNodes();
+    const qreal numberOfNodes();
+    void addEdge(QList<QString> sourceNodes, QList<QString> targetNodes);
+    void deleteEdge(const QString& edgeName);
+    QJsonArray listOfEdges();
+    const qreal numberOfEdges();
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
-    void pasteCopiedNetworkElements(const QPointF& position);
+    void pasteCopiedNetworkElements(const qreal& x, const qreal& y);
     void resetCopiedNetworkElements();
-    void selectAllElements();
-    void selectAllElements(const QString&);
-    void selectElements(const bool& selected);
-    void selectElementsOfCategory(const bool& selected, const QString& category);
+    const bool areSelectedElementsCopyable();
+    const bool areSelectedElementsCuttable();
+    const bool areAnyElementsCopied();
+    void selectNetworkElements(const bool& selected);
+    void selectNetworkElementsOfCategory(const bool& selected, const QString&);
     void selectNodes(const bool& selected);
     void selectNodesOfCategory(const bool& selected, const QString& category);
     void selectEdges(const bool& selected);
     void selectEdgesOfCategory(const bool& selected, const QString& category);
-    void setElementSelected(const QString& elementName);
-    const bool areSelectedElementsCopyable();
-    const bool areSelectedElementsCuttable();
-    const bool areSelectedElementsAlignable();
-    const bool areAnyElementsCopied();
+    void setNetworkElementSelected(const QString& networkElementName, const bool& selected);
     const bool areAnyElementsSelected();
-    void deleteSelectedNetworkElements();
-    void alignSelectedNetworkElements(const QString& alignType);
-    void updateFeatureMenu();
-    void displaySelectionArea(const QPointF& position);
+    void displaySelectionArea(const qreal& x, const qreal& y);
     void clearSelectionArea();
-    void addNodes(const QJsonObject &json);
-    void addNode(const QJsonObject& json);
-    void addNode(const QPointF& position);
-    void clearNodesInfo();
-    void addEdges(const QJsonObject &json);
-    void addEdge(const QJsonObject& json);
-    void clearEdgesInfo();
-    QJsonObject exportNetworkInfo();
-    void addDefaultNetworkElementStyles();
+    const bool areSelectedElementsAlignable();
+    void alignSelectedNetworkElements(const QString& alignType);
+    void deleteSelectedNetworkElements();
+    void adjustConnectedEdgesOfNodes();
+    void adjustExtentsOfNodes();
+
+    // feature menu
+    void updateFeatureMenu();
+
+    // undo/redo
+    void triggerUndoAction();
+    void triggerRedoAction();
     void createChangeStageCommand();
+
+    // directories
     const QString applicationDirectoryPath();
     const QString iconsDirectoryPath();
-    const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
+    const QString& workingDirectoryPath();
+    void setWorkingDirectoryPath(const QString& workingDirectoryPath);
+
+    // file names
     const QString getOpenFileName(const QString& fileExtension);
     const QString getSaveFileName(const QString& defaultFileExtension);
     const QString getSaveAsFileName(const QString& fileExtension);
     const QString getSaveFigureFileName(const QString& fileExtension);
+
+    // parameters
+    const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
+    void showParameterValue(const QString& name, const QJsonValue value);
+
+    // plugins
+    QJsonArray listOfPluginItemNames(const QString& type);
+    QJsonArray listOfPluginItemCategories(const QString& type);
     void callPluginFunctions(const QString& pluginName);
+
+private slots:
     void callPluginFunctions(MyPluginItemBase* plugin);
-    const QJsonValue callAPIFunction(const QString& functionName, const QJsonValue& inputs);
+    void enableAddNodeMode(MyPluginItemBase* style);
+    void enableAddEdgeMode(MyPluginItemBase* style);
 
 protected:
 
+    void addDefaultNetworkElementStyles();
+    void setSceneMode(const SceneMode& sceneMode) override;
+    void addNodes(const QJsonObject &json);
+    void addNode(const QJsonObject& json);
+    void clearNodesInfo();
+    void addEdges(const QJsonObject &json);
+    void addEdge(const QJsonObject& json);
+    void clearEdgesInfo();
     QUndoStack* undoStack();
     void setUndoStack();
     QDir applicationDirectory();

@@ -25,7 +25,15 @@ public:
 
     QList<MyNetworkElementBase*>& nodes();
 
+    QJsonArray listOfNodes();
+
+    const qreal numberOfNodes();
+
     QList<MyNetworkElementBase*>& edges();
+
+    QJsonArray listOfEdges();
+
+    const qreal numberOfEdges();
 
     void clearNodesInfo();
 
@@ -65,7 +73,7 @@ public:
 
     void resetCanvas();
 
-    void setBackground(const QJsonObject &json);
+    void setBackgroundColor(const QJsonObject &json);
 
     void addNodes(const QJsonObject &json);
 
@@ -74,6 +82,8 @@ public:
     void addNode(const QPointF& position);
 
     void addNode(MyNetworkElementBase* n);
+
+    void deleteNode(const QString& nodeName);
 
     void deleteNode(MyNetworkElementBase* node);
 
@@ -86,6 +96,10 @@ public:
     void addEdge(const QJsonObject &json);
 
     void addEdge(MyNetworkElementBase* e);
+
+    void addNewEdge(QList<QString> sourceNodes, QList<QString> targetNodes);
+
+    void deleteEdge(const QString& edgeName);
 
     void addNewEdge(MyNetworkElementBase* element);
 
@@ -141,9 +155,9 @@ public:
 
     void alignSelectedNetworkElements(const QString& alignType);
 
-    void selectElements(const bool& selected);
+    void selectNetworkElements(const bool& selected);
 
-    void selectElementsOfCategory(const bool& selected, const QString& category);
+    void selectNetworkElementsOfCategory(const bool& selected, const QString& category);
 
     void selectNodes(const bool& selected);
 
@@ -153,7 +167,7 @@ public:
 
     void selectEdgesOfCategory(const bool& selected, const QString& category);
 
-    void setElementSelected(const QString& elementName);
+    void setNetworkElementSelected(const QString& networkElementName, const bool& selected);
 
     MyNetworkElementBase* getOneSingleSelectedElement();
 

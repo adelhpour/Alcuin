@@ -46,7 +46,7 @@ signals:
 
     void askForAlignSelectedNetworkElements(const QString&);
 
-    void askForSetBackgroundColor();
+    void askForSetNetworkBackgroundColor();
 };
 
 class MyGraphicsItemContextMenuBase : public MyContextMenuBase {

@@ -72,6 +72,8 @@ MyBase* MyTakeParameterDialog::createParameter(const QString& name, const QJsonV
     MyParameterBase* parameter = NULL;
     if (defaultValue.isDouble()) {
         parameter = new MyDoubleParameter(name);
+        ((MyDoubleParameter*)parameter)->setMin(-10000);
+        ((MyDoubleParameter*)parameter)->setMax(10000);
         ((MyDoubleParameter*)parameter)->setDefaultValue(defaultValue.toDouble());
     }
     else if (defaultValue.isString()) {
@@ -84,4 +86,20 @@ MyBase* MyTakeParameterDialog::createParameter(const QString& name, const QJsonV
     }
 
     return parameter;
+}
+
+// MyShowParameterValueMessageBox
+
+MyShowParameterValueMessageBox::MyShowParameterValueMessageBox(const QString& name, const QJsonValue& value, QWidget *parent) : QMessageBox(parent) {
+    QString message = "\"" + name + "\": ";
+    if (value.isDouble())
+        message += QString::number(value.toDouble());
+    else if (value.isString())
+        message += value.toString();
+    else if (value.isBool())
+        message += value.toBool() ? "true" : "false";
+    setText(message);
+    setWindowTitle("The value of \"" + name + "\"");
+    setStandardButtons(QMessageBox::Ok);
+    setDefaultButton(QMessageBox::Ok);
 }

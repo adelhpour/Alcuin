@@ -5,7 +5,6 @@
 #include "negui_menu_button_manager.h"
 #include "negui_default_network_element_style_manager.h"
 #include "negui_customized_interactor_widgets.h"
-#include "negui_call_interactor_api_function.h"
 
 #include <QCoreApplication>
 
@@ -51,13 +50,18 @@ const QString MyInteractor::iconsDirectoryPath() {
     return iconsDirectory().path();
 }
 
+const QString& MyInteractor::workingDirectoryPath() {
+    return ((MyFileManager*)fileManager())->workingDirectoryPath();
+}
+
+void MyInteractor::setWorkingDirectoryPath(const QString& workingDirectoryPath) {
+    ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(workingDirectoryPath).absolutePath() + "/");
+}
+
 void MyInteractor::setPluginManager() {
     _pluginManager = new MyPluginManager();
     connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForApplicationDirectoryPath, this, [this] () { return applicationDirectoryPath(); } );
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForCurrentBaseFileName, this, [this] () { return ((MyFileManager*)fileManager())->currentBaseFileName(); });
-    connect((MyPluginManager*)_pluginManager, &MyPluginManager::askForNetworkInfo, this, [this] () { return exportNetworkInfo(); });
-    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SLOT(callAPIFunction(const QString&, const QJsonValue&)));
+    connect(_pluginManager, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)), this, SIGNAL(askForCallAPIFunction(const QString&, const QJsonValue&)));
 }
 
 void MyInteractor::loadPlugins() {
@@ -68,11 +72,11 @@ QList<MyPluginItemBase*>& MyInteractor::pluginItems() {
     return ((MyPluginManager*)_pluginManager)->pluginItems();
 }
 
-QStringList MyInteractor::listOfPluginItemNames(const QString& type) {
+QJsonArray MyInteractor::listOfPluginItemNames(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemNames(type);
 }
 
-QStringList MyInteractor::listOfPluginItemCategories(const QString& type) {
+QJsonArray MyInteractor::listOfPluginItemCategories(const QString& type) {
     return ((MyPluginManager*)_pluginManager)->listOfPluginItemCategories(type);
 }
 
@@ -90,7 +94,6 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(elementsCopyableStatusChanged(const bool&)), this, SIGNAL(elementsCopyableStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
     connect(_networkManager, SIGNAL(askForWhetherControlModifierIsPressed()), this, SIGNAL(askForWhetherControlModifierIsPressed()));
-    connect(_networkManager, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
     connect(_networkManager, SIGNAL(pasteElementsStatusChanged(const bool&)), this, SIGNAL(pasteElementsStatusChanged(const bool&)));
     connect(_networkManager, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()), this, SIGNAL(askForWhetherFeatureMenuCanBeDisplayed()));
     connect(_networkManager, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
@@ -103,12 +106,13 @@ void MyInteractor::setNetworkManager() {
     connect(_networkManager, SIGNAL(askForNetworkBackgroundColor()), this, SIGNAL(askForNetworkBackgroundColor()));
     connect(_networkManager, SIGNAL(askForItemsBoundingRect()), this, SIGNAL(askForItemsBoundingRect()));
     connect(_networkManager, SIGNAL(askForResetScale()), this, SIGNAL(askForResetScale()));
+    connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForDisplaySceneContextMenu, this, [this] (const QPointF& position) {
+        askForDisplaySceneContextMenu(position.x(), position.y());
+    } );
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForCreateChangeStageCommand, this, [this] () { createChangeStageCommand(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForEnableNormalMode, this, [this] () { enableNormalMode(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForClearUndoStack, this, [this] () { undoStack()->clear(); });
     connect((MyNetworkManager*)_networkManager, &MyNetworkManager::askForIconsDirectoryPath, this, [this] () { return iconsDirectoryPath(); });
-    connect(this, SIGNAL(askForAdjustExtentsOfNodes()), _networkManager, SIGNAL(askForAdjustExtentsOfNodes()));
-    connect(this, SIGNAL(askForAdjustConnectedEdgesOfNodes()), _networkManager, SIGNAL(askForAdjustConnectedEdgesOfNodes()));
 }
 
 QObject* MyInteractor::networkManager() {
@@ -118,8 +122,6 @@ QObject* MyInteractor::networkManager() {
 void MyInteractor::setFileManager() {
     _fileManager = new MyFileManager();
     connect(_fileManager, SIGNAL(currentFileNameIsUpdated(const QString&)), this, SIGNAL(currentFileNameIsUpdated(const QString&)));
-    connect(this, &MyInteractor::askForWorkingDirectoryPath, this, [this] () { return ((MyFileManager*)fileManager())->workingDirectoryPath(); });
-    connect(this, &MyInteractor::askForSettingWorkingDirectoryPath, this, [this] (const QString& workingDirectoryPath) { ((MyFileManager*)fileManager())->setWorkingDirectoryPath(QFileInfo(workingDirectoryPath).absolutePath() + "/"); });
 }
 
 QObject* MyInteractor::fileManager() {
@@ -151,7 +153,7 @@ void MyInteractor::enableNormalMode() {
 }
 
 void MyInteractor::enableAddNodeMode(const QString& nodeStyleName) {
-    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodeStyle"), nodeStyleName);
+    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodestyle"), nodeStyleName);
     if (nodeStyle)
         enableAddNodeMode(nodeStyle);
 }
@@ -183,30 +185,6 @@ void MyInteractor::enableAddEdgeMode(MyPluginItemBase* style) {
     emit addElementModeIsEnabled(style->name());
 }
 
-void MyInteractor::enableSelectMode(const QString& elementCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectMode();
-
-    emit askForSetToolTip("Select" + elementCategory);
-}
-
-void MyInteractor::enableSelectNodeMode(const QString& nodeCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectNodeMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectNodeMode();
-
-    emit askForSetToolTip("Select " + nodeCategory + " nodes");
-}
-
-void MyInteractor::enableSelectEdgeMode(const QString& edgeCategory) {
-    enableNormalMode();
-    MySceneModeElementBase::enableSelectEdgeMode();
-    ((MyNetworkManager*)_networkManager)->enableSelectEdgeMode();
-
-    emit askForSetToolTip("Select " + edgeCategory + " edges");
-}
-
 void MyInteractor::createNetwork(const QJsonObject& json) {
     ((MyNetworkManager*)_networkManager)->createNetwork(json);
 }
@@ -230,20 +208,12 @@ void MyInteractor::resetCanvas() {
     ((MyNetworkManager*)_networkManager)->resetCanvas();
 }
 
-void MyInteractor::setBackground(const QJsonObject &json) {
-    ((MyNetworkManager*)_networkManager)->setBackground(json);
-}
-
 void MyInteractor::addNodes(const QJsonObject &json) {
     ((MyNetworkManager*)_networkManager)->addNodes(json);
 }
 
 void MyInteractor::addNode(const QJsonObject &json) {
     ((MyNetworkManager*)_networkManager)->addNode(json);
-}
-
-void MyInteractor::addNode(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->addNode(position);
 }
 
 void MyInteractor::clearNodesInfo() {
@@ -294,8 +264,8 @@ void MyInteractor::pasteCopiedNetworkElements() {
     ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements();
 }
 
-void MyInteractor::pasteCopiedNetworkElements(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(position);
+void MyInteractor::pasteCopiedNetworkElements(const qreal& x, const qreal& y) {
+    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(QPointF(x, y));
 }
 
 void MyInteractor::resetCopiedNetworkElements() {
@@ -310,12 +280,12 @@ QJsonObject MyInteractor::exportNetworkInfo() {
     return ((MyNetworkManager*)_networkManager)->exportNetworkInfo();
 }
 
-void MyInteractor::selectElements(const bool& selected) {
-    ((MyNetworkManager*)_networkManager)->selectElements(selected);
+void MyInteractor::selectNetworkElements(const bool& selected) {
+    ((MyNetworkManager*)_networkManager)->selectNetworkElements(selected);
 }
 
-void MyInteractor::selectElementsOfCategory(const bool& selected, const QString& category) {
-    ((MyNetworkManager*)_networkManager)->selectElementsOfCategory(selected, category);
+void MyInteractor::selectNetworkElementsOfCategory(const bool& selected, const QString& category) {
+    ((MyNetworkManager*)_networkManager)->selectNetworkElementsOfCategory(selected, category);
 }
 
 void MyInteractor::selectNodes(const bool& selected) {
@@ -334,8 +304,8 @@ void MyInteractor::selectEdgesOfCategory(const bool& selected, const QString& ca
     ((MyNetworkManager*)_networkManager)->selectEdgesOfCategory(selected, category);
 }
 
-void MyInteractor::setElementSelected(const QString& elementName) {
-    ((MyNetworkManager*)_networkManager)->setElementSelected(elementName);
+void MyInteractor::setNetworkElementSelected(const QString& networkElementName, const bool& selected) {
+    ((MyNetworkManager*)_networkManager)->setNetworkElementSelected(networkElementName, selected);
 }
 
 void MyInteractor::deleteSelectedNetworkElements() {
@@ -350,12 +320,52 @@ void MyInteractor::updateFeatureMenu() {
     ((MyNetworkManager*)_networkManager)->updateFeatureMenu();
 }
 
-void MyInteractor::displaySelectionArea(const QPointF& position) {
-    ((MyNetworkManager*)_networkManager)->displaySelectionArea(position);
+void MyInteractor::displaySelectionArea(const qreal& x, const qreal& y) {
+    ((MyNetworkManager*)_networkManager)->displaySelectionArea(QPointF(x, y));
 }
 
 void MyInteractor::clearSelectionArea() {
     ((MyNetworkManager*)_networkManager)->clearSelectionArea();
+}
+
+void MyInteractor::addNode(const qreal& x, const qreal& y) {
+    ((MyNetworkManager*)_networkManager)->addNode(QPointF(x, y));
+}
+
+void MyInteractor::deleteNode(const QString& nodeName) {
+    ((MyNetworkManager*)_networkManager)->deleteNode(nodeName);
+}
+
+QJsonArray MyInteractor::listOfNodes() {
+    return ((MyNetworkManager*)_networkManager)->listOfNodes();
+}
+
+const qreal MyInteractor::numberOfNodes() {
+    return ((MyNetworkManager*)_networkManager)->numberOfNodes();
+}
+
+void MyInteractor::addEdge(QList<QString> sourceNodes, QList<QString> targetNodes) {
+    ((MyNetworkManager*)_networkManager)->addNewEdge(sourceNodes, targetNodes);
+}
+
+void MyInteractor::deleteEdge(const QString& edgeName) {
+    ((MyNetworkManager*)_networkManager)->deleteEdge(edgeName);
+}
+
+QJsonArray MyInteractor::listOfEdges() {
+    return ((MyNetworkManager*)_networkManager)->listOfEdges();
+}
+
+const qreal MyInteractor::numberOfEdges() {
+    return ((MyNetworkManager*)_networkManager)->numberOfEdges();
+}
+
+void MyInteractor::adjustConnectedEdgesOfNodes() {
+    ((MyNetworkManager*)_networkManager)->askForAdjustConnectedEdgesOfNodes();
+}
+
+void MyInteractor::adjustExtentsOfNodes() {
+    ((MyNetworkManager*)_networkManager)->askForAdjustExtentsOfNodes();
 }
 
 void MyInteractor::saveCurrentNetwork() {
@@ -366,10 +376,6 @@ void MyInteractor::saveCurrentNetwork() {
 void MyInteractor::saveCurrentNetworkWithUserPermission() {
     if (((MyFileManager*)fileManager())->isCurrentNetworkUnsaved() && ((MyFileManager*)fileManager())->isWillingToSaveCurrentNetwork())
         saveCurrentNetwork();
-}
-
-void MyInteractor::saveFigure(const QString& fileName) {
-    emit askForSaveFigure(fileName);
 }
 
 QList<QAbstractButton*> MyInteractor::getToolbarMenuButtons() {
@@ -411,17 +417,14 @@ void MyInteractor::triggerRedoAction() {
     undoStack()->redo();
 }
 
-void MyInteractor::selectAllElements() {
-    selectElements(true);
-}
-
-void MyInteractor::selectAllElements(const QString& category) {
-    selectElementsOfCategory(true, category);
-}
-
 const QJsonValue MyInteractor::takeParameterFromUser(const QString& name, const QJsonValue defaultValue) {
     MyTakeParameterDialog* takeParameterDialog = new MyTakeParameterDialog(name, defaultValue);
     return takeParameterDialog->execute();
+}
+
+void MyInteractor::showParameterValue(const QString& name, const QJsonValue value) {
+    MyShowParameterValueMessageBox* showParameterValueMessageBox = new MyShowParameterValueMessageBox(name, value);
+    showParameterValueMessageBox->exec();
 }
 
 const QString MyInteractor::getOpenFileName(const QString& fileExtension) {
@@ -447,8 +450,4 @@ void MyInteractor::callPluginFunctions(const QString& pluginName) {
 void MyInteractor::callPluginFunctions(MyPluginItemBase* plugin) {
     if (plugin)
         ((MyPluginManager*)_pluginManager)->callPluginFunctions(plugin);
-}
-
-const QJsonValue MyInteractor::callAPIFunction(const QString& functionName, const QJsonValue& inputs) {
-    return callInteractorAPIFunction(this, functionName, inputs);
 }

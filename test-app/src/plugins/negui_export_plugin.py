@@ -9,4 +9,4 @@ def items_info():
                   'type': "export",
                   'call-functions': [{'name': "saveFigure", 'inputs': [{'name': "getSaveFigureFileName", 'inputs':["svg"]}]}]}
     
-    return json.dumps({'items': [export_as_pdf, export_as_svg]})
+    return (json.dumps(export_as_pdf), json.dumps(export_as_svg))

@@ -19,7 +19,7 @@ void MyMenuBar::setMenus() {
     fileMenu->addSeparator();
     // open
     QMenu* openMenu = fileMenu->addMenu(tr("&Open"));
-    QStringList pluginItemNames = askForListOfPluginItemNames("importtool");
+    QStringList pluginItemNames = toStringList(askForListOfPluginItemNames("open"));
     for (const QString& pluginItemName: pluginItemNames) {
         QAction* openAction = openMenu->addAction(pluginItemName);
         connect(openAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
@@ -33,12 +33,12 @@ void MyMenuBar::setMenus() {
     QAction* saveAction = new QAction(tr("&Save"), fileMenu);
     saveAction->setShortcut(QKeySequence::Save);
     fileMenu->addAction(saveAction);
-    pluginItemNames = askForListOfPluginItemNames("datasavetool");
+    pluginItemNames = toStringList(askForListOfPluginItemNames("save"));
     if (pluginItemNames.size())
         connect(saveAction, &QAction::triggered, this, [this, pluginItemNames] () { askForCallPluginFunctions(pluginItemNames.at(0)); });
     // save as
     QMenu* saveAsMenu = fileMenu->addMenu(tr("&Save As"));
-    pluginItemNames = askForListOfPluginItemNames("dataexporttool");
+    pluginItemNames = toStringList(askForListOfPluginItemNames("saveAs"));
     for (const QString& pluginItemName: pluginItemNames) {
         QAction* saveAsAction = saveAsMenu->addAction(pluginItemName);
         connect(saveAsAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
@@ -46,7 +46,7 @@ void MyMenuBar::setMenus() {
     fileMenu->addSeparator();
     // export
     QMenu* exportMenu = fileMenu->addMenu(tr("&Export"));
-    pluginItemNames = askForListOfPluginItemNames("printexporttool");
+    pluginItemNames = toStringList(askForListOfPluginItemNames("export"));
     for (const QString& pluginItemName: pluginItemNames) {
         QAction* exportAction = exportMenu->addAction(pluginItemName);
         connect(exportAction, &QAction::triggered, this, [this, pluginItemName] () { askForCallPluginFunctions(pluginItemName); });
@@ -108,15 +108,15 @@ void MyMenuBar::setMenus() {
     QAction* selectAllAction = new QAction(tr("&Select All"), editMenu);
     selectAllAction->setShortcut(QKeySequence::SelectAll);
     editMenu->addAction(selectAllAction);
-    connect(selectAllAction, &QAction::triggered, this, QOverload<>::of(&MyMenuBar::askForSelectAllElements));
+    connect(selectAllAction, &QAction::triggered, this, [this] () { askForSelectNetworkElements(true); });
     // select all by category
     QMenu* selectMenu = editMenu->addMenu(tr("&Select All by Category"));
-    QStringList elementStyleCategories = askForListOfPluginItemCategories("nodestyle");
-    elementStyleCategories += askForListOfPluginItemCategories("edgestyle");
+    QStringList elementStyleCategories = toStringList(askForListOfPluginItemCategories("nodestyle"));
+    elementStyleCategories += toStringList(askForListOfPluginItemCategories("edgestyle"));
     elementStyleCategories.removeDuplicates();
     for (const QString& elementStyleCategory : elementStyleCategories) {
         QAction* selectAction = selectMenu->addAction(elementStyleCategory);
-        connect(selectAction, &QAction::triggered, this, [this, elementStyleCategory] () { askForSelectAllElements(elementStyleCategory);  });
+        connect(selectAction, &QAction::triggered, this, [this, elementStyleCategory] () { askForSelectNetworkElementsOfCategory(true, elementStyleCategory);  });
     }
     // zoom in
     QAction* zoomInAction = new QAction(tr("&Zoom In"), editMenu);
@@ -144,4 +144,14 @@ void MyMenuBar::setMenus() {
     connect(aboutAction, &QAction::triggered, this, [this] () {
         QMessageBox* infoMessageBox = new MyAboutMessageBox(askForName(), askForVersionNumber());
         infoMessageBox->exec();} );
+}
+
+const QStringList toStringList(const QJsonArray& json) {
+    QStringList stringList;
+    for (const QJsonValue& element : json) {
+        if (element.isString())
+            stringList << element.toString();
+    }
+
+    return stringList;
 }

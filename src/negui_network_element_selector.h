@@ -14,17 +14,17 @@ public:
 
     void enableNormalMode() override;
 
-    void selectElements(const bool& selected);
+    void selectNetworkElements(const bool& selected);
 
-    void selectElementsOfCategory(const QString& category, const bool& selected);
+    void selectNetworkElementsOfCategory(const QString& category, const bool& selected);
 
-    void selectElements(QList<MyNetworkElementBase*> networkElements, const bool& selected);
+    void selectNetworkElements(QList<MyNetworkElementBase*> networkElements, const bool& selected);
 
-    void setElementSelected(const QString& networkElementName);
+    void setNetworkElementSelected(const QString& networkElementName, const bool& selected);
 
-    void setElementSelected(MyNetworkElementBase* networkElement);
+    void setNetworkElementSelected(MyNetworkElementBase* networkElement, const bool& selected);
 
-    void selectElement(MyNetworkElementBase* networkElement, const bool& selected);
+    void selectNetworkElement(MyNetworkElementBase* networkElement, const bool& selected);
 
     void changeElementSelectionsStatus(MyNetworkElementBase* networkElement);
 

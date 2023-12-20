@@ -41,7 +41,7 @@ MyGraphicsSceneContextMenu::MyGraphicsSceneContextMenu(QWidget *parent) : MyCont
     connect(alignMenu->addAction("Distribute Vertically"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Distribute Vertically"); });
     connect(alignMenu->addAction("Distribute on Grid"), &QAction::triggered, [this] () { emit askForAlignSelectedNetworkElements("Distribute on Grid"); });
     alignMenu->addSeparator();
-    connect(addAction("Background Color"), &QAction::triggered, [this] () { emit askForSetBackgroundColor(); });
+    connect(addAction("Background Color"), &QAction::triggered, [this] () { emit askForSetNetworkBackgroundColor(); });
 }
 
 void MyGraphicsSceneContextMenu::initializeActionsStatus() {
