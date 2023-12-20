@@ -153,7 +153,7 @@ void MyInteractor::enableNormalMode() {
 }
 
 void MyInteractor::enableAddNodeMode(const QString& nodeStyleName) {
-    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodeStyle"), nodeStyleName);
+    MyPluginItemBase* nodeStyle = findPluginByName(getPluginsOfType(pluginItems(), "nodestyle"), nodeStyleName);
     if (nodeStyle)
         enableAddNodeMode(nodeStyle);
 }
@@ -334,6 +334,30 @@ void MyInteractor::addNode(const qreal& x, const qreal& y) {
 
 void MyInteractor::deleteNode(const QString& nodeName) {
     ((MyNetworkManager*)_networkManager)->deleteNode(nodeName);
+}
+
+QJsonArray MyInteractor::listOfNodes() {
+    return ((MyNetworkManager*)_networkManager)->listOfNodes();
+}
+
+const qreal MyInteractor::numberOfNodes() {
+    return ((MyNetworkManager*)_networkManager)->numberOfNodes();
+}
+
+void MyInteractor::addEdge(QList<QString> sourceNodes, QList<QString> targetNodes) {
+    ((MyNetworkManager*)_networkManager)->addNewEdge(sourceNodes, targetNodes);
+}
+
+void MyInteractor::deleteEdge(const QString& edgeName) {
+    ((MyNetworkManager*)_networkManager)->deleteEdge(edgeName);
+}
+
+QJsonArray MyInteractor::listOfEdges() {
+    return ((MyNetworkManager*)_networkManager)->listOfEdges();
+}
+
+const qreal MyInteractor::numberOfEdges() {
+    return ((MyNetworkManager*)_networkManager)->numberOfEdges();
 }
 
 void MyInteractor::adjustConnectedEdgesOfNodes() {

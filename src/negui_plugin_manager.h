@@ -38,7 +38,7 @@ signals:
 
     QString askForApplicationDirectoryPath();
 
-    const QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
+    QJsonValue askForCallAPIFunction(const QString&, const QJsonValue&);
 
 protected:
 

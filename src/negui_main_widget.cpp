@@ -448,6 +448,30 @@ void MyMainWidget::deleteNode(const QString& nodeName) {
     ((MyInteractor*)interactor())->deleteNode(nodeName);
 }
 
+QJsonArray MyMainWidget::listOfNodes() {
+    return ((MyInteractor*)interactor())->listOfNodes();
+}
+
+const qreal MyMainWidget::numberOfNodes() {
+    return ((MyInteractor*)interactor())->numberOfNodes();
+}
+
+void MyMainWidget::addEdge(QList<QString> sourceNodes, QList<QString> targetNodes) {
+    ((MyInteractor*)interactor())->addEdge(sourceNodes, targetNodes);
+}
+
+void MyMainWidget::deleteEdge(const QString& edgeName) {
+    ((MyInteractor*)interactor())->deleteEdge(edgeName);
+}
+
+QJsonArray MyMainWidget::listOfEdges() {
+    return ((MyInteractor*)interactor())->listOfEdges();
+}
+
+const qreal MyMainWidget::numberOfEdges() {
+    return ((MyInteractor*)interactor())->numberOfEdges();
+}
+
 void MyMainWidget::adjustConnectedEdgesOfNodes() {
     ((MyInteractor*)interactor())->adjustConnectedEdgesOfNodes();
 }

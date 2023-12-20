@@ -210,6 +210,14 @@ const QJsonValue callAPIFunction(QObject* mainWidget, const QString& functionNam
             if (inputArray.size() == 1 && inputArray[0].isString())
                 return ((MyMainWidget*)mainWidget)->listOfPluginItemCategories(inputArray[0].toString());
         }
+        else if (functionName == "listOfNodes")
+            return ((MyMainWidget*)mainWidget)->listOfNodes();
+        else if (functionName == "listOfEdges")
+            return ((MyMainWidget*)mainWidget)->listOfEdges();
+        else if (functionName == "numberOfNodes")
+            return ((MyMainWidget*)mainWidget)->numberOfNodes();
+        else if (functionName == "numberOfEdges")
+            return ((MyMainWidget*)mainWidget)->numberOfEdges();
     }
 
     return QJsonValue();

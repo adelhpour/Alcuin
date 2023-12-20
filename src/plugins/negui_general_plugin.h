@@ -13,12 +13,12 @@ public:
 
 protected:
     void loadPluginScripts(const QString &pluginsPath);
-    const QJsonObject loadItemsInfo(CPyObject script);
-    const QJsonObject addItemsInfo(QJsonObject itemsInfo, const QJsonObject& newItemsInfo);
+    const QJsonValue loadItemsInfo(CPyObject script);
+    const QJsonObject addItemsInfo(QJsonObject itemsInfo, const QJsonValue& newItemsInfo);
     CPyObject createFunctionInput(const QStringList& functionInputList);
     CPyObject processFunctionInput(const QJsonValue& functionInput);
-    const QJsonObject processFunctionOutput(CPyObject functionOutput);
-    const QJsonValue processFunctionOutput1(CPyObject functionOutput);
+    CPyObject createPythonObject(const QJsonValue& input);
+    const QJsonValue processFunctionOutput(CPyObject functionOutput);
 
     CPyInstance* _pyInstance;
     QList<CPyObject> _scripts;

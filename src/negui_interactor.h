@@ -56,7 +56,7 @@ signals:
     void elementsCuttableStatusChanged(const bool&);
     void elementsCopyableStatusChanged(const bool&);
     void pasteElementsStatusChanged(const bool&);
-    void askForCallAPIFunction(const QString& functionName, const QJsonValue& inputs);
+    QJsonValue askForCallAPIFunction(const QString& functionName, const QJsonValue& inputs);
 
 public slots:
     // modes
@@ -77,6 +77,12 @@ public slots:
     // network elements
     void addNode(const qreal& x, const qreal& y);
     void deleteNode(const QString& nodeName);
+    QJsonArray listOfNodes();
+    const qreal numberOfNodes();
+    void addEdge(QList<QString> sourceNodes, QList<QString> targetNodes);
+    void deleteEdge(const QString& edgeName);
+    QJsonArray listOfEdges();
+    const qreal numberOfEdges();
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
@@ -129,6 +135,11 @@ public slots:
     QJsonArray listOfPluginItemCategories(const QString& type);
     void callPluginFunctions(const QString& pluginName);
 
+private slots:
+    void callPluginFunctions(MyPluginItemBase* plugin);
+    void enableAddNodeMode(MyPluginItemBase* style);
+    void enableAddEdgeMode(MyPluginItemBase* style);
+
 protected:
 
     void addDefaultNetworkElementStyles();
@@ -139,9 +150,6 @@ protected:
     void addEdges(const QJsonObject &json);
     void addEdge(const QJsonObject& json);
     void clearEdgesInfo();
-    void callPluginFunctions(MyPluginItemBase* plugin);
-    void enableAddNodeMode(MyPluginItemBase* style);
-    void enableAddEdgeMode(MyPluginItemBase* style);
     QUndoStack* undoStack();
     void setUndoStack();
     QDir applicationDirectory();

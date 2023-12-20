@@ -25,7 +25,15 @@ public:
 
     QList<MyNetworkElementBase*>& nodes();
 
+    QJsonArray listOfNodes();
+
+    const qreal numberOfNodes();
+
     QList<MyNetworkElementBase*>& edges();
+
+    QJsonArray listOfEdges();
+
+    const qreal numberOfEdges();
 
     void clearNodesInfo();
 
@@ -88,6 +96,10 @@ public:
     void addEdge(const QJsonObject &json);
 
     void addEdge(MyNetworkElementBase* e);
+
+    void addNewEdge(QList<QString> sourceNodes, QList<QString> targetNodes);
+
+    void deleteEdge(const QString& edgeName);
 
     void addNewEdge(MyNetworkElementBase* element);
 

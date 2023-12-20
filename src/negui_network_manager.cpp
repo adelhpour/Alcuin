@@ -93,8 +93,32 @@ QList<MyNetworkElementBase*>& MyNetworkManager::nodes() {
     return _nodes;
 }
 
+QJsonArray MyNetworkManager::listOfNodes() {
+    QJsonArray listOfNodes;
+    for (MyNetworkElementBase* node : nodes())
+        listOfNodes.append(node->name());
+
+    return listOfNodes;
+}
+
+const qreal MyNetworkManager::numberOfNodes() {
+    return nodes().size();
+}
+
 QList<MyNetworkElementBase*>& MyNetworkManager::edges() {
     return _edges;
+}
+
+QJsonArray MyNetworkManager::listOfEdges() {
+    QJsonArray listOfEdges;
+    for (MyNetworkElementBase* edge : edges())
+        listOfEdges.append(edge->name());
+
+    return listOfEdges;
+}
+
+const qreal MyNetworkManager::numberOfEdges() {
+    return edges().size();
 }
 
 void MyNetworkManager::clearNodesInfo() {
@@ -411,17 +435,17 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
 
 void MyNetworkManager::deleteNode(const QString& nodeName) {
     MyNetworkElementBase *node = findElement(nodes(), nodeName);
+    if (node)
+        deleteNode(node);
 }
 
 void MyNetworkManager::deleteNode(MyNetworkElementBase* node) {
-    if (node) {
-        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
-            ((MyNodeBase*)node)->removeEdge(edge);
-            removeEdge(edge);
-        }
-        removeNode(node);
-        askForCreateChangeStageCommand();
+    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
+        ((MyNodeBase*)node)->removeEdge(edge);
+        removeEdge(edge);
     }
+    removeNode(node);
+    askForCreateChangeStageCommand();
 }
 
 void MyNetworkManager::removeNode(MyNetworkElementBase* n) {
@@ -487,6 +511,16 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
     }
 }
 
+void MyNetworkManager::addNewEdge(QList<QString> sourceNodes, QList<QString> targetNodes) {
+    MyNetworkElementBase* node = NULL;
+    for (QString nodeName : sourceNodes + targetNodes) {
+        node = findElement(nodes(), nodeName);
+        if (!node)
+            break;
+        addNewEdge(node);
+    }
+}
+
 void MyNetworkManager::addNewEdge(MyNetworkElementBase* element) {
     if (getSceneMode() == ADD_EDGE_MODE) {
         if (!_newEdgeBuilder) {
@@ -518,6 +552,12 @@ void MyNetworkManager::removeEdge(MyNetworkElementBase* e) {
         if (((MyEdgeBase*)e)->isSetArrowHead())
             emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
     }
+}
+
+void MyNetworkManager::deleteEdge(const QString& edgeName) {
+    MyNetworkElementBase *edge = findElement(edges(), edgeName);
+    if (edge)
+        deleteEdge(edge);
 }
 
 void MyNetworkManager::deleteEdge(MyNetworkElementBase* edge) {

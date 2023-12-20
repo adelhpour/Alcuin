@@ -54,6 +54,12 @@ public slots:
     // network elements
     void addNode(const qreal& x, const qreal& y);
     void deleteNode(const QString& nodeName);
+    QJsonArray listOfNodes();
+    const qreal numberOfNodes();
+    void addEdge(QList<QString> sourceNodes, QList<QString> targetNodes);
+    void deleteEdge(const QString& edgeName);
+    QJsonArray listOfEdges();
+    const qreal numberOfEdges();
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
