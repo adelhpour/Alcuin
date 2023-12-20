@@ -422,6 +422,11 @@ const QJsonValue MyInteractor::takeParameterFromUser(const QString& name, const 
     return takeParameterDialog->execute();
 }
 
+void MyInteractor::showParameterValue(const QString& name, const QJsonValue value) {
+    MyShowParameterValueMessageBox* showParameterValueMessageBox = new MyShowParameterValueMessageBox(name, value);
+    showParameterValueMessageBox->exec();
+}
+
 const QString MyInteractor::getOpenFileName(const QString& fileExtension) {
     return ((MyFileManager*)fileManager())->getOpenFileName(fileExtension);
 }

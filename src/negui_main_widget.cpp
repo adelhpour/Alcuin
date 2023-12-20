@@ -556,6 +556,10 @@ const QJsonValue MyMainWidget::takeParameterFromUser(const QString& name, const 
     return ((MyInteractor*)interactor())->takeParameterFromUser(name, defaultValue);
 }
 
+void MyMainWidget::showParameterValue(const QString& name,const QJsonValue value) {
+    return ((MyInteractor*)interactor())->showParameterValue(name, value);
+}
+
 const QString& MyMainWidget::workingDirectoryPath() {
     return ((MyInteractor*)interactor())->workingDirectoryPath();
 }

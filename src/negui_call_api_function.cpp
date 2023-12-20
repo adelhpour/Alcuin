@@ -149,6 +149,10 @@ const QJsonValue callAPIFunction(QObject* mainWidget, const QString& functionNam
             if (inputArray.size() == 2 && inputArray[0].isString())
                 return ((MyMainWidget*)mainWidget)->takeParameterFromUser(inputArray[0].toString(), inputArray[1]);
         }
+        else if (functionName == "showParameterValue") {
+            if (inputArray.size() == 2 && inputArray[0].isString())
+                ((MyMainWidget*)mainWidget)->showParameterValue(inputArray[0].toString(), inputArray[1]);
+        }
         else if (functionName == "getNetworkBackgroundColor")
             return ((MyMainWidget*)mainWidget)->getNetworkBackgroundColor();
         else if (functionName == "setNetworkBackgroundColor") {

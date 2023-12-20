@@ -4,6 +4,7 @@
 #include <QUndoStack>
 #include <QJsonObject>
 #include <QDialog>
+#include <QMessageBox>
 
 #include "negui_base.h"
 #include "negui_customized_common_widgets.h"
@@ -56,6 +57,14 @@ protected:
     MyBase* createParameter(const QString& name, const QJsonValue& defaultValue);
 
     MyBase* _parameter;
+};
+
+class MyShowParameterValueMessageBox : public QMessageBox {
+    Q_OBJECT
+
+public:
+
+    MyShowParameterValueMessageBox(const QString& name, const QJsonValue& value, QWidget *parent = nullptr);
 };
 
 #endif

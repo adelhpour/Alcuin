@@ -118,6 +118,7 @@ public slots:
 
     // parameters
     const QJsonValue takeParameterFromUser(const QString& name, const QJsonValue defaultValue);
+    void showParameterValue(const QString& name, const QJsonValue value);
 
     // keyboard modifiers
     const bool isControlModifierPressed();
