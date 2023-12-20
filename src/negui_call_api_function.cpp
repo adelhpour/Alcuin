@@ -119,6 +119,19 @@ const QJsonValue callAPIFunction(QObject* mainWidget, const QString& functionNam
             if (inputArray.size() == 2 && inputArray[0].isDouble() && inputArray[1].isDouble())
                 ((MyMainWidget*)mainWidget)->addNode( inputArray[0].toDouble(), inputArray[1].toDouble());
         }
+        else if (functionName == "addEdge") {
+            if (inputArray.size() == 2 && inputArray[0].isArray() && inputArray[1].isArray()) {
+                QList<QString> sourceNodes;
+                QList<QString> targetNodes;
+                for (unsigned int inputArrayZeroIndex = 0; inputArrayZeroIndex < inputArray[0].toArray().size(); inputArrayZeroIndex++)
+                    if (inputArray[0].toArray()[inputArrayZeroIndex].isString())
+                        sourceNodes.push_back(inputArray[0].toArray()[inputArrayZeroIndex].toString());
+                for (unsigned int inputArrayOneIndex = 0; inputArrayOneIndex < inputArray[1].toArray().size(); inputArrayOneIndex++)
+                    if (inputArray[1].toArray()[inputArrayOneIndex].isString())
+                        targetNodes.push_back(inputArray[1].toArray()[inputArrayOneIndex].toString());
+                ((MyMainWidget*)mainWidget)->addEdge(sourceNodes, targetNodes);
+            }
+        }
         else if (functionName == "applicationDirectoryPath")
             return ((MyMainWidget*)mainWidget)->applicationDirectoryPath();
         else if (functionName == "iconsDirectoryPath")
