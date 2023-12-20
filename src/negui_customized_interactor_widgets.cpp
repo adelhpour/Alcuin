@@ -72,6 +72,8 @@ MyBase* MyTakeParameterDialog::createParameter(const QString& name, const QJsonV
     MyParameterBase* parameter = NULL;
     if (defaultValue.isDouble()) {
         parameter = new MyDoubleParameter(name);
+        ((MyDoubleParameter*)parameter)->setMin(-10000);
+        ((MyDoubleParameter*)parameter)->setMax(10000);
         ((MyDoubleParameter*)parameter)->setDefaultValue(defaultValue.toDouble());
     }
     else if (defaultValue.isString()) {
