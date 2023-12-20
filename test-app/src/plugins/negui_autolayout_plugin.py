@@ -28,7 +28,7 @@ def items_info():
         {'name': "createChangeStageCommand", 'inputs': []},
         {'name': "enableNormalMode", 'inputs': []}]}
 
-    return json.dumps({'items': [circular, planar, spiral]})
+    return (json.dumps(circular), json.dumps(planar), json.dumps(spiral))
 
 def auto_layout_circular(input):
     graph_info = json.loads(input[0])

@@ -53,16 +53,12 @@ GeneralInterface* MyPluginManager::generalInterface() {
     return _generalInterface;
 }
 
-void MyPluginManager::readPluginItemsInfo(const QJsonObject &json) {
-    if (json.contains("items") && json["items"].isArray()) {
-        QJsonArray itemsArray = json["items"].toArray();
-        MyPluginItemBase* item = NULL;
-        for (int itemIndex = 0; itemIndex < itemsArray.size(); ++itemIndex) {
-            QJsonObject itemObject = itemsArray[itemIndex].toObject();
-            item = createPluginItem(itemsArray[itemIndex].toObject());
-            if (item)
-                addPluginItem(item);
-        }
+void MyPluginManager::readPluginItemsInfo(const QJsonArray &itemsArray) {
+    MyPluginItemBase* item = NULL;
+    for (int itemIndex = 0; itemIndex < itemsArray.size(); ++itemIndex) {
+        item = createPluginItem(itemsArray[itemIndex].toObject());
+        if (item)
+            addPluginItem(item);
     }
 }
 

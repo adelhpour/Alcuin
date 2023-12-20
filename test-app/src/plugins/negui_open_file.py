@@ -2,6 +2,14 @@ import json
 import networkinfotranslator
     
 def items_info():
+    open_sbml_format = {'name' : "SBML",
+                        'type': "open",
+                        'call-functions': [
+                            {'name': "saveCurrentNetworkWithUserPermission", 'inputs':[]},
+                            {'name': "createNetwork", 'inputs': [{'name': "load_sbml", 'api': "python", 'inputs': [
+                                {'name': "getOpenFileName", 'inputs': ["xml"]}]}]},
+                            {'name': "createChangeStageCommand", 'inputs': []}]}
+
     open_json_format = {'name' : "JSON",
                   'type': "open",
                   'call-functions': [
@@ -9,16 +17,8 @@ def items_info():
                       {'name': "createNetwork", 'inputs': [{'name': "load_json", 'api': "python", 'inputs': [
                           {'name': "getOpenFileName", 'inputs': ["json"]}]}]},
                       {'name': "createChangeStageCommand", 'inputs': []}]}
-
-    open_sbml_format = {'name' : "SBML",
-                  'type': "open",
-                  'call-functions': [
-                      {'name': "saveCurrentNetworkWithUserPermission", 'inputs':[]},
-                      {'name': "createNetwork", 'inputs': [{'name': "load_sbml", 'api': "python", 'inputs': [
-                          {'name': "getOpenFileName", 'inputs': ["xml"]}]}]},
-                      {'name': "createChangeStageCommand", 'inputs': []}]}
     
-    return json.dumps({'items': [open_json_format, open_sbml_format]})
+    return (json.dumps(open_sbml_format), json.dumps(open_json_format))
 
 def load_json(input):
     file_name = input[0]

@@ -18,7 +18,7 @@ public:
 
     const QDir getPluginsDirectory(const QDir applicationDirectory);
 
-    void readPluginItemsInfo(const QJsonObject &json);
+    void readPluginItemsInfo(const QJsonArray &itemsArray);
 
     void setGeneralInterface(GeneralInterface* generalInterface, const QString &appPath, const QString &pluginsPath);
 

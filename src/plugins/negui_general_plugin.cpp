@@ -25,41 +25,32 @@ void GeneralPlugin::loadPluginScripts(const QString &pluginsPath) {
     }
 }
 
-const QJsonObject GeneralPlugin::loadItemsInfo() {
-    QJsonObject object;
-    object["items"] = QJsonArray();
-    for (CPyObject script : _scripts)
-        object = addItemsInfo(object, loadItemsInfo(script));
+const QJsonArray GeneralPlugin::loadItemsInfo() {
+    QJsonArray itemsArray;
+    for (CPyObject script : _scripts) {
+        QJsonArray newItemsArray = loadItemsInfo(script);
+        for (unsigned int i = 0; i < newItemsArray.size(); i++)
+            itemsArray.append(newItemsArray[i]);
+    }
 
-    return object;
+    return itemsArray;
 }
 
-const QJsonValue GeneralPlugin::loadItemsInfo(CPyObject script) {
+const QJsonArray GeneralPlugin::loadItemsInfo(CPyObject script) {
     PyErr_Print();
+    QJsonArray itemsArray;
     if (script) {
         CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)"items_info");
-        if (function)
-            return processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
-    }
-
-    return QJsonValue();
-}
-
-const QJsonObject GeneralPlugin::addItemsInfo(QJsonObject itemsInfo, const QJsonValue& newItemsInfo) {
-    if (itemsInfo.contains("items") && itemsInfo["items"].isArray()) {
-        QJsonArray itemsArray = itemsInfo["items"].toArray();
-        if (newItemsInfo.isObject()) {
-            QJsonObject newItemsInfoObject = newItemsInfo.toObject();
-            if (newItemsInfoObject.contains("items") && newItemsInfoObject["items"].isArray()) {
-                QJsonArray newItemsArray = newItemsInfoObject["items"].toArray();
-                for (int itemIndex = 0; itemIndex < newItemsArray.size(); ++itemIndex)
-                    itemsArray.append(newItemsArray[itemIndex].toObject());
-            }
+        if (function) {
+            QJsonValue itemsValue = processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
+            if (itemsValue.isArray())
+                itemsArray = itemsValue.toArray();
+            else if (itemsValue.isObject())
+                itemsArray.append(itemsValue.toObject());
         }
-        itemsInfo["items"] = itemsArray;
     }
 
-    return itemsInfo;
+    return itemsArray;
 }
 
 const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonValue& functionInput) {
@@ -116,7 +107,13 @@ CPyObject GeneralPlugin::createPythonObject(const QJsonValue& jsonInput) {
 }
 
 const QJsonValue GeneralPlugin::processFunctionOutput(CPyObject functionOutput) {
-    if (PyUnicode_Check(functionOutput.getObject())) {
+    if (PyTuple_Check(functionOutput.getObject())) {
+        QJsonArray outputArray;
+        for (unsigned int i = 0; i < PyTuple_Size(functionOutput.getObject()); i++)
+            outputArray.append(processFunctionOutput(PyTuple_GetItem(functionOutput.getObject(), i)));
+        return outputArray;
+    }
+    else if (PyUnicode_Check(functionOutput.getObject())) {
         QString outputString = QString(PyBytes_AsString(PyUnicode_AsEncodedString(functionOutput.getObject(), "utf-8", "~E~")));
         QJsonDocument doc = QJsonDocument::fromJson(outputString.toUtf8());
         if (!doc.isNull())
