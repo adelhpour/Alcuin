@@ -92,6 +92,14 @@ foreach(PLUGIN ${PLUGINS})
 	## set library dist
 	install(TARGETS ${PLUGIN_NAME} RUNTIME DESTINATION bin/plugins COMPONENT alcuin_lib LIBRARY DESTINATION lib/plugins COMPONENT alcuin_lib ARCHIVE DESTINATION lib/plugins COMPONENT alcuin_lib)
 endforeach()
+file(GLOB PYTHON_PLUGINS ${CMAKE_SOURCE_DIR}/src/plugins/*.py)
+foreach (PYTHON_PLUGIN ${PYTHON_PLUGINS})
+	if (WIN32)
+		install(FILES ${PYTHON_PLUGIN} DESTINATION bin/plugins COMPONENT alcuin_lib)
+	else ()
+		install(FILES ${PYTHON_PLUGIN} DESTINATION lib/plugins COMPONENT alcuin_lib)
+	endif ()
+endforeach ()
 
 ## install headers
 file(GLOB plugin_headers ${CMAKE_SOURCE_DIR}/src/plugins/*.h ${CMAKE_SOURCE_DIR}/plugins/src/*.hpp)
