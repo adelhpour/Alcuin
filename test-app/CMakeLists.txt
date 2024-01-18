@@ -15,14 +15,16 @@ if(WIN32)
 	file(GLOB ALCUIN_DLLS "${ALCUIN_PREFIX}/bin/*.dll")
 	file(GLOB ALCUIN_PLUGINS_LIBS ${ALCUIN_PREFIX}/lib/plugins/*.lib)
 	file(GLOB ALCUIN_PLUGINS_DLLS "${ALCUIN_PREFIX}/bin/plugins/*.dll")
+	file(GLOB ALCUIN_PLUGINS_SCRIPTS ${ALCUIN_PREFIX}/bin/plugins/*.py)
 elseif(UNIX)
 	## get alcuin directories
 	set(ALCUIN_PREFIX "/usr/local" CACHE PATH "libalcuin root directory (contains lib, include, etc.)")
-	
+
 	## set use of RPATH for Mac
 	if (APPLE)
 		file(GLOB ALCUIN_LIBS ${ALCUIN_PREFIX}/lib/*.dylib)
 		file(GLOB ALCUIN_PLUGINS_LIBS ${ALCUIN_PREFIX}/lib/plugins/*.dylib)
+		file(GLOB ALCUIN_PLUGINS_SCRIPTS ${ALCUIN_PREFIX}/lib/plugins/*.py)
 		set(CMAKE_MACOSX_RPATH true)
 		set(CMAKE_BUILD_RPATH "${CMAKE_BINARY_DIR}/src;${CMAKE_BINARY_DIR}/src/dependencies")
 		set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} "@loader_path;@loader_path/../Frameworks;@loader_path/../Frameworks/dependencies")
@@ -33,6 +35,7 @@ elseif(UNIX)
 	else ()
 		file(GLOB ALCUIN_LIBS ${ALCUIN_PREFIX}/lib/*.so)
 		file(GLOB ALCUIN_PLUGINS_LIBS ${ALCUIN_PREFIX}/lib/plugins/*.so)
+		file(GLOB ALCUIN_PLUGINS_SCRIPTS ${ALCUIN_PREFIX}/lib/plugins/*.py)
 		set(CMAKE_INSTALL_RPATH ${CMAKE_INSTALL_RPATH} "$ORIGIN;$ORIGIN/../lib/dependencies")
 		## set C/C++ compiler flags
     		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -Wall -Wno-inline")

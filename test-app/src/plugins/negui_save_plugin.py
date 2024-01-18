@@ -1,22 +1,30 @@
 import json
 import networkinfotranslator
+import alcuin_plugin
 
 def items_info():
-    save_as_sbml = {'name' : " as SBML",
-                    'type': "save_as",
-                    'call-functions': [{'name': "write_sbml", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs':[]},
-                                                                                          {'name': "getSaveAsFileName", 'inputs':["xml"]}]}]}
+    sbml_get_save_as_file_name = alcuin_plugin.CPlusPlusCommand("getSaveAsFileName")
+    sbml_get_save_as_file_name.add_parameter("xml")
+    sbml_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+    sbml_write_sbml = alcuin_plugin.PythonCommand("write_sbml")
+    sbml_write_sbml.add_parameter(sbml_export_network_info)
+    sbml_write_sbml.add_parameter(sbml_get_save_as_file_name)
+    sbml_save_as_sbml = alcuin_plugin.CommandPlugin(plugin_name="as SBML", plugin_type="save_as", commands=[sbml_write_sbml])
 
-    save_as_json = {'name' : " as JSON",
-                    'type': "save_as",
-                    'call-functions': [{'name': "write_json", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs':[]},
-                                                                                                {'name': "getSaveAsFileName", 'inputs':["json"]}]}]}
+    json_get_save_as_file_name = alcuin_plugin.CPlusPlusCommand("getSaveAsFileName")
+    json_get_save_as_file_name.add_parameter("json")
+    json_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+    json_write_json = alcuin_plugin.PythonCommand("write_json")
+    json_write_json.add_parameter(json_export_network_info)
+    json_write_json.add_parameter(json_get_save_as_file_name)
+    json_save_as_json = alcuin_plugin.CommandPlugin(plugin_name="as JSON", plugin_type="save_as", commands=[json_write_json])
 
-    save = {'name' : "Save",
-                    'type': "save",
-                    'call-functions': [{'name': "save_file", 'api': "python", 'inputs':[{'name': "exportNetworkInfo", 'inputs':[]}]}]}
+    save_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+    save_save_file = alcuin_plugin.PythonCommand("save_file")
+    save_save_file.add_parameter(save_export_network_info)
+    save = alcuin_plugin.CommandPlugin(plugin_name="Save", plugin_type="save", commands=[save_save_file])
 
-    return (json.dumps(save_as_sbml), json.dumps(save_as_json), json.dumps(save))
+    return (sbml_save_as_sbml.__repr__(), json_save_as_json.__repr__(), save.__repr__())
 
 def write_json(input):
     if len(input) == 2 and input[1]:
