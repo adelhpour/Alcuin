@@ -54,7 +54,7 @@ void MyPluginItemBase::read(const QJsonObject &json) {
     _isFrequentlyUsed = false;
     if (json.contains("is-frequently-used") && json["is-frequently-used"].isBool())
         _isFrequentlyUsed = json["is-frequently-used"].toBool();
-    if (json.contains("type") && json["type"].isString())
+    if (json.contains("type") && json["type"].isString() && !json["type"].toString().isEmpty())
         _type = json["type"].toString();
     if (json.contains("category") && json["category"].isString())
         _category = json["category"].toString();
