@@ -8,12 +8,12 @@ class GeneralPlugin : public QObject, GeneralInterface {
 
 public:
     int initialize(const QString &appPath, const QString &pluginsPath) override;
-    const QJsonArray loadItemsInfo() override;
+    const QJsonArray loadPluginsInfo() override;
     const QJsonValue call(const QString& functionName, const QJsonValue& functionInput) override;
 
 protected:
     void loadPluginScripts(const QString &pluginsPath);
-    const QJsonArray loadItemsInfo(CPyObject script);
+    const QJsonArray loadPluginsInfo(CPyObject script);
     CPyObject createFunctionInput(const QStringList& functionInputList);
     CPyObject processFunctionInput(const QJsonValue& functionInput);
     CPyObject createPythonObject(const QJsonValue& input);

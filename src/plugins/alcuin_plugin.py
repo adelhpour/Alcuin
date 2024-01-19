@@ -1,5 +1,21 @@
 import json
 
+plugins = tuple()
+
+
+def add_plugin(plugin):
+    check_plugin(plugin)
+    global plugins
+    plugins += (plugin.__repr__(),)
+
+
+def plugins_info():
+    return plugins
+
+
+def check_plugin(plugin):
+    if not isinstance(plugin, PluginBase):
+        raise TypeError("plugin must be an instance of PluginBase")
 
 class PluginBase:
     def __init__(self, plugin_name, plugin_type, plugin_short_description,

@@ -9,7 +9,7 @@ class InterfaceBase {
 public:
     virtual ~InterfaceBase() = default;
     virtual int initialize(const QString &appPath, const QString &pluginsPath) = 0;
-    virtual const QJsonArray loadItemsInfo() = 0;
+    virtual const QJsonArray loadPluginsInfo() = 0;
 };
 
 class GeneralInterface : public InterfaceBase {
