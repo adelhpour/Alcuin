@@ -184,5 +184,5 @@ QGraphicsItem* MyConnectedToEndCentroidShapeLineGraphicsItem::getFocusedGraphics
 }
 
 const QPointF MyConnectedToEndCentroidShapeLineGraphicsItem::connectedToCentroidNodeControlPoint() {
-    return getControlPoint1();
+    return getControlPoint2();
 }
