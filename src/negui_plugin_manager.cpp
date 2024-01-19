@@ -45,7 +45,7 @@ void MyPluginManager::setGeneralInterface(GeneralInterface* generalInterface, co
     if (generalInterface) {
         _generalInterface = generalInterface;
         if (!generalInterface->initialize(appPath, pluginsPath))
-            readPluginItemsInfo(_generalInterface->loadItemsInfo());
+            readPluginItemsInfo(_generalInterface->loadPluginsInfo());
     }
 }
 

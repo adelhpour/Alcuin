@@ -25,32 +25,32 @@ void GeneralPlugin::loadPluginScripts(const QString &pluginsPath) {
     }
 }
 
-const QJsonArray GeneralPlugin::loadItemsInfo() {
-    QJsonArray itemsArray;
+const QJsonArray GeneralPlugin::loadPluginsInfo() {
+    QJsonArray pluginsArray;
     for (CPyObject script : _scripts) {
-        QJsonArray newItemsArray = loadItemsInfo(script);
-        for (unsigned int i = 0; i < newItemsArray.size(); i++)
-            itemsArray.append(newItemsArray[i]);
+        QJsonArray newPluginsArray = loadPluginsInfo(script);
+        for (unsigned int i = 0; i < newPluginsArray.size(); i++)
+            pluginsArray.append(newPluginsArray[i]);
     }
 
-    return itemsArray;
+    return pluginsArray;
 }
 
-const QJsonArray GeneralPlugin::loadItemsInfo(CPyObject script) {
+const QJsonArray GeneralPlugin::loadPluginsInfo(CPyObject script) {
     PyErr_Print();
-    QJsonArray itemsArray;
-    if (script) {
-        CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)"items_info");
+    QJsonArray pluginsArray;
+    if (script && PyObject_HasAttrString(script.getObject(), (char*)"plugins_info")) {
+        CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)"plugins_info");
         if (function) {
-            QJsonValue itemsValue = processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
-            if (itemsValue.isArray())
-                itemsArray = itemsValue.toArray();
-            else if (itemsValue.isObject())
-                itemsArray.append(itemsValue.toObject());
+            QJsonValue pluginsValue = processFunctionOutput(PyObject_CallObject(function.getObject(), PyTuple_Pack(0)));
+            if (pluginsValue.isArray())
+                pluginsArray = pluginsValue.toArray();
+            else if (pluginsValue.isObject())
+                pluginsArray.append(pluginsValue.toObject());
         }
     }
 
-    return itemsArray;
+    return pluginsArray;
 }
 
 const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonValue& functionInput) {

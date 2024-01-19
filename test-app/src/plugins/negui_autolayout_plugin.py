@@ -1,34 +1,61 @@
 import networkx as nx
 import json
+import alcuin_plugin
 
-def items_info():
-    # circular
-    circular = {'name' : "AutoLayout (Circular)", 'call-functions':[
-        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_circular", 'api': "python", 'inputs': [{'name': "exportNetworkInfo", 'inputs': []}]}]},
-        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
-        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
-        {'name': "createChangeStageCommand", 'inputs': []},
-        {'name': "enableNormalMode", 'inputs': []}]}
+# circular
+circular_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+circular_auto_layout_function = alcuin_plugin.PythonCommand("auto_layout_circular")
+circular_auto_layout_function.add_parameter(circular_export_network_info)
+circular_create_network = alcuin_plugin.CPlusPlusCommand("createNetwork")
+circular_create_network.add_parameter(circular_auto_layout_function)
+circular_ask_for_adjust_extents_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustExtentsOfNodes")
+circular_ask_for_adjust_connected_edges_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustConnectedEdgesOfNodes")
+circular_create_change_stage_command = alcuin_plugin.CPlusPlusCommand("createChangeStageCommand")
+circular_enable_normal_mode = alcuin_plugin.CPlusPlusCommand("enableNormalMode")
+circular_autolayout_plugin = alcuin_plugin.CommandPlugin(plugin_name="AutoLayout (Circular)",
+                                                         commands=[circular_create_network,
+                                                                   circular_ask_for_adjust_extents_of_nodes,
+                                                                   circular_ask_for_adjust_connected_edges_of_nodes,
+                                                                   circular_create_change_stage_command,
+                                                                   circular_enable_normal_mode])
+alcuin_plugin.add_plugin(circular_autolayout_plugin)
 
-    planar = {'name' : "AutoLayout (Planar)", 'call-functions':[
-        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_planar", 'api': "python", 'inputs': [
-            {'name': "exportNetworkInfo", 'inputs': []}]}]},
-        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
-        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
-        {'name': "createChangeStageCommand", 'inputs': []},
-        {'name': "enableNormalMode", 'inputs': []}]}
+# planar
+planar_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+planar_auto_layout_function = alcuin_plugin.PythonCommand("auto_layout_planar")
+planar_auto_layout_function.add_parameter(planar_export_network_info)
+planar_create_network = alcuin_plugin.CPlusPlusCommand("createNetwork")
+planar_create_network.add_parameter(planar_auto_layout_function)
+planar_ask_for_adjust_extents_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustExtentsOfNodes")
+planar_ask_for_adjust_connected_edges_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustConnectedEdgesOfNodes")
+planar_create_change_stage_command = alcuin_plugin.CPlusPlusCommand("createChangeStageCommand")
+planar_enable_normal_mode = alcuin_plugin.CPlusPlusCommand("enableNormalMode")
+planar_autolayout_plugin = alcuin_plugin.CommandPlugin(plugin_name="AutoLayout (Planar)",
+                                                       commands=[planar_create_network,
+                                                                 planar_ask_for_adjust_extents_of_nodes,
+                                                                 planar_ask_for_adjust_connected_edges_of_nodes,
+                                                                 planar_create_change_stage_command,
+                                                                 planar_enable_normal_mode])
+alcuin_plugin.add_plugin(planar_autolayout_plugin)
 
-    spiral = {'name' : "AutoLayout (Spiral)", 'call-functions':[
-        {'name': "createNetwork", 'inputs': [{'name': "auto_layout_spiral", 'api': "python", 'inputs': [
-            {'name': "exportNetworkInfo", 'inputs': []},
-            {'name': "takeParameterFromUser", 'inputs': ["resolution", 0.35]},
-            {'name': "takeParameterFromUser", 'inputs': ["equidistant", False]}]}]},
-        {'name': "askForAdjustExtentsOfNodes", 'inputs': []},
-        {'name': "askForAdjustConnectedEdgesOfNodes", 'inputs': []},
-        {'name': "createChangeStageCommand", 'inputs': []},
-        {'name': "enableNormalMode", 'inputs': []}]}
+# spiral
+spiral_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
+spiral_auto_layout_function = alcuin_plugin.PythonCommand("auto_layout_spiral")
+spiral_auto_layout_function.add_parameter(spiral_export_network_info)
+spiral_create_network = alcuin_plugin.CPlusPlusCommand("createNetwork")
+spiral_create_network.add_parameter(spiral_auto_layout_function)
+spiral_ask_for_adjust_extents_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustExtentsOfNodes")
+spiral_ask_for_adjust_connected_edges_of_nodes = alcuin_plugin.CPlusPlusCommand("askForAdjustConnectedEdgesOfNodes")
+spiral_create_change_stage_command = alcuin_plugin.CPlusPlusCommand("createChangeStageCommand")
+spiral_enable_normal_mode = alcuin_plugin.CPlusPlusCommand("enableNormalMode")
+spiral_autolayout_plugin = alcuin_plugin.CommandPlugin(plugin_name="AutoLayout (Spiral)",
+                                                       commands=[spiral_create_network,
+                                                                 spiral_ask_for_adjust_extents_of_nodes,
+                                                                 spiral_ask_for_adjust_connected_edges_of_nodes,
+                                                                 spiral_create_change_stage_command,
+                                                                 spiral_enable_normal_mode])
+alcuin_plugin.add_plugin(spiral_autolayout_plugin)
 
-    return (json.dumps(circular), json.dumps(planar), json.dumps(spiral))
 
 def auto_layout_circular(input):
     graph_info = json.loads(input[0])

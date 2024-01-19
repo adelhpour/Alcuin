@@ -30,7 +30,8 @@ target_link_libraries(AlcuinTestApp
 	Qt5::Svg
 	${ALCUIN_LIBS})
 
-file(GLOB PY_SCRIPTS ${CMAKE_SOURCE_DIR}/src/plugins/*.py)
+file(GLOB ALCUIN_TEST_APP_PLUGINS_SCRIPTS ${CMAKE_SOURCE_DIR}/src/plugins/*.py)
+list(APPEND ALCUIN_PLUGINS_SCRIPTS ${ALCUIN_TEST_APP_PLUGINS_SCRIPTS})
 set(DEPENDENCIES_BUILD_DIR ${CMAKE_BINARY_DIR}/src/dependencies)
 set(PLUGINS_BUILD_DIR ${CMAKE_BINARY_DIR}/src/plugins)
 
@@ -39,7 +40,7 @@ add_custom_command(TARGET AlcuinTestApp POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_LIBS} ${DEPENDENCIES_BUILD_DIR}
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_BUILD_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_LIBS} ${PLUGINS_BUILD_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_SCRIPTS} ${PLUGINS_BUILD_DIR})
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_SCRIPTS} ${PLUGINS_BUILD_DIR})
 
 if (APPLE)
 	## set the info plist
@@ -70,7 +71,7 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QMacStylePlugin> ${PLUGINS_DIR}/styles
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_LIBS} ${PLUGINS_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PY_SCRIPTS} ${PLUGINS_DIR}
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_SCRIPTS} ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${ALCUIN_PREFIX}/resources ${RESOURCES_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/qt.conf ${RESOURCES_DIR})
