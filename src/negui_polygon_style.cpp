@@ -61,7 +61,7 @@ const QRectF MyPolygonStyleBase::getShapeExtents() {
 }
 
 void MyPolygonStyleBase::updateShapeExtents(const QRectF& extents) {
-    scaleToExtents(extents);
+    scaleToExtents(QRectF(extents.x() + 0.5 * extents.width(), extents.y() + 0.5 * extents.height(), extents.width(), extents.height()));
 }
 
 void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
@@ -145,23 +145,23 @@ MyNodePolygonStyle::MyNodePolygonStyle(const QString& name) : MyPolygonStyleBase
 void MyNodePolygonStyle::addDefaultPoints() {
     MyAbsolutePointParameter* point = NULL;
     point = new MyAbsolutePointParameter("point1", "Relative coordinates of polygon vertex 1");
-    point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
-    point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
+    point->setDefaultValueX(-30.0);
+    point->setDefaultValueY(-20.0);
     addParameter(point);
     
     point = new MyAbsolutePointParameter("point2", "Relative coordinates of polygon vertex 2");
-    point->setDefaultValueX(0.0);
-    point->setDefaultValueY(25.0);
+    point->setDefaultValueX(30.0);
+    point->setDefaultValueY(-20.0);
     addParameter(point);
     
     point = new MyAbsolutePointParameter("point3", "Relative coordinates of polygon vertex 3");
-    point->setDefaultValueX(25.0 * qCos(qDegreesToRadians(30.0)));
-    point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
+    point->setDefaultValueX(0.0);
+    point->setDefaultValueY(20.0);
     addParameter(point);
     
     point = new MyAbsolutePointParameter("point4", "Relative coordinates of polygon vertex 4");
-    point->setDefaultValueX(-25.0 * qCos(qDegreesToRadians(30.0)));
-    point->setDefaultValueY(-25.0 * qSin(qDegreesToRadians(30.0)));
+    point->setDefaultValueX(-30.0);
+    point->setDefaultValueY(-20.0);
     addParameter(point);
 }
 
