@@ -2,9 +2,9 @@
 
 #include <QGridLayout>
 
-// MyElementFeatureMenu
+// MySingleNetworkElementFeatureMenu
 
-MyElementFeatureMenu::MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(iconsDirectoryPath, parent) {
+MySingleNetworkElementFeatureMenu::MySingleNetworkElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent) : MyFeatureMenuBase(iconsDirectoryPath, parent) {
     _expandableWidgetSize = QSize(0, 0);
     QGridLayout* contentLayout = (QGridLayout*)layout();
 
@@ -26,11 +26,11 @@ MyElementFeatureMenu::MyElementFeatureMenu(QWidget* elementFeatureMenu, const QS
     updateExtents();
 }
 
-MyFeatureMenuBase::FEATURE_MENU_TYPE MyElementFeatureMenu::type() {
+MyFeatureMenuBase::FEATURE_MENU_TYPE MySingleNetworkElementFeatureMenu::type() {
     return ELEMENT_FEATURE_MENU;
 }
 
-QList<MyShapeStyleBase*> MyElementFeatureMenu::shapeStyles() {
+QList<MyShapeStyleBase*> MySingleNetworkElementFeatureMenu::shapeStyles() {
     for (MyShapeStyleBase* shapeStyle : qAsConst(_shapeStyles)) {
         for (MyParameterBase* parameter : shapeStyle->parameters() + shapeStyle->outsourcingParameters())
             parameter->setDefaultValue();
@@ -39,46 +39,46 @@ QList<MyShapeStyleBase*> MyElementFeatureMenu::shapeStyles() {
     return _shapeStyles;
 }
 
-void MyElementFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
+void MySingleNetworkElementFeatureMenu::setShapeStyles(QList<MyShapeStyleBase*> shapeStyles) {
     clearShapeStyles();
     for (MyShapeStyleBase* shapeStyle : shapeStyles)
         addShapeStyle(shapeStyle);
 }
 
-void MyElementFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::addShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.push_back(shapeStyle);
     connect(shapeStyle, &MyShapeStyleBase::isUpdated, this, [this] () { emit isUpdated(this->shapeStyles()); });
     emit askForSetRemovingMenu(_shapeStyles);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
 }
 
-void MyElementFeatureMenu::addSingleShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::addSingleShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.push_front(shapeStyle);
     connect(shapeStyle, &MyShapeStyleBase::isUpdated, this, [this] () { emit isUpdated(this->shapeStyles()); });
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
 }
 
-void MyElementFeatureMenu::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::addNewShapeStyle(MyShapeStyleBase* shapeStyle) {
     addShapeStyle(shapeStyle);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandLastBranch();
     emit isUpdated(shapeStyles());
 }
 
-void MyElementFeatureMenu::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::removeShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.removeOne(shapeStyle);
     emit askForSetRemovingMenu(_shapeStyles);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->setBranches(_shapeStyles);
     emit isUpdated(shapeStyles());
 }
 
-void MyElementFeatureMenu::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
     _shapeStyles.removeFirst();
     addSingleShapeStyle(shapeStyle);
     ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandFirstBranch();
     emit isUpdated(shapeStyles());
 }
 
-MyShapeStyleBase* MyElementFeatureMenu::beingModifiedShapeStyle() {
+MyShapeStyleBase* MySingleNetworkElementFeatureMenu::beingModifiedShapeStyle() {
     QString expandedBranchTitle = ((MyShapeStyleTreeView*)_shapeStylesTreeView)->getExpandedBranchTitle();
     for (MyShapeStyleBase* shapeStyle : shapeStyles()) {
         if (shapeStyle->name() == expandedBranchTitle)
@@ -88,22 +88,22 @@ MyShapeStyleBase* MyElementFeatureMenu::beingModifiedShapeStyle() {
     return NULL;
 }
 
-void MyElementFeatureMenu::setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle) {
+void MySingleNetworkElementFeatureMenu::setBeingModifiedShapeStyle(MyShapeStyleBase* shapeStyle) {
     if (shapeStyle)
         ((MyShapeStyleTreeView*)_shapeStylesTreeView)->expandBranch(shapeStyle);
 }
 
-void MyElementFeatureMenu::clearShapeStyles() {
+void MySingleNetworkElementFeatureMenu::clearShapeStyles() {
     while(shapeStyles().size())
         delete shapeStyles().takeLast();
 }
 
-void MyElementFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
+void MySingleNetworkElementFeatureMenu::setExpandableWidgetSize(const QSize& expandableWidgetSize) {
     _expandableWidgetSize = expandableWidgetSize;
     updateExtents();
 }
 
-void MyElementFeatureMenu::updateExtents() {
+void MySingleNetworkElementFeatureMenu::updateExtents() {
     qint32 menuWidth = 0;
     QSize elementFeatureMenuSize = ((MyFeatureMenuItemFrame*)_elementFeatureMenu)->extents();
     if (elementFeatureMenuSize.width() > menuWidth)

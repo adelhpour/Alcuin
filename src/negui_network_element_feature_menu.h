@@ -4,12 +4,12 @@
 #include "negui_feature_menu_base.h"
 #include "negui_shape_style_base.h"
 
-class MyElementFeatureMenu : public MyFeatureMenuBase {
+class MySingleNetworkElementFeatureMenu : public MyFeatureMenuBase {
     Q_OBJECT
 
 public:
 
-    MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
+    MySingleNetworkElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     FEATURE_MENU_TYPE type() override;
 
