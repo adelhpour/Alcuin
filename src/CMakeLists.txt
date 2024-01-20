@@ -86,7 +86,7 @@ set(source_files
 		negui_decorate_menu_buttons.cpp
 		negui_mode_menu.cpp
 		negui_feature_menu_base.cpp
-		negui_network_element_feature_menu.cpp
+        negui_single_network_element_feature_menu.cpp
 		negui_null_feature_menu.cpp
 		negui_multi_network_element_feature_menu.cpp
 		negui_context_menu.cpp
@@ -177,7 +177,7 @@ set(header_files
 		negui_decorate_menu_buttons.h
 		negui_mode_menu.h
 		negui_feature_menu_base.h
-		negui_network_element_feature_menu.h
+		negui_single_network_element_feature_menu.h
 		negui_null_feature_menu.h
 		negui_multi_network_element_feature_menu.h
 		negui_context_menu.h

@@ -1,4 +1,4 @@
-#include "negui_network_element_feature_menu.h"
+#include "negui_single_network_element_feature_menu.h"
 
 #include <QGridLayout>
 
