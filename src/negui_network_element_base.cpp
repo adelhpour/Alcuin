@@ -1,5 +1,5 @@
 #include "negui_network_element_base.h"
-#include "negui_network_element_feature_menu.h"
+#include "negui_single_network_element_feature_menu.h"
 
 #include <QGridLayout>
 
@@ -167,17 +167,17 @@ void MyNetworkElementBase::addAddRemoveShapeStyleButtonsToFeatureMenu(QWidget* f
 }
 
 QWidget* MyNetworkElementBase::createFeatureMenu() {
-    MyFeatureMenuBase* featureMenu =  new MyElementFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
+    MyFeatureMenuBase* featureMenu =  new MySingleNetworkElementFeatureMenu(getFeatureMenu(), askForIconsDirectoryPath());
     featureMenu->setObjectName(name());
-    ((MyElementFeatureMenu*)featureMenu)->setShapeStyles(style()->shapeStyles());
-    connect((MyElementFeatureMenu*)featureMenu, &MyElementFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
+    ((MySingleNetworkElementFeatureMenu*)featureMenu)->setShapeStyles(style()->shapeStyles());
+    connect((MySingleNetworkElementFeatureMenu*)featureMenu, &MySingleNetworkElementFeatureMenu::isUpdated, this, [this] (QList<MyShapeStyleBase*> shapeStyles) {
         updateStyle(shapeStyles);
         updateGraphicsItem();
         updateFocusedGraphicsItems();
         emit askForCreateChangeStageCommand(); } );
     QWidget* currentlyBeingDisplayedFeatureMenu = askForCurrentlyBeingDisplayedFeatureMenu();
     if (currentlyBeingDisplayedFeatureMenu && ((MyFeatureMenuBase*)currentlyBeingDisplayedFeatureMenu)->type() == MyFeatureMenuBase::ELEMENT_FEATURE_MENU)
-        ((MyElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MyElementFeatureMenu*)currentlyBeingDisplayedFeatureMenu)->beingModifiedShapeStyle());
+        ((MySingleNetworkElementFeatureMenu*)featureMenu)->setBeingModifiedShapeStyle(((MySingleNetworkElementFeatureMenu*)currentlyBeingDisplayedFeatureMenu)->beingModifiedShapeStyle());
 
     return featureMenu;
 

@@ -1,15 +1,15 @@
-#ifndef __NEGUI_NETWORK_ELEMENT_FEATURE_MENU_H
-#define __NEGUI_NETWORK_ELEMENT_FEATURE_MENU_H
+#ifndef __NEGUI_SINGLE_NETWORK_ELEMENT_FEATURE_MENU_H
+#define __NEGUI_SINGLE_NETWORK_ELEMENT_FEATURE_MENU_H
 
 #include "negui_feature_menu_base.h"
 #include "negui_shape_style_base.h"
 
-class MyElementFeatureMenu : public MyFeatureMenuBase {
+class MySingleNetworkElementFeatureMenu : public MyFeatureMenuBase {
     Q_OBJECT
 
 public:
 
-    MyElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
+    MySingleNetworkElementFeatureMenu(QWidget* elementFeatureMenu, const QString& iconsDirectoryPath, QWidget *parent = nullptr);
 
     FEATURE_MENU_TYPE type() override;
 
