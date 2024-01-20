@@ -992,7 +992,8 @@ class Shape2DBase(Shape1DBase):
 
 
 class RectangleShape(Shape2DBase):
-    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, x=0.0, y=0.0, width=20.0, height=20.0, rx=0.0, ry=0.0):
+    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, x=0.0, y=0.0, width=20.0,
+                 height=20.0, border_radius_x=0.0, border_radius_y=0.0):
         super().__init__("rectangle", fill_color, border_color, border_width)
         self._check_x(x)
         self.x = x
@@ -1002,10 +1003,10 @@ class RectangleShape(Shape2DBase):
         self.width = width
         self._check_height(height)
         self.height = height
-        self._check_rx(rx)
-        self.rx = rx
-        self._check_ry(ry)
-        self.ry = ry
+        self._check_border_radius_x(border_radius_x)
+        self.border_radius_x = border_radius_x
+        self._check_border_radius_y(border_radius_y)
+        self.border_radius_y = border_radius_y
 
     def get_x(self):
         return self.x
@@ -1035,19 +1036,19 @@ class RectangleShape(Shape2DBase):
         self._check_height(height)
         self.height = height
 
-    def get_rx(self):
-        return self.rx
+    def get_border_radius_x(self):
+        return self.border_radius_x
 
-    def set_rx(self, rx):
-        self._check_rx(rx)
-        self.rx = rx
+    def set_border_radius_x(self, border_radius_x):
+        self._check_border_radius_x(border_radius_x)
+        self.border_radius_x = border_radius_x
 
-    def get_ry(self):
-        return self.ry
+    def get_border_radius_y(self):
+        return self.border_radius_y
 
-    def set_ry(self, ry):
-        self._check_ry(ry)
-        self.ry = ry
+    def set_border_radius_y(self, border_radius_y):
+        self._check_border_radius_y(border_radius_y)
+        self.border_radius_y = border_radius_y
 
     @staticmethod
     def _check_x(x):
@@ -1074,18 +1075,18 @@ class RectangleShape(Shape2DBase):
             raise ValueError("height must be greater than or equal to 0.0")
 
     @staticmethod
-    def _check_rx(rx):
-        if not isinstance(rx, (float, int)):
-            raise TypeError("rx must be a float or integer")
-        if rx < 0.0:
-            raise ValueError("rx must be greater than or equal to 0.0")
+    def _check_border_radius_x(border_radius_x):
+        if not isinstance(border_radius_x, (float, int)):
+            raise TypeError("border radius x must be a float or integer")
+        if border_radius_x < 0.0:
+            raise ValueError("border radius x must be greater than or equal to 0.0")
 
     @staticmethod
-    def _check_ry(ry):
-        if not isinstance(ry, (float, int)):
-            raise TypeError("ry must be a float or integer")
-        if ry < 0.0:
-            raise ValueError("ry must be greater than or equal to 0.0")
+    def _check_border_radius_y(border_radius_y):
+        if not isinstance(border_radius_y, (float, int)):
+            raise TypeError("border radius y must be a float or integer")
+        if border_radius_y < 0.0:
+            raise ValueError("border radius y must be greater than or equal to 0.0")
 
     def __str__(self):
         return json.dumps({'shape': self.get_name(),
@@ -1096,8 +1097,8 @@ class RectangleShape(Shape2DBase):
                             'y': self.get_y(),
                             'width': self.get_width(),
                             'height': self.get_height(),
-                            'rx': self.get_rx(),
-                            'ry': self.get_ry()})
+                            'border-radius-x': self.get_border_radius_x(),
+                            'border-radius-y': self.get_border_radius_y()})
 
 
 class EllipseShape(Shape2DBase):

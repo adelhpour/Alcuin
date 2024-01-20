@@ -27,7 +27,7 @@ public:
 public slots:
     void updateExtents(const QRectF& extents) override;
     
-    void updateCurvatureRadii(const qreal& radiusX, const qreal& radiusY);
+    void updateBorderRadii(const qreal& borderRadiusX, const qreal& borderRadiusY);
 };
 
 #endif

@@ -804,13 +804,13 @@ void MyArrowHeadEllipseDimensionalParameter::reset() {
     setDefaultValue(5.0);
 }
 
-// MyCornerCurvatureParameter
+// MyBorderRadiusParameter
 
-MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
+MyBorderRadiusParameter::MyBorderRadiusParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
     reset();
 }
 
-void MyCornerCurvatureParameter::reset() {
+void MyBorderRadiusParameter::reset() {
     setDefaultValue(0.0000);
     setMin(0.0);
     setMax(10000.0);
