@@ -67,6 +67,10 @@ QList<QGraphicsItem *> MyGraphicsScene::itemsAtPosition(const QPointF& position)
     return QGraphicsScene::items(position);
 }
 
+const QPointF MyGraphicsScene::cursorPosition() {
+    return _cursorPosition;
+}
+
 const bool MyGraphicsScene::isShiftModifierPressed() {
     return _isShiftModifierPressed;
 }
@@ -85,7 +89,7 @@ QMenu* MyGraphicsScene::createContextMenu() {
 void MyGraphicsScene::connectContextMenu(QMenu* contextMenu) {
     connect(contextMenu, SIGNAL(askForCopySelectedNetworkElements()), this, SIGNAL(askForCopySelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForCutSelectedNetworkElements()), this, SIGNAL(askForCutSelectedNetworkElements()));
-    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(_cursorPosition); });
+    connect((MyGraphicsSceneContextMenu*)contextMenu, &MyGraphicsSceneContextMenu::askForPasteCopiedNetworkElements, this, [this] () { emit askForPasteCopiedNetworkElements(); });
     connect(contextMenu, SIGNAL(askForDeleteSelectedNetworkElements()), this, SIGNAL(askForDeleteSelectedNetworkElements()));
     connect(contextMenu, SIGNAL(askForAlignSelectedNetworkElements(const QString&)), this, SIGNAL(askForAlignSelectedNetworkElements(const QString&)));
     connect(contextMenu, SIGNAL(askForWhetherSelectedElementsAreCopyable()), this, SIGNAL(askForWhetherSelectedElementsAreCopyable()));
@@ -172,7 +176,7 @@ void MyGraphicsScene::keyPressEvent(QKeyEvent *event) {
             else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_X)
                 emit askForCutSelectedNetworkElements();
             else if (event->modifiers() == Qt::ControlModifier && event->key() == Qt::Key_V)
-                emit askForPasteCopiedNetworkElements(_cursorPosition);
+                emit askForPasteCopiedNetworkElements();
             else if (event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace)
                 emit askForDeleteSelectedNetworkElements();
             else if (event->modifiers() == Qt::ControlModifier)

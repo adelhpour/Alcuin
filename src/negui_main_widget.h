@@ -63,7 +63,6 @@ public slots:
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
-    void pasteCopiedNetworkElements(const qreal& x, const qreal& y);
     void resetCopiedNetworkElements();
     const bool areSelectedElementsCopyable();
     const bool areSelectedElementsCuttable();

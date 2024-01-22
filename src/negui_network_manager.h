@@ -123,8 +123,6 @@ public:
 
     void cutSelectedNetworkElements();
 
-    void pasteCopiedNetworkElements();
-
     void pasteCopiedNetworkElements(const QPointF& position);
 
     const QList<MyNetworkElementBase*> getSelectedElements();

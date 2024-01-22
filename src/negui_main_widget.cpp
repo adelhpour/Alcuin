@@ -114,6 +114,9 @@ void MyMainWidget::setInteractions() {
     // items at position
     connect((MyInteractor*)interactor(), SIGNAL(askForItemsAtPosition(const QPointF&)), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(itemsAtPosition(const QPointF&)));
 
+    // cursor position
+    connect((MyInteractor*)interactor(), SIGNAL(askForCursorPosition()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(cursorPosition()));
+
     // activated shift modifier
     connect((MyInteractor*)interactor(), SIGNAL(askForWhetherShiftModifierIsPressed()), ((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), SLOT(isShiftModifierPressed()));
 
@@ -146,7 +149,7 @@ void MyMainWidget::setInteractions() {
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForWhetherAnyElementsAreAlignable, this, [this] () { return ((MyInteractor*)interactor())->areSelectedElementsAlignable(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCopySelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->copySelectedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForCutSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->cutSelectedNetworkElements(); });
-    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForPasteCopiedNetworkElements, this, [this] (const QPointF & position) { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
+    connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForPasteCopiedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->pasteCopiedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForDeleteSelectedNetworkElements, this, [this] () { ((MyInteractor*)interactor())->deleteSelectedNetworkElements(); });
     connect(((MyGraphicsScene*)((MyGraphicsView*)view())->scene()), &MyGraphicsScene::askForAlignSelectedNetworkElements, this, [this] (const QString& type)  { ((MyInteractor*)interactor())->alignSelectedNetworkElements(type); });
     connect((MyInteractor*)interactor(), SIGNAL(askForDisplaySceneContextMenu(const qreal&, const qreal&)), ((MyGraphicsView*)view())->scene(), SLOT(displayContextMenu(const qreal&, const qreal&)));
@@ -362,10 +365,6 @@ void MyMainWidget::copySelectedNetworkElements() {
 
 void MyMainWidget::pasteCopiedNetworkElements() {
     ((MyInteractor*)interactor())->pasteCopiedNetworkElements();
-}
-
-void MyMainWidget::pasteCopiedNetworkElements(const qreal& x, const qreal& y) {
-    ((MyInteractor*)interactor())->pasteCopiedNetworkElements(x, y);
 }
 
 void MyMainWidget::resetCopiedNetworkElements() {

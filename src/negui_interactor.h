@@ -51,6 +51,7 @@ signals:
     void askForDisplayFeatureMenu(QWidget*);
     QWidget* askForCurrentlyBeingDisplayedFeatureMenu();
     QList<QGraphicsItem *> askForItemsAtPosition(const QPointF& position);
+    const QPointF askForCursorPosition();
     void modeIsSet(const QString&);
     void currentFileNameIsUpdated(const QString&);
     void elementsCuttableStatusChanged(const bool&);
@@ -86,7 +87,6 @@ public slots:
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
-    void pasteCopiedNetworkElements(const qreal& x, const qreal& y);
     void resetCopiedNetworkElements();
     const bool areSelectedElementsCopyable();
     const bool areSelectedElementsCuttable();

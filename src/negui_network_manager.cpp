@@ -248,10 +248,6 @@ void MyNetworkManager::cutSelectedNetworkElements() {
     }
 }
 
-void MyNetworkManager::pasteCopiedNetworkElements() {
-    pasteCopiedNetworkElements(askForItemsBoundingRect().center());
-}
-
 void MyNetworkManager::pasteCopiedNetworkElements(const QPointF& position) {
     MyCopiedNetworkElementsPaster* copiedNetworkElementsPaster = new MyCopiedNetworkElementsPaster(copiedNetworkElements(), position);
     connect(copiedNetworkElementsPaster, &MyCopiedNetworkElementsPaster::askForAddNode, this, [this] (MyNetworkElementBase* node) { this->addNode(node); });
