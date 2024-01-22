@@ -501,19 +501,19 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadEllipseCxParameter : public MyPositionalParameter {
+class MyArrowHeadEllipseCenterXParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCxParameter();
+    MyArrowHeadEllipseCenterXParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyArrowHeadEllipseCyParameter : public MyPositionalParameter {
+class MyArrowHeadEllipseCenterYParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCyParameter();
+    MyArrowHeadEllipseCenterYParameter();
 
     // reset the values of the parameter
     void reset() override;

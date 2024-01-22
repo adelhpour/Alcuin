@@ -87,7 +87,8 @@ reaction_node_style2.set_parent_title("Compartment")
 reaction_node_style2.add_parent_category("Compartment")
 reaction_node_style2.set_name_title("Id")
 reaction_node_style2.set_is_name_editable(True)
-reaction_node_style2.add_shape(alcuin_plugin.EllipseShape(fill_color="white", border_color="black", border_width=2.0, cx=0.0, cy=0.0, rx=15.0, ry=15.0))
+reaction_node_style2.add_shape(alcuin_plugin.EllipseShape(fill_color="white", border_color="black", border_width=2.0,
+                                                          center_x=0.0, center_y=0.0, radius_x=15.0, radius_y=15.0))
 alcuin_plugin.add_plugin(reaction_node_style2)
 
 # species references
@@ -165,7 +166,8 @@ species_reference_edge_style4_arrow_head = alcuin_plugin.ArrowHeadStylePlugin("e
 species_reference_edge_style4_arrow_head.set_category("LineEnding")
 species_reference_edge_style4_arrow_head.set_name_title("Id")
 species_reference_edge_style4_arrow_head.set_is_name_editable(True)
-species_reference_edge_style4_arrow_head.add_shape(alcuin_plugin.EllipseShape(fill_color="white", border_color="lightblue", border_width=2.0, cx=-5.0, cy=0.0, rx=5.0, ry=5.0))
+species_reference_edge_style4_arrow_head.add_shape(alcuin_plugin.EllipseShape(fill_color="white", border_color="lightblue", border_width=2.0,
+                                                                              center_x=-5.0, center_y=0.0, radius_x=5.0, radius_y=5.0))
 species_reference_edge_style4.set_arrow_head_style(species_reference_edge_style4_arrow_head)
 alcuin_plugin.add_plugin(species_reference_edge_style4)
 
