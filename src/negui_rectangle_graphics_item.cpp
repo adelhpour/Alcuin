@@ -19,14 +19,14 @@ void MyRectangleGraphicsItem::updateStyle() {
         // position and dimensions
         QRectF rect(_originalPosition.x() + ((MyRectangleStyleBase*)style())->x(), _originalPosition.y() + ((MyRectangleStyleBase*)style())->y(), ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
         
-        // rx
-        qreal rx = ((MyRectangleStyleBase*)style())->rx();
+        // border-radius-x
+        qreal borderRadiusX = ((MyRectangleStyleBase*)style())->borderRadiusX();
         
-        // ry
-        qreal ry = ((MyRectangleStyleBase*)style())->ry();
+        // border-radius-y
+        qreal borderRadiusY = ((MyRectangleStyleBase*)style())->borderRadiusY();
         
         QPainterPath _path;
-        _path.addRoundedRect(rect, rx, ry);
+        _path.addRoundedRect(rect, borderRadiusX, borderRadiusY);
         QGraphicsPathItem::setPath(_path);
     }
 }
@@ -55,11 +55,11 @@ void MyRectangleGraphicsItem::updateExtents(const QRectF& extents) {
         // y
         ((MyRectangleStyleBase*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
         
-        // rx
-        ((MyRectangleStyleBase*)style())->setRx((extents.width()/ ((MyRectangleStyleBase*)style())->width()) * ((MyRectangleStyleBase*)style())->rx());
+        // border-radius-x
+        ((MyRectangleStyleBase*)style())->setBorderRadiusX((extents.width()/ ((MyRectangleStyleBase*)style())->width()) * ((MyRectangleStyleBase*)style())->borderRadiusX());
         
-        // ry
-        ((MyRectangleStyleBase*)style())->setRy((extents.height()/ ((MyRectangleStyleBase*)style())->height()) * ((MyRectangleStyleBase*)style())->ry());
+        // border-radius-y
+        ((MyRectangleStyleBase*)style())->setBorderRadiusY((extents.height()/ ((MyRectangleStyleBase*)style())->height()) * ((MyRectangleStyleBase*)style())->borderRadiusY());
         
         // width
         ((MyRectangleStyleBase*)style())->setWidth(extents.width());
@@ -75,13 +75,13 @@ QRectF MyRectangleGraphicsItem::getExtents() {
     return QRectF(((MyRectangleStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyRectangleStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
 }
 
-void MyRectangleGraphicsItem::updateCurvatureRadii(const qreal& radiusX, const qreal& radiusY) {
+void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, const qreal& borderRadiusY) {
     if (isSetStyle()) {
-        // rx
-        ((MyRectangleStyleBase*)style())->setRx(radiusX);
+        // border-radius-x
+        ((MyRectangleStyleBase*)style())->setBorderRadiusX(borderRadiusX);
         
-        // ry
-        ((MyRectangleStyleBase*)style())->setRy(radiusY);
+        // border-radius-y
+        ((MyRectangleStyleBase*)style())->setBorderRadiusY(borderRadiusY);
     }
     
     updateStyle();
@@ -95,9 +95,9 @@ void MyRectangleGraphicsItem::adjustOriginalPosition(const QPointF& originalPosi
 
 QGraphicsItem* MyRectangleGraphicsItem::getFocusedGraphicsItem() {
     QRectF focusedRect = getExtents();
-    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyRoundedRectangleResizeHandledGraphicsItem(focusedRect, ((MyRectangleStyleBase*)style())->rx(), ((MyRectangleStyleBase*)style())->ry(), zValue());
+    MyResizeHandledGraphicsItemBase* focusedGraphicsItem = new MyRoundedRectangleResizeHandledGraphicsItem(focusedRect, ((MyRectangleStyleBase*)style())->borderRadiusX(), ((MyRectangleStyleBase*)style())->borderRadiusY(), zValue());
     connect(focusedGraphicsItem, SIGNAL(rectIsUpdated(const QRectF&)), this, SLOT(updateExtents(const QRectF&)));
-    connect(focusedGraphicsItem, SIGNAL(curvatureRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateCurvatureRadii(const qreal&, const qreal&)));
+    connect(focusedGraphicsItem, SIGNAL(borderRadiiAreUpdated(const qreal&, const qreal&)), this, SLOT(updateBorderRadii(const qreal&, const qreal&)));
 
     return focusedGraphicsItem;
 }

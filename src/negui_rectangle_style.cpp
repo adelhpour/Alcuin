@@ -99,30 +99,30 @@ const qreal MyRectangleStyleBase::height() const {
     return 0.000;
 }
 
-void MyRectangleStyleBase::setRx(const qreal& rx) const {
-    MyParameterBase* parameter = findParameter("rx");
+void MyRectangleStyleBase::setBorderRadiusX(const qreal& borderRadiusX) const {
+    MyParameterBase* parameter = findParameter("border-radius-x");
     if (parameter)
-        return ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(rx);
+        return ((MyBorderRadiusParameter*)parameter)->setDefaultValue(borderRadiusX);
 }
 
-const qreal MyRectangleStyleBase::rx() const {
-    MyParameterBase* parameter = findParameter("rx");
+const qreal MyRectangleStyleBase::borderRadiusX() const {
+    MyParameterBase* parameter = findParameter("border-radius-x");
     if (parameter)
-        return ((MyCornerCurvatureParameter*)parameter)->defaultValue();
+        return ((MyBorderRadiusParameter*)parameter)->defaultValue();
     
     return 0.000;
 }
 
-void MyRectangleStyleBase::setRy(const qreal& ry) const {
-    MyParameterBase* parameter = findParameter("ry");
+void MyRectangleStyleBase::setBorderRadiusY(const qreal& borderRadiusY) const {
+    MyParameterBase* parameter = findParameter("border-radius-y");
     if (parameter)
-        return ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(ry);
+        return ((MyBorderRadiusParameter*)parameter)->setDefaultValue(borderRadiusY);
 }
 
-const qreal MyRectangleStyleBase::ry() const {
-    MyParameterBase* parameter = findParameter("ry");
+const qreal MyRectangleStyleBase::borderRadiusY() const {
+    MyParameterBase* parameter = findParameter("border-radius-y");
     if (parameter)
-        return ((MyCornerCurvatureParameter*)parameter)->defaultValue();
+        return ((MyBorderRadiusParameter*)parameter)->defaultValue();
     
     return 0.000;
 }
@@ -159,18 +159,18 @@ void MyRectangleStyleBase::read(const QJsonObject &json) {
             ((MyDimensionalParameter*)parameter)->setDefaultValue(json["height"].toDouble());
     }
     
-    // rx
-    if (json.contains("rx") && json["rx"].isDouble()) {
-        parameter = findParameter("rx");
+    // border-radius-x
+    if (json.contains("border-radius-x") && json["border-radius-x"].isDouble()) {
+        parameter = findParameter("border-radius-x");
         if (parameter)
-            ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(json["rx"].toDouble());
+            ((MyBorderRadiusParameter*)parameter)->setDefaultValue(json["border-radius-x"].toDouble());
     }
     
-    // ry
-    if (json.contains("ry") && json["ry"].isDouble()) {
-        parameter = findParameter("ry");
+    // border-radius-y
+    if (json.contains("border-radius-y") && json["border-radius-y"].isDouble()) {
+        parameter = findParameter("border-radius-y");
         if (parameter)
-            ((MyCornerCurvatureParameter*)parameter)->setDefaultValue(json["ry"].toDouble());
+            ((MyBorderRadiusParameter*)parameter)->setDefaultValue(json["border-radius-y"].toDouble());
     }
 }
 
@@ -198,25 +198,25 @@ void MyRectangleStyleBase::write(QJsonObject &json) {
     if (parameter)
         json["height"] = ((MyDimensionalParameter*)parameter)->defaultValue();
     
-    // rx
-    parameter = findParameter("rx");
+    // border-radius-x
+    parameter = findParameter("border-radius-x");
     if (parameter)
-        json["rx"] = ((MyCornerCurvatureParameter*)parameter)->defaultValue();
+        json["border-radius-x"] = ((MyBorderRadiusParameter*)parameter)->defaultValue();
     
-    // ry
-    parameter = findParameter("ry");
+    // border-radius-y
+    parameter = findParameter("border-radius-y");
     if (parameter)
-        json["ry"] = ((MyCornerCurvatureParameter*)parameter)->defaultValue();
+        json["border-radius-y"] = ((MyBorderRadiusParameter*)parameter)->defaultValue();
 }
 
 // MyNodeRectangleStyle
 
 MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleStyleBase(name) {
     // x
-    addParameter(new MyNodeRectanglePositionalParameter("x", "Relative \"X\" value of rectangle bounding box"));
+    addHiddenParameter(new MyNodeRectanglePositionalParameter("x", "Relative \"X\" value of rectangle bounding box"));
     
     // y
-    addParameter(new MyNodeRectanglePositionalParameter("y", "Relative \"Y\" value of rectangle bounding box"));
+    addHiddenParameter(new MyNodeRectanglePositionalParameter("y", "Relative \"Y\" value of rectangle bounding box"));
     
     // width
     addParameter(new MyNodeRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
@@ -224,11 +224,11 @@ MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleSty
     // height
     addParameter(new MyNodeRectangleDimensionalParameter("height", "\"Height\" value of rectangle bounding box"));
 
-    // rx
-    addParameter(new MyCornerCurvatureParameter("rx", "Radius of rectangle corner curvature along x-axis"));
+    // border-radius-x
+    addParameter(new MyBorderRadiusParameter("border-radius-x", "Border radius along x-axis"));
 
-    // ry
-    addParameter(new MyCornerCurvatureParameter("ry", "Radius of rectangle corner curvature along y-axis"));
+    // border-radius-y
+    addParameter(new MyBorderRadiusParameter("border-radius-y", "Border radius along y-axis"));
     
     reset();
 }
@@ -237,10 +237,10 @@ MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleSty
 
 MyArrowHeadRectangleStyle::MyArrowHeadRectangleStyle(const QString& name) : MyRectangleStyleBase(name) {
     // x
-    addParameter(new MyArrowHeadRectangleXParameter());
+    addHiddenParameter(new MyArrowHeadRectangleXParameter());
     
     // y
-    addParameter(new MyArrowHeadRectangleYParameter());
+    addHiddenParameter(new MyArrowHeadRectangleYParameter());
     
     // width
     addParameter(new MyArrowHeadRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
@@ -248,11 +248,11 @@ MyArrowHeadRectangleStyle::MyArrowHeadRectangleStyle(const QString& name) : MyRe
     // height
     addParameter(new MyArrowHeadRectangleDimensionalParameter("height", "\"Height\" value of rectangle bounding box"));
 
-    // rx
-    addParameter(new MyCornerCurvatureParameter("rx", "Radius of rectangle corner curvature along x-axis"));
+    // border-radius-x
+    addParameter(new MyBorderRadiusParameter("border-radius-x", "Border radius along x-axis"));
 
-    // ry
-    addParameter(new MyCornerCurvatureParameter("ry", "Radius of rectangle corner curvature along y-axis"));
+    // border-radius-y
+    addParameter(new MyBorderRadiusParameter("border-radius-y", "Border radius along y-axis"));
     
     reset();
 }

@@ -992,7 +992,8 @@ class Shape2DBase(Shape1DBase):
 
 
 class RectangleShape(Shape2DBase):
-    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, x=0.0, y=0.0, width=20.0, height=20.0, rx=0.0, ry=0.0):
+    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, x=0.0, y=0.0, width=20.0,
+                 height=20.0, border_radius_x=0.0, border_radius_y=0.0):
         super().__init__("rectangle", fill_color, border_color, border_width)
         self._check_x(x)
         self.x = x
@@ -1002,10 +1003,10 @@ class RectangleShape(Shape2DBase):
         self.width = width
         self._check_height(height)
         self.height = height
-        self._check_rx(rx)
-        self.rx = rx
-        self._check_ry(ry)
-        self.ry = ry
+        self._check_border_radius_x(border_radius_x)
+        self.border_radius_x = border_radius_x
+        self._check_border_radius_y(border_radius_y)
+        self.border_radius_y = border_radius_y
 
     def get_x(self):
         return self.x
@@ -1035,19 +1036,19 @@ class RectangleShape(Shape2DBase):
         self._check_height(height)
         self.height = height
 
-    def get_rx(self):
-        return self.rx
+    def get_border_radius_x(self):
+        return self.border_radius_x
 
-    def set_rx(self, rx):
-        self._check_rx(rx)
-        self.rx = rx
+    def set_border_radius_x(self, border_radius_x):
+        self._check_border_radius_x(border_radius_x)
+        self.border_radius_x = border_radius_x
 
-    def get_ry(self):
-        return self.ry
+    def get_border_radius_y(self):
+        return self.border_radius_y
 
-    def set_ry(self, ry):
-        self._check_ry(ry)
-        self.ry = ry
+    def set_border_radius_y(self, border_radius_y):
+        self._check_border_radius_y(border_radius_y)
+        self.border_radius_y = border_radius_y
 
     @staticmethod
     def _check_x(x):
@@ -1074,18 +1075,18 @@ class RectangleShape(Shape2DBase):
             raise ValueError("height must be greater than or equal to 0.0")
 
     @staticmethod
-    def _check_rx(rx):
-        if not isinstance(rx, (float, int)):
-            raise TypeError("rx must be a float or integer")
-        if rx < 0.0:
-            raise ValueError("rx must be greater than or equal to 0.0")
+    def _check_border_radius_x(border_radius_x):
+        if not isinstance(border_radius_x, (float, int)):
+            raise TypeError("border radius x must be a float or integer")
+        if border_radius_x < 0.0:
+            raise ValueError("border radius x must be greater than or equal to 0.0")
 
     @staticmethod
-    def _check_ry(ry):
-        if not isinstance(ry, (float, int)):
-            raise TypeError("ry must be a float or integer")
-        if ry < 0.0:
-            raise ValueError("ry must be greater than or equal to 0.0")
+    def _check_border_radius_y(border_radius_y):
+        if not isinstance(border_radius_y, (float, int)):
+            raise TypeError("border radius y must be a float or integer")
+        if border_radius_y < 0.0:
+            raise ValueError("border radius y must be greater than or equal to 0.0")
 
     def __str__(self):
         return json.dumps({'shape': self.get_name(),
@@ -1096,83 +1097,84 @@ class RectangleShape(Shape2DBase):
                             'y': self.get_y(),
                             'width': self.get_width(),
                             'height': self.get_height(),
-                            'rx': self.get_rx(),
-                            'ry': self.get_ry()})
+                            'border-radius-x': self.get_border_radius_x(),
+                            'border-radius-y': self.get_border_radius_y()})
 
 
 class EllipseShape(Shape2DBase):
-    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, cx=0.0, cy=0.0, rx=20.0, ry=20.0):
+    def __init__(self, fill_color="transparent", border_color="black", border_width=2.0, center_x=0.0, center_y=0.0,
+                 radius_x=20.0, radius_y=20.0):
         super().__init__("ellipse", fill_color, border_color, border_width)
-        self._check_cx(cx)
-        self.cx = cx
-        self._check_cy(cy)
-        self.cy = cy
-        self._check_rx(rx)
-        self.rx = rx
-        self._check_ry(ry)
-        self.ry = ry
+        self._check_center_x(center_x)
+        self.center_x = center_x
+        self._check_center_y(center_y)
+        self.center_y = center_y
+        self._check_radius_x(radius_x)
+        self.radius_x = radius_x
+        self._check_radius_y(radius_y)
+        self.radius_y = radius_y
 
-    def get_cx(self):
-        return self.cx
+    def get_center_x(self):
+        return self.center_x
 
-    def set_cx(self, cx):
-        self._check_cx(cx)
-        self.cx = cx
+    def set_center_x(self, center_x):
+        self._check_center_x(center_x)
+        self.center_x = center_x
 
-    def get_cy(self):
-        return self.cy
+    def get_center_y(self):
+        return self.center_y
 
-    def set_cy(self, cy):
-        self._check_cy(cy)
-        self.cy = cy
+    def set_center_y(self, center_y):
+        self._check_center_y(center_y)
+        self.center_y = center_y
 
-    def get_rx(self):
-        return self.rx
+    def get_radius_x(self):
+        return self.radius_x
 
-    def set_rx(self, rx):
-        self._check_rx(rx)
-        self.rx = rx
+    def set_radius_x(self, radius_x):
+        self._check_radius_x(radius_x)
+        self.radius_x = radius_x
 
-    def get_ry(self):
-        return self.ry
+    def get_radius_y(self):
+        return self.radius_y
 
-    def set_ry(self, ry):
-        self._check_ry(ry)
-        self.ry = ry
-
-    @staticmethod
-    def _check_cx(cx):
-        if not isinstance(cx, (float, int)):
-            raise TypeError("cx must be a float or integer")
+    def set_radius_y(self, radius_y):
+        self._check_radius_y(radius_y)
+        self.radius_y = radius_y
 
     @staticmethod
-    def _check_cy(cy):
-        if not isinstance(cy, (float, int)):
-            raise TypeError("cy must be a float or integer")
+    def _check_center_x(center_x):
+        if not isinstance(center_x, (float, int)):
+            raise TypeError("center_x must be a float or integer")
 
     @staticmethod
-    def _check_rx(rx):
-        if not isinstance(rx, (float, int)):
-            raise TypeError("rx must be a float or integer")
-        if rx < 0.0:
-            raise ValueError("rx must be greater than or equal to 0.0")
+    def _check_center_y(center_y):
+        if not isinstance(center_y, (float, int)):
+            raise TypeError("center_y must be a float or integer")
 
     @staticmethod
-    def _check_ry(ry):
-        if not isinstance(ry, (float, int)):
-            raise TypeError("ry must be a float or integer")
-        if ry < 0.0:
-            raise ValueError("ry must be greater than or equal to 0.0")
+    def _check_radius_x(radius_x):
+        if not isinstance(radius_x, (float, int)):
+            raise TypeError("radius_x must be a float or integer")
+        if radius_x < 0.0:
+            raise ValueError("radius_x must be greater than or equal to 0.0")
+
+    @staticmethod
+    def _check_radius_y(radius_y):
+        if not isinstance(radius_y, (float, int)):
+            raise TypeError("radius_y must be a float or integer")
+        if radius_y < 0.0:
+            raise ValueError("radius_y must be greater than or equal to 0.0")
 
     def __str__(self):
         return json.dumps({'shape': self.get_name(),
                             'fill-color': self.get_fill_color(),
                             'border-color': self.get_border_color(),
                             'border-width': self.get_border_width(),
-                            'cx': self.get_cx(),
-                            'cy': self.get_cy(),
-                            'rx': self.get_rx(),
-                            'ry': self.get_ry()})
+                            'center-x': self.get_center_x(),
+                            'center-y': self.get_center_y(),
+                            'radius-x': self.get_radius_x(),
+                            'radius-y': self.get_radius_y()})
 
 
 class PolygonShape(Shape2DBase):

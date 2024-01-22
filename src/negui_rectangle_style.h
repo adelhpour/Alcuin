@@ -38,17 +38,17 @@ public:
     // get the value of height
     const qreal height() const;
 
-    // set the x value of corner radius
-    void setRx(const qreal& rx) const;
+    // set the x value of border radius
+    void setBorderRadiusX(const qreal& borderRadiusX) const;
 
-    // get the x value of corner radius
-    const qreal rx() const;
+    // get the x value of border radius
+    const qreal borderRadiusX() const;
 
-    // set the y value of corner radius
-    void setRy(const qreal& ry) const;
+    // set the y value of border radius
+    void setBorderRadiusY(const qreal& borderRadiusY) const;
 
-    // get the y value of corner radius
-    const qreal ry() const;
+    // get the y value of border radius
+    const qreal borderRadiusY() const;
 
     // read the node style info from the json object
     void read(const QJsonObject &json) override;

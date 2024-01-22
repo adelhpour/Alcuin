@@ -501,19 +501,19 @@ public:
     void reset() override;
 };
 
-class MyArrowHeadEllipseCxParameter : public MyPositionalParameter {
+class MyArrowHeadEllipseCenterXParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCxParameter();
+    MyArrowHeadEllipseCenterXParameter();
 
     // reset the values of the parameter
     void reset() override;
 };
 
-class MyArrowHeadEllipseCyParameter : public MyPositionalParameter {
+class MyArrowHeadEllipseCenterYParameter : public MyPositionalParameter {
 public:
 
-    MyArrowHeadEllipseCyParameter();
+    MyArrowHeadEllipseCenterYParameter();
 
     // reset the values of the parameter
     void reset() override;
@@ -582,10 +582,10 @@ public:
     void reset() override;
 };
 
-class MyCornerCurvatureParameter : public MyDoubleParameter {
+class MyBorderRadiusParameter : public MyDoubleParameter {
 public:
 
-    MyCornerCurvatureParameter(const QString& name, const QString& hint = "");
+    MyBorderRadiusParameter(const QString& name, const QString& hint = "");
 
     // reset the values of the parameter
     void reset() override;

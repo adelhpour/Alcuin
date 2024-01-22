@@ -16,7 +16,9 @@ void MyEllipseGraphicsItem::updateStyle() {
         setBrush(((MyEllipseStyleBase*)style())->brush());
         
         // position and dimensions
-        setRect(_originalPosition.x() + ((MyEllipseStyleBase*)style())->cx() - ((MyEllipseStyleBase*)style())->rx(), _originalPosition.y() + ((MyEllipseStyleBase*)style())->cy() - ((MyEllipseStyleBase*)style())->ry(), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
+        setRect(_originalPosition.x() + ((MyEllipseStyleBase*)style())->centerX() - ((MyEllipseStyleBase*)style())->radiusX(),
+                _originalPosition.y() + ((MyEllipseStyleBase*)style())->centerY() - ((MyEllipseStyleBase*)style())->radiusY(),
+                2 * ((MyEllipseStyleBase*)style())->radiusX(), 2 * ((MyEllipseStyleBase*)style())->radiusY());
     }
 }
 
@@ -38,29 +40,31 @@ void MyEllipseGraphicsItem::setSelectedWithFillColor(const bool& selected) {
 
 void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
-        // cx
-        ((MyEllipseStyleBase*)style())->setCx(0.5 * extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
+        // center-x
+        ((MyEllipseStyleBase*)style())->setCenterX(0.5 * extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
         
-        // cy
-        ((MyEllipseStyleBase*)style())->setCy(0.5 * extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
+        // center-y
+        ((MyEllipseStyleBase*)style())->setCenterY(0.5 * extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
         
-        // rx
-        ((MyEllipseStyleBase*)style())->setRx(0.5 * extents.width());
+        // radius-x
+        ((MyEllipseStyleBase*)style())->setRadiusX(0.5 * extents.width());
         
-        // ry
-        ((MyEllipseStyleBase*)style())->setRy(0.5 * extents.height());
+        // radius-y
+        ((MyEllipseStyleBase*)style())->setRadiusY(0.5 * extents.height());
     }
     
     updateStyle();
 }
 
 QRectF MyEllipseGraphicsItem::getExtents() {
-    return QRectF(((MyEllipseStyleBase*)style())->cx() - ((MyEllipseStyleBase*)style())->rx() + (movedDistance().x() + _originalPosition.x()), ((MyEllipseStyleBase*)style())->cy() - ((MyEllipseStyleBase*)style())->ry() + (movedDistance().y() + _originalPosition.y()), 2 * ((MyEllipseStyleBase*)style())->rx(), 2 * ((MyEllipseStyleBase*)style())->ry());
+    return QRectF(((MyEllipseStyleBase*)style())->centerX() - ((MyEllipseStyleBase*)style())->radiusX() + (movedDistance().x() + _originalPosition.x()),
+                  ((MyEllipseStyleBase*)style())->centerY() - ((MyEllipseStyleBase*)style())->radiusY() + (movedDistance().y() + _originalPosition.y()),
+                  2 * ((MyEllipseStyleBase*)style())->radiusX(), 2 * ((MyEllipseStyleBase*)style())->radiusY());
 }
 
 void MyEllipseGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyEllipseStyleBase*)style())->setCx(((MyEllipseStyleBase*)style())->cx() - originalPositionMovedDistance.x());
-    ((MyEllipseStyleBase*)style())->setCy(((MyEllipseStyleBase*)style())->cy() - originalPositionMovedDistance.y());
+    ((MyEllipseStyleBase*)style())->setCenterX(((MyEllipseStyleBase*)style())->centerX() - originalPositionMovedDistance.x());
+    ((MyEllipseStyleBase*)style())->setCenterY(((MyEllipseStyleBase*)style())->centerY() - originalPositionMovedDistance.y());
     _originalPosition += originalPositionMovedDistance;
 }
 

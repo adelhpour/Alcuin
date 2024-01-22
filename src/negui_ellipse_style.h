@@ -14,29 +14,29 @@ public:
 
     const QRectF getShapeExtents() override;
 
-    // set the cx value of center position
-    void setCx(const qreal& cx) const;
+    // set the x value of center position
+    void setCenterX(const qreal& centerX) const;
 
     // get the x value of center position
-    const qreal cx() const;
+    const qreal centerX() const;
 
-    // set the cy value of center position
-    void setCy(const qreal& cy) const;
+    // set the y value of center position
+    void setCenterY(const qreal& centerY) const;
 
     // get the y value of center position
-    const qreal cy() const;
+    const qreal centerY() const;
 
     // set the value of horizontal radius
-    void setRx(const qreal& rx) const;
+    void setRadiusX(const qreal& radiusX) const;
 
     // get the value of horizontal radius
-    const qreal rx() const;
+    const qreal radiusX() const;
 
     // set the value of vertical radius
-    void setRy(const qreal& rx) const;
+    void setRadiusY(const qreal& radiusY) const;
 
     // get the value of vertical radius
-    const qreal ry() const;
+    const qreal radiusY() const;
 
     // read the node style info from the json object
     void read(const QJsonObject &json) override;

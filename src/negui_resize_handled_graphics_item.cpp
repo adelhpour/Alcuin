@@ -114,21 +114,21 @@ MyRoundedRectangleResizeHandledGraphicsItem::MyRoundedRectangleResizeHandledGrap
 
 void MyRoundedRectangleResizeHandledGraphicsItem::createResizeHandledItems(const QRectF &rect, qreal radiusX, qreal radiusY) {
     MyResizeHandledGraphicsItemBase::createResizeHandledItems(rect);
-    createCurvatureRadiusXControlHandle(rect, radiusX);
-    createCurvatureRadiusYControlHandle(rect, radiusY);
+    createBorderRadiusXControlHandle(rect, radiusX);
+    createBorderRadiusYControlHandle(rect, radiusY);
 }
 
-void MyRoundedRectangleResizeHandledGraphicsItem::createCurvatureRadiusXControlHandle(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase* handleItem = new MyCurvatureRadiusXControlHandleGraphicsItem(rect, radius);
+void MyRoundedRectangleResizeHandledGraphicsItem::createBorderRadiusXControlHandle(const QRectF &rect, qreal radius) {
+    MyBorderRadiusControlHandleGraphicsItemBase* handleItem = new MyBorderRadiusXControlHandleGraphicsItem(rect, radius);
     connect(handleItem, SIGNAL(handlePositionUpdated(const qreal&)), this, SLOT(updateRectUsingRadiusXHandlePosition(const qreal&)));
-    _curvatureRadiusXHandleItem = handleItem;
+    _borderRadiusXHandleItem = handleItem;
     addToGroup(handleItem);
 }
 
-void MyRoundedRectangleResizeHandledGraphicsItem::createCurvatureRadiusYControlHandle(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase* handleItem = new MyCurvatureRadiusYControlHandleGraphicsItem(rect, radius);
+void MyRoundedRectangleResizeHandledGraphicsItem::createBorderRadiusYControlHandle(const QRectF &rect, qreal radius) {
+    MyBorderRadiusControlHandleGraphicsItemBase* handleItem = new MyBorderRadiusYControlHandleGraphicsItem(rect, radius);
     connect(handleItem, SIGNAL(handlePositionUpdated(const qreal&)), this, SLOT(updateRectUsingRadiusYHandlePosition(const qreal&)));
-    _curvatureRadiusYHandleItem = handleItem;
+    _borderRadiusYHandleItem = handleItem;
     addToGroup(handleItem);
 }
 
@@ -141,19 +141,19 @@ void MyRoundedRectangleResizeHandledGraphicsItem::updateRectUsingOffsetRect(cons
 void MyRoundedRectangleResizeHandledGraphicsItem::updateRectUsingRadiusXHandlePosition(const qreal& radiusX) {
     _radiusX = radiusX;
     updateHandleItemsPositions();
-    emit curvatureRadiiAreUpdated(_radiusX, _radiusY);
+    emit borderRadiiAreUpdated(_radiusX, _radiusY);
 }
 
 void MyRoundedRectangleResizeHandledGraphicsItem::updateRectUsingRadiusYHandlePosition(const qreal& radiusY) {
     _radiusY = radiusY;
     updateHandleItemsPositions();
-    emit curvatureRadiiAreUpdated(_radiusX, _radiusY);
+    emit borderRadiiAreUpdated(_radiusX, _radiusY);
 }
 
 void MyRoundedRectangleResizeHandledGraphicsItem::updateHandleItemsPositions() {
     MyResizeHandledGraphicsItemBase::updateHandleItemsPositions();
-    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusXHandleItem)->updatePosition(_resizeRect->rect(), _radiusX);
-    ((MyCurvatureRadiusControlHandleGraphicsItemBase*)_curvatureRadiusYHandleItem)->updatePosition(_resizeRect->rect(), _radiusY);
+    ((MyBorderRadiusControlHandleGraphicsItemBase*)_borderRadiusXHandleItem)->updatePosition(_resizeRect->rect(), _radiusX);
+    ((MyBorderRadiusControlHandleGraphicsItemBase*)_borderRadiusYHandleItem)->updatePosition(_resizeRect->rect(), _radiusY);
 }
 
 // MyHandleGraphicsItemBase
@@ -389,9 +389,9 @@ void MyBottomLeftResizeHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEve
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-// MyCurvatureRadiusControlHandleGraphicsItemBase
+// MyBorderRadiusControlHandleGraphicsItemBase
 
-MyCurvatureRadiusControlHandleGraphicsItemBase::MyCurvatureRadiusControlHandleGraphicsItemBase(QGraphicsItem *parent) : MyHandleGraphicsItemBase(parent) {
+MyBorderRadiusControlHandleGraphicsItemBase::MyBorderRadiusControlHandleGraphicsItemBase(QGraphicsItem *parent) : MyHandleGraphicsItemBase(parent) {
     QPen pen;
     pen.setWidth(1.0);
     pen.setColor(QColor("#DAA520"));
@@ -403,39 +403,39 @@ MyCurvatureRadiusControlHandleGraphicsItemBase::MyCurvatureRadiusControlHandleGr
     setBrush(brush);
 }
 
-void MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(const QRectF &rect, qreal radius) {
+void MyBorderRadiusControlHandleGraphicsItemBase::updatePosition(const QRectF &rect, qreal radius) {
     MyHandleGraphicsItemBase::updatePosition(rect);
     _radius = radius;
 }
 
-// MyCurvatureRadiusXControlHandleGraphicsItem
+// MyBorderRadiusXControlHandleGraphicsItem
 
-MyCurvatureRadiusXControlHandleGraphicsItem::MyCurvatureRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyCurvatureRadiusControlHandleGraphicsItemBase(parent) {
+MyBorderRadiusXControlHandleGraphicsItem::MyBorderRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyBorderRadiusControlHandleGraphicsItemBase(parent) {
     updatePosition(rect, radius);
 }
 
-void MyCurvatureRadiusXControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
+void MyBorderRadiusXControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
+    MyBorderRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
     MyHandleGraphicsItemBase::updatePosition(rect.topLeft() + QPointF(qMin(radius, 0.5 * rect.width()), 0.0));
 }
 
-void MyCurvatureRadiusXControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+void MyBorderRadiusXControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     emit handlePositionUpdated(qMax(qMin((event->scenePos().x() - _rect.x()), 0.5 * _rect.width()), 0.0));
     QGraphicsItem::mouseMoveEvent(event);
 }
 
-// MyCurvatureRadiusYControlHandleGraphicsItem
+// MyBorderRadiusYControlHandleGraphicsItem
 
-MyCurvatureRadiusYControlHandleGraphicsItem::MyCurvatureRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyCurvatureRadiusControlHandleGraphicsItemBase(parent) {
+MyBorderRadiusYControlHandleGraphicsItem::MyBorderRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent) : MyBorderRadiusControlHandleGraphicsItemBase(parent) {
     updatePosition(rect, radius);
 }
 
-void MyCurvatureRadiusYControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
-    MyCurvatureRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
+void MyBorderRadiusYControlHandleGraphicsItem::updatePosition(const QRectF &rect, qreal radius) {
+    MyBorderRadiusControlHandleGraphicsItemBase::updatePosition(rect, radius);
     MyHandleGraphicsItemBase::updatePosition(rect.topLeft() + QPointF(0.0, qMin(radius, 0.5 * rect.height())));
 }
 
-void MyCurvatureRadiusYControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+void MyBorderRadiusYControlHandleGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
     emit handlePositionUpdated(qMax(qMin((event->scenePos().y() - _rect.y()), 0.5 * _rect.height()), 0.0));
     QGraphicsItem::mouseMoveEvent(event);
 }

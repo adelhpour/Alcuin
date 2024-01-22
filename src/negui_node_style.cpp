@@ -148,6 +148,7 @@ QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
 }
 
 void MySimpleClassicNodeStyle::replaceShapeStyle(MyShapeStyleBase* shapeStyle) {
+    shapeStyle->updateShapeExtents(shapeStyles().first()->getShapeExtents());
     _shapeStyles.removeFirst();
     _shapeStyles.push_front(shapeStyle);
 }

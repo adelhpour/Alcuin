@@ -701,24 +701,24 @@ void MyArrowHeadRectangleYParameter::reset() {
     setDefaultValue(-3.725);
 }
 
-// MyArrowHeadEllipseCxParameter
+// MyArrowHeadEllipseCenterXParameter
 
-MyArrowHeadEllipseCxParameter::MyArrowHeadEllipseCxParameter() : MyPositionalParameter("cx", "Relative center of ellipse along x-axis") {
+MyArrowHeadEllipseCenterXParameter::MyArrowHeadEllipseCenterXParameter() : MyPositionalParameter("center-x", "Relative center of ellipse along x-axis") {
     reset();
 }
 
-void MyArrowHeadEllipseCxParameter::reset() {
+void MyArrowHeadEllipseCenterXParameter::reset() {
     MyPositionalParameter::reset();
     setDefaultValue(-5.0);
 }
 
-// MyArrowHeadEllipseCyParameter
+// MyArrowHeadEllipseCenterYParameter
 
-MyArrowHeadEllipseCyParameter::MyArrowHeadEllipseCyParameter() : MyPositionalParameter("cy", "Relative center of ellipse along y-axis") {
+MyArrowHeadEllipseCenterYParameter::MyArrowHeadEllipseCenterYParameter() : MyPositionalParameter("center-y", "Relative center of ellipse along y-axis") {
     reset();
 }
 
-void MyArrowHeadEllipseCyParameter::reset() {
+void MyArrowHeadEllipseCenterYParameter::reset() {
     MyPositionalParameter::reset();
     setDefaultValue(0.0);
 }
@@ -804,13 +804,13 @@ void MyArrowHeadEllipseDimensionalParameter::reset() {
     setDefaultValue(5.0);
 }
 
-// MyCornerCurvatureParameter
+// MyBorderRadiusParameter
 
-MyCornerCurvatureParameter::MyCornerCurvatureParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
+MyBorderRadiusParameter::MyBorderRadiusParameter(const QString& name, const QString& hint) : MyDoubleParameter(name, hint) {
     reset();
 }
 
-void MyCornerCurvatureParameter::reset() {
+void MyBorderRadiusParameter::reset() {
     setDefaultValue(0.0000);
     setMin(0.0);
     setMax(10000.0);

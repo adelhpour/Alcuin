@@ -73,7 +73,7 @@ MyShapeStyleBase* getCopyNodeShapeStyle(MyShapeStyleBase* shapeStyle) {
     else if (shapeStyle->type() == MyShapeStyleBase::RECTANGLE_SHAPE_STYLE)
         return createNodeRectangleStyle("rectangle");
     else if (shapeStyle->type() == MyShapeStyleBase::POLYGON_SHAPE_STYLE)
-        return createNodeRectangleStyle("polygon");
+        return createNodeDefaultPolygonStyle("polygon");
 
     return NULL;
 }

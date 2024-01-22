@@ -24,75 +24,75 @@ const QRectF MyEllipseStyleBase::getShapeExtents() {
     QRectF extents;
     extents.setX(INT_MAX);
     extents.setY(INT_MAX);
-    if (cx() - rx() < extents.x())
-        extents.setX(cx() - rx());
-    if (cy() - ry() < extents.y())
-        extents.setY(cy() - ry());
-    if (2 * rx() > extents.width())
-        extents.setWidth(2 * rx());
-    if (2 * ry() > extents.height())
-        extents.setHeight(2 * ry());
+    if (centerX() - radiusX() < extents.x())
+        extents.setX(centerX() - radiusX());
+    if (centerY() - radiusY() < extents.y())
+        extents.setY(centerY() - radiusY());
+    if (2 * radiusX() > extents.width())
+        extents.setWidth(2 * radiusX());
+    if (2 * radiusY() > extents.height())
+        extents.setHeight(2 * radiusY());
     
     return extents;
 }
 
 void MyEllipseStyleBase::updateShapeExtents(const QRectF& extents) {
-    setCx(extents.center().x());
-    setCy(extents.center().y());
-    setRx(0.5 * extents.width());
-    setRy(0.5 * extents.height());
+    setCenterX(extents.center().x());
+    setCenterY(extents.center().y());
+    setRadiusX(0.5 * extents.width());
+    setRadiusY(0.5 * extents.height());
 }
 
-void MyEllipseStyleBase::setCx(const qreal& cx) const {
-    MyParameterBase* parameter = findParameter("cx");
+void MyEllipseStyleBase::setCenterX(const qreal& centerX) const {
+    MyParameterBase* parameter = findParameter("center-x");
     if (parameter)
-        return ((MyPositionalParameter*)parameter)->setDefaultValue(cx);
+        return ((MyPositionalParameter*)parameter)->setDefaultValue(centerX);
 }
 
-const qreal MyEllipseStyleBase::cx() const {
-    MyParameterBase* parameter = findParameter("cx");
-    if (parameter)
-        return ((MyPositionalParameter*)parameter)->defaultValue();
-    
-    return 0.000;
-}
-
-void MyEllipseStyleBase::setCy(const qreal& cy) const {
-    MyParameterBase* parameter = findParameter("cy");
-    if (parameter)
-        return ((MyPositionalParameter*)parameter)->setDefaultValue(cy);
-}
-
-const qreal MyEllipseStyleBase::cy() const {
-    MyParameterBase* parameter = findParameter("cy");
+const qreal MyEllipseStyleBase::centerX() const {
+    MyParameterBase* parameter = findParameter("center-x");
     if (parameter)
         return ((MyPositionalParameter*)parameter)->defaultValue();
     
     return 0.000;
 }
 
-void MyEllipseStyleBase::setRx(const qreal& rx) const {
-    MyParameterBase* parameter = findParameter("rx");
+void MyEllipseStyleBase::setCenterY(const qreal& centerY) const {
+    MyParameterBase* parameter = findParameter("center-y");
     if (parameter)
-        return ((MyPositionalParameter*)parameter)->setDefaultValue(rx);
+        return ((MyPositionalParameter*)parameter)->setDefaultValue(centerY);
 }
 
-const qreal MyEllipseStyleBase::rx() const {
-    MyParameterBase* parameter = findParameter("rx");
+const qreal MyEllipseStyleBase::centerY() const {
+    MyParameterBase* parameter = findParameter("center-y");
+    if (parameter)
+        return ((MyPositionalParameter*)parameter)->defaultValue();
+    
+    return 0.000;
+}
+
+void MyEllipseStyleBase::setRadiusX(const qreal& radiusX) const {
+    MyParameterBase* parameter = findParameter("radius-x");
+    if (parameter)
+        return ((MyPositionalParameter*)parameter)->setDefaultValue(radiusX);
+}
+
+const qreal MyEllipseStyleBase::radiusX() const {
+    MyParameterBase* parameter = findParameter("radius-x");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
     
     return 0.000;
 }
 
-void MyEllipseStyleBase::setRy(const qreal& ry) const {
-    MyParameterBase* parameter = findParameter("ry");
+void MyEllipseStyleBase::setRadiusY(const qreal& radiusY) const {
+    MyParameterBase* parameter = findParameter("radius-y");
     if (parameter)
-        return ((MyPositionalParameter*)parameter)->setDefaultValue(ry);
+        return ((MyPositionalParameter*)parameter)->setDefaultValue(radiusY);
 }
 
-const qreal MyEllipseStyleBase::ry() const {
-    MyParameterBase* parameter = findParameter("ry");
+const qreal MyEllipseStyleBase::radiusY() const {
+    MyParameterBase* parameter = findParameter("radius-y");
     if (parameter)
         return ((MyDimensionalParameter*)parameter)->defaultValue();
     
@@ -102,33 +102,33 @@ const qreal MyEllipseStyleBase::ry() const {
 void MyEllipseStyleBase::read(const QJsonObject &json) {
     My2DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;
-    
-    // cx
-    if (json.contains("cx") && json["cx"].isDouble()) {
-        parameter = findParameter("cx");
+
+    // center-x
+    if (json.contains("center-x") && json["center-x"].isDouble()) {
+        parameter = findParameter("center-x");
         if (parameter)
-            ((MyPositionalParameter*)parameter)->setDefaultValue(json["cx"].toDouble());
+            ((MyPositionalParameter*)parameter)->setDefaultValue(json["center-x"].toDouble());
     }
     
-    // cy
-    if (json.contains("cy") && json["cy"].isDouble()) {
-        parameter = findParameter("cy");
+    // center-y
+    if (json.contains("center-y") && json["center-y"].isDouble()) {
+        parameter = findParameter("center-y");
         if (parameter)
-            ((MyPositionalParameter*)parameter)->setDefaultValue(json["cy"].toDouble());
+            ((MyPositionalParameter*)parameter)->setDefaultValue(json["center-y"].toDouble());
     }
     
-    // rx
-    if (json.contains("rx") && json["rx"].isDouble()) {
-        parameter = findParameter("rx");
+    // radius-x
+    if (json.contains("radius-x") && json["radius-x"].isDouble()) {
+        parameter = findParameter("radius-x");
         if (parameter)
-            ((MyDimensionalParameter*)parameter)->setDefaultValue(json["rx"].toDouble());
+            ((MyDimensionalParameter*)parameter)->setDefaultValue(json["radius-x"].toDouble());
     }
     
-    // ry
-    if (json.contains("ry") && json["ry"].isDouble()) {
-        parameter = findParameter("ry");
+    // radius-y
+    if (json.contains("radius-y") && json["radius-y"].isDouble()) {
+        parameter = findParameter("radius-y");
         if (parameter)
-            ((MyDimensionalParameter*)parameter)->setDefaultValue(json["ry"].toDouble());
+            ((MyDimensionalParameter*)parameter)->setDefaultValue(json["radius-y"].toDouble());
     }
 }
 
@@ -136,41 +136,41 @@ void MyEllipseStyleBase::write(QJsonObject &json) {
     My2DShapeStyleBase::write(json);
     MyParameterBase* parameter = NULL;
     
-    // cx
-    parameter = findParameter("cx");
+    // center-x
+    parameter = findParameter("center-x");
     if (parameter)
-        json["cx"] = ((MyPositionalParameter*)parameter)->defaultValue();
+        json["center-x"] = ((MyPositionalParameter*)parameter)->defaultValue();
     
-    // cy
-    parameter = findParameter("cy");
+    // center-y
+    parameter = findParameter("center-y");
     if (parameter)
-        json["cy"] = ((MyPositionalParameter*)parameter)->defaultValue();
+        json["center-y"] = ((MyPositionalParameter*)parameter)->defaultValue();
     
-    // rx
-    parameter = findParameter("rx");
+    // radius-x
+    parameter = findParameter("radius-x");
     if (parameter)
-        json["rx"] = ((MyDimensionalParameter*)parameter)->defaultValue();
+        json["radius-x"] = ((MyDimensionalParameter*)parameter)->defaultValue();
     
-    // cy
-    parameter = findParameter("ry");
+    // radius-y
+    parameter = findParameter("radius-y");
     if (parameter)
-        json["ry"] = ((MyDimensionalParameter*)parameter)->defaultValue();
+        json["radius-y"] = ((MyDimensionalParameter*)parameter)->defaultValue();
 }
 
 // MyNodeEllipseStyle
 
 MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
-    // cx
-    addParameter(new MyNodeEllipsePositionalParameter("cx", "Relative center of ellipse along x-axis"));
+    // center-x
+    addHiddenParameter(new MyNodeEllipsePositionalParameter("center-x", "Relative center of ellipse along x-axis"));
     
-    // cy
-    addParameter(new MyNodeEllipsePositionalParameter("cy", "Relative center of ellipse along y-axis"));
+    // center-y
+    addHiddenParameter(new MyNodeEllipsePositionalParameter("center-y", "Relative center of ellipse along y-axis"));
     
-    // rx
-    addParameter(new MyNodeEllipseDimensionalParameter("rx", "Radius of ellipse along x-axis"));
+    // radius-x
+    addParameter(new MyNodeEllipseDimensionalParameter("radius-x", "Radius of ellipse along x-axis"));
     
-    // ry
-    addParameter(new MyNodeEllipseDimensionalParameter("ry", "Radius of ellipse along y-axis"));
+    // radius-y
+    addParameter(new MyNodeEllipseDimensionalParameter("radius-y", "Radius of ellipse along y-axis"));
     
     reset();
 }
@@ -178,17 +178,17 @@ MyNodeEllipseStyle::MyNodeEllipseStyle(const QString& name) : MyEllipseStyleBase
 // MyArrowHeadEllipseStyle
 
 MyArrowHeadEllipseStyle::MyArrowHeadEllipseStyle(const QString& name) : MyEllipseStyleBase(name) {
-    // cx
-    addParameter(new MyArrowHeadEllipseCxParameter());
+    // center-x
+    addHiddenParameter(new MyArrowHeadEllipseCenterXParameter());
     
-    // cy
-    addParameter(new MyArrowHeadEllipseCyParameter());
+    // center-y
+    addHiddenParameter(new MyArrowHeadEllipseCenterYParameter());
     
-    // rx
-    addParameter(new MyArrowHeadEllipseDimensionalParameter("rx", "Radius of ellipse along x-axis"));
+    // radius-x
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("radius-x", "Radius of ellipse along x-axis"));
     
-    // ry
-    addParameter(new MyArrowHeadEllipseDimensionalParameter("ry", "Radius of ellipse along y-axis"));
+    // radius-y
+    addParameter(new MyArrowHeadEllipseDimensionalParameter("radius-y", "Radius of ellipse along y-axis"));
     
     reset();
 }

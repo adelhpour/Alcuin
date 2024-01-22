@@ -61,13 +61,13 @@ public:
     
     void createResizeHandledItems(const QRectF &rect, qreal radiusX, qreal radiusY);
     
-    void createCurvatureRadiusXControlHandle(const QRectF &rect, qreal radius);
+    void createBorderRadiusXControlHandle(const QRectF &rect, qreal radius);
     
-    void createCurvatureRadiusYControlHandle(const QRectF &rect, qreal radius);
+    void createBorderRadiusYControlHandle(const QRectF &rect, qreal radius);
     
 signals:
     
-    void curvatureRadiiAreUpdated(const qreal&, const qreal&);
+    void borderRadiiAreUpdated(const qreal&, const qreal&);
     
 private slots:
     
@@ -81,9 +81,9 @@ private slots:
     
 protected:
     qreal _radiusX;
-    QGraphicsItem* _curvatureRadiusXHandleItem;
+    QGraphicsItem* _borderRadiusXHandleItem;
     qreal _radiusY;
-    QGraphicsItem* _curvatureRadiusYHandleItem;
+    QGraphicsItem* _borderRadiusYHandleItem;
 };
 
 class MyHandleGraphicsItemBase: public QObject, public QGraphicsEllipseItem {
@@ -212,12 +212,12 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
-class MyCurvatureRadiusControlHandleGraphicsItemBase: public MyHandleGraphicsItemBase {
+class MyBorderRadiusControlHandleGraphicsItemBase: public MyHandleGraphicsItemBase {
     Q_OBJECT
     
 public:
     
-    MyCurvatureRadiusControlHandleGraphicsItemBase(QGraphicsItem *parent = nullptr);
+    MyBorderRadiusControlHandleGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
     virtual void updatePosition(const QRectF &rect, qreal radius);
     
@@ -228,10 +228,10 @@ protected:
     qreal _radius;
 };
 
-class MyCurvatureRadiusXControlHandleGraphicsItem: public MyCurvatureRadiusControlHandleGraphicsItemBase {
+class MyBorderRadiusXControlHandleGraphicsItem: public MyBorderRadiusControlHandleGraphicsItemBase {
 public:
     
-    MyCurvatureRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
+    MyBorderRadiusXControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
     
     void updatePosition(const QRectF &rect, qreal radius) override;
     
@@ -239,10 +239,10 @@ protected:
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
-class MyCurvatureRadiusYControlHandleGraphicsItem: public MyCurvatureRadiusControlHandleGraphicsItemBase {
+class MyBorderRadiusYControlHandleGraphicsItem: public MyBorderRadiusControlHandleGraphicsItemBase {
 public:
     
-    MyCurvatureRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
+    MyBorderRadiusYControlHandleGraphicsItem(const QRectF &rect, qreal radius, QGraphicsItem *parent = nullptr);
     
     void updatePosition(const QRectF &rect, qreal radius) override;
     
