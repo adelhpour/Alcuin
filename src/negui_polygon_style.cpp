@@ -24,7 +24,7 @@ MyShapeStyleBase::SHAPE_STYLE MyPolygonStyleBase::type() {
 
 const QList<MyAbsolutePointParameter*> MyPolygonStyleBase::pointParameters() const {
     QList<MyAbsolutePointParameter*> pointParameters;
-    for (MyParameterBase* parameter : qAsConst(parameters())) {
+    for (MyParameterBase* parameter : qAsConst(hiddenParameters())) {
         if (parameter->type() == MyParameterBase::POINT_PARAMETER_TYPE)
             pointParameters.push_back((MyAbsolutePointParameter*)parameter);
     }
@@ -110,7 +110,7 @@ void MyPolygonStyleBase::read(const QJsonObject &json) {
                 // y
                 if (pointObject.contains("y") && pointObject["y"].isDouble())
                     point->setDefaultValueY(pointObject["y"].toDouble());
-                addParameter(point);
+                addHiddenParameter(point);
             }
         }
     }
@@ -147,22 +147,22 @@ void MyNodePolygonStyle::addDefaultPoints() {
     point = new MyAbsolutePointParameter("point1", "Relative coordinates of polygon vertex 1");
     point->setDefaultValueX(-30.0);
     point->setDefaultValueY(-20.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point2", "Relative coordinates of polygon vertex 2");
     point->setDefaultValueX(30.0);
     point->setDefaultValueY(-20.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point3", "Relative coordinates of polygon vertex 3");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(20.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point4", "Relative coordinates of polygon vertex 4");
     point->setDefaultValueX(-30.0);
     point->setDefaultValueY(-20.0);
-    addParameter(point);
+    addHiddenParameter(point);
 }
 
 // MyArrowHeadPolygonStyle
@@ -176,20 +176,20 @@ void MyArrowHeadPolygonStyle::addDefaultPoints() {
     point = new MyAbsolutePointParameter("point1", "Relative coordinates of polygon vertex 1");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point2", "Relative coordinates of polygon vertex 2");
     point->setDefaultValueX(0.0);
     point->setDefaultValueY(0.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point3", "Relative coordinates of polygon vertex 3");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(5.0);
-    addParameter(point);
+    addHiddenParameter(point);
     
     point = new MyAbsolutePointParameter("point4", "Relative coordinates of polygon vertex 4");
     point->setDefaultValueX(-10.0);
     point->setDefaultValueY(-5.0);
-    addParameter(point);
+    addHiddenParameter(point);
 }
