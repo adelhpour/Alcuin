@@ -86,10 +86,8 @@ void MyPolygonStyleBase::moveBy(qreal dx, qreal dy) {
 
 void MyPolygonStyleBase::reset() {
     MyShapeStyleBase::reset();
-    for (MyParameterBase* parameter : qAsConst(parameters())) {
-        if (parameter->type() == MyParameterBase::POINT_PARAMETER_TYPE)
-            _parameters.removeOne(parameter);
-    }
+    for (MyParameterBase* parameter : pointParameters())
+        _parameters.removeOne(parameter);
 }
 
 void MyPolygonStyleBase::read(const QJsonObject &json) {
@@ -124,13 +122,11 @@ void MyPolygonStyleBase::write(QJsonObject &json) {
     
     // points
     QJsonArray pointsArray;
-    for (MyParameterBase* parameter : qAsConst(parameters())) {
-        if (parameter->type() == MyParameterBase::POINT_PARAMETER_TYPE) {
-            QJsonObject pointObject;
-            pointObject["x"] = ((MyAbsolutePointParameter*)parameter)->defaultValueX();
-            pointObject["y"] = ((MyAbsolutePointParameter*)parameter)->defaultValueY();
-            pointsArray.append(pointObject);
-        }
+    for (MyParameterBase* parameter : pointParameters()) {
+        QJsonObject pointObject;
+        pointObject["x"] = ((MyAbsolutePointParameter*)parameter)->defaultValueX();
+        pointObject["y"] = ((MyAbsolutePointParameter*)parameter)->defaultValueY();
+        pointsArray.append(pointObject);
     }
     json["points"] = pointsArray;
 }
