@@ -261,11 +261,7 @@ void MyInteractor::cutSelectedNetworkElements() {
 }
 
 void MyInteractor::pasteCopiedNetworkElements() {
-    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements();
-}
-
-void MyInteractor::pasteCopiedNetworkElements(const qreal& x, const qreal& y) {
-    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(QPointF(x, y));
+    ((MyNetworkManager*)_networkManager)->pasteCopiedNetworkElements(askForCursorPosition());
 }
 
 void MyInteractor::resetCopiedNetworkElements() {

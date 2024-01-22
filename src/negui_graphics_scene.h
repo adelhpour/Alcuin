@@ -11,7 +11,7 @@
 
 class MyGraphicsScene :public QGraphicsScene, public MySceneModeElementBase {
     Q_OBJECT
-    
+
 public:
     
     MyGraphicsScene(QWidget* parent = nullptr);
@@ -39,7 +39,7 @@ signals:
     bool askForWhetherAnyElementsAreSelected();
     void askForCopySelectedNetworkElements();
     void askForCutSelectedNetworkElements();
-    void askForPasteCopiedNetworkElements(const QPointF&);
+    void askForPasteCopiedNetworkElements();
     void askForDeleteSelectedNetworkElements();
     void askForAlignSelectedNetworkElements(const QString&);
 
@@ -53,13 +53,14 @@ public slots:
     void setBackgroundColor(const QString& backgroundColor);
     void clearScene();
     QList<QGraphicsItem *> itemsAtPosition(const QPointF& position);
+    const QPointF cursorPosition();
     const bool isShiftModifierPressed();
     const bool isControlModifierPressed();
     void displayContextMenu(const qreal& x, const qreal& y);
     const bool whetherMouseReleaseEventIsAccepted();
     
 protected:
-    
+
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;

@@ -51,10 +51,6 @@ const QJsonValue callAPIFunction(QObject* mainWidget, const QString& functionNam
             ((MyMainWidget*)mainWidget)->copySelectedNetworkElements();
         else if (functionName == "pasteCopiedNetworkElements")
             ((MyMainWidget*)mainWidget)->pasteCopiedNetworkElements();
-        else if (functionName == "pasteCopiedNetworkElements") {
-            if (inputArray.size() == 2 && inputArray[0].isDouble() && inputArray[1].isDouble())
-                ((MyMainWidget*)mainWidget)->pasteCopiedNetworkElements(inputArray[0].toDouble(), inputArray[1].toDouble());
-        }
         else if (functionName == "resetCopiedNetworkElements")
             ((MyMainWidget*)mainWidget)->resetCopiedNetworkElements();
         else if (functionName == "areSelectedElementsCopyable")
