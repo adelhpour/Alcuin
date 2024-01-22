@@ -213,10 +213,10 @@ void MyRectangleStyleBase::write(QJsonObject &json) {
 
 MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleStyleBase(name) {
     // x
-    addParameter(new MyNodeRectanglePositionalParameter("x", "Relative \"X\" value of rectangle bounding box"));
+    addHiddenParameter(new MyNodeRectanglePositionalParameter("x", "Relative \"X\" value of rectangle bounding box"));
     
     // y
-    addParameter(new MyNodeRectanglePositionalParameter("y", "Relative \"Y\" value of rectangle bounding box"));
+    addHiddenParameter(new MyNodeRectanglePositionalParameter("y", "Relative \"Y\" value of rectangle bounding box"));
     
     // width
     addParameter(new MyNodeRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
@@ -237,10 +237,10 @@ MyNodeRectangleStyle::MyNodeRectangleStyle(const QString& name) : MyRectangleSty
 
 MyArrowHeadRectangleStyle::MyArrowHeadRectangleStyle(const QString& name) : MyRectangleStyleBase(name) {
     // x
-    addParameter(new MyArrowHeadRectangleXParameter());
+    addHiddenParameter(new MyArrowHeadRectangleXParameter());
     
     // y
-    addParameter(new MyArrowHeadRectangleYParameter());
+    addHiddenParameter(new MyArrowHeadRectangleYParameter());
     
     // width
     addParameter(new MyArrowHeadRectangleDimensionalParameter("width", "\"Width\" value of rectangle bounding box"));
