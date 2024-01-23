@@ -14,7 +14,7 @@ public:
         CENTROID_NODE,
     } NODE_TYPE;
     
-    MyNodeBase(const QString& name, const qreal& x, const qreal& y);
+    MyNodeBase(const QString& name);
     
     ELEMENT_TYPE type() override;
 
@@ -40,7 +40,7 @@ public:
     const bool isCuttable() override;
 
     // get the position of the node
-    const QPointF position() const;
+    const QPointF getPosition();
 
     // get the id of parent node of the node
     const QString& parentNodeId() const;
@@ -100,12 +100,8 @@ public slots:
     void updateParentNode();
 
     MyNetworkElementBase* getParentNodeAtPosition(const QPointF& position);
-    
-    // set the position of the node using its current position
-    void resetPosition();
-    
-    // set the position of the node
-    virtual void setPosition(const QPointF& position);
+
+    virtual void resetPosition();
 
     void adjustConnectedEdges(const bool& movedByParentNodeMove = false);
 
@@ -128,7 +124,7 @@ class MyClassicNodeBase : public MyNodeBase {
 
 public:
 
-    MyClassicNodeBase(const QString& name, const qreal& x, const qreal& y);
+    MyClassicNodeBase(const QString& name);
 
     const bool isCopyable() override;
 
@@ -162,8 +158,7 @@ public:
 
 public slots:
 
-    // set the position of the node
-    void setPosition(const QPointF& position) override;
+    void resetPosition() override;
 
     void adjustExtents() override;
 

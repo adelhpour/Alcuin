@@ -35,7 +35,8 @@ void MyCopiedNetworkElementsPaster::pasteNodes() {
 
 MyNetworkElementBase* MyCopiedNetworkElementsPaster::createPastedNode(MyNetworkElementBase* node, const QPointF& movedCenter) {
     QString pastedNodeName = askForNodeUniqueName(node->style());
-    return createNode(pastedNodeName, getCopyNodeStyle(pastedNodeName, node->style()), ((MyNodeBase*)node)->position().x() + movedCenter.x(), ((MyNodeBase*)node)->position().y() + movedCenter.y());
+    QPointF pastedNodePosition = ((MyNodeBase*)node)->getPosition();
+    return createNode(pastedNodeName, getCopyNodeStyle(pastedNodeName, node->style()), pastedNodePosition.x() + movedCenter.x(), pastedNodePosition.y() + movedCenter.y());
 }
 
 void MyCopiedNetworkElementsPaster::pasteEdges() {
@@ -72,7 +73,7 @@ const QPointF MyCopiedNetworkElementsPaster::calculateElementsCenter() {
     qreal numberOfCopiedNodes = 0;
     for (MyNetworkElementBase* copiedElement : _copiedNetworkElements) {
         if (copiedElement->type() == MyNetworkElementBase::NODE_ELEMENT) {
-            elementsCenter += ((MyNodeBase*)copiedElement)->position();
+            elementsCenter += ((MyNodeBase*)copiedElement)->getPosition();
             ++ numberOfCopiedNodes;
         }
     }
