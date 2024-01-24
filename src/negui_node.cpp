@@ -183,6 +183,13 @@ const QRectF MyNodeBase::getExtents() {
     return ((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents();
 }
 
+const bool MyNodeBase::canBeMovedExternally() {
+    if (getSceneMode() == NORMAL_MODE)
+        return true;
+
+    return false;
+}
+
 const qreal MyNodeBase::endEdgePadding() {
     return  _endEdgePadding;
 }
@@ -323,21 +330,6 @@ void MyClassicNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
     }
     resetPosition();
     updateFocusedGraphicsItems();
-}
-
-const bool MyClassicNodeBase::canBeMovedExternally() {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (childNodes().size()) {
-            for (MyNetworkElementBase* childNode : qAsConst(childNodes())) {
-                if (childNode->isSelected())
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
-    return false;
 }
 
 const QRectF MyClassicNodeBase::getExtents() {
@@ -601,15 +593,7 @@ void MyCentroidNode::setSelected(const bool& selected) {
 }
 
 void MyCentroidNode::moveExternally(const qreal& dx, const qreal& dy) {
-    if (canBeMovedExternally())
-        return;
-}
 
-const bool MyCentroidNode::canBeMovedExternally() {
-    if (getSceneMode() == NORMAL_MODE)
-        return false;
-
-    return false;
 }
 
 QWidget* MyCentroidNode::getFeatureMenu() {

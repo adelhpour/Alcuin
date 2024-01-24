@@ -68,6 +68,8 @@ public:
 
     const QRectF getExtents() override;
 
+    const bool canBeMovedExternally() override;
+
     const qreal endEdgePadding();
     
     const qint32 calculateZValue() override;
@@ -144,8 +146,6 @@ public:
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
 
     void moveExternally(const qreal& dx, const qreal& dy) override;
-
-    const bool canBeMovedExternally() override;
 
     // get node extents based on its children extents
     const QRectF getExtents() override;
@@ -233,8 +233,6 @@ public:
     const bool connectedBezierCurvesNeedsToBeAdjusted();
 
     void moveExternally(const qreal& dx, const qreal& dy) override;
-
-    const bool canBeMovedExternally() override;
 
     QWidget* getFeatureMenu() override;
 
