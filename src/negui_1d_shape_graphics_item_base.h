@@ -12,7 +12,7 @@ public:
     
     virtual void setLine(const QLineF& line) = 0;
     
-    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+    void moveOriginalPosition(const qreal& dx, const qreal& dy) override;
     
 public slots:
     virtual void updateExtents(const QRectF& extents) override;

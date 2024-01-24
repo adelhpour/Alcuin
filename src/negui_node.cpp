@@ -28,7 +28,7 @@ void MyNodeBase::connectGraphicsItem() {
     connect(_graphicsItem, SIGNAL(askForUpdateParentNode()), this,  SLOT(updateSelectedNodesParentNode()));
     connect(_graphicsItem, SIGNAL(askForResetPosition()), this, SLOT(resetPosition()));
     connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(adjustConnectedEdges()));
-    connect((MyNodeSceneGraphicsItemBase*)_graphicsItem, &MyNodeSceneGraphicsItemBase::positionChangedByMouseMoveEvent, this, [this] (const QPointF& movedDistance) { positionChangedByMouseMoveEvent(this, movedDistance); });
+    connect(_graphicsItem, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)));
 }
 
 void MyNodeBase::addEdge(MyNetworkElementBase* e) {
@@ -317,21 +317,26 @@ void MyClassicNodeBase::resetPosition() {
 
 void MyClassicNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
     if (canBeMovedExternally()) {
-        graphicsItem()->moveBy(dx, dy);
+        ((MyNodeSceneGraphicsItemBase*)(graphicsItem()))->moveBy(dx, dy);
         adjustConnectedEdges();
     }
+    resetPosition();
     updateFocusedGraphicsItems();
 }
 
 const bool MyClassicNodeBase::canBeMovedExternally() {
-    if (childNodes().size()) {
-        for (MyNetworkElementBase* childNode : qAsConst(childNodes())) {
-            if (childNode->isSelected())
-                return false;
+    if (getSceneMode() == NORMAL_MODE) {
+        if (childNodes().size()) {
+            for (MyNetworkElementBase* childNode : qAsConst(childNodes())) {
+                if (childNode->isSelected())
+                    return false;
+            }
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 const QRectF MyClassicNodeBase::getExtents() {
@@ -384,7 +389,6 @@ void MyClassicNodeBase::adjustExtents() {
     QPointF position = getPosition();
     ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->moveBy(extents.x() - (position.x() - 0.5 * extents.width()), extents.y() - (position.y() - 0.5 * extents.height()));
     ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->updateExtents(extents);
-    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->adjustOriginalPosition();
 }
 
 const qint32 MyClassicNodeBase::calculateNodeZValue() {
@@ -600,6 +604,9 @@ void MyCentroidNode::moveExternally(const qreal& dx, const qreal& dy) {
 }
 
 const bool MyCentroidNode::canBeMovedExternally() {
+    if (getSceneMode() == NORMAL_MODE)
+        return false;
+
     return false;
 }
 

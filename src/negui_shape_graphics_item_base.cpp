@@ -5,7 +5,6 @@
 MyShapeGraphicsItemBase::MyShapeGraphicsItemBase() {
     _style = NULL;
     _isSetStyle = false;
-    _movedDistance = QPointF(0.0, 0.0);
 }
 
 MyShapeStyleBase* MyShapeGraphicsItemBase::style() {
@@ -17,10 +16,6 @@ void MyShapeGraphicsItemBase::setStyle(MyShapeStyleBase* style) {
     _isSetStyle = true;
 }
 
-void MyShapeGraphicsItemBase::setMovedDistance(const QPointF& movedDistance) {
-    _movedDistance = movedDistance;
-}
-
-const QPointF& MyShapeGraphicsItemBase::movedDistance() const {
-    return _movedDistance;
+void MyShapeGraphicsItemBase::updateExtents() {
+    updateExtents(getExtents());
 }

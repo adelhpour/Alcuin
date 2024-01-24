@@ -38,11 +38,12 @@ void MyCentroidGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyCentroidGraphicsItem::getExtents() {
-    return QRectF(- ((MyCentroidStyleBase*)style())->radius() + (movedDistance().x() + _originalPosition.x()), - ((MyCentroidStyleBase*)style())->radius() + (movedDistance().y() + _originalPosition.y()), 2 * ((MyCentroidStyleBase*)style())->radius(), 2 * ((MyCentroidStyleBase*)style())->radius());
+    return QRectF(- ((MyCentroidStyleBase*)style())->radius() + _originalPosition.x(), - ((MyCentroidStyleBase*)style())->radius() + _originalPosition.y(), 2 * ((MyCentroidStyleBase*)style())->radius(), 2 * ((MyCentroidStyleBase*)style())->radius());
 }
 
-void MyCentroidGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-
+void MyCentroidGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
+    _originalPosition += QPointF(dx, dy);
+    My2DShapeGraphicsItemBase::updateExtents();
 }
 
 QGraphicsItem* MyCentroidGraphicsItem::getFocusedGraphicsItem() {

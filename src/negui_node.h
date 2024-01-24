@@ -88,7 +88,7 @@ public:
     
 signals:
 
-    void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
+    void positionChangedByMouseMoveEvent(const QPointF&);
 
     void parentNodeIsUpdated();
     

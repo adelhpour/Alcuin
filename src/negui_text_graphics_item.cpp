@@ -43,10 +43,10 @@ void MyTextGraphicsItemBase::setSelectedWithFillColor(const bool& selected) {
 void MyTextGraphicsItemBase::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
-        ((MyTextStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
+        ((MyTextStyleBase*)style())->setX(extents.x() - _originalPosition.x());
         
         // y
-        ((MyTextStyleBase*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
+        ((MyTextStyleBase*)style())->setY(extents.y() - _originalPosition.y());
         
         // width
         ((MyTextStyleBase*)style())->setWidth(extents.width());
@@ -59,13 +59,12 @@ void MyTextGraphicsItemBase::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyTextGraphicsItemBase::getExtents() {
-    return QRectF(((MyTextStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyTextStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
+    return QRectF(((MyTextStyleBase*)style())->x() + _originalPosition.x(), ((MyTextStyleBase*)style())->y() + _originalPosition.y(), ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
 }
 
-void MyTextGraphicsItemBase::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyTextStyleBase*)style())->setX(((MyTextStyleBase*)style())->x() - originalPositionMovedDistance.x());
-    ((MyTextStyleBase*)style())->setY(((MyTextStyleBase*)style())->y() - originalPositionMovedDistance.y());
-    _originalPosition += originalPositionMovedDistance;
+void MyTextGraphicsItemBase::moveOriginalPosition(const qreal& dx, const qreal& dy) {
+    _originalPosition += QPointF(dx, dy);
+    My2DShapeGraphicsItemBase::updateExtents();
 }
 
 void MyTextGraphicsItemBase::setZValue(qreal z) {

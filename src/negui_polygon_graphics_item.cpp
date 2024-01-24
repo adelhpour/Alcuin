@@ -44,19 +44,19 @@ void MyPolygonGraphicsItem::setSelectedWithFillColor(const bool& selected) {
 
 void MyPolygonGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle())
-        ((MyPolygonStyleBase*)style())->scaleToExtents(QRectF(extents.x() - (movedDistance().x() + boundingRect().x()), extents.y() - (movedDistance().y() + boundingRect().y()), extents.width(), extents.height()));
+        ((MyPolygonStyleBase*)style())->scaleToExtents(QRectF(extents.x() - boundingRect().x(), extents.y() - boundingRect().y(), extents.width(), extents.height()));
     
     updateStyle();
 }
 
 QRectF MyPolygonGraphicsItem::getExtents() {
     QRectF polygonBoundingRect = ((MyPolygonStyleBase*)style())->getShapeExtents();
-    return QRectF((movedDistance().x() + boundingRect().x()), (movedDistance().y() + boundingRect().y()), polygonBoundingRect.width(), polygonBoundingRect.height());
+    return QRectF(boundingRect().x(), boundingRect().y(), polygonBoundingRect.width(), polygonBoundingRect.height());
 }
 
-void MyPolygonGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyPolygonStyleBase*)style())->moveBy(-originalPositionMovedDistance.x(), -originalPositionMovedDistance.y());
-    _originalPosition += originalPositionMovedDistance;
+void MyPolygonGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
+    _originalPosition += QPointF(dx, dy);
+    My2DShapeGraphicsItemBase::updateExtents();
 }
 
 QGraphicsItem* MyPolygonGraphicsItem::getFocusedGraphicsItem() {

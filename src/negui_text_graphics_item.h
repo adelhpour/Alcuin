@@ -19,8 +19,8 @@ public:
     QRectF getExtents() override;
     
     void setZValue(qreal z) override;
-    
-    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+
+    void moveOriginalPosition(const qreal& dx, const qreal& dy) override;
     
 public slots:
 

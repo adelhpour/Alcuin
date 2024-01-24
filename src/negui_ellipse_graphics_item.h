@@ -19,8 +19,8 @@ public:
     QGraphicsItem* getFocusedGraphicsItem() override;
     
     void setZValue(qreal z) override;
-    
-    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+
+    void moveOriginalPosition(const qreal& dx, const qreal& dy) override;
     
 public slots:
     void updateExtents(const QRectF& extents) override;

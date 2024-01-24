@@ -17,10 +17,6 @@ public:
     
     const bool isSetStyle() const { return _isSetStyle; }
     
-    void setMovedDistance(const QPointF& movedDistance);
-    
-    const QPointF& movedDistance() const;
-    
     virtual void updateStyle() = 0;
     
     virtual void setSelectedWithBorderColor(const bool& selected) = 0;
@@ -33,13 +29,15 @@ public:
     
     virtual void setZValue(qreal z) = 0;
     
-    virtual void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) = 0;
+    virtual void moveOriginalPosition(const qreal& dx, const qreal& dy) = 0;
 
 signals:
 
     void askForAdjustFocusedGraphicsItems();
     
 public slots:
+
+    void updateExtents();
 
     virtual void updateExtents(const QRectF& extents) = 0;
 

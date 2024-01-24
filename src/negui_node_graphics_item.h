@@ -30,7 +30,7 @@ public:
 
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
 
-    void moveChildItems(const QPointF& movedDistance);
+    void moveChildItems(const qreal& dx, const qreal& dy);
     
     void enableNormalMode() override;
 
@@ -54,8 +54,6 @@ signals:
     
 protected:
 
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
@@ -77,10 +75,6 @@ public:
     const bool canAddTextShape() override;
 
     void setFocused(const bool& isFocused) override;
-
-    void moveBy(qreal dx, qreal dy) override;
-
-    void adjustOriginalPosition();
 
 public slots:
 

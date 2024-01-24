@@ -41,10 +41,10 @@ void MyEllipseGraphicsItem::setSelectedWithFillColor(const bool& selected) {
 void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // center-x
-        ((MyEllipseStyleBase*)style())->setCenterX(0.5 * extents.width() + extents.x() - (movedDistance().x() + _originalPosition.x()));
+        ((MyEllipseStyleBase*)style())->setCenterX(0.5 * extents.width() + extents.x() - _originalPosition.x());
         
         // center-y
-        ((MyEllipseStyleBase*)style())->setCenterY(0.5 * extents.height() + extents.y() - (movedDistance().y() + _originalPosition.y()));
+        ((MyEllipseStyleBase*)style())->setCenterY(0.5 * extents.height() + extents.y() - _originalPosition.y());
         
         // radius-x
         ((MyEllipseStyleBase*)style())->setRadiusX(0.5 * extents.width());
@@ -57,15 +57,14 @@ void MyEllipseGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyEllipseGraphicsItem::getExtents() {
-    return QRectF(((MyEllipseStyleBase*)style())->centerX() - ((MyEllipseStyleBase*)style())->radiusX() + (movedDistance().x() + _originalPosition.x()),
-                  ((MyEllipseStyleBase*)style())->centerY() - ((MyEllipseStyleBase*)style())->radiusY() + (movedDistance().y() + _originalPosition.y()),
+    return QRectF(((MyEllipseStyleBase*)style())->centerX() - ((MyEllipseStyleBase*)style())->radiusX() + _originalPosition.x(),
+                  ((MyEllipseStyleBase*)style())->centerY() - ((MyEllipseStyleBase*)style())->radiusY() + _originalPosition.y(),
                   2 * ((MyEllipseStyleBase*)style())->radiusX(), 2 * ((MyEllipseStyleBase*)style())->radiusY());
 }
 
-void MyEllipseGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyEllipseStyleBase*)style())->setCenterX(((MyEllipseStyleBase*)style())->centerX() - originalPositionMovedDistance.x());
-    ((MyEllipseStyleBase*)style())->setCenterY(((MyEllipseStyleBase*)style())->centerY() - originalPositionMovedDistance.y());
-    _originalPosition += originalPositionMovedDistance;
+void MyEllipseGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
+    _originalPosition += QPointF(dx, dy);
+    My2DShapeGraphicsItemBase::updateExtents();
 }
 
 QGraphicsItem* MyEllipseGraphicsItem::getFocusedGraphicsItem() {

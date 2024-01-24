@@ -8,14 +8,13 @@ class MyNetworkElementMoverBase : public QObject {
 
 public:
 
-    MyNetworkElementMoverBase(QList<MyNetworkElementBase*> networkElements, MyNetworkElementBase* movedNetworkElement);
+    MyNetworkElementMoverBase(QList<MyNetworkElementBase*> networkElements);
 
     virtual void move(const qreal& dx, const qreal& dy) = 0;
 
 protected:
 
     QList<MyNetworkElementBase*> _networkElements;
-    MyNetworkElementBase* _movedNetworkElement;
 };
 
 class MyNodeMover : public MyNetworkElementMoverBase {
@@ -23,7 +22,7 @@ class MyNodeMover : public MyNetworkElementMoverBase {
 
 public:
 
-    MyNodeMover(QList<MyNetworkElementBase*> networkElements, MyNetworkElementBase* movedNetworkElement);
+    MyNodeMover(QList<MyNetworkElementBase*> networkElements);
 
     void move(const qreal& dx, const qreal& dy) override;
 
