@@ -42,7 +42,7 @@ public:
 
     void enableSelectEdgeMode() override;
 
-    virtual void moveBy(qreal dx, qreal dy);
+    virtual void move(qreal dx, qreal dy);
     
 signals:
     

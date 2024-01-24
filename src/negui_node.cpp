@@ -305,8 +305,9 @@ void MyClassicNodeBase::resetPosition() {
     if (!areChildNodesLocked()) {
         for (MyNetworkElementBase* node : qAsConst(childNodes())) {
             ((MyNodeBase*)node)->lockParentNode(true);
-            ((MyNodeSceneGraphicsItemBase*)node->graphicsItem())->moveBy((position - _position).x(), (position - _position).y());
+            ((MyNodeSceneGraphicsItemBase*)node->graphicsItem())->move((position - _position).x(), (position - _position).y());
             ((MyNodeBase*)node)->adjustConnectedEdges(true);
+            ((MyNodeBase*)node)->resetPosition();
         }
     }
     else
@@ -317,7 +318,7 @@ void MyClassicNodeBase::resetPosition() {
 
 void MyClassicNodeBase::moveExternally(const qreal& dx, const qreal& dy) {
     if (canBeMovedExternally()) {
-        ((MyNodeSceneGraphicsItemBase*)(graphicsItem()))->moveBy(dx, dy);
+        ((MyNodeSceneGraphicsItemBase*)(graphicsItem()))->move(dx, dy);
         adjustConnectedEdges();
     }
     resetPosition();
@@ -387,7 +388,7 @@ const QRectF MyClassicNodeBase::createParentNodeExtentsRectangle(qreal extentsX,
 void MyClassicNodeBase::adjustExtents() {
     QRectF extents = getExtents();
     QPointF position = getPosition();
-    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->moveBy(extents.x() - (position.x() - 0.5 * extents.width()), extents.y() - (position.y() - 0.5 * extents.height()));
+    ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->move(extents.x() - (position.x() - 0.5 * extents.width()), extents.y() - (position.y() - 0.5 * extents.height()));
     ((MyClassicNodeSceneGraphicsItemBase*)graphicsItem())->updateExtents(extents);
 }
 
@@ -530,8 +531,9 @@ void MyCentroidNode::adjustNodePositionToNeighborNodes(const bool& movedByParent
         if (isNodePositionConnectedToNeighborNodes() && edges().size()) {
             QPointF oldPosition = getPosition();
             QPointF updatedPosition = getNodeUpdatedPositionUsingConnectedEdges();
-            ((MyCentroidNodeSceneGraphicsItem *) graphicsItem())->moveBy((updatedPosition - oldPosition).x(),
+            ((MyCentroidNodeSceneGraphicsItem *) graphicsItem())->move((updatedPosition - oldPosition).x(),
                                                                          (updatedPosition - oldPosition).y());
+            resetPosition();
             updateFocusedGraphicsItems();
             adjustConnectedBezierCurves();
         }

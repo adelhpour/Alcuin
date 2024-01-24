@@ -303,7 +303,7 @@ const bool MyConnectedToSourceCentroidNodeEdge::isCuttable() {
 
 
 const QPointF MyConnectedToSourceCentroidNodeEdge::nonCentroidNodePosition() {
-    return ((MyNodeBase*)targetNode())->getExtents().center();
+    return ((MyNodeBase*)targetNode())->getPosition();
 }
 
 MyNetworkElementBase* MyConnectedToSourceCentroidNodeEdge::nonCentroidNodeParent() {
@@ -338,7 +338,7 @@ const bool MyConnectedToTargetCentroidNodeEdge::isCuttable() {
 }
 
 const QPointF MyConnectedToTargetCentroidNodeEdge::nonCentroidNodePosition() {
-    return ((MyNodeBase*)sourceNode())->getExtents().center();
+    return ((MyNodeBase*)sourceNode())->getPosition();
 }
 
 MyNetworkElementBase* MyConnectedToTargetCentroidNodeEdge::nonCentroidNodeParent() {

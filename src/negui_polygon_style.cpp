@@ -76,14 +76,6 @@ void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
     }
 }
 
-void MyPolygonStyleBase::moveBy(qreal dx, qreal dy) {
-    QList<MyAbsolutePointParameter*> parameters = pointParameters();
-    for (MyAbsolutePointParameter* parameter : qAsConst(parameters)) {
-        parameter->setDefaultValueX(parameter->defaultValueX() + dx);
-        parameter->setDefaultValueY(parameter->defaultValueY() + dy);
-    }
-}
-
 void MyPolygonStyleBase::reset() {
     MyShapeStyleBase::reset();
     for (MyParameterBase* parameter : pointParameters())

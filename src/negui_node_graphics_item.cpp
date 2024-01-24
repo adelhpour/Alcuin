@@ -69,7 +69,7 @@ void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
     setCursor(Qt::ArrowCursor);
 }
 
-void MyNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {
+void MyNodeSceneGraphicsItemBase::move(qreal dx, qreal dy) {
     _originalPosition += QPointF(dx, dy);
     moveChildItems(dx, dy);
 }
