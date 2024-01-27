@@ -63,9 +63,9 @@ public:
     
     virtual const QRectF getExtents() = 0;
 
-    virtual const bool canBeMovedExternally() = 0;
+    virtual const bool canBeMoved() = 0;
 
-    virtual void moveExternally(const qreal& dx, const qreal& dy) = 0;
+    virtual void move(const qreal& dx, const qreal& dy) = 0;
     
     virtual QWidget* getFeatureMenu();
 

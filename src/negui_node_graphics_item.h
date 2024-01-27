@@ -48,7 +48,7 @@ signals:
     
     void askForUpdateParentNode();
     
-    void askForResetPosition();
+    void askForUpdateConnectedEdgesPoints();
 
     void positionChangedByMouseMoveEvent(const QPointF&);
     

@@ -154,12 +154,12 @@ void MyEdgeBase::enableSelectEdgeMode() {
         arrowHead()->enableSelectEdgeMode();
 }
 
-const bool MyEdgeBase::canBeMovedExternally() {
+const bool MyEdgeBase::canBeMoved() {
     return false;
 }
 
-void MyEdgeBase::moveExternally(const qreal& dx, const qreal& dy) {
-    if (canBeMovedExternally())
+void MyEdgeBase::move(const qreal& dx, const qreal& dy) {
+    if (canBeMoved())
         return;
 }
 

@@ -15,5 +15,5 @@ MyNodeMover::MyNodeMover(QList<MyNetworkElementBase*> networkElements) : MyNetwo
 
 void MyNodeMover::move(const qreal& dx, const qreal& dy) {
     for (MyNetworkElementBase* networkElement : _networkElements)
-        ((MyNodeBase*)networkElement)->moveExternally(dx, dy);
+        ((MyNodeBase*)networkElement)->move(dx, dy);
 }

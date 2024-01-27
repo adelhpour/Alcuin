@@ -110,7 +110,7 @@ const bool MyClassicNodeSceneGraphicsItemBase::canAddTextShape() {
 
 void MyClassicNodeSceneGraphicsItemBase::setFocused(const bool& isFocused) {
     if (!isFocused && _focusedGraphicsItems.size()) {
-        emit askForResetPosition();
+        emit askForUpdateConnectedEdgesPoints();
         emit askForCreateChangeStageCommand();
     }
     MyNetworkElementGraphicsItemBase::setFocused(isFocused);
