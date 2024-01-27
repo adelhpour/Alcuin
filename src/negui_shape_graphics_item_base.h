@@ -44,7 +44,7 @@ public slots:
 protected:
     MyShapeStyleBase* _style;
     QPointF _originalPosition;
-    QPointF _movedDistance;
+    QPointF _movedOriginalPosition;
     bool _isSetStyle;
 };
 

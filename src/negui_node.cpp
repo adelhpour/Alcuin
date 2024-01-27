@@ -157,7 +157,7 @@ void MyNodeBase::lockParentNode(const bool& locked) {
 }
 
 const QPointF MyNodeBase::getPosition() {
-    return ((MyNodeSceneGraphicsItemBase*)graphicsItem())->getExtents().center();
+    return getExtents().center();
 }
 
 void MyNodeBase::resetPosition() {

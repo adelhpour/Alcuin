@@ -71,6 +71,7 @@ void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
 
 void MyNodeSceneGraphicsItemBase::move(qreal dx, qreal dy) {
     _originalPosition += QPointF(dx, dy);
+    moveBy(dx, dy);
     moveChildItems(dx, dy);
 }
 

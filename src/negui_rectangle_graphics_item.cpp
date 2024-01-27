@@ -50,10 +50,10 @@ void MyRectangleGraphicsItem::setSelectedWithFillColor(const bool& selected) {
 void MyRectangleGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
-        ((MyRectangleStyleBase*)style())->setX(extents.x() - _originalPosition.x());
+        ((MyRectangleStyleBase*)style())->setX(extents.x() - (_originalPosition.x() + _movedOriginalPosition.x()));
         
         // y
-        ((MyRectangleStyleBase*)style())->setY(extents.y() - _originalPosition.y());
+        ((MyRectangleStyleBase*)style())->setY(extents.y() - (_originalPosition.y() + _movedOriginalPosition.y()));
         
         // border-radius-x
         ((MyRectangleStyleBase*)style())->setBorderRadiusX((extents.width()/ ((MyRectangleStyleBase*)style())->width()) * ((MyRectangleStyleBase*)style())->borderRadiusX());
@@ -72,7 +72,9 @@ void MyRectangleGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyRectangleGraphicsItem::getExtents() {
-    return QRectF(((MyRectangleStyleBase*)style())->x() + _originalPosition.x(), ((MyRectangleStyleBase*)style())->y() + _originalPosition.y(), ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
+    return  QRectF(((MyRectangleStyleBase*)style())->x() + _originalPosition.x() + _movedOriginalPosition.x(),
+                   ((MyRectangleStyleBase*)style())->y() + _originalPosition.y() + _movedOriginalPosition.y(),
+                   ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
 }
 
 void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, const qreal& borderRadiusY) {
@@ -88,8 +90,7 @@ void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, cons
 }
 
 void MyRectangleGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
-    _originalPosition += QPointF(dx, dy);
-    My2DShapeGraphicsItemBase::updateExtents();
+    _movedOriginalPosition += QPointF(dx, dy);
 }
 
 QGraphicsItem* MyRectangleGraphicsItem::getFocusedGraphicsItem() {

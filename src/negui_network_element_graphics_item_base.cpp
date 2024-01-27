@@ -14,6 +14,7 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
+    setPos(0, 0);
     clear();
     addShapeItems(shapeStyles, zValue);
 }
@@ -193,10 +194,8 @@ void MyNetworkElementGraphicsItemBase::setSelectedWithFillColor(const bool& sele
 }
 
 void MyNetworkElementGraphicsItemBase::setFocused(const bool& isFocused) {
-    if (!isFocused) {
+    if (!isFocused)
         clearFocusedGraphicsItems();
-        update(getShapeStyles(), zValue());
-    }
     else if (!_focusedGraphicsItems.size())
         addFocusedGraphicsItems();
 }
