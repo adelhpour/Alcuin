@@ -14,6 +14,12 @@ MyNodeMover::MyNodeMover(QList<MyNetworkElementBase*> networkElements) : MyNetwo
 }
 
 void MyNodeMover::move(const qreal& dx, const qreal& dy) {
-    for (MyNetworkElementBase* networkElement : _networkElements)
-        ((MyNodeBase*)networkElement)->move(dx, dy);
+    for (MyNetworkElementBase* networkElement : _networkElements) {
+        if (!whetherParentNodeIsInSelectedNetworkElements(networkElement))
+            ((MyNodeBase*)networkElement)->move(dx, dy);
+    }
+}
+
+const bool MyNodeMover::whetherParentNodeIsInSelectedNetworkElements(MyNetworkElementBase* networkElement) {
+    return findElement(_networkElements, ((MyNodeBase*)networkElement)->parentNodeId());
 }

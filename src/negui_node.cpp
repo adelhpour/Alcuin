@@ -315,6 +315,7 @@ void MyClassicNodeBase::adjustParentExtents() {
 }
 
 const QRectF MyClassicNodeBase::getExtents() {
+    ((MyNodeSceneGraphicsItemBase*)_graphicsItem)->updateOriginalPosition();
     if (childNodes().size()) {
         QRectF childExtents = ((MyNodeBase*)childNodes().at(0))->getExtents();
         qreal extentsX = childExtents.x();

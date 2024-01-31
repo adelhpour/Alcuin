@@ -26,6 +26,8 @@ public:
 
     void move(const qreal& dx, const qreal& dy) override;
 
+    const bool whetherParentNodeIsInSelectedNetworkElements(MyNetworkElementBase* networkElement);
+
 };
 
 #endif

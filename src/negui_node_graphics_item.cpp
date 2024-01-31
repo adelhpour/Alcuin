@@ -36,6 +36,23 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     setZValue(2);
 }
 
+void MyNodeSceneGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
+    if (_shapeStyles.size()) {
+        _originalPosition = getExtents().center();
+        setPos(0, 0);
+    }
+    MyNetworkElementGraphicsItemBase::update(shapeStyles, zValue);
+}
+
+void MyNodeSceneGraphicsItemBase::updateOriginalPosition() {
+    QPointF originalPosition = getExtents().center();
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->updateOriginalPosition(originalPosition);
+    }
+}
+
 void MyNodeSceneGraphicsItemBase::moveChildItems(const qreal& dx, const qreal& dy) {
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
@@ -217,7 +234,6 @@ MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &
 void MyCentroidNodeSceneGraphicsItem::connectShapeGraphicsItem(MyShapeGraphicsItemBase *item) {
     connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
     connect(item, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
-
 }
 
 const bool MyCentroidNodeSceneGraphicsItem::canAddCentroidShape() {

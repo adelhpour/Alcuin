@@ -28,6 +28,8 @@ public:
     virtual QGraphicsItem* getFocusedGraphicsItem() = 0;
     
     virtual void setZValue(qreal z) = 0;
+
+    virtual void updateOriginalPosition(const QPointF originalPosition) = 0;
     
     virtual void moveOriginalPosition(const qreal& dx, const qreal& dy) = 0;
 

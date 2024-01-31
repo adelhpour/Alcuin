@@ -24,6 +24,8 @@ public:
     
     void setZValue(qreal z) override;
 
+    void updateOriginalPosition(const QPointF originalPosition) override;
+
     void moveOriginalPosition(const qreal& dx, const qreal& dy) override;
 
 signals:

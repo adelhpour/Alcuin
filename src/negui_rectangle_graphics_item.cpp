@@ -89,6 +89,13 @@ void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, cons
     updateStyle();
 }
 
+void MyRectangleGraphicsItem::updateOriginalPosition(const QPointF originalPosition) {
+    QRectF extents = getExtents();
+    ((MyRectangleStyleBase*)style())->setX(((MyRectangleStyleBase*)style())->x() - (originalPosition - (_originalPosition + _movedOriginalPosition)).x());
+    ((MyRectangleStyleBase*)style())->setY(((MyRectangleStyleBase*)style())->y() - (originalPosition - (_originalPosition + _movedOriginalPosition)).y());
+    _originalPosition = originalPosition - _movedOriginalPosition;
+}
+
 void MyRectangleGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
     _movedOriginalPosition += QPointF(dx, dy);
 }

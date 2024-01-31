@@ -15,7 +15,7 @@ public:
     
     MyNetworkElementGraphicsItemBase(QGraphicsItem *parent = nullptr);
     
-    void update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue);
+    virtual void update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue);
     
     void addShapeItems(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue = 0);
     

@@ -30,6 +30,8 @@ public:
 
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
 
+    void update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) override;
+
     void moveChildItems(const qreal& dx, const qreal& dy);
     
     void enableNormalMode() override;
@@ -51,6 +53,10 @@ signals:
     void askForUpdateConnectedEdgesPoints();
 
     void positionChangedByMouseMoveEvent(const QPointF&);
+
+public slots:
+
+    void updateOriginalPosition();
     
 protected:
 

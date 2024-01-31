@@ -64,6 +64,13 @@ QRectF MyTextGraphicsItemBase::getExtents() {
                   ((MyTextStyleBase*)style())->width(), ((MyTextStyleBase*)style())->height());
 }
 
+void MyTextGraphicsItemBase::updateOriginalPosition(const QPointF originalPosition) {
+    QRectF extents = getExtents();
+    ((MyTextStyleBase*)style())->setX(((MyTextStyleBase*)style())->x() - (originalPosition - (_originalPosition + _movedOriginalPosition)).x());
+    ((MyTextStyleBase*)style())->setY(((MyTextStyleBase*)style())->y() - (originalPosition - (_originalPosition + _movedOriginalPosition)).y());
+    _originalPosition = originalPosition - _movedOriginalPosition;
+}
+
 void MyTextGraphicsItemBase::moveOriginalPosition(const qreal& dx, const qreal& dy) {
     _movedOriginalPosition += QPointF(dx, dy);
 }

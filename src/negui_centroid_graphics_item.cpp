@@ -43,6 +43,10 @@ QRectF MyCentroidGraphicsItem::getExtents() {
                   2 * ((MyCentroidStyleBase*)style())->radius(), 2 * ((MyCentroidStyleBase*)style())->radius());
 }
 
+void MyCentroidGraphicsItem::updateOriginalPosition(const QPointF originalPosition) {
+    _originalPosition = originalPosition - _movedOriginalPosition;
+}
+
 void MyCentroidGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
     _movedOriginalPosition += QPointF(dx, dy);
 }
