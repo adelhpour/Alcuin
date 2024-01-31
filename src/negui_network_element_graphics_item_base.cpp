@@ -14,8 +14,6 @@ MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem
 }
 
 void MyNetworkElementGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
-    _originalPosition += pos();
-    setPos(0.0, 0.0);
     clear();
     addShapeItems(shapeStyles, zValue);
 }
@@ -30,7 +28,6 @@ void MyNetworkElementGraphicsItemBase::addShapeItems(QList<MyShapeStyleBase*> sh
 void MyNetworkElementGraphicsItemBase::addShapeItem(MyShapeStyleBase* style) {
     MyShapeGraphicsItemBase* item = createShapeGraphicsItem(style);
     if (item) {
-
         item->setStyle(style);
         item->updateStyle();
         QGraphicsItem* casted_item = dynamic_cast<QGraphicsItem*>(item);

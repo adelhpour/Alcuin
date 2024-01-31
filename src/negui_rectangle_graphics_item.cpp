@@ -50,10 +50,10 @@ void MyRectangleGraphicsItem::setSelectedWithFillColor(const bool& selected) {
 void MyRectangleGraphicsItem::updateExtents(const QRectF& extents) {
     if (isSetStyle()) {
         // x
-        ((MyRectangleStyleBase*)style())->setX(extents.x() - (movedDistance().x() + _originalPosition.x()));
+        ((MyRectangleStyleBase*)style())->setX(extents.x() - (_originalPosition.x() + _movedOriginalPosition.x()));
         
         // y
-        ((MyRectangleStyleBase*)style())->setY(extents.y() - (movedDistance().y() + _originalPosition.y()));
+        ((MyRectangleStyleBase*)style())->setY(extents.y() - (_originalPosition.y() + _movedOriginalPosition.y()));
         
         // border-radius-x
         ((MyRectangleStyleBase*)style())->setBorderRadiusX((extents.width()/ ((MyRectangleStyleBase*)style())->width()) * ((MyRectangleStyleBase*)style())->borderRadiusX());
@@ -72,7 +72,9 @@ void MyRectangleGraphicsItem::updateExtents(const QRectF& extents) {
 }
 
 QRectF MyRectangleGraphicsItem::getExtents() {
-    return QRectF(((MyRectangleStyleBase*)style())->x() + (movedDistance().x() + _originalPosition.x()), ((MyRectangleStyleBase*)style())->y() + (movedDistance().y() + _originalPosition.y()), ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
+    return  QRectF(((MyRectangleStyleBase*)style())->x() + _originalPosition.x() + _movedOriginalPosition.x(),
+                   ((MyRectangleStyleBase*)style())->y() + _originalPosition.y() + _movedOriginalPosition.y(),
+                   ((MyRectangleStyleBase*)style())->width(), ((MyRectangleStyleBase*)style())->height());
 }
 
 void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, const qreal& borderRadiusY) {
@@ -87,10 +89,15 @@ void MyRectangleGraphicsItem::updateBorderRadii(const qreal& borderRadiusX, cons
     updateStyle();
 }
 
-void MyRectangleGraphicsItem::adjustOriginalPosition(const QPointF& originalPositionMovedDistance) {
-    ((MyRectangleStyleBase*)style())->setX(((MyRectangleStyleBase*)style())->x() - originalPositionMovedDistance.x());
-    ((MyRectangleStyleBase*)style())->setY(((MyRectangleStyleBase*)style())->y() - originalPositionMovedDistance.y());
-    _originalPosition += originalPositionMovedDistance;
+void MyRectangleGraphicsItem::updateOriginalPosition(const QPointF originalPosition) {
+    QRectF extents = getExtents();
+    ((MyRectangleStyleBase*)style())->setX(((MyRectangleStyleBase*)style())->x() - (originalPosition - (_originalPosition + _movedOriginalPosition)).x());
+    ((MyRectangleStyleBase*)style())->setY(((MyRectangleStyleBase*)style())->y() - (originalPosition - (_originalPosition + _movedOriginalPosition)).y());
+    _originalPosition = originalPosition - _movedOriginalPosition;
+}
+
+void MyRectangleGraphicsItem::moveOriginalPosition(const qreal& dx, const qreal& dy) {
+    _movedOriginalPosition += QPointF(dx, dy);
 }
 
 QGraphicsItem* MyRectangleGraphicsItem::getFocusedGraphicsItem() {

@@ -32,9 +32,9 @@ public:
 
     void setSelectedWithColor(const bool& selected) override;
 
-    const bool canBeMovedExternally() override;
+    const bool canBeMoved() override;
 
-    void moveExternally(const qreal& dx, const qreal& dy) override;
+    void move(const qreal& dx, const qreal& dy) override;
 
     const QRectF getExtents() override;
 

@@ -243,7 +243,7 @@ signals:
 
 public slots:
 
-    void moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance);
+    void moveSelectedNetworkElements(const QPointF& movedDistance);
 
 protected:
 

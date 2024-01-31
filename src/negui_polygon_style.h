@@ -23,8 +23,6 @@ public:
     // scale the points to fit the extents
     void scaleToExtents(const QRectF& extents);
 
-    void moveBy(qreal dx, qreal dy);
-
     // add the default points for a polygon style that contains no point
     virtual void addDefaultPoints() = 0;
 

@@ -24,9 +24,6 @@ QMenu* MyNodeGraphicsItemBase::createContextMenuObject() {
 
 MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
     _originalPosition = position;
-
-    // make it movable
-    setFlag(QGraphicsItem::ItemIsMovable, true);
     
     // make it send position changes
     setFlag(QGraphicsItem::ItemSendsScenePositionChanges, true);
@@ -39,55 +36,59 @@ MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position
     setZValue(2);
 }
 
-void MyNodeSceneGraphicsItemBase::moveChildItems(const QPointF& movedDistance) {
+void MyNodeSceneGraphicsItemBase::update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) {
+    if (_shapeStyles.size()) {
+        _originalPosition = getExtents().center();
+        setPos(0, 0);
+    }
+    MyNetworkElementGraphicsItemBase::update(shapeStyles, zValue);
+}
+
+void MyNodeSceneGraphicsItemBase::updateOriginalPosition() {
+    QPointF originalPosition = getExtents().center();
     for (QGraphicsItem* item : childItems()) {
         MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
         if (casted_item)
-            casted_item->setMovedDistance(movedDistance);
+            casted_item->updateOriginalPosition(originalPosition);
+    }
+}
+
+void MyNodeSceneGraphicsItemBase::moveChildItems(const qreal& dx, const qreal& dy) {
+    for (QGraphicsItem* item : childItems()) {
+        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
+        if (casted_item)
+            casted_item->moveOriginalPosition(dx,dy);
     }
 }
 
 void MyNodeSceneGraphicsItemBase::enableNormalMode() {
     MyNetworkElementGraphicsItemBase::enableNormalMode();
     setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, true);
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddNodeMode() {
     MyNetworkElementGraphicsItemBase::enableAddNodeMode();
     setCursor(Qt::ArrowCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectNodeMode() {
     MyNetworkElementGraphicsItemBase::enableSelectNodeMode();
     setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableAddEdgeMode() {
     MyNetworkElementGraphicsItemBase::enableAddEdgeMode();
     setCursor(Qt::PointingHandCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
 void MyNodeSceneGraphicsItemBase::enableSelectEdgeMode() {
     MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::ArrowCursor);
-    setFlag(QGraphicsItem::ItemIsMovable, false);
 }
 
-QVariant MyNodeSceneGraphicsItemBase::itemChange(GraphicsItemChange change, const QVariant &value) {
-    if (change == ItemPositionChange) {
-        moveChildItems(value.toPointF());
-        emit askForResetPosition();
-    }
-
-    return QGraphicsItem::itemChange(change, value);
-}
-
-void MyNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {
-    QGraphicsItem::moveBy(dx, dy);
+void MyNodeSceneGraphicsItemBase::move(qreal dx, qreal dy) {
+    moveBy(dx, dy);
+    moveChildItems(dx, dy);
 }
 
 void MyNodeSceneGraphicsItemBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
@@ -125,31 +126,10 @@ const bool MyClassicNodeSceneGraphicsItemBase::canAddTextShape() {
 
 void MyClassicNodeSceneGraphicsItemBase::setFocused(const bool& isFocused) {
     if (!isFocused && _focusedGraphicsItems.size()) {
-        emit askForResetPosition();
-        adjustOriginalPosition();
+        emit askForUpdateConnectedEdgesPoints();
         emit askForCreateChangeStageCommand();
     }
     MyNetworkElementGraphicsItemBase::setFocused(isFocused);
-}
-
-void MyClassicNodeSceneGraphicsItemBase::moveBy(qreal dx, qreal dy) {
-    if (qFabs(dx) > 0.0001 || qFabs(dy) > 0.0001)
-        QGraphicsItem::moveBy(dx, dy);
-    else
-        emit askForResetPosition();
-}
-
-void MyClassicNodeSceneGraphicsItemBase::adjustOriginalPosition() {
-    // TODO leads to an error in the position for newly added shapes.
-    /*
-    QPointF extentsCenter = getExtents().center();
-    for (QGraphicsItem* item : childItems()) {
-        MyShapeGraphicsItemBase* casted_item = dynamic_cast<MyShapeGraphicsItemBase*>(item);
-        if (casted_item)
-            casted_item->adjustOriginalPosition(extentsCenter - (_originalPosition + pos()));
-    }
-    _originalPosition = extentsCenter - pos();
-     */
 }
 
 void MyClassicNodeSceneGraphicsItemBase::updateExtents(const QRectF& extents) {
@@ -254,7 +234,6 @@ MyCentroidNodeSceneGraphicsItem::MyCentroidNodeSceneGraphicsItem(const QPointF &
 void MyCentroidNodeSceneGraphicsItem::connectShapeGraphicsItem(MyShapeGraphicsItemBase *item) {
     connect(item, SIGNAL(askForGetBezierAdjustLine()), this, SIGNAL(askForGetBezierAdjustLine()));
     connect(item, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)), this, SIGNAL(bezierAdjustLineIsUpdated(const QLineF&)));
-
 }
 
 const bool MyCentroidNodeSceneGraphicsItem::canAddCentroidShape() {

@@ -3,20 +3,23 @@
 
 // MyNetworkElementMoverBase
 
-MyNetworkElementMoverBase::MyNetworkElementMoverBase(QList<MyNetworkElementBase*> networkElements, MyNetworkElementBase* movedNetworkElement) {
+MyNetworkElementMoverBase::MyNetworkElementMoverBase(QList<MyNetworkElementBase*> networkElements) {
     _networkElements = networkElements;
-    _movedNetworkElement = movedNetworkElement;
 }
 
 // MyNodeMover
 
-MyNodeMover::MyNodeMover(QList<MyNetworkElementBase*> networkElements, MyNetworkElementBase* movedNetworkElement) : MyNetworkElementMoverBase(networkElements, movedNetworkElement) {
+MyNodeMover::MyNodeMover(QList<MyNetworkElementBase*> networkElements) : MyNetworkElementMoverBase(networkElements) {
 
 }
 
 void MyNodeMover::move(const qreal& dx, const qreal& dy) {
     for (MyNetworkElementBase* networkElement : _networkElements) {
-        if (networkElement != _movedNetworkElement)
-            ((MyNodeBase*)networkElement)->moveExternally(dx, dy);
+        if (!whetherParentNodeIsInSelectedNetworkElements(networkElement))
+            ((MyNodeBase*)networkElement)->move(dx, dy);
     }
+}
+
+const bool MyNodeMover::whetherParentNodeIsInSelectedNetworkElements(MyNetworkElementBase* networkElement) {
+    return findElement(_networkElements, ((MyNodeBase*)networkElement)->parentNodeId());
 }

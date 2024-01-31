@@ -11,8 +11,10 @@ public:
     virtual const qreal getEndSlope();
     
     virtual void setLine(const QLineF& line) = 0;
+
+    void updateOriginalPosition(const QPointF originalPosition) override;
     
-    void adjustOriginalPosition(const QPointF& originalPositionMovedDistance) override;
+    void moveOriginalPosition(const qreal& dx, const qreal& dy) override;
     
 public slots:
     virtual void updateExtents(const QRectF& extents) override;

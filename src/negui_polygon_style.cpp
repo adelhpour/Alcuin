@@ -56,12 +56,13 @@ const QRectF MyPolygonStyleBase::getShapeExtents() {
         if (extents.y() + extents.height() < parameter->defaultValueY())
             extents.setHeight(parameter->defaultValueY() - extents.y());
     }
-    
+
     return extents;
 }
 
 void MyPolygonStyleBase::updateShapeExtents(const QRectF& extents) {
-    scaleToExtents(QRectF(extents.x() + 0.5 * extents.width(), extents.y() + 0.5 * extents.height(), extents.width(), extents.height()));
+    QRectF polygonBoundingRect = getShapeExtents();
+    scaleToExtents(QRectF(polygonBoundingRect.x(), polygonBoundingRect.y(), extents.width(), extents.height()));
 }
 
 void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
@@ -71,16 +72,8 @@ void MyPolygonStyleBase::scaleToExtents(const QRectF& extents) {
     
     QList<MyAbsolutePointParameter*> parameters = pointParameters();
     for (MyAbsolutePointParameter* parameter : qAsConst(parameters)) {
-        parameter->setDefaultValueX(extents.x() + xScaleFactor * (parameter->defaultValueX() - polygonBoundingRect.center().x()) + polygonBoundingRect.center().x());
-        parameter->setDefaultValueY(extents.y() + yScaleFactor * (parameter->defaultValueY() - polygonBoundingRect.center().y()) + polygonBoundingRect.center().y());
-    }
-}
-
-void MyPolygonStyleBase::moveBy(qreal dx, qreal dy) {
-    QList<MyAbsolutePointParameter*> parameters = pointParameters();
-    for (MyAbsolutePointParameter* parameter : qAsConst(parameters)) {
-        parameter->setDefaultValueX(parameter->defaultValueX() + dx);
-        parameter->setDefaultValueY(parameter->defaultValueY() + dy);
+        parameter->setDefaultValueX(xScaleFactor * parameter->defaultValueX() + (extents.x() - polygonBoundingRect.x()));
+        parameter->setDefaultValueY(yScaleFactor * parameter->defaultValueY() + (extents.y() - polygonBoundingRect.y()));
     }
 }
 

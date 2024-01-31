@@ -418,7 +418,7 @@ void MyNetworkManager::addNode(MyNetworkElementBase* n) {
         connect(n, &MyNetworkElementBase::askForWhetherAnyOtherElementsAreSelected, this, [this] (QList<MyNetworkElementBase*> networkElements) {
             return ((MyNetworkElementSelector*)_networkElementSelector)->areAnyOtherElementsSelected(networkElements); });
         connect(n, SIGNAL(askForIconsDirectoryPath()), this, SIGNAL(askForIconsDirectoryPath()));
-        connect(n, SIGNAL(positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&)), this, SLOT(moveSelectedNetworkElements(MyNetworkElementBase*, const QPointF&)));
+        connect(n, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(moveSelectedNetworkElements(const QPointF&)));
         connect(n, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)), this, SIGNAL(askForDisplaySceneContextMenu(const QPointF&)));
         connect(n, SIGNAL(askForWhetherControlModifierIsPressed()), this, SIGNAL(askForWhetherControlModifierIsPressed()));
         connect(n->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
@@ -561,8 +561,8 @@ void MyNetworkManager::deleteEdge(MyNetworkElementBase* edge) {
     askForCreateChangeStageCommand();
 }
 
-void MyNetworkManager::moveSelectedNetworkElements(MyNetworkElementBase* movedNode, const QPointF& movedDistance) {
-    MyNetworkElementMoverBase* nodeMover = new MyNodeMover(getSelectedNodes(), movedNode);
+void MyNetworkManager::moveSelectedNetworkElements(const QPointF& movedDistance) {
+    MyNetworkElementMoverBase* nodeMover = new MyNodeMover(getSelectedNodes());
     nodeMover->move(movedDistance.x(), movedDistance.y());
     nodeMover->deleteLater();
 }

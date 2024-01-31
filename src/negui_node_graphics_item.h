@@ -30,7 +30,9 @@ public:
 
     MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent = nullptr);
 
-    void moveChildItems(const QPointF& movedDistance);
+    void update(QList<MyShapeStyleBase*> shapeStyles, const qint32& zValue) override;
+
+    void moveChildItems(const qreal& dx, const qreal& dy);
     
     void enableNormalMode() override;
 
@@ -42,19 +44,21 @@ public:
 
     void enableSelectEdgeMode() override;
 
-    virtual void moveBy(qreal dx, qreal dy);
+    virtual void move(qreal dx, qreal dy);
     
 signals:
     
     void askForUpdateParentNode();
     
-    void askForResetPosition();
+    void askForUpdateConnectedEdgesPoints();
 
     void positionChangedByMouseMoveEvent(const QPointF&);
+
+public slots:
+
+    void updateOriginalPosition();
     
 protected:
-
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
@@ -77,10 +81,6 @@ public:
     const bool canAddTextShape() override;
 
     void setFocused(const bool& isFocused) override;
-
-    void moveBy(qreal dx, qreal dy) override;
-
-    void adjustOriginalPosition();
 
 public slots:
 

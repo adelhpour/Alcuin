@@ -151,7 +151,7 @@ MyNetworkElementBase* MyNewTemplateBuilder::intermediaryNode() {
 const QPointF MyNewTemplateBuilder::intermediaryNodePosition() {
     QPointF position(0.0, 0.0);
     for (MyNetworkElementBase* connectedNode : selectedEdgeSourceNodes() + selectedEdgeTargetNodes())
-        position += ((MyNodeBase*)connectedNode)->position();
+        position += ((MyNodeBase*)connectedNode)->getPosition();
     position /= selectedEdgeSourceNodes().size() + selectedEdgeTargetNodes().size();
     
     return position;

@@ -14,7 +14,7 @@ public:
         CENTROID_NODE,
     } NODE_TYPE;
     
-    MyNodeBase(const QString& name, const qreal& x, const qreal& y);
+    MyNodeBase(const QString& name);
     
     ELEMENT_TYPE type() override;
 
@@ -40,7 +40,7 @@ public:
     const bool isCuttable() override;
 
     // get the position of the node
-    const QPointF position() const;
+    const QPointF getPosition();
 
     // get the id of parent node of the node
     const QString& parentNodeId() const;
@@ -68,6 +68,8 @@ public:
 
     const QRectF getExtents() override;
 
+    const bool canBeMoved() override;
+
     const qreal endEdgePadding();
     
     const qint32 calculateZValue() override;
@@ -88,24 +90,19 @@ public:
     
 signals:
 
-    void positionChangedByMouseMoveEvent(MyNetworkElementBase*, const QPointF&);
+    void positionChangedByMouseMoveEvent(const QPointF&);
 
     void parentNodeIsUpdated();
     
 public slots:
 
+    void updateConnectedEdgesPoints();
+
     void updateSelectedNodesParentNode();
-    
-    // update the parent node of the node
+
     void updateParentNode();
 
     MyNetworkElementBase* getParentNodeAtPosition(const QPointF& position);
-    
-    // set the position of the node using its current position
-    void resetPosition();
-    
-    // set the position of the node
-    virtual void setPosition(const QPointF& position);
 
     void adjustConnectedEdges(const bool& movedByParentNodeMove = false);
 
@@ -117,7 +114,6 @@ protected:
     QString _parentNodeId;
     MyNetworkElementBase* _parentNode;
     QList<MyNetworkElementBase*> _edges;
-    QPointF _position;
     bool _isSetParentNode;
     bool _isParentNodeLocked;
     qreal _endEdgePadding;
@@ -128,7 +124,7 @@ class MyClassicNodeBase : public MyNodeBase {
 
 public:
 
-    MyClassicNodeBase(const QString& name, const qreal& x, const qreal& y);
+    MyClassicNodeBase(const QString& name);
 
     const bool isCopyable() override;
 
@@ -147,9 +143,11 @@ public:
     // return true if the child nodes of the node are locked
     const bool areChildNodesLocked() const { return _areChildNodesLocked; }
 
-    void moveExternally(const qreal& dx, const qreal& dy) override;
+    void move(const qreal& dx, const qreal& dy) override;
 
-    const bool canBeMovedExternally() override;
+    void moveChildNodes(const qreal& dx, const qreal& dy);
+
+    void adjustParentExtents();
 
     // get node extents based on its children extents
     const QRectF getExtents() override;
@@ -161,9 +159,6 @@ public:
     const qint32 calculateConnectedEdgeZValue() override;
 
 public slots:
-
-    // set the position of the node
-    void setPosition(const QPointF& position) override;
 
     void adjustExtents() override;
 
@@ -237,9 +232,7 @@ public:
 
     const bool connectedBezierCurvesNeedsToBeAdjusted();
 
-    void moveExternally(const qreal& dx, const qreal& dy) override;
-
-    const bool canBeMovedExternally() override;
+    void move(const qreal& dx, const qreal& dy) override;
 
     QWidget* getFeatureMenu() override;
 

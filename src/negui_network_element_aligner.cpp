@@ -28,7 +28,7 @@ void MyNodeAlignerBase::extractExtents() {
     _maxY = INT_MIN;
     QPointF position;
     for (MyNetworkElementBase* node : _networkElements) {
-            position = ((MyNodeBase*)node)->position();
+            position = ((MyNodeBase*)node)->getPosition();
             if (_minX > position.x())
                 _minX = position.x();
             if (_maxX < position.x())
@@ -75,7 +75,7 @@ MyNodeTopAligner::MyNodeTopAligner(QList<MyNetworkElementBase*> networkElements)
 void MyNodeTopAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(0, _minY - ((MyNodeBase*)classicNode)->position().y());
+        ((MyNodeBase*)classicNode)->move(0, _minY - ((MyNodeBase*)classicNode)->getPosition().y());
     adjustCentroidNodePositions();
 }
 
@@ -88,7 +88,7 @@ MyNodeMiddleAligner::MyNodeMiddleAligner(QList<MyNetworkElementBase*> networkEle
 void MyNodeMiddleAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(0, 0.5 * (_minY + _maxY) - ((MyNodeBase*)classicNode)->position().y());
+        ((MyNodeBase*)classicNode)->move(0, 0.5 * (_minY + _maxY) - ((MyNodeBase*)classicNode)->getPosition().y());
     adjustCentroidNodePositions();
 }
 
@@ -101,7 +101,7 @@ MyNodeBottomAligner::MyNodeBottomAligner(QList<MyNetworkElementBase*> networkEle
 void MyNodeBottomAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(0, _maxY - ((MyNodeBase*)classicNode)->position().y());
+        ((MyNodeBase*)classicNode)->move(0, _maxY - ((MyNodeBase*)classicNode)->getPosition().y());
     adjustCentroidNodePositions();
 }
 
@@ -114,7 +114,7 @@ MyNodeLeftAligner::MyNodeLeftAligner(QList<MyNetworkElementBase*> networkElement
 void MyNodeLeftAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(_minX - ((MyNodeBase*)classicNode)->position().x(), 0);
+        ((MyNodeBase*)classicNode)->move(_minX - ((MyNodeBase*)classicNode)->getPosition().x(), 0);
     adjustCentroidNodePositions();
 }
 
@@ -127,7 +127,7 @@ MyNodeCenterAligner::MyNodeCenterAligner(QList<MyNetworkElementBase*> networkEle
 void MyNodeCenterAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(0.5 * (_minX + _maxX) - ((MyNodeBase*)classicNode)->position().x(), 0);
+        ((MyNodeBase*)classicNode)->move(0.5 * (_minX + _maxX) - ((MyNodeBase*)classicNode)->getPosition().x(), 0);
     adjustCentroidNodePositions();
 }
 
@@ -140,7 +140,7 @@ MyNodeRightAligner::MyNodeRightAligner(QList<MyNetworkElementBase*> networkEleme
 void MyNodeRightAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     for (MyNetworkElementBase* classicNode : classicNodes)
-        ((MyNodeBase*)classicNode)->moveExternally(_maxX - ((MyNodeBase*)classicNode)->position().x(), 0);
+        ((MyNodeBase*)classicNode)->move(_maxX - ((MyNodeBase*)classicNode)->getPosition().x(), 0);
     adjustCentroidNodePositions();
 }
 
@@ -160,7 +160,7 @@ void MyNodeHorizontallyDistributeAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     qreal distributionDistance = (_maxX - _minX) / (classicNodes.size() - 1);
     for (unsigned  int i = 0; i < classicNodes.size(); i++)
-        ((MyNodeBase*)classicNodes.at(i))->moveExternally(_minX - ((MyNodeBase*)classicNodes.at(i))->position().x() + i * distributionDistance, 0);
+        ((MyNodeBase*)classicNodes.at(i))->move(_minX - ((MyNodeBase*)classicNodes.at(i))->getPosition().x() + i * distributionDistance, 0);
     adjustCentroidNodePositions();
 }
 
@@ -174,7 +174,7 @@ void MyNodeVerticallyDistributeAligner::adjustNodePositions() {
     QList<MyNetworkElementBase*> classicNodes = getClassicNodes();
     qreal distributionDistance = (_maxY - _minY) / (classicNodes.size() - 1);
     for (unsigned  int i = 0; i < classicNodes.size(); i++)
-        ((MyNodeBase*)classicNodes.at(i))->moveExternally(0, _minY - ((MyNodeBase*)classicNodes.at(i))->position().y() + i * distributionDistance);
+        ((MyNodeBase*)classicNodes.at(i))->move(0, _minY - ((MyNodeBase*)classicNodes.at(i))->getPosition().y() + i * distributionDistance);
     adjustCentroidNodePositions();
 }
 
@@ -210,9 +210,10 @@ void MyNodeGridDistributeAligner::adjustClassicNodesPositionsInGrid(QList<MyNetw
     qint32 row = 0;
     while (row <= classicNodes.size() / numberOfGridColumns) {
         for (unsigned int column = 0; column < numberOfGridColumns && row * numberOfGridColumns + column < classicNodes.size()  ; column++) {
-            ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->moveExternally(
-                    _minX - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().x() +
-                    column * distributionDistance, _minY - ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->position().y() + row * distributionDistance);
+            QPointF position = ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->getPosition();
+            ((MyNodeBase *) classicNodes.at(row * numberOfGridColumns + column))->move(
+                    _minX - position.x() +
+                    column * distributionDistance, _minY - position.y() + row * distributionDistance);
         }
         row++;
     }
