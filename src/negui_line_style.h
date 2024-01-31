@@ -39,10 +39,6 @@ public:
 
     // write the node style info to the json object
     void write(QJsonObject &json) override;
-
-public slots:
-
-    void updateShapeExtents(const QRectF& extents) override;
 };
 
 class MyClassicLineStyle : public MyLineStyleBase {

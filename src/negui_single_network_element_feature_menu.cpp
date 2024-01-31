@@ -72,7 +72,7 @@ void MySingleNetworkElementFeatureMenu::removeShapeStyle(MyShapeStyleBase* shape
 }
 
 void MySingleNetworkElementFeatureMenu::changeShapeStyle(MyShapeStyleBase* shapeStyle) {
-    shapeStyle->updateShapeExtents(_shapeStyles.first()->getShapeExtents());
+    shapeStyle->update(_shapeStyles.first());
     _shapeStyles.removeFirst();
     addSingleShapeStyle(shapeStyle);
     emit isUpdated(shapeStyles());

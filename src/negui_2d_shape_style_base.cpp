@@ -29,6 +29,20 @@ const QBrush My2DShapeStyleBase::selectedBrush() const {
     return brush;
 }
 
+void My2DShapeStyleBase::updateBrush(const QBrush& brush) {
+    MyParameterBase* parameter = findParameter("fill-color");
+    if (parameter)
+        ((MyFillColorParameter*)parameter)->setDefaultValue(brush.color().name());
+}
+
+void My2DShapeStyleBase::update(MyShapeStyleBase* shapeStyle) {
+    My1DShapeStyleBase::update(shapeStyle);
+    if (dynamic_cast<My2DShapeStyleBase*>(shapeStyle)) {
+        updateBrush(((My2DShapeStyleBase*)shapeStyle)->brush());
+        updateShapeExtents(shapeStyle->getShapeExtents());
+    }
+}
+
 void My2DShapeStyleBase::read(const QJsonObject &json) {
     My1DShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;

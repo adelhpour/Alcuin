@@ -43,6 +43,24 @@ const QPen My1DShapeStyleBase::selectedPen() const {
     return pen;
 }
 
+void My1DShapeStyleBase::updatePen(const QPen& pen) {
+    MyParameterBase* parameter = NULL;
+    // border-width
+    parameter = findParameter("border-width");
+    if (parameter)
+        ((MyBorderWidthParameter*)parameter)->setDefaultValue(pen.width());
+
+    // border-color
+    parameter = findParameter("border-color");
+    if (parameter)
+        ((MyBorderColorParameter*)parameter)->setDefaultValue(pen.color().name());
+}
+
+void My1DShapeStyleBase::update(MyShapeStyleBase* shapeStyle) {
+    if (dynamic_cast<My1DShapeStyleBase*>(shapeStyle))
+        updatePen(((My1DShapeStyleBase*)shapeStyle)->pen());
+}
+
 void My1DShapeStyleBase::read(const QJsonObject &json) {
     MyShapeStyleBase::read(json);
     MyParameterBase* parameter = NULL;

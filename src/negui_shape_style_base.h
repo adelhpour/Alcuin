@@ -50,6 +50,8 @@ public:
     
     // set the default values of each parameter
     virtual void updateFeatures();
+
+    virtual void update(MyShapeStyleBase* shapeStyle) = 0;
     
     // reset all the values
     virtual void reset();
@@ -63,10 +65,6 @@ public:
 signals:
 
     void isUpdated();
-
-public slots:
-
-    virtual void updateShapeExtents(const QRectF& extents) = 0;
 
 protected:
     QList<MyParameterBase*> _parameters;
