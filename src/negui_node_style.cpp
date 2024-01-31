@@ -137,7 +137,7 @@ void MySimpleClassicNodeStyle::updateSimpleTextStyleExtentsWithOtherShapeStyleEx
                 otherShapeStyle = shapeStyle;
         }
         if (simpleTextStyle && otherShapeStyle)
-            simpleTextStyle->updateShapeExtents(otherShapeStyle->getShapeExtents());
+            simpleTextStyle->update(otherShapeStyle);
     }
 }
 
@@ -148,7 +148,7 @@ QWidget* MySimpleClassicNodeStyle::shapeStylesButtons() {
 }
 
 void MySimpleClassicNodeStyle::replaceShapeStyle(MyShapeStyleBase* shapeStyle) {
-    shapeStyle->updateShapeExtents(shapeStyles().first()->getShapeExtents());
+    shapeStyle->update(shapeStyles().first());
     _shapeStyles.removeFirst();
     _shapeStyles.push_front(shapeStyle);
 }

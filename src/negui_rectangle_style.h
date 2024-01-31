@@ -50,15 +50,13 @@ public:
     // get the y value of border radius
     const qreal borderRadiusY() const;
 
+    void updateShapeExtents(const QRectF& extents) override;
+
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
 
     // write the node style info to the json object
     void write(QJsonObject &json) override;
-
-public slots:
-
-    void updateShapeExtents(const QRectF& extents) override;
 };
 
 class MyNodeRectangleStyle : public MyRectangleStyleBase {

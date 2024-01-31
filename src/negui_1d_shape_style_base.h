@@ -18,6 +18,10 @@ public:
     // get the pen with selected border color
     const QPen selectedPen() const;
 
+    void updatePen(const QPen& pen);
+
+    void update(MyShapeStyleBase* shapeStyle) override;
+
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
 

@@ -16,6 +16,12 @@ public:
     // get the brush with selected fill color
     const QBrush selectedBrush() const;
 
+    void updateBrush(const QBrush& brush);
+
+    virtual void updateShapeExtents(const QRectF& extents) = 0;
+
+    void update(MyShapeStyleBase* shapeStyle) override;
+
     // read the node style info from the json object
     void read(const QJsonObject &json) override;
 
