@@ -28,7 +28,7 @@ void MyNetworkElementSelector::selectNetworkElements(QList<MyNetworkElementBase*
 }
 
 void MyNetworkElementSelector::setNetworkElementSelected(const QString& networkElementName, const bool& selected) {
-    setNetworkElementSelected(getNetworkElement(askForNodes() + askForEdges(), networkElementName), selected);
+    setNetworkElementSelected(getNetworkElement(askForNodes() + askForEdges() + askForArrowHeads(), networkElementName), selected);
 }
 
 void MyNetworkElementSelector::setNetworkElementSelected(MyNetworkElementBase* networkElement, const bool& selected) {

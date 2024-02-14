@@ -74,6 +74,8 @@ signals:
 
     QList<MyNetworkElementBase*> askForEdges();
 
+    QList<MyNetworkElementBase*> askForArrowHeads();
+
     const bool askForWhetherShiftModifierIsPressed();
 
     void askForAddGraphicsItem(QGraphicsItem*);

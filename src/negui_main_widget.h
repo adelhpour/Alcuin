@@ -60,6 +60,8 @@ public slots:
     void deleteEdge(const QString& edgeName);
     QJsonArray listOfEdges();
     const qreal numberOfEdges();
+    QJsonArray listOfArrowHeads();
+    const qreal numberOfArrowHeads();
     void cutSelectedNetworkElements();
     void copySelectedNetworkElements();
     void pasteCopiedNetworkElements();
