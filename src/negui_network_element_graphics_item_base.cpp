@@ -247,14 +247,3 @@ void MyNetworkElementGraphicsItemBase::mouseDoubleClickEvent(QGraphicsSceneMouse
     }
     QGraphicsItem::mouseDoubleClickEvent(event);
 }
-
-void MyNetworkElementGraphicsItemBase::displayContextMenu(const QPoint& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherAnyOtherElementsAreSelected() || !askForWhetherNetworkElementIsSelected()) {
-            QMenu* contextMenu = createContextMenu();
-            contextMenu->exec(position);
-        }
-        else
-            askForDisplaySceneContextMenu(position);
-    }
-}

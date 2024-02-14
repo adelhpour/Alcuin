@@ -15,6 +15,10 @@ public:
 
     virtual QMenu* createContextMenuObject();
 
+public slots:
+
+    void displayContextMenu(const QPoint& position) override;
+
 signals:
 
     const QLineF askForGetBezierAdjustLine();

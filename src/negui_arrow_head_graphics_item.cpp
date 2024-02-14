@@ -29,6 +29,13 @@ QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
     return contextMenu;
 }
 
+void MyArrowHeadGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        QMenu* contextMenu = createContextMenu();
+        contextMenu->exec(position);
+    }
+}
+
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {

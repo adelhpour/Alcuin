@@ -20,6 +20,17 @@ QMenu* MyNodeGraphicsItemBase::createContextMenuObject() {
     return new MyNodeGraphicsItemContextMenuBase();
 }
 
+void MyNodeGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        if (!askForWhetherAnyOtherElementsAreSelected() || !askForWhetherNetworkElementIsSelected()) {
+            QMenu* contextMenu = createContextMenu();
+            contextMenu->exec(position);
+        }
+        else
+            askForDisplaySceneContextMenu(position);
+    }
+}
+
 // MyNodeSceneGraphicsItemBase
 
 MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {

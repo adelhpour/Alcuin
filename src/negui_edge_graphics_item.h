@@ -27,6 +27,10 @@ public:
     void adjustStartPointToControlBezierLine(const QLineF& controlBezierLine);
 
     void adjustEndPointToControlBezierLine(const QLineF& controlBezierLine);
+
+public slots:
+
+    void displayContextMenu(const QPoint& position) override;
     
 signals:
     
