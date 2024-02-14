@@ -7,7 +7,6 @@
 // MyNetworkElementGraphicsItemBase
 
 MyNetworkElementGraphicsItemBase::MyNetworkElementGraphicsItemBase(QGraphicsItem *parent) : QGraphicsItemGroup(parent) {
-    _isChosen = false;
     _originalPosition = QPointF(0.0, 0.0);
     connect(this, SIGNAL(mouseLeftButtonIsPressed()), this, SIGNAL(askForSelectNetworkElement()));
     connect(this, SIGNAL(mouseLeftButtonIsDoubleClicked()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
@@ -120,7 +119,7 @@ QList<QGraphicsItem*> MyNetworkElementGraphicsItemBase::createFocusedGraphicsIte
                 focusedGraphicsItems.push_back((focusedGraphicsItem));
         }
     }
-    
+
     return focusedGraphicsItems;
 }
 
@@ -204,7 +203,7 @@ void MyNetworkElementGraphicsItemBase::setCursor(const QCursor &cursor) {
         item->setCursor(cursor);
     QGraphicsItemGroup::setCursor(cursor);
 }
- 
+
 void MyNetworkElementGraphicsItemBase::clear() {
     for (QGraphicsItem* item : childItems()) {
         removeFromGroup(item);
@@ -221,20 +220,21 @@ void MyNetworkElementGraphicsItemBase::setZValue(qreal z) {
 void MyNetworkElementGraphicsItemBase::mousePressEvent(QGraphicsSceneMouseEvent *event) {
     QGraphicsItem::mousePressEvent(event);
     if (event->button() == Qt::LeftButton) {
-        _isChosen = true;
         emit mouseLeftButtonIsPressed();
         event->accept();
     }
+    else if (event->button() == Qt::RightButton)
+        setFlag(QGraphicsItem::ItemIsMovable, true);
 }
 
 void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        _isChosen = false;
         event->accept();
         emit askForCreateChangeStageCommand();
     }
     else if (event->button() == Qt::RightButton) {
         displayContextMenu(event->screenPos());
+        setFlag(QGraphicsItem::ItemIsMovable, false);
         event->accept();
     }
     QGraphicsItem::mouseReleaseEvent(event);

@@ -24,11 +24,7 @@ QMenu* MyNodeGraphicsItemBase::createContextMenuObject() {
 
 MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
     _originalPosition = position;
-    
-    // make it send position changes
-    setFlag(QGraphicsItem::ItemSendsScenePositionChanges, true);
-    
-    // make it focusable
+
     setFlag(QGraphicsItem::ItemIsFocusable, true);
 
     connect(this, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(updateFocusedGraphicsItems()));
