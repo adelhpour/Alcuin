@@ -102,7 +102,6 @@ protected:
     QPointF _originalPosition;
     QList<MyShapeStyleBase*> _shapeStyles;
     QList<QGraphicsItem*> _focusedGraphicsItems;
-    bool _isChosen;
 };
 
 #endif
