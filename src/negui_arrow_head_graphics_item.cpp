@@ -30,10 +30,7 @@ QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
 }
 
 void MyArrowHeadGraphicsItemBase::displayContextMenu(const QPoint& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        QMenu* contextMenu = createContextMenu();
-        contextMenu->exec(position);
-    }
+    // no context menu is needed to be displayed for arrow heads
 }
 
 // MyArrowHeadSceneGraphicsItem
