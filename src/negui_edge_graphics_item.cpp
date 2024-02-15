@@ -59,6 +59,13 @@ const qreal MyEdgeGraphicsItemBase::getEndSlope() const {
     return endSlope;
 }
 
+void MyEdgeGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        QMenu* contextMenu = createContextMenu();
+        contextMenu->exec(position);
+    }
+}
+
 // MyEdgeSceneGraphicsItemBase
 
 MyEdgeSceneGraphicsItemBase::MyEdgeSceneGraphicsItemBase(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {

@@ -29,6 +29,10 @@ QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
     return contextMenu;
 }
 
+void MyArrowHeadGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    // no context menu is needed to be displayed for arrow heads
+}
+
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {

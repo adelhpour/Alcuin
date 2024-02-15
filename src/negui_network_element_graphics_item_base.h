@@ -87,7 +87,7 @@ signals:
 
 public slots:
 
-    void displayContextMenu(const QPoint& position);
+    virtual void displayContextMenu(const QPoint& position) = 0;
 
     void updateFocusedGraphicsItems();
     

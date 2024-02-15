@@ -227,10 +227,14 @@ const QJsonValue callAPIFunction(QObject* mainWidget, const QString& functionNam
             return ((MyMainWidget*)mainWidget)->listOfNodes();
         else if (functionName == "listOfEdges")
             return ((MyMainWidget*)mainWidget)->listOfEdges();
+        else if (functionName == "listOfArrowHeads")
+            return ((MyMainWidget*)mainWidget)->listOfArrowHeads();
         else if (functionName == "numberOfNodes")
             return ((MyMainWidget*)mainWidget)->numberOfNodes();
         else if (functionName == "numberOfEdges")
             return ((MyMainWidget*)mainWidget)->numberOfEdges();
+        else if (functionName == "numberOfArrowHeads")
+            return ((MyMainWidget*)mainWidget)->numberOfArrowHeads();
     }
 
     return QJsonValue();
