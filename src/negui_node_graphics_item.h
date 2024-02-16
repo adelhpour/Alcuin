@@ -11,10 +11,6 @@ public:
     
     MyNodeGraphicsItemBase(QGraphicsItem *parent = nullptr);
 
-    QMenu* createContextMenu() override;
-
-    virtual QMenu* createContextMenuObject();
-
 signals:
 
     const QLineF askForGetBezierAdjustLine();
@@ -45,6 +41,10 @@ public:
     void enableSelectEdgeMode() override;
 
     virtual void move(qreal dx, qreal dy);
+
+    QMenu* createContextMenu();
+
+    virtual QMenu* createContextMenuObject();
     
 signals:
     
@@ -57,6 +57,8 @@ signals:
 public slots:
 
     void updateOriginalPosition();
+
+    void displayContextMenu(const QPointF& position);
     
 protected:
 

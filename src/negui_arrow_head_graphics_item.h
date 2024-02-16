@@ -15,8 +15,6 @@ public:
     const bool canAddRectangleShape() override;
 
     const bool canAddPolygonShape() override;
-
-    QMenu* createContextMenu() override;
 };
 
 class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {

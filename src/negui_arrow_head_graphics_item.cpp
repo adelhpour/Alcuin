@@ -22,13 +22,6 @@ const bool MyArrowHeadGraphicsItemBase::canAddPolygonShape() {
     return true;
 }
 
-QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
-    QMenu* contextMenu = new MyArrowHeadGraphicsItemContextMenu();
-    connectContextMenu(contextMenu);
-    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
-    return contextMenu;
-}
-
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {

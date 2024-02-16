@@ -1,10 +1,10 @@
 #include "negui_edge.h"
 #include "negui_node.h"
-#include "negui_arrow_head.h"
-#include "negui_arrow_head_builder.h"
 #include "negui_edge_graphics_item_builder.h"
+#include "negui_arrow_head_graphics_item_builder.h"
 #include "negui_edge_style.h"
 #include "negui_edge_graphics_item.h"
+#include "negui_arrow_head_graphics_item.h"
 #include "negui_customized_common_widgets.h"
 
 #include <QtMath>
@@ -14,13 +14,7 @@
 // MyEdgeBase
 
 MyEdgeBase::MyEdgeBase(const QString& name) : MyNetworkElementBase(name) {
-    _arrowHead = NULL;
-    _isSetArrowHead = false;
-}
-
-MyEdgeBase::~MyEdgeBase() {
-    if (isSetArrowHead())
-        delete _arrowHead;
+    _arrowHeadGraphicsItem = createArrowHeadSceneGraphicsItem();
 }
 
 MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
@@ -30,6 +24,9 @@ MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
 void MyEdgeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, SIGNAL(askForUpdateArrowHeadPlacement()), this, SLOT(updateArrowHeadPlacement()));
+    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
+    connect(_arrowHeadGraphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });;
+    connect(_arrowHeadGraphicsItem, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
 }
 
 void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
@@ -54,23 +51,31 @@ MyNetworkElementBase* MyEdgeBase::targetNode() {
     return _targetNode;
 }
 
+MyNetworkElementGraphicsItemBase* MyEdgeBase::arrowHeadGraphicsItem() {
+    return _arrowHeadGraphicsItem;
+}
+
 void MyEdgeBase::updateGraphicsItem() {
     MyNetworkElementBase::updateGraphicsItem();
-    if (isSetArrowHead())
-        arrowHead()->updateGraphicsItem();
+    updateArrowHeadGraphicsItem();
     updatePoints();
+}
+
+void MyEdgeBase::updateArrowHeadGraphicsItem() {
+    if (arrowHeadGraphicsItem())
+        ((MyArrowHeadGraphicsItemBase*)arrowHeadGraphicsItem())->update(((MyEdgeStyleBase*)style())->arrowHeadStyle()->shapeStyles(), calculateArrowHeadZValue());
 }
 
 void MyEdgeBase::setStyle(MyNetworkElementStyleBase* style) {
     MyNetworkElementBase::setStyle(style);
-    setArrowHead();
+    updateArrowHeadGraphicsItem();
 }
 
 void MyEdgeBase::setSelected(const bool& selected) {
     if (selected != isSelected()) {
         MyNetworkElementBase::setSelected(selected);
-        if (isSetArrowHead())
-            arrowHead()->setSelected(selected);
+        if (arrowHeadGraphicsItem())
+            arrowHeadGraphicsItem()->setFocused(selected);
         emit askForSetConnectedElementsSelected(selected);
     }
 }
@@ -79,26 +84,8 @@ void MyEdgeBase::setSelectedWithColor(const bool& selected) {
     graphicsItem()->setSelectedWithBorderColor(selected);
     if (!selected)
         graphicsItem()->setSelectedWithFillColor(selected);
-
-    if (isSetArrowHead())
-        arrowHead()->setSelectedWithColor(selected);
-}
-
-MyNetworkElementBase* MyEdgeBase::arrowHead() {
-    return _arrowHead;
-}
-
-void MyEdgeBase::setArrowHead() {
-    if (isSetArrowHead()) {
-        delete _arrowHead;
-        _isSetArrowHead = false;
-    }
-
-    if (((MyEdgeStyleBase*)style())->arrowHeadStyle() && ((MyEdgeStyleBase*)style())->arrowHeadStyle()->shapeStyles().size()) {
-        _arrowHead = createArrowHead(name() + "_ArrowHead", ((MyEdgeStyleBase*)style())->arrowHeadStyle(), this);
-        connect(_arrowHead, SIGNAL(askForDisplayFeatureMenu(MyNetworkElementBase*)), this, SIGNAL(askForDisplayFeatureMenu(MyNetworkElementBase*)));
-        _isSetArrowHead = true;
-    }
+    if (arrowHeadGraphicsItem())
+        arrowHeadGraphicsItem()->setSelectedWithFillColor(selected);
 }
 
 bool MyEdgeBase::setActive(const bool& active) {
@@ -120,38 +107,12 @@ void MyEdgeBase::updatePoints() {
 }
 
 void MyEdgeBase::updateArrowHeadPlacement() {
-    if (isSetArrowHead())
-        ((MyArrowHeadBase*)arrowHead())->updatePlacement(getEndOfTheLinePosition(targetNode(), sourceNode()), ((MyEdgeSceneGraphicsItemBase*)graphicsItem())->getEndSlope());
-}
-
-void MyEdgeBase::enableNormalMode() {
-    MyNetworkElementBase::enableNormalMode();
-    if (isSetArrowHead())
-        arrowHead()->enableNormalMode();
-}
-
-void MyEdgeBase::enableAddNodeMode() {
-    MyNetworkElementBase::enableAddNodeMode();
-    if (isSetArrowHead())
-        arrowHead()->enableAddNodeMode();
-}
-
-void MyEdgeBase::enableSelectNodeMode() {
-    MyNetworkElementBase::enableSelectNodeMode();
-    if (isSetArrowHead())
-        arrowHead()->enableSelectNodeMode();
-}
-
-void MyEdgeBase::enableAddEdgeMode() {
-    MyNetworkElementBase::enableAddEdgeMode();
-    if (isSetArrowHead())
-        arrowHead()->enableAddEdgeMode();
-}
-
-void MyEdgeBase::enableSelectEdgeMode() {
-    MyNetworkElementBase::enableSelectEdgeMode();
-    if (isSetArrowHead())
-        arrowHead()->enableSelectEdgeMode();
+    if (arrowHeadGraphicsItem()) {
+        ((MyArrowHeadSceneGraphicsItem *) arrowHeadGraphicsItem())->update(
+                getEndOfTheLinePosition(targetNode(), sourceNode()),
+                ((MyEdgeSceneGraphicsItemBase *) graphicsItem())->getEndSlope());
+        graphicsItem()->setZValue(calculateArrowHeadZValue());
+    }
 }
 
 const bool MyEdgeBase::canBeMoved() {
@@ -190,6 +151,10 @@ QWidget* MyEdgeBase::getFeatureMenu() {
 
 const qint32 MyEdgeBase::calculateZValue() {
     return qMax(((MyNodeBase*)sourceNode())->calculateConnectedEdgeZValue(), ((MyNodeBase*)targetNode())->calculateConnectedEdgeZValue());
+}
+
+const qint32 MyEdgeBase::calculateArrowHeadZValue() {
+    return calculateZValue() + 1;
 }
 
 void MyEdgeBase::read(const QJsonObject &json) {
@@ -270,7 +235,6 @@ MyConnectedToCentroidNodeEdgeBase::MyConnectedToCentroidNodeEdgeBase(const QStri
 
 void MyConnectedToCentroidNodeEdgeBase::connectGraphicsItem() {
     MyEdgeBase::connectGraphicsItem();
-    connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(this, SIGNAL(askForConnectedToCentroidNodeControlPoint()), _graphicsItem, SIGNAL(askForConnectedToCentroidNodeControlPoint()));
 }
 
