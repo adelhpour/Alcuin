@@ -15,12 +15,6 @@ public:
     const bool canAddRectangleShape() override;
 
     const bool canAddPolygonShape() override;
-
-    QMenu* createContextMenu() override;
-
-public slots:
-
-    void displayContextMenu(const QPoint& position) override;
 };
 
 class MyArrowHeadSceneGraphicsItem : public MyArrowHeadGraphicsItemBase {
