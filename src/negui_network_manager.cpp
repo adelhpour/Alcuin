@@ -34,9 +34,9 @@ void MyNetworkManager::enableNormalMode() {
     setCopiedEdgeStyle(NULL);
     ((MyNetworkElementSelector*)_networkElementSelector)->enableNormalMode();
     deleteNewEdgeBuilder();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableNormalMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableNormalMode();
 }
 
@@ -44,9 +44,9 @@ void MyNetworkManager::enableAddNodeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddNodeMode();
     setNodeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     ((MyNetworkElementSelector*)_networkElementSelector)->enableAddNodeMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableAddNodeMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableAddNodeMode();
 }
 
@@ -54,18 +54,18 @@ void MyNetworkManager::enableAddEdgeMode(MyPluginItemBase* style) {
     MySceneModeElementBase::enableAddEdgeMode();
     setEdgeStyle(dynamic_cast<MyNetworkElementStyleBase*>(style));
     ((MyNetworkElementSelector*)_networkElementSelector)->enableAddEdgeMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableAddEdgeMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableAddEdgeMode();
 }
 
 void MyNetworkManager::enableSelectMode() {
     MySceneModeElementBase::enableSelectMode();
     ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableSelectNodeMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableSelectEdgeMode();
 }
 
@@ -73,9 +73,9 @@ void MyNetworkManager::enableSelectNodeMode() {
     enableNormalMode();
     MySceneModeElementBase::enableSelectNodeMode();
     ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectNodeMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableSelectNodeMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableSelectNodeMode();
 }
 
@@ -83,13 +83,13 @@ void MyNetworkManager::enableSelectEdgeMode() {
     enableNormalMode();
     MySceneModeElementBase::enableSelectEdgeMode();
     ((MyNetworkElementSelector*)_networkElementSelector)->enableSelectEdgeMode();
-    for (MyNetworkElementBase *node : qAsConst(nodes()))
+    for (MyNetworkElementBase *node : nodes())
         node->enableSelectEdgeMode();
-    for (MyNetworkElementBase *edge : qAsConst(edges()))
+    for (MyNetworkElementBase *edge : edges())
         edge->enableSelectEdgeMode();
 }
 
-QList<MyNetworkElementBase*>& MyNetworkManager::nodes() {
+QList<MyNetworkElementBase*> MyNetworkManager::nodes() {
     return _nodes;
 }
 
@@ -105,7 +105,7 @@ const qreal MyNetworkManager::numberOfNodes() {
     return nodes().size();
 }
 
-QList<MyNetworkElementBase*>& MyNetworkManager::edges() {
+QList<MyNetworkElementBase*> MyNetworkManager::edges() {
     return _edges;
 }
 
@@ -119,6 +119,28 @@ QJsonArray MyNetworkManager::listOfEdges() {
 
 const qreal MyNetworkManager::numberOfEdges() {
     return edges().size();
+}
+
+QList<MyNetworkElementBase*> MyNetworkManager::arrowHeads() {
+    QList<MyNetworkElementBase*> arrowHeads;
+    for (MyNetworkElementBase* edge : edges()) {
+        if (((MyEdgeBase*)edge)->isSetArrowHead())
+            arrowHeads.push_back(((MyEdgeBase*)edge)->arrowHead());
+    }
+
+    return arrowHeads;
+}
+
+QJsonArray MyNetworkManager::listOfArrowHeads() {
+    QJsonArray listOfArrowHeads;
+    for (MyNetworkElementBase* arrowHead : arrowHeads())
+        listOfArrowHeads.append(arrowHead->name());
+
+    return listOfArrowHeads;
+}
+
+const qreal MyNetworkManager::numberOfArrowHeads() {
+    return arrowHeads().size();
 }
 
 void MyNetworkManager::clearNodesInfo() {
@@ -270,6 +292,7 @@ void MyNetworkManager::setNetworkElementSelector() {
     connect(_networkElementSelector, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForNodes, this, [this] () { return nodes(); });
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForEdges, this, [this] () { return edges(); });
+    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForArrowHeads, this, [this] () { return arrowHeads(); });
     connect(_networkElementSelector, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
     connect(_networkElementSelector, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
 }
@@ -436,7 +459,7 @@ void MyNetworkManager::deleteNode(const QString& nodeName) {
 }
 
 void MyNetworkManager::deleteNode(MyNetworkElementBase* node) {
-    for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)node)->edges())) {
+    for (MyNetworkElementBase *edge : ((MyNodeBase*)node)->edges()) {
         ((MyNodeBase*)node)->removeEdge(edge);
         removeEdge(edge);
     }
@@ -455,7 +478,7 @@ void MyNetworkManager::removeNode(MyNetworkElementBase* n) {
 
 void MyNetworkManager::updateNodeParents() {
     MyNetworkElementBase* parentNode = NULL;
-    for (MyNetworkElementBase *node : qAsConst(nodes())) {
+    for (MyNetworkElementBase *node : nodes()) {
         parentNode = findElement(nodes(), ((MyNodeBase*)node)->parentNodeId());
         if (parentNode)
             ((MyNodeBase*)node)->setParentNode((MyNodeBase*)parentNode);
@@ -569,7 +592,7 @@ void MyNetworkManager::moveSelectedNetworkElements(const QPointF& movedDistance)
 
 void MyNetworkManager::deleteSelectedNetworkElements() {
     for (MyNetworkElementBase* selectedNode : getSelectedNodes()) {
-        for (MyNetworkElementBase *edge : qAsConst(((MyNodeBase*)selectedNode)->edges())) {
+        for (MyNetworkElementBase *edge : ((MyNodeBase*)selectedNode)->edges()) {
             ((MyNodeBase*)selectedNode)->removeEdge(edge);
             removeEdge(edge);
         }
@@ -593,11 +616,11 @@ void MyNetworkManager::alignSelectedNetworkElements(const QString& alignType) {
 }
 
 bool MyNetworkManager::isElementNameAlreadyUsed(const QString& elementName) {
-    for (MyNetworkElementBase* node : qAsConst(nodes())) {
+    for (MyNetworkElementBase* node : nodes()) {
         if (node->name() == elementName)
             return true;
     }
-    for (MyNetworkElementBase* edge : qAsConst(edges())) {
+    for (MyNetworkElementBase* edge : edges()) {
         if (edge->name() == elementName)
             return true;
     }
@@ -613,7 +636,7 @@ void MyNetworkManager::deleteNewEdgeBuilder() {
 }
 
 bool MyNetworkManager::edgeExists(MyNetworkElementBase* n1, MyNetworkElementBase* n2) {
-    for (MyNetworkElementBase *edge : qAsConst(edges())) {
+    for (MyNetworkElementBase *edge : edges()) {
         if ((((MyEdgeBase*)edge)->sourceNode() == n1 && ((MyEdgeBase*)edge)->targetNode() == n2) || (((MyEdgeBase*)edge)->sourceNode() == n2 && ((MyEdgeBase*)edge)->targetNode() == n1)) {
             return true;
         }
@@ -630,7 +653,7 @@ QJsonObject MyNetworkManager::getNetworkElementsAndColorInfo() {
 
     // nodes
     QJsonArray nodesArray;
-    for (MyNetworkElementBase *node : qAsConst(nodes())) {
+    for (MyNetworkElementBase *node : nodes()) {
         QJsonObject nodeObject;
         node->write(nodeObject);
         nodesArray.append(nodeObject);
@@ -639,7 +662,7 @@ QJsonObject MyNetworkManager::getNetworkElementsAndColorInfo() {
 
     // edges
     QJsonArray edgesArray;
-    for (MyNetworkElementBase *edge : qAsConst(edges())) {
+    for (MyNetworkElementBase *edge : edges()) {
         QJsonObject edgeObject;
         edge->write(edgeObject);
         edgesArray.append(edgeObject);

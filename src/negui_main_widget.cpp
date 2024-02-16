@@ -471,6 +471,14 @@ const qreal MyMainWidget::numberOfEdges() {
     return ((MyInteractor*)interactor())->numberOfEdges();
 }
 
+QJsonArray MyMainWidget::listOfArrowHeads() {
+    return ((MyInteractor*)interactor())->listOfArrowHeads();
+}
+
+const qreal MyMainWidget::numberOfArrowHeads() {
+    return ((MyInteractor*)interactor())->numberOfArrowHeads();
+}
+
 void MyMainWidget::adjustConnectedEdgesOfNodes() {
     ((MyInteractor*)interactor())->adjustConnectedEdgesOfNodes();
 }

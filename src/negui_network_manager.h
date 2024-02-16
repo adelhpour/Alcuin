@@ -23,17 +23,23 @@ public:
 
     void enableSelectEdgeMode() override;
 
-    QList<MyNetworkElementBase*>& nodes();
+    QList<MyNetworkElementBase*> nodes();
 
     QJsonArray listOfNodes();
 
     const qreal numberOfNodes();
 
-    QList<MyNetworkElementBase*>& edges();
+    QList<MyNetworkElementBase*> edges();
 
     QJsonArray listOfEdges();
 
     const qreal numberOfEdges();
+
+    QList<MyNetworkElementBase*> arrowHeads();
+
+    QJsonArray listOfArrowHeads();
+
+    const qreal numberOfArrowHeads();
 
     void clearNodesInfo();
 
