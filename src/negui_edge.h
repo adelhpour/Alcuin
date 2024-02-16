@@ -15,8 +15,6 @@ public:
     } EDGE_TYPE;
     
     MyEdgeBase(const QString& name);
-    
-    ~MyEdgeBase();
 
     ELEMENT_TYPE type() override;
 
@@ -31,37 +29,24 @@ public:
     void setTargetNode(MyNetworkElementBase* targetNode);
 
     MyNetworkElementBase* targetNode();
+
+    MyNetworkElementGraphicsItemBase* arrowHeadGraphicsItem();
     
     void updateGraphicsItem() override;
+
+    void updateArrowHeadGraphicsItem();
     
     void setStyle(MyNetworkElementStyleBase* style) override;
 
     void setSelectedWithColor(const bool& selected) override;
-    
-    MyNetworkElementBase* arrowHead();
 
-    void setArrowHead();
-
-    const bool isSetArrowHead() const { return _isSetArrowHead; }
+    void setArrowHeadGraphicsItem();
     
     // determine whether the edge is visible on the scene
     bool setActive(const bool& active) override;
 
     // update the ending points of the edge using the source and target node positions
     void updatePoints();
-    
-    // enable the normal mode of the edge
-    void enableNormalMode() override;
-    
-    // enable the add node mode of the edge
-    void enableAddNodeMode() override;
-    
-    void enableSelectNodeMode() override;
-    
-    // enable the add edge mode of the edge
-    void enableAddEdgeMode() override;
-    
-    void enableSelectEdgeMode() override;
 
     const bool canBeMoved() override;
 
@@ -72,6 +57,8 @@ public:
     QWidget* getFeatureMenu() override;
     
     const qint32 calculateZValue() override;
+
+    const qint32 calculateArrowHeadZValue();
     
     // read the edge info from the json object
     void read(const QJsonObject &json) override;
@@ -96,8 +83,7 @@ signals:
 protected:
     MyNetworkElementBase* _sourceNode;
     MyNetworkElementBase* _targetNode;
-    MyNetworkElementBase* _arrowHead;
-    bool _isSetArrowHead;
+    MyNetworkElementGraphicsItemBase* _arrowHeadGraphicsItem;
 };
 
 class MyClassicEdge : public MyEdgeBase {

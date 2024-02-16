@@ -30,13 +30,6 @@ const bool MyEdgeGraphicsItemBase::canAddLineShape() {
     return true;
 }
 
-QMenu* MyEdgeGraphicsItemBase::createContextMenu() {
-    QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
-    connectContextMenu(contextMenu);
-    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
-    return contextMenu;
-}
-
 void MyEdgeGraphicsItemBase::setLine(const QLineF &line) {
     for (QGraphicsItem* item : childItems()) {
         My1DShapeGraphicsItemBase* casted_item = dynamic_cast<My1DShapeGraphicsItemBase*>(item);
@@ -71,6 +64,7 @@ void MyEdgeGraphicsItemBase::displayContextMenu(const QPoint& position) {
 MyEdgeSceneGraphicsItemBase::MyEdgeSceneGraphicsItemBase(QGraphicsItem *parent) : MyEdgeGraphicsItemBase(parent) {
     _initialLine = QLineF(0.0, 0.0, 0.0, 0.0);
     setZValue(0);
+    connect(this, SIGNAL(mouseRightButtonIsReleased(const QPointF&)), this, SLOT(displayContextMenu(const QPointF&)));
 }
 
 void MyEdgeSceneGraphicsItemBase::enableNormalMode() {
@@ -96,6 +90,20 @@ void MyEdgeSceneGraphicsItemBase::enableAddEdgeMode() {
 void MyEdgeSceneGraphicsItemBase::enableSelectEdgeMode() {
     MyNetworkElementGraphicsItemBase::enableSelectEdgeMode();
     setCursor(Qt::PointingHandCursor);
+}
+
+void MyEdgeSceneGraphicsItemBase::displayContextMenu(const QPointF& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        QMenu* contextMenu = createContextMenu();
+        contextMenu->exec(QPoint(position.x(), position.y()));
+    }
+}
+
+QMenu* MyEdgeSceneGraphicsItemBase::createContextMenu() {
+    QMenu* contextMenu = new MyEdgeGraphicsItemContextMenu();
+    connectContextMenu(contextMenu);
+    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
+    return contextMenu;
 }
 
 // MyClassicEdgeSceneGraphicsItem

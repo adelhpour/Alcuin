@@ -37,8 +37,6 @@ public:
 
     virtual const bool canAddLineShape();
 
-    virtual QMenu* createContextMenu() = 0;
-
     virtual void connectContextMenu(QMenu* contextMenu);
     
     QList<MyShapeStyleBase*> getShapeStyles();
@@ -87,8 +85,6 @@ signals:
     void askForDisplaySceneContextMenu(const QPointF&);
 
 public slots:
-
-    virtual void displayContextMenu(const QPoint& position) = 0;
 
     void updateFocusedGraphicsItems();
     
