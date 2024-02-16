@@ -27,6 +27,7 @@ void MyEdgeBase::connectGraphicsItem() {
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });
     connect(_arrowHeadGraphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });;
     connect(_arrowHeadGraphicsItem, SIGNAL(askForEnableFeatureMenuDisplay()), this, SIGNAL(askForEnableFeatureMenuDisplay()));
+    connect(_arrowHeadGraphicsItem, SIGNAL(mouseRightButtonIsReleased(const QPointF&)), _graphicsItem, SLOT(displayContextMenu(const QPointF&)));
 }
 
 void MyEdgeBase::setSourceNode(MyNetworkElementBase* sourceNode) {
