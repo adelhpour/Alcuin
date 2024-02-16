@@ -525,8 +525,8 @@ void MyNetworkManager::addEdge(MyNetworkElementBase* e) {
         connect(e->graphicsItem(), SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
         connect(e->graphicsItem(), SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
         emit askForAddGraphicsItem(e->graphicsItem());
-        if (((MyEdgeBase*)e)->isSetArrowHead())
-            emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
+        if (((MyEdgeBase*)e)->arrowHeadGraphicsItem())
+            emit askForAddGraphicsItem(((MyEdgeBase*)e)->arrowHeadGraphicsItem());
     }
 }
 
@@ -568,8 +568,8 @@ void MyNetworkManager::removeEdge(MyNetworkElementBase* e) {
         e->setActive(false);
         e->setSelected(false);
         emit askForRemoveGraphicsItem(e->graphicsItem());
-        if (((MyEdgeBase*)e)->isSetArrowHead())
-            emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHead()->graphicsItem());
+        if (((MyEdgeBase*)e)->arrowHeadGraphicsItem())
+            emit askForRemoveGraphicsItem(((MyEdgeBase*)e)->arrowHeadGraphicsItem());
     }
 }
 

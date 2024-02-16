@@ -107,12 +107,4 @@ public:
     MyEdgeGraphicsItemContextMenu(QWidget *parent = nullptr);
 };
 
-class MyArrowHeadGraphicsItemContextMenu : public MyGraphicsItemContextMenuBase {
-    Q_OBJECT
-
-public:
-
-    MyArrowHeadGraphicsItemContextMenu(QWidget *parent = nullptr);
-};
-
 #endif
