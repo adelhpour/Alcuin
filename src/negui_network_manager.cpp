@@ -121,28 +121,6 @@ const qreal MyNetworkManager::numberOfEdges() {
     return edges().size();
 }
 
-QList<MyNetworkElementBase*> MyNetworkManager::arrowHeads() {
-    QList<MyNetworkElementBase*> arrowHeads;
-    for (MyNetworkElementBase* edge : edges()) {
-        if (((MyEdgeBase*)edge)->isSetArrowHead())
-            arrowHeads.push_back(((MyEdgeBase*)edge)->arrowHead());
-    }
-
-    return arrowHeads;
-}
-
-QJsonArray MyNetworkManager::listOfArrowHeads() {
-    QJsonArray listOfArrowHeads;
-    for (MyNetworkElementBase* arrowHead : arrowHeads())
-        listOfArrowHeads.append(arrowHead->name());
-
-    return listOfArrowHeads;
-}
-
-const qreal MyNetworkManager::numberOfArrowHeads() {
-    return arrowHeads().size();
-}
-
 void MyNetworkManager::clearNodesInfo() {
     while(nodes().size())
         delete nodes().takeLast();
@@ -292,7 +270,6 @@ void MyNetworkManager::setNetworkElementSelector() {
     connect(_networkElementSelector, SIGNAL(askForWhetherShiftModifierIsPressed()), this, SIGNAL(askForWhetherShiftModifierIsPressed()));
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForNodes, this, [this] () { return nodes(); });
     connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForEdges, this, [this] () { return edges(); });
-    connect((MyNetworkElementSelector*)_networkElementSelector, &MyNetworkElementSelector::askForArrowHeads, this, [this] () { return arrowHeads(); });
     connect(_networkElementSelector, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForAddGraphicsItem(QGraphicsItem*)));
     connect(_networkElementSelector, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)), this, SIGNAL(askForRemoveGraphicsItem(QGraphicsItem*)));
 }

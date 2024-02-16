@@ -356,14 +356,6 @@ const qreal MyInteractor::numberOfEdges() {
     return ((MyNetworkManager*)_networkManager)->numberOfEdges();
 }
 
-QJsonArray MyInteractor::listOfArrowHeads() {
-    return ((MyNetworkManager*)_networkManager)->listOfArrowHeads();
-}
-
-const qreal MyInteractor::numberOfArrowHeads() {
-    return ((MyNetworkManager*)_networkManager)->numberOfArrowHeads();
-}
-
 void MyInteractor::adjustConnectedEdgesOfNodes() {
     ((MyNetworkManager*)_networkManager)->askForAdjustConnectedEdgesOfNodes();
 }

@@ -35,12 +35,6 @@ public:
 
     const qreal numberOfEdges();
 
-    QList<MyNetworkElementBase*> arrowHeads();
-
-    QJsonArray listOfArrowHeads();
-
-    const qreal numberOfArrowHeads();
-
     void clearNodesInfo();
 
     void clearEdgesInfo();
