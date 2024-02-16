@@ -233,7 +233,7 @@ void MyNetworkElementGraphicsItemBase::mouseReleaseEvent(QGraphicsSceneMouseEven
         emit askForCreateChangeStageCommand();
     }
     else if (event->button() == Qt::RightButton) {
-        emit mouseRightButtonIsReleased(event->screenPos());
+        displayContextMenu(event->screenPos());
         setFlag(QGraphicsItem::ItemIsMovable, false);
         event->accept();
     }

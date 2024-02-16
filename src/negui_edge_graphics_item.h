@@ -17,6 +17,8 @@ public:
     void connectShapeGraphicsItem(MyShapeGraphicsItemBase* item) override;
 
     const bool canAddLineShape() override;
+
+    QMenu* createContextMenu() override;
     
     void setLine(const QLineF &line);
     
@@ -58,12 +60,6 @@ public:
     void enableAddEdgeMode() override;
 
     void enableSelectEdgeMode() override;
-
-    QMenu* createContextMenu();
-
-public slots:
-
-    void displayContextMenu(const QPointF& position);
 };
 
 class MyClassicEdgeSceneGraphicsItem: public MyEdgeSceneGraphicsItemBase {
