@@ -106,3 +106,9 @@ MyEdgeGraphicsItemContextMenu::MyEdgeGraphicsItemContextMenu(QWidget *parent) : 
     addSeparator();
     connect(addAction("Delete"), SIGNAL(triggered()), this, SIGNAL(askForDeleteNetworkElement()));
 }
+
+// MyArrowHeadGraphicsItemContextMenu
+
+MyArrowHeadGraphicsItemContextMenu::MyArrowHeadGraphicsItemContextMenu(QWidget *parent) : MyGraphicsItemContextMenuBase(parent) {
+
+}

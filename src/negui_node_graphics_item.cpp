@@ -9,13 +9,37 @@ MyNodeGraphicsItemBase::MyNodeGraphicsItemBase(QGraphicsItem *parent) : MyNetwor
     enableNormalMode();
 }
 
+QMenu* MyNodeGraphicsItemBase::createContextMenu() {
+    QMenu* contextMenu = createContextMenuObject();
+    connectContextMenu(contextMenu);
+    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
+    return contextMenu;
+}
+
+QMenu* MyNodeGraphicsItemBase::createContextMenuObject() {
+    return new MyNodeGraphicsItemContextMenuBase();
+}
+
+void MyNodeGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    if (getSceneMode() == NORMAL_MODE) {
+        if (!askForWhetherAnyOtherElementsAreSelected() || !askForWhetherNetworkElementIsSelected()) {
+            QMenu* contextMenu = createContextMenu();
+            contextMenu->exec(position);
+        }
+        else
+            askForDisplaySceneContextMenu(position);
+    }
+}
+
 // MyNodeSceneGraphicsItemBase
 
 MyNodeSceneGraphicsItemBase::MyNodeSceneGraphicsItemBase(const QPointF &position, QGraphicsItem *parent) : MyNodeGraphicsItemBase(parent) {
     _originalPosition = position;
+
     setFlag(QGraphicsItem::ItemIsFocusable, true);
+
     connect(this, SIGNAL(positionChangedByMouseMoveEvent(const QPointF&)), this, SLOT(updateFocusedGraphicsItems()));
-    connect(this, SIGNAL(mouseRightButtonIsReleased(const QPointF&)), this, SLOT(displayContextMenu(const QPointF&)));
+    
     setZValue(2);
 }
 
@@ -34,28 +58,6 @@ void MyNodeSceneGraphicsItemBase::updateOriginalPosition() {
         if (casted_item)
             casted_item->updateOriginalPosition(originalPosition);
     }
-}
-
-void MyNodeSceneGraphicsItemBase::displayContextMenu(const QPointF& position) {
-    if (getSceneMode() == NORMAL_MODE) {
-        if (!askForWhetherAnyOtherElementsAreSelected() || !askForWhetherNetworkElementIsSelected()) {
-            QMenu* contextMenu = createContextMenu();
-            contextMenu->exec(QPoint(position.x(), position.y()));
-        }
-        else
-            askForDisplaySceneContextMenu(position);
-    }
-}
-
-QMenu* MyNodeSceneGraphicsItemBase::createContextMenu() {
-    QMenu* contextMenu = createContextMenuObject();
-    connectContextMenu(contextMenu);
-    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
-    return contextMenu;
-}
-
-QMenu* MyNodeSceneGraphicsItemBase::createContextMenuObject() {
-    return new MyNodeGraphicsItemContextMenuBase();
 }
 
 void MyNodeSceneGraphicsItemBase::moveChildItems(const qreal& dx, const qreal& dy) {

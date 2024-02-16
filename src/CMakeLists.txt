@@ -23,8 +23,10 @@ set(source_files
 		negui_network_element_base.cpp
 		negui_node.cpp
 		negui_edge.cpp
+		negui_arrow_head.cpp
 		negui_node_builder.cpp
 		negui_edge_builder.cpp
+		negui_arrow_head_builder.cpp
 		negui_copied_network_elements_paster.cpp
 		negui_new_edge_builder.cpp
 		negui_network_element_aligner.cpp
@@ -112,9 +114,11 @@ set(header_files
 		negui_network_element_base.h
 		negui_node.h
 		negui_edge.h
+		negui_arrow_head.h
 		negui_node_builder.h
 		negui_edge_builder.h
-		negui_copied_network_elements_paster.h
+		negui_arrow_head_builder.h
+        negui_copied_network_elements_paster.h
 		negui_new_edge_builder.h
 		negui_network_element_aligner.h
 		negui_network_element_aligner_builder.h

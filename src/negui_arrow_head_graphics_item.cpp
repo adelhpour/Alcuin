@@ -22,6 +22,17 @@ const bool MyArrowHeadGraphicsItemBase::canAddPolygonShape() {
     return true;
 }
 
+QMenu* MyArrowHeadGraphicsItemBase::createContextMenu() {
+    QMenu* contextMenu = new MyArrowHeadGraphicsItemContextMenu();
+    connectContextMenu(contextMenu);
+    ((MyContextMenuBase*)contextMenu)->initializeActionsStatus();
+    return contextMenu;
+}
+
+void MyArrowHeadGraphicsItemBase::displayContextMenu(const QPoint& position) {
+    // no context menu is needed to be displayed for arrow heads
+}
+
 // MyArrowHeadSceneGraphicsItem
 
 MyArrowHeadSceneGraphicsItem::MyArrowHeadSceneGraphicsItem(QGraphicsItem *parent) : MyArrowHeadGraphicsItemBase(parent) {
