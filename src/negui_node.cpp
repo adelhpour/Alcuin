@@ -22,6 +22,10 @@ MyNodeBase::ELEMENT_TYPE MyNodeBase::type() {
     return NODE_ELEMENT;
 }
 
+const QString MyNodeBase::typeAsString() {
+    return "node";
+}
+
 void MyNodeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();
     connect(_graphicsItem, &MyNetworkElementGraphicsItemBase::askForSelectNetworkElement, this, [this] () { emit askForSelectNetworkElement(this); });

@@ -19,7 +19,11 @@ MyEdgeBase::MyEdgeBase(const QString& name) : MyNetworkElementBase(name) {
 
 MyEdgeBase::ELEMENT_TYPE MyEdgeBase::type() {
     return EDGE_ELEMENT;
-};
+}
+
+const QString MyEdgeBase::typeAsString() {
+    return "Edge";
+}
 
 void MyEdgeBase::connectGraphicsItem() {
     MyNetworkElementBase::connectGraphicsItem();

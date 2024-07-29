@@ -18,6 +18,8 @@ public:
     
     ELEMENT_TYPE type() override;
 
+    const QString typeAsString() override;
+
     virtual NODE_TYPE nodeType() = 0;
 
     void connectGraphicsItem() override;
