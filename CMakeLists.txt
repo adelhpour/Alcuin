@@ -64,7 +64,7 @@ elseif(UNIX)
 endif ()
 
 ## find Qt5 and required components
-find_package(Qt5 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
 
 ## Set build type default.
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING
