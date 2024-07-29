@@ -188,6 +188,7 @@ jobs:
           -DCMAKE_CXX_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
           -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
           -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+          -DALCUIN_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
           -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin"
 
       - name: Build and install Alcuin Test App
