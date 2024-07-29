@@ -140,11 +140,17 @@ jobs:
           /Miniconda3/bin/conda init && bash ~/.bashrc && . ~/.bashrc          cd ${RUNNER_WORKSPACE}
           echo "export PATH=/Miniconda3/envs/python${{ matrix.python_version }}/bin:$PATH" >> "${GITHUB_ENV}"
 
+      #- name: Set Install Qt Configurations
+      #  shell: bash
+      #  run: |
+      #    if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+      #      echo "HOMEBREW_NO_AUTO_UPDATE=1" >> "${GITHUB_ENV}"
+      #    fi
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '5.15.2'
-          arch: ${OSX_ARCHITECTURES}
+          version: '6.5.0'
 
       - name: Create build directory
         shell: bash
