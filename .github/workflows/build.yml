@@ -173,3 +173,25 @@ jobs:
         run: |
           cd ${RUNNER_WORKSPACE}/build-alcuin
           cmake --build . --target install --config ${{ matrix.platform.build_type }}
+
+      - name: Create test-app build directory
+        shell: bash
+        run: mkdir -p ${RUNNER_WORKSPACE}/build-alcuin/test-app
+
+      - name: Configure CMake for Alcuin Test App
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
+          cmake $GITHUB_WORKSPACE/test-app \
+          -G "Ninja" \
+          -DCMAKE_C_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
+          -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+          -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin"
+
+      - name: Build and install Alcuin Test App
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
+          cmake --build . --target install --config ${{ matrix.platform.build_type }}
