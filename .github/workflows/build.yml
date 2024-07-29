@@ -196,3 +196,30 @@ jobs:
         run: |
           cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
           cmake --build . --target install --config ${{ matrix.platform.build_type }}
+
+      - name: Set artifacts path and name
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          artifacts_name=""
+          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+          compiler_version=$(ls "C:\Program Files\Microsoft Visual Studio")
+          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-msvc$compiler_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+          os_version=$(sw_vers -productVersion | cut -d '.' -f 1)
+          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+          os_version=$(lsb_release -rs | cut -d '.' -f 1)
+          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          elif [ "${{ matrix.platform.os_type }}" == 'manylinux' ]; then
+          os_name="${{ matrix.platform.name }}"
+          os_name_without_build_type="${os_name%%-*}"
+          echo "artifacts_name=alcuin-${os_name_without_build_type}-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          fi
+          echo "artifacts_path=../install-alcuin" >> "${GITHUB_ENV}"
+
+      - name: Upload Alcuin binaries
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{env.artifacts_name}}
+          path: ${{env.artifacts_path}}
