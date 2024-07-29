@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 project(alcuin)
 add_definitions(-DMAKE_NEGUI_LIB=true)
 add_definitions(-DName_Definition="${PROJECT_NAME}")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(GNUInstallDirs)
 
