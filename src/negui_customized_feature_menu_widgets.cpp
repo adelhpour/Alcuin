@@ -41,7 +41,7 @@ const QSize MyFeatureMenuItemFrame::extents() const {
 // MyRestrictedToNameConventionsLineEdit
 
 MyRestrictedToNameConventionsLineEdit::MyRestrictedToNameConventionsLineEdit(const QString &contents, QWidget* parent) : MyLineEdit(contents, parent) {
-    setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9_]+"), this));
+    setValidator(new QRegularExpressionValidator(QRegularExpression("[A-Za-z0-9_]+"), this));
 }
 
 void MyRestrictedToNameConventionsLineEdit::setText(const QString& newText) {
