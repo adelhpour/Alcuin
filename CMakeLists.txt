@@ -63,7 +63,7 @@ elseif(UNIX)
 	set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif ()
 
-## find Qt5 and required components
+## find Qt6 and required components
 find_package(Qt6 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
 
 ## Set build type default.

@@ -51,8 +51,8 @@ endif ()
 set(ALCUIN_INCLUDEDIR ${ALCUIN_PREFIX}/include)
 set(ALCUIN_PLUGINS_INCLUDEDIR ${ALCUIN_PREFIX}/include/plugins)
 
-# find Qt5 and required components
-find_package(Qt5 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
+# find Qt6 and required components
+find_package(Qt6 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
 
 ## Set build type default.
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING

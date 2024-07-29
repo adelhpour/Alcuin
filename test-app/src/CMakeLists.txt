@@ -23,11 +23,11 @@ target_include_directories(AlcuinTestApp PUBLIC
 
 ## link libraries
 target_link_libraries(AlcuinTestApp
-	Qt5::Core
-	Qt5::Gui
-	Qt5::Widgets
-	Qt5::PrintSupport
-	Qt5::Svg
+	Qt6::Core
+	Qt6::Gui
+	Qt6::Widgets
+	Qt6::PrintSupport
+	Qt6::Svg
 	${ALCUIN_LIBS})
 
 file(GLOB ALCUIN_TEST_APP_PLUGINS_SCRIPTS ${CMAKE_SOURCE_DIR}/src/plugins/*.py)

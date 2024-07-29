@@ -186,11 +186,11 @@ add_library(Alcuin SHARED ${source_files} ${header_files})
 
 ## link libraries
 target_link_libraries(Alcuin
-		Qt5::Core
-		Qt5::Gui
-		Qt5::Widgets
-		Qt5::PrintSupport
-		Qt5::Svg)
+		Qt6::Core
+		Qt6::Gui
+		Qt6::Widgets
+		Qt6::PrintSupport
+		Qt6::Svg)
 
 ## set library dist
 install(TARGETS Alcuin RUNTIME DESTINATION bin COMPONENT alcuin_lib LIBRARY DESTINATION lib COMPONENT alcuin_lib ARCHIVE DESTINATION lib COMPONENT alcuin_lib)

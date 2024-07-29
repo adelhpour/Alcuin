@@ -82,11 +82,11 @@ foreach(PLUGIN ${PLUGINS})
 
 	## link libraries
 	target_link_libraries(${PLUGIN_NAME}
-			Qt5::Core
-			Qt5::Gui
-			Qt5::Widgets
-			Qt5::PrintSupport
-			Qt5::Svg
+			Qt6::Core
+			Qt6::Gui
+			Qt6::Widgets
+			Qt6::PrintSupport
+			Qt6::Svg
 			${Python_LIBRARIES})
 
 	## set library dist
