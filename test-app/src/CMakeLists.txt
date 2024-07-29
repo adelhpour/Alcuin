@@ -54,21 +54,21 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${DEPENDENCIES_BUILD_DIR} ${FRAMEWORKS_DIR}/dependencies
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtCore.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Core> ${FRAMEWORKS_DIR}/QtCore.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Core> ${FRAMEWORKS_DIR}/QtCore.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtGui.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Gui> ${FRAMEWORKS_DIR}/QtGui.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Gui> ${FRAMEWORKS_DIR}/QtGui.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Widgets> ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Widgets> ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::DBus>  ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::DBus>  ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::PrintSupport> ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::PrintSupport> ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/5
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::Svg> ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/5
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Svg> ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/5
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/platforms
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QCocoaIntegrationPlugin> ${PLUGINS_DIR}/platforms
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::QCocoaIntegrationPlugin> ${PLUGINS_DIR}/platforms
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/styles
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt5::QMacStylePlugin> ${PLUGINS_DIR}/styles
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::QMacStylePlugin> ${PLUGINS_DIR}/styles
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_LIBS} ${PLUGINS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_PLUGINS_SCRIPTS} ${PLUGINS_DIR}
@@ -89,11 +89,11 @@ if (APPLE)
 elseif (UNIX)
 	## install the dependencies
 	install(FILES
-	$<TARGET_FILE:Qt5::Core> "$<TARGET_FILE_DIR:Qt5::Core>/libQt5Core.so.5"
-	$<TARGET_FILE:Qt5::Gui> "$<TARGET_FILE_DIR:Qt5::Gui>/libQt5Gui.so.5"
-	$<TARGET_FILE:Qt5::Widgets> "$<TARGET_FILE_DIR:Qt5::Widgets>/libQt5Widgets.so.5"
-	$<TARGET_FILE:Qt5::PrintSupport> "$<TARGET_FILE_DIR:Qt5::PrintSupport>/libQt5PrintSupport.so.5"
-	$<TARGET_FILE:Qt5::Svg> "$<TARGET_FILE_DIR:Qt5::Svg>/libQt5Svg.so.5"
+	$<TARGET_FILE:Qt6::Core> "$<TARGET_FILE_DIR:Qt6::Core>/libQt6Core.so.5"
+	$<TARGET_FILE:Qt6::Gui> "$<TARGET_FILE_DIR:Qt6::Gui>/libQt6Gui.so.5"
+	$<TARGET_FILE:Qt6::Widgets> "$<TARGET_FILE_DIR:Qt6::Widgets>/libQt6Widgets.so.5"
+	$<TARGET_FILE:Qt6::PrintSupport> "$<TARGET_FILE_DIR:Qt6::PrintSupport>/libQt6PrintSupport.so.5"
+	$<TARGET_FILE:Qt6::Svg> "$<TARGET_FILE_DIR:Qt6::Svg>/libQt6Svg.so.5"
 	DESTINATION lib/dependencies COMPONENT alcuin_test_app)
 
 	## install the executable
@@ -104,9 +104,9 @@ elseif (WIN32)
 	install(FILES ${ALCUIN_DLLS} DESTINATION bin COMPONENT alcuin_test_app)
 	install(FILES ${ALCUIN_PLUGINS_DLLS} DESTINATION bin/plugins COMPONENT alcuin_test_app)
 	install(FILES ${PY_SCRIPTS} DESTINATION bin/plugins COMPONENT alcuin_test_app)
-	install(FILES $<TARGET_FILE:Qt5::Core> $<TARGET_FILE:Qt5::Gui> $<TARGET_FILE:Qt5::Widgets> $<TARGET_FILE:Qt5::PrintSupport> $<TARGET_FILE:Qt5::Svg> DESTINATION bin COMPONENT alcuin_test_app)
-	install(FILES $<TARGET_FILE:Qt5::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT alcuin_test_app)
-	install(FILES $<TARGET_FILE:Qt5::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT alcuin_test_app)
+	install(FILES $<TARGET_FILE:Qt6::Core> $<TARGET_FILE:Qt6::Gui> $<TARGET_FILE:Qt6::Widgets> $<TARGET_FILE:Qt6::PrintSupport> $<TARGET_FILE:Qt6::Svg> DESTINATION bin COMPONENT alcuin_test_app)
+	install(FILES $<TARGET_FILE:Qt6::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT alcuin_test_app)
+	install(FILES $<TARGET_FILE:Qt6::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT alcuin_test_app)
 	install(FILES ${CMAKE_SOURCE_DIR}/qt.conf DESTINATION bin COMPONENT alcuin_test_app)
 	install(DIRECTORY ${ALCUIN_PREFIX}/resources DESTINATION bin COMPONENT alcuin_test_app)
 	## install embeddable python
