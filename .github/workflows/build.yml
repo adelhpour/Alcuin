@@ -94,6 +94,12 @@ jobs:
             ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
             ${{ runner.os }}-
 
+      - name: Set Embeddable Python directory
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          ls -l
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
