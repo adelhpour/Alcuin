@@ -145,17 +145,6 @@ jobs:
         with:
           version: '6.7.0'
 
-      - name: Check Qt
-        if : matrix.platform.os_type == 'ubuntu'
-        run: |
-          ls ${RUNNER_WORKSPACE}
-          ls ${RUNNER_WORKSPACE}/Qt
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QtWidgets
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QWidgets/QScrollBar
-
       - name: Create build directory
         shell: bash
         run: mkdir -p ${RUNNER_WORKSPACE}/build-alcuin
