@@ -95,7 +95,7 @@ endif()
 add_subdirectory(src)
 
 ## Package the project
-option(BUILD_PACKAGING "Package AlcuinTestApp into binary distributions" OFF)
+option(BUILD_PACKAGING "Package ${PROJECT_NAME_TITLE} into binary distributions" OFF)
 if (${BUILD_PACKAGING})
 	add_subdirectory(packaging)
 endif()

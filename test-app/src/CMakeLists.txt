@@ -14,15 +14,15 @@ set(header_files
 		negui_about_message_box.h)
 
 ## build the bundle/executable
-add_executable(AlcuinTestApp WIN32 MACOSX_BUNDLE 
+add_executable(${PROJECT_NAME_TITLE} WIN32 MACOSX_BUNDLE
 	${source_files} ${header_files})
 
 ## include directories
-target_include_directories(AlcuinTestApp PUBLIC
+target_include_directories(${PROJECT_NAME_TITLE} PUBLIC
 		${ALCUIN_INCLUDEDIR})
 
 ## link libraries
-target_link_libraries(AlcuinTestApp
+target_link_libraries(${PROJECT_NAME_TITLE}
 	Qt6::Core
 	Qt6::Gui
 	Qt6::Widgets
@@ -35,7 +35,7 @@ list(APPEND ALCUIN_PLUGINS_SCRIPTS ${ALCUIN_TEST_APP_PLUGINS_SCRIPTS})
 set(DEPENDENCIES_BUILD_DIR ${CMAKE_BINARY_DIR}/src/dependencies)
 set(PLUGINS_BUILD_DIR ${CMAKE_BINARY_DIR}/src/plugins)
 
-add_custom_command(TARGET AlcuinTestApp POST_BUILD
+add_custom_command(TARGET ${PROJECT_NAME_TITLE} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${DEPENDENCIES_BUILD_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ALCUIN_LIBS} ${DEPENDENCIES_BUILD_DIR}
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_BUILD_DIR}
@@ -44,13 +44,13 @@ add_custom_command(TARGET AlcuinTestApp POST_BUILD
 
 if (APPLE)
 	## set the info plist
-	set_target_properties(AlcuinTestApp PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/Info.Plist)
+	set_target_properties(${PROJECT_NAME_TITLE} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/src/Info.Plist)
 	
 	## copy and bundle the dependencies and plugins
-	set(FRAMEWORKS_DIR $<TARGET_FILE_DIR:AlcuinTestApp>/../Frameworks)
-	set(PLUGINS_DIR $<TARGET_FILE_DIR:AlcuinTestApp>/../PlugIns)
-	set(RESOURCES_DIR $<TARGET_FILE_DIR:AlcuinTestApp>/../Resources)
-	add_custom_command(TARGET AlcuinTestApp POST_BUILD
+	set(FRAMEWORKS_DIR $<TARGET_FILE_DIR:${PROJECT_NAME_TITLE}>/../Frameworks)
+	set(PLUGINS_DIR $<TARGET_FILE_DIR:${PROJECT_NAME_TITLE}>/../PlugIns)
+	set(RESOURCES_DIR $<TARGET_FILE_DIR:${PROJECT_NAME_TITLE}>/../Resources)
+	add_custom_command(TARGET ${PROJECT_NAME_TITLE} POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${DEPENDENCIES_BUILD_DIR} ${FRAMEWORKS_DIR}/dependencies
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtCore.framework/Versions/A
@@ -76,15 +76,13 @@ if (APPLE)
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${ALCUIN_PREFIX}/resources ${RESOURCES_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/qt.conf ${RESOURCES_DIR})
 
+	## install the bundle
+	install(TARGETS ${PROJECT_NAME_TITLE} BUNDLE DESTINATION bin COMPONENT alcuin_test_app)
+
 	## install embeddable python
 	if (EXISTS "${ALCUIN_PREFIX}/Python.framework")
-		add_custom_command(TARGET AlcuinTestApp POST_BUILD
-				COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/Python.framework
-				COMMAND ${CMAKE_COMMAND} -E copy_directory "${ALCUIN_PREFIX}/Python.framework" ${FRAMEWORKS_DIR}/Python.framework)
+		install(DIRECTORY "${ALCUIN_PREFIX}/Python.framework" DESTINATION bin/${PROJECT_NAME_TITLE}.app/Contents/Frameworks COMPONENT alcuin_test_app)
 	endif ()
-
-	## install the bundle
-	install(TARGETS AlcuinTestApp BUNDLE DESTINATION bin COMPONENT alcuin_test_app)
 
 elseif (UNIX)
 	## install the dependencies
@@ -99,7 +97,7 @@ elseif (UNIX)
 	DESTINATION lib/dependencies COMPONENT alcuin_test_app)
 
 	## install the executable
-	install(TARGETS AlcuinTestApp DESTINATION bin COMPONENT alcuin_test_app)
+	install(TARGETS ${PROJECT_NAME_TITLE} DESTINATION bin COMPONENT alcuin_test_app)
 
 elseif (WIN32)
 	## install the dependencies
@@ -117,6 +115,6 @@ elseif (WIN32)
 	endif ()
 
 	## install the executable
-	install(TARGETS AlcuinTestApp DESTINATION bin COMPONENT alcuin_test_app)
+	install(TARGETS ${PROJECT_NAME_TITLE} DESTINATION bin COMPONENT alcuin_test_app)
 	
 endif ()
