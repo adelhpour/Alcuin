@@ -144,7 +144,6 @@ jobs:
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.5.0'
-          modules: 'qtwidgets'
 
       - name: Create build directory
         shell: bash
