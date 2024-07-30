@@ -112,6 +112,7 @@ jobs:
             file_name=${{ matrix.embeddable_python_name }}-ubuntu.zip
           fi
           curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/$file_name"
+          ls -l
           unzip -q $file_name
           rm $file_name
           ls -l
