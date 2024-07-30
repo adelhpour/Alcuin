@@ -31,10 +31,10 @@ jobs:
             os_type: windows
             os_name: windows-latest
             build_type: Release
-        embeddable_python_owner: [ "thonny" ]
-        embeddable_python_repo: [ "thonny" ]
-        embeddable_python_name: [ "thonny" ]
-        embeddable_python_release_version: [ "v4.1.4" ]
+        embeddable_python_owner: [ "adelhpour" ]
+        embeddable_python_repo: [ "EmbeddablePythonBinaries" ]
+        embeddable_python_name: [ "Python3.10" ]
+        embeddable_python_release_version: [ "v0.0.0" ]
         embeddable_python_version: [ "3.10" ]
 
     runs-on: ${{ matrix.platform.os_name }}
@@ -105,30 +105,16 @@ jobs:
           mkdir -p ${{ matrix.embeddable_python_name }}
           cd ${{ matrix.embeddable_python_name }}
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}-windows-portable.zip
+            file_name=${{ matrix.embeddable_python_name }}-windows.zip
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.pkg
+            file_name=${{ matrix.embeddable_python_name }}-macOS.zip
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
-            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.bash
+            file_name=${{ matrix.embeddable_python_name }}-ubuntu.zip
           fi
           curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/$file_name"
-
-
-      - name: Install Embeddable Python
-        shell: bash
-        run: |
-          cd ${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}
-          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-            ls -l
-            unzip -q thonny-v4.1.4-windows-portable.zip -d ./Python
-          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            ls -l
-            chmod 777 thonny-v4.1.4.pkg
-            installer -pkg thonny-v4.1.4.pkg -target /
-            cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
-          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
-            bash ./*.bash
-          fi
+          unzip -q $file_name
+          rm $file_name
+          ls -l
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
