@@ -101,12 +101,12 @@ jobs:
           ls -l
           ls Alcuin
           ls Alcuin/embeddable-python-devs
-          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
-          else if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            embeddable_python_version = ls Alcuin/embeddable-python/macos
-            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/${embeddable_python_version}" >> "${GITHUB_ENV}"
-          fi
+          #if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+          #  echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
+          #else if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+          #  embeddable_python_version = ls Alcuin/embeddable-python/macos
+          #  echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/${embeddable_python_version}" >> "${GITHUB_ENV}"
+          #fi
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
