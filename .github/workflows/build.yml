@@ -127,6 +127,7 @@ jobs:
             unzip -q ./*.zip -d ./Python
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             ls -l
+            ls -l ./*.pkg
             installer -pkg ./*.pkg -target /
             cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
