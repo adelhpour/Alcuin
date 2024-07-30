@@ -4,7 +4,7 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 	set(Python_VERSION_MINOR 0)
 	if(APPLE)
 		## get python prefix
-		set(Python_PREFIX "" CACHE PATH "Python root directory (contains lib, include, etc.)")
+		set(Python_PREFIX ${CMAKE_SOURCE_DIR}/embeddable_python/macos)
 
 		## extract python version string
 		string(REPLACE "/" ";" SPLITTED_Python_PREFIX "${Python_PREFIX}" )
@@ -26,7 +26,7 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 			set(Python_LIBRARIES ${Python_PREFIX}/Python)
 		endif ()
 	elseif (WIN32)
-		set(Python_PREFIX "" CACHE PATH "Python root directory (contains .dll)")
+		set(Python_PREFIX ${CMAKE_SOURCE_DIR}/embeddable_python/windows/Python)
 
 		## extract python version string
 		file(GLOB Python_DLLS_FULL_PATHS ${Python_PREFIX}/*.dll)
