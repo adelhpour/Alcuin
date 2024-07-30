@@ -113,7 +113,7 @@ jobs:
           fi
           curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/$file_name"
           ls -l
-          unzip $file_name
+          unzip Python3.10-macOS.zip
           ls -l
           
 
