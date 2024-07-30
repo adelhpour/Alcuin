@@ -103,7 +103,8 @@ jobs:
         shell: bash
         run: |
             cd ${RUNNER_WORKSPACE}
-            echo ${RUNNER_WORKSPACE}/Alcuin/embeddable-python/${{ matrix.platform.os_type }}-${embeddable_python_version}"
+            ls -l ${RUNNER_WORKSPACE}/Alcuin/embeddable-python/${{ matrix.platform.os_type }}/${embeddable_python_version}
+            echo ${RUNNER_WORKSPACE}/Alcuin/embeddable-python/${{ matrix.platform.os_type }}/${embeddable_python_version}"
 
       - name: Create build directory
         shell: bash
