@@ -47,19 +47,6 @@ jobs:
         if: matrix.platform.os_type == 'windows'
         uses: ilammy/msvc-dev-cmd@v1.6.0
 
-      - name: Upgrade gcc on Linux
-        shell: bash
-        run: |
-          if [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
-            apt-get update
-            apt-get install -y software-properties-common
-            add-apt-repository -y ppa:ubuntu-toolchain-r/test
-            apt-get update
-            apt-get install -y gcc-11 g++-11
-            update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90
-            update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 90
-          fi
-
       - name: Setup Ninja
         uses: seanmiddleditch/gha-setup-ninja@master
 
@@ -129,7 +116,7 @@ jobs:
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.bash
           fi
-          curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/$file_name"
+          curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/${file_name}"
 
       - name: Install Embeddable Python
         shell: bash
