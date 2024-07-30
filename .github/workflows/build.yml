@@ -148,13 +148,13 @@ jobs:
       - name: Check Qt
         if : matrix.platform.os_type == 'ubuntu'
         run: |
-          ls {RUNNER_WORKSPACE}
-          ls {RUNNER_WORKSPACE}/Alcuin
-          ls {RUNNER_WORKSPACE}/Alcuin/Qt
-          ls {RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0
-          ls {RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64
-          ls {RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include
-          ls {RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include/QtWidgets
+          ls ${RUNNER_WORKSPACE}
+          ls ${RUNNER_WORKSPACE}/Alcuin
+          ls ${RUNNER_WORKSPACE}/Alcuin/Qt
+          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0
+          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64
+          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include
+          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include/QtWidgets
 
       - name: Create build directory
         shell: bash
@@ -205,12 +205,6 @@ jobs:
         if : matrix.platform.os_type == 'macos'
         shell: bash
         run: |
-          ls -l ${RUNNER_WORKSPACE}
-          ls -l ${RUNNER_WORKSPACE}/install-alcuin
-          ls -l ${RUNNER_WORKSPACE}/install-alcuin/bin
-          ls -l ${RUNNER_WORKSPACE}/install-alcuin/bin/AlcuinTestApp.app
-          ls -l ${RUNNER_WORKSPACE}/install-alcuin/bin/AlcuinTestApp.app/Contents
-          ls -l ${RUNNER_WORKSPACE}/install-alcuin/bin/AlcuinTestApp.app/Contents/MacOS
           chmod 777 ${RUNNER_WORKSPACE}/install-alcuin/bin/AlcuinTestApp.app/Contents/MacOS/AlcuinTestApp
 
       - name: Set artifacts path and name
