@@ -53,18 +53,18 @@ if (APPLE)
 	add_custom_command(TARGET AlcuinTestApp POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}
 	COMMAND ${CMAKE_COMMAND} -E copy_directory ${DEPENDENCIES_BUILD_DIR} ${FRAMEWORKS_DIR}/dependencies
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtCore.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Core> ${FRAMEWORKS_DIR}/QtCore.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtGui.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Gui> ${FRAMEWORKS_DIR}/QtGui.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Widgets> ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::DBus>  ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::PrintSupport> ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/6
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Svg> ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/6
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtCore.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Core> ${FRAMEWORKS_DIR}/QtCore.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtGui.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Gui> ${FRAMEWORKS_DIR}/QtGui.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Widgets> ${FRAMEWORKS_DIR}/QtWidgets.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::DBus>  ${FRAMEWORKS_DIR}/QtDBus.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::PrintSupport> ${FRAMEWORKS_DIR}/QtPrintSupport.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E make_directory ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/A
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::Svg> ${FRAMEWORKS_DIR}/QtSvg.framework/Versions/A
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/platforms
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Qt6::QCocoaIntegrationPlugin> ${PLUGINS_DIR}/platforms
 	COMMAND ${CMAKE_COMMAND} -E make_directory ${PLUGINS_DIR}/styles
