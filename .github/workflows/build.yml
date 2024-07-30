@@ -104,7 +104,8 @@ jobs:
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
             echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/3.10" >> "${GITHUB_ENV}"
+            embeddable_python_version=$(ls Alcuin/embeddable-python-devs/macos)
+            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version" >> "${GITHUB_ENV}"
           fi
 
       - name: Install Qt
