@@ -200,12 +200,6 @@ jobs:
           cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
           cmake --build . --target install --config ${{ matrix.platform.build_type }}
 
-      - name: Making Alcuin Test App executable
-        if : matrix.platform.os_type == 'macos'
-        shell: bash
-        run: |
-          chmod 777 ${RUNNER_WORKSPACE}/install-alcuin/bin/AlcuinTestApp.app/Contents/MacOS/AlcuinTestApp
-
       - name: Set artifacts path and name
         shell: bash
         run: |
