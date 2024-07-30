@@ -6,6 +6,7 @@
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QFileInfo>
+// #include <QScrollBar> is not recognized in ubuntu 20.04 with the Qt version 6.5.0 so we include qscrollbar.h instead
 #include "qscrollbar.h"
 
 // MyGraphicsView
