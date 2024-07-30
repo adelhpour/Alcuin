@@ -31,7 +31,12 @@ jobs:
             os_type: windows
             os_name: windows-latest
             build_type: Release
-        python_version: [ "3.11" ]
+        embeddable_python_owner: [ "thonny" ]
+        embeddable_python_repo: [ "thonny" ]
+        embeddable_python_name: [ "thonny" ]
+        embeddable_python_release_version: [ "v4.1.4" ]
+        embeddable_python_version: [ "3.10" ]
+
     runs-on: ${{ matrix.platform.os_name }}
 
     steps:
@@ -43,7 +48,6 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.6.0
 
       - name: Upgrade gcc on Linux
-        if: matrix.platform.os_type == 'manylinux'
         shell: bash
         run: |
           if [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
@@ -54,10 +58,6 @@ jobs:
             apt-get install -y gcc-11 g++-11
             update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 90
             update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 90
-          elif [ "${{ matrix.platform.os_type }}" == 'manylinux' ]; then
-            dnf install -y gcc-toolset-11
-            scl enable gcc-toolset-11 bash
-            echo "/opt/rh/gcc-toolset-11/root/usr/bin" >> "${GITHUB_PATH}"
           fi
 
       - name: Setup Ninja
@@ -81,18 +81,6 @@ jobs:
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             sudo apt-get update
             sudo apt-get install -y ccache
-          elif [ "${{ matrix.platform.os_type }}" == 'manylinux' ]; then
-            mkdir -p ccache
-            cd ccache
-            curl -L https://github.com/ccache/ccache/releases/download/v4.9.1/ccache-4.9.1.tar.gz > ccache.tar.gz
-            tar -zxf ccache.tar.gz
-            rm ccache.tar.gz
-            mkdir -p build-ccache
-            mkdir -p install-ccache
-            cd build-ccache
-            cmake -DCMAKE_INSTALL_PREFIX="$RUNNER_WORKSPACE/ccache/install-ccache" -DCMAKE_BUILD_TYPE=Release ../ccache-4.9.1
-            cmake --build . --target install
-            echo "$RUNNER_WORKSPACE/ccache/install-ccache/bin" >> "${GITHUB_PATH}"
           fi
 
       - name: Prepare ccache timestamp on non-Windows platforms
@@ -123,27 +111,38 @@ jobs:
             ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
             ${{ runner.os }}-
 
-      - name: Setup Python for non-Manylinux platforms
-        if: matrix.platform.build_python == 'ON' && matrix.platform.os_type != 'manylinux'
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python_version }}
-
-      - name: Setup Python for Manylinux platforms
-        if: matrix.platform.build_python == 'ON' && matrix.platform.os_type == 'manylinux'
-        shell: bash
-        run: |
-          dnf install -y wget
-          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-          bash Miniconda3-latest-Linux-x86_64.sh -b -p /Miniconda3
-          /Miniconda3/bin/conda create -y --name python${{ matrix.python_version }} python=${{ matrix.python_version }}
-          /Miniconda3/bin/conda init && bash ~/.bashrc && . ~/.bashrc          cd ${RUNNER_WORKSPACE}
-          echo "export PATH=/Miniconda3/envs/python${{ matrix.python_version }}/bin:$PATH" >> "${GITHUB_ENV}"
-
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.5.0'
+
+      - name: Download Embeddable Python
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          mkdir -p ${{ matrix.embeddable_python_name }}
+          cd ${{ matrix.embeddable_python_name }}
+          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}-windows-portable.zip
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.pkg
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+            file_name=${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.bash
+          fi
+          curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/${file_name}"
+
+      - name: Install Embeddable Python
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}
+          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+            unzip -q ./*.zip
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            installer -pkg ./*.pkg -target /
+            cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+            bash ./*.bash
+          fi
 
       - name: Create build directory
         shell: bash
@@ -159,7 +158,9 @@ jobs:
           -DCMAKE_CXX_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
           -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
           -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
-          -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin"
+          -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
+          -DBUILD_WITH_EMBEDDABLE_PYTHON_DEVS=ON \
+          -DPython_PREFIX="${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}/Python.framework/Versions/3.10"
 
       - name: Build and install Alcuin
         shell: bash
@@ -182,8 +183,7 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
           -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
           -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
-          -DALCUIN_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
-          -DBUILD_WITH_EMBEDDABLE_PYTHON_DEVS=ON
+          -DALCUIN_PREFIX="${RUNNER_WORKSPACE}/install-alcuin"
 
       - name: Build and install Alcuin Test App
         shell: bash
@@ -197,18 +197,14 @@ jobs:
           cd ${RUNNER_WORKSPACE}
           artifacts_name=""
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-          compiler_version=$(ls "C:\Program Files\Microsoft Visual Studio")
-          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-msvc$compiler_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+            compiler_version=$(ls "C:\Program Files\Microsoft Visual Studio")
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-msvc$compiler_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-          os_version=$(sw_vers -productVersion | cut -d '.' -f 1)
-          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+            os_version=$(sw_vers -productVersion | cut -d '.' -f 1)
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
-          os_version=$(lsb_release -rs | cut -d '.' -f 1)
-          echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
-          elif [ "${{ matrix.platform.os_type }}" == 'manylinux' ]; then
-          os_name="${{ matrix.platform.name }}"
-          os_name_without_build_type="${os_name%%-*}"
-          echo "artifacts_name=alcuin-${os_name_without_build_type}-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+            os_version=$(lsb_release -rs | cut -d '.' -f 1)
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
           fi
           echo "artifacts_path=../install-alcuin" >> "${GITHUB_ENV}"
 
