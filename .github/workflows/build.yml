@@ -127,7 +127,7 @@ jobs:
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
             unzip -q ./*.zip
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            ls -l
+            unzip -q ./*.zip
             installer -pkg ./*.pkg -target /
             cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
