@@ -149,12 +149,11 @@ jobs:
         if : matrix.platform.os_type == 'ubuntu'
         run: |
           ls ${RUNNER_WORKSPACE}
-          ls ${RUNNER_WORKSPACE}/Alcuin
-          ls ${RUNNER_WORKSPACE}/Alcuin/Qt
-          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0
-          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64
-          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include
-          ls ${RUNNER_WORKSPACE}/Alcuin/Qt/6.5.0/gcc_64/include/QtWidgets
+          ls ${RUNNER_WORKSPACE}/Qt
+          ls ${RUNNER_WORKSPACE}/Qt/6.5.0
+          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64
+          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include
+          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QtWidgets
 
       - name: Create build directory
         shell: bash
