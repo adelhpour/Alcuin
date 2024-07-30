@@ -7,7 +7,7 @@
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QFileInfo>
-#include <QScrollbar>
+#include "QScrollbar"
 
 // MyGraphicsView
 
