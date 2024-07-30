@@ -3,6 +3,7 @@
 #include "negui_customized_common_widgets.h"
 #include "negui_menu_button_builder.h"
 
+#include <QFrame>
 #include <QScrollbar>
 #include <QPrinter>
 #include <QSvgGenerator>
