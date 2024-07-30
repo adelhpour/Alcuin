@@ -154,7 +154,7 @@ jobs:
           ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64
           ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include
           ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QtWidgets
-          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QScrollBar
+          ls ${RUNNER_WORKSPACE}/Qt/6.5.0/gcc_64/include/QWidgets/QScrollBar
 
       - name: Create build directory
         shell: bash
