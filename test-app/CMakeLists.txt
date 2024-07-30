@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(alcuintestapp)
 set(PROJECT_NAME_TITLE "AlcuinTestApp")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(GNUInstallDirs)
 
