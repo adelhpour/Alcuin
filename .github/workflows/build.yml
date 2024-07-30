@@ -124,6 +124,7 @@ jobs:
         run: |
           cd ${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+            ls -l ./*.zip
             unzip -q ./*.zip -d ./Python
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             ls -l
