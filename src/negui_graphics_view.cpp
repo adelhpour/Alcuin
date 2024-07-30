@@ -4,10 +4,10 @@
 #include "negui_menu_button_builder.h"
 
 #include <QFrame>
-#include <QScrollbar>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QFileInfo>
+#include <QScrollbar>
 
 // MyGraphicsView
 
