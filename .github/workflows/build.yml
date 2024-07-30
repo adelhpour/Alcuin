@@ -124,12 +124,10 @@ jobs:
         run: |
           cd ${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-            ls -l ./*.zip
-            unzip -q ./*.zip -d ./Python
+            ls ./*.zip | xargs -I{} unzip -q {}
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             ls -l
-            ls -l ./*.pkg
-            installer -pkg ./*.pkg -target /
+            ls ./*.pkg | xargs -I{} sudo installer -pkg {} -target /
             cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             bash ./*.bash
