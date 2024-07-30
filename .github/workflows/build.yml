@@ -123,8 +123,8 @@ jobs:
             unzip -q thonny-v4.1.4-windows-portable.zip -d ./Python
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             ls -l
-            chmod 777 ${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.pkg
-            installer -pkg ${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.pkg -target /
+            chmod 777 thonny-v4.1.4.pkg
+            installer -pkg thonny-v4.1.4.pkg -target /
             cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             bash ./*.bash
