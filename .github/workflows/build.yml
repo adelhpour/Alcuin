@@ -98,11 +98,6 @@ jobs:
             ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
             ${{ runner.os }}-
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '6.5.0'
-
       - name: Download Embeddable Python
         shell: bash
         run: |
@@ -124,14 +119,19 @@ jobs:
         run: |
           cd ${RUNNER_WORKSPACE}/${{ matrix.embeddable_python_name }}
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
-            ls ./*.zip | xargs -I{} unzip -q {}
+            unzip -q ${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}-windows-portable.zip
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             ls -l
-            ls ./*.pkg | xargs -I{} sudo installer -pkg {} -target /
+            sudo installer -pkg ${{ matrix.embeddable_python_name }}-${{ matrix.embeddable_python_release_version }}.pkg -target /
             cp -r /Applications/Thonny.app/Contents/Frameworks/Python.framework/Versions/3.10 .
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             bash ./*.bash
           fi
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.5.0'
 
       - name: Create build directory
         shell: bash
