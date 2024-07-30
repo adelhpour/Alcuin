@@ -3,7 +3,7 @@
 #include "negui_customized_common_widgets.h"
 #include "negui_menu_button_builder.h"
 
-#include <QScrollbar>
+//#include <QScrollbar>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QFileInfo>
@@ -26,8 +26,8 @@ MyGraphicsView::MyGraphicsView(QWidget* parent) : QGraphicsView(parent) {
     setScene(new MyGraphicsScene(this));
     setSceneRect(scene()->sceneRect().x(), scene()->sceneRect().y(), scene()->sceneRect().width(), scene()->sceneRect().height());
     connect(this, SIGNAL(askForDisplayContextMenu(const qreal&, const qreal&)), scene(), SLOT(displayContextMenu(const qreal&, const qreal&)));
-    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
+    //connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
+    //connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateFrame()));
 
     setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     resetScale();
@@ -149,8 +149,8 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
     if (_panMode) {
         _isPanned = true;
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->position().x() - _panStartX));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->position().y() - _panStartY));
+        //horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->position().x() - _panStartX));
+        //verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->position().y() - _panStartY));
         _panStartX = event->position().x();
         _panStartY = event->position().y();
         event->accept();
