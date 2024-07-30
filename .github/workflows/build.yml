@@ -103,6 +103,9 @@ jobs:
         shell: bash
         run: |
             cd ${RUNNER_WORKSPACE}
+            ls -l ${RUNNER_WORKSPACE}
+            ls -l ${RUNNER_WORKSPACE}/Alcuin
+            ls -l ${RUNNER_WORKSPACE}/Alcuin/embeddable-python
             ls -l ${RUNNER_WORKSPACE}/Alcuin/embeddable-python/${{ matrix.platform.os_type }}/${embeddable_python_version}
             echo ${RUNNER_WORKSPACE}/Alcuin/embeddable-python/${{ matrix.platform.os_type }}/${embeddable_python_version}"
 
