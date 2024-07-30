@@ -103,7 +103,7 @@ jobs:
           ls Alcuin/embeddable-python-devs
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
             echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
-          else if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/3.10" >> "${GITHUB_ENV}"
           fi
 
