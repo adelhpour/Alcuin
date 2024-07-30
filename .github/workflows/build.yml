@@ -107,14 +107,14 @@ jobs:
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
             file_name=${{ matrix.embeddable_python_name }}-windows.zip
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            file_name=${{ matrix.embeddable_python_name }}-macOS.zip
+            file_name=${{ matrix.embeddable_python_name }}-macOS.tar
           elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
             file_name=${{ matrix.embeddable_python_name }}-ubuntu.zip
           fi
           curl -LO "https://github.com/${{ matrix.embeddable_python_owner }}/${{ matrix.embeddable_python_repo }}/releases/download/${{ matrix.embeddable_python_release_version }}/$file_name"
           ls -l
-          brew install p7zip
-          7z x $file_name
+          tar -xvf $file_name
+          ls -l
           
 
       - name: Install Qt
