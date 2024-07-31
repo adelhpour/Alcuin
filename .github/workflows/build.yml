@@ -103,10 +103,10 @@ jobs:
             ls ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python
             ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python/python -m pip install --upgrade networkinfotranslator
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
-            embeddable_python_version=$(ls Alcuin/embeddable-python-devs/macos)
-            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version" >> "${GITHUB_ENV}"
-            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version/bin/python$embeddable_python_version -m pip install --upgrade networkinfotranslator
-            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version/bin/python$embeddable_python_version -m pip show networkinfotranslator
+            embeddable_python_version=$(ls Alcuin/embeddable-python-devs/macos/Python.framework/Versions)
+            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/Python.framework/Versions/$embeddable_python_version" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/Python.framework/Versions/$embeddable_python_version/bin/python$embeddable_python_version -m pip install --upgrade networkinfotranslator
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/Python.framework/Versions/$embeddable_python_version/bin/python$embeddable_python_version -m pip show networkinfotranslator
           fi
 
       - name: Install Qt
