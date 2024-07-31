@@ -94,18 +94,17 @@ jobs:
             ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
             ${{ runner.os }}-
 
-      - name: Set Embeddable Python directory
+      - name: Set Embeddable Python directory and Install required packages
         shell: bash
         run: |
           cd ${RUNNER_WORKSPACE}
-          ls -l
-          ls Alcuin
-          ls Alcuin/embeddable-python-devs
           if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
             echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python/bin/python -m pip install --upgrade networkinfotranslator
           elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
             embeddable_python_version=$(ls Alcuin/embeddable-python-devs/macos)
             echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/$embeddable_python_version/bin/python$embeddable_python_version -m pip install --upgrade networkinfotranslator
           fi
 
       - name: Install Qt
