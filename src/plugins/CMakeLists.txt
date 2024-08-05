@@ -48,9 +48,30 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 					endif ()
 					math(EXPR Python_VERSION_MAJOR "${Python_DLL_VERSION} / ${BASE_VERSION}")
 					math(EXPR Python_VERSION_MINOR "${Python_DLL_VERSION} % ${BASE_VERSION}")
-					set(Python_INCLUDE_DIRS "${Python_PREFIX}/include")
+					set(Python_INCLUDE_DIRS ${Python_PREFIX}/include)
 					set(Python_LIBRARIES ${Python_PREFIX}/libs/python${Python_VERSION_MAJOR}${Python_VERSION_MINOR}.lib)
 				endif ()
+			endif ()
+		endforeach ()
+	elseif (UNIX)
+		## get python prefix
+		set(Python_PREFIX "" CACHE PATH "Python root directory (contains lib, include, etc.)")
+
+		## extract python version string
+		file(GLOB BINARY_FILES ${Python_PREFIX}/bin/*)
+		foreach(BINARY_FILE ${BINARY_FILES})
+			get_filename_component(BINARY_FILE_NAME ${BINARY_FILE} NAME)
+			string(REPLACE "python" "" Python_VERSION_STRING ${BINARY_FILE_NAME})
+			string(REPLACE "." "" Python_VERSION_STRING ${Python_VERSION_STRING} )
+			set(BASE_VERSION 10)
+			if (Python_VERSION_STRING GREATER ${BASE_VERSION})
+				if (Python_VERSION_STRING GREATER 100)
+					set(BASE_VERSION 100)
+				endif ()
+				math(EXPR Python_VERSION_MAJOR "${Python_VERSION_STRING} / ${BASE_VERSION}")
+				math(EXPR Python_VERSION_MINOR "${Python_VERSION_STRING} % ${BASE_VERSION}")
+				set(Python_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
+				set(Python_INCLUDE_DIRS ${Python_PREFIX}/include/python${Python_VERSION})
 			endif ()
 		endforeach ()
 	endif ()
@@ -82,11 +103,11 @@ foreach(PLUGIN ${PLUGINS})
 
 	## link libraries
 	target_link_libraries(${PLUGIN_NAME}
-			Qt5::Core
-			Qt5::Gui
-			Qt5::Widgets
-			Qt5::PrintSupport
-			Qt5::Svg
+			Qt6::Core
+			Qt6::Gui
+			Qt6::Widgets
+			Qt6::PrintSupport
+			Qt6::Svg
 			${Python_LIBRARIES})
 
 	## set library dist
@@ -109,7 +130,7 @@ install(FILES ${plugin_headers} DESTINATION include/plugins COMPONENT alcuin_lib
 if (${BUILD_WITH_EMBEDDABLE_PYTHON_DEVS})
 	if (APPLE)
 		install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX}/Python.framework/Versions)
-	elseif (WIN32)
+	else ()
 		install(DIRECTORY ${Python_PREFIX} DESTINATION ${CMAKE_INSTALL_PREFIX})
 	endif ()
 endif ()

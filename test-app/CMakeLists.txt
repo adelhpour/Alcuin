@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.6 FATAL_ERROR)
 
 project(alcuintestapp)
 set(PROJECT_NAME_TITLE "AlcuinTestApp")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(GNUInstallDirs)
 
@@ -51,8 +53,8 @@ endif ()
 set(ALCUIN_INCLUDEDIR ${ALCUIN_PREFIX}/include)
 set(ALCUIN_PLUGINS_INCLUDEDIR ${ALCUIN_PREFIX}/include/plugins)
 
-# find Qt5 and required components
-find_package(Qt5 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
+# find Qt6 and required components
+find_package(Qt6 COMPONENTS Core Gui Widgets DBus PrintSupport Svg REQUIRED)
 
 ## Set build type default.
 set(CMAKE_BUILD_TYPE "Release" CACHE STRING
@@ -93,7 +95,7 @@ endif()
 add_subdirectory(src)
 
 ## Package the project
-option(BUILD_PACKAGING "Package AlcuinTestApp into binary distributions" OFF)
+option(BUILD_PACKAGING "Package ${PROJECT_NAME_TITLE} into binary distributions" OFF)
 if (${BUILD_PACKAGING})
 	add_subdirectory(packaging)
 endif()

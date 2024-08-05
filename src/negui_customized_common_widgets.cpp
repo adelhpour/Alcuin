@@ -29,7 +29,7 @@ MyLabel::MyLabel(const QString& text, const QString& toolTip, QWidget* parent) :
 #else
     fontSize = 12;
 #endif
-    _font.setPointSize(fontSize/ qMax(QFontMetrics(font()).width(text) / 110.0, 1.000));
+    _font.setPointSize(fontSize / qMax(QFontMetrics(font()).horizontalAdvance(text) / 110.0, 1.000));
     setFont(_font);
 
     if (!text.isEmpty())

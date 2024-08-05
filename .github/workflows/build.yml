@@ -1,0 +1,187 @@
+name: Build Alcuin
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build_on_OSs:
+    name: Build Alcuin on ${{ matrix.platform.name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - name: macos-12-release
+            os_type: macos
+            os_name: macos-12
+            build_type: Release
+          - name: macos-latest-release
+            os_type: macos
+            os_name: macos-latest
+            build_type: Release
+          - name: ubuntu-20.04-release
+            os_type: ubuntu
+            os_name: ubuntu-20.04
+            build_type: Release
+          - name: windows-latest-release
+            os_type: windows
+            os_name: windows-latest
+            build_type: Release
+        embeddable_python_version: [ "3.10" ]
+
+    runs-on: ${{ matrix.platform.os_name }}
+
+    steps:
+      - name: Checkout Alcuin
+        uses: actions/checkout@v4
+
+      - name: Set MSVC as the default compiler on Windows
+        if: matrix.platform.os_type == 'windows'
+        uses: ilammy/msvc-dev-cmd@v1.6.0
+
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Get Host Architecture
+        shell: bash
+        run: |
+          architecture=$(uname -m)
+          echo "host_architecture=$architecture" >> "${GITHUB_ENV}"
+          if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            echo "OSX_ARCHITECTURES=$architecture" >> "${GITHUB_ENV}"
+          fi
+
+      - name: Install ccache
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          if [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            brew install ccache
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+            sudo apt-get update
+            sudo apt-get install -y ccache
+          fi
+
+      - name: Prepare ccache timestamp on non-Windows platforms
+        if: matrix.platform.os_type != 'windows'
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+
+      - name: Set ccache cache directory on non-Windows
+        if: matrix.platform.os_type != 'windows'
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          echo "CCACHE_DIR=${RUNNER_WORKSPACE}/.ccache" >> "${GITHUB_ENV}"
+          echo "COMPILER_LAUNCHER=ccache" >> "${GITHUB_ENV}"
+
+      - name: Cache ccache files on non-Windows
+        if: matrix.platform.os_type != 'windows'
+        uses: actions/cache@v4
+        with:
+          path: ${RUNNER_WORKSPACE}/.ccache
+          key:
+            ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp
+            }}
+          restore-keys: |
+            ${{ runner.os }}-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
+            ${{ runner.os }}-
+
+      - name: Set Embeddable Python directory and Install required packages
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/windows/Python/python -m pip install --upgrade networkinfotranslator
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            embeddable_python_version=$(ls Alcuin/embeddable-python-devs/macos/Python.framework/Versions)
+            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/Python.framework/Versions/$embeddable_python_version" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/macos/Python.framework/Versions/$embeddable_python_version/bin/python$embeddable_python_version -m pip install --upgrade networkinfotranslator
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+            echo "Python_PREFIX=${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/linux/Python" >> "${GITHUB_ENV}"
+            ${RUNNER_WORKSPACE}/Alcuin/embeddable-python-devs/linux/Python/bin/python3 -m pip install --upgrade networkinfotranslator
+          fi
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.5.0'
+
+      - name: Create build directory
+        shell: bash
+        run: mkdir -p ${RUNNER_WORKSPACE}/build-alcuin
+
+      - name: Configure CMake for Alcuin
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin
+          cmake $GITHUB_WORKSPACE \
+          -G "Ninja" \
+          -DCMAKE_C_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
+          -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+          -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
+          -DBUILD_WITH_EMBEDDABLE_PYTHON_DEVS=ON \
+          -DPython_PREFIX=${Python_PREFIX}
+          
+
+      - name: Build and install Alcuin
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin
+          cmake --build . --target install --config ${{ matrix.platform.build_type }}
+
+      - name: Create test-app build directory
+        shell: bash
+        run: mkdir -p ${RUNNER_WORKSPACE}/build-alcuin/test-app
+
+      - name: Configure CMake for Alcuin Test App
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
+          cmake $GITHUB_WORKSPACE/test-app \
+          -G "Ninja" \
+          -DCMAKE_C_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_CXX_COMPILER_LAUNCHER=${COMPILER_LAUNCHER} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.platform.build_type }} \
+          -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
+          -DCMAKE_INSTALL_PREFIX="${RUNNER_WORKSPACE}/install-alcuin" \
+          -DALCUIN_PREFIX="${RUNNER_WORKSPACE}/install-alcuin"
+
+      - name: Build and install Alcuin Test App
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}/build-alcuin/test-app
+          cmake --build . --target install --config ${{ matrix.platform.build_type }}
+
+      - name: Set artifacts path and name
+        shell: bash
+        run: |
+          cd ${RUNNER_WORKSPACE}
+          artifacts_name=""
+          if [ "${{ matrix.platform.os_type }}" == 'windows' ]; then
+            compiler_version=$(ls "C:\Program Files\Microsoft Visual Studio")
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-msvc$compiler_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          elif [ "${{ matrix.platform.os_type }}" == 'macos' ]; then
+            os_version=$(sw_vers -productVersion | cut -d '.' -f 1)
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          elif [ "${{ matrix.platform.os_type }}" == 'ubuntu' ]; then
+            os_version=$(lsb_release -rs | cut -d '.' -f 1)
+            echo "artifacts_name=alcuin-${{ matrix.platform.os_type }}-$os_version-${host_architecture}-${{ matrix.platform.build_type }}" >> "${GITHUB_ENV}"
+          fi
+          echo "artifacts_path=../install-alcuin" >> "${GITHUB_ENV}"
+
+      - name: Upload Alcuin binaries
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{env.artifacts_name}}
+          path: ${{env.artifacts_path}}

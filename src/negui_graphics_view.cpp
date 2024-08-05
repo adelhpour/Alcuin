@@ -3,10 +3,11 @@
 #include "negui_customized_common_widgets.h"
 #include "negui_menu_button_builder.h"
 
-#include <QScrollbar>
 #include <QPrinter>
 #include <QSvgGenerator>
 #include <QFileInfo>
+// #include <QScrollBar> is not recognized in ubuntu 20.04 with the Qt version 6.5.0 so we include qscrollbar.h instead
+#include "qscrollbar.h"
 
 // MyGraphicsView
 
@@ -126,10 +127,10 @@ void MyGraphicsView::updateFrame(const QRectF& frameRect) {
 void MyGraphicsView::wheelEvent(QWheelEvent * event) {
     qint32 zoomSpeedFactor = 1;
     if (currentScale() > 1.000)
-        zoomSpeedFactor = qMin(qMax(qAbs(event->delta()) / 100, 1), 10);
-    if (event->delta() > 0.0001)
+        zoomSpeedFactor = qMin(qMax(qAbs(event->angleDelta().y()) / 100, 1), 10);
+    if (event->angleDelta().y() > 0.0001)
         zoom(zoomSpeedFactor * 0.01);
-    else if (event->delta() < -0.0001)
+    else if (event->angleDelta().y() < -0.0001)
         zoom(zoomSpeedFactor * -0.01);
 }
 
@@ -138,8 +139,8 @@ void MyGraphicsView::mousePressEvent(QMouseEvent *event) {
     if (!event->isAccepted()) {
         if (event->button() == Qt::RightButton) {
             _panMode = true;
-            _panStartX = event->x();
-            _panStartY = event->y();
+            _panStartX = event->position().x();
+            _panStartY = event->position().y();
             event->accept();
         }
     }
@@ -149,10 +150,10 @@ void MyGraphicsView::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
     if (_panMode) {
         _isPanned = true;
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x() - _panStartX));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y() - _panStartY));
-        _panStartX = event->x();
-        _panStartY = event->y();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->position().x() - _panStartX));
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->position().y() - _panStartY));
+        _panStartX = event->position().x();
+        _panStartY = event->position().y();
         event->accept();
     }
 }
@@ -162,7 +163,7 @@ void MyGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
     if (!((MyGraphicsScene*)scene())->whetherMouseReleaseEventIsAccepted()) {
         if (event->button() == Qt::RightButton) {
             if (!_isPanned)
-                emit askForDisplayContextMenu(event->globalPos().x(), event->globalPos().y());
+                emit askForDisplayContextMenu(event->globalPosition().x(), event->globalPosition().y());
         }
     }
     _isPanned = false;

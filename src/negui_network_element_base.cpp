@@ -245,7 +245,7 @@ MyNetworkElementBase* getNetworkElement(QList<MyNetworkElementBase*> networkElem
 QList<MyNetworkElementBase*> getNetworkElementsOfType(QList<MyNetworkElementBase*> networkElements, const QString& type) {
     QList<MyNetworkElementBase*> networkElementsOfType;
     for (MyNetworkElementBase* networkElement : networkElements) {
-        if (networkElement->type() == type)
+        if (networkElement->typeAsString() == type)
             networkElementsOfType.push_back(networkElement);
     }
 

@@ -13,8 +13,7 @@ public:
     
     typedef enum {
         NODE_ELEMENT,
-        EDGE_ELEMENT,
-        ARROW_HEAD_ELEMENT,
+        EDGE_ELEMENT
     } ELEMENT_TYPE;
 
     MyNetworkElementBase(const QString& name);
@@ -22,6 +21,8 @@ public:
     ~MyNetworkElementBase();
     
     virtual ELEMENT_TYPE type() = 0;
+
+    virtual const QString typeAsString() = 0;
 
     void setName(const QString& name);
     

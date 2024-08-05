@@ -18,6 +18,8 @@ public:
 
     ELEMENT_TYPE type() override;
 
+    const QString typeAsString() override;
+
     virtual EDGE_TYPE edgeType() = 0;
 
     void connectGraphicsItem() override;
