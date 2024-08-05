@@ -53,6 +53,35 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 				endif ()
 			endif ()
 		endforeach ()
+	elseif (UNIX)
+		## get python prefix
+		set(Python_PREFIX "" CACHE PATH "Python root directory (contains lib, include, etc.)")
+
+		## extract python version string
+		file(GLOB BINARY_FILES ${Python_PREFIX}/bin)
+		foreach(BINARY_FILE ${BINARY_FILES})
+			message(STATUS "BINARY_FILE: ${BINARY_FILE}")
+			if (BINARY_FILE MATCHES "python")
+				message(STATUS "BINARY_FILE0: ${BINARY_FILE}")
+				string(REPLACE "python" "" Python_VERSION_STRING ${BINARY_FILE})
+				message(STATUS "BINARY_FILE1: ${BINARY_FILE}")
+				set(BASE_VERSION 10)
+				if (Python_VERSION_STRING GREATER ${BASE_VERSION})
+					if (Python_VERSION_STRING GREATER 100)
+						set(BASE_VERSION 100)
+					endif ()
+					message(STATUS "BINARY_FILE2: ${BINARY_FILE}")
+					math(EXPR Python_VERSION_MAJOR "${Python_VERSION_STRING} / ${BASE_VERSION}")
+					math(EXPR Python_VERSION_MINOR "${Python_VERSION_STRING} % ${BASE_VERSION}")
+					set(Python_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
+					set(Python_INCLUDE_DIRS ${Python_PREFIX}/include)
+					message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
+			endif ()
+		endforeach ()
+
+
+
+
 	endif ()
 
 	if (${Python_VERSION_MAJOR} GREATER 0)
