@@ -58,7 +58,7 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 		set(Python_PREFIX "" CACHE PATH "Python root directory (contains lib, include, etc.)")
 
 		## extract python version string
-		file(GLOB BINARY_FILES ${Python_PREFIX}/bin)
+		file(GLOB BINARY_FILES ${Python_PREFIX}/bin/*)
 		foreach(BINARY_FILE ${BINARY_FILES})
 			message(STATUS "BINARY_FILE: ${BINARY_FILE}")
 			if (BINARY_FILE MATCHES "python")
