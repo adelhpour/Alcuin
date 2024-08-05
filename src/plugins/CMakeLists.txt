@@ -76,6 +76,7 @@ if (BUILD_WITH_EMBEDDABLE_PYTHON_DEVS)
 					set(Python_VERSION ${Python_VERSION_MAJOR}.${Python_VERSION_MINOR})
 					set(Python_INCLUDE_DIRS ${Python_PREFIX}/include)
 					message(STATUS "Python_INCLUDE_DIRS: ${Python_INCLUDE_DIRS}")
+				endif ()
 			endif ()
 		endforeach ()
 
