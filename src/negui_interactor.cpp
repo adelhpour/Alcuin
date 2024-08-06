@@ -41,6 +41,8 @@ const QString MyInteractor::applicationDirectoryPath() {
 QDir MyInteractor::iconsDirectory() {
 #if defined(Q_OS_MAC)
     return QDir(applicationDirectoryPath() + "/../Resources/icons");
+#elif defined(Q_OS_LINUX)
+    return QDir(applicationDirectoryPath() + "/../resources/icons");
 #else
     return QDir(applicationDirectoryPath() + "/resources/icons");
 #endif
