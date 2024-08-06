@@ -122,13 +122,17 @@ const qreal MyNetworkManager::numberOfEdges() {
 }
 
 void MyNetworkManager::clearNodesInfo() {
-    while(nodes().size())
-        delete nodes().takeLast();
+    for (MyNetworkElementBase* node : nodes()) {
+        delete node;
+    }
+    _nodes.clear();
 }
 
 void MyNetworkManager::clearEdgesInfo() {
-    while(edges().size())
-        delete edges().takeLast();
+    for (MyNetworkElementBase* edge : edges()) {
+        delete edge;
+    }
+    _edges.clear();
 }
 
 MyNetworkElementStyleBase* MyNetworkManager::nodeStyle() {
