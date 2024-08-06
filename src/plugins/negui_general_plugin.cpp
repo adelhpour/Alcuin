@@ -56,9 +56,11 @@ const QJsonArray GeneralPlugin::loadPluginsInfo(CPyObject script) {
 const QJsonValue GeneralPlugin::call(const QString& functionName, const QJsonValue& functionInput) {
     PyErr_Print();
     for (CPyObject script : _scripts) {
-        CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
-        if (function)
-            return processFunctionOutput(PyObject_CallObject(function.getObject(), processFunctionInput(functionInput)));
+        if (script && PyObject_HasAttrString(script.getObject(), (char*)functionName.toStdString().c_str())) {
+            CPyObject function = PyObject_GetAttrString(script.getObject(), (char*)functionName.toStdString().c_str());
+            if (function)
+                return processFunctionOutput(PyObject_CallObject(function.getObject(), processFunctionInput(functionInput)));
+        }
     }
 
     return QJsonValue();
