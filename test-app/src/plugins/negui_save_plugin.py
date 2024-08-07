@@ -42,11 +42,7 @@ def write_sbml(input):
     if len(input) == 2 and input[1]:
         network_info = json.loads(input[0])
         file_name = input[1]
-        network_info_import_from_network_editor = networkinfotranslator.NetworkInfoImportFromNetworkEditor()
-        network_info_import_from_network_editor.extract_info(network_info)
-        network_info_export_to_sbml_model = networkinfotranslator.NetworkInfoExportToSBMLModel()
-        network_info_export_to_sbml_model.extract_graph_info(network_info_import_from_network_editor)
-        network_info_export_to_sbml_model.export(file_name)
+        return networkinfotranslator.import_network_editor_export_sbml(network_info, file_name)
 
 def save_file(input):
     if len(input) == 2 and input[1]:

@@ -43,11 +43,6 @@ def load_json(input):
 def load_sbml(input):
     file_name = input[0]
     if file_name:
-        network_info_import_from_sbml_model = networkinfotranslator.NetworkInfoImportFromSBMLModel()
-        network_info_import_from_sbml_model.extract_info(file_name)
-        network_info_export_to_network_editor = networkinfotranslator.NetworkInfoExportToNetworkEditor()
-        network_info_export_to_network_editor.extract_graph_info(network_info_import_from_sbml_model)
-        network_info = network_info_export_to_network_editor.export(file_name)
-        return json.dumps(network_info)
+        return json.dumps(networkinfotranslator.import_sbml_export_network_editor(file_name))
 
     return ""
