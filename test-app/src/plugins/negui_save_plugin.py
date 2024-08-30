@@ -20,9 +20,12 @@ json_write_json.add_parameter(json_get_save_as_file_name)
 json_save_as_json = alcuin_plugin.CommandPlugin(plugin_name="as JSON", plugin_type="save_as", commands=[json_write_json])
 alcuin_plugin.add_plugin(json_save_as_json)
 
+save_get_save_file_name = alcuin_plugin.CPlusPlusCommand("getSaveFileName")
+save_get_save_file_name.add_parameter("xml")
 save_export_network_info = alcuin_plugin.CPlusPlusCommand("exportNetworkInfo")
 save_save_file = alcuin_plugin.PythonCommand("save_file")
 save_save_file.add_parameter(save_export_network_info)
+save_save_file.add_parameter(save_get_save_file_name)
 save = alcuin_plugin.CommandPlugin(plugin_name="Save", plugin_type="save", commands=[save_save_file])
 alcuin_plugin.add_plugin(save)
 
@@ -39,14 +42,10 @@ def write_sbml(input):
     if len(input) == 2 and input[1]:
         network_info = json.loads(input[0])
         file_name = input[1]
-        network_info_import_from_network_editor = networkinfotranslator.NetworkInfoImportFromNetworkEditor()
-        network_info_import_from_network_editor.extract_info(network_info)
-        network_info_export_to_sbml_model = networkinfotranslator.NetworkInfoExportToSBMLModel()
-        network_info_export_to_sbml_model.extract_graph_info(network_info_import_from_network_editor)
-        network_info_export_to_sbml_model.export(file_name)
+        return networkinfotranslator.import_network_editor_export_sbml(network_info, file_name)
 
 def save_file(input):
-    if len(input) == 2:
+    if len(input) == 2 and input[1]:
         if input[1].split(".")[-1] == "xml":
             write_sbml(input)
         else:

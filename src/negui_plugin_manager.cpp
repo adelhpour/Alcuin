@@ -35,6 +35,10 @@ const QDir MyPluginManager::getPluginsDirectory(const QDir applicationDirectory)
 #elif defined(Q_OS_MAC)
     if (pluginsDir.dirName() == "MacOS")
         pluginsDir.cdUp();
+#elif defined(Q_OS_LINUX)
+    if (pluginsDir.dirName() == "bin")
+        pluginsDir.cdUp();
+    pluginsDir.cd("lib");
 #endif
     pluginsDir.cd("plugins");
 

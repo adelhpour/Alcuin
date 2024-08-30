@@ -93,8 +93,9 @@ elseif (UNIX)
 	$<TARGET_FILE:Qt6::DBus> "$<TARGET_FILE_DIR:Qt6::DBus>/libQt6DBus.so.6"
 	$<TARGET_FILE:Qt6::PrintSupport> "$<TARGET_FILE_DIR:Qt6::PrintSupport>/libQt6PrintSupport.so.6"
 	$<TARGET_FILE:Qt6::Svg> "$<TARGET_FILE_DIR:Qt6::Svg>/libQt6Svg.so.6"
-
 	DESTINATION lib/dependencies COMPONENT alcuin_test_app)
+
+	install(FILES ${ALCUIN_PLUGINS_SCRIPTS} DESTINATION lib/plugins COMPONENT alcuin_test_app)
 
 	## install the executable
 	install(TARGETS ${PROJECT_NAME_TITLE} DESTINATION bin COMPONENT alcuin_test_app)
@@ -103,7 +104,7 @@ elseif (WIN32)
 	## install the dependencies
 	install(FILES ${ALCUIN_DLLS} DESTINATION bin COMPONENT alcuin_test_app)
 	install(FILES ${ALCUIN_PLUGINS_DLLS} DESTINATION bin/plugins COMPONENT alcuin_test_app)
-	install(FILES ${PY_SCRIPTS} DESTINATION bin/plugins COMPONENT alcuin_test_app)
+	install(FILES ${ALCUIN_PLUGINS_SCRIPTS} DESTINATION bin/plugins COMPONENT alcuin_test_app)
 	install(FILES $<TARGET_FILE:Qt6::Core> $<TARGET_FILE:Qt6::Gui> $<TARGET_FILE:Qt6::Widgets> $<TARGET_FILE:Qt6::DBus> $<TARGET_FILE:Qt6::PrintSupport> $<TARGET_FILE:Qt6::Svg> DESTINATION bin COMPONENT alcuin_test_app)
 	install(FILES $<TARGET_FILE:Qt6::QWindowsIntegrationPlugin> DESTINATION bin/platforms   COMPONENT alcuin_test_app)
 	install(FILES $<TARGET_FILE:Qt6::QWindowsVistaStylePlugin> DESTINATION bin/styles       COMPONENT alcuin_test_app)
